@@ -1,0 +1,55 @@
+---
+  title: "Final Project"
+---
+
+#### Goals
+The goal of your project is to apply the analytic skills you have gained in the course to a project that is relevant to your own research. Towards that end, your project could take many forms. 
+
+#### Products and Due Dates  
+You will have a final presentation on the last day of class. Project write-ups will be due the first day of exams.
+
+
+#### Sample Projects  
+
+Sample projects include
+
+* A detailed plan for the experiments you will be caryring out in the near future, including, but not limited to, a discussion of the causal network of hypotheses you will be testing, why your design addresses your hypothesis of interest given said network, a rundown of your framework for analysis of the data, and a detailed justification on choices of alpha and beta for each experiment based on power analyses of the analytic tools you will be using. Please also include a data management plan.  
+
+* An analysis of experimental and/or observational data already collected for your dissertation. This should include an extremely detailed writeup of the hypotheses being tested, the methods to gather the data and why they are appropriate (including choices of analytic tools, alpha, beta, and supposed power from _a priori_ power analyses), results from analyses of the data, and a brief discussion interpreting the data in light of your hypotheses. 
+  
+* Modeling of publically available data relevant to your thesis or dissertation research. This is particularly great if you are combining multiple data sources into a more comprehensive single source of for analysis (e.g., combining LTER data, NOAA, and Census data into a single analysis). This should be similar to the previous example, but may include more detail on the data sources, acquisition, and post-processing of data. \emph{A Priori   power analyses could be useful to demonstrate the validity of your approach, as would an introduction discussing your hypotheses _explicitly_ and how your analysis will address them   
+
+
+Note - you may have an idea that is very different than any of the three above. Perhaps it brings tools like GIS to the table. Perhaps you want to write a new R package for a set of tools combining what we've learned during the course. Perhaps you have a whole new field of modeling you would like to incorporate into an analysis of available data. These are all great options. I'm very flexible to additional projects as long as they meet the following requirements
+
+#### Requirements for Projects  
+Each project must have at bare minimum
+1. Clear testable hypotheses derived from biological theory.  
+
+2. Clear descriptions of sampling designs and why they are relevant for the hypothesis tests at hand.  
+
+3. Clear descriptions of and justifications for analytic frameworks.  
+
+4. All code must be supplied. Use this as an opportunity to show how knitr/RMarkdown can be used to generate a report you would hand to a colleague, rather than just a belching forth of unorganized codedumps.  
+
+5. Clean analysis and deft interpretation of results.  
+
+#### Proposals  
+Before you begin work, you are required to have my premission and/or address any feedback I give you. For that purpose, I'm having you write a proposal. Proposals should have
+
+1. A good description of the questions that will be asked by this project.  
+
+2. A general framework for the data that you will be using to answer these questions.  
+
+3. Preliminary thoughts on the types of analyses you might use to approach the data. These do not have the be excessively detailed, as you still have many tools and techniques to learn!  
+
+4. Optional: statement of breakdown of group work (see below).  
+
+
+#### Group Work  
+Some projects are enormous in scope, and will take many hands to gather the data and/or perform all of the analyses. For these projects, group work is a-ok. I expect that 1) given the scope of the project, you all make a commitment towards pushing this work to publication and 2) that you will give me a clear breakdown of who is doing what. Everyone should be making a substantial investment of time and energy. No freeloading! Please include this breakdown in your proposal.
+
+
+
+#### Extra Credit
+If you are able to publish the analysis that you put together in this project, I will raise your grade retroactively by one level (e.g., from a B+ to an A). It'll take some paperwork, but I'm excited to do it!

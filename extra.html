@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Extra Credit</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/default.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.0/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="overview.html">Overview</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li>
+  <a href="texts.html">Texts</a>
+</li>
+<li>
+  <a href="final.html">Final Project</a>
+</li>
+<li>
+  <a href="extra.html">Extra Credit</a>
+</li>
+<li>
+  <a href="biol607_syllabus_2016.doc">Syllabus</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Extra Credit</h1>
+
+</div>
+
+
+<p>Throughout the course, there will be multiple opportunities for extra credit. I’ll add more as we go along, but here are the first few. Each extra credit opportunity below can be worth 5% of your total grade.</p>
+<p><strong>Be Your Own Nate Silver</strong> It’s an election year. Given that you’re in this class, I’m sure you are following along at <a href="http://fivethirtyeight.com/" class="uri">http://fivethirtyeight.com/</a> and their model with great interest. You’re also, of course, listening to their elections podcast – and definitely the Friday special edition on how they build their model. I want you to forecast the election. You can find poll data using the pollstR package (<a href="https://cran.r-project.org/web/packages/pollstR/vignettes/introduction.html" class="uri">https://cran.r-project.org/web/packages/pollstR/vignettes/introduction.html</a>) or other sources (<a href="http://is-r.tumblr.com/post/36059986744/gathering-realclearpolitics-polling-trends-with" class="uri">http://is-r.tumblr.com/post/36059986744/gathering-realclearpolitics-polling-trends-with</a>) and there are plenty of other data sources out there (<a href="http://guides.library.harvard.edu/c.php?g=310717&amp;p=2072692" class="uri">http://guides.library.harvard.edu/c.php?g=310717&amp;p=2072692</a> as just a start – Google around). For this extra credit, 5 points for getting the correct answer, 5 extra points for explicitly stating the confidence of your estimates, and 5 points for a clear explanation of the methodology. 1 point for each thing you do beyond a weighted average of polls. Because, come on, that’s easy. Scored out of 16. So, theoretically, you could get extra credit on your extra credit.</p>
+<p><strong>Become a Git Addict</strong> I’m going to give you little directory-lets for your assignments. But, really, these are directories on Github. You <em>could</em> just issue a pull request with your homework assignment, plopping it right into the repo directory. This requires learning git and github. There are numerous tutorials on how to do so both as web pages and on youtube (e.g., <a href="http://product.hubspot.com/blog/git-and-github-tutorial-for-beginners" class="uri">http://product.hubspot.com/blog/git-and-github-tutorial-for-beginners</a>) - so find what works for you. I’ll also host a mini-tutorial sometime in the first few weeks. +10% on each homework that is submitted via a pull request instead of emailed to me.</p>
+<p><strong>Join the Conversation</strong> There are a wealth of great conversations out there about data science both in and out of biology. Starting to listen to the conversation will enable you to keep abreast of how the field is developing, and enable you to learn toolsets that will put you a cut above your colleagues as you consider new and sophisticated analyses. I’d recommend checking out sites list <a href="http://www.r-bloggers.com/" class="uri">http://www.r-bloggers.com/</a> daily, listening to podcasts such as Not So Standard Deviations <a href="https://itunes.apple.com/us/podcast/not-so-standard-deviations/" class="uri">https://itunes.apple.com/us/podcast/not-so-standard-deviations/</a> or following different data science/biology luminaries (such as <span class="citation">[@hadleywickham]</span>(<a href="http://twitter.com/hadleywickham" class="uri">http://twitter.com/hadleywickham</a>), <span class="citation">[@_inundata]</span>(<a href="http://twitter.com/_inundata" class="uri">http://twitter.com/_inundata</a>), <span class="citation">[@rdpeng]</span>(<a href="http://twitter.com/rdpeng" class="uri">http://twitter.com/rdpeng</a>), <span class="citation">[@hspter]</span>(<a href="http://twitter.com/hspter" class="uri">http://twitter.com/hspter</a>), <span class="citation">[@kara_woo]</span>(<a href="http://twitter.com/kara_woo" class="uri">http://twitter.com/kara_woo</a>), <span class="citation">[@sckottie]</span>(<a href="http://twitter.com/sckottie" class="uri">http://twitter.com/sckottie</a>), and more). There are a ton of other blogs and people who are relevant to what you are doing for your research, so look around! Each class, I’ll try and give an opportunity to share neat things you’ve seen in the ether. +1 for each contribution you make to the class. +10 if you end up at <a href="http://unconf.ropensci.org/">ROpenSci</a>.</p>
+<p><strong>Data Science for Social Good</strong> The data science techniques you are learning here have a broad suite of applications for the good of society. Heck, many of you are doing projects you feel are socially important. Want some extra credit? Join <a href="http://www.meetup.com/Data-Science-for-Social-Good/" class="uri">http://www.meetup.com/Data-Science-for-Social-Good/</a> - half credit for just going to their meetings, full credit for contributing to one of their projects. Extra extra credit for initiating a new one.</p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

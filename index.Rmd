@@ -10,3 +10,6 @@ title: "Intro to Data Science for Biology"
 **Weekly Schedule:** Tuesday & Thursday 11-12:30, Lab Thursday 12:30-3
 
 **Office Hours:** Prof. Byrnes will hold office hours Tuesday from 1:30-3
+
+##Course News:
+Welcome to the class! Please browse around the site or download the [syllabus](./biol607_syllabus_2016.doc)!

@@ -1,7 +1,7 @@
 ---  
   title: "Course Schedule and Readings"  
 ---  
-  While the topics covered are broad, each ### Week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
+  While the topics covered are broad, each week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
   
   W&S = Whitlock and Schluter, G&W = [Grolemund and Wickham](http://r4ds.had.co.nz), U/P for linked pdfs = biol607
     
@@ -9,8 +9,7 @@
 ### Week 1.  
 __Lecture:__ How do we use data to understand how the world works?    
 __Lab:__ Introduction to R Computing language. Best practices in executing Reproducible Research. Introduction to Markdown    
-__Reading:__ G&W  [Preface](http://r4ds.had.co.nz/introduction.html), [Intro](http://r4ds.had.co.nz/explore-intro.html), [Workflow basics](http://r4ds.had.co.nz/workflow-basics.html), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Markdown](http://r4ds.had.co.nz/r-markdown.html) Chapters, [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdfPaperpile  
-)  
+__Reading:__ G&W  [Preface](http://r4ds.had.co.nz/introduction.html), [Intro](http://r4ds.had.co.nz/explore-intro.html), [Workflow basics](http://r4ds.had.co.nz/workflow-basics.html), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Markdown](http://r4ds.had.co.nz/r-markdown.html) Chapters, [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)  
   
 ###Week 2.   
 __Lecture:__ Sampling and Simulation. Descriptive statistics, and the creation of good observational sampling designs.   

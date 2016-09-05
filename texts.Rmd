@@ -1,0 +1,23 @@
+---
+  title: "Course Texts"
+---
+  
+**Required Texts:**  
+  Grolemund, G., and Wickham, W. 2016. R for Data Science.  The book is in progress and can be found online at http://r4ds.had.co.nz/  
+  
+  Whitlock, W.C. and Schluter, D. (2014) The Analysis of Biological Data, Second Edition. Roberts and Company Publishers. http://www.amazon.com/Analysis-Biological-Data-Second-Edition/dp/1936221489 with  more info at http://whitlockschluter.zoology.ubc.ca/
+
+**Recommended Texts: **  
+I will be drawing on examples and materials from a few other sources.  They include wonderful examples of R code in the context of data analysis.  You are not required to have these, but you will either find them useful in this course or in future endeavors.   
+
+* Adler, J. (2009) R in a Nutshell: A Desktop Quick Reference. O’Reilly Media. http://shop.oreilly.com/product/9780596801717.do  
+* Bolker, B. (2009) Ecological Models and Data in R. Princeton University Press. http://www.amazon.com/Ecological-Models-Data-Benjamin-Bolker/dp/0691125228  
+* Matloff, N. (2011) The Art of R Programming: A Tour of Statistical Software Design. No Starch Press. http://nostarch.com/artofr.htm  
+* Silver, N. (2012) The Signal and the Noise. The Penguin Press. http://www.amazon.com/dp/B007V65R54/  
+* Song, S. Qian (2009) Environmental and Ecological Statistics with R. Chapman and Hall/CRC Press, London. http://www.amazon.com/Environmental-Ecological-Statistics-Chapman-Applied-ebook/dp/B005H6YDPU  
+* Wickham, H. 2014. Advanced R. The book can be found online at http://adv-r.had.co.nz/  
+  
+**Software**  
+* R - http://www.r-project.org/  
+* R Studio, a fantastic cross-platform interface for R - http://www.rstudio.org/  
+  

@@ -5,10 +5,18 @@ navbar:
  left:
   - text: "Home"
     href: index.html
-  - text: "Schedule"
-    href: schedule.html
   - text: "Overview"
     href: overview.html
+  - text: "Schedule"
+    href: schedule.html
+  - text: "Texts"
+    href: texts.html    
+  - text: "Final Project"
+    href: final.html    
+  - text: "Extra Credit"
+    href: extra.html
+  - text: "Syllabus"
+    href: biol607_syllabus_2016.doc
     
 output:
   html_document:
