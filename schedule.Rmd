@@ -1,0 +1,89 @@
+---  
+  title:__ "__Lecture and __Lab Schedule"  
+---  
+  While the topics covered are broad, each ### Week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
+    
+      
+### Week 1.  
+__Lecture:__ How do we use data to understand how the world works?    
+__Lab:__ Introduction to R Computing language. Best practices in executing Reproducible Research. Introduction to Markdown    
+__Reading:__ G&W  [Preface](http://r4ds.had.co.nz/introduction.html), [Intro](http://r4ds.had.co.nz/explore-intro.html), [Workflow basics](http://r4ds.had.co.nz/workflow-basics.html), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Markdown](http://r4ds.had.co.nz/r-markdown.html) Chapters, [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdfPaperpile  
+)  
+  
+###Week 2.   
+__Lecture:__ Sampling and Simulation. Descriptive statistics, and the creation of good observational sampling designs.   
+__Lab Topic:__ Libraries in R. R as a Data Importing Tool, Dplyr. Forcats.  
+__Reading:__ W&S 1,3-4, G&W Chapter 5, 11, 18, Dplyr cheat sheet  
+  
+  
+###Week 3.   
+__Lecture:__ Data visualization.  
+__Lab Topic:__ Data import and visualization, Introduction to ggplot2,   
+__Reading:__ W&S Chapter 2, Unwin 2008, G&W Chapter 3, 28, Ggplot2 cheat sheet  
+  
+  
+### Week 4.   
+__Lecture:__ Frequentist Hypothesis Testing, Z-Tests, Power Analysis  
+__Lab Topic:__ Simulation and Frequentist Hypothesis testing, Simulation and Power  
+__Reading:__ W&S 5-7, G&W Chapter 7, 16  
+  
+  
+### Week 5.   
+__Lecture:__ T, and χ2 tests  
+__Lab Topic:__ Simple hypothesis tests with data  
+__Reading:__ W&S 8-12, G&W Chapter 10, 20  
+  
+  
+### Week 6.   
+__Lab Topic:__ Linear regression, diagnostics, visualization  
+__Reading:__ W&S 16-17, G&W Chapter 21, 22  
+  
+  
+### Week 7.   
+__Lecture:__ Likelihoodist Inference, Fitting a line with Likelihood, Model Selection with one predictor  
+__Lab Topic:__ Calculating and visualizing Likelihoods, fitting a line with bbmle and glm  
+__Reading:__ W&S 20, G&W Chapter 18  
+  
+  
+### Week 8.   
+__Lecture:__ Bayesian Inference, Fitting a line with Bayesian techniques  
+__Lab Topic:__ Bayesian computation in R, Fitting a line with Bayesian techniques  
+__Reading:__ Ellison 1996, Statistical Rethinking Ch 1-2.  
+  
+  
+### Week 9.   
+__Lecture:__ Experimental design and ANOVA  
+__Lab Topic:__ Basic ANOVA, Midterm work session	  
+__Reading:__ W&S Chapter 14-15  
+  
+  
+### Week 10.   
+__Lectures:__ Experimental Design in a Multicausal World  
+__Lab Topic:__ Factorial ANOVA, Discussion of Hurlbert  
+__Reading:__ W&S 18, Hurlbert 1984  
+  
+  
+### Week 11.   
+__Lecture:__ Multiple Regression and Interaction Effects, Information Theoretic Approaches  
+__Lab Topic:__ Multiple Regression, Multimodel Inference  
+__Readings:__ Symonds and Moussalli 2010, Ecology Special Section on P Values  
+  
+  
+### Week 12.   
+__Lecture:__ Entering a non-normal world - Modeling count data with Genearlized linear models. Overdispersed continuous data.  
+__Lab Topic:__ Generalized Linear Models. Diagnostics with DHARMa.  
+__Reading:__ O'Hara 2009, O'Hara and Kotze 2010, Wharton and Hui 2011  
+  
+    
+### Week 13.   
+__Lecture:__ Tidy data for statistical analysis  
+__Reading:__ Borer et al. 2009. https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/, G&W 12, 14, 16  
+  
+  
+### Week 14.   
+__Lecture:__ Class's Choice  
+__Lab Topic:__ Class's Choice, Final Presentation Open __Lab  
+  
+  
+### Week 15.  
+__Lecture:__ Final Presentations  

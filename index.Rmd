@@ -1,0 +1,12 @@
+---
+title: "Intro to Data Science for Biology"
+---
+
+
+<b>Instructor:</b> Jarrett Byrnes, PhD.
+
+<b>Email:</b> jarrett.byrnes@umb.edu
+
+<b>Weekly Schedule:</b> Tuesday & Thursday 11-12:30, Lab Thursday 12:30-3
+
+<b>Office Hours:</b> Prof. Byrnes will hold office hours Tuesday from 1:30-3

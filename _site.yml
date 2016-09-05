@@ -1,0 +1,12 @@
+name: "Biol 607 - Intro to Computational Data Analysis for Biology"
+navbar:
+ title: ""
+ left:
+  - text: "Home"
+    href: index.html
+  - text: "Schedule"
+    href: schedule.html
+output:
+  html_document:
+    theme: lumen
+output_dir: "."
