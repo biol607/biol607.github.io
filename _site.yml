@@ -1,4 +1,5 @@
 name: "Biol 607 - Intro to Computational Data Analysis for Biology"
+
 navbar:
  title: ""
  left:
@@ -8,6 +9,7 @@ navbar:
     href: schedule.html
   - text: "Overview"
     href: overview.html
+    
 output:
   html_document:
     theme: lumen
