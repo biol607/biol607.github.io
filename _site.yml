@@ -6,6 +6,8 @@ navbar:
     href: index.html
   - text: "Schedule"
     href: schedule.html
+  - text: "Overview"
+    href: overview.html
 output:
   html_document:
     theme: lumen

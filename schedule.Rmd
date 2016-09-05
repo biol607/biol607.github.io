@@ -1,7 +1,9 @@
 ---  
-  title:__ "__Lecture and __Lab Schedule"  
+  title: "Course Schedule and Readings"  
 ---  
   While the topics covered are broad, each ### Week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
+  
+  W&S = Whitlock and Schluter, G&W = [Grolemund and Wickham](http://r4ds.had.co.nz), U/P for linked pdfs = biol607
     
       
 ### Week 1.  

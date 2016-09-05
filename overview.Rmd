@@ -1,0 +1,20 @@
+---
+  title: "Course Overview"
+---
+  
+**Overview:** This course will cover the basic statistical knowledge necessary for a graduate student to design, execute, and analyze a basic research project.  The course aims to have students focus on thinking about the biological processes that they are studying in their research and how to translate them into statistical models.  The course will take a hands-on computational approach, teaching students the statistical programming language R.  In addition to teaching the fundamentals of data analysis, we will emphasize several key concepts of efficient computer programming that students can use in a variety of other areas outside of data analysis.  
+  
+We will emphasize the underlying principle behind modern statistical analysis – that nearly every biological system can be described with a simple series of linear or nonlinear relationships created by a data generating process with variation in data generated some meaningful error generating process.  Additionally, we will emphasize thinking about whole biological systems, causality, and the limits of inference that can be drawn from observational versus experimental studies.  
+  
+The course will build through a series of topics.  We will begin by thinking about the basics how we sample populations and how we describe those samples. We will move on to the fundamentals of frequentist hypothesis testing as a jumping off point for deriving inference from a sample of data. We will focus this understanding on simple linear data generating processes with a normal, or Gaussian, error generating process. We will use this framework to explore Likelihoodist and Bayesian modes of drawing inference from data and discuss when each approach might be right for a given problem. With this firm footing, we will move on to examine the analysis of manipulative experiments, complex multi-causal models, and nonlinear data generating processes with non-normal error generating processes.  
+  
+Along the way, we will stress ideas of how to deal with modern complex data sets, efficient computation, and try to consider deeply the philosophical nature that underpins modern statistical inference in biology.  
+  
+**Objectives:**	 
+  
+1.	To learn how to think about your study system and research question of interest in a systematic way in order to design an efficient sampling and experimental research program.  
+2.	To understand how to analyze collected data to derive the most information possible about your research questions.  
+3.	Provide the grounding needed to effectively collaborate with statistical experts.  
+4.	Allow students to feel sufficiently comfortable with the basic principles of statistical analysis so that they can learn and implement techniques outside of the purview of this course.  
+  
+**Prerequisites:** I will assume a basic knowledge of algebra.  Undergraduate courses in probability theory and computer science are useful, but not required. 
