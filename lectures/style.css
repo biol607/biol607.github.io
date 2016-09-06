@@ -1,0 +1,16 @@
+.small-code pre code {
+  font-size: 1em;
+}
+
+
+.reveal h1  {
+    font-size: 1.5em;
+    font-variant: normal;
+    font-weight: bold;
+}
+
+.reveal h1.title  {
+    font-size: 2em;
+    font-variant: normal;
+    font-weight: bold;
+}

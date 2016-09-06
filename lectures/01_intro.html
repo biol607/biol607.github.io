@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="01_intro_files/reveal.js-3.3.0/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="01_intro_files/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '01_intro_files/reveal.js-3.3.0/css/print/pdf.css' : '01_intro_files/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="01_intro_files/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2" data-background="images/01/Sonoma_coast.jpg">
+<h1></h1>
+<br><br>
+<center>
+<div style="font-size: 2em;font-weight: bold; color:black;background-color:white;opacity:0.8;">
+Introduction to An Introduction to Computational Data Analysis for Biology
+</div>
+<div style="background-color:white;font-size:1em;opacity:0.8;">
+Jarrett Byrnes<br />
+UMass Boston<br />
+<a href="https://biol607.github.io/" class="uri">https://biol607.github.io/</a></span>
+</center>
+</section>
+<section id="but-first-a-pop-quiz" class="slide level2">
+<h1>But First, A Pop Quiz</h1>
+<br><br>
+<center>
+<div style="font-size: 2em;font-weight: bold;">
+<a href="http://tinyurl.com/firstPopQuiz" class="uri">http://tinyurl.com/firstPopQuiz</a>
+</div>
+</center>
+<p><br><br></p>
+</section>
+<section id="second-some-new-technology" class="slide level2">
+<h1>Second, Some New Technology</h1>
+<p><a href="https://etherpad.wikimedia.org/p/607-intro" class="uri">https://etherpad.wikimedia.org/p/607-intro</a></p>
+<ul>
+<li><p>This class will use collaborative note-taking</p></li>
+<li><p>Research shows that this enhances learning!</p></li>
+<li><p>It’s also a way to ask me a question during class</p></li>
+</ul>
+</section>
+<section id="third-some-old-technology" class="slide level2">
+<h1>Third, Some Old Technology</h1>
+<p><img src="images/01/sticky-note-color-clipart.jpeg" /></p>
+<ul>
+<li class="fragment">Green: Party on, Wayne</li>
+<li class="fragment">Red: I fell off the understanding wagon<br />
+</li>
+<li class="fragment">Blue: Write a question/Other</li>
+</ul>
+</section>
+<section id="outline-for-today" class="slide level2">
+<h1>Outline for Today</h1>
+<ol type="1">
+<li>What are we doing here?<br />
+</li>
+<li>Who are we?<br />
+</li>
+<li>How will this course work?<br />
+</li>
+<li>A Philosophy of answering scientific questions with data<br />
+</li>
+<li>R!</li>
+</ol>
+</section>
+<section id="section-1" class="slide level2">
+<h1></h1>
+<p><img src="images/01/data_says_no.jpg" /></p>
+</section>
+<section id="computational" class="slide level2">
+<h1>Computational</h1>
+<p><small style="font-size:.7em"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#subset consumptionData into mixed diet treatments only (mixed diet BOX #&#39;s are multiples of 5)</span>
+mixedData&lt;-consumptionData[consumptionData$BOX %%<span class="st"> </span><span class="dv">5</span> ==<span class="st"> </span><span class="dv">0</span>,]
+mixedData$delta&lt;-mixedData$ADD_WT -<span class="st"> </span>mixedData$REM_WT
+mixedData$rate&lt;-mixedData$delta/mixedData$days
+
+<span class="co">#reshape to get species-specific consumption rate table</span>
+mixed.summary&lt;-<span class="kw">ddply</span>(mixedData,.(BOX,SP_CODE),function(x){
+  <span class="kw">data.frame</span>(<span class="dt">CONSUMPTION_RATE=</span><span class="kw">mean</span>(x$rate,<span class="dt">na.rm=</span><span class="ot">TRUE</span>))
+    })
+
+#############fit linear models (not including consumption--see below)
+LMtestChange &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> TEST_CHANGE ~<span class="st"> </span>TREATMENT, <span class="dt">data =</span> expData, <span class="dt">na.action =</span> na.omit)</code></pre></div>
+</small>
+<p class="fragment" align="center">
+<big style="color:red; font-size:2em;">Code Forces You to Be Explicity About Theory</big>
+</p>
+</section>
+<section id="computational-1" class="slide level2">
+<h1>Computational</h1>
+<p><small style="font-size:.7em"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#subset consumptionData into mixed diet treatments only (mixed diet BOX #&#39;s are multiples of 5)</span>
+mixedData&lt;-consumptionData[consumptionData$BOX %%<span class="st"> </span><span class="dv">5</span> ==<span class="st"> </span><span class="dv">0</span>,]
+mixedData$delta&lt;-mixedData$ADD_WT -<span class="st"> </span>mixedData$REM_WT
+mixedData$rate&lt;-mixedData$delta/mixedData$days
+
+<span class="co">#reshape to get species-specific consumption rate table</span>
+mixed.summary&lt;-<span class="kw">ddply</span>(mixedData,.(BOX,SP_CODE),function(x){
+  <span class="kw">data.frame</span>(<span class="dt">CONSUMPTION_RATE=</span><span class="kw">mean</span>(x$rate,<span class="dt">na.rm=</span><span class="ot">TRUE</span>))
+    })
+
+#############fit linear models (not including consumption--see below)
+LMtestChange &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> TEST_CHANGE ~<span class="st"> </span>TREATMENT, <span class="dt">data =</span> expData, <span class="dt">na.action =</span> na.omit)</code></pre></div>
+</small>
+<p class="fragment" align="center">
+<big style="color:red; font-size:2em;">Coding is power</big>
+</p>
+</section>
+<section id="computational-2" class="slide level2">
+<h1>Computational</h1>
+<p><small style="font-size:.7em"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#subset consumptionData into mixed diet treatments only (mixed diet BOX #&#39;s are multiples of 5)</span>
+mixedData&lt;-consumptionData[consumptionData$BOX %%<span class="st"> </span><span class="dv">5</span> ==<span class="st"> </span><span class="dv">0</span>,]
+mixedData$delta&lt;-mixedData$ADD_WT -<span class="st"> </span>mixedData$REM_WT
+mixedData$rate&lt;-mixedData$delta/mixedData$days
+
+<span class="co">#reshape to get species-specific consumption rate table</span>
+mixed.summary&lt;-<span class="kw">ddply</span>(mixedData,.(BOX,SP_CODE),function(x){
+  <span class="kw">data.frame</span>(<span class="dt">CONSUMPTION_RATE=</span><span class="kw">mean</span>(x$rate,<span class="dt">na.rm=</span><span class="ot">TRUE</span>))
+  })
+
+#############fit linear models (not including consumption--see below)
+LMtestChange &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> TEST_CHANGE ~<span class="st"> </span>TREATMENT, <span class="dt">data =</span> expData, <span class="dt">na.action =</span> na.omit)</code></pre></div>
+</small>
+<p align="center">
+<span style="color:red; font-size:2em;">Repeatable Research</span>
+</p>
+</section>
+<section id="section-2" class="slide level2" data-background="images/01/gorgeous-wildflowers-37110-37953-hd-wallpapers.jpg">
+<h1></h1>
+<p align="center">
+<span style="font-size:2em; background-color:white">Data (acquisition)</span> <br><br><br><br> <br><br><br><br> <span style="color:red; font-size:1em; background-color:white;">How do I get good data here?</span>
+</p>
+</section>
+<section id="data-maintaince" class="slide level2">
+<h1>Data (maintaince)</h1>
+<center>
+<img src="images/01/Life%20Cycle%20DiagramA.png" alt="http://libguides.wits.ac.za/content.php?pid=220705&amp;sid=3862732" />
+</center>
+</section>
+<section id="analysis-philosophy" class="slide level2">
+<h1>Analysis (philosophy)</h1>
+<p><img src="images/01/bayes_popper.png" /></p>
+</section>
+<section id="analysis-visual" class="slide level2">
+<h1>Analysis (visual)</h1>
+<center>
+<img src="images/01/f2011-4f_supatto_science_2008_f3_crop.jpg" alt="http://biomedicalcomputationreview.org/content/visualization-space-and-time-seamless-pipelines-now-available">
+</center>
+<footer style="font-size:0.5em; position:fixed; bottom:0; width:100%">
+<a href="http://biomedicalcomputationreview.org/content/visualization-space-and-time-seamless-pipelines-now-available">http://biomedicalcomputationreview.org/</a>
+</footer>
+</section>
+<section id="analysis-model" class="slide level2">
+<h1>Analysis (model)</h1>
+<p><small style="font-size:.7em"></p>
+<pre><code>## 
+## Call:
+## lm(formula = shoots ~ treatment.genotypes, data = eelgrass)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -27.473 -10.723  -1.299   8.955  35.701 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           30.664      5.324   5.760 2.73e-06 ***
+## treatment.genotypes    4.635      1.401   3.308  0.00245 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 16.39 on 30 degrees of freedom
+## Multiple R-squared:  0.2672, Adjusted R-squared:  0.2428 
+## F-statistic: 10.94 on 1 and 30 DF,  p-value: 0.002449</code></pre>
+<p></small></p>
+</section>
+<section id="for-biology" class="slide level2">
+<h1>for Biology</h1>
+<center>
+<img src="images/01/scientists_sees_world_all_i_see_are_equations.png" height=635 width=400>
+</center>
+</section>
+<section id="for-biology-1" class="slide level2">
+<h1>for Biology</h1>
+<h3 id="science-first">SCIENCE FIRST!</h3>
+<ul>
+<li><p>What is your model(s)?</p></li>
+<li><p>THEN decide on statistical approach</p></li>
+<li><p>Can you get data to paramaterize that model?</p></li>
+<li><p>How does biology inform your modeled results?</p></li>
+</ul>
+</section>
+<section id="avoiding-the-replication-crisis" class="slide level2">
+<h1>Avoiding The Replication Crisis</h1>
+<p><img src="images/01/replication_2x2.png" alt="http://simplystatistics.org/2016/08/24/replication-crisis/" /></p>
+<p><a href="http://simplystatistics.org/2016/08/24/replication-crisis/" class="uri">http://simplystatistics.org/2016/08/24/replication-crisis/</a></p>
+</section>
+<section id="course-goals" class="slide level2">
+<h1>Course Goals</h1>
+<ol type="1">
+<li class="fragment">Learn how to think about your research in a systematic way to design efficient observational &amp; experimental studies.</li>
+</ol>
+<ol start="2" type="1">
+<li class="fragment">Understand how to get the most bang for your buck from your data.</li>
+</ol>
+<ol start="3" type="1">
+<li class="fragment">Make you effective collaborators with statisticians.</li>
+</ol>
+<ol start="4" type="1">
+<li class="fragment">Make you comfortable enough to learn and grow beyond this class.</li>
+</ol>
+</section>
+<section id="who-are-you" class="slide level2">
+<h1>Who are You?</h1>
+<ol type="1">
+<li><p>Name</p></li>
+<li><p>Lab</p></li>
+<li><p>Brief research description</p></li>
+<li><p>Why are you here?</p></li>
+</ol>
+<!-- SECTION BREAK -->
+</section>
+<section id="outline-for-today-1" class="slide level2">
+<h1>Outline for Today</h1>
+<ol type="1">
+<li>What are we doing here?<br />
+</li>
+<li>Who are we?<br />
+</li>
+<li><span style="color:red">How will this course work? </span></li>
+<li>A Philosophy of answering scientific questions with data<br />
+</li>
+<li>R!</li>
+</ol>
+</section>
+<section id="lecture-and-lab" class="slide level2">
+<h1>Lecture and Lab</h1>
+<ul>
+<li>T/Th Lecutre on Concepts</li>
+<li>Occasional Paper Discussion</li>
+<li>Th Lab (which will cover some homework problems!)</li>
+</ul>
+</section>
+<section id="yes-lectures-are-coded" class="slide level2">
+<h1>Yes, Lectures are Coded</h1>
+R Markdown sometimes with Reveal.js  <br />
+
+<center>
+<img src="images/01/lecture_code.jpg">
+</center>
+<p><a href="http://github.com/biol607/biol607.github.io" class="uri">http://github.com/biol607/biol607.github.io</a></p>
+</section>
+<section id="readings-for-class-ws" class="slide level2">
+<h1>Readings for Class: W&amp;S</h1>
+<p><img src="images/01/whitlockSchluter.jpeg"></p>
+<p>Whitlock, W.C. and Schluter, D. (2014) The Analysis of Biological Data, 2nd Edition.</p>
+<p><a href="http://whitlockschluter.zoology.ubc.ca/" class="uri">http://whitlockschluter.zoology.ubc.ca/</a></p>
+<p>Chapter 1 this week!</p>
+</section>
+<section id="readings-for-class-grolemund-wickham" class="slide level2">
+<h1>Readings for Class: Grolemund &amp; Wickham</h1>
+<p><img src="images/01/r4ds_cover.png" alt="http://r4ds.had.co.nz" /> <br><br><br />
+Grolemund, G., and Wickham, W. 2016. R for Data Science.<br />
+<a href="http://r4ds.had.co.nz" class="uri">http://r4ds.had.co.nz</a></p>
+</section>
+<section id="quizes" class="slide level2">
+<h1>Quizes</h1>
+<ul>
+<li><p>Before and After Class</p></li>
+<li><p>Measures understanding - and attendance!</p></li>
+<li><p>Will drop lowest two</p></li>
+<li><p>10% of your grade</p></li>
+</ul>
+</section>
+<section id="problem-sets" class="slide level2">
+<h1>Problem Sets</h1>
+<ul>
+<li>40% of your grade</li>
+<li>“Adapted”&quot; from Whitlock and Schluter</li>
+<li>Will often require R</li>
+<li>Complete them using Rmarkdown</li>
+</ul>
+</section>
+<section id="midterm" class="slide level2">
+<h1>Midterm</h1>
+<ul>
+<li><p>Advanced problem set</p></li>
+<li><p>Due Nov 4th</p></li>
+<li><p>20% of your grade</p></li>
+</ul>
+</section>
+<section id="final-project" class="slide level2">
+<h1>Final Project</h1>
+<ul>
+<li>Topic of your choosing
+<ul>
+<li>Your data, public data, any data!</li>
+<li>Make it dissertation relevant!</li>
+<li>If part of submitted manuscript, I will retroactively raise your grade  </li>
+</ul></li>
+<li>Dates</li>
+<li>Proposal Due Oct 7th</li>
+<li>Presentations on Dec 15th</li>
+<li><p>Paper due Dec 16th (but earlier fine!)  </p></li>
+<li><p>30% of your grade</p></li>
+</ul>
+</section>
+<section id="extra-credit-1-use-github" class="slide level2">
+<h1>Extra Credit 1: Use Github</h1>
+<p><img src="images/01/github.png" /></p>
+<ul>
+<li>This whole class is a github repo</li>
+<li>Homeworks will be posted as part of the repo</li>
+<li>If you submit your homework via a pull request, +1 &gt; - There will be a github tutorial outside of class hours</li>
+</ul>
+</section>
+<section id="extra-credit-2-be-nate-silver" class="slide level2">
+<h1>Extra Credit 2: Be Nate Silver</h1>
+<p><img src="images/01/silver.jpg" /></p>
+</section>
+<section id="extra-credit-3-livin-la-vida-data-science" class="slide level2">
+<h1>Extra Credit 3: Livin’ La Vida Data Science</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td><img src="images/01/nssd.jpg" /></td>
+<td><img src="images/01/hadley.jpg" /></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="extra-credit-4-data-science-for-social-good" class="slide level2">
+<h1>Extra Credit 4: Data Science for Social Good</h1>
+<p><img src="images/01/dssg.png" /></p>
+<p><a href="http://www.meetup.com/Data-Science-for-Social-Good/" class="uri">http://www.meetup.com/Data-Science-for-Social-Good/</a></p>
+<!-- SECTION BREAK -->
+</section>
+<section id="outline-for-today-2" class="slide level2">
+<h1>Outline for Today</h1>
+<ol type="1">
+<li>What are we doing here?<br />
+</li>
+<li>Who are we?<br />
+</li>
+<li>How will this course work?<br />
+</li>
+<li><span style="color:red">A Philosophy of answering scientific questions with data </span></li>
+<li>R!</li>
+</ol>
+</section>
+<section id="our-approach-to-data-analysis" class="slide level2">
+<h1>Our Approach to Data Analysis</h1>
+<center>
+ <br />
+Data from Reusch et al. 2005 PNAS
+</center>
+</section>
+<section id="start-with-a-question" class="slide level2">
+<h1>Start with a Question</h1>
+<center>
+<p><img src="images/01/seagrass.jpeg" alt="Photo by Jessica Abbot"></p>
+<p>Does seagrass genetic diversity increase productivity?</p>
+</center>
+</section>
+<section id="build-an-understanding-of-the-system" class="slide level2">
+<h1>Build an Understanding of the System</h1>
+<ol type="1">
+<li><p>Literature</p></li>
+<li><p>Observation</p></li>
+<li><p>Disciplinary History</p></li>
+</ol>
+</section>
+<section id="construct-a-causal-model-of-the-system" class="slide level2">
+<h1>Construct a Causal Model of the System</h1>
+ <br />
+ <br />
+
+<center>
+<p><img src="images/01/grass1.jpg"></p>
+This is your <strong>DATA GENERATING PROCESS</strong>
+</center>
+</section>
+<section id="construct-a-causal-model-of-the-system-1" class="slide level2">
+<h1>Construct a Causal Model of the System</h1>
+<center>
+<p><img src="images/01/grass2.jpg"></p>
+Big Picture <strong>DATA GENERATING PROCESS</strong>
+</center>
+</section>
+<section id="construct-a-causal-model-of-the-system-2" class="slide level2">
+<h1>Construct a Causal Model of the System</h1>
+<center>
+<p><img src="images/01/grass2.jpg"></p>
+What is your <strong>ERROR GENERATING PROCESS</strong>?
+</center>
+</section>
+<section id="construct-a-causal-model-of-the-system-3" class="slide level2">
+<h1>Construct a Causal Model of the System</h1>
+<center>
+<p><img src="images/01/grass3.jpg"></p>
+What can you isolate?
+</center>
+</section>
+<section id="collect-the-data-to-best-estimate-test-the-model" class="slide level2">
+<h1>Collect the Data to Best Estimate &amp; Test the Model</h1>
+<center>
+<p><img src="images/01/grass1.jpg"></p>
+<div style="background:green; color: black; margin:3px; width:175px; float:center">
+1<br>Genotype
+</div>
+<div style="background:green; color: black; margin:3px; width:175px; float:center;">
+3<br>Genotypes
+</div>
+<div style="background:green; color: black; margin:3px; width:175px; float:center; clear:none;">
+6<br>Genotypes
+</div>
+</center>
+</section>
+<section id="look-at-your-data" class="slide level2">
+<h1>Look at Your Data</h1>
+<img src="01_intro_files/figure-revealjs/unnamed-chunk-5-1.png" title="" alt="" width="672" style="display: block; margin: auto;" />
+<p class="fragment">
+Fit a model(s), chosen to suit data &amp; error generating process!
+</p>
+</section>
+<section id="analysis" class="slide level2">
+<h1>Analysis!</h1>
+<p><img src="01_intro_files/figure-revealjs/genotypes3-1.png" title="" alt="" width="768" style="display: block; margin: auto;" /></p>
+</section>
+<section id="build-open-reproducible-research" class="slide level2">
+<h1>Build Open Reproducible Research</h1>
+<p>Many Methods of Sharing Data, Methods, and Results Beyond Publication</p>
+<ol type="1">
+<li><p>GitHub - public code repository</p></li>
+<li><p>FigShare - share key figures, get a doi</p></li>
+<li><p>Blog - open ‘notebook’</p></li>
+<li><p>Dryad or Other Repository - post-publication data sharing</p></li>
+</ol>
+</section>
+<section id="questions" class="slide level2">
+<h1>Questions</h1>
+<!-- SECTION BREAK R -->
+</section>
+<section id="outline-for-today-3" class="slide level2">
+<h1>Outline for Today</h1>
+<ol type="1">
+<li>What are we doing here?<br />
+</li>
+<li>Who are we?<br />
+</li>
+<li>How will this course work?<br />
+</li>
+<li>A Philosophy of answering scientific questions with data<br />
+</li>
+<li><span style="color:red">R! </span></li>
+</ol>
+</section>
+<section id="what-is-r" class="slide level2">
+<h1>What is R?</h1>
+   
+<center>
+<strong>A programming language uniquely developed for statistical analysis</strong>
+</center>
+</section>
+<section id="why-r" class="slide level2">
+<h1>Why R?</h1>
+<ol type="1">
+<li>Free<br />
+</li>
+<li>Huge growing community<br />
+</li>
+<li>Packages to do almost anything<br />
+</li>
+<li>Makes reusable research easy<br />
+</li>
+<li>C-based language<br />
+</li>
+<li>Syntax naturally matches analytical thinking</li>
+</ol>
+</section>
+<section id="what-is-r-studio" class="slide level2">
+<h1>What is R Studio?</h1>
+<p><img src="images/01/rstudio-windows.png"></p>
+<ul>
+<li>Cross-Platform Graphical User Interface for R</li>
+<li>It is not R</li>
+</ul>
+</section>
+<section id="lets-fire-it-up" class="slide level2">
+<h1>Let’s Fire It Up!</h1>
+<center>
+**Open R-Studio.<br><br> Don’t have it? Download it from <a href="http://rstudio.org**" class="uri">http://rstudio.org**</a>
+</center>
+</section>
+<section id="what-do-you-see" class="slide level2">
+<h1>What do you see?</h1>
+<center>
+<img src="images/01/blank_rstudio.jpg">
+</center>
+</section>
+<section id="the-console-and-math" class="slide level2">
+<h1>The Console and Math</h1>
+<p> </p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1+1</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<p> </p>
+<p><span style="color:red">You try - different mathematical operators</span></p>
+</section>
+<section id="everything-is-an-object" class="slide level2">
+<h1>Everything is an Object</h1>
+<p> </p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a.number&lt;-<span class="dv">1+1</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a.number</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<p> <br />
+ </p>
+<p><span style="color:red">You try - what can you save as an object?</span></p>
+</section>
+<section id="note-comment-your-code-as-you-write-with" class="slide level2">
+<h1>Note: Comment Your Code as You Write with <code>#</code></h1>
+<p>The text after <code>#</code> is not evaluated.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#This is going to be the number two</span>
+a.number&lt;-<span class="dv">1+1</span></code></pre></div>
+<p><small style="font-size:.8em"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">#####----------
+
+<span class="co"># You can get creative with comments to separate code blocks</span>
+<span class="co"># And write a lot, which is good practice</span>
+
+#####----------</code></pre></div>
+<p></small> Your comments tell readers - including yourself - what you are doing</p>
+</section>
+<section id="functions-work-on-objects" class="slide level2">
+<h1>Functions Work on Objects</h1>
+<p> </p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sin</span>(a.number)</code></pre></div>
+<pre><code>## [1] 0.9092974</code></pre>
+<p>How to get help for a function</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">?cos
+
+<span class="kw">help</span>(cos)
+
+??<span class="st">&#39;cosine function&#39;</span></code></pre></div>
+</section>
+<section id="lots-of-object-types---like-data" class="slide level2">
+<h1>Lots of Object Types - like Data!</h1>
+<p> </p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(cars, <span class="dt">n=</span><span class="dv">3</span>) <span class="co">#note the n= argument!</span></code></pre></div>
+<pre><code>##   speed dist
+## 1     4    2
+## 2     4   10
+## 3     7    4</code></pre>
+<blockquote>
+<p><red>Try looking at all of cars and names(cars)</red></p>
+</blockquote>
+</section>
+<section id="graphics-are-a-snap" class="slide level2">
+<h1>Graphics are a Snap</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(speed ~<span class="st"> </span>dist, <span class="dt">data=</span>cars)</code></pre></div>
+<p><img src="01_intro_files/figure-revealjs/plotCode-1.png" title="" alt="" width="672" /></p>
+<p><span class="fragment">Look at ?plot to see other arguments to change appearance</span></p>
+</section>
+<section id="installing-packages" class="slide level2">
+<h1>Installing Packages</h1>
+<center>
+<img src="images/01/packages1.jpg">
+<center>
+</section>
+<section id="installing-packages-1" class="slide level2">
+<h1>Installing Packages</h1>
+<center>
+<img src="images/01/packages2.jpg">
+<center>
+</section>
+<section id="installing-packages-2" class="slide level2">
+<h1>Installing Packages</h1>
+<p>You can also install packages from the command line.<br />
+<small style="font-size:.8em;"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>, <span class="dt">repos=</span><span class="st">&#39;http://cran.case.edu/&#39;</span>, <span class="dt">dependencies=</span><span class="ot">TRUE</span>)</code></pre></div>
+<p></small></p>
+<p>Using one of the above methods, install the package ggplot2 and its dependencies now.</p>
+</section>
+<section id="using-a-package" class="slide level2">
+<h1>Using a Package</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+
+<span class="kw">qplot</span>(dist, speed, <span class="dt">data=</span>cars)</code></pre></div>
+<p><img src="01_intro_files/figure-revealjs/qplotCode-1.png" title="" alt="" width="672" style="display: block; margin: auto;" /></p>
+</section>
+<section id="you-try-it" class="slide level2">
+<h1>You Try It</h1>
+<ol type="1">
+<li>Load ggplot2 and look at the mtcars data set</li>
+</ol>
+<p>2.Look at the qplot help file &amp; demos</p>
+<ol start="3" type="1">
+<li>Make two plots (ggplot or plot)</li>
+</ol>
+<p><img src="01_intro_files/figure-revealjs/plotcode2-1.png" title="" alt="" width="384" style="display: block; margin: auto;" /></p>
+</section>
+<section id="questions-1" class="slide level2">
+<h1>Questions</h1>
+</section>
+    </div>
+  </div>
+
+  <script src="01_intro_files/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="01_intro_files/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
