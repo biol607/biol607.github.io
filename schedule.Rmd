@@ -10,6 +10,7 @@
 __Lecture:__ How do we use data to understand how the world works?    
 __Lab:__ Introduction to R Computing language. Best practices in executing Reproducible Research. Introduction to Markdown    
 __Reading:__ G&W  [Preface](http://r4ds.had.co.nz/introduction.html), [Intro](http://r4ds.had.co.nz/explore-intro.html), [Workflow basics](http://r4ds.had.co.nz/workflow-basics.html), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Markdown](http://r4ds.had.co.nz/r-markdown.html) Chapters, [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-intro
   
 ###Week 2.   
 __Lecture:__ Sampling and Simulation. Descriptive statistics, and the creation of good observational sampling designs.   
