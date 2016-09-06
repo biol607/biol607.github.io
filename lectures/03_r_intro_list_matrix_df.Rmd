@@ -1,0 +1,190 @@
+---
+title: "Matrices, Lists, and Data Frames, Oh My!"
+author: "Intro to Computational Data Analysis for Biology"
+output: html_document
+---
+
+
+### A Vector is like a column... So what are rows?
+
+Right now, we've worked with a single vector, and I've made the analogy that a vector is like a column in a spreadsheet. Each index references a different row. But, we know that spreadsheets have many columns.  What would that be like in R? Introducing, the matrix.
+
+```{r}
+my_matrix <- matrix(1:50, nrow=10)
+
+my_matrix
+```
+
+Well that's a table. Notice that the rows and column labels are in brackets with commas. The row labels all have a comma after a number, and the column labels have the comma before the number.  This suggest an indexing scheme - where we have `[row, column]` to define any individual cell of a matrix.
+
+Think of the matrix as the cells of a spreadsheet. So, let's say we wanted row 5, column 3 of `my_matrix`
+
+```{r}
+my_matrix[5,3]
+```
+
+What about if we wanted to get a whole row or a whole column? R let's us specify that by leaving the columns or rows blank, respectively.  For example, to see the entire third row of this matrix
+
+```{r}
+#third row - note no column specified
+my_matrix[3,]
+```
+
+Similarly, for the fourth column
+
+```{r}
+my_matrix[,4]
+```
+
+So, what `class` are these outputs? Find out with `str`.
+
+Matrices are great as many functions specialize in looking at rows and columns. For example
+
+```{r}
+rowMeans(my_matrix)
+
+colSums(my_matrix)
+```
+
+We can also get the dimensions of a matrix in a few different fashions
+```{r}
+#All at once
+dim(my_matrix)
+
+#just rows
+nrow(my_matrix)
+
+#just columns
+ncol(my_matrix)
+```
+
+Try creating a 10 x 10 matrix of random uniform numbers between 5 and 50, and get the row and column means. What's the output of str?
+
+###But columns should have names!
+
+Matrices are somewhat unsatisfying, as we're going to want to reference our columns by name. R has a catchall object type called a `list` where objects are stored in key-value pairs. If you know the key - think column name - you can access the value. Let's see how this works.
+
+```{r}
+my_list <- list(First = 1:10,
+                Second = letters[1:5])
+
+my_list
+```
+
+So now we have a list with two elements, a vector of ten numbers and a vector of five letters.  Note the funny `$` notation next to the names of the keys. Much like we've noticed indiced before when we look at object suggesting how we can access the pieces they hold, so, too, is this a clue.  To look at just the object stored with the key (again, think column name!) "First", we have three options
+
+```{r}
+my_list$First
+
+my_list[["First"]]
+
+my_list["First"]
+
+my_list[1]
+```
+
+Note the first way (ha!) uses the `$` followed by another new way to index - `[[]]`. The third uses our old friend `[]`, but in a new way. The fourth assumes we want the first key-value pair from the list, and its name is unimportant. What is the different between these methods?  Try `str` out on all of them. Notice anything? The first two return vectors. The second return lists. Yeah, sneaky. It's important to know which method of accessing a list you are using so that you can then use the output in the proper way. More on that in a moment.
+
+Back to `[1]` -  what *is* first? How do you know?  To get the keys in a list (think column names!) we use `names`
+
+```{r}
+names(my_list)
+```
+
+Try this out. Create a list consisting of a vector of numbers, an `NA`, and a list which contains two vectors. Take a look at their second elements. Also, check out our old friends `str` and `summary` Yes, lists can be nested in lists.  And yes, you'd use something like `my_list$sublist$First` or anything analogous to access it.
+
+Last, how do you access multiple parts of a list? With matrices we could use the `[,]` notation, but not so with lists.  Let's first look at the second element of the first entry in `my_list`.
+
+```{r}
+my_list$First[2]
+```
+
+What are some other ways you can do that?
+
+OK, now what if we want to look at two elements of `my_list`.  Again, there are a few ways to do that.
+
+```{r}
+my_list[1:2]
+
+my_list[c("First", "Second")]
+```
+
+These both yield lists with multiple elements in them. We couldn't have used `[[]]` as it does not return a list, and hence you can't access multiple elements. This will become important as we get into *data frames*.
+
+
+###What if a matrix and a list had a baby?
+
+We've talked before about how vectors are like the columns in a spreadsheet. Those 'sheets' themselves within R care called data frames. And they are a useful combination of a matrix and a list. Let's look at a sample data frame.
+
+```{r}
+#load the data
+data(mtcars)
+
+#look at the top 6 rows
+head(mtcars)
+```
+
+So, I've loaded a data set about cars. And now we're looking at the first six lines using the head function. If you want, try typing `mtcars` without anything else. It runs off the screen! Hence, `head` is a useful function.
+
+There are other ways we can get information about the data frame that you will use time and time and time again to diagnose what's going wrong.
+
+```{r}
+summary(mtcars)
+
+#str is life
+str(mtcars)
+```
+
+Summary gives you some nice information about each column of `mtcars`. But `str` is the real star of the show. Any time your code borks on you and you think it's because of one of the objects you are passing to it, use `str` as it will give you a rich set of information about object types, values, etc. Often your object is not doing what you think it's doing.
+
+###So, I've got data. How do I use it?
+
+First off, how do we work with individual columns?  We have a few ways to access them.
+
+```{r}
+mtcars[["mpg"]]
+```
+
+Oh hey! It's the `[[]]` notation from before! Quick, before you `str`, what class of object will the output be?
+
+...
+
+If you guessed a numeric vector, you'd be right! We can also use `["mpg"]` as well to return a data frame. Now, we of course have other list-like ways of accessing columns.
+
+```{r}
+mtcars$mpg
+```
+
+This is a way we can not worry about quotes (unless you have spaces in column names, but you won't will you?) to also get the values in a column.  
+
+But, I mentioned a data frame can also act like a matrix. As we see in a spreadsheet, there are rows and columns - a matrix if you will. We can take advantage of this, as r uses the `[row, column]` formulation of indexing matrices.  So
+
+```{r}
+mtcars[1,1]
+```
+
+gives us that first value of mtcars. To get the second row and then second column, we can use similar notation.
+
+```{r}
+#columns
+mtcars[,2]
+
+#rows
+mtcars[2,]
+```
+
+By leaving out a row or column number, it means, give *all* of the values in that row or column to us.  We can of course be more specific.
+
+```{r}
+mtcars[1:5,1]
+```
+
+Yes, we can use vectors of numbers as rows and columns to get many of them. We can also mix up indices and column names.
+
+```{r}
+mtcars[1:5, c("disp", "hp")]
+```
+
+Or we could have had both numbers and column names in the columns vector. And this is just the beginning.
+
+Great! Now that you've got those basics, futz around with the rows and columns of mtcars. Get information about each of them, try applying arithmatic and functions, such as those we used on matrices, and see what shakes out!

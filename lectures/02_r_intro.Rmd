@@ -1,0 +1,337 @@
+---
+title: "First Intro to R"
+author: "Intro to Computational Data Analysis for Biology"
+output: html_document
+---
+
+Hello!  So, today we're going to begin to code in R. We're going to cover the basics of using R with a focus on data frame objects.
+
+But let's begin. To talk about what's going on and take notes offline, use this week's etherpad at https://etherpad.wikimedia.org/p/607-intro
+
+###I have this cursor sitting here. What can I do with it?
+
+Peering into your console, often the first source of fear and confusion is, what the heck do I do with this giant blank space.  The easiest way to start thinking about R is as th world's most advanced calculator.  Seriously, try it out!
+
+```{r}
+3+4
+```
+
+Whoah!  You can add!  Wonderful.  Let's try a few other operations.
+
+```{r}
+3-4
+
+4*5
+
+9/3
+
+2^7
+```
+
+Yes, basic arithmatic is right there at your fingertips.
+
+
+###Arithmatic is great. But I want more
+
+While arithmatic is cool (and necessary) we often want R to do more for us. Perhaps calculating more compelling mathematical functions. One that we commonly use is logarithms. Let's say you want the natural log of 10.
+
+```{r}
+log(10)
+```
+
+Great! Notice how that worked. We had log. Then two parentheses. Inside of which we had 10.  log is a **function**. Functions in R are hugely powerful. They are the core of many things we do. Functions consist of a function name, those parentheses, and then inside of the parentheses one or more *arguments* separated by commas. Often these arguments have names. For example, what if we wanted to get the log of 10 in base 10.
+
+```{r}
+log(10, base = 10)
+```
+
+Now we've supplied two arguments.
+
+
+###Help! I don't know what arguments to give to a function!
+
+We're going to run into many different functions as we go forward. To get help on how to use them, and what arguments to supply, there are two ways to get help. Let's look at the help file for log:
+
+```{r eval=FALSE}
+?log
+
+help("log")
+```
+
+Both of those do the same thing. Note that there is an order to arguments in the help file. If you put arguments in order in a function, you don't need to worry about naming them. This is bad practice (future you will be unhappy), as you may forget what they mean. Whevenever possible, use named arguments.
+
+
+###But I don't know what the name of a function I need is!
+
+Sometimes, we don't know the name of a function we're looking for. For example, in R, the function for arcsin is `asin`. But you have no way of knowing that. For that, we use the ?? with quotes.
+
+```{r eval=FALSE}
+??"arcsine"
+```
+
+Notice this brings up a list of helpfiles that have the word arcsine in them. Bueno! You can now track down the right function.
+
+###Getting out of the console
+So, all this is well and good. We like the console. It's where our code is executed. Which sounds morbid. Because, we want our code to be a living breathing thing. We want to be able to alter our code, to work with it, to love it.  That's why there is the script editing window.
+
+Try typing some of the code above into the script pane. Perhaps:
+
+```{r eval=FALSE}
+log(10, base=10)
+```
+
+Did anything happen? No! It shouldn't have. It just sits there, mutely staring back. To make R do something, select the code and type Cmd-Enter (Mac) or Ctrl-Enter (PC). AH HA! It runs! The selected code runs. Indeed, if you want to run a single line, hitting those keys will run whatever line your cursor currently happens to be on.
+
+What are the benefits of a script file? Well, 
+1. You won't forget what you just did. It will still be there.
+2. You can debug code if you run it and it borks on you with ease.
+3. You can save the script for future use.
+4. You can share it with collaborators.
+5. You create a permanent re-usable archive of what you have done. Your science is now repeatable.
+
+In this class, start a new script file for every class. Name it something useful, like `01_r_intro.R`. Keep all of your course scripts in a single folder, so it's easy to find what you need.
+
+###A little note about directory structure
+This is going to seem pedantic, but, good organization can save you hours of head-banging and gigabytes of duplicated data. For every topic or project I work on, I usually setup a directory like so:
+
+I often use something like this:
+
+```{r eval=FALSE}
+My Project 
+| 
+|- Data 
+|- R 
+|- Notes 
+|- Images 
+```
+
+In this way, I keep my data and scripts separate, and I always know where to look for different pieces of information. Your directory structure may vary, but this isn't a bad one. Sometimes I even get saucy, and have no R folder, but isntead put it all at the toplevel. Like I said, very saucy.
+
+I'd suggest doing something like this for in-class code. And each homework assignment should have its own directory (and I'll be sending them out like that).
+
+OK, back to scripts.
+
+###Before we go any further, a comment on comments
+
+It can be VERY easy to get lost in a sea of R code, not knowing what is going on. Fortunately, R provides something called *comments*.  In a comment, R stops evaluating code, and let's you write whatever love notes to yourself that you want to write.  In R the comment character is `#`.  For example.
+
+```{r}
+#this is a comments
+
+### This is also a comment
+
+3+4 #hey, I commented after 3+4
+
+########################################
+##### Oh, a comment box
+##### that I can use to delinieate
+##### blocks of code
+########################################
+```
+
+**ALWAYS COMMENT THE HECK OUT OF YOUR CODE TO HELP OUT FUTURE YOU!**  I'll include some comments in the code today to show you examples.
+
+Commenting in your scripts is particularly helpful, as it will enable you to known what you've done, when, and how. Make your comments useful!
+
+###Variables and You
+
+One of the great things about R is that you can save things as variables and use them later on. Some of them are there already.  For example:
+
+```{r}
+#This is Pi
+pi
+```
+
+WHOAH! PI IN R! 
+
+What if you wanted to make your own variable. Say, foo. And you wanted foo to always equal the square root of 2.
+
+```{r}
+#let's create a variable foo
+foo <- sqrt(2)
+
+
+#what's inside of foo
+foo
+```
+
+Note that the assignment operator is <- and not an = sign. Now, you *can* use =, but in R it's generally bad practice, as = will crop up in other places, and you'll want to avoid it.
+
+Now you have a variable that you can use form now on that is the square root of two! For example:
+
+```{r}
+foo + 5
+
+log(foo, base=2)
+
+foo^2
+```
+
+Some notes on variable names - 
+1. Make your variable name descriptive. If it needs to be long, so be it, although economy is helpful.
+2. Do not use `.` in your variable name. Such as `my.var` It has a special meaning. Use `_` instead. So, `my_var`.
+
+For more, see http://adv-r.had.co.nz/Style.html
+
+###More than a number
+
+OK, numbers are great, but there are other types of objects we'll be dealing with in R. Primarily, we're going to work with data frames, but let's build up to a data frame, as it's big and hairy. 
+
+First, are there other object types that have a single element to them beyond numbers?  Well, yes!  There are strings - words in quotes
+
+```{r}
+"hello"
+```
+
+Also, Booleans, which denote true and false
+```{r}
+TRUE
+
+FALSE
+
+0==4
+
+4==4
+
+3 <= 4
+
+3 <= 4
+```
+
+Note the different ways we made comparisons.  These will become handy as you move on. Booleans are really 1s and 0s, such that you can even do math with them
+
+```{r}
+TRUE + TRUE + FALSE
+```
+
+OK, what about something for a missing value. For that, we have NA.  This is quite important if, say, you have a missing value in your data set.
+
+```{r}
+NA
+
+NA + 1
+```
+
+No one likes an NA, and often we have to find ways around them!
+
+###Combining values into larger objects
+
+Now that we have a few object times down, what is we have a bunch of them we want to work with together?  Let's start with what we call a vector.
+
+What is a vector? A vector is a bunch of numbers (or other things) all in one single object that we can reference with an index.  Thing of it as a column in a spreadsheet. For example, let's say I had a column containing all of the integers from 5 through 10, and I wanted to know the 2nd integer.
+
+```{r}
+my_numbers <- c(5, 6, 7, 8, 9, 10)
+
+my_numbers[2]
+```
+
+Notice a few things. First, we created our vector wth the function `c`.  This function takes a sequence of values and puts them into a vector. These values can be anything - numbers, strings, booleans, etc.  Second, notice that to reference the second value of the vector we used [] Specificially, we put `[2]` in. This means give me the second value in this object.
+
+Now you try it. Create a vector - any vector - and try pulling out single values. Do some math with them. Log transform them. Use your vector with an index as you would any other variable.  For example
+
+```{r}
+my_vector <- 1:100
+
+my_vector[4] + my_vector[50]
+```
+
+Oh! Notice the use of `:` there to get a long vector? Neat trick, no?  There are other ways to generate vectors. Here are two:
+
+First, a function to get a sequence with non-integer steps between numbers
+
+```{r}
+seq(from = 1, to = 2, by=0.1)
+```
+
+Second, 10 random numbers between 0 and 100
+
+```{r}
+runif(10, min = 0, max = 100)
+```
+
+Now, vectors are neat, as they allow us to introduce two more concepts.  First, some functions take vectors as input, and return other types of objects. For example, let's say we wanted to sum everything in `my_vector` above. And then get the average of a bunch of random numbers between 0 and 100
+
+```{r}
+sum(my_vector)
+
+#a function in a function!
+#oh my!
+mean(runif(10, min = 0, max = 100))
+
+
+```
+
+OH!  Notice I nested a function inside of a function. YES! You can do that. But only when you **really** need to. To keep track of things, it's often better practice to create an object with a variable name that has meaning to you, and *then* feed that as an argument to another function.
+
+Last, often you just want some summary information about your vector. You'll want to do this for many more complex objects in the future as well. Fortunately, there's a function for that. Summary!
+
+```{r}
+summary(my_numbers)
+```
+
+
+###I'm all vectorized. What does this have to do with data?
+
+We've talked before about how vectors are like the columns in a spreadsheet. Those 'sheets' themselves within R care called data frames. Let's look at a sample data frame.
+
+```{r}
+#load the data
+data(mtcars)
+
+#look at the top 6 rows
+head(mtcars)
+```
+
+So, I've loaded a data set about cars. And now we're looking at the first six lines using the head function. If you want, try typing `mtcars` without anything else. It runs off the screen! Hence, `head` is a useful function.
+
+There are other ways we can get information about the data frame that you will use time and time and time again to diagnose what's going wrong.
+
+```{r}
+summary(mtcars)
+
+#str is life
+str(mtcars)
+```
+
+Summary gives you some nice information about each column of `mtcars`. But `str` is the real star of the show. Any time your code borks on you and you think it's because of one of the objects you are passing to it, use `str` as it will give you a rich set of information about object types, values, etc. Often your object is not doing what you think it's doing.
+
+###So, I've got data. How do I use it?
+
+First off, how do we work with individual columns?  We have a few ways to access them.
+
+```{r}
+mtcars[["mpg"]]
+```
+
+This is kind of like the [] notation of before, but instead we use [[]] with a quoted variable name.
+
+```{r}
+mtcars$mpg
+```
+
+This is a way we can not worry about quotes (unless you have spaces in column names, but you won't will you?) to also get the values in a column.  Last, as we see in a spreadsheet, there are rows and columns - a matrix if you will. We can take advantage of this, as r uses the `[row, column]` formulation of indexing matrices.  So
+
+```{r}
+mtcars[1,1]
+```
+
+gives us that first value of mtcars. To get the second row and then second column, we can use similar notation.
+
+```{r}
+#columns
+mtcars[,2]
+
+#rows
+mtcars[2,]
+```
+
+By leaving out a row or column number, it means, give *all* of the values in that row or column to us.  We can of course be more specific.
+
+```{r}
+mtcars[1:5,1]
+```
+
+Yes, we can use vectors of numbers as rows and columns to get many of them.
+
+Great! Now that you've got those basics, futz around with the rows and columns of mtcars. Get information about each of them, try applying arithmatic and functions, and see what shakes out!
