@@ -9,6 +9,7 @@ output:
     center: false
     transition: fade
     self_contained: false
+    lib_dir: libs
     css: style.css
 
 ---
