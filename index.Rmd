@@ -2,6 +2,13 @@
 title: "Intro to Data Science for Biology"
 ---
 
+```{r demoplot, fig.align='center', echo=FALSE}
+library(ggplot2)
+ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
+  geom_point() +
+  theme_bw(base_size=14) +
+  stat_smooth(method="lm")
+```
 
 **Instructor:** Jarrett Byrnes, PhD.
 
@@ -11,5 +18,11 @@ title: "Intro to Data Science for Biology"
 
 **Office Hours:** Prof. Byrnes will hold office hours Tuesday from 1:30-3
 
-##Course News:
-Welcome to the class! Please browse around the site or download the [syllabus](./biol607_syllabus_2016.doc)!
+**Source for this Website:** https://github.com/biol607/biol607.github.io/
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
+
+## Course News:
+*9/5/16* Welcome to the class! Please browse around the site or download the [syllabus](./biol607_syllabus_2016.doc)!
