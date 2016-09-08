@@ -9,15 +9,18 @@ navbar:
     href: overview.html
   - text: "Schedule"
     href: schedule.html
+  - text: "Homework"
+    href: https://github.com/biol607/homework_2016
   - text: "Texts"
-    href: texts.html    
+    href: texts.html
   - text: "Final Project"
-    href: final.html    
+    href: final.html
   - text: "Extra Credit"
     href: extra.html
   - text: "Syllabus"
     href: biol607_syllabus_2016.doc
-    
+
+
 output:
   html_document:
     theme: lumen
