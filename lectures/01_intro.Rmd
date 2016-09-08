@@ -15,6 +15,10 @@ output:
 ---
 
 ## {data-background="images/01/Sonoma_coast.jpg"}
+<!-- comments for next year 
+  - futz with philosophy example
+  - eliminate last part of class
+-->
 <br><br><center><div style="font-size: 2em;font-weight: bold; color:black;background-color:white;opacity:0.8;"> Introduction  to An  Introduction  to  Computational  Data  Analysis  for  Biology  </div>  
   
   
@@ -22,12 +26,8 @@ output:
 UMass Boston  
 https://biol607.github.io/</span></center>
 
-## But First, A Pop Quiz
-<br><br><center>
-<div style="font-size: 2em;font-weight: bold;">http://tinyurl.com/firstPopQuiz</div>
-</center><br><br>
 
-## Second, Some New Technology
+## First, Some New Technology
 https://etherpad.wikimedia.org/p/607-intro
 
 - This class will use collaborative note-taking
@@ -36,12 +36,18 @@ https://etherpad.wikimedia.org/p/607-intro
 
 - It's also a way to ask me a question during class
 
-## Third, Some Old Technology
+## Second, Some Old Technology
 ![](images/01/sticky-note-color-clipart.jpeg)  
 
 > - Green: Party on, Wayne 
 > - Red: I fell off the understanding wagon  
 > - Blue: Write a question/Other
+
+
+## And Now, A Pop Quiz!
+<br><br><center>
+<div style="font-size: 2em;font-weight: bold;">http://tinyurl.com/firstPopQuiz</div>
+</center><br><br>
 
 ## Outline for Today
 
