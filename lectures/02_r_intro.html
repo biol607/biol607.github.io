@@ -278,104 +278,20 @@ my_vector[4] + my_vector[50]</code></pre>
 <pre><code>##  [1] 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0</code></pre>
 <p>Second, 10 random numbers between 0 and 100</p>
 <pre class="r"><code>runif(10, min = 0, max = 100)</code></pre>
-<pre><code>##  [1] 32.359810 26.084500 97.131662 49.051413  2.539534 80.607729 93.982156
-##  [8] 33.973858 85.676577 98.077677</code></pre>
+<pre><code>##  [1]  5.0449549 53.6507961 73.7152073 91.3051059 84.0075868 86.7884400
+##  [7] 37.2419118 34.7859719  0.8265922 41.9767806</code></pre>
 <p>Now, vectors are neat, as they allow us to introduce two more concepts. First, some functions take vectors as input, and return other types of objects. For example, let’s say we wanted to sum everything in <code>my_vector</code> above. And then get the average of a bunch of random numbers between 0 and 100</p>
 <pre class="r"><code>sum(my_vector)</code></pre>
 <pre><code>## [1] 5050</code></pre>
 <pre class="r"><code>#a function in a function!
 #oh my!
 mean(runif(10, min = 0, max = 100))</code></pre>
-<pre><code>## [1] 48.2402</code></pre>
+<pre><code>## [1] 43.65547</code></pre>
 <p>OH! Notice I nested a function inside of a function. YES! You can do that. But only when you <strong>really</strong> need to. To keep track of things, it’s often better practice to create an object with a variable name that has meaning to you, and <em>then</em> feed that as an argument to another function.</p>
 <p>Last, often you just want some summary information about your vector. You’ll want to do this for many more complex objects in the future as well. Fortunately, there’s a function for that. Summary!</p>
 <pre class="r"><code>summary(my_numbers)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##    5.00    6.25    7.50    7.50    8.75   10.00</code></pre>
-</div>
-<div id="im-all-vectorized.-what-does-this-have-to-do-with-data" class="section level3">
-<h3>I’m all vectorized. What does this have to do with data?</h3>
-<p>We’ve talked before about how vectors are like the columns in a spreadsheet. Those ‘sheets’ themselves within R care called data frames. Let’s look at a sample data frame.</p>
-<pre class="r"><code>#load the data
-data(mtcars)
-
-#look at the top 6 rows
-head(mtcars)</code></pre>
-<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
-## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
-## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
-## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
-## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
-## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
-## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
-<p>So, I’ve loaded a data set about cars. And now we’re looking at the first six lines using the head function. If you want, try typing <code>mtcars</code> without anything else. It runs off the screen! Hence, <code>head</code> is a useful function.</p>
-<p>There are other ways we can get information about the data frame that you will use time and time and time again to diagnose what’s going wrong.</p>
-<pre class="r"><code>summary(mtcars)</code></pre>
-<pre><code>##       mpg             cyl             disp             hp       
-##  Min.   :10.40   Min.   :4.000   Min.   : 71.1   Min.   : 52.0  
-##  1st Qu.:15.43   1st Qu.:4.000   1st Qu.:120.8   1st Qu.: 96.5  
-##  Median :19.20   Median :6.000   Median :196.3   Median :123.0  
-##  Mean   :20.09   Mean   :6.188   Mean   :230.7   Mean   :146.7  
-##  3rd Qu.:22.80   3rd Qu.:8.000   3rd Qu.:326.0   3rd Qu.:180.0  
-##  Max.   :33.90   Max.   :8.000   Max.   :472.0   Max.   :335.0  
-##       drat             wt             qsec             vs        
-##  Min.   :2.760   Min.   :1.513   Min.   :14.50   Min.   :0.0000  
-##  1st Qu.:3.080   1st Qu.:2.581   1st Qu.:16.89   1st Qu.:0.0000  
-##  Median :3.695   Median :3.325   Median :17.71   Median :0.0000  
-##  Mean   :3.597   Mean   :3.217   Mean   :17.85   Mean   :0.4375  
-##  3rd Qu.:3.920   3rd Qu.:3.610   3rd Qu.:18.90   3rd Qu.:1.0000  
-##  Max.   :4.930   Max.   :5.424   Max.   :22.90   Max.   :1.0000  
-##        am              gear            carb      
-##  Min.   :0.0000   Min.   :3.000   Min.   :1.000  
-##  1st Qu.:0.0000   1st Qu.:3.000   1st Qu.:2.000  
-##  Median :0.0000   Median :4.000   Median :2.000  
-##  Mean   :0.4062   Mean   :3.688   Mean   :2.812  
-##  3rd Qu.:1.0000   3rd Qu.:4.000   3rd Qu.:4.000  
-##  Max.   :1.0000   Max.   :5.000   Max.   :8.000</code></pre>
-<pre class="r"><code>#str is life
-str(mtcars)</code></pre>
-<pre><code>## 'data.frame':    32 obs. of  11 variables:
-##  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
-##  $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
-##  $ disp: num  160 160 108 258 360 ...
-##  $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
-##  $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
-##  $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
-##  $ qsec: num  16.5 17 18.6 19.4 17 ...
-##  $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...
-##  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
-##  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
-##  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
-<p>Summary gives you some nice information about each column of <code>mtcars</code>. But <code>str</code> is the real star of the show. Any time your code borks on you and you think it’s because of one of the objects you are passing to it, use <code>str</code> as it will give you a rich set of information about object types, values, etc. Often your object is not doing what you think it’s doing.</p>
-</div>
-<div id="so-ive-got-data.-how-do-i-use-it" class="section level3">
-<h3>So, I’ve got data. How do I use it?</h3>
-<p>First off, how do we work with individual columns? We have a few ways to access them.</p>
-<pre class="r"><code>mtcars[[&quot;mpg&quot;]]</code></pre>
-<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
-## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
-## [29] 15.8 19.7 15.0 21.4</code></pre>
-<p>This is kind of like the [] notation of before, but instead we use [[]] with a quoted variable name.</p>
-<pre class="r"><code>mtcars$mpg</code></pre>
-<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
-## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
-## [29] 15.8 19.7 15.0 21.4</code></pre>
-<p>This is a way we can not worry about quotes (unless you have spaces in column names, but you won’t will you?) to also get the values in a column. Last, as we see in a spreadsheet, there are rows and columns - a matrix if you will. We can take advantage of this, as r uses the <code>[row, column]</code> formulation of indexing matrices. So</p>
-<pre class="r"><code>mtcars[1,1]</code></pre>
-<pre><code>## [1] 21</code></pre>
-<p>gives us that first value of mtcars. To get the second row and then second column, we can use similar notation.</p>
-<pre class="r"><code>#columns
-mtcars[,2]</code></pre>
-<pre><code>##  [1] 6 6 4 6 8 6 8 4 4 6 6 8 8 8 8 8 8 4 4 4 4 8 8 8 8 4 4 4 8 6 8 4</code></pre>
-<pre class="r"><code>#rows
-mtcars[2,]</code></pre>
-<pre><code>##               mpg cyl disp  hp drat    wt  qsec vs am gear carb
-## Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4</code></pre>
-<p>By leaving out a row or column number, it means, give <em>all</em> of the values in that row or column to us. We can of course be more specific.</p>
-<pre class="r"><code>mtcars[1:5,1]</code></pre>
-<pre><code>## [1] 21.0 21.0 22.8 21.4 18.7</code></pre>
-<p>Yes, we can use vectors of numbers as rows and columns to get many of them.</p>
-<p>Great! Now that you’ve got those basics, futz around with the rows and columns of mtcars. Get information about each of them, try applying arithmatic and functions, and see what shakes out!</p>
 </div>
 
 
