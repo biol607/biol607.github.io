@@ -25,6 +25,8 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 
 
 ## Course News:
+*9/8/16* New issue of [The R Journal](https://journal.r-project.org/archive/2016-1/)
+
 *9/7/16* Check out [Interview with a Data Sucker](http://simplystatistics.org/open%20science/2016/09/07/interview-with-a-data-sucker/)
 
 *9/6/16* Sticky notes are available at the bookstore in Desk Supplies section. Walk in, and go straight to the back.
