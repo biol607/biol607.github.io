@@ -15,7 +15,8 @@ output:
 ---
 
 ##  {data-background="images/03/mice_men.jpg"}
-
+<!-- move stratification to after random, reduce number of
+things on Qs for how to decide sampling design slide-->
 <br><br><br><br><br><br><br><br>
 <div style="align:center; background:black; color:white; font-size: 2em;font-weight: bold;">Sampling</div>
 
