@@ -16,7 +16,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-intro
 __Lecture:__ Sampling and Simulation. Descriptive statistics, and the creation of good observational sampling designs.   
 __Lab Topic:__ Libraries in R. R as a Data Importing Tool, Dplyr. Forcats.  
 __Reading:__ W&S 1,3-4, G&W Chapter 5, 11, 18, Dplyr cheat sheet  
-  
+__Etherpad:__ https://etherpad.wikimedia.org/p/sampling  
   
 ###Week 3.   
 __Lecture:__ Data visualization.  
