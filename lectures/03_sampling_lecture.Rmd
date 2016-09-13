@@ -1,6 +1,5 @@
 ---
-title: "Sampling Nature"
-
+title:
 output:
   revealjs::revealjs_presentation:
     reveal_options:
@@ -14,6 +13,11 @@ output:
     css: style.css
 
 ---
+
+##  {data-background="images/03/mice_men.jpg"}
+
+<br><br><br><br><br><br><br><br>
+<div style="align:center; background:black; color:white; font-size: 2em;font-weight: bold;">Sampling</div>
 
 ## Sampling
 
@@ -56,9 +60,9 @@ Population = All Individuals</div>
           
 ## How can sampling a population go awry?
 <div style="font-size:32pt">
-- Sample is not **representative**
-- Replicates do not have **equal chance** of being sampled
-- Replicates are not is not **independent**
+> * Sample is not **representative**
+> * Replicates do not have **equal chance** of being sampled
+> * Replicates are not is not **independent**
 </div>
 
 
@@ -96,11 +100,9 @@ Can incorporate multiple gradients
 ## Solution: Random Sampling
 ```{r spatialSample2,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
 ```
-<div class="fragment">
-Two sampling schemes:  
--  Random - samples chosen using random numbers  
-- Haphazard - samples chosen without any system (careful!)
-</div>
+<div id="fragment">Two sampling schemes:  </div>
+> *  Random - samples chosen using random numbers  
+> * Haphazard - samples chosen without any system (careful!)
 
   
 ## Non-Independence & Haphazard Sampling
@@ -383,7 +385,7 @@ basePlot + xlim(c(30, 55)) +
 > What is the range of values for 2/3 of a population?
 
 ## Describing Population Variation
-```{r sampDistVar, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+```{r sampDistVar2, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 s_samp <- sd(samp)
 splot + xlim(c(30, 55)) +
   geom_vline(xintercept=mean(samp)+s_samp, lty=2, color="orange", lwd=3) +
