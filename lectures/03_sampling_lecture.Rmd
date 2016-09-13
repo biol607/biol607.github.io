@@ -1,0 +1,431 @@
+---
+title: "Sampling Nature"
+
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+
+---
+
+## Sampling
+
+```{r set-rDisplay, echo=FALSE, cache=FALSE}
+library(knitr)
+read_chunk("./03_sampling_lecture.R")
+opts_chunk$set(fig.height=5, comment=NA, warning=FALSE)
+library(ggplot2)
+```
+
+1. Sampling Nature
+2. Describing your Sample
+3. Using a Sample to Describe a Population
+
+## Today's Quiz
+<br><br><br><center>http://tinyurl.com/sampling-pre</center>
+ 
+ 
+## Today's Etherpad
+<br><br><br><center>https://etherpad.wikimedia.org/p/sampling</center>
+          
+## What is a population?
+```{r population,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+<div class="fragment">&nbsp;  
+Population = All Individuals</div>
+
+
+
+
+          
+## What is a sample?
+```{r sample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+<div class="fragment">A <b>sample</b> of individuals in a randomly distributed population.</div>
+
+
+
+
+          
+## How can sampling a population go awry?
+<div style="font-size:32pt">
+- Sample is not **representative**
+- Replicates do not have **equal chance** of being sampled
+- Replicates are not is not **independent**
+</div>
+
+
+
+          
+## Bias from Unequal Representation
+```{r colorSize,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+If you only chose one color, you would only get one range of sizes.
+
+
+
+          
+## Bias from Unequal Change of Sampling
+```{r spatialBias,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+<span class="fragment">Spatial gradient in size</span>
+
+
+
+          
+## Bias from Unequal Change of Sampling
+```{r spatialSample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+Oh, I'll just grab those individuals closest to me...
+
+
+## Solution: **Stratified** Sampling
+```{r stratified,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+Sample over a known gradient, aka **cluster sampling**
+
+Can incorporate multiple gradients
+
+## Solution: Random Sampling
+```{r spatialSample2,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+<div class="fragment">
+Two sampling schemes:  
+-  Random - samples chosen using random numbers  
+- Haphazard - samples chosen without any system (careful!)
+</div>
+
+  
+## Non-Independence & Haphazard Sampling
+```{r samplePath,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+<span class="fragment">What if there are interactions between individuals?</span>
+
+
+
+## Solution: Chose Samples Randomly
+```{r samplePath2,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+  Path chosen with random number generator
+
+## Deciding Sampling Design
+&nbsp;  
+&nbsp;  
+
+What influences the measurement you are interested in?
+&nbsp;  
+
+<div class="fragment">
+<center>
+  
+  
+<img src="./images/03/dag1.jpg" width=500>  
+  
+  
+</center>
+<center>
+ Causal Graph </center>
+</div>
+
+      
+## Stratified or Random?
+&nbsp;  
+&nbsp;  
+
+
+Do you know all of the influences?
+
+<center>
+  
+  
+<img src="./images/03/dag2.jpg" width=500>  
+  
+
+
+
+## Stratified or Random?
+&nbsp;  
+&nbsp;  
+
+
+Do you know all of the influences?
+
+<center>
+  
+  
+<img src="./images/03/dag3.jpg" width=500>  
+  </center>
+
+  
+<div class="fragment">
+<center>
+You can represent this as an equation:<br>
+Size = Color + Location + ???
+</center>
+</div>
+
+## Stratified or Random?
+
+- How is your population defined?  
+
+
+- What is the scale of your inference?  
+
+
+- What might influence the inclusion of a replicate?  
+
+
+- How important are external factors you know about?  
+
+
+- How important are external factors you cannot assess?  
+
+      
+## Exercise
+<div style="font-size: 1.4em;">
+Draw a causal graph of the influences on one thing you measure
+
+How would you sample your population?
+
+</div>
+
+## Sampling
+  
+1. Sampling Nature  
+  
+<span style="color:red">2. Describing your Sample</span>  
+  
+3. Using a Sample to Describe a Population
+
+
+## Taking a Descriptive
+```{r sample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+
+<center>How big are individuals in this population?  
+
+## Our 'Sample'
+
+```{r samp, echo=FALSE}
+set.seed(2012)
+samp <- rnorm(15, 45,5)
+samp
+```
+
+## How can we Understand Our Sample
+
+```{r sampPlot, echo=FALSE}
+qplot(samp, geom="histogram", bins=30) +
+  theme_bw(base_size=17)
+```
+
+
+## Median - Dead Center
+
+```{r sampSort, echo=FALSE}
+sort(samp)
+```
+<Br><br>
+<div class="fragment"> Middle Value = 50th Percentile = 0.5 Quantile = Median</div>  
+<br><br>
+<div class="fragment"> 
+```{r median, echo=FALSE}
+median(samp)
+```
+</div>
+
+## What About the Variability?
+```{r sampPlot, echo=FALSE}
+```
+
+Other Quantiles!  
+<div class="fragment">(Percentile = Quantiles * 100)</div>
+
+## Quantiles and Quartiles
+
+```{r sampSort, echo=FALSE, comment=NA}
+```
+<br><br>
+<div class="fragment">
+Quantiles:
+```{r quantiles, echo=FALSE, comment=NA}
+quantile(samp, c(0.05, 0.1, 0.5, 0.90, 0.95))
+```
+</div>
+
+<br><br>
+<div class="fragment">
+Quartiles (quarter-quantiles):
+```{r quartiles, echo=FALSE, comment=NA}
+quantile(samp)
+```
+</div>
+
+
+
+## Inter-Quartile Range
+
+IQR = Range from 0.25 to 0.75 Quantile
+
+```{r quantiles, echo=FALSE}
+```
+  
+  
+  <br><br>
+  
+<div class="fragment">
+IQR = `r quantile(samp, 0.75) - quantile(samp, 0.25)`
+</div>
+
+## Boxplots Show Quantiles
+```{r boxplot, echo=FALSE, fig.height=5, fig.width=6}
+qplot(1, samp, geom="blank") +
+  geom_boxplot(width=0.5) +
+  theme_bw(base_size=17) +
+  ylim(c(25,55)) +
+  xlim(c(0,2)) +
+  xlab("") +
+  ylab("Value\n")
+```
+
+Whiskers show 1.5x the IQR
+
+## {}
+<br><br><br>
+<center>**What do we learn from these measures?**</center>
+
+
+## Sampling
+  
+1. Sampling Nature  
+  
+2. Describing your Sample  
+  
+<span style="color:red">3. Using a Sample to Describe a Population</span>
+
+## This is Just a Sample
+
+```{r sampPlot, echo=FALSE, warning=FALSE}
+```
+<div class="fragment">An estimate of the population</div>
+
+## How Does our Sample Compare to the Population?
+
+```{r sampDist, echo=FALSE, warning=FALSE}
+x <- seq(30,57,.1)
+y <- dnorm(x, 45, 5)
+y <- y*3/max(y)
+basePlot <- qplot(samp, geom="histogram", bins=30) +
+  theme_bw(base_size=17)+
+  xlim(c(30.14803, 53.75905))
+  
+splot <- basePlot +
+  geom_line(aes(x=x, y=y), color="red") 
+
+splot
+```
+
+## Estimating Population Parameters
+
+> * Before we described the sample  
+  
+> * We want to estimate **population** parameters
+  
+> * N.B. Greek Letters = Population, English = Sample
+
+## Sample Properties: Mean {.bigger}
+&nbsp;  
+&nbsp;  
+<center> 
+$\bar{Y} = \frac{ \displaystyle \sum_{i=1}^{n}{y_{i}} }{n}$
+</center>
+
+$\large \bar{Y}$ - The average value of a sample  
+$y_{i}$ - The value of a measurement for a single individual   
+n - The number of individuals in a sample  
+&nbsp;  
+$\mu$ - The average value of a population  
+(Greek = population, Latin = Sample)
+
+## How Good is our Estimate?
+```{r sampDistMean, echo=FALSE, warning=FALSE}
+
+mplot <- qplot(samp, geom="histogram", bins=30) +
+#  geom_line(aes(x=x, y=y), color="red") +
+  geom_vline(xintercept=mean(samp), color="blue", lty=2)+
+  theme_bw(base_size=17) +
+  xlim(c(30.14803, 53.75905))
+mplot
+```
+
+## How Good is our Estimate?
+```{r sampDistMean2, echo=FALSE, warning=FALSE}
+
+mplot+
+  geom_line(aes(x=x, y=y), color="red")
+```
+
+## Describing Population Variation
+```{r sampDistVar, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+s_samp <- sd(samp)
+basePlot + xlim(c(30, 55)) +
+  geom_vline(xintercept=mean(samp)+s_samp, lty=2, color="orange", lwd=3) +
+  geom_vline(xintercept=mean(samp)-s_samp, lty=2, color="orange", lwd=3) 
+```
+  
+> What is the range of values for 2/3 of a population?
+
+## Describing Population Variation
+```{r sampDistVar, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+s_samp <- sd(samp)
+splot + xlim(c(30, 55)) +
+  geom_vline(xintercept=mean(samp)+s_samp, lty=2, color="orange", lwd=3) +
+  geom_vline(xintercept=mean(samp)-s_samp, lty=2, color="orange", lwd=3) 
+```
+  
+What is the range of values for 2/3 of a population?
+
+
+## Sample Properties: Variance
+How variable was that population?
+$$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(Y_i - \bar{Y})^2}} {n-1}$$
+
+* Sums of Squares over n-1  
+* n-1 corrects for both sample size and sample bias  
+* $\sigma^2$ if describing the population
+* Units in square of measurement...
+
+## Sample Properties: Standard Deviation
+$$ \large s = \sqrt{s^2}$$  
+
+* Units the same as the measurement
+* If distribution is normal, 67% of data within 1 SD
+* 95% within 2 SD
+* $\sigma$ if describing the population
+
+## How Well did we Do: 67%?
+```{r sampDistSD, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+one_sd_plot <- splot + xlim(c(30, 55)) +
+  geom_vline(xintercept=mean(samp)+s_samp, lty=2, color="orange", lwd=3) +
+  geom_vline(xintercept=mean(samp)-s_samp, lty=2, color="orange", lwd=3) 
+one_sd_plot
+```
+  
+## How Well did we Do: 95%?
+```{r sampDist2SD, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+one_sd_plot +
+  geom_vline(xintercept=mean(samp)+2*s_samp, lty=2, color="purple", lwd=3) +
+  geom_vline(xintercept=mean(samp)-2*s_samp, lty=2, color="purple", lwd=3) 
+```  
+
+
+## Post-Quiz
+<br><br><br><center>http://tinyurl.com/sampling-post</center>
+ 

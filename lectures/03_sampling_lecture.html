@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Sampling Nature</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Sampling Nature</h1>
+</section>
+
+<section id="sampling" class="slide level2">
+<h1>Sampling</h1>
+<ol type="1">
+<li>Sampling Nature</li>
+<li>Describing your Sample</li>
+<li>Using a Sample to Describe a Population</li>
+</ol>
+</section>
+<section id="what-is-a-population" class="slide level2">
+<h1>What is a population?</h1>
+<img src="03_sampling_lecture_files/figure-revealjs/population-1.png" title="" alt="" width="576" style="display: block; margin: auto;" />
+<div class="fragment">
+ <br />
+Population = All Individuals
+</div>
+</section>
+<section id="what-is-a-sample" class="slide level2">
+<h1>What is a sample?</h1>
+<img src="03_sampling_lecture_files/figure-revealjs/sample-1.png" title="" alt="" width="576" style="display: block; margin: auto;" />
+<div class="fragment">
+A <b>sample</b> of individuals in a randomly distributed population.
+</div>
+</section>
+<section id="how-can-sampling-a-population-go-awry" class="slide level2">
+<h1>How can sampling a population go awry?</h1>
+<div style="font-size:32pt">
+<ul>
+<li>Sample is not <strong>representative</strong></li>
+<li>Replicates do not have <strong>equal chance</strong> of being sampled</li>
+<li>Replicates are not is not <strong>independent</strong></li>
+</ul>
+</div>
+</section>
+<section id="bias-from-unequal-representation" class="slide level2">
+<h1>Bias from Unequal Representation</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/colorSize-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> If you only chose one color, you would only get one range of sizes.</p>
+</section>
+<section id="bias-from-unequal-change-of-sampling" class="slide level2">
+<h1>Bias from Unequal Change of Sampling</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/spatialBias-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> <span class="fragment">Spatial gradient in size</span></p>
+</section>
+<section id="bias-from-unequal-change-of-sampling-1" class="slide level2">
+<h1>Bias from Unequal Change of Sampling</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/spatialSample-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> Oh, I’ll just grab those individuals closest to me…</p>
+</section>
+<section id="solution-stratified-sampling" class="slide level2">
+<h1>Solution: <strong>Stratified</strong> Sampling</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/stratified-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> Sample over a known gradient, aka <strong>cluster sampling</strong></p>
+<p>Can incorporate multiple gradients</p>
+</section>
+<section id="solution-random-sampling" class="slide level2">
+<h1>Solution: Random Sampling</h1>
+<img src="03_sampling_lecture_files/figure-revealjs/spatialSample2-1.png" title="" alt="" width="576" style="display: block; margin: auto;" />
+<div class="fragment">
+<p>Two sampling schemes:<br />
+- Random - samples chosen using random numbers<br />
+- Haphazard - samples chosen without any system (careful!)</p>
+</div>
+</section>
+<section id="non-independence-haphazard-sampling" class="slide level2">
+<h1>Non-Independence &amp; Haphazard Sampling</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/samplePath-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> <span class="fragment">What if there are interactions between individuals?</span></p>
+</section>
+<section id="solution-chose-samples-randomly" class="slide level2">
+<h1>Solution: Chose Samples Randomly</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/samplePath2-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> Path chosen with random number generator</p>
+</section>
+<section id="deciding-sampling-design" class="slide level2">
+<h1>Deciding Sampling Design</h1>
+<p> <br />
+ </p>
+<p>What influences the measurement you are interested in?  </p>
+<div class="fragment">
+<center>
+<p><img src="images/03/dag1.jpg" width=500></p>
+</center>
+<center>
+Causal Graph
+</center>
+</div>
+</section>
+<section id="stratified-or-random" class="slide level2">
+<h1>Stratified or Random?</h1>
+<p> <br />
+ </p>
+<p>Do you know all of the influences?</p>
+<center>
+<p><img src="images/03/dag2.jpg" width=500></p>
+</section>
+<section id="stratified-or-random-1" class="slide level2">
+<h1>Stratified or Random?</h1>
+<p> <br />
+ </p>
+<p>Do you know all of the influences?</p>
+<center>
+<img src="images/03/dag3.jpg" width=500><br />
+
+</center>
+<div class="fragment">
+<center>
+You can represent this as an equation:<br> Size = Color + Location + ???
+</center>
+</div>
+</section>
+<section id="stratified-or-random-2" class="slide level2">
+<h1>Stratified or Random?</h1>
+<ul>
+<li><p>How is your population defined?</p></li>
+<li><p>What is the scale of your inference?</p></li>
+<li><p>What might influence the inclusion of a replicate?</p></li>
+<li><p>How important are external factors you know about?</p></li>
+<li><p>How important are external factors you cannot assess?</p></li>
+</ul>
+</section>
+<section id="exercise" class="slide level2">
+<h1>Exercise</h1>
+<div style="font-size: 1.4em;">
+<p>Draw a causal graph of the influences on one thing you measure</p>
+<p>How would you sample your population?</p>
+</div>
+</section>
+<section id="sampling-1" class="slide level2">
+<h1>Sampling</h1>
+<ol type="1">
+<li>Sampling Nature</li>
+</ol>
+<p><span style="color:red">2. Describing your Sample</span></p>
+<ol start="3" type="1">
+<li>Using a Sample to Describe a Population</li>
+</ol>
+</section>
+<section id="taking-a-descriptive" class="slide level2">
+<h1>Taking a Descriptive</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sample-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /></p>
+<center>
+<p>How big are individuals in this population?</p>
+</section>
+<section id="our-sample" class="slide level2">
+<h1>Our ‘Sample’</h1>
+<pre><code> [1] 41.11041 42.11062 48.31628 45.44011 51.28539 41.85113 43.02021
+ [8] 46.86495 47.03553 38.87441 46.56152 51.24369 40.79575 46.86209
+[15] 31.41510</code></pre>
+</section>
+<section id="how-can-we-understand-our-sample" class="slide level2">
+<h1>How can we Understand Our Sample</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" title="" alt="" width="768" /></p>
+</section>
+<section id="median---dead-center" class="slide level2">
+<h1>Median - Dead Center</h1>
+<pre><code> [1] 31.41510 38.87441 40.79575 41.11041 41.85113 42.11062 43.02021
+ [8] 45.44011 46.56152 46.86209 46.86495 47.03553 48.31628 51.24369
+[15] 51.28539</code></pre>
+<Br><br>
+<div class="fragment">
+Middle Value = 50th Percentile = 0.5 Quantile = Median
+</div>
+<br><br>
+<div class="fragment">
+<pre><code>[1] 45.44011</code></pre>
+</div>
+</section>
+<section id="what-about-the-variability" class="slide level2">
+<h1>What About the Variability?</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" title="" alt="" width="768" /></p>
+Other Quantiles!<br />
+
+<div class="fragment">
+(Percentile = Quantiles * 100)
+</div>
+</section>
+<section id="quantiles-and-quartiles" class="slide level2">
+<h1>Quantiles and Quartiles</h1>
+<pre><code> [1] 31.41510 38.87441 40.79575 41.11041 41.85113 42.11062 43.02021
+ [8] 45.44011 46.56152 46.86209 46.86495 47.03553 48.31628 51.24369
+[15] 51.28539</code></pre>
+<br><br>
+<div class="fragment">
+<p>Quantiles:</p>
+<pre><code>      5%      10%      50%      90%      95% 
+36.63662 39.64295 45.44011 50.07273 51.25620 </code></pre>
+</div>
+<br><br>
+<div class="fragment">
+<p>Quartiles (quarter-quantiles):</p>
+<pre><code>      0%      25%      50%      75%     100% 
+31.41510 41.48077 45.44011 46.95024 51.28539 </code></pre>
+</div>
+</section>
+<section id="inter-quartile-range" class="slide level2">
+<h1>Inter-Quartile Range</h1>
+<p>IQR = Range from 0.25 to 0.75 Quantile</p>
+<pre><code>      5%      10%      50%      90%      95% 
+36.63662 39.64295 45.44011 50.07273 51.25620 </code></pre>
+<p><br><br></p>
+<div class="fragment">
+<p>IQR = 5.4694721</p>
+</div>
+</section>
+<section id="boxplots-show-quantiles" class="slide level2">
+<h1>Boxplots Show Quantiles</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/boxplot-1.png" title="" alt="" width="576" /></p>
+<p>Whiskers show 1.5x the IQR</p>
+</section>
+<section id="section" class="slide level2">
+<h1></h1>
+<br><br><br>
+<center>
+<strong>What do we learn from these measures?</strong>
+</center>
+</section>
+<section id="sampling-2" class="slide level2">
+<h1>Sampling</h1>
+<ol type="1">
+<li><p>Sampling Nature</p></li>
+<li><p>Describing your Sample</p></li>
+</ol>
+<p><span style="color:red">3. Using a Sample to Describe a Population</span></p>
+</section>
+<section id="this-is-just-a-sample" class="slide level2">
+<h1>This is Just a Sample</h1>
+<img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" title="" alt="" width="768" />
+<div class="fragment">
+An estimate of the population
+</div>
+</section>
+<section id="how-does-our-sample-compare-to-the-population" class="slide level2">
+<h1>How Does our Sample Compare to the Population?</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDist-1.png" title="" alt="" width="768" /></p>
+</section>
+<section id="estimating-population-parameters" class="slide level2">
+<h1>Estimating Population Parameters</h1>
+<ul>
+<li class="fragment">Before we described the sample</li>
+</ul>
+<ul>
+<li class="fragment">We want to estimate <strong>population</strong> parameters</li>
+</ul>
+<ul>
+<li class="fragment">N.B. Greek Letters = Population, English = Sample</li>
+</ul>
+</section>
+<section id="sample-properties-mean" class="slide level2 bigger">
+<h1>Sample Properties: Mean</h1>
+ <br />
+ <br />
+
+<center>
+<span class="math inline">\(\bar{Y} = \frac{ \displaystyle \sum_{i=1}^{n}{y_{i}} }{n}\)</span>
+</center>
+<p><span class="math inline">\(\large \bar{Y}\)</span> - The average value of a sample<br />
+<span class="math inline">\(y_{i}\)</span> - The value of a measurement for a single individual<br />
+n - The number of individuals in a sample<br />
+ <br />
+<span class="math inline">\(\mu\)</span> - The average value of a population<br />
+(Greek = population, Latin = Sample)</p>
+</section>
+<section id="how-good-is-our-estimate" class="slide level2">
+<h1>How Good is our Estimate?</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistMean-1.png" title="" alt="" width="768" /></p>
+</section>
+<section id="how-good-is-our-estimate-1" class="slide level2">
+<h1>How Good is our Estimate?</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistMean2-1.png" title="" alt="" width="768" /></p>
+</section>
+<section id="describing-population-variation" class="slide level2">
+<h1>Describing Population Variation</h1>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistVar-1.png" title="" alt="" width="768" /></p>
+<p>What is the range of values for 2/3 of a population?</p>
+</section>
+<section id="sample-properties-variance" class="slide level2">
+<h1>Sample Properties: Variance</h1>
+<p>How variable was that population? <span class="math display">\[\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(Y_i - \bar{Y})^2}} {n-1}\]</span></p>
+<ul>
+<li>Sums of Squares over n-1<br />
+</li>
+<li>n-1 corrects for both sample size and sample bias<br />
+</li>
+<li><span class="math inline">\(\sigma^2\)</span> if describing the population</li>
+<li>Units in square of measurement…</li>
+</ul>
+</section>
+<section id="sample-properties-standard-deviation" class="slide level2">
+<h1>Sample Properties: Standard Deviation</h1>
+<p><span class="math display">\[ \large s = \sqrt{s^2}\]</span></p>
+<ul>
+<li>Units the same as the measurement</li>
+<li>If distribution is normal, 67% of data within 1 SD</li>
+<li>95% within 2 SD</li>
+<li><span class="math inline">\(\sigma\)</span> if describing the population</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
