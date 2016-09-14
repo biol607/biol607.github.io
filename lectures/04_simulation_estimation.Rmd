@@ -1,0 +1,464 @@
+---
+title: "Estimation, Confidence, and Simulation"
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+```{r prep, echo=FALSE, cache=FALSE}
+library(knitr)
+library(dplyr)
+read_chunk("./03_sampling_lecture.R")
+opts_chunk$set(fig.height=5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(ggplot2)
+#devtools::install_github("dgrtwo/gganimate")
+library(gganimate)
+firefly <- read.csv("./data/04/04q06FireflyFlash.csv")
+```
+
+## How Well Can We Estimate Mean Age?
+
+1. Get in groups of 3 <br><br>
+2. Ask each other your age. Report the mean to me.<br><br>
+3. Now get into another group of three, and do the same.<br><br>
+
+
+
+## {data-background="images/04/firefly-ship.jpg"}
+
+## {data-background="images/04/fireflies-1500x1000.jpg"}
+
+## {data-background="images/04/maxresdefault.jpg"}
+
+## Firefly Flashing Frequency
+From a sample of `r nrow(firefly)` fireflies
+```{r firefly_hist, echo=FALSE}
+ff_hist <- ggplot(firefly, aes(x=flash.ms)) +
+  theme_bw(base_size=17) +
+  geom_histogram(bins=30, color="black", fill="lightgrey") +
+  xlab("Number of Flashes per Millisecond")
+
+ff_hist
+```
+
+## How Good are Population Estimates?
+> 1. Introduction to Simulation
+> 2. Determining Sample Size
+> 3. Confidence in our Estimates
+
+## {data-background="images/04/is-this-a-simulation.jpg"}
+<div style="position: fixed;left:0;bottom:0; font-size:0.3em">http://www.thetruthhunter.com/</div>
+
+
+## {}
+<h1 class="fragment">What are computers best at?</h1>
+<br><br><br><br>
+<h1 class="fragment">Iteration!</h1>
+
+## Iterating in R: Old Skool For Loops
+```{r for_loop}
+x <- 0
+for (x in 1:100){
+  x <- x+1
+}
+x
+```
+
+## Creation of Random Numbers
+```{r runif}
+runif(100, min=50, max=500)
+```
+
+
+## Fake Sampling
+```{r sample_practice}
+sample(1:100, size=50, replace=TRUE)
+```
+
+## Combining Simulation and Iteration for Inference
+> * We can repeat simulations  
+  
+> * We can modify conditions for each simulation  
+  
+> * We can examine how simulated results differ
+
+## Example: Simulated Sampling
+
+```{r simPop, echo=FALSE, warning=FALSE, message=FALSE, fig.show = "animate", cache=TRUE}
+library(dplyr)
+simPops <- data.frame(pop=1:10) %>%
+  group_by(pop) %>%
+  do(data.frame(popSamp = rnorm(10, 50, 10))) %>%
+  ungroup()
+
+p <- ggplot(data=simPops, mapping = aes(x=popSamp, frame = factor(pop))) +
+  geom_histogram(bins=10, position=position_identity(),
+                 mapping=aes(fill=factor(pop), cumulative = TRUE)) +
+  guides(fill="none") + xlab("")
+
+gg_animate(p)
+```
+
+## Example: Simulated Sampling With Differing Sample Size
+
+```{r simPopN, echo=FALSE, warning=FALSE, message=FALSE, fig.show = "animate", cache=TRUE}
+simPopN <- data.frame(pop=30:50) %>%
+  group_by(pop) %>%
+  do(data.frame(popSamp = rnorm(10, 50, 10))) %>%
+  ungroup()
+
+n <- ggplot(data=simPopN, mapping = aes(x=popSamp, frame = factor(pop))) +
+  geom_histogram(bins=10, position=position_identity(),
+                 mapping=aes(fill=factor(pop), cumulative = TRUE)) +
+  guides(fill="none") + xlab("")
+
+gg_animate(n)
+```
+
+## How Good are Population Estimates?
+<br><br><br>
+1. Introduction to Simulation  
+2. <span style="color:red">Determining Sample Size</span>  
+3. Confidence in our Estimates 
+
+## Back to Fireflies
+```{r firefly_hist, echo=FALSE}
+```
+
+## Our Mean Estimate
+```{r firefly_with_mean}
+ff_hist +
+  geom_vline(color="red", lty=2, lwd=2, xintercept=mean(firefly$flash.ms))
+```
+
+## Sample Properties: Mean {.bigger}
+&nbsp;  
+&nbsp;  
+<center> 
+$\bar{Y} = \frac{ \displaystyle \sum_{i=1}^{n}{y_{i}} }{n}$
+</center>
+
+$\large \bar{Y}$ - The average value of a sample  
+$y_{i}$ - The value of a measurement for a single individual   
+n - The number of individuals in a sample  
+&nbsp;  
+$\mu$ - The average value of a population  
+(Greek = population, Latin = Sample)
+
+## {}
+<br><br><br><center><h1>WAS OUR SAMPLE SIZE LARGE ENOUGH?</ht></center>
+
+
+## Two Simulation Approaches to Determine N
+  
+1. Use the sample as a 'population'  
+     - Draw different sample sizes and estimate mean  
+  
+   
+   
+   
+2. Estimate the mean and sd of our sample
+     - Assume a normal distribution
+     - Use mean and SD as population estimates
+     - Create simulated samples
+
+## Start With a Population...
+
+Mean of Firefly flashing times: `r mean(firefly$flash.ms)`  
+SD of Firefly flasing times: `r sd(firefly$flash.ms)`  
+<div class="fragment">So assuming a normal distribution...</div>
+<div class="fragment">
+```{r fireflydist, fig.height=3, fig.width=5, echo=FALSE}
+fireflyDens <- data.frame(x=seq(65,125, .1), 
+                  y=dnorm(seq(65,125, .1), mean(firefly$flash.ms),sd(firefly$flash.ms)))
+
+ffDensPlot <- ggplot(fireflyDens,aes(x=x, y=y)) +
+         geom_line(lwd=1.5, color="blue") +
+  theme_bw(base_size=17)
+ffDensPlot
+```
+</div>
+
+## Choose a Random Sample - n=5?
+
+Mean of Firefly flashing times: `r mean(firefly$flash.ms)`  
+SD of Firefly flasing times: `r sd(firefly$flash.ms)`  
+So assuming a normal distribution...
+
+```{r choose, echo=FALSE}
+set.seed(2002)
+fireflySim5 <- rnorm(5,mean(firefly$flash.ms),sd(firefly$flash.ms))
+```
+
+
+```{r fireflydistPoints, fig.height=3, fig.width=5, echo=FALSE}
+ffDensWithSim <- ffDensPlot +
+  geom_point(data=data.frame(x=fireflySim5, y=0), mapping=aes(x=x, y=y), size=4)
+ffDensWithSim
+```
+
+
+## Calculate Sample Mean
+
+Mean of Firefly flashing times: `r mean(firefly$flash.ms)`  
+SD of Firefly flasing times: `r sd(firefly$flash.ms)`  
+So assuming a normal distribution...
+
+
+```{r fireflydistMean, fig.height=3, fig.width=5, echo=FALSE}
+ffDensWithSim +
+  geom_vline(xintercept=mean(fireflySim5), lwd=3, color="red", lty=2)
+```
+
+<div class="fragment">Rinse and repeat...</div>
+
+## How Good is our Sample Size for Estimating a Mean?
+```{r distSim}
+simFrame <- 
+  data.frame(sampSize=rep(5:(nrow(firefly)+50), 10)) %>%
+  mutate(sim=1:n()) %>%
+  group_by(sim) %>%
+  mutate(m = mean(rnorm(sampSize, mean(firefly$flash.ms), sd(firefly$flash.ms)))) %>%
+  ungroup()
+
+simFrameSummary <- simFrame %>%
+  group_by(sampSize) %>%
+  summarize(mean_sim_sd = sd(m)) %>%
+  ungroup() %>%
+  arrange(mean_sim_sd)
+```
+
+```{r plot_dist_sim}
+dist_sim <- ggplot(simFrame, mapping=aes(x=sampSize, y=m)) +
+  theme_bw(base_size=17) +
+  geom_point() +
+  xlab("Sample Size") +
+  ylab("Estimate of Mean") 
+dist_sim
+```
+
+## Where does the variability level off?
+```{r dist_sim_stop}
+dist_sim +
+  geom_vline(xintercept=30, lwd=2, lty=2, color="red")
+```
+
+
+## Where does the variability level off?
+```{r dist_sim_low_sd}
+simFrameSummary
+```
+
+## Approach 2: Sample from the Population
+```{r fireflyData}
+fireFlyTimes <- ggplot(data=firefly, aes(x = flash.ms)) +
+  geom_point(y=0, size=4) + 
+  theme_bw(base_size = 17) +
+  scale_y_continuous(limits = c(-0.5, 0.5), breaks=c(-2,2))
+
+fireFlyTimes
+```
+
+## Sample from the Sample, n=5
+```{r fireFlySamp}
+firefly5samp <- sample(firefly$flash.ms, 5)
+firefly5samp_plot <- fireFlyTimes +
+  geom_point(data=data.frame(x=firefly5samp, y=0), 
+             mapping=aes(x=x, y=y), color="orange", size=8)
+firefly5samp_plot
+```  
+
+WITH replacement
+
+## Calculate Mean, n=5
+```{r fireFlySampMean}
+firefly5samp_plot +
+  geom_vline(xintercept=mean(firefly5samp), lty=2, lwd=2, color="red")
+```
+<div class="fragment">Rinse and Repeat</div>
+
+## Resulting Sample Size Suggestion
+```{r sampSim}
+sampFrame <- 
+  data.frame(sampSize=rep(5:(nrow(firefly)+50), 10)) %>%
+  mutate(sim=1:n()) %>%
+  group_by(sim) %>%
+  mutate(m = mean(sample(firefly$flash.ms, sampSize, replace=TRUE))) %>%
+  ungroup()
+
+sampFrameSummary <- simFrame %>%
+  group_by(sampSize) %>%
+  summarize(mean_sim_sd = sd(m)) %>%
+  ungroup() %>%
+  arrange(mean_sim_sd)
+```
+```{r plot_samp_sim}
+samp_sim <- ggplot(sampFrame, mapping=aes(x=sampSize, y=m)) +
+  theme_bw(base_size=17) +
+  geom_point() +
+  xlab("Sample Size") +
+  ylab("Estimate of Mean") 
+samp_sim
+```
+
+## Where does the variability level off?
+```{r samp_sim_stop}
+samp_sim +
+  geom_vline(xintercept=45, lwd=2, lty=2, color="red")
+```
+
+
+## Where does the variability level off?
+```{r samp_sim_low_sd}
+sampFrameSummary
+```
+
+## SO - how do you determine sample size for a parameter {.bigger}
+1. Take an initial sample or assume a distribution
+2. Take simulated draws of varying sample size
+3. A lot.
+4. Look for where variability in population parameter estimate levels off
+<br><br><br>
+<div class="fragment">This works for mean, sd, skew, median, quantiles, etc...</div>
+
+## How Good are Population Estimates?
+  
+1. Introduction to Simulation  
+2. Determining Sample Size
+3. <span style="color:red">Confidence in our Estimates </span>  
+
+## Even with n=80, Variability in Mean Estimate
+```{r plot_samp_sim}
+```
+
+## How variable is our estimate of a population parameter?
+> * We can resample our sample some number of times with replacement
+    - This resampling with replacement is called **bootstrapping**
+    - One replicate simulation is one **bootstrap**
+> * We can calculate the Standard Deviation of the values of those simulations
+> * This is called the botstrapped **Standard Error** of the estimate
+
+## {}
+<div style="position: fixed;top:25%; font-size:2em; align:center">Standard Error = the Standard Deviation of a Population of Estimates of a Parameter</div>
+
+## A Population of Standard Deviations
+```{r sd_sim}
+ffSD <- data.frame(sims=1:200) %>%
+  group_by(sims) %>%
+  mutate(sd_sim = sd(sample(firefly$flash.ms, size=nrow(firefly), replace=T)))
+```
+
+```{r sd_sim_plot, fig.height=4}
+hist(ffSD$sd_sim, xlab="Estimated Standard Deviation", 
+     main="Histogram of 200 Bootstrapped SDs of Firefly Flash Time")
+```
+
+<div class="fragment">Estimated SD:`r round(mean(ffSD$sd_sim),3)`</div>
+<div class="fragment">SD of SD (i.e., Standard Error of Estimate of SD): `r round(sd(ffSD$sd_sim),3)`</div>
+
+## So I always have to boostrap Standard Errors?
+<center style="font-size:3em" class="fragment">No</center>
+<br><br><br>
+<div class="fragment">Many common estimates have formulae, e.g.:  
+$$SE_{mean} = \frac{s}{\sqrt(n)}$$</div>
+<br><Br>
+<center style="font-size:0.5em" class="fragment">(but for medians, etc., yes )</center>
+
+## Means, Standard Deviation, and Standard Error
+> * A mean from a sample, m, is an estimate of a population mean, $\mu$  
+> * A SD from a sample, s,  is an estimate of the population SD, $\sigma$  
+> * The Standard Error of the mean is the standard deviation of your estimate of a mean if you had *many* estimates
+> * The SE tells you how much you can trust your estimate
+
+
+## Describing Confidence with an Interval
+```{r ciplot, fig.height=4}
+samp <- rnorm(20, 10, 3)
+s_samp <- sd(samp)
+se_samp <- s_samp/sqrt(length(samp))
+ggplot(data.frame(x=1, y=mean(samp), ymin=mean(samp)-2*se_samp, 
+                  ymax=mean(samp)+2*se_samp),
+       aes(x=x, y=y, ymin=ymin, ymax=ymax)) +
+  geom_pointrange() +
+  theme_bw(base_size=17) +
+  xlim(c(0.75, 1.25)) +
+  ylim(c(0,14)) +
+  xlab("") + ylab("value")
+```
+  
+<center>The 95% Conidence Interval</center>
+  
+## 95% Confidence Intervals
+> * 95% CI $\approx$ 2*SE (or 1.96, really....)<br><br>
+> * The Confidence Interval is hugely misunderstood<br><br>
+> * Describes the region where we are some percent confident that the true value of a parameter exists<br>
+>     - If you were to repeat this study 100 times, the CIs of 95 of the studies would overlap the true value<br><br>
+> * Fundamentally a Frequentist concept
+>     - There is a 'true' value, and if you were to repeat this study the same way, how often would you overlap it?
+
+
+## Replicated 95% Confidence Intervals 
+100 simulations drawing from the same population
+```{r ci_sim}
+set.seed(2016009)
+m_ci_df <- data.frame(sims=1:100) %>%
+  group_by(sims) %>%
+  do(samp = rnorm(20, 5, 3)) %>%
+  mutate(m = mean(samp), s = sd(samp),
+         se =s/sqrt(20),
+         ci=2*se) %>%
+  mutate(hasTrue = findInterval(5, c(m-ci, m+ci))) %>%
+  ungroup() %>%
+  select(-samp) %>%
+  mutate(hasTrue = hasTrue>0)
+```
+```{r m_ci_sim_plot}
+ci_sim_plot <- ggplot(m_ci_df, aes(x=sims, y=m, ymin=m-ci, ymax=m+ci)) +
+  geom_pointrange() +
+  xlab("Sim") + ylab("Mean") +
+  theme_bw(base_size=17)
+ci_sim_plot
+```
+
+## Replicated 95% Confidence Intervals 
+<br>
+```{r m_ci_sim_plot_value}
+ci_sim_plot +
+  geom_hline(yintercept=5, lty=2, lwd=1, color="black")
+```
+
+## Replicated 95% Confidence Intervals 
+<br>
+```{r m_ci_sim_plot_true}
+ci_sim_plot +
+  geom_hline(yintercept=5, lty=2, lwd=1, color="black") +
+  geom_pointrange(mapping=aes(color=hasTrue)) +
+  scale_color_manual(values=c("red", "black"),
+                     guide=guide_legend(title="Overlaps True\nValue"))
+
+```
+
+## OK, What Am I to Make of This?
+> * Fancy-pants statistics would never have been invented if we had computers that could just do simulations in the 1900s<br><br>
+> * We can only **estimate** population parameters from sample<br><br>
+> * There is always uncertainty in our estimate
+>     - Is it quantifiable<Br><br>
+> * We can derive estimates of uncertainty via simulation or use available formulae
+
+
+## SE, CD, CIs....
+![Cumming et al. 2007 Fig 4](images/04/cumming_comparison_2007.jpg)
+<div style="position: fixed;left:0;bottom:0; font-size:0.6em">[Cumming et al. 2007](http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf)</div>
+
+## SE, CD, CIs....
+![Cumming et al. 2007 Table 1](images/04/cumming_table_2007.jpg)
+<div style="position: fixed;left:0;bottom:0; font-size:0.8em">[Cumming et al. 2007](http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf)</div>

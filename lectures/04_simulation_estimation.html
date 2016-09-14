@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Estimation, Confidence, and Simulation</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Estimation, Confidence, and Simulation</h1>
+</section>
+
+<section class="slide level2">
+
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+</section>
+<section id="how-well-can-we-estimate-mean-age" class="slide level2">
+<h1>How Well Can We Estimate Mean Age?</h1>
+<ol type="1">
+<li>Get in groups of 3 <br><br></li>
+<li>Ask each other your age. Report the mean to me.<br><br></li>
+<li>Now get into another group of three, and do the same.<br><br></li>
+</ol>
+</section>
+<section id="section" class="slide level2" data-background="images/04/firefly-ship.jpg">
+<h1></h1>
+</section>
+<section id="section-1" class="slide level2" data-background="images/04/fireflies-1500x1000.jpg">
+<h1></h1>
+</section>
+<section id="section-2" class="slide level2" data-background="images/04/maxresdefault.jpg">
+<h1></h1>
+</section>
+<section id="firefly-flashing-frequency" class="slide level2">
+<h1>Firefly Flashing Frequency</h1>
+<p>From a sample of 35 fireflies <img src="04_simulation_estimation_files/figure-revealjs/firefly_hist-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="how-good-are-population-estimates" class="slide level2">
+<h1>How Good are Population Estimates?</h1>
+<ol type="1">
+<li class="fragment">Introduction to Simulation</li>
+<li class="fragment">Determining Sample Size</li>
+<li class="fragment">Confidence in our Estimates</li>
+</ol>
+</section>
+<section id="section-3" class="slide level2" data-background="images/04/is-this-a-simulation.jpg">
+<h1></h1>
+<div style="position: fixed;left:0;bottom:0; font-size:0.3em">
+<a href="http://www.thetruthhunter.com/" class="uri">http://www.thetruthhunter.com/</a>
+</div>
+</section>
+<section id="section-4" class="slide level2">
+<h1></h1>
+<h1 class="fragment">
+What are computers best at?
+</h1>
+<br><br><br><br>
+<h1 class="fragment">
+Iteration!
+</h1>
+</section>
+<section id="iterating-in-r-old-skool-for-loops" class="slide level2">
+<h1>Iterating in R: Old Skool For Loops</h1>
+<pre><code>[1] 101</code></pre>
+</section>
+<section id="creation-of-random-numbers" class="slide level2">
+<h1>Creation of Random Numbers</h1>
+<pre><code>  [1] 282.73018 448.96959  59.58069 363.69370 241.68246 171.25366 259.33072
+  [8] 464.37219 414.17149 380.07414 441.93057 211.62560 154.26904 447.45986
+ [15] 362.96854 211.09182 304.61956  57.46402 223.45916 432.69200 168.79203
+ [22] 231.26229 410.05934 415.65839 132.19311 238.87321 473.07136 263.21791
+ [29] 302.54733 115.85809 353.21074  66.31984 291.41494 188.24569 463.28060
+ [36] 206.98543  62.90657 339.44137 298.15228 108.16353 266.24704 496.69234
+ [43] 222.75778 104.22016 257.89810 331.36902 457.70433 127.73889 470.84454
+ [50] 138.84415 222.97013 351.77985 211.20652 254.81243 323.60162 457.12070
+ [57]  85.59711 148.88014 226.83045 415.65838  67.55863 281.38349 232.44298
+ [64] 129.30948  68.22041 311.40670 238.83480 176.61999 129.32509 358.91880
+ [71] 110.10423 357.85996 406.04196 324.90300 229.59912 362.70644 228.22899
+ [78] 155.36009 402.23393 127.72061 426.08858 454.52834 323.34473 483.76462
+ [85] 147.58239 224.50452 366.80854 182.57413 254.49770  67.82137 378.80763
+ [92] 490.95276 212.78564 322.31376 392.06086 403.57165 341.54264 165.16744
+ [99] 465.01892 421.87343</code></pre>
+</section>
+<section id="fake-sampling" class="slide level2">
+<h1>Fake Sampling</h1>
+<pre><code> [1]  78 100  53  48  45  74   3  97  12   1  25  52   1  70  93  73  56
+[18]  51  17  36   9  41  27  87  70  93  11  66  30  88  71  38  19  69
+[35]  66  30  10  49   1  34  91  24  26  14  95  16  40  23  77  63</code></pre>
+</section>
+<section id="combining-simulation-and-iteration-for-inference" class="slide level2">
+<h1>Combining Simulation and Iteration for Inference</h1>
+<ul>
+<li class="fragment">We can repeat simulations</li>
+</ul>
+<ul>
+<li class="fragment">We can modify conditions for each simulation</li>
+</ul>
+<ul>
+<li class="fragment">We can examine how simulated results differ</li>
+</ul>
+</section>
+<section id="example-simulated-sampling" class="slide level2">
+<h1>Example: Simulated Sampling</h1>
+<video width="768"  controls loop>
+<source src="04_simulation_estimation_files/figure-revealjs/simPop-.webm" />
+<p>
+video of chunk simPop
+</p>
+</video>
+</section>
+<section id="example-simulated-sampling-with-differing-sample-size" class="slide level2">
+<h1>Example: Simulated Sampling With Differing Sample Size</h1>
+<video width="768"  controls loop>
+<source src="04_simulation_estimation_files/figure-revealjs/simPopN-.webm" />
+<p>
+video of chunk simPopN
+</p>
+</video>
+</section>
+<section id="how-good-are-population-estimates-1" class="slide level2">
+<h1>How Good are Population Estimates?</h1>
+<p><br><br><br> 1. Introduction to Simulation<br />
+2. <span style="color:red">Determining Sample Size</span><br />
+3. Confidence in our Estimates</p>
+</section>
+<section id="back-to-fireflies" class="slide level2">
+<h1>Back to Fireflies</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/firefly_hist-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="our-mean-estimate" class="slide level2">
+<h1>Our Mean Estimate</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/firefly_with_mean-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="sample-properties-mean" class="slide level2 bigger">
+<h1>Sample Properties: Mean</h1>
+ <br />
+ <br />
+
+<center>
+<span class="math inline">\(\bar{Y} = \frac{ \displaystyle \sum_{i=1}^{n}{y_{i}} }{n}\)</span>
+</center>
+<p><span class="math inline">\(\large \bar{Y}\)</span> - The average value of a sample<br />
+<span class="math inline">\(y_{i}\)</span> - The value of a measurement for a single individual<br />
+n - The number of individuals in a sample<br />
+ <br />
+<span class="math inline">\(\mu\)</span> - The average value of a population<br />
+(Greek = population, Latin = Sample)</p>
+</section>
+<section id="section-5" class="slide level2">
+<h1></h1>
+<br><br><br>
+<center>
+<h1>
+WAS OUR SAMPLE SIZE LARGE ENOUGH?</ht>
+</center>
+</section>
+<section id="two-simulation-approaches-to-determine-n" class="slide level2">
+<h1>Two Simulation Approaches to Determine N</h1>
+<ol type="1">
+<li>Use the sample as a ‘population’
+<ul>
+<li>Draw different sample sizes and estimate mean</li>
+</ul></li>
+<li>Estimate the mean and sd of our sample
+<ul>
+<li>Assume a normal distribution</li>
+<li>Use mean and SD as population estimates</li>
+<li>Create simulated samples</li>
+</ul></li>
+</ol>
+</section>
+<section id="start-with-a-population" class="slide level2">
+<h1>Start With a Population…</h1>
+Mean of Firefly flashing times: 95.9428571<br />
+SD of Firefly flasing times: 10.9944982<br />
+
+<div class="fragment">
+So assuming a normal distribution…
+</div>
+<div class="fragment">
+<p><img src="04_simulation_estimation_files/figure-revealjs/fireflydist-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+</section>
+<section id="choose-a-random-sample---n5" class="slide level2">
+<h1>Choose a Random Sample - n=5?</h1>
+<p>Mean of Firefly flashing times: 95.9428571<br />
+SD of Firefly flasing times: 10.9944982<br />
+So assuming a normal distribution…</p>
+<p><img src="04_simulation_estimation_files/figure-revealjs/fireflydistPoints-1.jpeg" title="" alt="" width="480" /></p>
+</section>
+<section id="calculate-sample-mean" class="slide level2">
+<h1>Calculate Sample Mean</h1>
+<p>Mean of Firefly flashing times: 95.9428571<br />
+SD of Firefly flasing times: 10.9944982<br />
+So assuming a normal distribution…</p>
+<p><img src="04_simulation_estimation_files/figure-revealjs/fireflydistMean-1.jpeg" title="" alt="" width="480" /></p>
+<div class="fragment">
+Rinse and repeat…
+</div>
+</section>
+<section id="how-good-is-our-sample-size-for-estimating-a-mean" class="slide level2">
+<h1>How Good is our Sample Size for Estimating a Mean?</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/plot_dist_sim-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="where-does-the-variability-level-off" class="slide level2">
+<h1>Where does the variability level off?</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/dist_sim_stop-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="where-does-the-variability-level-off-1" class="slide level2">
+<h1>Where does the variability level off?</h1>
+<pre><code># A tibble: 81 x 2
+   sampSize mean_sim_sd
+      &lt;int&gt;       &lt;dbl&gt;
+1        73   0.7390990
+2        23   0.7571298
+3        46   0.9268731
+4        51   0.9368759
+5        63   0.9555057
+6        74   0.9589096
+7        85   0.9897979
+8        81   1.0230904
+9        79   1.0692790
+10       82   1.0734958
+# ... with 71 more rows</code></pre>
+</section>
+<section id="approach-2-sample-from-the-population" class="slide level2">
+<h1>Approach 2: Sample from the Population</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/fireflyData-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="sample-from-the-sample-n5" class="slide level2">
+<h1>Sample from the Sample, n=5</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/fireFlySamp-1.jpeg" title="" alt="" width="768" /></p>
+<p>WITH replacement</p>
+</section>
+<section id="calculate-mean-n5" class="slide level2">
+<h1>Calculate Mean, n=5</h1>
+<img src="04_simulation_estimation_files/figure-revealjs/fireFlySampMean-1.jpeg" title="" alt="" width="768" />
+<div class="fragment">
+Rinse and Repeat
+</div>
+</section>
+<section id="resulting-sample-size-suggestion" class="slide level2">
+<h1>Resulting Sample Size Suggestion</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/plot_samp_sim-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="where-does-the-variability-level-off-2" class="slide level2">
+<h1>Where does the variability level off?</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/samp_sim_stop-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="where-does-the-variability-level-off-3" class="slide level2">
+<h1>Where does the variability level off?</h1>
+<pre><code># A tibble: 81 x 2
+   sampSize mean_sim_sd
+      &lt;int&gt;       &lt;dbl&gt;
+1        73   0.7390990
+2        23   0.7571298
+3        46   0.9268731
+4        51   0.9368759
+5        63   0.9555057
+6        74   0.9589096
+7        85   0.9897979
+8        81   1.0230904
+9        79   1.0692790
+10       82   1.0734958
+# ... with 71 more rows</code></pre>
+</section>
+<section id="so---how-do-you-determine-sample-size-for-a-parameter" class="slide level2 bigger">
+<h1>SO - how do you determine sample size for a parameter</h1>
+<ol type="1">
+<li>Take an initial sample or assume a distribution</li>
+<li>Take simulated draws of varying sample size</li>
+<li>A lot.</li>
+<li>Look for where variability in population parameter estimate levels off <br><br><br>
+<div class="fragment">
+This works for mean, sd, skew, median, quantiles, etc…
+</div></li>
+</ol>
+</section>
+<section id="how-good-are-population-estimates-2" class="slide level2">
+<h1>How Good are Population Estimates?</h1>
+<ol type="1">
+<li>Introduction to Simulation<br />
+</li>
+<li>Determining Sample Size</li>
+<li><span style="color:red">Confidence in our Estimates </span></li>
+</ol>
+</section>
+<section id="even-with-n80-variability-in-mean-estimate" class="slide level2">
+<h1>Even with n=80, Variability in Mean Estimate</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/plot_samp_sim-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="how-variable-is-our-estimate-of-a-population-parameter" class="slide level2">
+<h1>How variable is our estimate of a population parameter?</h1>
+<ul>
+<li class="fragment">We can resample our sample some number of times with replacement</li>
+<li class="fragment">This resampling with replacement is called <strong>bootstrapping</strong></li>
+<li class="fragment">One replicate simulation is one <strong>bootstrap</strong></li>
+<li class="fragment">We can calculate the Standard Deviation of the values of those simulations</li>
+<li class="fragment">This is called the botstrapped <strong>Standard Error</strong> of the estimate</li>
+</ul>
+</section>
+<section id="section-6" class="slide level2">
+<h1></h1>
+<div style="position: fixed;top:25%; font-size:2em; align:center">
+Standard Error = the Standard Deviation of a Population of Estimates of a Parameter
+</div>
+</section>
+<section id="a-population-of-standard-deviations" class="slide level2">
+<h1>A Population of Standard Deviations</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/sd_sim_plot-1.jpeg" title="" alt="" width="768" /></p>
+<div class="fragment">
+Estimated SD:10.77
+</div>
+<div class="fragment">
+SD of SD (i.e., Standard Error of Estimate of SD): 1.132
+</div>
+</section>
+<section id="so-i-always-have-to-boostrap-standard-errors" class="slide level2">
+<h1>So I always have to boostrap Standard Errors?</h1>
+<center style="font-size:3em" class="fragment">
+No
+</center>
+<br><br><br>
+<div class="fragment">
+Many common estimates have formulae, e.g.:<br />
+<span class="math display">\[SE_{mean} = \frac{s}{\sqrt(n)}\]</span>
+</div>
+<br><Br>
+<center style="font-size:0.5em" class="fragment">
+(but for medians, etc., yes )
+</center>
+</section>
+<section id="means-standard-deviation-and-standard-error" class="slide level2">
+<h1>Means, Standard Deviation, and Standard Error</h1>
+<ul>
+<li class="fragment">A mean from a sample, m, is an estimate of a population mean, <span class="math inline">\(\mu\)</span><br />
+</li>
+<li class="fragment">A SD from a sample, s, is an estimate of the population SD, <span class="math inline">\(\sigma\)</span><br />
+</li>
+<li class="fragment">The Standard Error of the mean is the standard deviation of your estimate of a mean if you had <em>many</em> estimates</li>
+<li class="fragment">The SE tells you how much you can trust your estimate</li>
+</ul>
+</section>
+<section id="describing-confidence-with-an-interval" class="slide level2">
+<h1>Describing Confidence with an Interval</h1>
+<p><img src="04_simulation_estimation_files/figure-revealjs/ciplot-1.jpeg" title="" alt="" width="768" /></p>
+<center>
+The 95% Conidence Interval
+</center>
+</section>
+<section id="confidence-intervals" class="slide level2">
+<h1>95% Confidence Intervals</h1>
+<ul>
+<li class="fragment">95% CI <span class="math inline">\(\approx\)</span> 2*SE (or 1.96, really….)<br><br></li>
+<li class="fragment">The Confidence Interval is hugely misunderstood<br><br></li>
+<li class="fragment">Describes the region where we are some percent confident that the true value of a parameter exists<br>
+<ul>
+<li class="fragment">If you were to repeat this study 100 times, the CIs of 95 of the studies would overlap the true value<br><br></li>
+</ul></li>
+<li class="fragment">Fundamentally a Frequentist concept
+<ul>
+<li class="fragment">There is a ‘true’ value, and if you were to repeat this study the same way, how often would you overlap it?</li>
+</ul></li>
+</ul>
+</section>
+<section id="replicated-95-confidence-intervals" class="slide level2">
+<h1>Replicated 95% Confidence Intervals</h1>
+<p>100 simulations drawing from the same population</p>
+<p><img src="04_simulation_estimation_files/figure-revealjs/m_ci_sim_plot-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="replicated-95-confidence-intervals-1" class="slide level2">
+<h1>Replicated 95% Confidence Intervals</h1>
+<p><br> <img src="04_simulation_estimation_files/figure-revealjs/m_ci_sim_plot_value-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="replicated-95-confidence-intervals-2" class="slide level2">
+<h1>Replicated 95% Confidence Intervals</h1>
+<p><br> <img src="04_simulation_estimation_files/figure-revealjs/m_ci_sim_plot_true-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="ok-what-am-i-to-make-of-this" class="slide level2">
+<h1>OK, What Am I to Make of This?</h1>
+<ul>
+<li class="fragment">Fancy-pants statistics would never have been invented if we had computers that could just do simulations in the 1900s<br><br></li>
+<li class="fragment">We can only <strong>estimate</strong> population parameters from sample<br><br></li>
+<li class="fragment">There is always uncertainty in our estimate
+<ul>
+<li class="fragment">Is it quantifiable<Br><br></li>
+</ul></li>
+<li class="fragment">We can derive estimates of uncertainty via simulation or use available formulae</li>
+</ul>
+</section>
+<section id="se-cd-cis." class="slide level2">
+<h1>SE, CD, CIs….</h1>
+<img src="images/04/cumming_comparison_2007.jpg" alt="Cumming et al. 2007 Fig 4" />
+<div style="position: fixed;left:0;bottom:0; font-size:0.6em">
+<a href="http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf">Cumming et al. 2007</a>
+</div>
+</section>
+<section id="se-cd-cis.-1" class="slide level2">
+<h1>SE, CD, CIs….</h1>
+<img src="images/04/cumming_table_2007.jpg" alt="Cumming et al. 2007 Table 1" />
+<div style="position: fixed;left:0;bottom:0; font-size:0.8em">
+<a href="http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf">Cumming et al. 2007</a>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
