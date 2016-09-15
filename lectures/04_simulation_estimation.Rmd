@@ -12,7 +12,7 @@ output:
     lib_dir: libs
     css: style.css
 ---
-```{r prep, echo=FALSE, cache=FALSE}
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(dplyr)
 read_chunk("./03_sampling_lecture.R")
@@ -26,7 +26,7 @@ firefly <- read.csv("./data/04/04q06FireflyFlash.csv")
 ```
 
 ## How Well Can We Estimate Mean Age?
-
+<!-- move some CI slides around - gets confusing - reread -->
 1. Get in groups of 3 <br><br>
 2. Ask each other your age. Report the mean to me.<br><br>
 3. Now get into another group of three, and do the same.<br><br>
@@ -65,7 +65,7 @@ ff_hist
 <h1 class="fragment">Iteration!</h1>
 
 ## Iterating in R: Old Skool For Loops
-```{r for_loop}
+```{r for_loop, echo=TRUE}
 x <- 0
 for (x in 1:100){
   x <- x+1
@@ -74,13 +74,13 @@ x
 ```
 
 ## Creation of Random Numbers
-```{r runif}
+```{r runif, echo=TRUE}
 runif(100, min=50, max=500)
 ```
 
 
 ## Fake Sampling
-```{r sample_practice}
+```{r sample_practice, echo=TRUE}
 sample(1:100, size=50, replace=TRUE)
 ```
 

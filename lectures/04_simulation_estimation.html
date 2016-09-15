@@ -10,6 +10,43 @@
   <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
 
 
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 
 <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
 
@@ -80,17 +117,6 @@
     <h1 class="title">Estimation, Confidence, and Simulation</h1>
 </section>
 
-<section class="slide level2">
-
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-</section>
 <section id="how-well-can-we-estimate-mean-age" class="slide level2">
 <h1>How Well Can We Estimate Mean Age?</h1>
 <ol type="1">
@@ -138,31 +164,38 @@ Iteration!
 </section>
 <section id="iterating-in-r-old-skool-for-loops" class="slide level2">
 <h1>Iterating in R: Old Skool For Loops</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">0</span>
+for (x in <span class="dv">1</span>:<span class="dv">100</span>){
+  x &lt;-<span class="st"> </span>x<span class="dv">+1</span>
+}
+x</code></pre></div>
 <pre><code>[1] 101</code></pre>
 </section>
 <section id="creation-of-random-numbers" class="slide level2">
 <h1>Creation of Random Numbers</h1>
-<pre><code>  [1] 282.73018 448.96959  59.58069 363.69370 241.68246 171.25366 259.33072
-  [8] 464.37219 414.17149 380.07414 441.93057 211.62560 154.26904 447.45986
- [15] 362.96854 211.09182 304.61956  57.46402 223.45916 432.69200 168.79203
- [22] 231.26229 410.05934 415.65839 132.19311 238.87321 473.07136 263.21791
- [29] 302.54733 115.85809 353.21074  66.31984 291.41494 188.24569 463.28060
- [36] 206.98543  62.90657 339.44137 298.15228 108.16353 266.24704 496.69234
- [43] 222.75778 104.22016 257.89810 331.36902 457.70433 127.73889 470.84454
- [50] 138.84415 222.97013 351.77985 211.20652 254.81243 323.60162 457.12070
- [57]  85.59711 148.88014 226.83045 415.65838  67.55863 281.38349 232.44298
- [64] 129.30948  68.22041 311.40670 238.83480 176.61999 129.32509 358.91880
- [71] 110.10423 357.85996 406.04196 324.90300 229.59912 362.70644 228.22899
- [78] 155.36009 402.23393 127.72061 426.08858 454.52834 323.34473 483.76462
- [85] 147.58239 224.50452 366.80854 182.57413 254.49770  67.82137 378.80763
- [92] 490.95276 212.78564 322.31376 392.06086 403.57165 341.54264 165.16744
- [99] 465.01892 421.87343</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">runif</span>(<span class="dv">100</span>, <span class="dt">min=</span><span class="dv">50</span>, <span class="dt">max=</span><span class="dv">500</span>)</code></pre></div>
+<pre><code>  [1] 190.89387 176.25599 118.63243 485.83678 111.04730 494.53942 264.64897
+  [8] 487.22288  83.68602 139.06495 469.42956 388.64767 220.51169 217.19700
+ [15] 373.65338 386.18910 485.53283 335.96225 361.45647 385.13480 493.01253
+ [22] 401.27532 157.19113 131.85486 498.18610 496.42744 179.59209 457.11463
+ [29] 412.31684 210.89412  88.03183 114.51248 384.99800 495.95735 104.99523
+ [36] 133.07635 438.17810 276.99112  93.24909 212.23181 203.13317 335.52296
+ [43] 288.80416  59.44128 468.57121 400.94012 372.72777 290.93984  70.29615
+ [50]  92.92981  73.77335 375.07841 436.46104 130.13121 449.73825 379.31745
+ [57] 383.06860 364.90164  97.24626 315.45178 181.12571 190.16395 131.22551
+ [64] 377.61358 176.28394  51.49367 288.54402  87.02868 133.32108 385.80073
+ [71] 237.95319 215.04260 119.45128 142.28658 215.82106 305.74634 380.92119
+ [78] 462.38345 451.13132 182.60253 270.96458 409.64673 259.18381 422.59475
+ [85] 173.85831 365.42595 288.97490  79.29357 164.87361 285.19891 216.97120
+ [92] 156.42073 493.03632 167.46891 493.12424 167.93765 359.06254 268.99307
+ [99]  64.05685 281.86993</code></pre>
 </section>
 <section id="fake-sampling" class="slide level2">
 <h1>Fake Sampling</h1>
-<pre><code> [1]  78 100  53  48  45  74   3  97  12   1  25  52   1  70  93  73  56
-[18]  51  17  36   9  41  27  87  70  93  11  66  30  88  71  38  19  69
-[35]  66  30  10  49   1  34  91  24  26  14  95  16  40  23  77  63</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">100</span>, <span class="dt">size=</span><span class="dv">50</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code> [1] 54 32 74  6 66 43 96 17 61 17 84 64 41 46 58 58 37 77 39 32 47 52 87
+[24] 42 93 75 57 42 10  2  9 62 54 41 95 56 31 89  2  1 23 79 44  7 62 83
+[47] 86 67 33 85</code></pre>
 </section>
 <section id="combining-simulation-and-iteration-for-inference" class="slide level2">
 <h1>Combining Simulation and Iteration for Inference</h1>
