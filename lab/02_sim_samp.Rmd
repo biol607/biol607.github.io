@@ -1,0 +1,511 @@
+---
+title: "Simulation for Estimation of Parameter Uncertainty"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Setting the stage
+
+### 1.1 Pipes
+
+Often in R, what we kludge together different pieces of code to generate a sequence of events. For example, let's say I wanted to take a vector , find out it's length, and get the square root. Then get the log of that. There are a few ways I could do this.
+
+```{r nonpipe}
+vec <- 1:10
+len <- length(vec)
+sq <- sqrt(len)
+log(sq)
+```
+
+This makes sense, and is very logical, but I keep saving new variables as I go along. I could write some nested piece of code that does the same thing with no variables.
+
+```{r nonpipe2}
+log(sqrt(length(1:10)))
+```
+
+Which is efficient, but, man, I hope I can keep track of parentheses. It's also ugly as hell. And super difficult for future-me to understand.
+
+This idea of doing one thing, then the next, then the next is often how we treat our data. We take a piece of data, sift it, transform it, summarize it, etc. And this step-by-step style of coding has a name - **functional programming**. It lies at the core of much of what we do in R.
+
+So, is there a better way? Yes!  What if we could take the output of one function, and pass it to the next? This is known as piping. And it is implemented in R by the `magrittr` library.  (Pause. Get the joke. Laugh at it. Move on.) `magrittr` introduces a funny new operator `%>%` which says, take the output of the thing on the right hand side, and pass it to the next function as its first argument. 
+
+As a simple example, let's sum one through ten using pipes.
+
+```{r pipesum}
+#If you haven't, install.packages("magrittr") first
+library(magrittr)
+1:10 %>% sum()
+```
+
+Notice that we supplied no argument to sum. Now, what if wanted to take the square root of the result?
+
+```{r pipe_sum_sqrt}
+1:10 %>% 
+  sum() %>%
+  sqrt()
+```
+
+Notice how I separated different steps on different lines? This is a more readable code. Future me can track what's going on, line by line, instead of having to read a looooong single line of code.
+
+Let's try a few exercises with pipes.
+
+a) Use pipes to sum the log of 100:200.
+
+b) Use pipes to take the square root of the mean of 100 random uniform numbers.
+
+c) Let's dive into the guts of R. Using the `mtcars` data frame, get it's summary and str that summary. What do you get back?
+
+
+### 1.2 Plot
+
+The last basic thing we'll need today is plotting, as we'll want to see the results of our simulations. Next week we'll learn `ggplot2` and get fancy. For the moment, I just want you to know a few things in baseplot.
+
+First, here's how to make a histogram.
+
+```{r hist}
+#just some random numbers
+vals <- runif(50, 5, 10)
+
+#the histogram
+hist(vals)
+```
+
+Easy, no?
+
+Now, what if I wanted to plot x by y? A scatterplot. R uses an equation-like syntax for this, where I plot `y ~ x`. We'll use this again and again as we fit linear models. For now, here's an example scatterplot.
+
+```{r scatterplot}
+#first, a data frame
+my_df <- data.frame(x=1:10, y=10:1)
+
+#note how data is used
+#as well as column names in the equation
+plot(y ~ x, data=my_df)
+```
+
+Now, you can supply all sorts of arguments on plot - look at the help file. We're not really going to worry about those today.
+
+Let's try some examples.
+
+a) Using `mtcars`, plot mpg by cyl. What happens if you set pch to 19 or 5?
+
+b) `boxplot()` works like plot. Use it for `mpg ~ vs`. Now try the col argument. Give it a vector of two colors, like `c("red", "blue")`.
+
+## 2. Dplyr
+
+`dplyr` will change your life. It is the data munging tool you didn't know you needed until now. To learn our way around it, we'll use it with the `mtcars` data frame. `dplyr` is a collection of functions that manipulate data frames (or data tables, or tibbles, or other objects that work like data frames - more on those later). It's functions largely take the data frame object as the first argument, and then return data frames as the output, so pipes are a natural fit for `dplyr`.  Indeed, if you load `dplyr`, `magrittr` is loaded by default.
+
+### 2.1 `mutate()`
+
+Often, we want to make a column that uses information from other columns. For this, we have mutate. For example, what if we wanted to make a log transformed column of `mpg`? Note, I'm going to wrap the whole thing in head, so we only get the first 6 lines of the result
+
+```{r mutate_mpg}
+library(dplyr)
+
+mtcars2 <-  mutate(mtcars, log_mpg = log(mpg)) 
+
+head(mtcars2)
+```
+
+OK, the first argument was the data frame. Then, we just specified a new column from whole cloth, but used one of the columns from mtcars to make it. How easy! It's even easier with pipes.
+
+```{r mutate_mpg_pipe}
+mtcars2 <- mtcars %>%
+    mutate(log_mpg = log(mpg))
+
+head(mtcars2)
+```
+
+### 2.2 `group_by()`
+One of the ways we use `dplyr` the most is `group_by()`. This lets us group by different unique values of a column - think treatments or categories - and do something to those sub-data-frames.  For example, let's say we wanted to group by number of gears, and then use mutate to make a new column that's the average of the mpg values.
+
+```{r group}
+mtcars_group <- mtcars %>%
+  group_by(gear) %>%
+  mutate(avg_mpg = mean(mpg)) %>%
+  ungroup()
+
+head(mtcars_group)
+```
+
+Notice the `ungroup()` at the end. That's provided as some functions bork if you give them a grouped data frame. We want to remove that structure.
+
+Now see that final column - each row with the same number of gears has the same avg_mpg value.
+
+### 2.3 `summarize()`
+
+Often, you don't want to have a data frame with summarized information repeated. You just want to reduce your data frame down to summarized information. In Excel, this is pivot tables, basically. For that, we use a combination of `group_by()` and `summarize()`  Let's do the same thing as the previous example, only let's add the standard deviation, and return just the summarized information.
+
+```{r mtcars_summary}
+mtcars %>%
+  group_by(gear) %>%
+  summarize(avg_mpg = mean(mpg),
+            sd_mpg = sd(mpg)) %>% 
+  ungroup()
+```
+
+Whoah!  Cool!
+
+You try it, but group by gear and vs, and look at how that alters weight. Yes, you can group by multiple things in the same `group_by` statement - just separate them with a comma!
+
+### 2.4 `select()`
+Often when working with a data frame, you end up with some column you no longer want. Maybe it was intermediate to some calculation. Or maybe you just want only a few columns to save memory. Either way, select is a way to include or exclude columns. 
+
+```{r select}
+head(select(mtcars2, -mpg))
+```
+
+Uh oh! Where did mpg go? Gone!
+
+Or
+
+```{r select2}
+mtcars3 <- mtcars %>%
+  select(wt, am, gear)
+
+head(mtcars3)
+```
+
+One can even use some more imprecise matches if need be.
+
+```{r}
+head(select(mtcars2, contains("mpg")))
+```
+
+
+### 2.5 `filter()`
+
+We can also exclude by row values using filter. This function takes all manner of comparisons, and returns only those rows for which the comparison is true. For example, to get rid of 3 cylinder cars:
+
+```{r filter1}
+mtcars_filter <- mtcars %>%
+  filter(cyl != 3)
+
+head(mtcars_filter)
+```
+
+I'll often use this to remove rows with `NA` values for some column, such as 
+```{r filter2, eval=FALSE}
+mtcars %>%
+  filter(!is.na(cyl))
+```
+
+
+## 3. Simulation and Sample Size
+
+
+
+### 3.1 Random Numbers and `sample()`
+
+There are a number of ways to get random numbers in R from a variety of distributions.  For our simulations, let's start with a sample of 40 individuals that's from a population with a mean value of 10, a SD of 3.
+
+```{r samp}
+set.seed(323)
+samp <- rnorm(n = 40, mean = 10, sd = 3)
+```
+
+Note the `set.seed()` function. Random number generators on computers aren't REALLY random - they use some nugget of information that changes constantly to be pseudo-random. By setting that nugget - the seed - we make sure that all random numbers generated from this point on are the same.
+
+Unsettling, no?
+
+So, we can pull a random sample from a perfect population anytime we'd like. How do we get a bootstrap sample from a population?
+
+Why, with the sample function. Let's sample the sample we've greated above, and draw five different elements.
+
+```{r sample1}
+sample(samp, 5)
+```
+
+This is *incredibly* useful in a wide variety of context. For example, let's say we wanted five rows of mtcars.
+
+```{r sample_mtcars}
+mtcars[sample(1:nrow(mtcars), 5), ]
+```
+
+Of course, for that kind of thing, `dplyr` has you covered with 
+
+```{r sample_dplyr}
+sample_n(mtcars, 5)
+```
+
+Or, you can even use a porportions - so, here's a random sampling of 10% of mtcars
+
+```{r sample_dplyr_frac}
+sample_frac(mtcars, 0.1)
+```
+
+But that is neither here nor there. 
+
+One thing that all of these sample functions let you do is sample with or without replacement. If we're assuming a sample is representative of a population and we want to bootstrap resample it, we're going to need to sample **with replacement**. Fortunately, that's just one more argument.
+
+```{r sample_replace}
+sample(1:3, 15, replace = TRUE)
+```
+
+This will come in handy shortly!
+
+### 3.2 Using `group_by()` for simulation
+
+The other tool we'll need to simulate sampling a population is some output. Let's go through this step by step. First, let's say we are going to have 10 samples per sample size, and try sample sizes from 3 to 50. We begin by creating a data frame with this information, as we're going to want to plot this information later.
+
+```{r start_n}
+#use rep to repeat the sample sizes 3 through 50 10 times
+sampSim <- data.frame(samp_size = rep(3:50, times = 10))
+```
+
+We also want to keep track of simulation number, as we're going to want to perform independent actions for each sim.
+
+```{r setup_sim}
+sampSim$sim_number = 1:nrow(sampSim)
+```
+
+Now, we're ready to go! What we want to do is, for each simulation, generate a sample population and take a mean. So, something like
+
+```{r take_mean, eval=FALSE}
+mean(rnorm(n = 10, mean = 10, sd = 3))
+```
+
+Or replace that rnorm bit with the `sample` function and vector of interest. We'll do it both ways.
+
+So, we want to work this into a `dplyr` workflow.  Now, what I often do it write out, in comments, what I want to do. Then implement that in `dplyr`. For example.
+
+```{r comment_dplyr}
+# Take the data frame
+# For each individual simulation
+# Use samp_size to get the mean of a random normal population with mean 10 and sd 3
+# Also draw a mean from the samp vector with n = samp_size, with replacement
+```
+
+Reasonable, no? You could have written this out. Now, let's operationalize this. We'll group by `sim_number`, as we're doing to do the same thing for each replicate simulation.
+```{r comment_dplyr_nsim}
+# Take the data frame
+sampSim <- sampSim %>%
+# For each individual simulation
+  group_by(sim_number) %>%
+# Use samp_size to get the mean of a random normal population with mean 10 and sd 3
+  mutate(mean_pop = mean(rnorm(samp_size, mean = 10, sd = 3)),
+         
+# Also draw a mean from the samp vector with n = samp_size, with replacement
+         mean_sample = mean(sample(samp, size = samp_size, replace=T))) %>%
+# Cleanup
+    ungroup()
+```
+
+#### 3.3.1 Faded Examples.
+Let's try this out, and have you fill in what's missing in these faded examples.
+```{r faded_sim, eval=FALSE}
+#Some preperatory material
+set.seed(42)
+samp <- rnorm(100, 10, 3)
+sampSim <- data.frame(samp_size = rep(3:50, times = 10))
+sampSim$sim_number = 1:nrow(sampSim)
+
+#Mean simulations
+sampSim %>%
+  group_by(sim_number) %>%
+  mutate(mean_pop = mean(rnorm(samp_size, mean = 10, sd = 3)),
+         mean_sample = mean(sample(samp, size = samp_size, replace=T))) %>%
+  ungroup()
+
+#Now the faded examples! Fill in the ___
+
+#Median simulations
+sampSim %>%
+  group_by(sim_number) %>%
+  mutate(median_pop = ____(rnorm(samp_size, mean = 10, sd = 3)),
+         median_sample = ____(sample(samp, size = samp_size, replace=T))) %>%
+  ungroup()
+
+#SD simulations
+sampSim %>%
+  group_by(____) %>%
+  ____(sd_pop = ____(rnorm(____, mean = 10, sd = 3)),
+         sd_sample = ____(sample(samp, size = ____, ____)) %>%
+  ungroup()
+  
+  
+  
+#IQR simulations
+#function for interquartile range is IQR
+sampSim %>%
+  ____(____) %>%
+  ____(IQE_pop = ____(____(____, mean = 10, sd = 3)),
+         IQR_sample = ____(____(samp, size = ____, ____)) %>%
+  ungroup()
+```
+
+### 3.3 Determining Optimal Sample Size with `plot` and `summarize`
+
+Great, so we've done the simulation! How do we determine sample size?  The first way is a plot.
+
+```{r plot_n}
+plot(mean_pop ~ samp_size, data=sampSim)
+```
+
+We can eyeball this result and see a leveling out > 20 or so. OK, that's great, but...totally imprecise.
+
+Better might be to see where the SD of the mean levels off. Let's pseudocode that out in comments to see what we might need to do.
+
+```{r comment pseudo_sam}
+# Take our sampSim data
+# Group it by sample size
+# Take the SD of the sample size
+# ungroup the resulting data
+# Sort it by SD
+# Look at the top 5 entries.
+```
+
+A few new things here. First, we're grouping by sample size, not sim number. Second, we're summarizing. We are reducing our data down - boiling it to its essence. For this, `dplyr` has a function called - wait for it - `summarize()`. Second, we're going to have to do some arranging. With a `dplyr` function called - and this is a shocker - `arrange`. `sort` was already taken by the base package.  OK, let's walk through the resulting pipeline in two pieces. First, the summarization
+
+```{r comment pseudo_sam_do}
+# Take our sampSim data
+sampSim_summary <- sampSim %>%
+  # Group it by sample size
+  group_by(samp_size) %>%
+  # Take the SD of the sample size
+  summarize(pop_mean_sd = sd(mean_pop))
+
+```
+
+Neat - this gives us a much reduced piece of data to work with. But - what about the arranging?
+```{r psuedo_sam_do_2}
+sampSim_summary <- sampSim_summary %>%
+  # ungroup the resulting data
+  ungroup() %>%
+  # Sort it by SD
+  arrange(pop_mean_sd)
+
+sampSim_summary
+```
+
+Now, notice that I don't have to use `head` or chop of the top few rows (there's a dplyr function for that - `slice()`).  That's because dplyr creates a data frame-like object called a `tibble`.  We'll talk about this in more detail later. For now, tibbles work just like data frames, but they print out a little differently. If we REALLY wanted a data frame, we could just use `as.data.frame()`.
+
+As for the result, we can see that, eh, 46 has the lowest SD, but things bounce around, with even some of the mid 20s sample sizes having nice properties. Now, to be sure, we should probably repeat this with 100 or even 1000 simulations per 
+
+### 3.4 Exercises.
+
+a) Look at the resulting simulations using the sample. Would you chose a different optimal sample size?
+
+b) Repeat this process, but for the sample median. What is the optimal sample size?
+
+
+## 4. Standard Errors
+### 4.1 Basic Sample Properties
+
+So, as we launch into things like standard errors, I wanted to pause and hit a few key functions we need to describe a sample. Let's use the `samp` vector from above as adata source.  First, mean, sd, and median.
+
+```{r samp_properties}
+mean(samp)
+
+sd(samp)
+
+median(samp)
+```
+
+This is pretty great. There are a ton of functions like these. Such as
+
+```{r iqr}
+IQR(samp)
+```
+
+Although there is no standard error of the mean or confidence interval function. There are functions for skew, kurtosis, and more in other packages. Last, for arbitrary percentiles, there's the 'quantile()' function.
+
+```{r quantiles}
+#quartiles by defeault
+quantile(samp)
+
+#or, get what you want
+quantile(samp, probs = c(0.05, 0.1, 0.5, 0.9, 0.95))
+```
+
+You can get individual values by specifying the percentile you want with probs.
+
+### 4.2 Standard Error of a Median via Simulation
+Let's look at the standard error of a median from our samp vector. And let's do it via simulation. One way we can do this is to use the 'replicate()` function. This lets us replicate some statement over and over again. So, let's replicate taking the median of a sample with replacement of the samp vector. Then we can get the standard deviation of that.
+
+```{r se_sim}
+median_sims <- replicate(n = 100, median(sample(samp, size=10, replace=TRUE)))
+
+sd(median_sims)
+```
+
+This is nice, but, man, that's a lot of nested statements. The other way we could do this is with `dplyr`. Again, we can start with a blank data frame with 100 simulations, waiting to take flight.
+
+```{r se_dplyr_start}
+median_sims <- data.frame(sims=1:100)
+```
+
+Now, we can take these, and for each simulation, draw a median from a sample of our `samp` vector.
+
+```{r se_dplyr}
+median_sims <- median_sims %>%
+  group_by(sims) %>%
+  mutate(median_sim = median(sample(samp, size=10, replace = TRUE))) %>%
+  ungroup()
+
+median_sims
+```
+
+Perfect! From this, we can get the standard error of our median quite simply.
+
+```{r se_median}
+sd(median_sims$median_sim)
+```
+
+Done!
+
+#### 4.2.1 Faded Examples
+
+To take this for a spin, let's try some faded examples.
+
+```{r se_faded, eval=FALSE}
+#some preperatory material
+se_sims <- data.frame(sample_size=rep(5:50, 100))
+
+median_se_sims <- se_sims %>%
+  group_by(1:n()) %>%
+  mutate(median_sim = median(sample(samp, size = sample_size, replace=TRUE))) %>%
+  ungroup() %>%
+  group_by(sample_size) %>%
+  summarize(median_se = sd(median_sim))
+
+plot(median_se ~ sample_size, data=median_se_sims, type="l")
+
+#mean se sims
+mean_se_sims <- se_sims %>%
+  ___(1:n()) %>%
+  mutate(mean_sim = mean(___(samp, size = sample_size, replace=TRUE))) %>%
+  ungroup() %>%
+  group_by(___) %>%
+  summarize(mean_se = sd(___))
+
+plot(mean_se ~ sample_size, data=___, type="l")
+
+
+#iqr se sims
+iqr_se_sims <- se_sims %>%
+  ___(1:n()) %>%
+  ___(iqr_sim = IQR(___(samp, size = sample_size, replace=TRUE))) %>%
+  ungroup() %>%
+  group_by(___) %>%
+  summarize(iqr_se = sd(___))
+
+plot(___ ~ ___, data=___, type="l")
+
+
+
+#sd se sims
+sd_se_sims <- se_sims %>%
+  ___(1:n()) %>%
+  ___(sd_sim = sd(___(samp, size = ___, ___=___))) %>%
+  ungroup() %>%
+  ___(___) %>%
+  ___(sd_se = sd(___))
+
+plot(___ ~ ___, data=___, type="l")
+
+
+```
