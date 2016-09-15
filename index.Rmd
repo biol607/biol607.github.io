@@ -16,7 +16,7 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 
 **Weekly Schedule:** Tuesday & Thursday 11-12:30, Lab Thursday 12:30-3
 
-**Office Hours:** Prof. Byrnes will hold office hours Tuesday from 1:30-3
+**Office Hours:** Prof. Byrnes will hold office hours Tuesday from 1:30-3 and Wednesday 11-12:30.
 
 **Source for this Website:** https://github.com/biol607/biol607.github.io/
 &nbsp;  
