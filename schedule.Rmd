@@ -14,7 +14,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-intro
   
 ###Week 2.   
 __Lecture:__ [Sampling](lectures/03_sampling_lecture.html) and [Simulation for Estimation](lectures/04_simulation_estimation.html). Descriptive statistics, and the creation of good observational sampling designs.   
-__Lab Topic:__ Libraries in R. R as a Data Importing Tool, Dplyr. Forcats.  
+__Lab Topic:__ [Sampling and simulation](lab/02_sim_samp.html). Libraries in R. Dplyr. Forcats.  
 __Reading:__ W&S 1,3-4, G&W Chapter 5, 11, 18, Dplyr cheat sheet  
 __Optional Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf), [Simpler Coding with Pipes](https://www.r-statistics.com/2014/08/simpler-r-coding-with-pipes-the-present-and-future-of-the-magrittr-package/), [Managing Data Frames with the Dplyr package](https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling  
