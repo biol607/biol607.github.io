@@ -1,0 +1,74 @@
+---
+title: "Resources, Blogs, and More"
+---
+
+### R
+[R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/). 2016. Roger D. Peng. Provides a more detailed intro to basic R programming.  
+[Exploratory Data Analysis with R](https://bookdown.org/rdpeng/exdata/). 2016. Roger D. Peng. Uses the tidyverse and ggplot2 for data exploration. Great introduction to these packages and how they can be made to sing together.  
+[Efficient R Programming](https://bookdown.org/csgillespie/efficientR/). 2016.  Colin Gillespe and Robin Lovelace\
+[Advanced R](http://adv-r.had.co.nz/). 2014. Great walkthrough of the details and guts of R. From novices to R wizards, you will learn things you never thought possible (or the actual reasoning behind that hacky stuff you've been doing for years).\
+[STAT545](http://stat545.com/) UBC Course by Jenny Bryan that covers many similar topics to us - probably better - and more!
+
+### Github
+[Using Git and Github with Rstudio](http://www.molecularecologist.com/2013/11/using-github-with-r-and-rstudio/)
+[Git and Github in Rstudio](http://www.datasurg.net/2015/07/13/rstudio-and-github/)
+[Happy with Git](http://happygitwithr.com/index.html). 2006. Jenny Bryan. Introduction to Git and Github for her class. Very detailed and walks you through each step.
+
+### Offline Books
+
+Adler, J. (2009) <strong>R in a Nutshell: A Desktop Quick Reference.</strong> O'Reilly Media. <a href="http://shop.oreilly.com/product/9780596801717.do">http://shop.oreilly.com/product/9780596801717.do</a>
+
+Silver, N. (2012) <strong>The Signal and the Noise. </strong>The Penguin Press.<a href="http://www.amazon.com/dp/B007V65R54/">http://www.amazon.com/dp/B007V65R54/</a>
+
+Bolker, B. (2009) <strong>Ecological Models and Data in R.</strong> Princeton University Press. <a href="http://www.amazon.com/Ecological-Models-Data-Benjamin-Bolker/dp/0691125228">http://www.amazon.com/Ecological-Models-Data-Benjamin-Bolker/dp/0691125228</a>
+
+Matloff, N. (2011) <strong>The Art of R Programming: A Tour of Statistical Software Design.</strong> No Starch Press. http://nostarch.com/artofr.htm
+
+Song, S. Qian (2009) <strong>Environmental and Ecological Statistics with R</strong>. Chapman and Hall/CRC Press, London. <a href="http://www.amazon.com/Environmental-Ecological-Statistics-Chapman-Applied-ebook/dp/B005H6YDPU">http://www.amazon.com/Environmental-Ecological-Statistics-Chapman-Applied-ebook/dp/B005H6YDPU</a>
+
+
+### Blogs
+[R bloggers](http://www.r-bloggers.com/) R Blogger aggregator\
+[RStudio Blog](https://blog.rstudio.org/)\
+[Simply Statistics](http://simplystatistics.org/)\
+[Statistical modeling, causal inference, and social science](http://www.stat.columbia.edu/~gelman/blog/): Andrew Gelman's research group\
+[R-statistics blog](http://www.r-statistics.com/)\
+[Error Statistics Philosophy](http://errorstatistics.com/)\ Great source of information on philosophy of statistics and data analysis\
+[Dynamic Ecology](https://dynamicecology.wordpress.com/) Covers many topics in analysis and philosophy of data in addition to ecology\
+[Quantum Forest ](http://www.quantumforest.com/) A shoebox for scribbles on data analysis by Luis Apiolaza\ 
+[Inundata](http://inundata.org/) from Karthik Ram of ROpenSci\
+[ROpenSci](https://ropensci.org/blog/)
+[Xi'an's Og](http://xianblog.wordpress.com/)  
+
+### Visualization Blogs  
+[I love charts](http://ilovecharts.tumblr.com/)
+
+### Podcasts
+[Not So Standard Deviations](https://soundcloud.com/nssd-podcast) Listen to this! #Rcatladies  
+[FiveThirtyEight Elections Podcast](http://fivethirtyeight.com/tag/fivethirtyeight-podcasts/): How we use data analysis to forecast elections.  
+[What's the Point](http://fivethirtyeight.com/tag/fivethirtyeight-podcasts/): Data in society. From FiveThirtyEight.  
+
+### Twitter Feeds
+[Karthik Ram](https://twitter.com/_inundata)\
+[ROpenSci](https://twitter.com/ropensci)\
+[Hilary Parker](https://twitter.com/hspter)\
+[#RCatLadies](https://twitter.com/rcatladies)\
+[Hadley Wickham](https://twitter.com/hadleywickham)\
+[Jenny Bryan](https://twitter.com/JennyBryan)\
+[STAT545](https://twitter.com/STAT545)\
+[Roger D. Peng](https://twitter.com/rdpeng)\
+[Emily Robinson](https://twitter.com/robinson_es)\
+[Scott Chamberlain](https://twitter.com/sckottie)\
+[R-Ladies Boston](https://twitter.com/RLadiesBoston)\
+[Carly Strasser](https://twitter.com/carlystrasser)  
+
+### Philosophy
+[The Logic of Scientific Discovery](https://www.amazon.com/Logic-Scientific-Discovery-Routledge-Classics/dp/0415278449/ref=sr_1_2?ie=UTF8&qid=1474044878&sr=8-2&keywords=karl+popper). 1934. Karl Popper.\
+[The Methodology of Scientific Research Programs](https://www.amazon.com/Methodology-Scientific-Research-Programmes-Philosophical/dp/0521280311/ref=sr_1_5?ie=UTF8&qid=1474044943&sr=8-5&keywords=lakatos) Collected works of Irme Lakatos\
+[Against Method](https://www.amazon.com/Against-Method-Paul-Feyerabend/dp/1844674428/ref=sr_1_1?ie=UTF8&qid=1474045065&sr=8-1&keywords=Against+Method) Paul Feyerabend's provocative take on sciene in context. \
+[For and Against Method](https://www.amazon.com/Against-Method-Scientific-Lakatos-Feyerabend-Correspondence/dp/0226467759/ref=sr_1_2?ie=UTF8&qid=1474044943&sr=8-2&keywords=lakatos)  Collected correspondence/dialogue of Imre Lakatos and Paul Feyerabend\ 
+[Causality](https://www.amazon.com/Causality-Reasoning-Inference-Judea-Pearl/dp/052189560X/ref=sr_1_1?ie=UTF8&qid=1474045137&sr=8-1&keywords=causality) Judea Pearl's plea and proof of how to assess causal logic in data analysis.
+
+### Data Science
+[Why, and how, to do statistics (it’s probably not why and how you think)](https://dynamicecology.wordpress.com/2012/11/28/why-and-how-to-do-statistics-its-probably-not-why-and-how-you-think/)
+[How do I shift to a career in Data Science?](https://decisionstats.com/2016/08/23/how-do-i-shift-to-a-data-science-career/)
