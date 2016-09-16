@@ -9,8 +9,6 @@ navbar:
     href: overview.html
   - text: "Schedule"
     href: schedule.html
-  - text: "Homework"
-    href: https://github.com/biol607/homework_2016
   - text: "Texts"
     href: texts.html
   - text: "Final Project"
@@ -19,6 +17,10 @@ navbar:
     href: extra.html
   - text: "Syllabus"
     href: biol607_syllabus_2016.doc
+  - text: "Resources"
+    href: resources.html
+  - text: "Local Meetups"
+    href: http://byrneslab.net/resources/boston-area-data-science-groups/
 
 
 output:

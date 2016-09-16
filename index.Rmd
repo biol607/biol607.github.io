@@ -25,6 +25,8 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 
 
 ## Course News:
+*9/16/16* For a one-stop-shop for the tidyverse, there's now a [package](https://blog.rstudio.org/2016/09/15/tidyverse-1-0-0/) that will load it all.
+
 *9/8/16* New issue of [The R Journal](https://journal.r-project.org/archive/2016-1/)
 
 *9/7/16* Check out [Interview with a Data Sucker](http://simplystatistics.org/open%20science/2016/09/07/interview-with-a-data-sucker/)
