@@ -10,9 +10,9 @@ title: "Resources, Blogs, and More"
 [STAT545](http://stat545.com/) UBC Course by Jenny Bryan that covers many similar topics to us - probably better - and more!
 
 ### Github
-[Using Git and Github with Rstudio](http://www.molecularecologist.com/2013/11/using-github-with-r-and-rstudio/)
-[Git and Github in Rstudio](http://www.datasurg.net/2015/07/13/rstudio-and-github/)
-[Happy with Git](http://happygitwithr.com/index.html). 2006. Jenny Bryan. Introduction to Git and Github for her class. Very detailed and walks you through each step.
+[Using Git and Github with Rstudio](http://www.molecularecologist.com/2013/11/using-github-with-r-and-rstudio/)\
+[Git and Github in Rstudio](http://www.datasurg.net/2015/07/13/rstudio-and-github/)\
+[Happy with Git](http://happygitwithr.com/index.html). 2006. Jenny Bryan. Introduction to Git and Github for her class. Very detailed and walks you through each step.  
 
 ### Offline Books
 
