@@ -21,7 +21,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/sampling
 __Homework:__ https://github.com/biol607/2016_homework_02_sampling
 
 ###Week 3.   
-__Lecture:__ Data visualization.  
+__Lecture:__ [Data visualization](lectures/05_data_viz_principles.pptx). 
 __Lab Topic:__ Data import and visualization, Introduction to ggplot2   
 __Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), G&W Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdfPaperpile
 )  
