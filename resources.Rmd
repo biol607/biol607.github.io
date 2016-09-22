@@ -28,6 +28,7 @@ Song, S. Qian (2009) <strong>Environmental and Ecological Statistics with R</st
 
 
 ### Blogs
+[R Weekly](https://rweekly.org/) A weekly newsletter\
 [R bloggers](http://www.r-bloggers.com/) R Blogger aggregator\
 [RStudio Blog](https://blog.rstudio.org/)\
 [Simply Statistics](http://simplystatistics.org/)\
@@ -35,10 +36,12 @@ Song, S. Qian (2009) <strong>Environmental and Ecological Statistics with R</st
 [R-statistics blog](http://www.r-statistics.com/)\
 [Error Statistics Philosophy](http://errorstatistics.com/)\ Great source of information on philosophy of statistics and data analysis\
 [Dynamic Ecology](https://dynamicecology.wordpress.com/) Covers many topics in analysis and philosophy of data in addition to ecology\
-[Quantum Forest ](http://www.quantumforest.com/) A shoebox for scribbles on data analysis by Luis Apiolaza\ 
-[Inundata](http://inundata.org/) from Karthik Ram of ROpenSci\
-[ROpenSci](https://ropensci.org/blog/)
-[Xi'an's Og](http://xianblog.wordpress.com/)  
+[Quantum Forest ](http://www.quantumforest.com/) A shoebox for scribbles on data analysis by Luis Apiolaza  
+[Inundata](http://inundata.org/) from Karthik Ram of ROpenSci  
+[ROpenSci](https://ropensci.org/blog/)\
+[Xi'an's Og](http://xianblog.wordpress.com/)\
+[Civil Statistician](http://civilstat.com/) Former census statistician\
+[Citizen Statistician](http://citizen-statistician.org/) Various stats faculty
 
 ### Visualization Blogs  
 [I love charts](http://ilovecharts.tumblr.com/)
