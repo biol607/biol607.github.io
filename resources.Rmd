@@ -7,6 +7,7 @@ title: "Resources, Blogs, and More"
 [Exploratory Data Analysis with R](https://bookdown.org/rdpeng/exdata/). 2016. Roger D. Peng. Uses the tidyverse and ggplot2 for data exploration. Great introduction to these packages and how they can be made to sing together.  
 [Efficient R Programming](https://bookdown.org/csgillespie/efficientR/). 2016.  Colin Gillespe and Robin Lovelace\
 [Advanced R](http://adv-r.had.co.nz/). 2014. Great walkthrough of the details and guts of R. From novices to R wizards, you will learn things you never thought possible (or the actual reasoning behind that hacky stuff you've been doing for years).\
+[Principles of Econometrics with  R](https://bookdown.org/ccolonescu/RPoE4/) 2016. Constantin Colonescu. Yes, it's econometrics, but there's a lot here that's very generalizable to biological data analysis in R as well.\
 [STAT545](http://stat545.com/) UBC Course by Jenny Bryan that covers many similar topics to us - probably better - and more!
 
 ### Github
