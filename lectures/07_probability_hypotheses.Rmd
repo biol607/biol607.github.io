@@ -1,0 +1,441 @@
+---
+title: "Probability and Frequentist Hypothesis Testing"
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+
+## 
+<br>
+<center><h1>Probability and Frequentist Hypothesis Testing</h1>
+![](images/07/xkcd_sig_blowup.png){width=749px height=400px}
+<!-- Learning Objectives:
+  1) Understand what a point versus integrated probability means.
+  2) Grok the frequentist paradigm versus likelihoodist v. bayesian
+  3) Understand how we use integrated probability to calculate a p-value
+  -->
+</center>
+<p align="left" style="font-size:7pt; font-color:black;">https://xkcd.com/882/</p>
+
+## Quiz!
+<br><br>
+<center><h2>http://tinyurl.com/hyp-pre-quiz</h2><center>
+
+## Etherpad for this week
+<br><Br>
+<center><h4>https://etherpad.wikimedia.org/p/607-hypotheses</h4></center>
+
+## Roadmap
+
+1.  Basic Probability Review\
+
+2.  The normal distribution & P-Values\
+
+3.  Hypothesis testing\
+
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(ggplot2)
+```
+
+## 
+<br><br><center>
+<h1>Probability Distributions & What they can Do for You!</h1>
+<br><br>
+<span class="fragment"><h4>So far, we’ve been slinging around normal distribution terminology
+casually. Let’s formalize it, and make it useful for hypothesis testing!</h4></span>
+</center>
+## Probability!
+<br><br>
+*Probability* - The fraction of observations of an event given multiple
+repeated independent observations.
+
+## Probability of Eating
+
+<img src="./images/07/tobacco-budworm-large-Melanie-Marr.jpeg" width="400" style="position:absolute; left:20px">
+
+<div style="position: relative; left: 500px; vertical-align: top; text-align: left; width: 50%"> Let’s say you’ve offered 50 budworms a leaf to eat. 45 eat. <br><br> 
+<span class="fragment">$P(eats) = \frac{45}{50} = 0.9$</span> <br><br> 
+<span class="fragment">Now you offer 50 others a leaf. 10 eat.</span> <br><br>
+<span class="fragment">$P(eats) = \frac{10}{50} = 0.2$</span></div> 
+
+<br>
+
+## Probability of Exclusive Feeding Events
+
+<img src="./images/07/tobacco-budworm-large-Melanie-Marr.jpeg" width="400" style="position:absolute; left:20px">
+
+<div style="position: relative; left: 500px; vertical-align: top; text-align: left; width: 50%"> We offered our budworms two different leaves\
+<span class="fragment">20 eat the first, 5 eat the second.</span>\
+<span class="fragment">What is the probability of eating one **or** the other?</span>  
+
+\
+<span class="fragment">P(A or B) = P(A) + P(B)</span><br><br>
+<span class="fragment">P(eats) = $\frac{20}{50} + \frac{5}{50} = 0.5$\ </span>
+</div> 
+<br>
+
+## Probability of Joint Events
+
+<img src="./images/07/tobacco-budworm-large-Melanie-Marr.jpeg" width="400" style="position:absolute; left:20px">
+
+<div style="position: relative; left: 500px; vertical-align: top; text-align: left; width: 50%"> We offer our budworms a leaf. 45 eat it. Then we offern all of them another leaf. 20
+eat it.\ 
+<span class="fragment">What is the probability of eating one **and** the other?</span><br><br>
+
+<span class="fragment">P(A and B) = P(A)P(B) </span><br>
+\
+<span class="fragment">P(eats twice) = $\frac{45}{50} * \frac{20}{45}$\ </span><br>
+<span class="fragment"> = $\frac{20}{50}$</span><span class="fragment"> = 0.4</span><br>
+\
+</div>
+
+<center><span class="fragment">**JOINT PROBABILITY**</span></center>
+
+## 
+<br><br><center><h1>Distributions!</h1>
+<br><br><br>
+(when a point probabilty just ain’t enough)</center>
+
+## Frequency Distributions Make Intuitive Sense
+
+```{r freqDist1, echo=FALSE}
+library(ggplot2)
+bird<-read.csv("./data/07/02e1bDesertBirdCensus.csv")
+
+bplot<-ggplot(data=bird, aes(x=Count))+xlab("# of Birds") + theme_bw()
+bplot+geom_histogram(binwidth=20)  + ylab("# of Times Observed\n") 
+
+```
+
+## Frequencies Can be Turned Into Probabilities
+
+Just divide by total \# of observations\
+```{r freqDist2}
+bplot+geom_histogram(aes(y=..density..*20), binwidth=20)  + ylab("Probability\n") 
+```  
+
+<span class="fragment">But - we have binned observations...</span>
+
+
+
+## Probabilities of Individual Observations
+
+```{r freqDist3, echo=FALSE} 
+bplot+geom_histogram(aes(y=..density..), binwidth=1)  + ylab("Probability") 
+```  
+
+<span class="fragment">Tradeoff: Bins or we need to find something that fills gaps</span>
+
+
+## Continuous Probability Distributions
+
+```{r birdDensity1, echo=FALSE} 
+bplot+geom_density() + ylab("Probability Density\n") 
+```  
+
+Any individual observation has a *probability density*.
+
+
+
+## Probability of a Range of Values
+
+```{r birdDensityP}
+dd <- with(density(bird$Count),data.frame(x,y))
+
+bplot+geom_density() + ylab("Probability Density") + 
+  geom_area(data=dd, aes(x=ifelse(x>100 & x<200, x, 200), y=y), fill="red") +
+  ylim(c(0,0.0082))
+```  
+
+What is the probability of a value between 100 and 200?
+
+## Probability of a range of values
+
+```{r birdDensityP}
+```  
+
+We obtain probabilities of observations between a range of values by integrating the distribution over selected values.
+
+
+## Probability  as Integral Under the Curve
+
+```{r birdDensityP}
+```  
+
+$\int_{i=100}^{200}{P(a=i)}$
+
+
+## Roadmap
+
+1.  Basic Probability Review\
+
+2.  <span style="color:red">The normal distribution & P-Values</span>\
+
+3.  Hypothesis testing\
+
+## The Normal Distribution
+```{r normal, echo=FALSE}
+vals<-seq(-3,3,.01)
+normPlot<-ggplot(mapping = aes(x=vals, y=dnorm(vals))) +
+  geom_line() +
+  xlab("Y") +
+  ylab("Proability Density\n") +
+  theme_bw(base_size=17) 
+
+normPlot 
+```
+
+- A single **mean** data generating process
+- Many sources of variation (error) with equal probability
+- Low probability of ending up in tails, high in middle
+
+## 67% of Values within 1 SD
+
+```{r normalSD1, echo=FALSE}
+normPlot + geom_area(mapping = (aes(x=seq(-1,1,.01), y=dnorm(seq(-1,1,.01)))), fill="red", alpha=0.4)
+```
+
+> - If we summed up the probability densities under the curve, it would be 0.67
+
+## 95% of Values within 2 (1.96) SD
+
+```{r normalSD2, echo=FALSE}
+normPlot + geom_area(mapping = (aes(x=seq(-1,1,.01), y=dnorm(seq(-1,1,.01)))), fill="red", alpha=0.4) +
+  geom_area(mapping = (aes(x=seq(-2,-1,.01), y=dnorm(seq(-2,-1,.01)))), fill="blue", alpha=0.4) +
+  geom_area(mapping = (aes(x=seq(1,2,.01), y=dnorm(seq(1,2,.01)))), fill="blue", alpha=0.4) 
+
+```
+
+
+> - If we summed up the probability densities under the curve, it would be 0.95
+
+## The Probability of a Value or More Extreme Value
+
+```{r pnormPlot, echo=FALSE}
+normPlot + 
+  geom_area(mapping = (aes(x=seq(-3,-2,.01), y=dnorm(seq(-3,-2,.01)))), fill="purple", alpha=0.4)
+```
+
+
+## The Probability of a Value or More Extreme Value
+
+```{r pnormPlot2}
+normPlot + 
+  geom_area(mapping = (aes(x=seq(-3,-2,.01), y=dnorm(seq(-3,-2,.01)))), fill="purple", alpha=0.4) +
+  annotate(x=-2.2, y=0.01, geom="text", label=round(pnorm(-2), 2))
+```
+
+<span class="fragment">This is a **p-value**</span>
+
+## P-Values
+<Br><br><br>
+<h2>The probability of observing a value or more extreme value in a distribution.</h2>
+
+## The Probability of a Value or More Extreme Value
+
+```{r pnormPlot3}
+normPlot + 
+  geom_area(mapping = (aes(x=seq(-3,-2,.01), y=dnorm(seq(-3,-2,.01)))), fill="purple", alpha=0.4) +
+  geom_area(mapping = (aes(x=seq(-2,-1,.01), y=dnorm(seq(-2,-1,.01)))), fill="blue", alpha=0.4) +
+  geom_area(mapping = (aes(x=seq(-1,0,.01), y=dnorm(seq(-1,0,.01)))), fill="red", alpha=0.4) +
+  annotate(x=-2.2, y=0.01, geom="text", label=round(pnorm(-2), 2))+
+  annotate(x=-1.5, y=0.01, geom="text", label=round(pnorm(-1), 2))+
+  annotate(x=-0.5, y=0.01, geom="text", label=round(pnorm(-0), 2))
+```
+
+## The Cummulative Distribution/Quantile Function
+
+```{r qnormPlot, echo=FALSE}
+
+ggplot(mapping = aes(y=seq(0,1,.01), x=qnorm(seq(0,1,.01)))) + 
+  geom_line() + 
+  ylim(0,1) + 
+  theme_bw(base_size=15) +
+  xlab("Y") +
+  ylab("Quantile\n")
+```
+
+<span class="fragment">How **p-value** changes with different values of a distribution</span>
+
+## Roadmap
+
+1.  Basic Probability Review\
+
+2.  The normal distribution & P-Values\
+
+3.  <span style="color:red">Hypothesis testing</span>\
+
+## 
+<br><br><br>
+<center><h1>Hypothesis Testing</center>
+
+
+## Inductive v. Deductive Reasoning
+<br><br>
+<span class="fragment">**Deductive Inference:** A larger theory is used to devise
+many small tests.</span> \
+<Br><br>
+<span class="fragment">**Inductive Inference:** Small pieces of evidence are used
+to shape a larger theory and degree of belief.</span>\
+
+
+## Deriving Truth from Data
+> - **Frequentist Inference:** Correct conclusion drawn from repeated experiments  
+>     - Uses p-values and CIs as inferential engine  
+\
+> - **Likelihoodist Inference:** Evaluate the weight of evidence for different hypotheses  
+>     - Derivative of frequentist mode of thinking  
+>     - Uses model comparison (sometimes with p-values...)  
+\
+> - **Bayesian Inference:** Probability of belief that is constantly updated  
+>     - Uses explicit statements of probability and degree of belief for inferences  
+
+
+## Primary Mode of Frequentist Inference
+<Br><br>
+
+**Null Hypothesis Tests**: Falsify a null hypothesis : Evaluate weight of evidence
+
+## Null Hypothesis Tests & Popper
+<br>
+<img src="./images/07/Karl_Popper_wikipedia.jpeg" style="position:absolute; left:20px">
+
+<div style="position: relative; left: 400px; vertical-align: top; text-align: left; width: 60%"> Falsification of hypotheses is key! <br><br>
+A theory should be considered scientific if, and only if, it is falsifiable.</div>
+
+## Deductive Reasoning and Null Hypothesis Tests
+<br><br>
+<span class="fragment"><h5>A null hypothesis is a default condition that we can attempt to falsify.</h5></span>
+
+## Common Uses of Null Hypothesis Tests
+
+-   Ho: Two groups are the same
+
+-   Ho: An estimated parameter is not different from 0
+
+-   Ho: The slopes of two lines are the same
+
+-   Etc...
+
+\
+So, what conclusions can we draw if we reject the null?
+
+## Null Distributions
+> - Null hypotheses are associated with null statistical distributions.\
+\
+> - For example, if Ho states that a value is normally distributed, but 
+not different from 0, the null distribtion is centered on 0 with some
+standard deviation.  <br>
+\
+> - We then assess whether an observed value or more extreme value than our observation is likely.
+
+
+
+## Null Distributions
+
+```{r normal, echo=FALSE}
+```
+
+
+## R.A. Fisher and The P-Value For Null Hypotheses
+
+<img src="./images/07/fisher2.jpeg" style="position:absolute; left:20px">
+
+<div style="position: relative; left: 400px; vertical-align: top; text-align: left; width: 50%"> P-value: The Probability of making an observation or more extreme
+observation given that the null hypothesis is true.</div>
+
+## Evaluation of a Test Statistic
+
+<p align="left">We  use our data to calculate a test statistic that maps to a value
+of the null distribution. <br><Br>
+We can then calculate the probability of observing our data, or of observing data even more extreme, given that the null hypothesis is true.</p><br><br>
+
+<center>$P(X \leq Data | H_{0})$</center>
+
+
+
+## Evaluation of a Test Statistic
+Let's say we know the distribution of chest hair lengths on Welsh Corgis
+```{r normalTest, echo=FALSE}
+corgi <- seq(4,10, .01)
+corgiDist <- dnorm(corgi, 7,1)
+corgiPlot <- ggplot(data.frame(corgi = corgi, corgiDist = corgiDist)) +
+  geom_line(mapping = aes(x=corgi, y=corgiDist)) +
+  theme_bw(base_size=17) +
+  xlab("Chest Hair Length (cm)") + ylab("Probability Density\n") + 
+  scale_y_continuous(expand=c(0.01,0))
+corgiPlot
+```
+
+
+## A short-haired Corgi
+You have a Corgi with a chest hair that is 5 cm
+```{r normalLine, echo=FALSE}
+corgiPlot2 <- corgiPlot +
+  geom_vline(lty=2, lwd=2, color="red", xintercept=5)
+corgiPlot2
+```
+
+## A Corgi's P
+What is the probability of this or a shorter-haired Corgi?
+```{r normalFill, echo=FALSE}
+px <- seq(4,5,.01)
+py <- dnorm(px, 7, 1)
+corgiPlot2 <- corgiPlot2 +
+  geom_area(fill="red", alpha=0.4, data=data.frame(px = px, py = py), mapping = aes(x=px, y=py))
+corgiPlot2
+```
+
+p = `r round(pnorm(5,7,1),4)`\
+<span class="fragment">Note - this is a one-tailed test!</span>
+
+## 1-Tailed v. 2-Tailed Tests
+
+1-Tailed Test: We are explicit about whether Ha implies that our sample
+is greater than or less than our null value.\
+<br>
+<span class="fragment">$P(X \leq Data | H_{0})$ (1-tailed)\ </span>
+<br><br>
+<span class="fragment">2-Tailed Test: We are make no assumption about the sign or direction of
+our alternative hypotheses.</span> \
+<br>
+<span class="fragment">$P(X \leq Data | H_{0}) + P(X \geq Data | H_{0})$ (2-tailed)</span>
+
+
+
+## Two-Tailed P Value
+<span class="fragment">p = 2 x `r round(pnorm(5,7,1),4)`</span><span class = "fragment"> = `r 2*round(pnorm(5,7,1),4)` </span>
+
+```{r normalFill2, echo=FALSE}
+px2 <- seq(9,10,.01)
+py2 <- dnorm(px2, 7, 1)
+corgiPlot2 + 
+  geom_area(fill="red", alpha=0.4, data=data.frame(px = px2, py = py2), mapping = aes(x=px, y=py)) +
+  geom_vline(aes(xintercept=9), color="red", lwd=2, lty=2)
+```
+
+<span class="fragment">When should you use a 1-Tailed Test?</span>
+
+## What does 0.456 mean?
+
+> - There is a 4.56% chance of obtaining the observed data, or more extreme
+data, given that the null hypothesis is true.
+
+> - If you chose to reject the null, you have a ~ 1 in 22 chance of being wrong.
+
+> - How comfortable are you with rejecting the null?
+
+<center><span class="fragment">**Note: rejecting the null ̸= accepting a specific alternative**</span></center>

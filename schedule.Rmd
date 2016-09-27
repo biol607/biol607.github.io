@@ -32,13 +32,16 @@ __In Class Code:__ [Loading Data](in_class_code_2016/03_load_data.R), [Intro to 
 __Homework:__ https://github.com/biol607/2016_homework_03_ggplot2  
   
 ### Week 4.   
-__Lecture:__ Frequentist Hypothesis Testing, Z-Tests, Power Analysis  
-__Lab Topic:__ Simulation and Frequentist Hypothesis testing, Simulation and Power  
+__Lecture:__ [Frequentist Hypothesis Testing](lectures/07_probability_hypotheses.html), Z and Binomial Tests
+__Lab Topic:__ Distributions in R, Frequentist Hypothesis testing via simulation  
 __Reading:__ W&S 5-7, G&W Chapter 7, 16  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses
+__Quiz:__ http://tinyurl.com/hyp-pre-quiz
+
   
   
 ### Week 5.   
-__Lecture:__ T, and χ2 tests  
+__Lecture:__ T, and χ2 tests, Power Analysis and simulation
 __Lab Topic:__ Simple hypothesis tests with data  
 __Reading:__ W&S 8-12, G&W Chapter 10, 20  
   

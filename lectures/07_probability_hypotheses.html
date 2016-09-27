@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Probability and Frequentist Hypothesis Testing</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Probability and Frequentist Hypothesis Testing</h1>
+</section>
+
+<section id="section" class="slide level2">
+<h1></h1>
+<br>
+<center>
+<h1>
+Probability and Frequentist Hypothesis Testing
+</h1>
+<img src="images/07/xkcd_sig_blowup.png" width="749" height="400" /> <!-- Learning Objectives:
+  1) Understand what a point versus integrated probability means.
+  2) Grok the frequentist paradigm versus likelihoodist v. bayesian
+  3) Understand how we use integrated probability to calculate a p-value
+  -->
+</center>
+<p align="left" style="font-size:7pt; font-color:black;">
+<a href="https://xkcd.com/882/" class="uri">https://xkcd.com/882/</a>
+</p>
+</section>
+<section id="quiz" class="slide level2">
+<h1>Quiz!</h1>
+<br><br>
+<center>
+<h2>
+<a href="http://tinyurl.com/hyp-pre-quiz" class="uri">http://tinyurl.com/hyp-pre-quiz</a>
+</h2>
+<center>
+</section>
+<section id="etherpad-for-this-week" class="slide level2">
+<h1>Etherpad for this week</h1>
+<br><Br>
+<center>
+<h4>
+<a href="https://etherpad.wikimedia.org/p/607-hypotheses" class="uri">https://etherpad.wikimedia.org/p/607-hypotheses</a>
+</h4>
+</center>
+</section>
+<section id="roadmap" class="slide level2">
+<h1>Roadmap</h1>
+<ol type="1">
+<li>Basic Probability Review<br />
+</li>
+<li>The normal distribution &amp; P-Values<br />
+</li>
+<li>Hypothesis testing<br />
+</li>
+</ol>
+</section>
+<section id="section-1" class="slide level2">
+<h1></h1>
+<br><br>
+<center>
+<h1>
+Probability Distributions &amp; What they can Do for You!
+</h1>
+<br><br> <span class="fragment">
+<h4>
+So far, we’ve been slinging around normal distribution terminology casually. Let’s formalize it, and make it useful for hypothesis testing!
+</h4>
+</span>
+</center>
+</section>
+<section id="probability" class="slide level2">
+<h1>Probability!</h1>
+<p><br><br> <em>Probability</em> - The fraction of observations of an event given multiple repeated independent observations.</p>
+</section>
+<section id="probability-of-eating" class="slide level2">
+<h1>Probability of Eating</h1>
+<p><img src="images/07/tobacco-budworm-large-Melanie-Marr.jpeg" width="400" style="position:absolute; left:20px"></p>
+<div style="position: relative; left: 500px; vertical-align: top; text-align: left; width: 50%">
+Let’s say you’ve offered 50 budworms a leaf to eat. 45 eat. <br><br> <span class="fragment"><span class="math inline">\(P(eats) = \frac{45}{50} = 0.9\)</span></span> <br><br> <span class="fragment">Now you offer 50 others a leaf. 10 eat.</span> <br><br> <span class="fragment"><span class="math inline">\(P(eats) = \frac{10}{50} = 0.2\)</span></span>
+</div>
+<p><br></p>
+</section>
+<section id="probability-of-exclusive-feeding-events" class="slide level2">
+<h1>Probability of Exclusive Feeding Events</h1>
+<p><img src="images/07/tobacco-budworm-large-Melanie-Marr.jpeg" width="400" style="position:absolute; left:20px"></p>
+<div style="position: relative; left: 500px; vertical-align: top; text-align: left; width: 50%">
+<p>We offered our budworms two different leaves<br />
+<span class="fragment">20 eat the first, 5 eat the second.</span><br />
+<span class="fragment">What is the probability of eating one <strong>or</strong> the other?</span></p>
+<p><br />
+<span class="fragment">P(A or B) = P(A) + P(B)</span><br><br> <span class="fragment">P(eats) = <span class="math inline">\(\frac{20}{50} + \frac{5}{50} = 0.5\)</span> </span></p>
+</div>
+<p><br></p>
+</section>
+<section id="probability-of-joint-events" class="slide level2">
+<h1>Probability of Joint Events</h1>
+<p><img src="images/07/tobacco-budworm-large-Melanie-Marr.jpeg" width="400" style="position:absolute; left:20px"></p>
+<div style="position: relative; left: 500px; vertical-align: top; text-align: left; width: 50%">
+<p>We offer our budworms a leaf. 45 eat it. Then we offern all of them another leaf. 20 eat it.  <span class="fragment">What is the probability of eating one <strong>and</strong> the other?</span><br><br></p>
+<span class="fragment">P(A and B) = P(A)P(B) </span><br><br />
+<span class="fragment">P(eats twice) = <span class="math inline">\(\frac{45}{50} * \frac{20}{45}\)</span> </span><br> <span class="fragment"> = <span class="math inline">\(\frac{20}{50}\)</span></span><span class="fragment"> = 0.4</span><br><br />
+
+</div>
+<center>
+<span class="fragment"><strong>JOINT PROBABILITY</strong></span>
+</center>
+</section>
+<section id="section-2" class="slide level2">
+<h1></h1>
+<br><br>
+<center>
+<h1>
+Distributions!
+</h1>
+<br><br><br> (when a point probabilty just ain’t enough)
+</center>
+</section>
+<section id="frequency-distributions-make-intuitive-sense" class="slide level2">
+<h1>Frequency Distributions Make Intuitive Sense</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/freqDist1-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="frequencies-can-be-turned-into-probabilities" class="slide level2">
+<h1>Frequencies Can be Turned Into Probabilities</h1>
+<p>Just divide by total # of observations<br />
+<img src="07_probability_hypotheses_files/figure-revealjs/freqDist2-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="fragment">But - we have binned observations…</span></p>
+</section>
+<section id="probabilities-of-individual-observations" class="slide level2">
+<h1>Probabilities of Individual Observations</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/freqDist3-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="fragment">Tradeoff: Bins or we need to find something that fills gaps</span></p>
+</section>
+<section id="continuous-probability-distributions" class="slide level2">
+<h1>Continuous Probability Distributions</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/birdDensity1-1.jpeg" title="" alt="" width="768" /></p>
+<p>Any individual observation has a <em>probability density</em>.</p>
+</section>
+<section id="probability-of-a-range-of-values" class="slide level2">
+<h1>Probability of a Range of Values</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/birdDensityP-1.jpeg" title="" alt="" width="768" /></p>
+<p>What is the probability of a value between 100 and 200?</p>
+</section>
+<section id="probability-of-a-range-of-values-1" class="slide level2">
+<h1>Probability of a range of values</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/birdDensityP-1.jpeg" title="" alt="" width="768" /></p>
+<p>We obtain probabilities of observations between a range of values by integrating the distribution over selected values.</p>
+</section>
+<section id="probability-as-integral-under-the-curve" class="slide level2">
+<h1>Probability as Integral Under the Curve</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/birdDensityP-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="math inline">\(\int_{i=100}^{200}{P(a=i)}\)</span></p>
+</section>
+<section id="roadmap-1" class="slide level2">
+<h1>Roadmap</h1>
+<ol type="1">
+<li>Basic Probability Review<br />
+</li>
+<li><span style="color:red">The normal distribution &amp; P-Values</span><br />
+</li>
+<li>Hypothesis testing<br />
+</li>
+</ol>
+</section>
+<section id="the-normal-distribution" class="slide level2">
+<h1>The Normal Distribution</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/normal-1.jpeg" title="" alt="" width="768" /></p>
+<ul>
+<li>A single <strong>mean</strong> data generating process</li>
+<li>Many sources of variation (error) with equal probability</li>
+<li>Low probability of ending up in tails, high in middle</li>
+</ul>
+</section>
+<section id="of-values-within-1-sd" class="slide level2">
+<h1>67% of Values within 1 SD</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/normalSD1-1.jpeg" title="" alt="" width="768" /></p>
+<ul>
+<li class="fragment">If we summed up the probability densities under the curve, it would be 0.67</li>
+</ul>
+</section>
+<section id="of-values-within-2-1.96-sd" class="slide level2">
+<h1>95% of Values within 2 (1.96) SD</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/normalSD2-1.jpeg" title="" alt="" width="768" /></p>
+<ul>
+<li class="fragment">If we summed up the probability densities under the curve, it would be 0.95</li>
+</ul>
+</section>
+<section id="the-probability-of-a-value-or-more-extreme-value" class="slide level2">
+<h1>The Probability of a Value or More Extreme Value</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/pnormPlot-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="the-probability-of-a-value-or-more-extreme-value-1" class="slide level2">
+<h1>The Probability of a Value or More Extreme Value</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/pnormPlot2-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="fragment">This is a <strong>p-value</strong></span></p>
+</section>
+<section id="p-values" class="slide level2">
+<h1>P-Values</h1>
+<Br><br><br>
+<h2>
+The probability of observing a value or more extreme value in a distribution.
+</h2>
+</section>
+<section id="the-probability-of-a-value-or-more-extreme-value-2" class="slide level2">
+<h1>The Probability of a Value or More Extreme Value</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/pnormPlot3-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="the-cummulative-distributionquantile-function" class="slide level2">
+<h1>The Cummulative Distribution/Quantile Function</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/qnormPlot-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="fragment">How <strong>p-value</strong> changes with different values of a distribution</span></p>
+</section>
+<section id="roadmap-2" class="slide level2">
+<h1>Roadmap</h1>
+<ol type="1">
+<li>Basic Probability Review<br />
+</li>
+<li>The normal distribution &amp; P-Values<br />
+</li>
+<li><span style="color:red">Hypothesis testing</span><br />
+</li>
+</ol>
+</section>
+<section id="section-3" class="slide level2">
+<h1></h1>
+<br><br><br>
+<center>
+<h1>
+Hypothesis Testing
+</center>
+</section>
+<section id="inductive-v.-deductive-reasoning" class="slide level2">
+<h1>Inductive v. Deductive Reasoning</h1>
+<p><br><br> <span class="fragment"><strong>Deductive Inference:</strong> A larger theory is used to devise many small tests.</span><br />
+<Br><br> <span class="fragment"><strong>Inductive Inference:</strong> Small pieces of evidence are used to shape a larger theory and degree of belief.</span><br />
+</p>
+</section>
+<section id="deriving-truth-from-data" class="slide level2">
+<h1>Deriving Truth from Data</h1>
+<ul>
+<li class="fragment"><strong>Frequentist Inference:</strong> Correct conclusion drawn from repeated experiments
+<ul>
+<li class="fragment">Uses p-values and CIs as inferential engine<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment"><strong>Likelihoodist Inference:</strong> Evaluate the weight of evidence for different hypotheses
+<ul>
+<li class="fragment">Derivative of frequentist mode of thinking<br />
+</li>
+<li class="fragment">Uses model comparison (sometimes with p-values…)<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment"><strong>Bayesian Inference:</strong> Probability of belief that is constantly updated
+<ul>
+<li class="fragment">Uses explicit statements of probability and degree of belief for inferences</li>
+</ul></li>
+</ul>
+</section>
+<section id="primary-mode-of-frequentist-inference" class="slide level2">
+<h1>Primary Mode of Frequentist Inference</h1>
+<p><Br><br></p>
+<p><strong>Null Hypothesis Tests</strong>: Falsify a null hypothesis : Evaluate weight of evidence</p>
+</section>
+<section id="null-hypothesis-tests-popper" class="slide level2">
+<h1>Null Hypothesis Tests &amp; Popper</h1>
+<p><br> <img src="images/07/Karl_Popper_wikipedia.jpeg" style="position:absolute; left:20px"></p>
+<div style="position: relative; left: 400px; vertical-align: top; text-align: left; width: 60%">
+Falsification of hypotheses is key! <br><br> A theory should be considered scientific if, and only if, it is falsifiable.
+</div>
+</section>
+<section id="deductive-reasoning-and-null-hypothesis-tests" class="slide level2">
+<h1>Deductive Reasoning and Null Hypothesis Tests</h1>
+<br><br> <span class="fragment">
+<h5>
+A null hypothesis is a default condition that we can attempt to falsify.
+</h5>
+<p></span></p>
+</section>
+<section id="common-uses-of-null-hypothesis-tests" class="slide level2">
+<h1>Common Uses of Null Hypothesis Tests</h1>
+<ul>
+<li><p>Ho: Two groups are the same</p></li>
+<li><p>Ho: An estimated parameter is not different from 0</p></li>
+<li><p>Ho: The slopes of two lines are the same</p></li>
+<li><p>Etc…</p></li>
+</ul>
+<p><br />
+So, what conclusions can we draw if we reject the null?</p>
+</section>
+<section id="null-distributions" class="slide level2">
+<h1>Null Distributions</h1>
+<ul>
+<li class="fragment">Null hypotheses are associated with null statistical distributions.<br />
+<br />
+</li>
+<li class="fragment">For example, if Ho states that a value is normally distributed, but not different from 0, the null distribtion is centered on 0 with some standard deviation. <br><br />
+</li>
+<li class="fragment">We then assess whether an observed value or more extreme value than our observation is likely.</li>
+</ul>
+</section>
+<section id="null-distributions-1" class="slide level2">
+<h1>Null Distributions</h1>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/normal-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="r.a.-fisher-and-the-p-value-for-null-hypotheses" class="slide level2">
+<h1>R.A. Fisher and The P-Value For Null Hypotheses</h1>
+<p><img src="images/07/fisher2.jpeg" style="position:absolute; left:20px"></p>
+<div style="position: relative; left: 400px; vertical-align: top; text-align: left; width: 50%">
+P-value: The Probability of making an observation or more extreme observation given that the null hypothesis is true.
+</div>
+</section>
+<section id="evaluation-of-a-test-statistic" class="slide level2">
+<h1>Evaluation of a Test Statistic</h1>
+<p align="left">
+We use our data to calculate a test statistic that maps to a value of the null distribution. <br><Br> We can then calculate the probability of observing our data, or of observing data even more extreme, given that the null hypothesis is true.
+</p>
+<p><br><br></p>
+<center>
+<span class="math inline">\(P(X \leq Data | H_{0})\)</span>
+</center>
+</section>
+<section id="evaluation-of-a-test-statistic-1" class="slide level2">
+<h1>Evaluation of a Test Statistic</h1>
+<p>Let’s say we know the distribution of chest hair lengths on Welsh Corgis <img src="07_probability_hypotheses_files/figure-revealjs/normalTest-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="a-short-haired-corgi" class="slide level2">
+<h1>A short-haired Corgi</h1>
+<p>You have a Corgi with a chest hair that is 5 cm <img src="07_probability_hypotheses_files/figure-revealjs/normalLine-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="a-corgis-p" class="slide level2">
+<h1>A Corgi’s P</h1>
+<p>What is the probability of this or a shorter-haired Corgi? <img src="07_probability_hypotheses_files/figure-revealjs/normalFill-1.jpeg" title="" alt="" width="768" /></p>
+<p>p = 0.0228<br />
+<span class="fragment">Note - this is a one-tailed test!</span></p>
+</section>
+<section id="tailed-v.-2-tailed-tests" class="slide level2">
+<h1>1-Tailed v. 2-Tailed Tests</h1>
+<p>1-Tailed Test: We are explicit about whether Ha implies that our sample is greater than or less than our null value.<br />
+<br> <span class="fragment"><span class="math inline">\(P(X \leq Data | H_{0})\)</span> (1-tailed) </span> <br><br> <span class="fragment">2-Tailed Test: We are make no assumption about the sign or direction of our alternative hypotheses.</span><br />
+<br> <span class="fragment"><span class="math inline">\(P(X \leq Data | H_{0}) + P(X \geq Data | H_{0})\)</span> (2-tailed)</span></p>
+</section>
+<section id="two-tailed-p-value" class="slide level2">
+<h1>Two-Tailed P Value</h1>
+<p><span class="fragment">p = 2 x 0.0228</span><span class="fragment"> = 0.0456 </span></p>
+<p><img src="07_probability_hypotheses_files/figure-revealjs/normalFill2-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="fragment">When should you use a 1-Tailed Test?</span></p>
+</section>
+<section id="what-does-0.456-mean" class="slide level2">
+<h1>What does 0.456 mean?</h1>
+<ul>
+<li class="fragment">There is a 4.56% chance of obtaining the observed data, or more extreme data, given that the null hypothesis is true.</li>
+</ul>
+<ul>
+<li class="fragment">If you chose to reject the null, you have a ~ 1 in 22 chance of being wrong.</li>
+</ul>
+<ul>
+<li class="fragment">How comfortable are you with rejecting the null?</li>
+</ul>
+<center>
+<span class="fragment"><strong>Note: rejecting the null ̸= accepting a specific alternative</strong></span>
+</center>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
