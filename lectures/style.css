@@ -14,3 +14,9 @@
     font-variant: normal;
     font-weight: bold;
 }
+
+td {
+  position:relative;
+  top: -100%;
+  vertical-align: top;
+}
