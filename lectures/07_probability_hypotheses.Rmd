@@ -1,5 +1,5 @@
 ---
-title: "Probability and Frequentist Hypothesis Testing"
+title: 
 output:
   revealjs::revealjs_presentation:
     reveal_options:
@@ -22,6 +22,7 @@ output:
   2) Grok the frequentist paradigm versus likelihoodist v. bayesian
   3) Understand how we use integrated probability to calculate a p-value
   -->
+<!-- for next year, insert scientific method slides -->
 </center>
 <p align="left" style="font-size:7pt; font-color:black;">https://xkcd.com/882/</p>
 
