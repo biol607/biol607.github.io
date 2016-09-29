@@ -119,12 +119,10 @@ ggplot(mapping = aes(x=vals, y=dens)) +
 3) Exponential - The distribution of time between events happening, with rate = 1/(average time to next event). If the mean time to mortality of a super-corgi is 20 years, what's the probability that a super-corgi will live to 30
 
 ```{r exp, eval=FALSE}
-# What's the density of 4
-# from a standard lognormal?
 dexp(___, rate = ___)
 
 #plot the density
-vals <- ___(0,50, length.out=___
+vals <- ___(0,50, length.out=___)
 dens <- ___(___, rate = ___)
 ggplot(mapping = aes(x=___, y=___)) +
   geom_line() +
@@ -134,8 +132,6 @@ ggplot(mapping = aes(x=___, y=___)) +
 4) Binomial - You flip a coin 100 times, and think that you have 50:50 chance of heads or tails. What's the probability of obtaining 40 heads?
 
 ```{r bin, eval=FALSE}
-# What's the density of 4
-# from a standard lognormal?
 dbinom(___, size = ___, prob = ___)
 
 #plot the density

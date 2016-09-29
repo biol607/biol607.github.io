@@ -36,6 +36,7 @@ __Lecture:__ [Frequentist Hypothesis Testing](lectures/07_probability_hypotheses
 __Lab Topic:__ [Distributions in R, Frequentist Hypothesis testing via simulation](lab/05_hypothesis_power.html)  \
 __Reading:__ W&S 5-7, G&W Chapter 7, 16  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses  
+__In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)\
 __Quiz:__ http://tinyurl.com/hyp-pre-quiz
 
   
