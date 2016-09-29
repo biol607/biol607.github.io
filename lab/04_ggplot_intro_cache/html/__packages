@@ -1,0 +1,9 @@
+base
+readr
+dplyr
+forcats
+ggplot2
+RColorBrewer
+viridis
+ggthemes
+gganimate

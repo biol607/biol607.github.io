@@ -1,0 +1,374 @@
+---
+title: "Hypothesis Testing, Simulation, and Power"
+author: "Bill 607"
+date: "September 29, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Probability Density Distributions
+Every probability distribution in R - whether in the base package or in other packages - typically obeys a standard naming conventions. For some distribution, `dist`, then `ddist` is the function for it's density, `pdist` would give you p-values, `qdist` allows you to get the value of an observation that will produce a given p-value, and `rdist` uses the distribution to generate random numbers.
+
+### 1.1 Normal and Continuous Densities
+A normal distribution in R is defined by it's mean and standard deviation. To get a point density for a normal distribution, `dnorm()` accepts an obsered value, a `mean` argument, and a `sd` argument. The default mean and SD are for a standard normal distribution.
+
+Let's say we wanted to get the density from an observation of 5 from a distribution with mean 8 and sd of 3.
+
+```{r dnorm}
+dnorm(5, mean = 8, sd = 3)
+```
+
+Woo! Number!
+
+So, I've been plotting all kinds of distributions over the last few weeks. To do that, all I've needed was the density over a wide range of values. So, using this distribution, let's plot the normal curve from 0 to 16. For this, we'd give dnorm a vector instead of a single observation.
+
+```{r dnorm_vec}
+dens_frame <- data.frame(x = seq(0, 16, length.out = 200))
+
+#note - you could do this with mutate! But I like $ 
+dens_frame$density <- dnorm(dens_frame$x, mean = 8, sd = 3)
+```
+
+That produces a lot of numbers - but we can feed them easily ito ggplot2.
+
+```{r plotnorm}
+library(ggplot2)
+
+norm_dens <- ggplot(dens_frame,
+                    mapping=aes(x=x, y=density)) +
+  geom_line()
+
+norm_dens
+```
+
+Neat!
+
+We've also already seen normal distributions in action to generate random variables.
+
+```{r rand_norm}
+rnorm(10, mean = 8, sd=3)
+```
+
+### 1.2 Poisson and Discrete Densities
+
+What about discrete distributions? For the poisson distribution, we have the `dpois()` function for density, which just takes `lambda` as its argument to define the distribution. So, assuming a lambda of 10, what's the probability of an observation of 3?
+
+```{r pois}
+dpois(3, lambda=10)
+```
+
+Note, if you enter a continuous number, you get an error.
+
+```{r pois2}
+dpois(1.5, lambda=10)
+```
+
+Negative numbers just give a probability of 0, which is sensible. They are not possible.
+
+Plotting is a wee bit funnier, as these distributions are discrete.
+
+```{r dpois_vec}
+pois_frame = data.frame(x = 0:20)
+
+#note - you could do this with mutate! But I like $ 
+pois_frame$density <- dpois(pois_frame$x, lambda = 10)
+```
+
+So how to plot? Line plots are... dishonest. We need to show the discrete nature of the distribution. So, we have `geom_bar` to come to our rescue. `stat="identity"` means just plot what value is supplied. And we can monkey with the bar width to express the discrete nature of the distribution.
+
+```{r plot_pois}
+ggplot(pois_frame) +
+  aes(x=x, y=density) +
+  geom_bar(width=0.1, stat="identity")
+
+```
+
+
+### 1.3 Exercises: Exploring Distributions
+OK, let's try getting the density of one value and plotting the distribution of a few different distributions
+
+1) Lognormal
+```{r exercises, eval=FALSE}
+# What's the density of 4
+# from a standard lognormal?
+dlnorm(4, meanlog=0, sdlog = 1)
+
+#plot the density
+vals <- seq(0,10, length.out=500)
+dens <- dlnorm(vals, meanlog = 0, sdlog = 1)
+ggplot(mapping = aes(x=vals, y=dens)) +
+  geom_line() +
+  geom_vline(xintercept = 4)
+```
+
+2) Gamma - You wait 2 hours for a leaf to be eaten, you feed your works 5 leaves. What's the point probability of waiting 15 hours?
+```{r gamma_ex, eval=FALSE}
+dgamma(___, scale = 2, shape = 5)
+
+#plot the density
+vals <- seq(0,20, length.out = ___)
+dens <- dgamma(___, scale = 2, shape = 5)
+
+ggplot(mapping = aes(x=vals, y=dens)) +
+  geom_line() +
+  geom_vline(xintercept = ___)
+```
+3) Exponential - The distribution of time between events happening, with rate = 1/(average time to next event). If the mean time to mortality of a super-corgi is 20 years, what's the probability that a super-corgi will live to 30
+
+```{r exp, eval=FALSE}
+# What's the density of 4
+# from a standard lognormal?
+dexp(___, rate = ___)
+
+#plot the density
+vals <- ___(0,50, length.out=___
+dens <- ___(___, rate = ___)
+ggplot(mapping = aes(x=___, y=___)) +
+  geom_line() +
+  geom_vline(___ = ___)
+```
+
+4) Binomial - You flip a coin 100 times, and think it's a 50:50 shot. What's the probability of obtaining 40 heads?
+
+```{r bin, eval=FALSE}
+# What's the density of 4
+# from a standard lognormal?
+dbinom(___, size = ___, prob = ___)
+
+#plot the density
+vals <- 0:100
+dens <- ___(___, ___ = ___, ___=___)
+ggplot(____ = ___(x=___, y=___)) +
+  geom_bar(width=0.6, stat="identity") +
+  ___(___ = ___)
+```
+
+
+## 2. Getting P-Values from Distributions
+
+From getting densities it's a hop, skip, and a jump to getting p-values. With densitites, we were getting point probabilities. With p-values, we invoke the quantile function (which starts with `p`). Think about it. Quantiles are non-parametric p-values, if you will, stating the value that X% of a sample is less than or equal to.
+
+### 2.1 1-Tailed P Values
+
+Using that as a jumping off point, let us remember that quantiles are ordered from smallest value to largest value. They are inherently 1-tailed. Let's take an example of surveying coral reefs after a hurricane. We survey 500 reefs one year after a hurricane, and want to know if the hurricane has had an effect. We know that reefs get damaged from time to time by any number of things - not just storms. Our expectation based on past surveys is that there's a 30% chance of a reef being damaged. So, a 70% chance of it being undamaged. We survey the reefs, and find that 300 are undamaged. 
+
+What is the probability of observing 300 or fewer undamaged reefs?
+
+```{r binom_p}
+pbinom(300, size = 500, prob = 0.7)
+```
+
+Excellent. So, good chance that this hurricane had an effect! What if we had wanted to do this with the damaged information instead?
+
+```{r binom_p_dead}
+pbinom(200, size = 500, prob = 0.3)
+```
+
+Oh that's weird. A really high p-value. Why?
+
+Well, a quantile function looks at the *lower tail* of a distribution. If we're talking about number of damaged reefs, and want to know if the number is higher than usual, then we want to look at the upper tail. This is fairly straightforward with one additional argument. Or you can cleverly use some subtraction for many well behaved distributions.
+
+```{r binom_p_2}
+pbinom(200, size = 500, prob = 0.3, lower.tail=FALSE)
+
+1 - pbinom(200, size = 500, prob = 0.3)
+```
+
+
+### 2.2 Two-Tailed Tests
+
+What if instead of assuming that a hurricane would cause more damage, we weren't sure, one way or another. For example, maybe the hurricane stimulated so much growth, that it could have mitigated the propensity of a reef to be damaged!
+
+Simply put, we take the p-value based on the appropriate tail, and double it.
+
+```{r binom_p_two_tail}
+2*pbinom(300, size = 500, prob = 0.7)
+```
+
+There are all sorts of tricks one can do to minimize coding here in different tests. For example, for a z-test, one can take the absolute value of the z-test, now that it's positive, and then use `lower.tail=FALSE` and multiply the whole shebang by 2. You'll see this with t-tests next weeek.
+
+For example, let's assume a sample of 10 flies with an antenna length of 0.4mm. The population of fly antenna lengths has a mean of 0.3mm with a SD of 0.1SD.
+
+```{r pnorm}
+#Calculate SE based on the population
+sigma_ybar = 0.1/sqrt(5)
+
+#Z-Score
+z <- (0.4 - 0.5)/sigma_ybar
+
+#P-Value
+2*pnorm(abs(z), lower.tail=FALSE)
+
+```
+
+## 3. P-Value via Simulation
+What if you don't know your distirbution, or it's something weird? Let's go back to the tapir example from class
+
+### 3.1 Creating a null distribution
+So, we know that tapirs have a 90% chance, with even probability, of having a nose that is 5-10cm in length. And a 10% chance, with an even distribution of probability, of having noses from 10 to 15cm in length. Greater than that or less than that means that those tapirs have experienced the wrath of Papa Darwin.
+
+First, how do we build a null distribution?
+
+Simply put, start by making a vector of all of the possible values you might want.
+```{r null_tapir}
+nose_length <- c(seq(5,15, length.out=2000))
+```
+
+OK, we know that if `nose_length` $\le$ 10, there's a 90% chance of seeing one of those values. Otherwise, a 10% chance. So first we find the index of where nose length begins being over 10. 
+
+`which` is a great function that 
+
+```{r middle}
+which(nose_length>10)[1]
+```
+
+1001 - cool, so, right in the middle. That means, the first 1000 have a high chance of being chose, and the second 1000 have a low chance of being chosen.
+
+If you're in the first 1000, each individual size has a 0.9/1000 chance of being observed. If you're in the second 1000, each size has a 0.1/1000 chance of being observed. Let's turn that into a vector
+```{r probs}
+prob_observed =  c(rep(0.9/1000, 1000), rep(0.1/1000, 1000))
+```
+
+Now we can use `sample` to take replicate samples of a fictional population to create a distribution. Let's use a population size of 100000 - although you could go larger. We'll sample from the list of nose lengths, with replacement, but use the `probs` argument to specify the chance of being chosen using our `prob_observed` vector.
+
+```{r sample_tapir}
+samp <- sample(nose_length, 100000, replace=TRUE,
+               prob = prob_observed)
+```
+
+### 3.2 Getting a p-value
+OK, you have a null population. How do you get a p-value from that population sample? Let's say, for example, we have a tapir with a nose length of 14.5. Is it a tapir, or a *faux* tapir?
+
+Given that p-values are the probability of observing a value or something greater than it, this translates to the fraction of individuals in a population that is equal to or greater than some value. So, what fraction of the observations in your simulated population are equal to or greater than 14.5?
+
+We can assess this a number of ways. Using our ```which``` function above, we can look at the length of the output vector.
+
+Or, in any comparison that produces boolean values, `TRUE` = 1 and `FALSE` = 0. So we could sum up a comparison.
+
+```{r sample_p}
+length(which(samp >= 14.5))/length(samp)
+
+sum(samp >= 14.5)/length(samp)
+```
+
+We can of course make this a two-tailed comparison by doubling our simulated p-value.
+
+## 4. Power Via Simulation
+
+To evaluate how power works via simulation, let's walk through an example with a z-test. Let's assume an average population-wide resting heart rate of 80 beats per minute with a standard deviation of 6 BPM.
+
+A given drug speeds people's heart rates up on average by 5 BPM. What sample size do we need to achieve a power of 0.8?
+
+### 4.1 Creating the simulation
+
+To begin with, we need to create a simulated data frame of observations at different sample sizes. We've done this before two weeks ago using dplyr, so, making a data frame with, let's say 500, replicates of each sample size between 1-10 shouldn't be too onerous. We'll draw our random samples from a normal distribution with mean of 85 BPM and a SD of 6 BPM.
+
+```{r sim_data}
+library(dplyr)
+
+#first make a data frame with sample sizes
+sim_data <- data.frame(samps = rep(1:10, 500)) %>%
+  
+  #a trick - group by 1:n() means you don't need sim numbers!
+  group_by(1:n()) %>%
+  
+  #get a sample mean
+  mutate(sample = mean(rnorm(samps, 90, 6))) %>%
+  
+  #clean up
+  ungroup()
+```
+
+### 4.2 Applying the Test
+OK, now you have the data....so, let's do a z-test! We can define a variable for the population standard error of the mean, and then use that to calculate z, and then calculate p.
+
+```{r z_sim}
+
+sim_data <- sim_data %>%
+  mutate(se_y = 6/sqrt(samps)) %>%
+  mutate(z = (sample-80)/se_y) %>%
+  mutate(p = 2*pnorm(abs(z), lower.tail=FALSE))
+```
+
+Cool! We have p values! We can even plot this by sample size
+
+```{r p-plot}
+ggplot(data = sim_data, mapping = aes(x=samps, y=p)) +
+  geom_jitter(alpha=0.4)
+```
+
+### 4.3 Calculating Power
+Now - power! We know that our type II error rate, beta, is the fraction of p values that are greater than our alpha (here 0.05). Great! Power is then 1 - beta.
+
+Note, I'm going to use `n()` within a group here rather than trying to remember how big my number or replicate simulations for each sample size was. Protect yourself! Practice lazy coding!
+
+```{r power}
+sim_power <- sim_data %>%
+  group_by(samps) %>%
+  summarise(power = 1-sum(p>0.05)/n()) %>% 
+  ungroup()
+```
+
+And we can plot that result with our critical threshold for power.
+
+```{r powerplot}
+ggplot(data=sim_power, mapping = aes(x=samps, y=power)) +
+  geom_point() +
+  geom_line() +
+  geom_hline(yintercept=0.8, lty=2)
+```
+
+Wow - pretty good!
+
+### 4.3 Exercise
+OK, let's take the above example, and now, assume that the drug only increased the BPM by 2, the population has a SD of 7, and our alpha is 0.01.  What is our power?
+
+
+### 4.3 Multiple Alphas
+
+Let's say we wanted to look at multiple alphas. Well, we'd need another column for alpha! And we want all possible combinations of alpha and the `sim_data`. For that, we can use a function in the `tidyr` library that does that sort of all possible combinations of values in two objects called `crossing()`.
+
+```{r alphas}
+library(tidyr)
+
+sim_tradeoff <- sim_data %>%
+  
+  #more alphas!
+  crossing(alpha = 10^(-1:-10)) %>%
+  
+  #now calculate power for each alpha
+  group_by(samps, alpha) %>%
+  summarise(power = 1-sum(p>alpha)/500) %>%
+  ungroup()
+```
+
+We can then plot this with `ggplot`
+
+```{r plot_tradeoff}
+ggplot(sim_tradeoff) +
+  aes(x=samps, y=power, color=factor(alpha)) +
+  geom_point() + geom_line() +
+  xlab("Sample Size") +
+  
+  #just a little note on greek letters and re-titling
+  #colorbars
+  scale_color_discrete(guide = guide_legend(title=expression(alpha)))
+```
+
+
+### 4.3 Exercise (and homework): Many SDs
+
+1) Let's start from scratch. Assume a mean effect of 5 again. But now, make a simulated data frame that not only looks at multiple sample sizes, but also multiple SD values. You're going to want `crossing` with your intitial data frame of sample sizes and a vector of sd values from 3 to 10 (just iterate by 1).
+
+2) OK, now that you've done that, calculate the results from z-tests. Plot p by sample size, using `facet_wrap` for different SD values.
+
+3) Now plot power, but use color for different SD values. Include our threshold power of 0.8.
+
+4) Last, use `crossing` again to explore changing alphas from 0.01 to 0.1. Plot power curves with different alphas as different colors, and use faceting to look at different SDs. 
+
+5) What do you learn about how alpha and SD affect power? 
+
+6) How do you think that changing the effect size would affect power? You can just answer this without coding out anything. Based on what we've learned so far - what do you think?
