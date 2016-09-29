@@ -202,11 +202,11 @@ binomPlot1
   
 > - e.g., # of Budworms eating a leaf!
   
-> -   Defined by size (\# of flips) and prob (probability of heads)
+> - Defined by size (\# of flips) and prob (probability of heads)
  
-> -   $Y \sim B(size, prob)$
+> - $Y \sim B(size, prob)$
  
-> -   bounded by 0 and size
+> - bounded by 0 and size
  
 </div>
    
