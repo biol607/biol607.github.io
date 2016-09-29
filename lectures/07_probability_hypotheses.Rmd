@@ -22,7 +22,10 @@ output:
   2) Grok the frequentist paradigm versus likelihoodist v. bayesian
   3) Understand how we use integrated probability to calculate a p-value
   -->
-<!-- for next year, insert scientific method slides -->
+<!-- for next year, insert scientific method slides 
+need conclusion slide, need scientific method 
+Add a priori reasoning for 1 v. 2-tails 
+add galton board - animation? http://vis.supstat.com/2013/04/bean-machine/ -->
 </center>
 <p align="left" style="font-size:7pt; font-color:black;">https://xkcd.com/882/</p>
 
@@ -430,7 +433,7 @@ corgiPlot2 +
 
 <span class="fragment">When should you use a 1-Tailed Test?</span>
 
-## What does 0.456 mean?
+## What does 0.0456 mean?
 
 > - There is a 4.56% chance of obtaining the observed data, or more extreme
 data, given that the null hypothesis is true.
