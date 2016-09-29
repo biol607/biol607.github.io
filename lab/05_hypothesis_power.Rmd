@@ -104,7 +104,7 @@ ggplot(mapping = aes(x=vals, y=dens)) +
   geom_vline(xintercept = 4)
 ```
 
-2) Gamma - You wait 2 hours for a leaf to be eaten, you feed your works 5 leaves. What's the point probability of waiting 15 hours?
+2) Gamma - Spruce budworms take 2 hours to eat a single leaf. You have given your budworm 5 leaves. What is the probability that you will wait 15 hours for it to finish eating? 
 ```{r gamma_ex, eval=FALSE}
 dgamma(___, scale = 2, shape = 5)
 
