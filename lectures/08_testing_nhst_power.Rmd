@@ -368,13 +368,13 @@ normRef <- ggplot(mapping = aes(x=vals, y=dnorm(vals))) +
   xlab("Z") +
   ylab("Proability Density\n") +
   theme_bw(base_size=17)
-z <- round(5/(1/sqrt(15)),3)
+z <- round(3/(1/sqrt(15)),3)
 normRef
 ```
 
 > - Corgis: $\mu = 7, \sigma=1$, N=15 so $s_{\bar{Y}}=$ `r round(1/sqrt(15),3)`
 > - Sample, $\bar{Y} = 10$, 10-7 = 3
-> - Z = 3/`r round(1/sqrt(15),3)` = `r round(3/(1/sqrt(15)),3)`
+> - Z = 3/`r round(1/sqrt(15),3)` = `r z`
 
 ## Our Corgis and Z
 ```{r withTest}
@@ -576,7 +576,7 @@ ggplot(sim_data) +
   #scale_y_log10() +
   theme_bw(base_size=17) + 
   xlab("Sample Size") + 
-  geom_hline(yintercept=0.05)
+  geom_hline(yintercept=0.05, lwd=2, color="red", lty=2)
 ```
 
 ## Turn Many P-Values into Power!
