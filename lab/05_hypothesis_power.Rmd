@@ -131,7 +131,7 @@ ggplot(mapping = aes(x=___, y=___)) +
   geom_vline(___ = ___)
 ```
 
-4) Binomial - You flip a coin 100 times, and think it's a 50:50 shot. What's the probability of obtaining 40 heads?
+4) Binomial - You flip a coin 100 times, and think that you have 50:50 chance of heads or tails. What's the probability of obtaining 40 heads?
 
 ```{r bin, eval=FALSE}
 # What's the density of 4
