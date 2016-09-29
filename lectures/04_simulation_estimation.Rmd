@@ -26,7 +26,8 @@ firefly <- read.csv("./data/04/04q06FireflyFlash.csv")
 ```
 
 ## How Well Can We Estimate Mean Age?
-<!-- move some CI slides around - gets confusing - reread -->
+<!-- FOR NEXT YEAR move some CI slides around - gets confusing - reread 
+add Law of Large Numbers animation http://vis.supstat.com/2013/04/law-of-large-numbers/ -->
 1. Get in groups of 3 <br><br>
 2. Ask each other your age. Report the mean to me.<br><br>
 3. Now get into another group of three, and do the same.<br><br>
