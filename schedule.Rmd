@@ -37,15 +37,17 @@ __Lab Topic:__ [Distributions in R, Frequentist Hypothesis testing via simulatio
 __Reading:__ W&S 5-7, G&W Chapter 7, 16  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses  
 __In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)\
-__Quiz:__ http://tinyurl.com/hyp-pre-quiz
+__Quiz:__ http://tinyurl.com/hyp-pre-quiz\
+__Homework:__ https://github.com/biol607/2016_homework_04_hypothesis_power
 
   
   
 ### Week 5.   
-__Lecture:__ T, and χ2 tests, Power Analysis and simulation
+__Lecture:__ T,  χ2 tests, and p  
 __Lab Topic:__ Simple hypothesis tests with data  
 __Reading:__ W&S 8-12, G&W Chapter 10, 20  
-  
+__Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes/biol607/readings/Wasserstein_Lazar_2016_The_American_Statistician.pdf), And choose one of the accompanying [rejoinders](http://byrneslab.net/classes/biol607/readings/p_value_statements.zip)
+(sign up in class)  
   
 ### Week 6.   
 __Lab Topic:__ Linear regression, diagnostics, visualization  
