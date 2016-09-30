@@ -36,8 +36,8 @@ __Lecture:__ [Frequentist Hypothesis Testing](lectures/07_probability_hypotheses
 __Lab Topic:__ [Distributions in R, Frequentist Hypothesis testing via simulation](lab/05_hypothesis_power.html)  \
 __Reading:__ W&S 5-7, G&W Chapter 7, 16  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses  
-__In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)\
-__Quiz:__ http://tinyurl.com/hyp-pre-quiz\
+__In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)  
+__Quiz:__ http://tinyurl.com/hyp-pre-quiz  
 __Homework:__ https://github.com/biol607/2016_homework_04_hypothesis_power
 
   
@@ -47,7 +47,8 @@ __Lecture:__ T,  χ2 tests, and p
 __Lab Topic:__ Simple hypothesis tests with data  
 __Reading:__ W&S 8-12, G&W Chapter 10, 20  
 __Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes/biol607/readings/Wasserstein_Lazar_2016_The_American_Statistician.pdf), And choose one of the accompanying [rejoinders](http://byrneslab.net/classes/biol607/readings/p_value_statements.zip)
-(sign up in class)  
+(sign up in [here](https://etherpad.wikimedia.org/p/607-t_tests))  (also feel free to read them all)
+__Etherpad__: https://etherpad.wikimedia.org/p/607-t_tests
   
 ### Week 6.   
 __Lab Topic:__ Linear regression, diagnostics, visualization  
@@ -58,7 +59,6 @@ __Reading:__ W&S 16-17, G&W Chapter 21, 22
 __Lecture:__ Likelihoodist Inference, Fitting a line with Likelihood, Model Selection with one predictor  
 __Lab Topic:__ Calculating and visualizing Likelihoods, fitting a line with bbmle and glm  
 __Reading:__ W&S 20, G&W Chapter 18  
-  
   
 ### Week 8.   
 __Lecture:__ Bayesian Inference, Fitting a line with Bayesian techniques  
