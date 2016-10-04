@@ -279,7 +279,7 @@ p = `r sum(samp>=14.5)/length(samp)`
 
 1.  Null Hypothesis Tests & Other Distibrutions\
 \
-2.  <span style="color="red">Test Statistics: Z-Tests</span> \
+2.  <span style="color:red">Test Statistics: Z-Tests</span> \
 \
 3.  Null Hypothesis Sigificance Testing\
 \
@@ -434,7 +434,7 @@ Egon Pearson
 \
 3.  Null Hypothesis Sigificance Testing\
 \
-4.  <span style="color="red"Statistical Power in a NHST framework</span> \
+4.  <span style="color:red">Statistical Power in a NHST framework</span> \
 \
 5. Power via Simulation\
 \
@@ -495,7 +495,7 @@ assuming a given $\alpha$!
 
 1.  Null Hypothesis Tests & Other Distibrutions\
 \
-2.  <span style="color="red">Test Statistics: Z-Tests</span> \
+2.  <span style="color:red">Test Statistics: Z-Tests</span> \
 \
 3.  Null Hypothesis Sigificance Testing\
 \
