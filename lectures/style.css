@@ -37,3 +37,8 @@ td {
   z-index:-10;
   width:50%;
 }
+
+#noborder {
+  border:0px;
+  box-shadow: 0 0 0 0;
+}
