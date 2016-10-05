@@ -28,7 +28,7 @@ __Lab Topic:__ [Data import](lab/03_read_data_libraries.html) and [introduction 
 __Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), G&W Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)  
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf)\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz  
-__In Class Code:__ [Loading Data](in_class_code_2016/03_load_data.R), [Intro to ggplot2](in_class_code/04_ggplot2_intro.R)\
+__In Class Code:__ [Loading Data](in_class_code_2016/03_load_data.R), [Intro to ggplot2](in_class_code_2016/04_ggplot2_intro.R)\
 __Homework:__ https://github.com/biol607/2016_homework_03_ggplot2  
   
 ### Week 4.   
@@ -38,7 +38,7 @@ __Reading:__ W&S 5-7, G&W Chapter 7, 16
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses  
 __In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)  
 __Quiz:__ http://tinyurl.com/hyp-pre-quiz  
-__In Class Code:__  [Distributions and Power](in_class_code/05_distributions_power.R)\
+__In Class Code:__  [Distributions and Power](in_class_code_2016/05_distributions_power.R)\
 __Homework:__ https://github.com/biol607/2016_homework_04_hypothesis_power
 
   
@@ -52,6 +52,7 @@ __Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes
 __Etherpad__: https://etherpad.wikimedia.org/p/607-t_tests
   
 ### Week 6.   
+__Lecture:__ Least Squares Linear Regression
 __Lab Topic:__ Linear regression, diagnostics, visualization  
 __Reading:__ W&S 16-17, G&W Chapter 21, 22  
   
