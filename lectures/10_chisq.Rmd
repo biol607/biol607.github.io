@@ -1,0 +1,114 @@
+---
+title: 
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+
+## {data-background="images/10/bacteria-in-a-petri-dish-compressed.jpg"}
+<!-- next year add contingency tables -->
+<br><br><br><br>
+<div style="backround:white; font-size:1.5em">Quantifying Goodness of Fit: the $$\chi^2$$</div>
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4.5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(ggplot2)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+```
+
+## Number of Observations in Categories 
+Consider the following data generating process:
+
+- We have a number of categories  
+\
+- We expect some number of observations in each category  
+\
+<span class="fragment">Then add this error generating process:  
+\
+> - Small random errors generating variation in observed values  
+\ 
+> - This error is *normal*
+
+## Do our observed values fit our expectations?
+> - $H_0$: Observations = Expectations  
+\
+> - We are testing goodness of fit!  
+\
+> -  If there is no difference, deviations should be normally
+distributed noise  
+\ 
+> - Differences can be positive or negtive - so we square them  
+\
+> - The square of a normal distribution is the χ2 distribution!
+>     - The χ2 is defined by degrees of freedom = n-1!
+
+## The $\chi^2$ Distribution
+$$\chi^2 = \sum\frac{\displaystyle(O_i-E_i)^2}{E_i}$$
+
+```{r chisq}
+chdata<-expand.grid(df=seq(1,9,3), x=seq(0,15,.05))
+
+qplot(x, dchisq(x, df=df), data=chdata, geom="line", color=factor(df), group=df, size=I(1.5), lty=factor(df)) +
+  theme_bw(base_size=17) +
+  ylim(0,0.5) +
+  xlab("X") +
+  ylab("Probability Density\n") +
+  geom_vline(xintercept=0) +
+  scale_color_discrete("Degrees of Freedom") +
+  scale_linetype(guide=FALSE)
+```
+
+## Birth Days
+![](images/10/baby-home-frame.jpg){width = 80%}
+
+Are births evenly spread across the week?
+
+## Birth Days
+```{r births}
+library(tibble)
+days <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+birth_vec <- c(33,	41,	63,	63,	47,	56,	47)
+births <- data.frame(`Day of the Week` = days, Births = birth_vec)
+
+births
+```
+
+## Even Expectations
+
+```{r even_births}
+births$Expectation <- sum(births$Births)/7
+
+births
+```
+<br>  
+<span class="fragment">$\chi^2$ = `r with(births, sum((Births-Expectation)^2/Expectation))` with 6 DF<span><br><br>
+<span class="fragment">p = `r pchisq(with(births, sum((Births-Expectation)^2/Expectation)), 6, lower.tail=FALSE)`</span>
+
+## Assumptions of $\chi^2$ test
+
+<p align="left">Given that the goal is to detect deviations from expectations given normal error, this test has a few assumptions:</p>
+<div class="fragment">
+1. No expected values less that 1  
+\
+2. 80% of the expected values must be >5
+\
+</div>
+
+<div class="fragment">
+<p align="left">**If you violate assumptions:**</p>
+
+1. Combine categories or 
+2. Use a different test (e.g., Fisher's Exact).
+</div>
