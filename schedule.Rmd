@@ -44,8 +44,8 @@ __Homework:__ https://github.com/biol607/2016_homework_04_hypothesis_power
   
   
 ### Week 5.   
-__Lecture:__ [T tests](lectures/09_the_t_test.html),  χ2 tests, and p  
-__Lab Topic:__ Functions for hypothesis tests with data  
+__Lecture:__ [T tests](lectures/09_the_t_test.html),  [χ2 tests](lectures/10_chisquare.html), and p  
+__Lab Topic:__ Statistical analysis functions for t and $\chi^2$ in R   
 __Reading:__ W&S 8-12, G&W Chapter 10, 20  
 __Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes/biol607/readings/Wasserstein_Lazar_2016_The_American_Statistician.pdf), And choose one of the accompanying [rejoinders](http://byrneslab.net/classes/biol607/readings/p_value_statements.zip)
 (sign up in [here](https://etherpad.wikimedia.org/p/607-t_tests))  (also feel free to read them all)
@@ -54,7 +54,7 @@ __Etherpad__: https://etherpad.wikimedia.org/p/607-t_tests
 ### Week 6.   
 __Lecture:__ Least Squares Linear Regression
 __Lab Topic:__ Linear regression, diagnostics, visualization  
-__Reading:__ W&S 16-17, G&W Chapter 21, 22  
+__Reading:__ W&S 16-17, G&W Chapter [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html) 
   
   
 ### Week 7.   

@@ -14,6 +14,8 @@ output:
 ---
 
 ## {data-background="images/09/guiness.png"}
+<!-- next year, a few small fixes of formulae - what is sample size 
+of unpaired t-test, show more formulae?-->
 <br><br><br><br>
 <div style="background-color:white; align:center; font-size: 2em;">Differences Between Two Groups</div>
 
@@ -382,11 +384,11 @@ ggplot(lizards) +
 <span class="fragment">$$\beta_i = Horn\: Length\, for\, group\: i$$</span>
 
 ## Error Generating Process in the Model
-$$Horn\: Length_{ij} = \beta_i + \epsilon$$
+$$Horn\: Length_{ij} = \beta_i + \epsilon_j$$
 \
 $$\beta_i = Horn\: Length\: for\, group\: i$$
 \
-<span class="fragment">$$\epsilon \sim(N,\sigma)$$</span>
+<span class="fragment">$$\epsilon \sim N(0,\sigma)$$</span>
 
 ## The Unpaired T-Test
 <br><br>
