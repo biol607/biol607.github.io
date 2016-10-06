@@ -1,0 +1,415 @@
+---
+title: "Using Test Statistics"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+
+```
+
+### 1. Put it to the Test
+Today we're going to bein our exploration of how R handles performing statistical tests. Within R, there are many functions that enable one to do statistical testing. These functions typically force a user to be explicit about what they want R to do. In today's lab, we're going to first examine the simplicity of the $\chi^2$ test and begin to build a workflow for data analysis. We'll then dig into the t-test and more formally develop a data analysis workflow.
+
+### 2. $\chi^2$
+The $\chi^2$ test is a fairly straightforward test. It and its variations are ubiquitos in evaluating expectations. We also see it in likelihood ratio tests and evaluations of model fit across a variety of other techniques, all verifying whether or not our models adequately the data at hand.
+
+#### 2.1 Day of Birth
+In class we used a dataset looking at day of birth. Let's load that up and visualize it.
+
+```{r load_birth}
+#load some libriaries
+library(readr)
+library(ggplot2)
+
+births <- read_csv("data/05/08e1DayOfBirth.csv")
+
+births
+```
+
+Next, what's our expected value? If we assume each day should have an equal number of births, then...
+
+```{r}
+expected <- sum(births$`Number of births`)/nrow(births)
+
+expected
+```
+
+Just seeing these numbers might be enough. We can also visulize things using 
+
+```{r viz_chisq}
+ggplot(data=births, mapping = aes(x=Day, y=`Number of births`)) +
+  geom_point() +
+  geom_hline(yintercept = expected)
+```
+
+But what abou the test. We don't have to worry about sample size. Our expectation is nothing fancy - an even distribution. So, we can use the `chisq.test()` function.
+
+```{r chisq}
+chisq.test(births$`Number of births`)
+```
+
+The output is fairly straightforward - we get our test statistic, DF, and p-value.
+
+#### 2.2 Mass Extinctions and Non-Even Probabilities
+
+We don't **have** to use an even probability distribution. For example, we might have an idea of how values should be distributed between cells. For example, let's look at the number of families going extinct in major extinction events over geological time.
+
+```{r extinct}
+extinct <- read_csv("data/05/08e6MassExtinctions.csv")
+
+ggplot(extinct, mapping=aes(x=`Number of extinctions`, y=Frequency)) +
+  geom_line()
+```
+
+So, few mass extinctions, but many where a few families went extinct. And 0 where 0 went extinct (hey, it wouldn't be an extinction event, otherwise).
+
+One distribution that matches this kind of shape is negative binomial, describing the number of successes (families going extinct) until the first failure (extinction event ending). In our data, we 3.6 extinctions on average, and for fun, let's assume an overdispersion parameter of 3.
+
+From this, we can generate a vector of expectations by first getting a vector of porportion of data that should be in each cell from the probability density distribution, and then multiplying it by the total number of observations.
+
+```{r exp}
+#get raw frequencies
+freqs <- dnbinom(0:20, mu = 3.6, size = 3)
+
+#make sure they sum to one
+freqs <- freqs/sum(freqs)
+
+extinct$expected <- freqs*sum(extinct$Frequency)
+```
+
+We can even plot the match/mismatch
+```{r plot_exp}
+ggplot(data=extinct, mapping=aes(x=expected, y=Frequency)) +
+  geom_point()
+```
+
+Eh, not bad.
+
+And then put it to the test, using the p argument to incorporate our new expected frequencies.
+
+```{r chisq_ext}
+chisq.test(x = extinct$Frequency,
+           p = freqs)
+```
+
+Note the warning message. This indicates that there might be something fishy here - and, indeed, we know from looking at the data that many cells have <5 observations in them, indicating that we might want to rethink if this is the right approach.
+
+#### 2.3 Faded Examples
+So, to review, here's the births example, where we'll load, visualize, and test.
+
+```{r birth_fade, eval=FALSE}
+#Load
+births <- read_csv("data/05/08e1DayOfBirth.csv")
+
+#calculate expected values
+expected <- sum(births$`Number of births`)/nrow(births)
+
+#visualize
+ggplot(data=births, mapping = aes(x=Day, y=`Number of births`)) +
+  geom_point() +
+  geom_hline(yintercept = expected)
+
+#test
+chisq.test(births$`Number of births`)
+```
+
+Let's try this for two other data sets.
+
+First, days on which people buy Powerball tickets.
+```{r powerball, eval=FALSE}
+#load
+powerball <- ____("data/05/08q02Powerball.csv")
+
+#calculate expected values
+expected_powerball <- sum(powerball$`Millions of tickets sold`)/nrow(powerball)
+
+#visualize
+ggplot(data=___, mapping = aes(x=Day, y=`Millions of tickets sold`)) +
+  geom_point() +
+  geom_hline(yintercept = ___)
+
+##test
+chisq.test(____$`Millions of tickets sold`)
+```
+
+
+Last, number of boys in 2-child families. We'd expect a distribution of 25:50:25 for 0,1, or 2 boys. So, an uneven frequency.
+
+
+```{r boys, eval=FALSE}
+#load
+boys <- ____("data/05/08e5NumberOfBoys.csv")
+
+#calculate expected values
+freq_boys <- c(0.25, 0.5, 0.25)
+boys$expected_boys <- freq_boys * sum(boys$Frequency)
+
+#visualize
+ggplot(data=___, mapping = ____(x=expected_boys, y=_____)) +
+  geom_point()
+
+##test
+chisq.test(boys$_____,
+           p = _______)
+```
+
+
+### 3. T-Tests
+
+T-tests are among the most frequently used tests in data analysis. They're delightfully simple, and provide a robust example of how to examine the entire workflow of a data analysis. These are steps you'll take with any analysis you do in the future, no matter how complex the model! 
+
+#### 3.1 One Sample T-Test
+
+For a one sample t-test, we're merely testing whether or not a vector of observations are different from zero, our null hypothesis. This can be a sample of observed values, it can be a sample of differences between paired treatments, anything!
+
+Let's look at the W&S data on blackbird immunoresponse before and after testosterone implants. So, first, load the data and visualize the change in immunoresponse.
+
+```{r blackbird}
+#We will need to add an individual bird identifier
+blackbird <- read_csv("data/05/12e2BlackbirdTestosterone.csv") %>%
+  mutate(Bird = 1:n())
+
+ggplot(data = blackbird, mapping=aes(x=dif)) + 
+  geom_histogram(bins=10) +
+  geom_vline(xintercept=0, lty=2)
+```
+
+So, right away we can see the problem with the distribution of the data.
+
+Let's proceed and ignore it for the moment.
+
+The `t.test()` function gives us a lot of options.
+```{r t_test, eval=FALSE}
+t.test(x, y = NULL,
+       alternative = c("two.sided", "less", "greater"),
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95, ...)
+```
+
+We can feed it different alternatives (it defaults to two=tails), specify a hypothesis we're testing against (it defaults to a null hypothesis with mu=0), and we can give it either just a sample of observations, or also a vector with groups. We can also tell it whether we're worried about equal variances, if we're giving it paired data, and more.
+
+In this case, for a one-sample t-test, we just want to feed it our differences.
+
+```{r t_blackbird}
+t.test(blackbird$dif)
+```
+
+That's a fairly wonky output table, but we see all of the critical information - the value of t, our DF, our p-value, and both a mean estimate and confidence interval. Here we see a p-value of `r t.test(blackbird$dif)$p.value` that suggests we fail to reject the null.
+
+If you find this output ugly, there's a wonderful package called `broom` that produces a standardized set of model output tidiers in a data frame format.
+
+```{r broom}
+library(broom)
+tidy(t.test(blackbird$dif))
+```
+
+More on `broom` next week.
+
+#### 3.2 Two Sample T-Test
+For a two sample t-test, we can feed in a vector of groups, or, `t.test()` is the first function that will take a *formula* for statistical tests. Let's look at a data set examining the survival of juvenile chinook salmon (yum) in rivers with versus without brook trout.
+
+First, we'll load and plot the data.
+
+```{r chinook}
+chinook <- read_csv("data/05/12e4BrookTrout.csv")
+
+ggplot(data=chinook, mapping=aes(x=`brook trout?`, y=`Mean chinook survival`)) +
+  geom_boxplot() 
+```
+
+We have some unequal variances in the data here, which is of note. We also have two groups.  
+
+As with base plot, R has a formula syntax that we can use to specify a relationship where we have a predictor and response. Broadly, it looks like:
+
+$$response \sim predictor$$
+
+We can use this syntax with our t.test function, as it also accepts formulae. So, here's our two-sample unpaired t-test with unequal variances:
+
+```{r chinook_t}
+chin_test <- t.test(`Mean chinook survival` ~ `brook trout?`, data = chinook,
+       unequal.var = TRUE)
+
+chin_test
+```
+
+Great, we have our means per group, the difference between them, and we see we're using a Welch's t-test for unequal variance. Here we'd again fail to reject the null hypothesis.
+
+If you want prettier output:
+
+```{r chinook_brook}
+tidy(chin_test)
+```
+
+OK, not that much prettier, but you can put it in a table.
+
+#### 3.3 Evaluating Residuals
+So, we've ignored the assumption of normality up until now. Broadly, in any statistical model, error comes in as a residual value. So, often our data may not be normally distribted, but after accounting for predictors, we find that the *residuals* are. To test whether residuals are normal, we need to, well, create residuals!
+
+For a t-test this is easy, as residuals are just means - either of a single column, or from groups.  We can thus use `dplyr` here. So for our one-sample t-test of blackbirds
+
+```{r black_resid}
+library(dplyr)
+
+blackbird <- blackbird %>%
+  mutate(resid = dif - mean(dif))
+```
+
+For our two-sample t-test, we use `group_by` for group means.
+```{r chinook_resid}
+chinook <- chinook %>%
+  group_by( `brook trout?`) %>%
+  mutate(mean_survival_resid = 
+           `Mean chinook survival` - mean(`Mean chinook survival`)) %>%
+  ungroup()
+```
+
+We can then evaluate for normality. Let's use the blackbird example. First, we'd look at the distribution of residuals.
+
+```{r resid_hist}
+ggplot(data = blackbird, mapping=aes(x=resid)) +
+  geom_histogram(bins=11)
+```
+
+OK - still not looking good. But, who knows, this is a binned histogram. Maybe we need something more accurate - like a qqplot. For a qqplot, we invoke two functions in base plot (if we want the fit line - `ggplot2` still doesn't do this, but give it time).
+
+The functions are `qqnorm` and `qqline`. We use them sequentially.
+
+```{r qq}
+qqnorm(blackbird$resid)
+qqline(blackbird$resid)
+```
+
+Now we can see that systematic behavior in the lower tail.
+
+We may still want to *put it to the test* as it were, with a Shapiro Wilk's test. R provides a `shapiro.test()` functio for this.
+
+```{r shapiro}
+shapiro.test(blackbird$resid)
+```
+
+OK, so, what does that p-value mean? In this case, it means we would fail to reject the null hypothesis that this data comes from a normal distribution. So, we should actually be OK going forward! This is one case where we don't want to have a p value smaller than our alpha.
+
+**Exercise** - repeat this normality analysis for the chinook salmon!
+
+#### 3.3 Plotting results
+
+For a one-sample t-test, plotting a result - a mean and SE - might not be necessary. But for a two-sample test, it's highly informative! It should be the final step in any analysis in order to aid interpretation. Here, `ggplot2`'s stat_summary function is invaluable, as it defaults to plotting mean and standard errors.
+
+```{r plot_salmon_means, warning=FALSE}
+salmon_means <- ggplot(data=chinook, 
+                       mapping=aes(x=`brook trout?`, 
+                                   y=`Mean chinook survival`)) +
+  stat_summary(size=1.5)
+
+salmon_means
+```
+
+Nice. If you want to see this relative to the data, you can still include it.
+
+```{r plot_salmon_data}
+salmon_means+
+  geom_point(color="red")
+```
+#### 3.4 Workflow and Faded Examples
+As we've talked about, our general workflow for an analysis is
+
+1) Build a Test
+2) Evaluate Assumptions of Test
+3) Evaluate Results
+4) Visualize Results
+
+If we've decided on a t-test, we've satisfied #1. So let's go through a few examples where we load up our data, evaluate assumptions, evaluate the results of our test, and visualize the results.
+
+We'll start with the salmon example, all in one place.
+```{r}
+#Load and visualize data
+chinook <- read_csv("data/05/12e4BrookTrout.csv")
+
+ggplot(data=chinook, mapping=aes(x=`brook trout?`, y=`Mean chinook survival`)) +
+  geom_boxplot() 
+
+## test assumptions
+chinook <- chinook %>%
+  group_by( `brook trout?`) %>%
+  mutate(resid = 
+           `Mean chinook survival` - mean(`Mean chinook survival`)) %>%
+  ungroup()
+
+#qq
+qqnorm(chinook$resid)
+qqline(chinook$resid)
+
+shapiro.test(chinook$resid)
+
+#put it to the test!
+t.test(`Mean chinook survival` ~ `brook trout?`, data = chinook,
+       unequal.var = TRUE)
+ 
+ggplot(data=chinook, 
+                       mapping=aes(x=`brook trout?`, 
+                                   y=`Mean chinook survival`)) +
+  stat_summary(size=1.5)
+```
+
+OK, now that we have this, let's apply the same strategy to Cichlid habitat preferences that vary by genotypes.
+
+```{r chichlid, eval=FALSE}
+#Load and visualize data
+cichlid <- read_csv("data/05/12q09Cichlids.csv")
+
+ggplot(data=cichlid, mapping=aes(x=Genotype, y=preference)) +
+  ____() 
+
+## test assumptions
+cichlid <- cichlid %>%
+  group_by(____) %>%
+  mutate(resid = 
+          preference - mean(preference)) %>%
+  ungroup()
+
+#qq
+qqnorm(cichlid$____)
+qqline(cichlid$____)
+
+shapiro.test(cichlid$____)
+
+#put it to the test!
+t.test(____ ~ ____, data = ____,
+       unequal.var = TRUE)
+ 
+ggplot(data=cichlid, mapping=aes(x=____,y=____)) +
+  stat_summary(size=1.5)
+```
+
+
+And now for how monogamy influences testes size
+
+```{r monogamy, eval=FALSE}
+#Load and visualize data
+monogomy <- ____("data/05/12q05MonogamousTestes.csv")
+
+ggplot(data=____, mapping=aes(x=`Column 1` , y=`Testes area`)) +
+  ____() 
+
+## test assumptions
+monogomy <- monogomy %>%
+  group_by(____) %>%
+  ____(resid = 
+          `Testes area` - ____(____)) %>%
+  ungroup()
+
+#qq
+____(____)
+____(____)
+
+shapiro.test(____)
+
+#put it to the test!
+t.test(____ ~ ____ , data = monogomy,
+       unequal.var = ____)
+ 
+ggplot(data=____, mapping=aes(x=____ ,y=____)) +
+  ____(size=1.5)
+```
