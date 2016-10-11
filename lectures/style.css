@@ -42,3 +42,31 @@ td {
   border:0px;
   box-shadow: 0 0 0 0;
 }
+
+.reveal h2 {
+  font-size: 1.4em; }
+  
+.reveal {
+  font-family: "Source Sans Pro", Helvetica, sans-serif;
+  font-size: 36px;
+  font-weight: normal;
+  color: #222; }
+
+.reveal section img {
+  margin: 0px 0px;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  box-shadow: 0 0 0 0;
+}
+  
+.reveal pre {
+  display: block;
+  position: relative;
+  width: 90%;
+  margin: 20px auto;
+  text-align: left;
+  font-size: 0.7em;
+  font-family: monospace;
+  line-height: 1.2em;
+  word-wrap: break-word;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3); }

@@ -52,9 +52,10 @@ __Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes
 __Etherpad__: https://etherpad.wikimedia.org/p/607-t_tests
   
 ### Week 6.   
-__Lecture:__ Least Squares Linear Regression
+__Lecture:__ Least Squares Linear Regression: [Part 1](lectures/11_cor_linear_model.html)  
 __Lab Topic:__ Linear regression, diagnostics, visualization  
-__Reading:__ W&S 16-17, G&W on [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html) 
+__Reading:__ W&S 16-17, G&W on [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html)  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-lm  
   
   
 ### Week 7.   

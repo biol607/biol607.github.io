@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h1></h1>
+<div style="background-color:white; align:center; font-size: 2em;">
+Correlation and The Linear Model
+</div>
+<br />
+<br />
+<img src="images/11/correlation_xkcd.jpg" alt="image" style="width:70.0%" /><br />
+
+<p align="left" style="font-size:10pt; font-color:black;">
+<a href="https://xkcd.com/552/" class="uri">https://xkcd.com/552/</a>
+</p>
+</section>
+<section id="etherpad" class="slide level2">
+<h1>Etherpad</h1>
+<br><br>
+<center>
+<h3>
+<a href="https://etherpad.wikimedia.org/p/607-lm" class="uri">https://etherpad.wikimedia.org/p/607-lm</a>
+</h3>
+</center>
+</section>
+<section id="review" class="slide level2">
+<h1>Review</h1>
+<ul>
+<li>Testing Hypotheses with P-Values<br />
+<br />
+</li>
+<li>Z, T, and <span class="math inline">\(\chi^2\)</span> tests for hypothesis testing<br />
+<br />
+</li>
+<li>Power of different statistical tests using simulation<br />
+<br />
+</li>
+</ul>
+</section>
+<section id="today" class="slide level2">
+<h1>Today</h1>
+<ol type="1">
+<li>Correlation<br />
+<br />
+</li>
+<li>Mechanics of Simple Linear Regression<br />
+<br />
+</li>
+<li>Testing Asssumptions of SLR<br />
+<br />
+</li>
+</ol>
+</section>
+<section id="the-steps-of-statistical-modeling" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li>Evaluate test results</li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="how-are-x-and-y-related" class="slide level2">
+<h1>How are X and Y Related?</h1>
+<br><br>
+<div id="left">
+<center>
+<img src="images/11/regression.jpg" alt="image" id="noborder" /><br />
+Causation (regression)<br />
+<br />
+<span class="math inline">\(x_2 \sim N(\alpha + \beta x_1, \sigma)\)</span>
+</center>
+</div>
+<div id="right">
+<center>
+<img src="images/11/correlation.jpg" alt="image" id="noborder" /><br />
+Correlation<br />
+<br />
+<span class="math inline">\(X \sim MVN(\mu, \Sigma)\)</span>
+</center>
+</div>
+<br><br />
+
+<center>
+Your question might not be causal - and that’s OK!
+</center>
+</section>
+<section id="correlation-can-be-induced-by-many-mechanisms" class="slide level2">
+<h1>Correlation Can be Induced by Many Mechanisms</h1>
+<p><img src="images/11/correlation-1.jpg" alt="image" id="noborder" />     <img src="images/11/correlation-2.jpg" alt="image" id="noborder" /> <img src="images/11/correlation-3.jpg" alt="image" id="noborder" /></p>
+</section>
+<section id="example-wolf-inbreeding-and-litter-size" class="slide level2">
+<h1>Example: Wolf Inbreeding and Litter Size</h1>
+<div id="left">
+<p><img src="11_cor_linear_model_files/figure-revealjs/wolf_scatterplot-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+<div id="right">
+<br> <img src="images/11/CUTE_WOLF_PUPS_by_horsesrock44.jpeg" alt="image" id="noborder" style="width:100.0%" /><br />
+
+</div>
+</section>
+<section id="example-wolf-inbreeding-and-litter-size-1" class="slide level2">
+<h1>Example: Wolf Inbreeding and Litter Size</h1>
+<p><img src="images/11/wolf-regression.jpg" alt="image" id="noborder" /><br />
+<img src="images/11/wolf-correlation.jpg" alt="image" id="noborder" /><br />
+We don’t know which is correct - or if another model is better. We can only examine <em>correlation</em>.</p>
+</section>
+<section id="what-is-correlation" class="slide level2">
+<h1>What is Correlation?</h1>
+<ul>
+<li class="fragment">The porportion change in standard deviations of variable x per change in 1 SD of variable y
+<ul>
+<li class="fragment">Clear, right?<br />
+</li>
+<li class="fragment">And that’s just for normal, linear variables<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">Assesses the degree of association between two variables<br />
+<br />
+</li>
+<li class="fragment">But, unitless (sort of)
+<ul>
+<li class="fragment">Between -1 and 1</li>
+</ul></li>
+</ul>
+</section>
+<section id="calculating-correlation-start-with-covariance" class="slide level2">
+<h1>Calculating Correlation: Start with Covariance</h1>
+<p align="left">
+Describes the relationship between two variables. Not scaled.
+</p>
+<div class="fragment">
+<p><span class="math inline">\(\sigma_{xy}\)</span> = population level covariance<br />
+<span class="math inline">\(s_{xy}\)</span> = covariance in your sample</p>
+</div>
+<div id="left">
+<div class="fragment">
+<p><br><br><br> <span class="math display">\[\sigma_{XY} = \frac{\sum (X-\bar{X})(y-\bar{Y})}{n-1}\]</span></p>
+</div>
+</div>
+<div id="right">
+<div class="fragment" style="vertical-align: text-top;">
+<p><img src="11_cor_linear_model_files/figure-revealjs/rnormPlot_cov-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+</div>
+</section>
+<section id="pearson-correlation" class="slide level2">
+<h1>Pearson Correlation</h1>
+Describes the relationship between two variables.<br />
+Scaled between -1 and 1.<br />
+<br />
+<span class="math inline">\(\rho_{xy}\)</span> = population level correlation, <span class="math inline">\(r_{xy}\)</span> = correlation in your sample
+<div id="left" class="fragment">
+<p><br><br><br> <span class="math display">\[\Large\rho_{xy} = \frac{\sigma_{xy}}{\sigma_{x}\sigma_{y}}\]</span></p>
+</div>
+<div id="right" class="fragment">
+<p><img src="11_cor_linear_model_files/figure-revealjs/rnormPlot_cor-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+</section>
+<section id="assumptions-of-pearson-correlation" class="slide level2">
+<h1>Assumptions of Pearson Correlation</h1>
+<br>
+<div id="left">
+<ul>
+<li class="fragment">Observations are from a <strong>random sample</strong><br />
+<br />
+<br />
+</li>
+<li class="fragment">Each observation is <strong>independent</strong><br />
+<br />
+<br />
+</li>
+<li class="fragment">X and Y are from a <strong>Normal Distribution</strong></li>
+</ul>
+</div>
+<div id="right">
+<p><img src="11_cor_linear_model_files/figure-revealjs/mvnorm_persp-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+</section>
+<section id="the-meaning-of-r" class="slide level2">
+<h1>The meaning of r</h1>
+<p>Y is perfectly predicted by X if r = -1 or 1.<br />
+<span class="math inline">\(r^2\)</span> = the porportion of variation in y explained by x <img src="11_cor_linear_model_files/figure-revealjs/corLevels-1.jpeg" title="" alt="" width="480" /></p>
+</section>
+<section id="get-r-in-your-bones" class="slide level2">
+<h1>Get r in your bones…</h1>
+<br><br><br>
+<center>
+<a href="http://guessthecorrelation.com/" class="uri">http://guessthecorrelation.com/</a>
+</center>
+</section>
+<section id="testing-if-r-ne-0" class="slide level2">
+<h1>Testing if r <span class="math inline">\(\ne\)</span> 0</h1>
+<p><span class="fragment">Ho is r=0. Ha is r <span class="math inline">\(\ne\)</span> 0. </span><br />
+<br />
+<br />
+<span class="fragment"><strong>Testing: <span class="math inline">\(t= \frac{r}{SE_{r}}\)</span> with df=n-2</strong></span><br />
+<br />
+<br />
+<span class="fragment">WHY n-2? </span><br />
+<span class="fragment"><span class="math inline">\(\sigma_{xy}\)</span> Because you use two parameters: <span class="math inline">\(\bar{X}\)</span> and <span class="math inline">\(\bar{Y}\)</span> </span><br />
+<br />
+<br />
+<span class="fragment"><span class="math display">\[SE_{r} = \sqrt{\frac{1-r^2}{n-2}}\]</span> </span></p>
+</section>
+<section id="example-wolf-inbreeding-and-litter-size-2" class="slide level2">
+<h1>Example: Wolf Inbreeding and Litter Size</h1>
+<div id="left">
+<p><img src="11_cor_linear_model_files/figure-revealjs/wolf_scatterplot-1.jpeg" title="" alt="" width="576" /></p>
+</div>
+<div id="right">
+<img src="images/11/CUTE_WOLF_PUPS_by_horsesrock44.jpeg" alt="image" style="width:80.0%" /><br />
+
+</div>
+</section>
+<section id="example-wolf-inbreeding-and-litter-size-3" class="slide level2">
+<h1>Example: Wolf Inbreeding and Litter Size</h1>
+<div class="fragment">
+<pre><code>                       inbreeding.coefficient  pups
+inbreeding.coefficient                   0.01 -0.11
+pups                                    -0.11  3.52</code></pre>
+</div>
+<br><br>
+<div class="fragment">
+<pre><code>                       inbreeding.coefficient  pups
+inbreeding.coefficient                   1.00 -0.61
+pups                                    -0.61  1.00</code></pre>
+</div>
+<br><br>
+<div class="fragment">
+
+
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">parameter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td style="text-align: right;">-0.608</td>
+<td style="text-align: right;">-3.589</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">22</td>
+</tr>
+<tr class="even">
+<td>&lt;/div</td>
+<td style="text-align: right;">&gt;</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="violating-assumptions" class="slide level2">
+<h1>Violating Assumptions?</h1>
+<div style="font-size:36pt">
+<ul>
+<li class="fragment">Spearman’s Correlation (rank based)<br />
+<br />
+</li>
+<li class="fragment">Distance Based Correlation &amp; Covariance (<span>dcor</span>)<br />
+<br />
+</li>
+<li class="fragment">Maximum Information Coefficient (nonparametric)<br />
+<br />
+</li>
+<li class="fragment">All are lower in power for linear correlations<br />
+<br />
+</li>
+</ul>
+</div>
+</section>
+<section id="spearman-correlation" class="slide level2">
+<h1>Spearman Correlation</h1>
+<ol type="1">
+<li><p>Transform variables to ranks, i.e.,2,3… (<code>rank()</code>)</p></li>
+<li><p>Compute correlation using ranks as data</p></li>
+<li><p>If n <span class="math inline">\(\le\)</span> 100, use Spearman Rank Correlation table</p></li>
+<li><p>If n <span class="math inline">\(&gt;\)</span> 100, use t-test as in Pearson correlation</p></li>
+</ol>
+</section>
+<section id="distance-based-correlation-mic-etc." class="slide level2">
+<h1>Distance Based Correlation, MIC, etc.</h1>
+<p><img src="images/11/Distance_Correlation_Examples.jpg" alt="image" style="width:90.0%" /></p>
+</section>
+<section id="least-squares-regression" class="slide level2">
+<h1>Least Squares Regression</h1>
+<br> <span class="math inline">\(\Large \widehat{y} = \beta_0 + \beta_1 x + \epsilon\)</span><br />
+<Br><br><br>
+<div style="font-size:18pt">
+<p align="left">
+Then it’s code in the data, give the keyboard a punch<br />
+Then cross-correlate and break for some lunch<br />
+Correlate, tabulate, process and screen<br />
+Program, printout, regress to the mean<br />
+<br />
+-White Coller Holler by Nigel Russell
+</p>
+</div>
+</section>
+<section id="how-are-x-and-y-related-1" class="slide level2">
+<h1>How are X and Y Related?</h1>
+<br><br>
+<div id="left">
+<center>
+<img src="images/11/regression.jpg" alt="image" id="noborder" /><br />
+Causation (regression)<br />
+<br />
+<span class="math inline">\(x_2 \sim N(\alpha + \beta x_1, \sigma)\)</span>
+</center>
+</div>
+<div id="right">
+<center>
+<img src="images/11/correlation.jpg" alt="image" id="noborder" /><br />
+Correlation<br />
+<br />
+<span class="math inline">\(X \sim MVN(\mu, \Sigma)\)</span>
+</center>
+</div>
+</section>
+<section id="correlation-v.-regression-coefficients" class="slide level2">
+<h1>Correlation v. Regression Coefficients</h1>
+<p><img src="11_cor_linear_model_files/figure-revealjs/cor_and_reg-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="basic-princples-of-linear-regression" class="slide level2">
+<h1>Basic Princples of Linear Regression</h1>
+<br>
+<div style="font-size:32pt">
+<ul>
+<li class="fragment">Y is determined by X: p(Y <span class="math inline">\(|\)</span> X=x) <br />
+<br />
+</li>
+<li class="fragment">The relationship between X and Y is Linear <br />
+<br />
+</li>
+<li class="fragment">The residuals of <span class="math inline">\(\widehat{Y} = \beta_0 + \beta_1 X + \epsilon\)</span> are normally distributed <br />
+(i.e., <span class="math inline">\(\epsilon \sim\)</span> N(0,<span class="math inline">\(\sigma\)</span>))</li>
+</ul>
+</div>
+</section>
+<section id="basic-principles-of-least-squares-regression" class="slide level2">
+<h1>Basic Principles of Least Squares Regression</h1>
+<p><span class="math inline">\(\widehat{Y} = \beta_0 + \beta_1 X + \epsilon\)</span> where <span class="math inline">\(\beta_0\)</span> = intercept, <span class="math inline">\(\beta_1\)</span> = slope</p>
+<p><img src="11_cor_linear_model_files/figure-revealjs/linefit-1.jpeg" title="" alt="" width="768" /></p>
+<p>Minimize Residuals defined as <span class="math inline">\(SS_{residuals} = \sum(Y_{i} - \widehat{Y})^2\)</span></p>
+</section>
+<section id="lots-of-possible-lines-least-squares" class="slide level2">
+<h1>Lots of Possible Lines: Least Squares</h1>
+<p><img src="11_cor_linear_model_files/figure-revealjs/lsq-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="solving-for-slope" class="slide level2">
+<h1>Solving for Slope</h1>
+<p><br><br> <span class="math inline">\(\LARGE b=\frac{s_{xy}}{s_{x}^2}\)</span> <span class="math inline">\(= \frac{cov(x,y)}{var(x)}\)</span><br />
+<br />
+<br />
+<span class="fragment"><span class="math inline">\(\LARGE = r_{xy}\frac{s_{y}}{s_{x}}\)</span></span></p>
+</section>
+<section id="solving-for-intercept" class="slide level2">
+<h1>Solving for Intercept</h1>
+<p><br><br> Least squares regression line always goes through the mean of X and Y <span class="math inline">\(\Large \bar{Y} = \beta_0 + \beta_1 \bar{X}\)</span><br />
+<br />
+<br><br> <span class="fragment"><span class="math inline">\(\Large \beta_0 = \bar{Y} - \beta_1 \bar{X}\)</span></span></p>
+</section>
+<section id="putting-linear-regression-into-practice-with-pufferfish" class="slide level2">
+<h1>Putting Linear Regression Into Practice with Pufferfish</h1>
+<div id="left">
+<ul>
+<li>Pufferfish are toxic/harmful to predators<br />
+<br></li>
+<li>Batesian mimics gain protection from predation - why? <br><br></li>
+<li>Evolved response to appearance? <br><br></li>
+<li>Researchers tested with mimics varying in toxic pufferfish resemblance</li>
+</ul>
+</div>
+<div id="right">
+<img src="images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
+
+</div>
+</section>
+<section id="the-steps-of-statistical-modeling-1" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li>Evaluate test results</li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="question-does-resembling-a-pufferfish-reduce-predator-visits" class="slide level2">
+<h1>Question: Does Resembling a Pufferfish Reduce Predator Visits?</h1>
+<p><img src="11_cor_linear_model_files/figure-revealjs/puffershow-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="a-preview-but-how-do-we-get-here" class="slide level2">
+<h1>A Preview: But How do we Get Here?</h1>
+<p><img src="11_cor_linear_model_files/figure-revealjs/unnamed-chunk-1-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="the-world-of-pufferfish" class="slide level2">
+<h1>The World of Pufferfish</h1>
+<p align="left">
+<strong>Data Generating Process:</strong>
+</p>
+<span class="math display">\[Visits \sim Resemblance\]</span><br>
+<center>
+Assume: Linearity (reasonable first approximation)
+</center>
+<br><br>
+<p align="left">
+<strong>Error Generating Process:</strong>
+</p>
+<center>
+Variation in Predator Behavior
+</center>
+</section>
+<section id="quantiative-model-of-process" class="slide level2">
+<h1>Quantiative Model of Process</h1>
+<p><span class="math display">\[\Huge Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i\]</span> <br><br> <span class="math display">\[\Huge \epsilon_i ~ N(0, \sigma)\]</span></p>
+</section>
+<section id="what-questions-will-we-test" class="slide level2">
+<h1>What questions will we test?</h1>
+<ul>
+<li class="fragment">Does resemblance explain variation in predator behavior? <br><br></li>
+<li class="fragment">Is the slope of the relationship positive or negative? <br><br></li>
+<li class="fragment">All questions will be tested using a fit linear model with T and F tests</li>
+</ul>
+</section>
+<section id="testing-assumptions" class="slide level2">
+<h1>Testing Assumptions</h1>
+<ul>
+<li class="fragment"><strong>Data Generating Process: Linearity</strong>
+<ul>
+<li class="fragment">Test be looking at relationship between fitted and observed values</li>
+<li class="fragment">Secondary evaluation: fitted v. residual values <br><br></li>
+</ul></li>
+<li class="fragment"><strong>Error Generating Process:</strong> Normality &amp; homoscedasticity of residuals
+<ul>
+<li class="fragment">Histogram of residuals</li>
+<li class="fragment">QQ plot of residuals</li>
+<li class="fragment">Levene test if needed <br><br></li>
+</ul></li>
+<li class="fragment"><strong>Data</strong>
+<ul>
+<li class="fragment">Do we have any outliers with excessive leverage?</li>
+</ul></li>
+</ul>
+</section>
+<section id="linearity-of-the-puffer-relationship" class="slide level2">
+<h1>Linearity of the Puffer Relationship</h1>
+<h3>
+Fitted v. Observed
+</h3>
+<p><img src="11_cor_linear_model_files/figure-revealjs/puffer_fit_pred-1.jpeg" title="" alt="" width="768" /></p>
+<p>Points fall on 1:1 line, no systematic deviations</p>
+</section>
+<section id="linearity-and-homoscedasticity-of-the-puffer-relationship" class="slide level2">
+<h1>Linearity and Homoscedasticity of the Puffer Relationship</h1>
+<h3>
+Fitted v. Residual
+</h3>
+<p><img src="11_cor_linear_model_files/figure-revealjs/puffer_fit_resid-1.jpeg" title="" alt="" width="768" /></p>
+<p>No systematic trends in relationship required!</p>
+</section>
+<section id="normality-of-residuals" class="slide level2">
+<h1>Normality of Residuals</h1>
+<p><img src="11_cor_linear_model_files/figure-revealjs/puffer_resid_hist-1.jpeg" title="" alt="" width="768" /></p>
+<p>Appears peaked in the middle…</p>
+</section>
+<section id="normality-of-residuals-1" class="slide level2">
+<h1>Normality of Residuals</h1>
+<h3>
+QQ Plot!
+</h3>
+<p><img src="11_cor_linear_model_files/figure-revealjs/puffer_qq-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="any-excessive-outliers" class="slide level2">
+<h1>Any Excessive Outliers?</h1>
+<h3>
+Cook’s Distance
+</h3>
+<p><img src="11_cor_linear_model_files/figure-revealjs/puffer_cooks-1.jpeg" title="" alt="" width="768" /></p>
+<p>Nothing with &gt; 1</p>
+</section>
+<section id="anything-too-influential" class="slide level2">
+<h1>Anything Too Influential</h1>
+<h3>
+Leverage: How Far is an Observation from the Others
+</h3>
+<p><img src="11_cor_linear_model_files/figure-revealjs/puffer_leverage-1.jpeg" title="" alt="" width="768" /></p>
+<p>Should be a cloud with no trend</p>
+</section>
+<section id="the-steps-of-statistical-modeling-2" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions <font color="red">
+<h5>
+<ol start="5" type="1">
+<li>Evaluate test results
+</h5>
+</font></li>
+</ol></li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="you-have-fit-a-model.-now" class="slide level2">
+<h1>You have Fit a Model. Now…</h1>
+<ol type="1">
+<li><p>Can you really use this model fit?</p></li>
+<li><p>Does your model explain variation in the data?</p></li>
+<li><p>Are your coefficients different from 0?</p></li>
+<li><p>How much variation is retained by the model?</p></li>
+<li><p>How confident can you be in model predictions?</p></li>
+</ol>
+</section>
+<section id="testing-the-model" class="slide level2">
+<h1>Testing the Model</h1>
+<p>Ho = The model predicts no variation in the data.<br />
+Ha = The model predicts variation in the data. <img src="11_cor_linear_model_files/figure-revealjs/linefit-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="math display">\[SS_{Total} = SS_{Regression} + SS_{Error}\]</span></p>
+</section>
+<section id="the-f-distribution-and-ratios-of-variances" class="slide level2">
+<h1>The F Distribution and Ratios of Variances</h1>
+<p><span class="math inline">\(F = \frac{MS_{R}}{MS_{E}}\)</span> with DF=1,n-2</p>
+<p><img src="11_cor_linear_model_files/figure-revealjs/f-1.jpeg" title="" alt="" width="768" /></p>
+<p>1-Tailed Test</p>
+</section>
+<section id="components-of-the-total-sums-of-squares" class="slide level2">
+<h1>Components of the Total Sums of Squares</h1>
+<span class="math inline">\(SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}\)</span>, df=1<br />
+<br />
+<span class="math inline">\(SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2\)</span>, df=n-2<br />
+<br />
+
+<div class="fragment">
+<p>To compare them, we need to correct for different DF. This is the Mean Square.<br />
+<br />
+MS=SS/DF<br />
+<br />
+e.g, <span class="math inline">\(MS_{E} = \frac{SS_{E}}{n-2}\)</span></p>
+</div>
+</section>
+<section id="f-test-and-pufferfish" class="slide level2">
+<h1>F-Test and Pufferfish</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>resemblance</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">255.1532</td>
+<td style="text-align: right;">255.153152</td>
+<td style="text-align: right;">27.37094</td>
+<td style="text-align: right;">5.64e-05</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">167.7968</td>
+<td style="text-align: right;">9.322047</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
