@@ -49,7 +49,8 @@ __Lab Topic:__ [Statistical analysis functions for t and $\chi^2$ in R](lab/05_c
 __Reading:__ W&S 8-12, G&W Chapter 10, 20  
 __Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes/biol607/readings/Wasserstein_Lazar_2016_The_American_Statistician.pdf), And choose one of the accompanying [rejoinders](http://byrneslab.net/classes/biol607/readings/p_value_statements.zip)
 (sign up in [here](https://etherpad.wikimedia.org/p/607-t_tests))  (also feel free to read them all)
-__Etherpad__: https://etherpad.wikimedia.org/p/607-t_tests
+__Etherpad__: https://etherpad.wikimedia.org/p/607-t_tests  
+__In Class Code:__ [t and chi square](in_class_code_2016/06_t_chisq.R)
   
 ### Week 6.   
 __Lecture:__ Least Squares Linear Regression: [Part 1](lectures/11_cor_linear_model.html)  
