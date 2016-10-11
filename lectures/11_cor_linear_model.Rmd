@@ -329,11 +329,12 @@ knitr::kable(round(cTest[1:4],3))
 1.  Correlation\
     \
 
-<font color="red">2.  Mechanics of Simple Linear Regression </font> \
+2.  <font color="red">Mechanics of Simple Linear Regression </font> \
     \
 
 3.  Testing Asssumptions of SLR\
     \
+    
 ## Least Squares Regression
 <br>
 $\Large \widehat{y} = \beta_0 + \beta_1 x + \epsilon$\
