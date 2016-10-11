@@ -13,7 +13,7 @@ output:
     css: style.css
 ---
 ##
-
+<!-- next year, more on workflow of correlation test - assumptions and viz -->
 <div style="background-color:white; align:center; font-size: 2em;"> Correlation and The Linear Model </div>\
 \
 ![image](./images/11/correlation_xkcd.jpg){width=70%}\
@@ -324,7 +324,16 @@ knitr::kable(round(cTest[1:4],3))
 ![image](./images/11/Distance_Correlation_Examples.jpg){width=90%}
 
 
+## Today
 
+1.  Correlation\
+    \
+
+<font color="red">2.  Mechanics of Simple Linear Regression </font> \
+    \
+
+3.  Testing Asssumptions of SLR\
+    \
 ## Least Squares Regression
 <br>
 $\Large \widehat{y} = \beta_0 + \beta_1 x + \epsilon$\
@@ -444,7 +453,7 @@ $\LARGE b=\frac{s_{xy}}{s_{x}^2}$ $= \frac{cov(x,y)}{var(x)}$\
 
 ## Solving for Intercept
 <br><br>
-Least squares regression line always goes through the mean of X and Y
+Least squares regression line always goes through the mean of X and Y<br>
 $\Large \bar{Y} = \beta_0 + \beta_1 \bar{X}$\
 \
 <br><br>
@@ -503,9 +512,20 @@ $$Visits \sim Resemblance$$<br>
 <center>Variation in Predator Behavior</center>
 
 ## Quantiative Model of Process
-$$\Huge Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i$$
+$$\Large Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i$$
 <br><br>
-$$\Huge \epsilon_i ~ N(0, \sigma)$$
+$$\Large \epsilon_i ~ N(0, \sigma)$$
+
+## Today
+
+1.  Correlation\
+    \
+
+2.  Mechanics of Simple Linear Regression\
+    \
+
+3.  <font color="red">Testing Asssumptions of SLR </font>  \
+    \
 
 
 ## What questions will we test?
@@ -594,7 +614,7 @@ Should be a cloud with no trend
 2. What model of the world matches your question?
 3. Build a test
 4. Evaluate test assumptions
-<font color="red"><h5>5. Evaluate test results</h5></font>
+5. <font color="red">Evaluate test results</font>
 6. Visualize
 
 

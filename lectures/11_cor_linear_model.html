@@ -79,6 +79,7 @@
 
 <section id="section" class="slide level2">
 <h1></h1>
+<!-- next year, more on workflow of correlation test - assumptions and viz -->
 <div style="background-color:white; align:center; font-size: 2em;">
 Correlation and The Linear Model
 </div>
@@ -369,9 +370,18 @@ pups                                    -0.61  1.00</code></pre>
 <h1>Distance Based Correlation, MIC, etc.</h1>
 <p><img src="images/11/Distance_Correlation_Examples.jpg" alt="image" style="width:90.0%" /></p>
 </section>
-<section id="least-squares-regression" class="slide level2">
-<h1>Least Squares Regression</h1>
-<br> <span class="math inline">\(\Large \widehat{y} = \beta_0 + \beta_1 x + \epsilon\)</span><br />
+<section id="today-1" class="slide level2">
+<h1>Today</h1>
+<ol type="1">
+<li>Correlation<br />
+<br />
+</li>
+</ol>
+<font color="red">2. Mechanics of Simple Linear Regression </font><br />
+<br />
+3. Testing Asssumptions of SLR<br />
+<br />
+## Least Squares Regression <br> <span class="math inline">\(\Large \widehat{y} = \beta_0 + \beta_1 x + \epsilon\)</span><br />
 <Br><br><br>
 <div style="font-size:18pt">
 <p align="left">
@@ -443,7 +453,7 @@ Correlation<br />
 </section>
 <section id="solving-for-intercept" class="slide level2">
 <h1>Solving for Intercept</h1>
-<p><br><br> Least squares regression line always goes through the mean of X and Y <span class="math inline">\(\Large \bar{Y} = \beta_0 + \beta_1 \bar{X}\)</span><br />
+<p><br><br> Least squares regression line always goes through the mean of X and Y<br> <span class="math inline">\(\Large \bar{Y} = \beta_0 + \beta_1 \bar{X}\)</span><br />
 <br />
 <br><br> <span class="fragment"><span class="math inline">\(\Large \beta_0 = \bar{Y} - \beta_1 \bar{X}\)</span></span></p>
 </section>
@@ -501,7 +511,21 @@ Variation in Predator Behavior
 </section>
 <section id="quantiative-model-of-process" class="slide level2">
 <h1>Quantiative Model of Process</h1>
-<p><span class="math display">\[\Huge Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i\]</span> <br><br> <span class="math display">\[\Huge \epsilon_i ~ N(0, \sigma)\]</span></p>
+<p><span class="math display">\[\Large Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i\]</span> <br><br> <span class="math display">\[\Large \epsilon_i ~ N(0, \sigma)\]</span></p>
+</section>
+<section id="today-2" class="slide level2">
+<h1>Today</h1>
+<ol type="1">
+<li>Correlation<br />
+<br />
+</li>
+<li>Mechanics of Simple Linear Regression<br />
+<br />
+</li>
+<li><font color="red">Testing Asssumptions of SLR </font><br />
+<br />
+</li>
+</ol>
 </section>
 <section id="what-questions-will-we-test" class="slide level2">
 <h1>What questions will we test?</h1>
@@ -581,13 +605,8 @@ Leverage: How Far is an Observation from the Others
 <li>What is your question?</li>
 <li>What model of the world matches your question?</li>
 <li>Build a test</li>
-<li>Evaluate test assumptions <font color="red">
-<h5>
-<ol start="5" type="1">
-<li>Evaluate test results
-</h5>
-</font></li>
-</ol></li>
+<li>Evaluate test assumptions</li>
+<li><font color="red">Evaluate test results</font></li>
 <li>Visualize</li>
 </ol>
 </section>
