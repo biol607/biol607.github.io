@@ -54,7 +54,7 @@ __In Class Code:__ [t and chi square](in_class_code_2016/06_t_chisq.R)
   
 ### Week 6.   
 __Lecture:__ Least Squares Linear Regression: [Correlation and Regression](lectures/11_cor_linear_model.html), [Fit and Power](lectures/12_linear_model_fit.html)  
-__Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), and [data](lab/data_06.zip)\
+__Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), and [data](lab/data_06.zip) \
 __Reading:__ W&S 16-17, G&W on [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm  
   
