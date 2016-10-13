@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="evaluating-fit-linear-models" class="slide level2">
+<h1>Evaluating Fit Linear Models</h1>
+<p><br> <img src="images/12/linear_regression_love.gif" style="width:45.0%" /></p>
+<p align="left" style="font-size:10pt; font-color:black;">
+<a href="http://www.smbc-comics.com/?id=2469/" class="uri">http://www.smbc-comics.com/?id=2469/</a>
+</p>
+</section>
+<section id="outline" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Putting your model to the test<br />
+<br />
+</li>
+<li>Evaluating fit<br />
+<br />
+</li>
+<li>How you can get it wrong<br />
+<br />
+</li>
+<li>Power and Linear Regression</li>
+</ol>
+</section>
+<section id="the-steps-of-statistical-modeling" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li><font color="red">Evaluate test results</font></li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="our-puffer-example" class="slide level2">
+<h1>Our Puffer Example</h1>
+<div id="left">
+<ul>
+<li>Pufferfish are toxic/harmful to predators<br />
+<br></li>
+<li>Batesian mimics gain protection from predation - why? <br><br></li>
+<li>Evolved response to appearance? <br><br></li>
+<li>Researchers tested with mimics varying in toxic pufferfish resemblance</li>
+</ul>
+</div>
+<div id="right">
+<img src="images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
+
+</div>
+</section>
+<section id="question-does-resembling-a-pufferfish-reduce-predator-visits" class="slide level2">
+<h1>Question: Does Resembling a Pufferfish Reduce Predator Visits?</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffershow-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="you-have-fit-a-valid-model.-now" class="slide level2">
+<h1>You have Fit a Valid Model. Now…</h1>
+<ol type="1">
+<li><p>Does your model explain variation in the data?</p></li>
+<li><p>Are your coefficients different from 0?</p></li>
+<li><p>How much variation is retained by the model?</p></li>
+<li><p>How confident can you be in model predictions?</p></li>
+</ol>
+</section>
+<section id="testing-the-model" class="slide level2">
+<h1>Testing the Model</h1>
+<p>Ho = The model predicts no variation in the data.<br />
+Ha = The model predicts variation in the data.</p>
+<p><br />
+<br />
+<span class="fragment" style="align:left">To evaluate these hypotheses, we need to have a measure of variation explained by data versus error - the sums of squares!</span><br />
+<br />
+<span class="fragment"><span class="math display">\[SS_{Total} = SS_{Regression} + SS_{Error}\]</span></span></p>
+</section>
+<section id="sums-of-squares-of-error-visually" class="slide level2">
+<h1>Sums of Squares of Error, Visually</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/linefit-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="sums-of-squares-of-regression-visually" class="slide level2">
+<h1>Sums of Squares of Regression, Visually</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/grandmean-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="sums-of-squares-of-regression-visually-1" class="slide level2">
+<h1>Sums of Squares of Regression, Visually</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/ssr-1.jpeg" title="" alt="" width="768" /></p>
+<p>Distance from <span class="math inline">\(\hat{y}\)</span> to <span class="math inline">\(\bar{y}\)</span></p>
+</section>
+<section id="components-of-the-total-sums-of-squares" class="slide level2">
+<h1>Components of the Total Sums of Squares</h1>
+<span class="math inline">\(SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}\)</span>, df=1<br />
+<br />
+<span class="math inline">\(SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2\)</span>, df=n-2<br />
+<br />
+
+<div class="fragment">
+<p>To compare them, we need to correct for different DF. This is the Mean Square.<br />
+<br />
+MS=SS/DF<br />
+<br />
+e.g, <span class="math inline">\(MS_{E} = \frac{SS_{E}}{n-2}\)</span></p>
+</div>
+</section>
+<section id="the-f-distribution-and-ratios-of-variances" class="slide level2">
+<h1>The F Distribution and Ratios of Variances</h1>
+<p><span class="math inline">\(F = \frac{MS_{R}}{MS_{E}}\)</span> with DF=1,n-2</p>
+<p><img src="12_linear_model_fit_files/figure-revealjs/f-1.jpeg" title="" alt="" width="768" /></p>
+<p>1-Tailed Test</p>
+</section>
+<section id="f-test-and-pufferfish" class="slide level2">
+<h1>F-Test and Pufferfish</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>resemblance</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">255.1532</td>
+<td style="text-align: right;">255.153152</td>
+<td style="text-align: right;">27.37094</td>
+<td style="text-align: right;">5.64e-05</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">167.7968</td>
+<td style="text-align: right;">9.322047</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<br><br>
+<div class="fragment">
+We reject the null hypothesis that resemblance does not explain variability in predator approaches
+</div>
+</section>
+<section id="testing-the-coefficients" class="slide level2">
+<h1>Testing the Coefficients</h1>
+<ul>
+<li class="fragment">F-Tests evaluate whether elements of the model contribute to variability in the data
+<ul>
+<li class="fragment">Are modeled predictors just noise?</li>
+<li class="fragment">What’s the difference between a model with only an intercept and an intercept and slope?<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">T-tests evaluate whether coefficients are different from 0<br />
+<br />
+</li>
+<li class="fragment">Often, F and T agree - but not always
+<ul>
+<li class="fragment">T can be more sensitive with multiple predictors</li>
+</ul></li>
+</ul>
+</section>
+<section id="error-in-the-slope-estimate" class="slide level2">
+<h1>Error in the Slope Estimate</h1>
+<br> <span class="math inline">\(\Large SE_{b} = \sqrt{\frac{MS_{E}}{SS_{X}}}\)</span><br />
+<br />
+<br />
+<span class="fragment">
+<h4>
+95% CI = <span class="math inline">\(b \pm t_{\alpha,df}SE_{b}\)</span>
+</h4>
+<p></span><br />
+<span class="fragment">(~ 1.96 when N is large)</span></p>
+</section>
+<section id="assessing-the-slope-with-a-t-test" class="slide level2">
+<h1>Assessing the Slope with a T-Test</h1>
+<br> <span class="math display">\[\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}\]</span><br />
+<br />
+
+<h5>
+DF=n-2
+</h5>
+<p><br />
+<br />
+<span class="math inline">\(H_0: \beta_{0} = 0\)</span>, but we can test other hypotheses</p>
+</section>
+<section id="slope-of-puffer-relationship" class="slide level2">
+<h1>Slope of Puffer Relationship</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t value</th>
+<th style="text-align: right;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td style="text-align: right;">1.924694</td>
+<td style="text-align: right;">1.5064163</td>
+<td style="text-align: right;">1.277664</td>
+<td style="text-align: right;">0.2176012</td>
+</tr>
+<tr class="even">
+<td>resemblance</td>
+<td style="text-align: right;">2.989492</td>
+<td style="text-align: right;">0.5714163</td>
+<td style="text-align: right;">5.231724</td>
+<td style="text-align: right;">0.0000564</td>
+</tr>
+</tbody>
+</table>
+<p><Br> We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept.</p>
+</section>
+<section id="the-steps-of-statistical-modeling-1" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li>Evaluate test results</li>
+<li><font color="red">Visualize</font></li>
+</ol>
+</section>
+<section id="visualize-your-fit" class="slide level2">
+<h1>Visualize Your Fit</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_line_1-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="outline-1" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Putting your model to the test<br />
+<br />
+</li>
+<li><font color="red">Evaluating fit</font><br />
+<br />
+</li>
+<li>How you can get it wrong<br />
+<br />
+</li>
+<li>Power and Linear Regression</li>
+</ol>
+</section>
+<section id="evaluating-goodness-of-fit" class="slide level2">
+<h1>Evaluating Goodness of Fit</h1>
+<p><br></p>
+<ul>
+<li class="fragment">You can have a strong slope, reject and F-test, and still have a meaningless result<br />
+<br />
+</li>
+<li class="fragment">How much variation does your model explain in the data?<br />
+<br />
+</li>
+<li class="fragment">What is the SD of your residual relative to the predicted values?</li>
+</ul>
+</section>
+<section id="coefficient-of-determination" class="slide level2">
+<h1>Coefficient of Determination</h1>
+<p><span class="math inline">\(R^2\)</span> = The porportion of Y is predicted by X.<br />
+<br />
+<span class="fragment"> <span class="math display">\[R^2 = \frac{SS_{regression}}{SS_{total}}\]</span><br />
+</span><br />
+<span class="fragment"> <span class="math display">\[= 1 - \frac{SS_{regression}}{SS_{error}}\]</span> </span></p>
+</section>
+<section id="coefficient-of-determination-1" class="slide level2">
+<h1>Coefficient of Determination</h1>
+<br> <img src="images/12/linear_regression.png" /> <br>
+<p align="left" style="font-size:10pt; font-color:black;">
+<a href="https://xkcd.com/1725/" class="uri">https://xkcd.com/1725/</a>
+</p>
+</section>
+<section id="how-well-does-our-line-fit" class="slide level2">
+<h1>How well does our line fit?</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_line-1.jpeg" title="" alt="" width="768" /> <br> R<sup>2</sup> = 0.603</p>
+</section>
+<section id="confidence-intervals-around-fit" class="slide level2">
+<h1>Confidence Intervals Around <strong>Fit</strong></h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_fit-1.jpeg" title="" alt="" width="768" /></p>
+<p>Accomodates uncertainty (SE) in slope &amp; intercept</p>
+</section>
+<section id="or-fit-confidence-interval-via-simulation-using-coefficient-ses" class="slide level2">
+<h1>Or, <strong>Fit</strong> Confidence Interval via Simulation using Coefficient SEs</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_sims-1.jpeg" title="" alt="" width="768" /></p>
+<ul>
+<li>Values close to mean of X and Y are more certain.</li>
+<li>Uncertainty increases at edges.</li>
+</ul>
+</section>
+<section id="confidence-intervals-around-fit-1" class="slide level2">
+<h1>Confidence Intervals Around Fit</h1>
+<span class="math inline">\(\hat{y}\pm t_{n-2}s_{y}\sqrt{\frac{1}{n}+\frac{(x^{*}-x)^2}{(n-1)s_{x}^2}}\)</span><br />
+<br />
+<br />
+<span class="fragment"><span class="math inline">\(s_{y} = \sqrt{\frac{SS_{E}}{n-2}}\)</span> </span><br />
+<br />
+
+<div class="fragment">
+<li>
+Incorporates variability in residuals, distance from center of regression, sample size 
+</div>
+ <br />
+
+<div class="fragment">
+<li>
+t value for desired CI of fit. Note, for 95% CI, as n is large, multiplier converges to 1.96
+</div>
+</section>
+<section id="confidence-intervals-around-prediction" class="slide level2">
+<h1>Confidence Intervals Around Prediction</h1>
+<p><br></p>
+<ul>
+<li class="fragment">Fit CIs show results of imprecise estimation of parameters<br />
+<br />
+</li>
+<li class="fragment">Remember out model has an <span class="math inline">\(\epsilon_i\)</span> in it, though!<br />
+<br />
+</li>
+<li class="fragment">This means that there are <strong>other sources of variability</strong> that influence our response variable<br />
+<br />
+</li>
+<li class="fragment">If we want to make a <strong>new prediction</strong> we need to incorporate the SD around the line - 3.0532028 in the puffer model<br />
+<br />
+</li>
+<li class="fragment">Note: Extrapolation beyond range of data is bad practice</li>
+</ul>
+</section>
+<section id="coefficient-of-determination-2" class="slide level2">
+<h1>Coefficient of Determination</h1>
+<br> <img src="images/12/extrapolating.png" /> <br>
+<p align="left" style="font-size:10pt; font-color:black;">
+<a href="https://xkcd.com/605/" class="uri">https://xkcd.com/605/</a>
+</p>
+</section>
+<section id="confidence-intervals-around-prediction-of-a-new-value" class="slide level2">
+<h1>Confidence Intervals Around Prediction of a New Value</h1>
+<p><span class="math inline">\(\hat{y}\pm t_{n-2}s_{y}\sqrt{1+\frac{1}{n}+\frac{(x^{*}-x)^2}{(n-1)s_{x}^2}}\)</span></p>
+<p><br />
+<br />
+Confidence of where the true value of <span class="math inline">\(\hat{y}\)</span> lies<br />
+Large n converges on t distribution of fitted value.</p>
+</section>
+<section id="prediction-confidence-interval" class="slide level2">
+<h1>Prediction Confidence Interval</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/predict_ci-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="outline-2" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Putting your model to the test<br />
+<br />
+</li>
+<li>Evaluating fit<br />
+<br />
+</li>
+<li><font color="red">How you can get it wrong</font><br />
+<br />
+</li>
+<li>Power and Linear Regression</li>
+</ol>
+</section>
+<section id="the-obese-n" class="slide level2">
+<h1>The “Obese N”</h1>
+<p>High sample size can lead to a low p-value, even if no association exists<br />
+<img src="12_linear_model_fit_files/figure-revealjs/obeseN-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="sample-size-and-r2" class="slide level2">
+<h1>Sample Size and <span class="math inline">\(R^2\)</span></h1>
+<p>High sample size can decrease <span class="math inline">\(R^2\)</span> if residual SD is high relative to slope<br />
+<img src="12_linear_model_fit_files/figure-revealjs/obeseN2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="little-variation-in-a-predictor-low-power" class="slide level2">
+<h1>Little Variation in a Predictor = Low Power</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/predictionRange1-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="fragment">But is this all there is to X?</span></p>
+</section>
+<section id="but-is-that-all-there-is" class="slide level2">
+<h1>But is that all there is?</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/predRange2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="how-should-this-population-be-sampled" class="slide level2">
+<h1>How Should this Population be Sampled?</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/PredictionRange3-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="same-n-higher-variation-in-x-more-power" class="slide level2">
+<h1>Same N, Higher Variation in X = More Power</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/predRange4-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="outline-3" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Putting your model to the test<br />
+<br />
+</li>
+<li>Evaluating fit<br />
+<br />
+</li>
+<li>How you can get it wrong<br />
+<br />
+</li>
+<li><font color="red">Power and Linear Regression</font></li>
+</ol>
+</section>
+<section id="what-influences-power-of-a-regression" class="slide level2">
+<h1>What Influences Power of a Regression?</h1>
+<ol type="1">
+<li>Sample Size<br />
+<br />
+</li>
+<li>Effect Size (slope)<br />
+<br />
+</li>
+<li>Residual Variability<br />
+<br />
+</li>
+<li>Range of X Values</li>
+</ol>
+</section>
+<section id="power-analysis-of-regression" class="slide level2">
+<h1>Power Analysis of Regression</h1>
+<ul>
+<li class="fragment">Yes, we can do this with equations<br />
+<br />
+</li>
+<li class="fragment">But, come on, it’s better with simulation!</li>
+</ul>
+</section>
+<section id="relevant-info-for-pufferfish" class="slide level2">
+<h1>Relevant Info for Pufferfish</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">1.924694</td>
+<td style="text-align: right;">1.5064163</td>
+<td style="text-align: right;">1.277664</td>
+<td style="text-align: right;">0.2176012</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">resemblance</td>
+<td style="text-align: right;">2.989492</td>
+<td style="text-align: right;">0.5714163</td>
+<td style="text-align: right;">5.231724</td>
+<td style="text-align: right;">0.0000564</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">df.residual</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.6032703</td>
+<td style="text-align: right;">3.053203</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><Br><br></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">(DF Residual</td>
+<td style="text-align: right;">= n-2)</td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="lets-try-different-effect-sizes-0.5-5.5" class="slide level2">
+<h1>Let’s try different effect sizes: 0.5-5.5</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/eff_size-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="lets-try-different-sigmas---1-to-10" class="slide level2">
+<h1>Let’s try different Sigmas - 1 to 10</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/sigma_pow-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="lets-try-different-sample-sizes-per-treatment---2-to-10" class="slide level2">
+<h1>Let’s try different Sample Sizes Per Treatment - 2 to 10</h1>
+<p><img src="12_linear_model_fit_files/figure-revealjs/sigma_samp-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

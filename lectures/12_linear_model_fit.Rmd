@@ -1,0 +1,585 @@
+---
+title:
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+## Evaluating Fit Linear Models
+<br>
+![](images/12/linear_regression_love.gif){width=45%}
+
+<p align="left" style="font-size:10pt; font-color:black;">http://www.smbc-comics.com/?id=2469/</p>
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4.5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(mvtnorm)
+library(dplyr)
+library(tidyr)
+library(modelr)
+library(ggplot2)
+
+```
+
+## Outline
+1. Putting your model to the test
+\
+\
+2. Evaluating fit
+\
+\
+3. How you can get it wrong
+\
+\
+4. Power and Linear Regression
+
+
+## The Steps of Statistical Modeling
+1. What is your question?
+2. What model of the world matches your question?
+3. Build a test
+4. Evaluate test assumptions
+5. <font color="red">Evaluate test results</font>
+6. Visualize
+
+## Our Puffer Example
+```{r pufferload}
+puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
+
+puffer_lm <- lm(predators ~ resemblance, data=puffer)
+puffer<- puffer %>%
+  modelr::add_residuals(puffer_lm) %>%
+  modelr::add_predictions(puffer_lm)
+```
+<div id = "left">
+- Pufferfish are toxic/harmful to predators  
+<br>
+- Batesian mimics gain protection from predation - why?
+<br><br>
+- Evolved response to appearance?
+<br><br>
+- Researchers tested with mimics varying in toxic pufferfish resemblance
+</div>
+
+<div id = "right">
+![image](./images/11/puffer_mimics.jpg){width="80.00000%"}\
+</div>
+
+## Question: Does Resembling a Pufferfish Reduce Predator Visits?
+```{r puffershow}
+pufferplot <- ggplot(puffer, mapping=aes(x=resemblance, y=predators)) +
+  geom_point(size=2) +
+  ylab("Predator Approaches per Trial") + 
+  xlab("Dissimilarity to Toxic Pufferfish") +
+  theme_bw(base_size=17)
+
+pufferplot
+```
+
+
+## You have Fit a Valid Model. Now...
+
+1.  Does your model explain variation in the data?
+
+2.  Are your coefficients different from 0?
+
+3.  How much variation is retained by the model?
+
+4.  How confident can you be in model predictions?
+
+
+## Testing the Model
+
+Ho = The model predicts no variation in the data.  
+Ha = The model predicts variation in the data.
+
+\
+\
+<span class="fragment" style="align:left">To evaluate these hypotheses, we need to have a measure of variation explained by data versus error - the sums of squares!</span>
+\
+\
+<span class="fragment">$$SS_{Total} = SS_{Regression} + SS_{Error}$$</span>
+
+## Sums of Squares of Error, Visually
+```{r linefit}
+set.seed(697)
+x<-1:10
+y<-rnorm(10, mean=x,sd=2)
+a<-lm(y~x)
+plot(x,y,pch=19, cex=1.5, cex.lab=1.5, cex.axis=1.1)
+abline(a, lwd=2)
+segments(x,fitted(a),x,y, col="red", lwd=2)
+``` 
+
+## Sums of Squares of Regression, Visually
+```{r grandmean}
+set.seed(697)
+
+plot(x,y,pch=19, cex=0, cex.lab=1.5, cex.axis=1.1)
+abline(a, lwd=2)
+#segments(x,fitted(a),x,y, col="red", lwd=2)
+points(mean(x), mean(y), col="blue", pch=15)
+``` 
+
+## Sums of Squares of Regression, Visually
+```{r ssr}
+set.seed(697)
+
+plot(x,y,pch=19, cex=0, cex.lab=1.5, cex.axis=1.1)
+abline(a, lwd=2)
+points(mean(x), mean(y), col="blue", pch=15)
+points(x, fitted(a), col="blue", pch=1)
+``` 
+
+Distance from $\hat{y}$ to $\bar{y}$
+
+
+## Components of the Total Sums of Squares
+
+$SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}$, df=1\
+\
+$SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2$, df=n-2\
+\
+
+<div class="fragment">To compare them, we need to correct for different DF. This is the Mean
+Square.\
+\
+MS=SS/DF\
+\
+e.g, $MS_{E} = \frac{SS_{E}}{n-2}$
+</div>
+
+## The F Distribution and Ratios of Variances
+
+$F = \frac{MS_{R}}{MS_{E}}$ with DF=1,n-2 
+
+```{r f}
+
+x<-seq(0,6,.01)
+qplot(x,df(x,1,25), geom="line",  xlab="Y", ylab="df(Y)") + 
+  theme_bw(base_size=17)
+
+```
+
+1-Tailed Test
+
+
+
+## F-Test and Pufferfish
+```{r f-puffer}
+knitr::kable(anova(puffer_lm))
+```
+
+<br><br>
+<div class="fragment">We reject the null hypothesis that resemblance does not explain variability in predator approaches</div>
+
+## Testing the Coefficients
+
+> -  F-Tests evaluate whether elements of the model contribute to variability in the data
+>       - Are modeled predictors just noise?
+>      - What's the difference between a model with only an intercept and an intercept and slope?
+\
+\
+> - T-tests evaluate whether coefficients are different from 0
+\
+\
+> - Often, F and T agree - but not always
+>      - T can be more sensitive with multiple predictors
+
+## Error in the Slope Estimate
+<br>
+$\Large SE_{b} = \sqrt{\frac{MS_{E}}{SS_{X}}}$\
+\
+\
+<span class="fragment"><h4>95% CI = $b \pm t_{\alpha,df}SE_{b}$  </h4></span>
+\
+<span class="fragment">(~ 1.96 when N is large)</span>
+
+
+
+## Assessing the Slope with a T-Test
+<br>
+$$\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}$$ \
+\
+<h5>DF=n-2</h5>
+\
+\
+$H_0: \beta_{0} = 0$, but we can test other hypotheses
+
+## Slope of Puffer Relationship
+```{r puffer_t}
+knitr::kable(coef(summary(puffer_lm)))
+```
+
+<Br>
+We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept.
+
+
+## The Steps of Statistical Modeling
+1. What is your question?
+2. What model of the world matches your question?
+3. Build a test
+4. Evaluate test assumptions
+5. Evaluate test results
+6. <font color="red">Visualize</font>
+
+## Visualize Your Fit
+```{r puffer_line_1}
+pufferplot + 
+  stat_smooth(method="lm", color="red", size=1.3, fill=NA)
+```
+
+## Outline
+1. Putting your model to the test
+\
+\
+2. <font color="red">Evaluating fit</font>
+\
+\
+3. How you can get it wrong
+\
+\
+4. Power and Linear Regression
+
+## Evaluating Goodness of Fit
+<br>
+
+> * You can have a strong slope, reject and F-test, and still have a meaningless result
+\
+\
+> * How much variation does your model explain in the data?
+\
+\
+> * What is the SD of your residual relative to the predicted values?
+
+## Coefficient of Determination
+
+$R^2$ = The porportion of Y is predicted by X.\
+\
+<span class="fragment">
+$$R^2 = \frac{SS_{regression}}{SS_{total}}$$\
+</span>
+\
+<span class="fragment">
+$$= 1 - \frac{SS_{regression}}{SS_{error}}$$
+</span>
+
+## Coefficient of Determination
+<br>
+![](images/12/linear_regression.png)
+<br>
+<p align="left" style="font-size:10pt; font-color:black;">https://xkcd.com/1725/</p>
+
+
+## How well does our line fit?
+```{r puffer_line}
+pufferplot + 
+  stat_smooth(method="lm", color="red", size=1.3, fill=NA)
+```
+<br>
+R<sup>2</sup> = `r round(broom::glance(puffer_lm)[1],3)`
+
+
+## Confidence Intervals Around **Fit**
+
+```{r puffer_fit}
+puffer_fit_plot <- pufferplot +
+  stat_smooth(method="lm", color="red")
+
+puffer_fit_plot
+```
+
+Accomodates uncertainty (SE) in slope & intercept
+
+
+
+##  Or, **Fit** Confidence Interval via Simulation using Coefficient SEs
+
+```{r puffer_sims}
+coefSet <- data.frame(rmvnorm(100, coef(puffer_lm), vcov(puffer_lm)))
+
+pufferplot +
+  geom_abline(data = coefSet, mapping=aes(slope = resemblance, intercept=X.Intercept.)) +
+  stat_smooth(method="lm", color="red", fill=NA) 
+
+```
+
+- Values close to mean of X and Y are more certain.
+- Uncertainty increases at edges.
+
+
+
+
+## Confidence Intervals Around Fit
+
+$\hat{y}\pm t_{n-2}s_{y}\sqrt{\frac{1}{n}+\frac{(x^{*}-x)^2}{(n-1)s_{x}^2}}$\
+\
+\
+<span class="fragment">$s_{y} = \sqrt{\frac{SS_{E}}{n-2}}$\ </span>
+\
+\
+<div class="fragment">
+<li> Incorporates variability in residuals, distance from center of
+regression, sample size\ </div>  
+\ 
+\
+<div class="fragment">
+<li> t value for desired CI of fit. Note, for 95% CI, as n is large,
+multiplier converges to 1.96 </div>
+
+
+
+## Confidence Intervals Around Prediction
+<br>
+
+> - Fit CIs show results of imprecise estimation of parameters  
+\
+> - Remember out model has an $\epsilon_i$ in it, though!  
+\
+> - This means that there are **other sources of variability** that influence our response variable  
+\
+> - If we want to make a **new prediction** we need to incorporate the SD around the line - `r summary(puffer_lm)$sigma` in the puffer model  
+\
+> - Note: Extrapolation beyond range of data is bad practice
+
+## Coefficient of Determination
+<br>
+![](images/12/extrapolating.png)
+<br>
+<p align="left" style="font-size:10pt; font-color:black;">https://xkcd.com/605/</p>
+
+
+## Confidence Intervals Around Prediction of a New Value
+
+$\hat{y}\pm t_{n-2}s_{y}\sqrt{1+\frac{1}{n}+\frac{(x^{*}-x)^2}{(n-1)s_{x}^2}}$
+
+\
+\
+Confidence of where the true value of $\hat{y}$ lies\
+Large n converges on t distribution of fitted value.
+
+## Prediction Confidence Interval
+```{r predict_ci}
+predFrame <- data.frame(resemblance = seq(1,4,.01), predators=0)
+predFrame <- cbind(predFrame, predict(puffer_lm, newdata=predFrame, interval = "prediction"))
+
+pufferplot +
+  stat_smooth(method="lm", color="red", fill=NA) +
+  geom_ribbon(data=predFrame, mapping=aes(x=resemblance, ymin=lwr, ymax=upr),
+              fill="lightgrey", alpha=0.4)
+```
+
+## Outline
+1. Putting your model to the test
+\
+\
+2. Evaluating fit
+\
+\
+3. <font color="red">How you can get it wrong</font>
+\
+\
+4. Power and Linear Regression
+
+
+## The “Obese N”
+
+High sample size can lead to a low p-value, even if no association
+exists\
+
+```{r obeseN}
+set.seed(1001)
+par(mfrow=c(2,2))
+p<-sapply(seq(10,400, 100), function(n) {
+  x<-rnorm(n)
+  y<-rnorm(n)
+  alm<-lm(y~x)
+  p<-anova(alm)[1,5]
+  r2<-summary(alm)$r.squared
+  plot(y~x, main=paste("p=", round(p,2), " r^2=", round(r2,2), sep=""))
+  abline(alm)
+})
+par(mfrow=c(1,1))
+```
+
+## Sample Size and $R^2$
+
+High sample size can decrease $R^2$ if residual SD is high relative
+to slope\
+```{r obeseN2}
+set.seed(10201)
+par(mfrow=c(2,2))
+p<-sapply(seq(10,325, length.out=4), function(n) {
+  x<-rnorm(n)
+  y<-rnorm(n, 0.3*x,0.5)
+  alm<-lm(y~x)
+  p<-anova(alm)[1,5]
+  r2<-summary(alm)$r.squared
+  plot(y~x, main=paste("p=", round(p,2), " r^2=", round(r2,2), sep=""))
+  abline(alm)
+})
+par(mfrow=c(1,1))
+```
+
+## Little Variation in a Predictor = Low Power
+
+```{r predictionRange1}
+set.seed(10201)
+par(mfrow=c(1,2))
+x <- sort(runif(100,0,100))
+y1 <- rnorm(10, 0.5*x[51:60], 2)
+y <- rnorm(100, 0.5*x, 2)
+
+poorlm <- lm(y1 ~ x[51:60])
+plot(y1 ~ x[51:60], pch=19, xlab="X", ylab="Y")
+aplot <- qplot(x[51:60], y1)  + theme_bw(base_size=16) + xlab("X") + ylab("Y")+ stat_smooth(method="lm", lwd=1.5, col="red", lty=2)
+aplot
+```
+
+<span class="fragment">But is this all there is to X?</span>
+
+## But is that all there is?
+```{r predRange2}
+aplot+xlim(c(0,100))
+```
+
+
+
+## How Should this Population be Sampled?
+
+```{r PredictionRange3}
+bplot <- aplot+geom_point(mapping=aes(x=x, y=y))  + theme_bw(base_size=16) + xlab("X") + ylab("Y")
+bplot
+```
+
+
+## Same N, Higher Variation in X = More Power
+
+```{r predRange4}
+y2 <- y[seq(0,100,10)]
+x2 <- x[seq(0,100,10)]
+cplot <- qplot(x2, y2) + geom_point(size=3)  + theme_bw(base_size=16) + xlab("X") + ylab("Y")+ stat_smooth(method="lm", lwd=1.5, col="blue", lty=1)
+cplot
+```
+
+## Outline
+1. Putting your model to the test
+\
+\
+2. Evaluating fit
+\
+\
+3. How you can get it wrong
+\
+\
+4. <font color="red">Power and Linear Regression</font>
+
+
+
+## What Influences Power of a Regression?
+
+1. Sample Size  
+\
+2. Effect Size (slope)  
+\
+3. Residual Variability  
+\
+4. Range of X Values
+
+## Power Analysis of Regression
+> - Yes, we can do this with equations  
+\
+> - But, come on, it's better with simulation!
+
+## Relevant Info for Pufferfish
+
+```{r info}
+knitr::kable(broom::tidy(puffer_lm))
+cat("\n\n")
+knitr::kable(broom::glance(puffer_lm)[,c(1,3,11)])
+```
+<Br><br>
+(DF Residual = n-2)
+
+## Let's try different effect sizes: 0.5-5.5
+```{r eff_size, cache=TRUE}
+simPop <- tibble(Effect_Size = seq(0.5,5.5, length.out=5),
+                 sigma = 3.05,
+                 n=5, levels=4) %>%
+  crossing(resemblance = rep(1:4)) %>% # no. of levels
+  slice(rep(1:n(), each=5)) %>% #5 samples per level
+  crossing(sims = 1:500) %>%
+  mutate(predators = rnorm(n(), Effect_Size*resemblance, sigma))
+
+getPow <- function(simPop, cache=TRUE){
+  ##Fit models
+  fits <- simPop %>%
+    group_by(Effect_Size, sigma, n, levels, sims) %>%
+    nest() %>%
+    mutate(mod = purrr:::map(data, ~lm(predators ~ resemblance, data=.))) %>%
+    mutate(coefs = purrr::map(mod, ~broom::tidy(.))) %>%
+    unnest(coefs) %>%
+    ungroup() %>%
+    filter(term == "resemblance")
+
+  pow <- fits %>%
+    crossing(alpha = c(0.05, 0.01, 0.001)) %>%
+    group_by(Effect_Size, sigma, n, levels, alpha) %>%
+    summarise(power = 1-sum(p.value>alpha)/n()) %>%
+    ungroup() %>%
+    mutate(alpha = factor(alpha))
+
+  pow
+}  
+
+pow <- getPow(simPop)
+
+qplot(Effect_Size, power, color=alpha, data=pow, geom=c("point", "line")) +
+  theme_bw(base_size=17) +
+  geom_hline(yintercept=0.8, lty=2)
+```
+
+## Let's try different Sigmas - 1 to 10
+```{r sigma_pow, cache=TRUE}
+simPopSigma <- tibble(Effect_Size = 2.98,
+                 sigma = seq(1,10, length.out=20),
+                 n=5, levels=4) %>%
+  crossing(resemblance = rep(1:4)) %>% # no. of levels
+  slice(rep(1:n(), each=5)) %>% #5 samples per level
+  crossing(sims = 1:500) %>%
+  mutate(predators = rnorm(n(), Effect_Size*resemblance, sigma))
+
+pow <- getPow(simPopSigma)
+
+qplot(sigma, power, color=alpha, data=pow, geom=c("point", "line")) +
+  theme_bw(base_size=17) +
+  geom_hline(yintercept=0.8, lty=2)
+```
+
+## Let's try different Sample Sizes Per Treatment - 2 to 10
+```{r sigma_samp, cache=TRUE}
+simPopN <- tibble(Effect_Size = 2.98,
+                 sigma = 3.05,
+                 n_use=2:10, n=2:10, levels=4) %>%
+  crossing(resemblance = rep(1:4)) %>% # no. of levels
+  splitstackshape::expandRows("n_use") %>%
+  crossing(sims = 1:500) %>%
+  mutate(predators = rnorm(n(), Effect_Size*resemblance, sigma))
+  
+powN <- getPow(simPopN)
+
+qplot(n, power, color=alpha, data=powN, geom=c("point", "line")) +
+  theme_bw(base_size=17) +
+  geom_hline(yintercept=0.8, lty=2)
+
+```
