@@ -1,0 +1,448 @@
+---
+title: "Linear Regression"
+author: "Bill 607"
+date: "October 13, 2016"
+output: html_document
+---
+
+Believe it or not, despite all of the complexity under the hood, fitting a linear model in R with least squares is quite simple with a straightfoward workflow.
+
+1. Load the data
+2. Visualize the data - just to detect problems and perform a cursory test of assumptions!
+3. Fit the model.
+4. Use the fit model to test assumptions
+5. Evaluate the model
+6. Visualize the fit model
+
+Let's go through each step with an example of seals. Are older seals larger?
+
+### 0. Load and visualize the data
+
+## Are Older Seals Bigger?
+```{r}
+library(dplyr)
+library(ggplot2)
+
+seals <- read.csv("./data/06/17e8ShrinkingSeals Trites 1996.csv")
+
+seal_base <- ggplot(seals, aes(x=age.days, y=length.cm)) +
+  geom_point() +
+  theme_grey(base_size=14)
+
+seal_base
+```
+
+Neat data set, no?
+
+Now, looking at this from the get-go, we can see it's likely nonlinear. Maybe even non-normal! Let's ignore that for now, as it will make the results great fodder for our diagnostics!
+
+### 1. Fitting a model
+
+OK, so, you have the data. And in your model, you want to see how age is a predictor of length. How do you fit it?
+
+Nothing could be simpler. R has a function called `lm()` which stands for linear model. It works just like base plot, with the `y ~ x` syntax. And we create a fit model object.
+
+```{r lm}
+seal_lm <- lm(length.cm ~ age.days, data=seals)
+```
+
+That's it.
+
+Now, if we want to just peak at the fit, before going forward, we can use `coef()` which is pretty standard across all R fit model functions.
+
+```{r coef}
+coef(seal_lm)
+```
+
+But that's getting ahead of ourselves...
+
+### 2. Evaluating Assumptions
+
+R also provides a 1-stop shop for evaluating functions. Fit model objects can typically be plotted. Now, it uses base plot, so, we'll use the `par` function to setup a 2x2 plotting area.
+
+```{r assumptions}
+par(mfrow = c(2,2)) #2 rows, 2 columns
+
+plot(seal_lm)
+
+par(mfrow=c(1,1)) #reset back to 1 panel
+```
+
+Whoah - that's a lot! And, there's no figure with Cook's D or a histogram of residuals.
+
+OK, breathe.
+
+`plot.lm()` actualyl generates even more plots than shown here. You can specify what plot you want with the `which` argument, but will need to look at `?plot.lm` to know just what to look at.
+
+I have five plots I really like to look at - four of which `plot.lm()` will generate. Those four are the fitted versus residuals:
+
+```{r assumptions_fit_resid}
+plot(seal_lm, which=1)
+```
+
+Note the curvature of the line? Troubling, or a high n?
+
+A QQ plot of the residuals
+```{r qq}
+plot(seal_lm, which=2)
+```
+Not bad!
+
+The Cook's D values
+```{r cooks}
+plot(seal_lm, which=4)
+```
+All quite small!
+
+And last, leverage
+```{r leverage}
+plot(seal_lm, which=5)
+```
+
+I also like to look at the histogram of residuals.There is a function called `residuals` that will work on nearly any fit model object in R. So we can just...
+
+```{r resid_hist}
+hist(residuals(seal_lm))
+```
+
+Note, there's also a library called modelr which can add the appropriate residuals to your data frame using a dplyr-like syntax. 
+
+```{r modelr_resd}
+library(modelr)
+
+seals <- seals %>%
+  add_residuals(seal_lm)
+
+head(seals)
+```
+
+Check out that new column. You can now plot your predictor versus residuals, which should show no trend, which you can use a spline with stat_smooth to see.
+
+```{r obs_resid}
+qplot(age.days, resid, data=seals) +
+  stat_smooth()
+```
+
+And you can also add fitted values and look at fitted versus residual.
+
+```{r modelr_fit}
+seals <- seals %>%
+  add_predictions(seal_lm)
+
+qplot(pred, resid, data=seals) +
+  stat_smooth(method="lm")
+```
+
+### 3. Putting it to the test
+OK, ok, everything looks fine. Now, how do we test our model.
+
+First, F-tests! R has a base method called `anova` which - well, it's for looking at analysis of partitioning variance, but really will take on a wide variety of forms as we go forward. For now, it will produce F tables for us
+
+```{r anova}
+anova(seal_lm)
+```
+
+Boom! P values! And they are low. Simple, no?
+
+For more information - t tests, R<sup2>2</sup>, and more, we can use `summary()` - again, a function that is a go-to for nearly any fit model.
+
+```{r summary}
+summary(seal_lm)
+```
+
+This is a lot of information to drink in - function call, distribution of residuals, coefficient t-tests, and multiple pieces of information about total fit.
+
+We may want to get this information in a more condensed form for use in other contexts - particularly to compare against other models.  For that, there's a wonderful packages called `broom` that sweeps up your model into easy digestable pieces.
+
+First, the coefficient table - let's make it pretty.
+```{r broom}
+library(broom)
+
+tidy(seal_lm)
+```
+
+Nice.
+
+We can also do this for the F-test.
+
+```{r broom_anova}
+tidy(anova(seal_lm))
+```
+
+If we want to get information about fit, there's `glance()`
+
+```{r glance}
+glance(seal_lm)
+```
+
+### 4. Visualization
+
+Lovely! Now, how do we visualize the fit and fit prediction error?
+
+In `ggplot2` we can use the smoother, `stat_smooth` in conjunction with `method = "lm"` to get the job done.
+
+```{r show_data}
+seal_fit_plot <- ggplot(data=seals) +
+  aes(x=age.days, y=length.cm) +
+  geom_point() +
+  stat_smooth(method="lm")
+
+seal_fit_plot
+```
+
+Note - you cannot see the fit interval because our SE is so small with such a large N.
+
+What about prediction intervals? That's a bit harder, and we need to dig into the specific prediction function for `lm`s, `predict()`.  This function is very useful as you can use it to generate new predicted values, and it will also give you error as well. Now, `modelr::add_prediction` will give you values, but no error yet.  YET.
+
+So how does predict work? We begin with a new data frame that has columns matching our predictors in the model. Then add a new column. As the data frame is not the first argument, we can't use pipes here. Booo.
+
+We then cbind the predictors and predicted values - along with the interval we've created. We'll also do some renaming, simply to make it easier to use this new data in our ggplot coming up. Note, there are also arguments to get intervals other than the 95%.
+
+```{r predict_ci}
+predFrame <- data.frame(age.days = min(seals$age.days):max(seals$age.days))
+predVals <- predict(seal_lm, newdata=predFrame, interval="prediction")
+
+predFrame <- cbind(predFrame, predVals) %>%
+  rename(length.cm = fit)
+
+head(predFrame)
+```
+
+We can then add this to our plot using the `geom_ribbon` which takes a `ymin` and `ymax` argument to generate a ribbon - like the fit standard error ribbon.
+
+```{r predict_plot}
+seal_fit_plot +
+  stat_smooth(method="lm", color="blue") +
+  geom_ribbon(data=predFrame, mapping=aes(x=age.days, ymin=lwr, ymax=upr),
+              fill="grey", alpha=0.6) +
+  theme_bw()
+```
+
+Now we can better see the prediction 95% interval - and that we do have some points that fall outside of it.
+
+### 5. Faded Examples.
+
+#### A Fat Model
+Fist, the relationship between how lean you are and how quickly you lose fat. Implement this to get a sense ot the general workflow for analysis
+
+```{r, eval=FALSE}
+library(ggplot2)
+fat <- read.csv("./lm/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
+
+#initial visualization to determine if lm is appropriate
+fat_plot <- ggplot(data=fat, aes(x=leanness, y=lossrate)) + 
+  geom_point()
+fat_plot
+
+fat_mod <- lm(lossrate ~ leanness, data=fat)
+
+#assumptions
+plot(fat_mod, which=1)
+plot(fat_mod, which=2)
+
+#f-tests of model
+anova(fat_mod)
+
+#t-tests of parameters
+summary(fat_mod)
+
+#plot with line
+fat_plot + 
+  stat_smooth(method=lm, formula=y~x)
+```
+
+#### An Itchy Followup  
+For your first faded example, let's look at the relationship between DEET and mosquito bites.
+
+```{r eval=FALSE}
+deet <- read.csv("./lm/17q24DEETMosquiteBites.csv")
+
+deet_plot <- ggplot(data=___, aes(x=dose, y=bites)) + 
+  geom_point()
+
+deet_plot
+
+deet_mod <- lm(bites ~ dose, data=deet)
+
+#assumptions
+plot(___, which=1)
+plot(___, which=2)
+
+#f-tests of model
+anova(___)
+
+#t-tests of parameters
+summary(___)
+
+#plot with line
+deet_plot + 
+  stat_smooth(method=lm, formula=y~x)
+```
+### 6. Log-Transformation for Nonlinearity
+
+One of the most common reasons for a linear model to not fit is a nonlinearity in the data generating process.  Often in nature we encounter exponential processes with a log-normal error structure. This is common in count data. Now, really, it's often a poisson distribted variable, but, to a first approximation, log-transformation can often help fix what ails your model and give you reasonable estimates for our tests. We'll talk later in the course about why this isn't the best idea, and why you should start with a nonlinear/non-normal model to begin with.
+
+Let's practice the workflow of how we handle this log transformation.
+
+#### Was that relationship linear?  
+We might suspect that the relationship was nonlinear. Let's see how a simple log transform works here. Note the modifications to model fitting and `stat_smooth`.
+
+```{r eval=FALSE}
+
+deet_mod_log <- lm(log(bites) ~ dose, data=deet)
+
+#assumptions
+plot(___, which=1)
+plot(___, which=2)
+
+#f-tests of model
+anova(___)
+
+#t-tests of parameters
+summary(___)
+
+#plot with line
+deet_plot + 
+  scale_y_continuous(trans="log") +
+  stat_smooth(method=lm, formula=y~x)
+```
+
+#### Long-Lived species and Home Ranges
+Do longer lived species also have larger home ranges? Let's test this!
+```{r eval=FALSE}
+
+zoo <- read.csv("./lm/17q02ZooMortality Clubb and Mason 2003 replica.csv")
+
+zoo_plot <- ggplot(data=___, aes(x=mortality, y=homerange)) + 
+  ___()
+
+___
+
+zoo_mod <- lm(___, data=___)
+
+#assumptions
+plot(___, which=1)
+plot(___, which=2)
+
+#f-tests of model
+anova(___)
+
+#t-tests of parameters
+summary(___)
+
+#plot with line
+zoo_plot + 
+  stat_smooth(method=___, formula=___)
+```
+
+
+### Nonlinear home-ranges
+
+That definitely wasn't linear. Look at that outlier! Let's log our y and see how things change.
+
+```{r eval=FALSE}
+
+zoo_mod_log <- lm(log(___) ~ ___, ___=___)
+
+#assumptions
+___(___)
+___(___)
+
+#f-tests of model
+___(___)
+
+#t-tests of parameters
+___(___)
+
+#plot with line
+zoo_plot + 
+  scale_y_continuous(trans="___")+
+  ___(method=___, formula=___)
+
+```
+
+
+##### 5. Power
+
+OK, this is great, but what about power?  Let's look at our seal fit again - maybe we want to know what would have happened with a lower sample size?
+
+Note, I'm going to use a knitr function to neaten up the table for markdown. Try it in your own homeworks!
+
+```{r seal_coef}
+knitr::kable(tidy(seal_lm))
+```
+
+What about the residual SD?
+
+```{r seal_SD}
+knitr::kable(glance(seal_lm)[,1:3])
+```
+
+All right - there are our target values.  Now, we can change a lof ot things. The effect size (slope), range of values, sigma, and more. But let's try sample size.
+
+To do a power analysis via simulation for a linear regression, we begin by building our simulation data frame with parameters and information that varies.
+```{r simPop}
+set.seed(607)
+
+simPopN <- data.frame(slope = 0.00237, 
+                      intercept=115.767,
+                      sigma = 5.6805,
+                      n=10:100) 
+```
+
+OK, now we need to expand this out, and have some number of samples for each n.For that, we can use the function in `tidyr` (same library as crossings), `expand()`.
+
+```{r add_samp_size}
+library(tidyr)
+
+simPopN <- simPopN %>%
+  group_by(slope, intercept, sigma, n) %>%
+  expand(reps = 1:n[1]) %>%
+  ungroup()
+```
+
+Now, if we want to simulate each of these, say, 500 times, we need to assign unique sim numbers, so for each n and sim number we have a unique data set.
+
+```{r increase_sims}
+simPopN <- simPopN  %>%
+  crossing(sim = 1:500)
+```
+
+Great - almost ready to go! Now we just need to add in fitted values. Fortunately, as `rnorm()` works with vectors, we can just use a mutate here. We'll also need to simulate random draws of ages, but that's just another random number.
+
+```{r add_length}
+simPopN <- simPopN %>%
+  mutate(age.days = runif(n(), 1000, 8500)) %>%
+  mutate(length.cm = rnorm(n(), intercept + slope*age.days, sigma))
+```
+
+Yatzee! Ready to run!
+
+First, we now need to generate a lot of fit models. Dplyr doesn't take too kindly to including fit things, so, we can use two powerful functions here - first, `nest` and `unnest()` allow us to collapse grouped data down into little pieces and re-expand it. Second, the `map` function in the purrr library allows us to iterate over different levels or grouped data frames, and perform some function. In this case, we'll fit a model, get it's coefficients using broom, and unnest it all, and filter out only the slopes (the age.days coefficient)
+
+```{r simFit, cache=TRUE}
+fits <- simPopN %>%
+    group_by(slope, intercept, sigma, n, sim) %>%
+    nest() %>%
+    mutate(mod = purrr:::map(data, ~lm(length.cm ~ age.days, data=.))) %>%
+    mutate(coefs = purrr::map(mod, ~tidy(.))) %>%
+    unnest(coefs) %>%
+    ungroup() %>%
+    filter(term == "age.days")
+
+fits
+```
+
+Notice that we do indeed have p-values, so we can use these fits to get power for each sample size. We can now do our normal process - in this case grouping by sample size - to get power. And then we can plot the result!
+
+```{r pow}
+pow <- fits %>%
+    group_by(n) %>%
+    summarise(power = 1-sum(p.value>0.05)/n()) %>%
+    ungroup() 
+
+
+qplot(n, power,  data=pow, geom=c("point", "line")) +
+  theme_bw(base_size=17) +
+  geom_hline(yintercept=0.8, lty=2)
+```
