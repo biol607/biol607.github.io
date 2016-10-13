@@ -13,7 +13,10 @@ output:
     css: style.css
 ---
 ##
-<!-- next year, more on workflow of correlation test - assumptions and viz -->
+<!-- next year, more on workflow of correlation test - assumptions and viz 
+add lots of what things look like when they go awry, also better 
+description of assumption testing - fix bad english
+-->
 <div style="background-color:white; align:center; font-size: 2em;"> Correlation and The Linear Model </div>\
 \
 ![image](./images/11/correlation_xkcd.jpg){width=70%}\
@@ -538,7 +541,7 @@ $$\Large \epsilon_i ~ N(0, \sigma)$$
 
 ## Testing Assumptions
 > - **Data Generating Process: Linearity**
->     - Test be looking at relationship between fitted and observed values
+>     - Examine relationship between fitted and observed values
 >     - Secondary evaluation: fitted v. residual values
 <br><br>
 > - **Error Generating Process:** Normality & homoscedasticity of residuals
@@ -610,69 +613,3 @@ plot(puffer_lm, which=5, cex.lab=1.4, cex.main=2, cex.axis=1.1)
 
 Should be a cloud with no trend
 
-## The Steps of Statistical Modeling
-1. What is your question?
-2. What model of the world matches your question?
-3. Build a test
-4. Evaluate test assumptions
-5. <font color="red">Evaluate test results</font>
-6. Visualize
-
-
-## You have Fit a Model. Now...
-
-1.  Can you really use this model fit?
-
-2.  Does your model explain variation in the data?
-
-3.  Are your coefficients different from 0?
-
-4.  How much variation is retained by the model?
-
-5.  How confident can you be in model predictions?
-
-
-## Testing the Model
-
-Ho = The model predicts no variation in the data.  
-Ha = The model predicts variation in the data.
-```{r linefit}
-```
-
-$$SS_{Total} = SS_{Regression} + SS_{Error}$$
-
-
-## The F Distribution and Ratios of Variances
-
-$F = \frac{MS_{R}}{MS_{E}}$ with DF=1,n-2 
-
-```{r f}
-
-x<-seq(0,6,.01)
-qplot(x,df(x,1,25), geom="line",  xlab="Y", ylab="df(Y)") + 
-  theme_bw(base_size=17)
-
-```
-
-1-Tailed Test
-
-## Components of the Total Sums of Squares
-
-$SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}$, df=1\
-\
-$SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2$, df=n-2\
-\
-
-<div class="fragment">To compare them, we need to correct for different DF. This is the Mean
-Square.\
-\
-MS=SS/DF\
-\
-e.g, $MS_{E} = \frac{SS_{E}}{n-2}$
-</div>
-
-
-## F-Test and Pufferfish
-```{r f-puffer}
-knitr::kable(anova(puffer_lm))
-```
