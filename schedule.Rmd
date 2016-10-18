@@ -60,7 +60,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm
 __In Class Code:__ [lm](in_class_code_2016/06_lm_inclass.R)  
   
 ### Week 7.   
-__Lecture:__ [Likelihood](lectures/13_likelihood.html), Fitting a line with Likelihood, Model Selection with one predictor  
+__Lecture:__ [Linear Model Power Analysis](lab/06a_power_analysis.html), [Likelihood](lectures/13_likelihood.html), Fitting a line with Likelihood, Model Selection with one predictor  
 __Lab Topic:__ Calculating and visualizing Likelihoods, fitting a line with bbmle and glm  
 __Reading:__ W&S 20, G&W Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-likelihood  
