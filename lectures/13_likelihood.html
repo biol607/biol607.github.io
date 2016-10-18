@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="likelihood" class="slide level2">
+<h1>Likelihood!</h1>
+<p><img src="images/13/i_can_haz_statz_fb_lolstatz.png" style="width:45.0%" /></p>
+</section>
+<section id="review" class="slide level2">
+<h1>Review</h1>
+<ul>
+<li><p>We test hypotheses using <span class="math inline">\(P(x \le Data | H)\)</span></p></li>
+<li><p>We can fit models, then test them in this framework</p></li>
+<li><p>We are awfully good at for simulation</p></li>
+</ul>
+</section>
+<section id="outline" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Introduction to Likelihood<br />
+<br />
+</li>
+<li>Maximum Likelihood<br />
+<br />
+</li>
+<li>Likelihood with Multiple Parameters<br />
+</li>
+</ol>
+</section>
+<section id="deriving-truth-from-data" class="slide level2">
+<h1>Deriving Truth from Data</h1>
+<ul>
+<li class="fragment"><strong>Frequentist Inference:</strong> Correct conclusion drawn from repeated experiments
+<ul>
+<li class="fragment">Uses p-values and CIs as inferential engine<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment"><strong>Likelihoodist Inference:</strong> Evaluate the weight of evidence for different hypotheses
+<ul>
+<li class="fragment">Derivative of frequentist mode of thinking<br />
+</li>
+<li class="fragment">Uses model comparison (sometimes with p-values…)<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment"><strong>Bayesian Inference:</strong> Probability of belief that is constantly updated
+<ul>
+<li class="fragment">Uses explicit statements of probability and degree of belief for inferences</li>
+</ul></li>
+</ul>
+</section>
+<section id="section" class="slide level2">
+<h1></h1>
+<p><br><br><br></p>
+<h1 style="text-align:left">
+Likelihood: how well data support a given hypothesis.
+</h2>
+<br />
+<br />
+
+<h4 style="text-align:left">
+<span class="fragment">Note: Each and every parameter choice IS a hypothesis</span>
+</h4>
+</section>
+<section id="likelihood-defined" class="slide level2">
+<h1>Likelihood Defined</h1>
+<p><br><br> <span class="math display">\[\Large L(H | D) = p(D | H)\]</span></p>
+<br />
+
+<p align="left">
+Where the D is the data and H is the hypothesis (model) including a both a data generating process with some choice of parameters (aften called <span class="math inline">\(\theta\)</span>). The error generating process is inherent in the choice of probability distribution used for calculation.
+</p>
+</section>
+<section id="likelihood-of-a-single-value" class="slide level2">
+<h1>Likelihood of a Single Value</h1>
+<p>What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1. <img src="13_likelihood_files/figure-revealjs/norm_lik-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-of-a-single-value-1" class="slide level2">
+<h1>Likelihood of a Single Value</h1>
+<p>What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1. <img src="13_likelihood_files/figure-revealjs/norm_lik_2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihoodist-v.-p-values" class="slide level2">
+<h1>Likelihoodist v. P-Values</h1>
+<p>What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1. <img src="13_likelihood_files/figure-revealjs/norm_lik_3-1.jpeg" title="" alt="" width="768" /></p>
+<p>Compare <font color="red">p(x = D | H)</font> to <font color="blue">p(x D | H)</font></p>
+</section>
+<section id="outline-1" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Introduction to Likelihood<br />
+<br />
+</li>
+<li><font color="red">Maximum Likelihood</font><br />
+<br />
+</li>
+<li>Likelihood with Multiple Parameters<br />
+</li>
+</ol>
+</section>
+<section id="maximum-likelihood" class="slide level2">
+<h1>Maximum Likelihood</h1>
+<br>
+<h2 style="text-align:left">
+The Maximum Likelihood Estimate is the value at which <span class="math inline">\(p(D | \theta)\)</span> is highest.
+</h2>
+<p><br> <span class="fragment" style="text-align:left">Note the explicit choice of parameters.</p>
+</section>
+<section id="example-of-maximum-likelihood" class="slide level2">
+<h1>Example of Maximum Likelihood</h1>
+<p>Let’s say we have counted 10 individuals in a plot. Given that the population is Poisson distributed, what is the value of <span class="math inline">\(\lambda\)</span>?</p>
+<div id="left" style="width:60%">
+<p><img src="13_likelihood_files/figure-revealjs/likelihoodSapply-1.jpeg" title="" alt="" width="576" /></p>
+</div>
+<div id="right", style="width:40%">
+<br><br>
+$$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$ 
+<br>where we search all possible values of &lambda;
+<Br><br>
+<span class="fragment">Brute force, or simple iterative ML</span>
+</div>
+</section>
+<section id="maximum-log-likelihood" class="slide level2">
+<h1>Maximum Log-Likelihood</h1>
+<h4 style="text-align:left">
+We often maximize log-likelihood because of<br />
+<br />
+1) more well behaved (<span class="math inline">\(\chi^2\)</span>) properties of Log-Likelihood values and<br />
+<br />
+2) rounding error
+</h4>
+</section>
+<section id="log-likelihood" class="slide level2">
+<h1>Log-Likelihood</h1>
+<p><img src="13_likelihood_files/figure-revealjs/LoglikelihoodSapply-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="section-1" class="slide level2">
+<h1></h1>
+<br><br><br>
+<h1>
+What about many data points?
+</h1>
+</section>
+<section id="start-with-a-probability-distribution" class="slide level2">
+<h1>Start with a Probability Distribution</h1>
+<div id="left", style="width:60%">
+
+<img src="13_likelihood_files/figure-revealjs/likelihoodDemo1-1.jpeg" title="" alt="" width="576" />
+
+</div>
+<div id="right", style="width:40%">
+<br><br>
+ $$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$
+</div>
+</section>
+<section id="what-is-the-probability-of-the-data-given-the-parameter" class="slide level2">
+<h1>What is the probability of the data given the parameter?</h1>
+<div id="left", style="width:60%">
+
+<img src="13_likelihood_files/figure-revealjs/likelihoodDemo2-1.jpeg" title="" alt="" width="576" />
+
+</div>
+<div id="right", style="width:40%">
+<br><br>
+ $$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$
+</div>
+</section>
+<section id="what-is-the-probability-of-the-data-given-the-parameter-1" class="slide level2">
+<h1>What is the probability of the data given the parameter?</h1>
+<div id="left", style="width:60%">
+<img src="13_likelihood_files/figure-revealjs/likelihoodDemo2-1.jpeg" title="" alt="" width="576" />
+
+</div>
+<div id="right", style="width:40%">
+<br><br>
+p(a and b) = p(a)p(b)  
+<br><br><br>
+$$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
+</div>
+</section>
+<section id="can-compare-pdata-h-for-alternate-parameter-values" class="slide level2">
+<h1>Can Compare p(data | H) for alternate Parameter Values</h1>
+<p><img src="13_likelihood_files/figure-revealjs/likelihoodDemo3-1.jpeg" title="" alt="" width="768" /></p>
+<p>Compare <span class="math inline">\(p(D|\theta_{1})\)</span> versus <span class="math inline">\(p(D|\theta_{2})\)</span></p>
+</section>
+<section id="likelihood-and-log-likelihood-with-a-data-set" class="slide level2">
+<h1>Likelihood and Log-Likelihood With a Data Set</h1>
+<p><img src="13_likelihood_files/figure-revealjs/likelihoodSapply1Plot-1.jpeg" title="" alt="" width="768" /></p>
+<p>Maximum Likelihood: 1.331914410^{-11} at 17<br />
+Maximum Log Likelihood: -25.0418188 at 17</p>
+</section>
+<section id="section-2" class="slide level2">
+<h1></h1>
+<p><img src="images/13/deadbee3.jpg" alt="image" /></p>
+</section>
+<section id="likelihood-and-bee-death" class="slide level2">
+<h1>Likelihood and Bee Death!</h1>
+<ul>
+<li><p>We have Bee data mortality</p></li>
+<li><p>We can model Bee Lifespans as a Gamma Distribution with shape = 1 (1 bee per death)</p></li>
+<li><p>What is the ML estimate of a Bee’s Lifespan in hours?</p></li>
+</ul>
+</section>
+<section id="the-gamma-distribution" class="slide level2">
+<h1>The Gamma Distribution</h1>
+<div id="left">
+<p><img src="13_likelihood_files/figure-revealjs/gamma1-1.jpeg" title="" alt="" width="384" /></p>
+</div>
+<div id="right">
+<ul>
+<li>Defined by number of events(shape) average time to an event (scale)</li>
+</ul>
+<ul>
+<li class="fragment">Think of time spent waiting for a bus to arrive</li>
+</ul>
+<ul>
+<li class="fragment">Can also use rate (1/scale)</li>
+</ul>
+<ul>
+<li class="fragment"><span class="math inline">\(Y \sim G(shape, scale)\)</span></li>
+</ul>
+</div>
+</section>
+<section id="distribution-of-mortality" class="slide level2">
+<h1>Distribution of Mortality</h1>
+<p><img src="13_likelihood_files/figure-revealjs/beeExample-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="test-different-scale-values" class="slide level2">
+<h1>Test Different Scale Values</h1>
+<p><img src="13_likelihood_files/figure-revealjs/beeExampleCode-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="very-pointed-likelihood" class="slide level2">
+<h1>Very Pointed Likelihood</h1>
+<p><img src="13_likelihood_files/figure-revealjs/bee_lik-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="smoother-log-likelihood---but-wheres-the-max" class="slide level2">
+<h1>Smoother Log Likelihood - but where’s the max?</h1>
+<p><img src="13_likelihood_files/figure-revealjs/bee_ll-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="zooming-in-to-the-peak" class="slide level2">
+<h1>Zooming in to the Peak</h1>
+<p><img src="13_likelihood_files/figure-revealjs/bee_ll_2-1.jpeg" title="" alt="" width="768" /></p>
+<p>Max Log Likelihood = -142.7837018, Scale = 27.8693467</p>
+</section>
+<section id="what-is-the-variation-around-our-estimate" class="slide level2">
+<h1>What is the Variation Around our Estimate?</h1>
+<div id="left" style="width:60%">
+<p><img src="13_likelihood_files/figure-revealjs/bee_ll_2-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+<div id="right" class="fragment" style="width:40%">
+<ol type="1">
+<li><p>Log-Likelihood appxomiately <span class="math inline">\(\chi^2\)</span> distirbuted</p></li>
+<li><p>95% CI holds all values within half of the .05 tail of <span class="math inline">\(\chi^{2}_{df=1}\)</span></p></li>
+<li>(<span class="math inline">\(\approx\)</span> 1.92)</li>
+</ol>
+</div>
+</section>
+<section id="profile-likelihoods-to-search-for-key-values" class="slide level2">
+<h1>Profile Likelihoods to Search for Key Values</h1>
+<div id="left" style="width:60%">
+<p><img src="13_likelihood_files/figure-revealjs/bee_ll_3-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+<div id="right" style="width:40%">
+<ol type="1">
+<li><p>Log-Likelihood appxomiately <span class="math inline">\(\chi^2\)</span> distirbuted</p></li>
+<li><p>95% CI holds all values within half of the .05 tail of <span class="math inline">\(\chi^{2}_{df=1}\)</span></p></li>
+<li>(<span class="math inline">\(\approx\)</span> 1.92)</li>
+</ol>
+</div>
+<p><br><br> <!-- Log-Likelihood of CI = -144.6516706 (MLL = -142.7837018 --> CI Limits = 20.25, 39.9</p>
+</section>
+<section id="section-3" class="slide level2">
+<h1></h1>
+<br><br>
+<h1 style="text-align:left">
+What if you have multiple parameters?
+</h1>
+</section>
+<section id="outline-2" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Introduction to Likelihood<br />
+<br />
+</li>
+<li>Maximum Likelihood<br />
+<br />
+</li>
+<li><font color="red">Likelihood with Multiple Parameters</font><br />
+<br />
+</li>
+</ol>
+</section>
+<section id="mean-seal-age-distribution" class="slide level2">
+<h1>Mean Seal Age Distribution</h1>
+<p><img src="images/13/Arctocephalus_pusillus_(Cape_fur_seals).jpg" /><br />
+<br />
+What’s the distribution of ages in a seal colony?</p>
+</section>
+<section id="estimating-mean-and-sd-likelihood-surface" class="slide level2">
+<h1>Estimating Mean and SD: Likelihood Surface</h1>
+<p><img src="13_likelihood_files/figure-revealjs/mleSurfPersp-1.jpeg" title="" alt="" width="576" /></p>
+</section>
+<section id="contour-plot-of-a-likelihood-surface" class="slide level2">
+<h1>Contour Plot of a Likelihood Surface</h1>
+<img src="13_likelihood_files/figure-revealjs/contour_LL-1.jpeg" title="" alt="" width="768" />
+<p align="left">
+Estimates: mean = 3730.05, SD = 1293.4
+</p>
+</section>
+<section id="new-issues-with-multiple-parameters" class="slide level2">
+<h1>New Issues with Multiple Parameters</h1>
+<ol type="1">
+<li><p>What Log-Likelihood Values Are Used for 95% CI?</p></li>
+<li><p>Brute-Force Becomes Slow</p></li>
+<li><p>Algorithmic Solutions Necessary</p></li>
+<li><p>Specification of Likelihood Function Unwieldy</p></li>
+</ol>
+</section>
+<section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other" class="slide level2">
+<h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
+<p><img src="13_likelihood_files/figure-revealjs/profileBrute_mean-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-1" class="slide level2">
+<h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
+<p><img src="13_likelihood_files/figure-revealjs/profileBrute_SD-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-profile-of-mean-along-ml-estimates-of-the-sd" class="slide level2">
+<h1>Likelihood Profile of Mean Along ML Estimates of the SD</h1>
+<p><img src="13_likelihood_files/figure-revealjs/showMeanLik-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-profile-of-the-sd-along-ml-estimates-of-the-mean" class="slide level2">
+<h1>Likelihood Profile of the SD Along ML Estimates of the Mean</h1>
+<p><img src="13_likelihood_files/figure-revealjs/profile_mean-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-2" class="slide level2">
+<h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
+<p><font color="red">Mean profile</font>, <font color="blue">SD Profile</font> <img src="13_likelihood_files/figure-revealjs/profileBrute2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-3" class="slide level2">
+<h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
+<p><font color="red">Mean profile</font>, <font color="blue">SD Profile</font></p>
+<p><img src="13_likelihood_files/figure-revealjs/profileBrute3-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-4" class="slide level2">
+<h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
+<p><font color="red">Mean profile</font>, <font color="blue">SD Profile</font></p>
+<p><img src="13_likelihood_files/figure-revealjs/profileBrute4-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-profiles-to-get-cis" class="slide level2">
+<h1>Likelihood Profiles to get CIs</h1>
+<p><img src="13_likelihood_files/figure-revealjs/mleWolvesMeanProfile-1.jpeg" title="" alt="" width="768" /></p>
+<pre><code>        2.5 %   97.5 %
+mean 3704.364 3756.122
+sd   1275.384 1311.887</code></pre>
+</section>
+<section id="how-do-we-search-likelihood-space" class="slide level2">
+<h1>How do we Search Likelihood Space?</h1>
+<p><span style="color:red">Optimizing</span> to find a Minimum Value</p>
+<ul>
+<li><p><code>optim</code> - wide variety of optimizers</p></li>
+<li><p><code>nlm</code> - Nonlinear Minimization</p></li>
+<li><p><code>nlminb</code> - Constrained Optimization</p></li>
+<li><p><code>mle2</code> from <code>bbmle</code> (wrapper for all of the above)</p></li>
+</ul>
+</section>
+<section id="did-you-say-minimum" class="slide level2">
+<h1>Did You Say Minimum?</h1>
+<h2 style="text-align:left">
+<span class="fragment">YES! </span> <br><br> <span class="fragment">We optimize using -sum(LL Function) </span> <br><br> <span class="fragment">Deviance = -2 * LL </span>
+</h2>
+</section>
+<section id="searching-likelihood-space" class="slide level2">
+<h1>Searching Likelihood Space</h1>
+<p>We use <span style="color:red">Algorithms</span></p>
+<ul>
+<li class="fragment">Newtown-Raphson (algorithmicly implemented in <span>nlm</span> and <span>BFGS</span> method) uses derivatives
+<ul>
+<li class="fragment">good for smooth surfaces &amp; good start values<br />
+</li>
+</ul></li>
+<li class="fragment">Brent’s Method - for single parameter fits<br />
+ </li>
+<li class="fragment">Nelder-Mead Simplex (<span>optim</span>’s default)
+<ul>
+<li class="fragment">good for rougher surfaces, but slower<br />
+ </li>
+</ul></li>
+<li class="fragment">Simulated Annealing (<span>SANN</span>) uses Metropolis Algorithm search
+<ul>
+<li class="fragment">global solution, but slow</li>
+</ul></li>
+</ul>
+<p><strong>If your algorithm fails to converge, you cannot evaluate your model or coefficients</strong></p>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,688 @@
+---
+title:
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+
+## Likelihood!
+![](images/13/i_can_haz_statz_fb_lolstatz.png){width=45%}
+
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4.5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+```
+
+## Review
+
+-   We test hypotheses using $P(x \le Data | H)$
+
+-   We can fit models, then test them in this framework
+
+-   We are awfully good at for simulation
+
+## Outline
+1. Introduction to Likelihood\
+\
+2. Maximum Likelihood \
+\
+3. Likelihood with Multiple Parameters \
+
+## Deriving Truth from Data
+> - **Frequentist Inference:** Correct conclusion drawn from repeated experiments  
+>     - Uses p-values and CIs as inferential engine  
+\
+> - **Likelihoodist Inference:** Evaluate the weight of evidence for different hypotheses  
+>     - Derivative of frequentist mode of thinking  
+>     - Uses model comparison (sometimes with p-values...)  
+\
+> - **Bayesian Inference:** Probability of belief that is constantly updated  
+>     - Uses explicit statements of probability and degree of belief for inferences  
+
+
+## 
+<br><br><br>
+
+<h1 style="text-align:left">Likelihood: how well data support a given hypothesis.</h2> \
+\
+
+<h4 style="text-align:left"><span class="fragment">Note: Each and every parameter choice IS a hypothesis</span></h4>
+
+
+
+## Likelihood Defined
+<br><br>
+$$\Large L(H | D) = p(D | H)$$
+
+\
+<p align="left">Where the D is the data and H is the hypothesis (model) including a both a data generating process with some choice of parameters (aften called $\theta$). The error generating process is inherent in the choice of probability distribution used for calculation.</p>
+
+## Likelihood of a Single Value
+What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1. 
+```{r norm_lik}
+x <- seq(-3,3, length.out=200)
+y <- dnorm(x)
+normplot <- qplot(x,y, geom="line") + theme_bw(base_size=17) +
+  ylab("Density") + xlab("X")
+
+normplot
+```
+
+## Likelihood of a Single Value
+What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1. 
+```{r norm_lik_2} 
+normline <- normplot + 
+  geom_segment(mapping=aes(x=1.5, xend=1.5, y = 0, yend = dnorm(1.5)), size=1.3, color="red")
+
+normline
+```
+
+
+## Likelihoodist v. P-Values
+What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1. 
+```{r norm_lik_3} 
+x2 <- seq(1.51, 3, length.out=50)
+y2 <- dnorm(x2)
+
+normall <- normline + 
+  geom_area(mapping=aes(x=x2, y=y2), alpha=0.5, fill="blue")
+
+normall
+```
+
+Compare <font color="red">p(x = D | H)</font> to <font color="blue">p(x \ge D | H)</font> 
+
+## Outline
+1. Introduction to Likelihood\
+\
+2. <font color="red">Maximum Likelihood</font> \
+\
+3. Likelihood with Multiple Parameters \
+
+
+
+## Maximum Likelihood
+<br>
+<h2 style="text-align:left">The Maximum Likelihood Estimate is the value at which $p(D | \theta)$ is
+highest.</h2>
+<br>
+<span class="fragment" style="text-align:left">Note the explicit choice of parameters.
+
+
+## Example of Maximum Likelihood
+
+Let’s say we have counted 10 individuals in a plot. Given that the
+population is Poisson distributed, what is the value of $\lambda$?
+
+<div id = "left" style="width:60%">
+```{r likelihoodSapply, fig.width=6, fig.height=5}
+count <- 10
+#
+l <- sapply(0:20, function(x) dpois(count, lambda=x) ) 
+#
+plot(0:20, l, ylab="Likelihood", xlab=expression(lambda), pch=19, cex.lab=1.5)
+abline(v=10, col="red", lwd=2, lty=2)
+
+```
+
+</div>
+
+<div id="right", style="width:40%">
+<br><br>
+$$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$ 
+<br>where we search all possible values of &lambda;
+<Br><br>
+<span class="fragment">Brute force, or simple iterative ML</span>
+</div>
+
+
+## Maximum Log-Likelihood
+
+<h4 style="text-align:left">We often maximize log-likelihood because of   
+\
+1) more well behaved ($\chi^2$) properties of Log-Likelihood values and   
+\
+2) rounding error
+</h4>
+
+
+## Log-Likelihood
+
+```{r LoglikelihoodSapply, fig.height=6}
+plot(0:20, log(l), ylab="Log-Likelihood", xlab=expression(lambda), pch=19, cex.lab=1.5)
+
+```
+
+##
+<br><br><br>
+<h1> What about many data points?</h1>
+
+
+
+
+## Start with a Probability Distribution
+
+```{r likelihoodPrep}
+set.seed(697)
+counts <- rpois(10, 15)
+lambdaVals <- 0:50
+```
+<div id="left", style="width:60%">
+
+```{r likelihoodDemo1, fig.width=6, fig.height=5}
+
+poisCurve10 <- dpois(lambdaVals, 10)
+barplot(poisCurve10,  ylab="Probability Density", xlab=expression(lambda), col="white", width=1, xlim=c(0,50), main="Density Function at Lambda = 10", cex.lab=1.5)
+
+```
+
+</div>
+
+<div id="right", style="width:40%">
+<br><br>
+ $$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$
+</div>
+
+
+## What is the probability of the data given the parameter?
+<div id="left", style="width:60%">
+
+```{r likelihoodDemo2, fig.width=6, fig.height=5}
+
+colvec<-rep("white", 50)
+colvec[counts]<-"red"
+barplot(poisCurve10,  ylab="Probability Density", xlab=expression(lambda), col=colvec, width=1, xlim=c(0,50), main="Density Function at Lambda = 10", cex.lab=1.5)
+
+
+```
+
+</div>
+
+<div id="right", style="width:40%">
+<br><br>
+ $$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$
+</div>
+
+
+## What is the probability of the data given the parameter?
+<div id="left", style="width:60%">
+```{r likelihoodDemo2, fig.width=6, fig.height=5}
+```
+
+</div>
+
+<div id="right", style="width:40%">
+<br><br>
+p(a and b) = p(a)p(b)  
+<br><br><br>
+$$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
+</div>
+
+
+## Can Compare p(data | H) for alternate Parameter Values
+
+```{r likelihoodDemo3}
+poisCurve15 <- dpois(lambdaVals, 15)
+
+par(mfrow=c(1,2))
+barplot(poisCurve10,  ylab="Probability Density", xlab=expression(lambda), col=colvec, width=1, xlim=c(0,50), main="Lambda = 10", cex.lab=1.5)
+barplot(poisCurve15,  ylab="Probability Density", xlab=expression(lambda), col=colvec, width=1, xlim=c(0,50), main="Lambda = 15", cex.lab=1.5)
+par(mfrow=c(1,1))
+
+```
+
+
+Compare $p(D|\theta_{1})$ versus $p(D|\theta_{2})$
+
+
+
+## Likelihood and Log-Likelihood With a Data Set
+
+```{r likelihoodSapply1Plot}
+
+lik <- sapply(lambdaVals, 
+             function(x) prod( dpois(counts, lambda=x) ) )
+
+ll_pois <- sapply(lambdaVals, 
+             function(x) sum( dpois(counts, lambda=x, log=TRUE) ) )
+
+par(mfrow=c(1,2))
+plot(lambdaVals, lik, ylab="Likelihood", xlab=expression(lambda), pch=19, cex.lab=1.5)
+plot(lambdaVals, ll_pois, ylab="Log-Likelihood", xlab=expression(lambda), pch=19, cex.lab=1.5)
+par(mfrow=c(1,1))
+```
+
+Maximum Likelihood: `r max(lik)` at `r lambdaVals[which(lik==max(lik))]`  
+Maximum Log Likelihood: `r max(ll_pois)` at `r lambdaVals[which(ll_pois==max(ll_pois))]`
+
+
+## 
+
+![image](./images/13/deadbee3.jpg){width="0.8\paperwidth"}
+
+
+## Likelihood and Bee Death!
+
+-  We have Bee data mortality
+
+-   We can model Bee Lifespans as a Gamma Distribution with shape = 1 (1 bee
+    per death)
+
+-   What is the ML estimate of a Bee’s Lifespan in hours?
+
+
+
+## The Gamma Distribution
+
+<div id="left">
+```{r gamma1, echo=FALSE, fig.height=5, fig.width=4}
+valsG<-seq(0,15,.01)
+
+gammaPlot<-ggplot(mapping=aes(x=valsG, y=dgamma(valsG, shape = 2, scale=2))) +
+  geom_line()+
+  xlab("Y") +
+  ylab("Proability Density\n") +
+  theme_bw(base_size=17)
+
+gammaPlot
+```
+
+</div>
+
+<div id="right">
+-   Defined by number of events(shape) average time to an event (scale)
+    
+> - Think of time spent waiting for a bus to arrive
+  
+> -  Can also use rate (1/scale)
+  
+> - $Y \sim G(shape, scale)$
+
+</div>
+
+
+
+
+## Distribution of Mortality
+
+```{r beeExample}
+
+bees <- read.csv("./data/13/20q18BeeLifespans.csv")
+ggplot(data=bees, mapping=aes(x=hours)) +
+  geom_histogram(bins=15, fill="blue") +
+  xlab("Hours") + ylab("Count") +
+  theme_bw(base_size=17)
+
+```
+
+
+
+
+## Test Different Scale Values
+
+```{r beeExampleCode}
+
+
+## @knitr beeExampleCode
+scaleVals <- seq(0.2, 80, length.out=200)
+#
+beeD <- function(x) sum(dgamma(bees$hours, shape=1, 
+                               scale=x, log=TRUE))
+mll <- sapply(scaleVals, beeD)
+
+bee_vals <- data.frame(hours = seq(0,95, length.out=200)) %>%
+  mutate(scale_35 = dgamma(hours, shape=1, scale=35),
+         scale_27.86 = dgamma(hours, shape=1, scale=27.86935)) %>%
+  gather(scale, density, scale_35, scale_27.86) %>%
+  mutate(scale = gsub("scale_", "Scale = ", scale))
+
+beesD <- bees %>%
+   mutate(scale_35 = dgamma(hours, shape=1, scale=35),
+         scale_27.86 = dgamma(hours, shape=1, scale=27.86935)) %>%
+  gather(scale, density, scale_35, scale_27.86) %>%
+  mutate(scale = gsub("scale_", "Scale = ", scale))
+
+ggplot() + 
+  geom_line(data = bee_vals, mapping=aes(x=hours, y=density)) +
+  facet_wrap(~scale) +
+  geom_segment(data=beesD, mapping=aes(x=hours, xend=hours, y=0, yend=density), color="red") +
+  xlab("Hours") + ylab("Density") +
+  theme_bw(base_size=17)
+
+
+```
+
+## Very Pointed Likelihood
+```{r bee_lik}
+qplot(scaleVals, exp(mll), geom="line") +
+  geom_line(size=2) +
+  xlab("Scale") +
+  ylab("Likelihood") +
+  theme_bw(base_size=17)
+
+```
+
+## Smoother Log Likelihood - but where's the max?
+```{r bee_ll}
+llplot <- qplot(scaleVals, mll, geom="line") +
+  geom_line(size=2) +
+  xlab("Scale") +
+  ylab("Log Likelihood") +
+  theme_bw(base_size=17)
+
+llplot
+
+```
+
+## Zooming in to the Peak
+```{r bee_ll_2}
+
+llplot_with_estimate <- llplot +
+  ylim(c(-150,-140)) +
+  geom_segment(mapping=aes(x=scaleVals[which(mll==max(mll))], xend = scaleVals[which(mll==max(mll))],
+                           y=-150, yend = max(mll)), col="blue", lty=2)+
+  geom_point(mapping=aes(x=scaleVals[which(mll==max(mll))], y = max(mll)), col="blue", size=3)
+
+
+llplot_with_estimate
+```
+
+Max Log Likelihood = `r max(mll)`, Scale = `r scaleVals[which(mll==max(mll))]`
+
+
+## What is the Variation Around our Estimate?
+<div id="left" style="width:60%">
+```{r bee_ll_2, fig.height=5, fig.width=5}
+```
+</div>
+
+<div id="right" style="width:40%" class="fragment">
+1.  Log-Likelihood appxomiately $\chi^2$ distirbuted
+
+2.  95% CI holds all values within half of the .05 tail of
+    $\chi^{2}_{df=1}$
+
+3.  ($\approx$ 1.92)
+</div>
+
+
+
+## Profile Likelihoods to Search for Key Values
+<div id="left" style="width:60%">
+```{r bee_ll_3, fig.height=5, fig.width=5}
+
+lConf <- max(mll) - 1.92
+
+confIDX <- which(mll >= lConf)
+confIDX <- c(confIDX[1], confIDX[length(confIDX)])
+
+
+#95% confidence interval of Lambda
+llplot_with_estimate +
+  geom_segment(mapping=aes(x=scaleVals[confIDX], xend = scaleVals[confIDX],
+                           y=c(-150,-150), yend = mll[confIDX]), col="red", lty=2) +
+  geom_point(mapping=aes(x=scaleVals[confIDX], y = mll[confIDX]), col="red", size=3)
+
+  
+```
+</div>
+
+<div id="right" style="width:40%">
+1.  Log-Likelihood appxomiately $\chi^2$ distirbuted
+
+2.  95% CI holds all values within half of the .05 tail of
+    $\chi^{2}_{df=1}$
+
+3.  ($\approx$ 1.92)
+</div>
+
+<br><br>
+<!-- Log-Likelihood of CI = `r mll[confIDX][1]` (MLL = `r max(mll)` -->
+CI Limits = `r round(scaleVals[confIDX],2)`
+
+
+## 
+
+<br><br>
+<h1 style="text-align:left">What if you have multiple parameters?</h1>
+
+## Outline
+1. Introduction to Likelihood\
+\
+2. Maximum Likelihood \
+\
+3. <font color="red">Likelihood with Multiple Parameters</font> \
+\
+
+
+## Mean Seal Age Distribution
+![](images/13/Arctocephalus_pusillus_(Cape_fur_seals).jpg)  
+\
+What's the distribution of ages in a seal colony?
+
+## Estimating Mean and SD: Likelihood Surface
+
+```{r sealMLE, cache=TRUE}
+seals <- read.csv("./data/13/17e8ShrinkingSeals Trites 1996.csv")
+
+seal_m <- seq(3630.246, 3830.246, length.out=500)
+seal_s <-  seq(1253.485, 1333.485, length.out=500)
+
+sealSurf <- crossing(m = seal_m,
+                   s = seal_s) %>%
+  rowwise() %>%
+  mutate(ll = sum(dnorm(seals$age.days, m, s, log=TRUE)))
+```
+
+```{r mleSurfPersp, fig.height=6, fig.width=6}
+persp(seal_m, seal_s, z=matrix(sealSurf$ll, ncol=500), xlab="Mean", ylab="SD", zlab="Log-Likelihood",
+      theta = -30, phi = 25, border=NA, col="lightblue")
+```
+
+## Contour Plot of a Likelihood Surface
+```{r contour_LL}
+mll_seals <- max(sealSurf$ll)
+m_seals <- sealSurf$m[which(sealSurf$ll==mll_seals)]
+s_seals <- sealSurf$s[which(sealSurf$ll==mll_seals)]
+
+ll_contour <- ggplot() +
+  geom_contour(data=sealSurf, mapping=aes(x=m, y=s, z=ll, colour = ..level..), bins=35) +
+  theme_bw(base_size=17) +
+  scale_colour_gradient(low="black", high="lightgrey", guide=guide_colorbar(title="Log Likelihood")) +
+  ylab("SD") + xlab("Mean")
+
+ll_contour +  geom_point(mapping=aes(x=m_seals, y=s_seals), color="red", size=4) 
+```
+<p align="left">
+Estimates: mean = `r round(m_seals, 2)`, SD = `r round(s_seals, 2)`
+</p>
+
+## New Issues with Multiple Parameters
+
+1.  What Log-Likelihood Values Are Used for 95% CI?
+
+2.  Brute-Force Becomes Slow
+
+3.  Algorithmic Solutions Necessary
+
+4.  Specification of Likelihood Function Unwieldy
+
+
+
+## Likelihood Profile of One Coefficient Along ML Estimates of the Other
+
+```{r profileBrute_mean, cache=TRUE}
+m_levs <- seal_m[c(100,300,500)]
+m_names <- paste("Mean = ", round(m_levs, 2))
+names(m_names) <- m_levs
+
+ggplot(data = sealSurf %>% filter(m %in% m_levs)) +
+  geom_line(mapping = aes(x=s, y=ll)) +
+  facet_wrap(~m, labeller = labeller(m = m_names)) +
+  ggtitle("ML Curve for SD at Different Mean Values") +
+  ylab("Log Likelihood") + xlab("SD") +
+  theme_bw(base_size=17) +
+  geom_hline(data = sealSurf %>% filter(m %in% m_levs) %>% 
+               group_by(m) %>% summarise(ll = max(ll)) %>% ungroup(),
+             mapping=aes(yintercept=ll), lty=2, col="blue")
+```
+
+## Likelihood Profile of One Coefficient Along ML Estimates of the Other
+
+```{r profileBrute_SD, cache=TRUE}
+s_levs <- seal_s[c(100,300,500)]
+s_names <- paste("SD = ", round(s_levs, 2))
+names(s_names) <- s_levs
+
+ggplot(data = sealSurf %>% filter(s %in% s_levs)) +
+  geom_line(mapping = aes(x=m, y=ll)) +
+  facet_wrap(~s, labeller = labeller(s = s_names)) +
+  ggtitle("ML Curve for Mean at Different SD Values") +
+  ylab("Log Likelihood") + xlab("Mean") +
+  theme_bw(base_size=17) +
+  geom_hline(data = sealSurf %>% filter(s %in% s_levs) %>% 
+               group_by(s) %>% summarise(ll = max(ll)) %>% ungroup(),
+             mapping=aes(yintercept=ll), lty=2, col="red")
+```
+
+## Likelihood Profile of Mean  Along ML Estimates of the SD
+```{r showMeanLik}
+sealSurf_M <- sealSurf %>% 
+  group_by(s) %>%
+  summarise( m = m[which(ll == max(ll))],
+             ll = max(ll)
+           ) %>%
+  ungroup()
+
+
+qplot(m, s, size=as.numeric(ll), data=sealSurf_M, geom="line") + 
+  geom_line(mapping = aes(size=as.numeric(ll)),color="blue") +
+  xlab("Mean") + ylab("S") +
+  scale_size_continuous(guide=guide_legend(title="Log Likelihood")) +
+  theme_bw(base_size=17)
+
+```
+
+## Likelihood Profile of the SD  Along ML Estimates of the Mean
+
+```{r profile_mean}
+sealSurf_S <- sealSurf %>% 
+  group_by(m) %>%
+  summarise( s = s[which(ll == max(ll))],
+             ll = max(ll)
+           ) %>%
+  ungroup()
+
+
+
+qplot(m, s, size=as.numeric(ll), data=sealSurf_S, geom="line") + 
+  geom_line(mapping = aes(size=as.numeric(ll)), color="red") +
+  xlab("Mean") + ylab("SD") +
+  scale_size_continuous(guide=guide_legend(title="Log Likelihood")) +
+  theme_bw(base_size=17)
+
+```
+
+## Likelihood Profile of One Coefficient Along ML Estimates of the Other
+<font color="red">Mean profile</font>, <font color="blue">SD Profile</font>
+```{r profileBrute2}
+ll_contour 
+``` 
+
+## Likelihood Profile of One Coefficient Along ML Estimates of the Other
+<font color="red">Mean profile</font>, <font color="blue">SD Profile</font>
+
+```{r profileBrute3}
+ll_contour + 
+    geom_line(data = sealSurf_S, mapping = aes(x=m, y=s),color="red") 
+``` 
+
+## Likelihood Profile of One Coefficient Along ML Estimates of the Other
+<font color="red">Mean profile</font>, <font color="blue">SD Profile</font>
+
+```{r profileBrute4}
+ll_contour + 
+    geom_line(data = sealSurf_S, mapping = aes(x=m, y=s),color="red") + 
+    geom_line(data = sealSurf_M, mapping = aes(x=m, y=s),color="blue") 
+``` 
+
+
+
+
+## Likelihood Profiles to get CIs
+
+```{r mleWolfFunctionFix, echo=FALSE, eval=TRUE}
+```
+
+```{r mleWolvesMeanProfile}
+library(bbmle)
+mleSeals <- mle2(age.days ~ dnorm(mean=mean, sd=sd), 
+                  data=seals, start=list(mean=3700,sd=1300))
+
+plot(profile(mleSeals), conf = c( 95, 90, 80)/100,
+     ylab="Signed square root deviance")
+
+confint(mleSeals)
+```
+
+
+
+## How do we Search Likelihood Space?
+
+<span style="color:red">Optimizing</span> to find a Minimum Value
+
+-   `optim` - wide variety of optimizers
+
+-   `nlm` - Nonlinear Minimization
+
+-   `nlminb` - Constrained Optimization
+
+-  ` mle2` from `bbmle` (wrapper for all of the above)
+
+
+
+## Did You Say Minimum?
+<h2 style="text-align:left">
+<span class="fragment">YES!\ </span>
+<br><br>
+<span class="fragment">We optimize using -sum(LL Function)\ </span>
+<br><br>
+<span class="fragment">Deviance = -2 \* LL </span>
+</h2>
+
+
+## Searching Likelihood Space
+
+We use <span style="color:red">Algorithms</span>
+
+> -   Newtown-Raphson (algorithmicly implemented in <span>nlm</span> and
+    <span>BFGS</span> method) uses derivatives
+>     - good for smooth surfaces & good start values
+\
+> -   Brent’s Method - for single parameter fits  
+\ 
+> -   Nelder-Mead Simplex (<span>optim</span>’s default)
+>     - good for rougher surfaces, but slower  
+\ 
+> -   Simulated Annealing (<span>SANN</span>) uses Metropolis Algorithm search
+>     - global solution, but slow  
+
+**If your algorithm fails to converge, you cannot evaluate your model or
+coefficients**
+
+
