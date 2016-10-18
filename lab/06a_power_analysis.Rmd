@@ -1,0 +1,209 @@
+---
+title: "Power for Linear Regression"
+author: "Bill 607"
+date: "October 18, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(ggplot2)
+seals <- read.csv("./data/06/17e8ShrinkingSeals Trites 1996.csv")
+seal_lm <- lm(length.cm ~ age.days, data=seals)
+
+```
+
+### Power
+
+OK, we can fit and evluate linear regression models, but what about their power?  Let's look at our [seal fit](https://biol607.github.io/lab/06_lm.html) again - maybe we want to know what would have happened with a lower sample size?
+
+Note, I'm going to use a knitr function, `kable` to neaten up the table for markdown. Try it in your own homeworks!
+
+```{r seal_coef}
+knitr::kable(tidy(seal_lm))
+```
+
+What about the residual SD?
+
+```{r seal_SD}
+knitr::kable(glance(seal_lm)[,1:3])
+```
+
+All right - there are our target values.  Now, we can change a lof ot things. The effect size (slope), range of values, sigma, and more. But let's try sample size.
+
+
+###### 1 Make a Table of Parameters, some of which vary
+
+The first step of a power analysis is to setup a data frame with all of the different possibilities that you might want to assess for power. For linear regression, we have the following parameters, all of which might vary:
+
+1. Slope
+2. Intercept
+3. Residual variance
+4. Sample Size
+5. Range of X values
+
+To do a power analysis via simulation for a linear regression, we begin by building our simulation data frame with the parameters and information that varies. In this case, sample size.
+
+```{r simPop}
+library(dplyr)
+
+set.seed(607)
+
+simPopN <- data.frame(slope = 0.00237, 
+                      intercept=115.767,
+                      sigma = 5.6805,
+                      n=10:100) 
+```
+
+Note, if we wanted to vary more than one parameter, we'd first create a data frame where only one parameter varied, then add a second that varried using crossing in tidyr, like so:
+
+```{r cross, eval=FALSE}
+library(tidyr)
+
+simPopN <- data.frame(slope = 0.00237, 
+                      intercept=115.767,
+                      sigma = 2:6) %>%
+  crossing(n=10:100) 
+```
+
+###### 2 Expand to have a number of rows for each simulated sample with each parameter combination
+
+OK, once we have everything in place, including sample size, we need to expand this out to  have some number of samples for each n. For that, we can use the function in `tidyr` (same library as crossings), `expand()`.
+
+```{r add_samp_size}
+library(tidyr)
+
+simPopN <- simPopN %>%
+  group_by(slope, intercept, sigma, n) %>%
+  expand(reps = 1:n) %>%
+  ungroup()
+```
+
+###### 3 Expand to create repeated simulated data sets for each combination of parameters
+
+Now, if we want to simulate each of these, say, 100 times, we need to assign unique sim numbers, so for each n and sim number we have a unique data set. We can use crossing to replicate each combination of variables above some number of times. Note - 100 is really low, but it doesn't eat your processor! Use low numbers of simulation for development, then crank them up for final analysis.
+
+```{r increase_sims}
+simPopN <- simPopN  %>%
+  crossing(sim = 1:100)
+```
+
+
+###### 3 Simulate the data
+
+Great - almost ready to go! Now we just need to add in fitted values. Fortunately, as `rnorm()` works with vectors, we can just use a mutate here. We'll also need to simulate random draws of ages, but that's just another random number.
+
+```{r add_length}
+simPopN <- simPopN %>%
+  mutate(age.days = runif(n(), 1000, 8500)) %>%
+  mutate(length.cm = rnorm(n(), intercept + slope*age.days, sigma))
+```
+
+Yatzee! Ready to run!
+
+###### 4 Fit models and extract coefficients
+
+First, we now need to generate a lot of fit models. Dplyr doesn't take too kindly to including fit things, so, we can use two powerful functions here - first, `nest` and `unnest()` allow us to collapse grouped data down into little pieces and re-expand it.
+
+```{r simNest}
+fits <- simPopN %>%
+    group_by(slope, intercept, sigma, n, sim) %>%
+    nest()
+
+fits
+```
+
+Second, the `map` function in the purrr library allows us to iterate over different levels or grouped data frames, and perform some function. In this case, we'll fit a model, get it's coefficients using `broom`. This is a new weird set of functions. What's odd about map is that the first argument is a column. But that argument, for the rest of the arguments of the function, is now called `.` and we also use the `~` notation. What `~` does is says that, from this point forward, `.` refers to the first argument given to `map`. 
+
+In essence, what map does is iterate over each element of a list given to it. Once we nest, the data column is now a list, with each element of the list it's own unique data frame. So, map works with lists to apply a function to each element.  The output of the model fitting is another list - now called mod. A list of models. We then iterate, using `map` over that list to generate another list of data frames - this time of coefficients.
+
+```{r simFit, cache=TRUE}
+library(purrr)
+library(broom)
+
+fits <- fits %>%
+    mutate(mod = map(data, ~lm(length.cm ~ age.days, data=.))) %>%
+    mutate(coefs = map(mod, ~tidy(.)))
+
+fits  
+```
+
+Last, we cleanup - we `unnest`, which takes list-columns from above, and expands them out as into full data frames that get slotted back into our original data frame. Nice trick, no?
+
+We'll also filter for just the slope coefficient.
+
+```{r simUnnest}
+fits <- fits %>%
+  unnest(coefs) %>%
+  ungroup() %>%
+  filter(term == "age.days")
+
+fits
+```
+
+###### 5 Calculate your Power
+
+Notice that we do indeed have p-values, so we can use these fits to get power for each sample size. We can now do our normal process - in this case grouping by sample size - to get power. And then we can plot the result!
+
+```{r pow}
+pow <- fits %>%
+    group_by(n) %>%
+    summarise(power = 1-sum(p.value>0.05)/n()) %>%
+    ungroup() 
+
+
+qplot(n, power,  data=pow, geom=c("point", "line")) +
+  theme_bw(base_size=17) +
+  geom_hline(yintercept=0.8, lty=2)
+```
+
+###### 6. Examples
+
+Let's take a look at the whole workflow, this time trying a bunch of standard deviation values.
+
+```{r examp_1, eval=FALSE}
+##setup parameters
+simSD <- data.frame(slope = 0.00237, 
+                      intercept=115.767,
+                      sigma = seq(2:6, lengthout=5),
+                      n=100) %>%
+  group_by(slope, intercept, sigma, n) %>%
+
+  #add sample sizes
+  expand(reps = 1:n) %>%
+  
+  #add sims
+  crossing(sim = 1:100) %>%
+  
+  #add fake data
+  mutate(age.days = runif(n(), 1000, 8500)) %>%
+  mutate(length.cm = rnorm(n(), intercept + slope*age.days, sigma))
+
+
+##make your fits
+fitsSD <- simSD %>%
+    group_by(slope, intercept, sigma, n, sim) %>%
+    nest()%>%
+  
+  #mapping
+  mutate(mod = map(data, ~lm(length.cm ~ age.days, data=.))) %>%
+  mutate(coefs = map(mod, ~tidy(.)))%>%
+  
+  #unnest and filter
+  unnest(coefs) %>%
+  ungroup() %>%
+  filter(term == "age.days")
+
+##calculate and plot power
+powSD <- fitsSD %>% group_by(n) %>%
+    summarise(power = 1-sum(p.value>0.05)/n()) %>%
+    ungroup() 
+
+
+qplot(n, power,  data=powSD, geom=c("point", "line")) +
+  theme_bw(base_size=17) +
+  geom_hline(yintercept=0.8, lty=2)
+```
