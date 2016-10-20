@@ -1,0 +1,233 @@
+---
+title: "Likelihood!"
+author: "Biol 607"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(bbmle)
+library(ggplot2)
+```
+
+#### 1. Likelihood of a Single Data Point
+
+At its core, with likelihood we are searching parameter space and attempting to maximize our likelihood of a model given the data. Let's begin with a simple one parameter model of how the world works and a single data point. Sure, it's trivial, but it demonstrates the core properties of likelihood.
+
+Let's assume we are sampling a field of flowers. As this is count data, we have assumed a Poisson distribution. We throw our plot down, and find 10 flowers. What is the MLE of $\lambda$, the mean (and variance) of our POisson distribution?
+
+##### 1.1 The Likelihood Function
+
+As we've assumed our data is Poisson distributed, our **likelihood function* is that of a Poisson distribution. Now, we could write out the formula for the probability of a data point given a Poisson distribution (note L(H|D = p(D|H))), but, hey, these are just the probability density functions of each distribution!  So, in this case, 'dpois(x, lambda)`.
+
+Now, how do we search parameter space? We've got a Poisson distribution and an observation of 10. A reasonable set of values could be from 0 to 20. Why not!
+
+At this point, we can simply vectorize our search for a maximum likelihood.
+
+```{r mle_1}
+dpois(x = 10, lambda = 0:20)
+```
+
+Well, great. We can squint at that output and find our Maximum Likelihood. But that's a pain in the butt. We can instead use R intelligently to grab estimates for us.
+
+```{r mle_2}
+lik_pois_10 <- dpois(x = 10, lambda = 0:20)
+
+#maximum likelihood
+max(lik_pois_10)
+```
+
+Yay! We have a likelihood. But...what's the estimate? Now, we can use `which` to figure this all out to get the index of the value of the vector of lambdas. But this gets...clunky. Here's an example, just for your delictation.
+
+```{r mle_3}
+#Index of the MLE
+idx_mle <- which(lik_pois_10 == max(lik_pois_10))
+
+idx_mle
+
+#OK, what's the MLE?
+c(0:20)[idx_mle]
+```
+
+And, of course, it would have been better practice to have a vector of lambda values to work on, etc., but, woof. This gets ugly and code-y fast. 
+
+##### 1.2 MLE with `dplyr`
+
+Why not keep all of our information in one nice tidy place and use `dplyr` to get easy answers? We can make a data frame with a set of lambda values, calculate the likelihood, and then filter down to the MLE for our answer.
+
+```{r mle_dplyr}
+library(dplyr)
+
+pois_10 <- data.frame(lambda_vals = 0:20) %>%
+  mutate(likelihood = dpois(x = 10, lambda = lambda_vals)) 
+
+#Get the MLE
+pois_10 %>%
+  filter(likelihood == max(likelihood))
+```
+
+We can even use this to make a nice plot.
+```{r mle_plot}
+ggplot(pois_10, aes(x=lambda_vals, y=likelihood)) +
+  geom_point()
+```
+
+##### 1.3 Log-Likelihood
+So, notice that we have a *lot* of values close to 0? Lots of room for rounding error and weird peaks. And while this distribtion  was nicely shaped, due to these issues, the log-likelihood often looks much nicer (and leads to good test statistic performance).
+
+How do we add that? We simply add the `log=TRUE` argument to any probability density function.
+
+```{r mle_ll}
+pois_10 <- pois_10 %>%
+  mutate(log_likelihood = dpois(x = 10, lambda = lambda_vals, log=TRUE))
+
+
+
+ggplot(pois_10, aes(x=lambda_vals, y=log_likelihood)) +
+  geom_point()
+```
+
+Note, I'm not logging after the fact. That's because we'll get different estimates if we log within the function versus after a really really small value is spit out.
+
+#### 2. Likelihood of a Data Set
+
+#### 2.1 Integrating Likelihood over Many Data Points 
+
+Here's the beauty of a data set. The only two differences between the workflow for 1 point and many is first, that you use either `prod()` (for likelihood) or `sum()` (for log-likelihood) to get the total value. Second, as the density functions don't take kindly to a vector of data and a vector of parameters, we'll use `rowwise()` to iterate over rows, but `ungroup()` after for other operations.
+
+Let's try this for a random dataset that we generate from a Poisson distribution with a lambda of 10.
+
+Note the tiny tiny changes in the calculation of the likelihood and log-likelihood.
+
+```{r mle_data}
+set.seed(607)
+pois_data <- rpois(10, lambda=10)
+
+pois_mle <- data.frame(lambda_vals = 0:20) %>%
+  rowwise() %>%
+  mutate(likelihood = prod(dpois(x = pois_data, lambda = lambda_vals)),
+         log_likelihood = sum(dpois(x = pois_data, lambda = lambda_vals, log=TRUE))) %>%
+  ungroup()
+
+#Plot the surface
+qplot(lambda_vals, log_likelihood, data=pois_mle)
+
+#Get the MLE
+pois_mle %>%
+  filter(log_likelihood == max(log_likelihood))
+```
+
+This example also shows why we use Log-Likelihood over Likelihood. Let's look at the first few rows of the output:
+```{r pois_out}
+pois_mle
+```
+
+Notice that we cannot differentiate the first four values using likelihood because they are so small? But the difference is clear for Log Likelihood.
+
+#### 2.2 Confidence Intervals 
+
+OK, given our assumption that the CI of each parameter is 1.92 away from the Maximum Log-Likelhood. Again, pretty straightfoward to get with filtering.
+
+```{r mle_ci}
+pois_mle %>%
+  filter(log_likelihood > (max(log_likelihood) - 1.92) )
+```
+
+So, our CI is between 8 and 11.
+
+#### 2.3 Examples
+
+1. You have run 5 trials of flipping 20 coins. The number of heads in each trial is: 11, 10,  8,  9,  7. What's the maximum likelihood estimate of the probability getting heads?
+
+
+#### 3. Likelihood with Two Parameters
+
+##### 3.1 Two parameters and crossing!
+
+The great thing about multiple parameters is that, heck, it's no different than one parameter. Let's use the seals example from last week and look at estimating the mean and SD of the seal age distribution. TO start with, what's the range of values we should choose to test? Let's look at the data!
+
+```{r seals}
+seals <- read.csv("data/06/17e8ShrinkingSeals Trites 1996.csv")
+
+hist(seals$age.days)
+```
+
+Eyeballing this, I'd say the mean is between 3700 and 3800 and the SD is...oh, between 1280 and 1310
+
+Fair enough.  We can use `crossing` in `tidyr` to generate a set of parameters to test, and then literally nothing is different from the workflow before. Let's just look at the Log Likelihood.
+
+```{r seal_ll, cache=TRUE}
+seal_dist <- crossing(m = seq(3720, 3740, by = 0.1), 
+                      s=seq(1280, 1310, by = 0.1)) %>%
+  rowwise() %>%
+  mutate(log_lik = sum(dnorm(seals$age.days, mean = m, sd = s, log=TRUE))) %>%
+  ungroup()
+
+```
+
+Notice that took a bit That's because we searched `r nrow(seal_dist)` combinations of values. And we didn't even do that with high precision!  And I gave you a really narrow band of possible values! If anything can convince you that we need an algorithmic solution rather than something brute force - I hope this does!
+
+What's the MLE?
+
+```{r seal_mle}
+seal_dist %>%
+  filter(log_lik == max(log_lik))
+```
+
+And can we plot a super-sexy contour plot of the surface?
+
+```{r seal_contour}
+ggplot(seal_dist, aes(x=m, y=s, z=log_lik)) +
+  geom_contour(aes(color = ..level..))
+```
+
+Note that odd color thing enables you to see the contours.
+
+##### 3.2 Profile Likelihoods for CIs
+
+So, how do we get profile likelihoods from this mess?
+
+Simply put, for each variable we want the profile of, we look at the MLE estimate at each value of the other parameter. So, group by the **other** parameter and filter out the MLE.  So for the mean - 
+
+```{r mean_prof}
+seal_sd_profile <- seal_dist %>%
+  group_by(s) %>%
+  filter(log_lik == max(log_lik)) %>%
+  ungroup()
+
+qplot(s, log_lik, data=seal_sd_profile)
+```
+
+OK, nice profile.
+
+So, what about the CI? Unfortunately, even after filtering, we have a lot of values. We want to just look at the first and last. Weirdly, `filter` lets us use `row_number` as something to work on. So, let's take advantage of that here!
+
+##See the CI
+```{r prof_ci}
+seal_sd_profile %>%
+  filter(log_lik > max(log_lik) - 1.92) %>%
+    filter(row_number()==1 | row_number()==n())
+```
+
+So, now we see the CI of our SD is from 1280 to 1310 - at least from this grid.
+
+##### 3.3 Exercises
+
+1. Using the seal data, get the mean and SD of the seal lengths. Actually use `mean` and `sd` to derive reasonable parameter ranges likelihood surface.  
+\
+2. What is the profile estimate of the CIs of the mean?
+
+
+#### 4. Linear Regression and Likelihood: `bbmle`
+
+So, you want to fit a model with multiple parameters using Likelihood? We've seen that brute force is not the way. We need algorithms to search parameter space. R has multiple optimizer functions that seek to fund the minimum value of a function (likelihood or otherwise). `bbmle` is Ben Bolker's package that seeks to create an easy interface to these functions. You can tweak to your heart's delight all of the details of the optimizer, but at the end of the day, much of the code is fairly straightforward.
+
+<!--
+##### 4.1 Seal Regression with `mle2`
+
+The function at the core of `bbmle` is `mle2`.
+
+-->
