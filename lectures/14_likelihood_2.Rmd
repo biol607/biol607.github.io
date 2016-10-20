@@ -1,0 +1,338 @@
+---
+title:
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+
+## Fitting Models with Likelihood!
+![](images/14/scientists_see_the_world.jpg){width=45%}
+
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4.5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(ggplot2)
+
+```
+
+## Outline
+1. Review of Likelihood\
+\
+2. Comparing Models with Likelihood \
+\
+3. Linear Regression with Likelihood \
+
+## Deriving Truth from Data
+> - **Frequentist Inference:** Correct conclusion drawn from repeated experiments  
+>     - Uses p-values and CIs as inferential engine  
+\
+> - **Likelihoodist Inference:** Evaluate the weight of evidence for different hypotheses  
+>     - Derivative of frequentist mode of thinking  
+>     - Uses model comparison (sometimes with p-values...)  
+\
+> - **Bayesian Inference:** Probability of belief that is constantly updated  
+>     - Uses explicit statements of probability and degree of belief for inferences  
+
+
+## 
+<br><br><br>
+
+<h1 style="text-align:left">Likelihood: how well data support a given hypothesis.</h2> \
+\
+
+<h4 style="text-align:left"><span class="fragment">Note: Each and every parameter choice IS a hypothesis</span></h4>
+
+
+
+## Likelihood Defined
+<br><br>
+$$\Large L(H | D) = p(D | H)$$
+
+\
+<p align="left">Where the D is the data and H is the hypothesis (model) including a both a data generating process with some choice of parameters (aften called $\theta$). The error generating process is inherent in the choice of probability distribution used for calculation.</p>
+
+
+## Example of Maximum Likelihood Fit
+
+Let’s say we have counted 10 individuals in a plot. Given that the
+population is Poisson distributed, what is the value of $\lambda$?
+
+<div id = "left" style="width:60%">
+```{r likelihoodSapply, fig.width=6, fig.height=5}
+count <- 10
+#
+l <- sapply(0:20, function(x) dpois(count, lambda=x) ) 
+#
+plot(0:20, l, ylab="Likelihood", xlab=expression(lambda), pch=19, cex.lab=1.5)
+abline(v=10, col="red", lwd=2, lty=2)
+
+```
+
+</div>
+
+<div id="right", style="width:40%">
+<br><br>
+$$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$ 
+<br>where we search all possible values of &lambda;
+</div>
+
+## Likelihood Function
+
+$$\Large p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$ 
+<br><br>  
+
+> * This is a **Likelihood Function** for one sample \
+>     - It is the Poisson Probability Density function
+\
+\
+> * $Dpois = \frac{\lambda^{x}e^{-\lambda}}{x!}$
+\
+
+## What is the probability of the data given the parameter?
+<div id="left", style="width:60%">
+```{r likelihoodDemo2, fig.width=6, fig.height=5}
+
+set.seed(697)
+counts <- rpois(10, 15)
+lambdaVals <- 0:50
+
+
+colvec<-rep("white", 50)
+colvec[counts]<-"red"
+poisCurve10 <- dpois(lambdaVals, 10)
+
+barplot(poisCurve10,  ylab="Probability Density", xlab=expression(lambda), col=colvec, width=1, xlim=c(0,50), main="Density Function at Lambda = 10", cex.lab=1.5)
+
+```
+
+</div>
+
+<div id="right", style="width:40%">
+<br><br>
+p(a and b) = p(a)p(b)  
+<br><br><br>
+$$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
+<br><br>
+<span class="fragment">$$    = \prod_{i=1}^n \frac{\theta^{x_i}e^{-\theta}}{x_!}$$</span>
+</div>
+
+## Outline
+1. Review of Likelihood\
+\
+2. <font color="red">Comparing Models with Likelihood</font> \
+\
+3. Linear Regression with Likelihood \
+
+## Can Compare p(data | H) for alternate Parameter Values
+
+```{r likelihoodDemo3}
+poisCurve15 <- dpois(lambdaVals, 15)
+
+par(mfrow=c(1,2))
+barplot(poisCurve10,  ylab="Probability Density", xlab=expression(lambda), col=colvec, width=1, xlim=c(0,50), main="Lambda = 10", cex.lab=1.5)
+barplot(poisCurve15,  ylab="Probability Density", xlab=expression(lambda), col=colvec, width=1, xlim=c(0,50), main="Lambda = 15", cex.lab=1.5)
+par(mfrow=c(1,1))
+
+```
+
+
+Compare $p(D|\theta_{1})$ versus $p(D|\theta_{2})$
+
+## Likelihood Ratios
+<br>
+$$\LARGE G = \frac{L(H_1 | D)}{L(H_2 | D)}$$
+
+> - G is the ratio of *Maximum Likelihoods* from each model  
+\
+> - Used to compare goodness of fit of different models/hypotheses  
+\
+> - Most often, $\theta$ = MLE versus $\theta$ = 0  
+\
+> - $-2 log(G)$ is $\chi^2$ distributed  
+
+## Likelihood Ratio Test
+> - A new test statistic: $D = -2 log(G)$  
+\ 
+> - $= 2 [Log(L(H_2 | D)) - Log(L(H_1 | D))]$  
+\
+> - It's $\chi^2$ distributed!   
+>       - DF = Difference in # of Parameters  
+\
+> - If $H_1$ is the Null Model, we have support for our alternate model
+
+## Likelihood Ratio at Work
+
+```{r LL}
+lik <- sapply(lambdaVals, 
+             function(x) prod( dpois(counts, lambda=x) ) )
+
+ll_pois <- sapply(lambdaVals, 
+             function(x) sum( dpois(counts, lambda=x, log=TRUE) ) )
+
+plot(lambdaVals, ll_pois, ylab="Log-Likelihood", xlab=expression(lambda), pch=19, cex.lab=1.5)
+abline(v=17, lty=2, col="red", lwd=2)
+abline(v=14, lty=2, col="blue", lwd=2)
+```
+
+$$G = \frac{L(\lambda = 14 | D)}{L(\lambda = 17 | D)}$$  
+<span class="fragment">=`r lik[15]/max(lik)`</fragment>
+
+## Likelihood Ratio Test at Work
+```{r LL}
+```
+$$D = 2 [Log(L(\lambda = 14 | D)) - Log(L(\lambda = 17 | D))]$$
+<span class="fragment">=`r 2*(ll_pois[18] - ll_pois[15])` with 1DF</fragment>  
+<span class="fragment">p =`r round(pchisq(2*(ll_pois[18] - ll_pois[15]),1, lower.tail=FALSE),2)`</fragment>
+
+## Outline
+1. Review of Likelihood\
+\
+2. Comparing Models with Likelihood \
+\
+3. <font color="red">Linear Regression with Likelihood</font> \
+
+## Putting Likelihood Into Practice with Pufferfish
+```{r pufferload}
+puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
+```
+<div id = "left">
+- Pufferfish are toxic/harmful to predators  
+<br>
+- Batesian mimics gain protection from predation
+<br><br>
+- Evolved response to appearance?
+<br><br>
+- Researchers tested with mimics varying in toxic pufferfish resemblance
+</div>
+
+<div id = "right">
+![image](./images/11/puffer_mimics.jpg){width="80.00000%"}\
+</div>
+
+
+## Does Resembling a Pufferfish Reduce Predator Visits?
+```{r puffershow}
+pufferplot <- ggplot(puffer, mapping=aes(x=resemblance, y=predators)) +
+  geom_point(size=2) +
+  ylab("Predator Approaches per Trial") + 
+  xlab("Dissimilarity to Toxic Pufferfish") +
+  theme_bw(base_size=17)
+
+pufferplot
+```
+
+## The Steps of Statistical Modeling
+1. What is your question?
+2. What model of the world matches your question?
+3. Build a test
+4. Evaluate test assumptions
+5. Evaluate test results
+6. Visualize
+
+## The World of Pufferfish
+<p align='left'>**Data Generating Process:**</p>
+$$Visits \sim Resemblance$$<br>
+<center>Assume: Linearity (reasonable first approximation)</center>
+<br><br>
+<p align="left">**Error Generating Process:**</p>
+<center>Variation in Predator Behavior</center>
+
+## Quantiative Model of Process
+<br><br>
+$$\Large Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i$$
+<br><br><br>
+$$\Large \epsilon_i \sim N(0, \sigma)$$
+
+## Likelihood Function for Linear Regression
+<br><br><br>
+<center>Will often see:<br><br>
+$\large L(\theta | D) = \prod_{i=1}^n p(y_i\; | \; x_i;\ \beta_0, \beta_1, \sigma)$ </center>
+
+## Likelihood Function for Linear Regression
+<br><br>
+$$L(\theta_j | Data) = \prod_{i=1}^n \mathcal{N}(Visits_i\; |\; \beta_{0j} + \beta_{1j} Resemblance_i, \sigma_j)$$
+<br><br>
+where $\beta_{0j}, \beta_{1j}, \sigma_j$ are elements of $\theta_j$
+
+## Fit Your Model!
+```{r bblme, echo=TRUE}
+library(bbmle)
+
+puffer_mle <- mle2(predators ~ dnorm(b0 + b1*resemblance, sd = resid_sd),
+                   data=puffer, 
+                   start=list(b0=1, b1=1, resid_sd = 2))
+```
+
+## The *Same* Diagnostics
+<div id="left">
+```{r diag1, fig.height=6, fig.width=5}
+library(ggplot2)
+ggplot() +
+  aes(x=predict(puffer_mle), y=residuals(puffer_mle)) +
+  geom_point() + 
+  xlab("Fitted") + ylab("Observed") +
+  theme_bw(base_size=17)
+```
+</div>
+<div id="right">
+```{r diag2, fig.height=6, fig.width=5}
+qqnorm(residuals(puffer_mle), cex.lab=1.5)
+qqline(residuals(puffer_mle))
+```
+</div>
+
+## But - What do the Likelihood Profiles Look Like?
+```{r profile}
+plot(profile(puffer_mle), cex.lab=1.5)
+```
+
+Are these nice symmetric slices?
+
+## Evaluate Coefficients
+```{r mle_coef}
+knitr::kable(tidy(puffer_mle))
+```
+
+<br>
+Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Interval
+
+
+## Confidence Intervals
+Quadratic Assumption
+```{r mle_confint}
+knitr::kable(confint(puffer_mle))
+```
+
+<br><Br>
+Spline Fit to Likelihood Surface
+```{r mle_confint_spline}
+knitr::kable(confint(puffer_mle, method="spline"))
+```
+
+## To test the model, need an alternate hypothesis
+<br>
+```{r bblme_null, echo=TRUE}
+puffer_null_mle <- mle2(predators ~ dnorm(b0, sd = resid_sd),
+                   data=puffer, 
+                   start=list(b0=14, resid_sd = 10))
+```
+
+## Put it to the Likelihood Ratio Test!
+<Br>
+```{r mle_chisq}
+anova(puffer_mle, puffer_null_mle)
+```

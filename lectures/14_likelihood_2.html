@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="fitting-models-with-likelihood" class="slide level2">
+<h1>Fitting Models with Likelihood!</h1>
+<p><img src="images/14/scientists_see_the_world.jpg" style="width:45.0%" /></p>
+</section>
+<section id="outline" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Review of Likelihood<br />
+<br />
+</li>
+<li>Comparing Models with Likelihood<br />
+<br />
+</li>
+<li>Linear Regression with Likelihood<br />
+</li>
+</ol>
+</section>
+<section id="deriving-truth-from-data" class="slide level2">
+<h1>Deriving Truth from Data</h1>
+<ul>
+<li class="fragment"><strong>Frequentist Inference:</strong> Correct conclusion drawn from repeated experiments
+<ul>
+<li class="fragment">Uses p-values and CIs as inferential engine<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment"><strong>Likelihoodist Inference:</strong> Evaluate the weight of evidence for different hypotheses
+<ul>
+<li class="fragment">Derivative of frequentist mode of thinking<br />
+</li>
+<li class="fragment">Uses model comparison (sometimes with p-values…)<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment"><strong>Bayesian Inference:</strong> Probability of belief that is constantly updated
+<ul>
+<li class="fragment">Uses explicit statements of probability and degree of belief for inferences</li>
+</ul></li>
+</ul>
+</section>
+<section id="section" class="slide level2">
+<h1></h1>
+<p><br><br><br></p>
+<h1 style="text-align:left">
+Likelihood: how well data support a given hypothesis.
+</h2>
+<br />
+<br />
+
+<h4 style="text-align:left">
+<span class="fragment">Note: Each and every parameter choice IS a hypothesis</span>
+</h4>
+</section>
+<section id="likelihood-defined" class="slide level2">
+<h1>Likelihood Defined</h1>
+<p><br><br> <span class="math display">\[\Large L(H | D) = p(D | H)\]</span></p>
+<br />
+
+<p align="left">
+Where the D is the data and H is the hypothesis (model) including a both a data generating process with some choice of parameters (aften called <span class="math inline">\(\theta\)</span>). The error generating process is inherent in the choice of probability distribution used for calculation.
+</p>
+</section>
+<section id="example-of-maximum-likelihood-fit" class="slide level2">
+<h1>Example of Maximum Likelihood Fit</h1>
+<p>Let’s say we have counted 10 individuals in a plot. Given that the population is Poisson distributed, what is the value of <span class="math inline">\(\lambda\)</span>?</p>
+<div id="left" style="width:60%">
+<p><img src="14_likelihood_2_files/figure-revealjs/likelihoodSapply-1.jpeg" title="" alt="" width="576" /></p>
+</div>
+<div id="right", style="width:40%">
+<br><br>
+$$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$ 
+<br>where we search all possible values of &lambda;
+</div>
+</section>
+<section id="likelihood-function" class="slide level2">
+<h1>Likelihood Function</h1>
+<p><span class="math display">\[\Large p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}\]</span> <br><br></p>
+<ul>
+<li class="fragment">This is a <strong>Likelihood Function</strong> for one sample<br />
+- It is the Poisson Probability Density function<br />
+<br />
+</li>
+<li class="fragment"><span class="math inline">\(Dpois = \frac{\lambda^{x}e^{-\lambda}}{x!}\)</span><br />
+</li>
+</ul>
+</section>
+<section id="what-is-the-probability-of-the-data-given-the-parameter" class="slide level2">
+<h1>What is the probability of the data given the parameter?</h1>
+<div id="left", style="width:60%">
+<img src="14_likelihood_2_files/figure-revealjs/likelihoodDemo2-1.jpeg" title="" alt="" width="576" />
+
+</div>
+<div id="right", style="width:40%">
+<br><br>
+p(a and b) = p(a)p(b)  
+<br><br><br>
+$$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
+<br><br>
+<span class="fragment">$$    = \prod_{i=1}^n \frac{\theta^{x_i}e^{-\theta}}{x_!}$$</span>
+</div>
+</section>
+<section id="outline-1" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Review of Likelihood<br />
+<br />
+</li>
+<li><font color="red">Comparing Models with Likelihood</font><br />
+<br />
+</li>
+<li>Linear Regression with Likelihood<br />
+</li>
+</ol>
+</section>
+<section id="can-compare-pdata-h-for-alternate-parameter-values" class="slide level2">
+<h1>Can Compare p(data | H) for alternate Parameter Values</h1>
+<p><img src="14_likelihood_2_files/figure-revealjs/likelihoodDemo3-1.jpeg" title="" alt="" width="768" /></p>
+<p>Compare <span class="math inline">\(p(D|\theta_{1})\)</span> versus <span class="math inline">\(p(D|\theta_{2})\)</span></p>
+</section>
+<section id="likelihood-ratios" class="slide level2">
+<h1>Likelihood Ratios</h1>
+<p><br> <span class="math display">\[\LARGE G = \frac{L(H_1 | D)}{L(H_2 | D)}\]</span></p>
+<ul>
+<li class="fragment">G is the ratio of <em>Maximum Likelihoods</em> from each model<br />
+<br />
+</li>
+<li class="fragment">Used to compare goodness of fit of different models/hypotheses<br />
+<br />
+</li>
+<li class="fragment">Most often, <span class="math inline">\(\theta\)</span> = MLE versus <span class="math inline">\(\theta\)</span> = 0<br />
+<br />
+</li>
+<li class="fragment"><span class="math inline">\(-2 log(G)\)</span> is <span class="math inline">\(\chi^2\)</span> distributed</li>
+</ul>
+</section>
+<section id="likelihood-ratio-test" class="slide level2">
+<h1>Likelihood Ratio Test</h1>
+<ul>
+<li class="fragment">A new test statistic: <span class="math inline">\(D = -2 log(G)\)</span><br />
+ </li>
+<li class="fragment"><span class="math inline">\(= 2 [Log(L(H_2 | D)) - Log(L(H_1 | D))]\)</span><br />
+<br />
+</li>
+<li class="fragment">It’s <span class="math inline">\(\chi^2\)</span> distributed!
+<ul>
+<li class="fragment">DF = Difference in # of Parameters<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">If <span class="math inline">\(H_1\)</span> is the Null Model, we have support for our alternate model</li>
+</ul>
+</section>
+<section id="likelihood-ratio-at-work" class="slide level2">
+<h1>Likelihood Ratio at Work</h1>
+<p><img src="14_likelihood_2_files/figure-revealjs/LL-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="math display">\[G = \frac{L(\lambda = 14 | D)}{L(\lambda = 17 | D)}\]</span><br />
+<span class="fragment">=0.0494634</fragment></p>
+</section>
+<section id="likelihood-ratio-test-at-work" class="slide level2">
+<h1>Likelihood Ratio Test at Work</h1>
+<p><img src="14_likelihood_2_files/figure-revealjs/LL-1.jpeg" title="" alt="" width="768" /> <span class="math display">\[D = 2 [Log(L(\lambda = 14 | D)) - Log(L(\lambda = 17 | D))]\]</span> <span class="fragment">=6.0130449 with 1DF</fragment><br />
+<span class="fragment">p =0.01</fragment></p>
+</section>
+<section id="outline-2" class="slide level2">
+<h1>Outline</h1>
+<ol type="1">
+<li>Review of Likelihood<br />
+<br />
+</li>
+<li>Comparing Models with Likelihood<br />
+<br />
+</li>
+<li><font color="red">Linear Regression with Likelihood</font><br />
+</li>
+</ol>
+</section>
+<section id="putting-likelihood-into-practice-with-pufferfish" class="slide level2">
+<h1>Putting Likelihood Into Practice with Pufferfish</h1>
+<div id="left">
+<ul>
+<li>Pufferfish are toxic/harmful to predators<br />
+<br></li>
+<li>Batesian mimics gain protection from predation <br><br></li>
+<li>Evolved response to appearance? <br><br></li>
+<li>Researchers tested with mimics varying in toxic pufferfish resemblance</li>
+</ul>
+</div>
+<div id="right">
+<img src="images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
+
+</div>
+</section>
+<section id="does-resembling-a-pufferfish-reduce-predator-visits" class="slide level2">
+<h1>Does Resembling a Pufferfish Reduce Predator Visits?</h1>
+<p><img src="14_likelihood_2_files/figure-revealjs/puffershow-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="the-steps-of-statistical-modeling" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li>Evaluate test results</li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="the-world-of-pufferfish" class="slide level2">
+<h1>The World of Pufferfish</h1>
+<p align="left">
+<strong>Data Generating Process:</strong>
+</p>
+<span class="math display">\[Visits \sim Resemblance\]</span><br>
+<center>
+Assume: Linearity (reasonable first approximation)
+</center>
+<br><br>
+<p align="left">
+<strong>Error Generating Process:</strong>
+</p>
+<center>
+Variation in Predator Behavior
+</center>
+</section>
+<section id="quantiative-model-of-process" class="slide level2">
+<h1>Quantiative Model of Process</h1>
+<p><br><br> <span class="math display">\[\Large Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i\]</span> <br><br><br> <span class="math display">\[\Large \epsilon_i \sim N(0, \sigma)\]</span></p>
+</section>
+<section id="likelihood-function-for-linear-regression" class="slide level2">
+<h1>Likelihood Function for Linear Regression</h1>
+<br><br><br>
+<center>
+Will often see:<br> <span class="math inline">\(\large L(\theta | D) = \prod_{i=1}^n p(y_i\; | \; x_i;\ \beta_0, \beta_1, \sigma)\)</span>
+</center>
+</section>
+<section id="likelihood-function-for-linear-regression-1" class="slide level2">
+<h1>Likelihood Function for Linear Regression</h1>
+<p><br><br> <span class="math display">\[L(\theta_j | Data) = \prod_{i=1}^n \mathcal{N}(Visits_i\; |\; \beta_{0j} + \beta_{1j} Resemblance_i, \sigma_j)\]</span> <br><br> where <span class="math inline">\(\beta_{0j}, \beta_{1j}, \sigma_j\)</span> are elements of <span class="math inline">\(\theta_j\)</span></p>
+</section>
+<section id="fit-your-model" class="slide level2">
+<h1>Fit Your Model!</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bbmle)
+
+puffer_mle &lt;-<span class="st"> </span><span class="kw">mle2</span>(predators ~<span class="st"> </span><span class="kw">dnorm</span>(b0 +<span class="st"> </span>b1*resemblance, <span class="dt">sd =</span> resid_sd),
+                   <span class="dt">data=</span>puffer, 
+                   <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">b0=</span><span class="dv">1</span>, <span class="dt">b1=</span><span class="dv">1</span>, <span class="dt">resid_sd =</span> <span class="dv">2</span>))</code></pre></div>
+</section>
+<section id="the-same-diagnostics" class="slide level2">
+<h1>The <em>Same</em> Diagnostics</h1>
+<div id="left">
+<p><img src="14_likelihood_2_files/figure-revealjs/diag1-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+<div id="right">
+<p><img src="14_likelihood_2_files/figure-revealjs/diag2-1.jpeg" title="" alt="" width="480" /></p>
+</div>
+</section>
+<section id="but---what-do-the-likelihood-profiles-look-like" class="slide level2">
+<h1>But - What do the Likelihood Profiles Look Like?</h1>
+<p><img src="14_likelihood_2_files/figure-revealjs/profile-1.jpeg" title="" alt="" width="768" /></p>
+<p>Are these nice symmetric slices?</p>
+</section>
+<section id="evaluate-coefficients" class="slide level2">
+<h1>Evaluate Coefficients</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">b0</td>
+<td style="text-align: right;">1.924604</td>
+<td style="text-align: right;">1.4291143</td>
+<td style="text-align: right;">1.346711</td>
+<td style="text-align: right;">0.1780732</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">b1</td>
+<td style="text-align: right;">2.989502</td>
+<td style="text-align: right;">0.5420939</td>
+<td style="text-align: right;">5.514730</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">resid_sd</td>
+<td style="text-align: right;">2.896527</td>
+<td style="text-align: right;">0.4579823</td>
+<td style="text-align: right;">6.324540</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+</tbody>
+</table>
+<p><br> Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Interval</p>
+</section>
+<section id="confidence-intervals" class="slide level2">
+<h1>Confidence Intervals</h1>
+<p>Quadratic Assumption</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">2.5 %</th>
+<th style="text-align: right;">97.5 %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>b0</td>
+<td style="text-align: right;">-1.016771</td>
+<td style="text-align: right;">4.866158</td>
+</tr>
+<tr class="even">
+<td>b1</td>
+<td style="text-align: right;">1.873731</td>
+<td style="text-align: right;">4.105253</td>
+</tr>
+<tr class="odd">
+<td>resid_sd</td>
+<td style="text-align: right;">2.187663</td>
+<td style="text-align: right;">4.092085</td>
+</tr>
+</tbody>
+</table>
+<p><br><Br> Spline Fit to Likelihood Surface</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">2.5 %</th>
+<th style="text-align: right;">97.5 %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>b0</td>
+<td style="text-align: right;">-1.016771</td>
+<td style="text-align: right;">4.866158</td>
+</tr>
+<tr class="even">
+<td>b1</td>
+<td style="text-align: right;">1.873731</td>
+<td style="text-align: right;">4.105253</td>
+</tr>
+<tr class="odd">
+<td>resid_sd</td>
+<td style="text-align: right;">2.187663</td>
+<td style="text-align: right;">4.092085</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="to-test-the-model-need-an-alternate-hypothesis" class="slide level2">
+<h1>To test the model, need an alternate hypothesis</h1>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">puffer_null_mle &lt;-<span class="st"> </span><span class="kw">mle2</span>(predators ~<span class="st"> </span><span class="kw">dnorm</span>(b0, <span class="dt">sd =</span> resid_sd),
+                   <span class="dt">data=</span>puffer, 
+                   <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">b0=</span><span class="dv">14</span>, <span class="dt">resid_sd =</span> <span class="dv">10</span>))</code></pre></div>
+</section>
+<section id="put-it-to-the-likelihood-ratio-test" class="slide level2">
+<h1>Put it to the Likelihood Ratio Test!</h1>
+<p><Br></p>
+<pre><code>Likelihood Ratio Tests
+Model 1: puffer_mle, predators~dnorm(b0+b1*resemblance,sd=resid_sd)
+Model 2: puffer_null_mle, predators~dnorm(b0,sd=resid_sd)
+  Tot Df Deviance Chisq Df Pr(&gt;Chisq)    
+1      3   99.298                        
+2      2  117.788 18.49  1  1.708e-05 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
