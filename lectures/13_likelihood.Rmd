@@ -12,6 +12,14 @@ output:
     lib_dir: libs
     css: style.css
 ---
+## Announcements
+1. Schedule a meeting with me this week or next to discuss final project\
+\
+2. Exam questions starting to post Thursday\
+\
+3. Three weeks for exam! \
+\
+4. https://etherpad.wikimedia.org/p/607-likelihood
 
 ## Likelihood!
 ![](images/13/i_can_haz_statz_fb_lolstatz.png){width=45%}
@@ -27,6 +35,7 @@ library(tidyr)
 library(ggplot2)
 
 ```
+
 
 ## Review
 
@@ -522,6 +531,13 @@ Estimates: mean = `r round(m_seals, 2)`, SD = `r round(s_seals, 2)`
 
 4.  Specification of Likelihood Function Unwieldy
 
+## Profile CIs
+
+1. For each value of the parameter of interest, get the MLE of the other paramter  
+\
+2. Use this as your **profile** likelihood for your parameter  
+\ 
+3. Values of your parameter with a Log Likelihood 1.92 from the peak are in your CI
 
 
 ## Likelihood Profile of One Coefficient Along ML Estimates of the Other
@@ -543,64 +559,46 @@ ggplot(data = sealSurf %>% filter(m %in% m_levs)) +
 ```
 
 ## Likelihood Profile of One Coefficient Along ML Estimates of the Other
+```{r profileBrute_mean_all}
+mean_prof <- sealSurf %>%
+  group_by(m) %>%
+  filter(ll == max(ll)) %>%
+  ungroup()
 
-```{r profileBrute_SD, cache=TRUE}
-s_levs <- seal_s[c(100,300,500)]
-s_names <- paste("SD = ", round(s_levs, 2))
-names(s_names) <- s_levs
-
-ggplot(data = sealSurf %>% filter(s %in% s_levs)) +
-  geom_line(mapping = aes(x=m, y=ll)) +
-  facet_wrap(~s, labeller = labeller(s = s_names)) +
-  ggtitle("ML Curve for Mean at Different SD Values") +
+mean_prof_plot <- ggplot(data = mean_prof) +
+  geom_line(aes(x=m, y=ll))+
   ylab("Log Likelihood") + xlab("Mean") +
   theme_bw(base_size=17) +
-  geom_hline(data = sealSurf %>% filter(s %in% s_levs) %>% 
-               group_by(s) %>% summarise(ll = max(ll)) %>% ungroup(),
-             mapping=aes(yintercept=ll), lty=2, col="red")
+  ggtitle("ML Curve for Mean Optimized for SD")
+
+mean_prof_plot
 ```
 
-## Likelihood Profile of Mean  Along ML Estimates of the SD
-```{r showMeanLik}
-sealSurf_M <- sealSurf %>% 
-  group_by(s) %>%
-  summarise( m = m[which(ll == max(ll))],
-             ll = max(ll)
-           ) %>%
-  ungroup()
+## Likelihood Profile of One Coefficient Along ML Estimates of the Other
+```{r profileBrute_mean_all_2}
 
-
-qplot(m, s, size=as.numeric(ll), data=sealSurf_M, geom="line") + 
-  geom_line(mapping = aes(size=as.numeric(ll)),color="blue") +
-  xlab("Mean") + ylab("S") +
-  scale_size_continuous(guide=guide_legend(title="Log Likelihood")) +
-  theme_bw(base_size=17)
-
+mean_prof_plot +
+  geom_hline(yintercept = max(mean_prof$ll)-1.92, color="blue", lty=2, lwd=2)
 ```
 
-## Likelihood Profile of the SD  Along ML Estimates of the Mean
-
-```{r profile_mean}
-sealSurf_S <- sealSurf %>% 
-  group_by(m) %>%
-  summarise( s = s[which(ll == max(ll))],
-             ll = max(ll)
-           ) %>%
-  ungroup()
-
-
-
-qplot(m, s, size=as.numeric(ll), data=sealSurf_S, geom="line") + 
-  geom_line(mapping = aes(size=as.numeric(ll)), color="red") +
-  xlab("Mean") + ylab("SD") +
-  scale_size_continuous(guide=guide_legend(title="Log Likelihood")) +
-  theme_bw(base_size=17)
-
-```
 
 ## Likelihood Profile of One Coefficient Along ML Estimates of the Other
 <font color="red">Mean profile</font>, <font color="blue">SD Profile</font>
 ```{r profileBrute2}
+sealSurf_S <- sealSurf %>% 
+  group_by(m) %>%
+  summarise( s = s[which(ll == max(ll))],
+             ll = max(ll)
+  ) %>%
+  ungroup()
+
+sealSurf_M <- sealSurf %>% 
+  group_by(s) %>%
+  summarise( m = m[which(ll == max(ll))],
+             ll = max(ll)
+  ) %>%
+  ungroup()
+
 ll_contour 
 ``` 
 
@@ -672,7 +670,7 @@ We use <span style="color:red">Algorithms</span>
 
 > -   Newtown-Raphson (algorithmicly implemented in <span>nlm</span> and
     <span>BFGS</span> method) uses derivatives
->     - good for smooth surfaces & good start values
+>     - good for smooth surfaces & good start values  
 \
 > -   Brent’s Method - for single parameter fits  
 \ 
@@ -682,7 +680,9 @@ We use <span style="color:red">Algorithms</span>
 > -   Simulated Annealing (<span>SANN</span>) uses Metropolis Algorithm search
 >     - global solution, but slow  
 
-**If your algorithm fails to converge, you cannot evaluate your model or
-coefficients**
+## Final Note on Searching Likelihood Space
+<br><br><br><br>
+<h4>**<font color="red">If your algorithm fails to converge, you cannot evaluate your model or
+coefficients</font>**</h4>
 
 

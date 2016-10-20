@@ -77,6 +77,21 @@
     <div class="slides">
 
 
+<section id="announcements" class="slide level2">
+<h1>Announcements</h1>
+<ol type="1">
+<li>Schedule a meeting with me this week or next to discuss final project<br />
+<br />
+</li>
+<li>Exam questions starting to post Thursday<br />
+<br />
+</li>
+<li>Three weeks for exam!<br />
+<br />
+</li>
+<li><a href="https://etherpad.wikimedia.org/p/607-likelihood" class="uri">https://etherpad.wikimedia.org/p/607-likelihood</a></li>
+</ol>
+</section>
 <section id="likelihood" class="slide level2">
 <h1>Likelihood!</h1>
 <p><img src="images/13/i_can_haz_statz_fb_lolstatz.png" style="width:45.0%" /></p>
@@ -391,32 +406,39 @@ Estimates: mean = 3730.05, SD = 1293.4
 <li><p>Specification of Likelihood Function Unwieldy</p></li>
 </ol>
 </section>
+<section id="profile-cis" class="slide level2">
+<h1>Profile CIs</h1>
+<ol type="1">
+<li>For each value of the parameter of interest, get the MLE of the other paramter<br />
+<br />
+</li>
+<li>Use this as your <strong>profile</strong> likelihood for your parameter<br />
+ </li>
+<li>Values of your parameter with a Log Likelihood 1.92 from the peak are in your CI</li>
+</ol>
+</section>
 <section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other" class="slide level2">
 <h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
 <p><img src="13_likelihood_files/figure-revealjs/profileBrute_mean-1.jpeg" title="" alt="" width="768" /></p>
 </section>
 <section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-1" class="slide level2">
 <h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
-<p><img src="13_likelihood_files/figure-revealjs/profileBrute_SD-1.jpeg" title="" alt="" width="768" /></p>
-</section>
-<section id="likelihood-profile-of-mean-along-ml-estimates-of-the-sd" class="slide level2">
-<h1>Likelihood Profile of Mean Along ML Estimates of the SD</h1>
-<p><img src="13_likelihood_files/figure-revealjs/showMeanLik-1.jpeg" title="" alt="" width="768" /></p>
-</section>
-<section id="likelihood-profile-of-the-sd-along-ml-estimates-of-the-mean" class="slide level2">
-<h1>Likelihood Profile of the SD Along ML Estimates of the Mean</h1>
-<p><img src="13_likelihood_files/figure-revealjs/profile_mean-1.jpeg" title="" alt="" width="768" /></p>
+<p><img src="13_likelihood_files/figure-revealjs/profileBrute_mean_all-1.jpeg" title="" alt="" width="768" /></p>
 </section>
 <section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-2" class="slide level2">
 <h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
-<p><font color="red">Mean profile</font>, <font color="blue">SD Profile</font> <img src="13_likelihood_files/figure-revealjs/profileBrute2-1.jpeg" title="" alt="" width="768" /></p>
+<p><img src="13_likelihood_files/figure-revealjs/profileBrute_mean_all_2-1.jpeg" title="" alt="" width="768" /></p>
 </section>
 <section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-3" class="slide level2">
+<h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
+<p><font color="red">Mean profile</font>, <font color="blue">SD Profile</font> <img src="13_likelihood_files/figure-revealjs/profileBrute2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-4" class="slide level2">
 <h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
 <p><font color="red">Mean profile</font>, <font color="blue">SD Profile</font></p>
 <p><img src="13_likelihood_files/figure-revealjs/profileBrute3-1.jpeg" title="" alt="" width="768" /></p>
 </section>
-<section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-4" class="slide level2">
+<section id="likelihood-profile-of-one-coefficient-along-ml-estimates-of-the-other-5" class="slide level2">
 <h1>Likelihood Profile of One Coefficient Along ML Estimates of the Other</h1>
 <p><font color="red">Mean profile</font>, <font color="blue">SD Profile</font></p>
 <p><img src="13_likelihood_files/figure-revealjs/profileBrute4-1.jpeg" title="" alt="" width="768" /></p>
@@ -451,6 +473,7 @@ sd   1275.384 1311.887</code></pre>
 <li class="fragment">Newtown-Raphson (algorithmicly implemented in <span>nlm</span> and <span>BFGS</span> method) uses derivatives
 <ul>
 <li class="fragment">good for smooth surfaces &amp; good start values<br />
+<br />
 </li>
 </ul></li>
 <li class="fragment">Brent’s Method - for single parameter fits<br />
@@ -465,7 +488,13 @@ sd   1275.384 1311.887</code></pre>
 <li class="fragment">global solution, but slow</li>
 </ul></li>
 </ul>
-<p><strong>If your algorithm fails to converge, you cannot evaluate your model or coefficients</strong></p>
+</section>
+<section id="final-note-on-searching-likelihood-space" class="slide level2">
+<h1>Final Note on Searching Likelihood Space</h1>
+<br><br><br><br>
+<h4>
+<strong><font color="red">If your algorithm fails to converge, you cannot evaluate your model or coefficients</font></strong>
+</h4>
 </section>
     </div>
   </div>
