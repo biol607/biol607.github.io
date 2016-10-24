@@ -73,34 +73,33 @@ __Lab Topic:__ Bayesian computation in R, Fitting a line with Bayesian technique
 __Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1]((http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and Chapter 2, [R Users will Now Inevitably Become Bayesians](https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/)  
 __Additional Reading on rstanarm__: [How to use it](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html), [Linear Models in rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html), [more vignettes](https://cran.r-project.org/web/packages/rstanarm/index.html), [rstanarm and more](http://andrewgelman.com/2016/01/14/rstanarm-and-more/)  
   
-  
 ### Week 9.   
+__Lecture:__ Functions, Tidy data for statistical analysis  
+__Reading:__ Borer et al. 2009. [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), G&W Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)     
+    
+  
+### Week 10.   
 __Lecture:__ Experimental design and ANOVA  
 __Lab Topic:__ Basic ANOVA, Midterm work session	  
 __Reading:__ W&S Chapter 14-15  
   
   
-### Week 10.   
+### Week 11.   
 __Lectures:__ Experimental Design in a Multicausal World  
 __Lab Topic:__ Factorial ANOVA, Discussion of Hurlbert  
 __Reading:__ W&S 18, Hurlbert 1984  
   
   
-### Week 11.   
+### Week 12.   
 __Lecture:__ Multiple Regression and Interaction Effects, Information Theoretic Approaches  
 __Lab Topic:__ Multiple Regression, Multimodel Inference  
 __Readings:__ Symonds and Moussalli 2010, Ecology Special Section on P Values  
   
   
-### Week 12.   
+### Week 13.   
 __Lecture:__ Entering a non-normal world - Modeling count data with Genearlized linear models. Overdispersed continuous data.  
 __Lab Topic:__ Generalized Linear Models. Diagnostics with DHARMa.  
 __Reading:__ O'Hara 2009, O'Hara and Kotze 2010, Wharton and Hui 2011  
-  
-    
-### Week 13.   
-__Lecture:__ Tidy data for statistical analysis  
-__Reading:__ Borer et al. 2009. https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/, G&W 12, 14, 16  
   
   
 ### Week 14.   
