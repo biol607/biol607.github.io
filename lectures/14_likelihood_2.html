@@ -346,7 +346,7 @@ Variation in Predator Behavior
 <h1>Likelihood Function for Linear Regression</h1>
 <br><br><br>
 <center>
-Will often see:<br> <span class="math inline">\(\large L(\theta | D) = \prod_{i=1}^n p(y_i\; | \; x_i;\ \beta_0, \beta_1, \sigma)\)</span>
+Will often see:<br><br> <span class="math inline">\(\large L(\theta | D) = \prod_{i=1}^n p(y_i\; | \; x_i;\ \beta_0, \beta_1, \sigma)\)</span>
 </center>
 </section>
 <section id="likelihood-function-for-linear-regression-1" class="slide level2">
@@ -488,6 +488,141 @@ Model 2: puffer_null_mle, predators~dnorm(b0,sd=resid_sd)
 2      2  117.788 18.49  1  1.708e-05 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</section>
+<section id="compare-to-linear-regression" class="slide level2">
+<h1>Compare to Linear Regression</h1>
+<p>Likelihood:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">b0</td>
+<td style="text-align: right;">1.924604</td>
+<td style="text-align: right;">1.4291143</td>
+<td style="text-align: right;">1.346711</td>
+<td style="text-align: right;">0.1780732</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">b1</td>
+<td style="text-align: right;">2.989502</td>
+<td style="text-align: right;">0.5420939</td>
+<td style="text-align: right;">5.514730</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">resid_sd</td>
+<td style="text-align: right;">2.896527</td>
+<td style="text-align: right;">0.4579823</td>
+<td style="text-align: right;">6.324540</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+</tbody>
+</table>
+<p><br><br> Least Squares</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">1.924694</td>
+<td style="text-align: right;">1.5064163</td>
+<td style="text-align: right;">1.277664</td>
+<td style="text-align: right;">0.2176012</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">resemblance</td>
+<td style="text-align: right;">2.989492</td>
+<td style="text-align: right;">0.5714163</td>
+<td style="text-align: right;">5.231724</td>
+<td style="text-align: right;">0.0000564</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="compare-to-linear-regression-f-and-chisq" class="slide level2">
+<h1>Compare to Linear Regression: F and Chisq</h1>
+<p>Likelihood:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">b0</td>
+<td style="text-align: right;">1.924604</td>
+<td style="text-align: right;">1.4291143</td>
+<td style="text-align: right;">1.346711</td>
+<td style="text-align: right;">0.1780732</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">b1</td>
+<td style="text-align: right;">2.989502</td>
+<td style="text-align: right;">0.5420939</td>
+<td style="text-align: right;">5.514730</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">resid_sd</td>
+<td style="text-align: right;">2.896527</td>
+<td style="text-align: right;">0.4579823</td>
+<td style="text-align: right;">6.324540</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+</tbody>
+</table>
+<p><br><br> Least Squares</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>resemblance</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">255.1532</td>
+<td style="text-align: right;">255.153152</td>
+<td style="text-align: right;">27.37094</td>
+<td style="text-align: right;">5.64e-05</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">167.7968</td>
+<td style="text-align: right;">9.322047</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
 </section>
     </div>
   </div>

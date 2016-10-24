@@ -336,3 +336,27 @@ puffer_null_mle <- mle2(predators ~ dnorm(b0, sd = resid_sd),
 ```{r mle_chisq}
 anova(puffer_mle, puffer_null_mle)
 ```
+
+## Compare to Linear Regression
+Likelihood:
+```{r mle_coef}
+```
+
+<br><br>
+Least Squares
+```{r ls_coef}
+lm_mod <- lm(predators ~ resemblance, data=puffer)
+knitr::kable(tidy(lm_mod))
+```
+
+
+## Compare to Linear Regression: F and Chisq
+Likelihood:
+```{r mle_coef}
+```
+
+<br><br>
+Least Squares
+```{r ls_anova}
+knitr::kable(anova(lm_mod))
+```
