@@ -49,6 +49,7 @@ __Lab Topic:__ [Statistical analysis functions for t and $\chi^2$ in R](lab/05_c
 __Reading:__ W&S 8-12, G&W Chapter 10, 20  
 __Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes/biol607/readings/Wasserstein_Lazar_2016_The_American_Statistician.pdf), And choose one of the accompanying [rejoinders](http://byrneslab.net/classes/biol607/readings/p_value_statements.zip)
 (sign up in [here](https://etherpad.wikimedia.org/p/607-t_tests))  (also feel free to read them all)
+__Additional Readings on P-Values__: [Peaceful negotiation in the face of so-called ‘methodological terrorism’](https://errorstatistics.com/2016/10/01/a-new-front-in-the-statistics-wars-peaceful-negotiation-in-the-face-of-so-called-methodological-terrorism/), [P-value madness: A puzzle about the latest test ban (or ‘don’t ask, don’t tell’)](https://errorstatistics.com/2015/10/10/p-value-madness-a-puzzle-about-the-latest-test-ban-or-dont-ask-dont-tell/), [The Paradox of Replication, and the vindication of the P-value (but she can go deeper) ](https://errorstatistics.com/2015/08/31/the-paradox-of-replication-and-the-vindication-of-the-p-value-but-she-can-go-deeper-i/)  
 __Etherpad__: https://etherpad.wikimedia.org/p/607-t_tests  
 __In Class Code:__ [t and chi square](in_class_code_2016/06_t_chisq.R)
   
