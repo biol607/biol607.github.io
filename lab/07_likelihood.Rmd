@@ -5,7 +5,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 library(dplyr)
 library(tidyr)
 library(purrr)
@@ -225,9 +225,305 @@ So, now we see the CI of our SD is from 1280 to 1310 - at least from this grid.
 
 So, you want to fit a model with multiple parameters using Likelihood? We've seen that brute force is not the way. We need algorithms to search parameter space. R has multiple optimizer functions that seek to fund the minimum value of a function (likelihood or otherwise). `bbmle` is Ben Bolker's package that seeks to create an easy interface to these functions. You can tweak to your heart's delight all of the details of the optimizer, but at the end of the day, much of the code is fairly straightforward.
 
-<!--
 ##### 4.1 Seal Regression with `mle2`
 
-The function at the core of `bbmle` is `mle2`.
+The function at the core of `bbmle` is `mle2`. Let's fit the seal regression as before, and look at what is different.
 
--->
+```{r bbmle_seals}
+seals <- read.csv("data/06/17e8ShrinkingSeals Trites 1996.csv")
+
+seal_mle <- mle2(length.cm ~ dnorm(b0 + b1 * age.days, resid_sd),
+                 start = list(b0 = 5, b1 = 5, resid_sd = 500),
+                 data = seals)
+```
+
+First, whoah! We had to specify `dnorm` to say that this was a normal error distribution! In essence, we were specifying our likelihood function here explicitly.  That's new.
+
+Second, we had to **name** our coefficients. Explicitly. And write out our model. No more canned routines for us.
+
+Third, we had to specify a list of start values. Remember, we're using an algorithm. So where you you start?  This opens up a host of problems - you can fall into a local minimum. So, always best to start with different sets of start values to make sure that's not a problem. Particularly for more complex models.
+
+Last, that should have thrown a bunch of warnings for you - these warnings indicate that the algorithm tried to explore non-possible values (negative SDs, actually). This happens.
+
+Try different start values. Do you get different errors or warnings?
+
+##### 4.2 Testing Assumptions
+
+So now that we have this fit object, how do we test our assumptions. Let's remember what they are:
+
+1. No relationship between fitted and residual values
+2. Residuals follow normal distribution
+3. The surface is peaked approximately symetrically
+
+Let's break these down one by one. There is no nice `plot()` method here, so we'll have to do it by hand.
+
+First, fitted and residual. We can extract both of these from the model object and plot them using `predict()` and `residuals()`. Note, using `predict()` with no new data merely get the fitted values.
+
+```{r fit_res}
+fitted <- predict(seal_mle)
+res <- residuals(seal_mle)
+
+qplot(fitted, res)
+```
+
+If we wanted to add a spline, we could have used `stat_smooth()` with no method argument.
+
+Second, qq! Well, we have our residuals, so we can use `qqnorm()` and ``qqline()` as we did with t-tests. Or plot a histogram.
+
+```{r qq}
+
+qqnorm(res)
+qqline(res)
+
+hist(res)
+```
+
+Again, looks good!
+
+Now, what about looking at the surface? We don't have a nice way of visualizing a 4-D surface, so, instead we look at the profile likelihoods of each parameter. For that, we use the `profile` function which gets a profile of any function that can be accessed with the `logLik()` function. Note, this might take some time.
+
+```{r profile_mle2}
+plot(profile(seal_mle))
+```
+
+This largely looks ok...except the prfile for b0 looks somewhat suspicious. Welcome to the world of fiddling with likelihood. One issue here might be that it's not searching a wide enough region. We can manually set the region to search using the `std.err` argument. I'll try setting that to 0.05, just to give it an area to search.
+
+```{r profile_b0}
+plot(profile(seal_mle, which="b0", std.err=0.05))
+```
+
+Voila. Explore `?profile` for other tricks here. It can get a little hairy.
+
+##### 4.3 Coefficients and CIs
+
+OK, now that we've done this and feel comfortable with our fit, what are our coefficients?
+
+```{r mle2_summary}
+summary(seal_mle)
+
+#or
+
+broom::tidy(seal_mle)
+```
+
+First, let's see how that compares to an `lm()` fit.
+
+```{r lm}
+broom::tidy(lm(length.cm ~ age.days, data=seals))
+```
+
+Not bad. Pretty close.
+
+Note, the SEs are based on the assumption that the profiles are well behaved. If we want to get into more detail and change that assumption, we use `confint()`.
+
+```{r confint_mle}
+#based off of profile
+confint(seal_mle)
+
+#based off of apprxoimation
+confint(seal_mle, method="uniroot")
+
+#based off of quadratic assumption
+confint(seal_mle, method="quad")
+```
+
+You can see the last method prodiced similar results to searching the profile - and didn't fall prey to the profile problem we hit earlier.
+
+##### 4.4 Model Comparison
+So, how do we compare models? Unfortunately, there's not an automated way. This is likelihood, so you have to specify your null or alternate models. You have to think. In this case, a null model would only have an intercept - a mean - term.
+
+```{r null_mod}
+
+seal_mle_null <- mle2(length.cm ~ dnorm(b0, resid_sd),
+                 start = list(b0 = 5, resid_sd = 500),
+                 data = seals)
+```
+
+We can now compare these models using a LRT.
+
+```{r mod_compare}
+anova(seal_mle, seal_mle_null)
+```
+
+Yes! They are different!  If we wanted to do an AIC comparison
+
+```{r aic_compare}
+AIC(seal_mle)
+AIC(seal_mle_null)
+```
+
+Quite different! Even after adjusting for parsiony, we need Age to understand what is going on here.
+
+##### 4.6 Algorithms
+
+So, one thing that has been annoying up until now is these warnings we get due to our algorithm putting a negative value on our SD. Now, there are a number of different algorithms out there. Some even have constraints!
+
+Now, when I started developing this example, I began with a resid_sd startvalue of 5 - close to the real one. I immediately got convergence errors and a note about setting SDs to 1. If I summarized it, I would get no SE for some coefficients
+```{r start}
+summary(mle2(length.cm ~ dnorm(b0 + b1*age.days, resid_sd),
+                 start = list(b0 = 5, b1=5, resid_sd = 5),
+                 data = seals))
+```
+
+How do I solve this? One idea is to try different methods or optimizers. First, let's try simulated annealing, which searches parameter space, but is slow.
+
+```{r optimizers, cache=TRUE}
+#Simulated annealing
+summary(mle2(length.cm ~ dnorm(b0 + b1*age.days, resid_sd),
+                 start = list(b0 = 5, b1 = 5, resid_sd = 5),
+                 data = seals, method="SANN"))
+```
+
+A second option is to use a method that includes a constraint. L-BFGS-B allows for box constraints (set a lower and upper bound), so, we can set the lower bound of resid_sd to something very small - close to 0 even.
+
+The bobyqa algorithm in the `optimx` package also allows for box constraints.
+
+```{r optimizers_constraint, cache=TRUE}
+#"L-BFGS-B
+summary(mle2(length.cm ~ dnorm(b0 + b1*age.days, resid_sd),
+                 start = list(b0 = 5, b1=5, resid_sd = 5),
+                 data = seals, method="L-BFGS-B", 
+                 lower = c(b0 = -Inf, b1 = -Inf, resid_sd = 0.0001),
+                 upper = c(b0 = Inf, b1 = Inf, resid_sd = Inf)))
+
+#bobyqa
+library(optimx)
+summary(mle2(length.cm ~ dnorm(b0 + b1*age.days, resid_sd),
+                 start = list(b0 = 5, b1=5, resid_sd = 5),
+                 data = seals, 
+                 optimizer = "optimx", method="bobyqa", 
+                 lower = c(b0 = -Inf, b1 = -Inf, resid_sd = 0.0001),
+                 upper = c(b0 = Inf, b1 = Inf, resid_sd = Inf)))
+                 
+```
+
+OK, that works!
+
+Which optimizer is right for you I will leave as a further topic for your research as you get into progressively complex likelihood methods.
+
+
+##### 4.5 Faded Examples
+Let's revisit the examples from our lm lab the other day.
+
+#### A Fat Model
+Fist, the relationship between how lean you are and how quickly you lose fat. Implement this to get a sense ot the general workflow for analysis
+
+```{r, eval=FALSE}
+fat <- read.csv("./data/06/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
+
+#initial visualization to determine if lm is appropriate
+fat_plot <- ggplot(data=fat, aes(x=leanness, y=lossrate)) + 
+  geom_point()
+fat_plot
+
+#get some sensible start values
+lm_coefs <- coef(lm(lossrate ~ leanness, data=fat))
+
+fat_mod <- mle2(lossrate ~ dnorm(b0 + b1*leanness, resid_sd),
+                start = list(b0 = lm_coefs[1], b1 =lm_coefs[2], resid_sd = 4),
+                data = fat)
+  
+  
+
+#assumptions
+fat_fit <- predict(fat_mod)
+fat_res <- residuals(fat_mod)
+
+qplot(fat_fit, fat_res)
+
+qqnorm(fat_res)
+qqline(fat_res)
+
+plot(profile(fat_mod))
+
+#LRT test of model
+fat_mod_null <- mle2(lossrate ~ dnorm(b0 , resid_sd),
+                start = list(b0 = 1, resid_sd = 4),
+                data = fat)
+  
+anova(fat_mod, fat_mod_null)
+
+#t-tests of parameters
+summary(fat_mod)
+```
+
+#### An Itchy Followup  
+For your first faded example, let's look at the relationship between DEET and mosquito bites.
+
+```{r eval=FALSE}
+deet <- read.csv("./data/06/17q24DEETMosquiteBites.csv")
+
+deet_plot <- ggplot(data=___, aes(x=dose, y=bites)) + 
+  geom_point()
+
+deet_plot
+
+#get start values
+deet_coef <- coef(lm(bites ~ dose, data=deet))
+
+deet_mod <- <- mle2(___ ~ dnorm(b0 + b1*dose, resid_sd),
+                start = list(b0 = deet_coef[1], b1 =deet_coef[2], resid_sd = 4),
+                data = ____)
+  
+
+#assumptions
+deet_fit <- predict(____)
+deet_res <- residuals(____)
+
+qplot(deet_fit, deet_res)
+
+qqnorm(_____)
+qqline(_____)
+
+plot(profile(____))
+
+#f-tests of model
+deet_mod_null <- mle2(____ ~ dnorm(b0 + _____),
+                start = list(b0 = 1, resid_sd = 4),
+                data = deet)
+
+anova(___, _____)
+
+#t-tests of parameters
+summary(___)
+
+```
+
+#### Long-Lived species and Home Ranges
+Do longer lived species also have larger home ranges? Let's test this!
+```{r eval=FALSE}
+
+zoo <- read.csv("./data/06/17q02ZooMortality Clubb and Mason 2003 replica.csv")
+
+zoo_plot <- ggplot(data=___, aes(x=mortality, y=homerange)) + 
+  ___()
+
+___
+
+zoo_coef <- coef(___(___~___, data=___))
+
+
+zoo_mod <- <- mle2(___ ~ dnorm(____ + ____*mortality, ____),
+                start = list(____ = zoo_coef[1], ____ =zoo_coef[2], ____ = 4),
+                data = ____)
+
+#assumptions
+zoo_fit <- ____(____)
+zoo_res <- ____(____)
+
+qplot(____, ____)
+
+qqnorm(____)
+qqline(____)
+
+plot(_____(____))
+
+#f-tests of model
+zoo_mod_null <- <- mle2(___ ~ dnorm(____, ____),
+                start = list(____ = 1, ____ = 4),
+                data = ____)
+anova(___,_____)
+
+#z-tests of parameters
+_____(___)
+```
