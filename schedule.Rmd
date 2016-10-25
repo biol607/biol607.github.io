@@ -65,7 +65,7 @@ __Lecture:__ [Linear Model Power Analysis](lab/06a_power_analysis.html), [Likeli
 __Lab Topic:__ [Calculating and visualizing Likelihoods, fitting a line with bbmle](lab/07_likelihood.html)\
 __Reading:__ W&S 20, G&W Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-likelihood  
-__In Class Code:__ [power analysis](in_class_code_2016/06a_power_lm.R)
+__In Class Code:__ [power analysis](in_class_code_2016/06a_power_lm.R), [linear models with likelihood](in_class_code_2016/07a_likelihood_lm.R)  
   
 ### Week 8.   
 __Lecture:__ Bayesian Inference, Fitting a line with Bayesian techniques  
