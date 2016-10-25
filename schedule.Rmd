@@ -70,7 +70,7 @@ __In Class Code:__ [power analysis](in_class_code_2016/06a_power_lm.R), [linear 
 ### Week 8.   
 __Lecture:__ Bayesian Inference, Fitting a line with Bayesian techniques  
 __Lab Topic:__ Bayesian computation in R, Fitting a line with Bayesian techniques  
-__Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1]((http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and Chapter 2, [R Users will Now Inevitably Become Bayesians](https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/)  
+__Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1](http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and [Chapter 2](http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf), [R Users will Now Inevitably Become Bayesians](https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/)  
 __Additional Reading on rstanarm__: [How to use it](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html), [Linear Models in rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html), [more vignettes](https://cran.r-project.org/web/packages/rstanarm/index.html), [rstanarm and more](http://andrewgelman.com/2016/01/14/rstanarm-and-more/)  
   
 ### Week 9.   
