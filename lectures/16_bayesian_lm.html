@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="fitting-linear-models-with-bayes" class="slide level2">
+<h1>Fitting Linear Models with Bayes</h1>
+<p><img src="images/15/bayes.png" alt="image" /></p>
+</section>
+<section id="bayesian-inference" class="slide level2">
+<h1>Bayesian Inference</h1>
+<p><img src="images/15/neon_bayes_theorem.jpeg" alt="image" style="width:40.0%" /><br />
+<font size="6"></p>
+<ul>
+<li><p>Estimate probability of a parameter</p></li>
+<li><p>State degree of believe in specific parameter values</p></li>
+<li><p>Evaluate probability of hypothesis given the data</p></li>
+<li><p>Incorporate prior knowledge</p></li>
+</ul>
+<p></font></p>
+</section>
+<section id="today" class="slide level2">
+<h1>Today</h1>
+<ul>
+<li><p>Markov Chain Monte-Carlo Sampling</p></li>
+<li><p>Fitting and evaluating linear models fit with MCMC</p></li>
+<li><p>Modifying our Prior</p></li>
+</ul>
+</section>
+<section id="bayes-theorem-expanded" class="slide level2">
+<h1>Bayes Theorem Expanded</h1>
+<div style="text-align:left; font-size:24pt">
+<p><span class="math inline">\(p(\theta | X) = \frac{p(X | \theta)P(\theta)}{\displaystyle \sum_{i=0}^{j} p(X | \theta_{i})p(\theta_{i})}\)</span></p>
+<ul>
+<li>Algebraically Solvable<br />
+<br />
+</li>
+</ul>
+<p><span class="math inline">\(p(\theta | X) = \frac{p(X | \theta)P(\theta)}{\int p(X | \theta)p(\theta)d\theta}\)</span></p>
+<ul>
+<li><p>Analytically Solveable for Conjugate Priors<br />
+<br />
+<span class="math inline">\(p(\theta | X) = \frac{\int p(X | \theta)P(\theta|\eta)p(\eta)d\eta}{\int\int p(X | \theta)p(\theta)d\theta d\eta}\)</span></p></li>
+<li>Hierarchical Model: need numerical integration approach with random hyperparameters
+</div></li>
+</ul>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-1" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p align="left">
+If we cannot analytically solve a distribution, we can still simulate from it:
+</p>
+<ul>
+<li><p>Chose a set of starting values X at t=0</p></li>
+<li><p>Chose a random set of parameters, Y, based on X</p></li>
+<li><p>Calculate an acceptance ratio, <span class="math inline">\(\alpha\)</span>, based on P(Y)/P(X)</p></li>
+<li><p>If <span class="math inline">\(\alpha \ge 1\)</span> X(t+1) = Y</p></li>
+<li><p>Otherwise, select a uniorm random number between 0 and 1, U</p></li>
+<li><p>If <span class="math inline">\(U \le \alpha\)</span>, X(t+1) = Y. Otherwise, X(t+1) = X.</p></li>
+<li><p>Rinse and repeat</p></li>
+</ul>
+<p>(Note, this is the Metropolis-Hastings Algorithm - there are others)</p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-2" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p align="left">
+This is a time series. To use it for inference to sample from the final stationary distribution:
+</p>
+<ul>
+<li><p>Discard a ’burn in’ set of samples</p></li>
+<li><p>‘Thin’ your chain or use other methods to reduce temporal autocorrelation</p></li>
+<li><p>Examine chain for convergence on your posterior distribution</p></li>
+<li><p>Evaluate multiple chains to ensure convergence to a single distribution</p></li>
+</ul>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-3" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic1-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-4" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-5" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic3-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-6" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic4-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-7" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic5-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-8" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic6-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-9" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic100-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="markov-chain-monte-carlo-sampling-mcmc-10" class="slide level2">
+<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphicThinned-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="multiple-chains-to-check-convergence-and-improve-answer" class="slide level2">
+<h1>Multiple Chains to Check Convergence and Improve Answer</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="section" class="slide level2">
+<h1></h1>
+<br><br><br>
+<h1>
+<p>Linear Modeling with Bayes</p>
+</section>
+<section id="software-options-for-mcmc" class="slide level2">
+<h1>Software Options for MCMC</h1>
+<ul>
+<li><p>WinBUGS <a href="http://www.mrc-bsu.cam.ac.uk/bugs/" class="uri">http://www.mrc-bsu.cam.ac.uk/bugs/</a></p></li>
+<li><p>OpenBUGS <a href="http://www.openbugs.info/w/" class="uri">http://www.openbugs.info/w/</a></p></li>
+<li><p>JAGS <a href="http://mcmc-jags.sourceforge.net/" class="uri">http://mcmc-jags.sourceforge.net/</a></p></li>
+<li>STAN <a href="http://mc-stan.org/" class="uri">http://mc-stan.org/</a>
+<ul>
+<li><strong>rstanarm</strong></li>
+<li>rethinking</li>
+</ul></li>
+<li><p>MCMCglmm in R</p></li>
+<li><p>MCMCpack in R</p></li>
+</ul>
+</section>
+<section id="rstanarm" class="slide level2">
+<h1>rstanarm</h1>
+<ul>
+<li><p>Powerful package that fits bayesian models using MCMC with Hamiltonian Updating (reduced autocorrelation in chain)</p></li>
+<li><p>Available tools to tweak priors</p></li>
+<li><p>Flexible in error distribution</p></li>
+<li><p>Can accomodate random effects, autocorrelation, etc</p></li>
+<li><p>Uses STAN to fit models, but same syntax as base R models</p></li>
+<li><p>For more flexible correlation structure, <code>MCMCglmm</code></p></li>
+<li><p>For maximum flexibility, <em>rethinking</em> or <em>rstan</em></p></li>
+</ul>
+</section>
+<section id="bayesian-pufferfish" class="slide level2">
+<h1>Bayesian Pufferfish</h1>
+<div id="left">
+<ul>
+<li>Pufferfish are toxic/harmful to predators<br />
+<br></li>
+<li>Batesian mimics gain protection from predation <br><br></li>
+<li>Evolved response to appearance? <br><br></li>
+<li>Researchers tested with mimics varying in toxic pufferfish resemblance</li>
+</ul>
+</div>
+<div id="right">
+<img src="images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
+
+</div>
+</section>
+<section id="does-resembling-a-pufferfish-reduce-predator-visits" class="slide level2">
+<h1>Does Resembling a Pufferfish Reduce Predator Visits?</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/puffershow-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="the-steps-of-statistical-modeling" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a model</li>
+<li>Evaluate model assumptions</li>
+<li>Evaluate model results</li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="implementing-the-puffer-model-in-rstanarm" class="slide level2">
+<h1>Implementing the Puffer Model in rstanarm</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">100</span>)
+puffer_mod &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators ~<span class="st"> </span>resemblance, 
+                      <span class="dt">data=</span>puffer,
+                      <span class="dt">family=</span><span class="kw">gaussian</span>())</code></pre></div>
+</section>
+<section id="what-were-the-priors" class="slide level2">
+<h1>What were the priors?</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">puffer_mod_p &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators ~<span class="st"> </span>resemblance, 
+                      <span class="dt">data=</span>puffer,
+                      <span class="dt">family=</span><span class="kw">gaussian</span>(),
+                      <span class="dt">prior=</span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="fl">2.5</span>),
+                      <span class="dt">prior_intercept=</span><span class="kw">normal</span>(<span class="dv">0</span>,<span class="dv">10</span>))</code></pre></div>
+<p>Note that these are weakly informative!</p>
+</section>
+<section id="section-1" class="slide level2">
+<h1></h1>
+<br><br><br>
+<h1 style="text-align:left">
+All assumptions of linear regression hold - and then there are a few checks for MCMC fits
+</h1>
+</section>
+<section id="good-ole-qq" class="slide level2">
+<h1>Good ole’ QQ</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/qq_stan-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="but---often-use-simulated-posterior-estimates" class="slide level2">
+<h1>But - often use simulated posterior estimates</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/resid_hist-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="observed-v.-average-of-simulated-fitted-value" class="slide level2">
+<h1>Observed v. Average of Simulated Fitted Value</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/obs_v_fit-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="do-simulated-posterios-of-the-data-fit-our-observations" class="slide level2">
+<h1>Do Simulated Posterios of the Data Fit our Observations?</h1>
+<p>Blue = Distribution of our observations, Lines = Simulations <img src="16_bayesian_lm_files/figure-revealjs/pp_check-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="does-distribution-of-sample-estimates-match-distribution-of-simulated-sample-estimates" class="slide level2">
+<h1>Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/pp_hist-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="does-distribution-of-sample-estimates-match-distribution-of-simulated-sample-estimates-1" class="slide level2">
+<h1>Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/pp_hist_2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="how-sensitive-is-our-simulation-to-leaving-out-one-value" class="slide level2">
+<h1>How sensitive is our simulation to leaving out one value?</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/loo-1.jpeg" title="" alt="" width="768" /></p>
+<p>Only one point with a moderate test statistic - not bad! If &gt;1, inspect that point!</p>
+</section>
+<section id="section-2" class="slide level2">
+<h1></h1>
+<br><br>
+<h1>
+<p align="left">
+These are all data and error generating process checks. If they fail, you may need to respecify your model (or your prior)
+</p>
+</h1>
+</section>
+<section id="mcmc-diagnostics---did-we-converge" class="slide level2">
+<h1>MCMC diagnostics - Did we converge?</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/converge-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="are-our-posterior-distributions-well-behaved" class="slide level2">
+<h1>Are our posterior distributions well behaved?</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/check-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="section-3" class="slide level2">
+<h1></h1>
+<br><br><br>
+<h1 style="text-align:left">
+These are all checks of the model fitting process. If they fail, either tweak the MCMC process (e.g., burnin, nsims), or your model is incompatible with the data
+</h1>
+</section>
+<section id="finally---the-parameters" class="slide level2">
+<h1>Finally - the Parameters</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmc_params-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="so.-what-did-we-get" class="slide level2">
+<h1>So…. what did we get?</h1>
+<pre><code>stan_glm(formula = predators ~ resemblance, family = gaussian(), 
+    data = puffer)
+
+Family: gaussian (identity)
+Algorithm: sampling
+Posterior sample size: 4000
+Observations: 20
+
+Estimates:
+                mean   sd    2.5%   25%   50%   75%   97.5%
+(Intercept)     2.0    1.5  -1.0    1.0   2.0   3.0   5.0  
+resemblance     3.0    0.6   1.8    2.6   3.0   3.3   4.1  
+sigma           3.2    0.6   2.4    2.8   3.1   3.5   4.5  
+mean_PPD        9.0    1.0   6.9    8.3   9.0   9.6  10.9  
+log-posterior -59.6    1.3 -62.9  -60.1 -59.2 -58.6 -58.2  
+
+Diagnostics:
+              mcse Rhat n_eff
+(Intercept)   0.0  1.0  2072 
+resemblance   0.0  1.0  2574 
+sigma         0.0  1.0  2329 
+mean_PPD      0.0  1.0  3208 
+log-posterior 0.0  1.0  1719 
+
+For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</code></pre>
+</section>
+<section id="or-just-look-at-your-credible-interval" class="slide level2">
+<h1>Or, just look at your Credible Interval</h1>
+<br />
+<br />
+
+<p align="left">
+For 80% Credible Interval:
+</p>
+<p><br />
+</p>
+<pre><code>                     10%      90%
+(Intercept) -0.008701499 3.849364
+resemblance  2.239234508 3.687381
+sigma        2.595004307 3.952061</code></pre>
+</section>
+<section id="what-is-the-weight-of-the-tail-less-that-0" class="slide level2">
+<h1>What is the weight of the tail less that 0?</h1>
+<p>Weight of Intercept ≤ 0? 0.10075<br />
+<br />
+Weight of Slope ≤ 0? 0</p>
+</section>
+<section id="talking-about-uncertainty-the-ipcc-way" class="slide level2">
+<h1>Talking about Uncertainty the IPCC Way</h1>
+<p><img src="images/15/ipcc_uncertainty_ar5.jpg" /></p>
+</section>
+<section id="compare-to-lm" class="slide level2">
+<h1>Compare to LM</h1>
+<p>Bayesian Fit</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">lower</th>
+<th style="text-align: right;">upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">2.001440</td>
+<td style="text-align: right;">1.4660824</td>
+<td style="text-align: right;">-0.5745849</td>
+<td style="text-align: right;">4.45753</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">resemblance</td>
+<td style="text-align: right;">2.959374</td>
+<td style="text-align: right;">0.5614372</td>
+<td style="text-align: right;">2.0419708</td>
+<td style="text-align: right;">3.91519</td>
+</tr>
+</tbody>
+</table>
+<p>LM Fit</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">1.924694</td>
+<td style="text-align: right;">1.5064163</td>
+<td style="text-align: right;">1.277664</td>
+<td style="text-align: right;">0.2176012</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">resemblance</td>
+<td style="text-align: right;">2.989492</td>
+<td style="text-align: right;">0.5714163</td>
+<td style="text-align: right;">5.231724</td>
+<td style="text-align: right;">0.0000564</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-4" class="slide level2">
+<h1></h1>
+<h1 style="text-align:left">
+OK, ok, but what about the prior that we get all of the as for?
+</h1>
+</section>
+<section id="see-your-posterior-relative-to-your-prior" class="slide level2">
+<h1>See your posterior relative to your prior</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/post_prior-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="adding-a-stronger-prior" class="slide level2">
+<h1>Adding a stronger prior</h1>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">100</span>)
+puffer_mod_prior &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators ~<span class="st"> </span>resemblance, 
+                      <span class="dt">data=</span>puffer,
+                      <span class="dt">family=</span><span class="kw">gaussian</span>(),
+                      <span class="dt">prior =</span> <span class="kw">normal</span>(<span class="dv">10</span>,<span class="dv">1</span>),
+                      <span class="dt">prior_intercept =</span> <span class="kw">normal</span>(<span class="dv">2</span>,<span class="dv">1</span>))</code></pre></div>
+</section>
+<section id="how-influential-was-that-new-prior" class="slide level2">
+<h1>How influential was that new prior?</h1>
+<p><img src="16_bayesian_lm_files/figure-revealjs/post_prior_strong-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="compare-results" class="slide level2">
+<h1>Compare results!</h1>
+<p align="left">
+<p>Weak Prior:</p>
+<pre><code>                    5%      95%
+(Intercept) -0.5745849 4.457530
+resemblance  2.0419708 3.915190
+sigma        2.4738777 4.237936</code></pre>
+<br />
+Strong Prior:
+</p>
+<pre><code>                   5%      95%
+(Intercept) -1.164132 3.965022
+resemblance  2.236086 4.165638
+sigma        2.454073 4.257712</code></pre>
+</section>
+<section id="in-conclusion" class="slide level2">
+<h1>In Conclusion…</h1>
+<ul>
+<li>Yes, it’s more fidly and there are more assumptions<br />
+<br />
+</li>
+<li>BUT - you can now talk in the language or probability<br />
+<br />
+</li>
+<li>Inherently recognizes “All models are wrong, some are useful”</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
