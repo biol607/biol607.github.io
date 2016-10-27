@@ -417,6 +417,22 @@ knitr::kable(tidy(lm(predators ~ resemblance, data=puffer)))
 
 <h1 style="text-align:left">OK, ok, but what about the prior that we get all of the as for?</h1>
 
+## Visualize the mean fit...
+```{r fit_fig}
+pufferplot + 
+  geom_abline(slope=coef(puffer_mod)[2], intercept=coef(puffer_mod)[1], color="red")
+```
+
+## And the distributions of fits
+```{r dist_fit}
+
+pufferplot + 
+    geom_abline(slope=post_puffer[,2], intercept=post_puffer[,1], color="lightgrey", alpha=0.1) +
+  geom_abline(slope=coef(puffer_mod)[2], intercept=coef(puffer_mod)[1], color="red")  +
+  geom_point()
+```
+
+
 ## See your posterior relative to your prior
 ```{r post_prior, cache=TRUE}
 posterior_vs_prior(puffer_mod) +
