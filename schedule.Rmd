@@ -72,7 +72,8 @@ __Lecture:__ [Bayesian Inference](lectures/15_bayesian_basics.html), [Fitting a 
 __Lab Topic:__ Bayesian computation in R, Fitting a line with Bayesian techniques  
 __Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1](http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and [Chapter 2](http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf), [R Users will Now Inevitably Become Bayesians](https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/)  
 __Additional Reading on rstanarm__: [How to use it](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html), [Linear Models in rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html), [more vignettes](https://cran.r-project.org/web/packages/rstanarm/index.html), [rstanarm and more](http://andrewgelman.com/2016/01/14/rstanarm-and-more/), [Bayesian basics with rstanarm](http://m-clark.github.io/docs/IntroBayes.html)  
-  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-bayes  
+
 ### Week 9.   
 __Lecture:__ Functions, Tidy data for statistical analysis  
 __Reading:__ Borer et al. 2009. [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), G&W Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)     
