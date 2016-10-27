@@ -23,7 +23,9 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 &nbsp;  
 &nbsp;  
 
-## Course News:
+## Course News:  
+*10/27/2016* Midterm exam [is out](https://github.com/biol607/exam_2016)  
+  
 *9/19/16* Hadley Wickham special session [on quora](https://www.quora.com/session/Hadley-Wickham/1)  
   
 *9/16/16* For a one-stop-shop for the tidyverse, there's now a [package](https://blog.rstudio.org/2016/09/15/tidyverse-1-0-0/) that will load it all.
