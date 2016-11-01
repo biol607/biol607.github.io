@@ -1,0 +1,23 @@
+---
+title: "R Error Messages Ye Have Found"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We all run into error messages. In class, during a homework, during an exam. This is a page with an embedded etherpad. You can work on it here, or at https://etherpad.wikimedia.org/p/607-error-messages if you would prefer.
+
+For each error:  
+
+0) State who you are
+1) Report the error message.  
+2) Make a reproducible example that generates the error.
+3) Provide any additional comments.  
+4) Email the class that you have put up a new error (or email jarrett.byrnes@umb.edu and I'll forward your notice).
+5) Once you answer an error, put your name by it. +1 point on your exam per error message troubleshot.
+
+See the example at the top as a template.
+
+<iframe src='https://etherpad.wikimedia.org/p/607-error-messages' width=600 height=400>
+
