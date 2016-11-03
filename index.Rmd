@@ -24,6 +24,8 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 &nbsp;  
 
 ## Course News:  
+*11/2/2016* A [Bayesian election forecast](http://www.slate.com/features/pkremp_forecast/report.html) with STAN in R  
+  
 *10/27/2016* Midterm exam [is out](https://github.com/biol607/exam_2016)  
   
 *9/19/16* Hadley Wickham special session [on quora](https://www.quora.com/session/Hadley-Wickham/1)  
