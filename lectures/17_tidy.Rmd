@@ -1,0 +1,220 @@
+---
+title: "Tidy Data"
+author: "Biol 607"
+date: "11/2/2016"
+output: html_document
+---
+
+
+```{r setup, include=FALSE, warning=FALSE, messages=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyr)
+library(dplyr)
+```
+
+First - today's etherpad, along with the mammal data, is at 
+
+## Why Tidy?
+
+For the past few days, we've been grapping with a data set that we've almost wrestled down to size. The only problem is, what we're left with is a big table with one score per row, and a lot of NAs. This doesn't seem efficient, nor does it seem like a good format for plotting.  Clearly, we need to TIDY THE DATA.
+
+### Long versus Wide
+
+As we talked about a few weeks ago, there are both long and wide data formats. *Long data* formats have one observation and one measurement per row. So, multiple rows constitude a single observation.
+
+![long from R4DS](./images/17/long_data.png)
+
+These kinds of data sets are great for plotting summary information for each group and each variable aggregated together. Think of a bar plot with averages for different species taken across different sites.
+
+*Wide data* has a every measurement in a single observation in a single row.
+
+![wide from R4DS](./images/17/wide.png)
+
+This kind of data is ideal for things like scatterplots of one measurement against another, with each observation as a single data point.
+
+
+### Long to Wide
+
+Quite often, data is recorded in a long format for efficiency. Let's talk about this with respect to a data set of mammals. For every site a researcher visited, they wrote down the species of mammals they say, and the density of those mammals.  As this was just a running tally, the data ended up in a long format:
+
+```{r, echo=FALSE}
+
+mammals <- data.frame(site = c(1,1,2,3,3,3), 
+                      taxon = c('Suncus etruscus', 'Sorex cinereus', 
+                                'Myotis nigricans', 'Notiosorex crawfordi', 
+                                'Scuncus etruscus', 'Myotis nigricans'),
+                      density = c(6.2, 5.2, 11.0, 1.2, 9.4, 9.6)
+)
+
+cat("The mammals data frame:\n")
+mammals
+```
+
+But, what if we wanted to plot the abundance of, say, *Myostis nigricans* against *Scuncus etruscus* - we can't do that from here. We need to `spread` the data into a wide format.  For that, there is the `tidyr` library and it's `spread` function.
+
+`spread` works simply in that it take a data set, and you tell it the name of the column which contains values that will be the column names in your new data set - a so called "key" column. You also tell it which column contains the relevant numbers - the "values" column.
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyr)
+
+m_wide <- mammals %>%
+  spread(taxon, density)
+
+m_wide
+```
+
+Great! We have a wide data set. But - uh oh, what are all of those NAs doing there?
+
+###Filling in null values
+
+We often have data sets like this. Ones where we have many measurements that we have not observed. Sometimes, they are NA - we just didn't take them. Other times, such as in this data set, we want to fill them in with a sensible value, such as 0.
+
+The simplest approach here would be to use the `fill` argument in `spread`.
+
+```{r}
+m_wide_0 <- mammals %>%
+  spread(taxon, density, fill=0)
+
+m_wide_0
+```
+
+Perfect!  Other times, though, we want to fill those in right into the long data format. For that we have the `complete` function. In that function, we specify which columns we want all combinations of, and then supply a list of how new values should be filled in for other columns. If we don't give a column name in that list, it defaults to NA. Oh, `complete` function... you `complete` me.
+
+```{r}
+m_long_0 <- mammals %>%
+  complete(site, taxon, fill=list(density=0))
+
+m_long_0
+```
+
+We could then take that new `complete` long data frame and `spread` it with abandon! Either way, now we can plot!
+
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2)
+
+ggplot(m_wide_0, mapping = aes(x=`Myotis nigricans`,
+                               y=`Scuncus etruscus`)) +
+  geom_point(size=1.4) +
+  stat_smooth() +
+  theme_bw()
+```
+
+OK, so, that's not such an impressive plot, but you see what we're getting at here...
+
+###Wide to Long
+
+But what if your intrepid mammal researcher had been wise and recorded their data in a wide format (in truth, this is what I do all the time). And instead of a scatterplot, we wanted to compare the densities of all of the different species in a point-range plot?  Well, then we'd have to go from a wide format to long.
+
+To do this, `tidyr` offers the `gather` function, as in gather up your wide data into one nice long piece. Gather is a little trickier, as you specify what you want the name of the new key column to be, what you want the name of the new values column to be, and then...well, you have some options. You can either specify which columns are to be gathered up (which can take a while) or you can specify which columns you want to exclude. You can do fancy things, like specify all columns between two others with a :, but, honestly, I often specify which to exclude. Let's see two examples.
+
+```{r}
+m_long <- m_wide_0 %>%
+  gather(Species_name, Density, -site)
+
+m_long
+
+#Another way of doing the same thing
+m_long <- m_wide_0 %>%
+  gather(Species_name, Density, `Myotis nigricans`:`Suncus etruscus`)
+
+m_long
+```
+
+And now that we have a long format, let's plot~
+
+```{r}
+
+ggplot(m_long, mapping=aes(x=Species_name, y=Density)) +
+  geom_point(size=2) +
+  stat_summary(fun.data="mean_sdl", color="red")
+```
+
+
+OK - how would you apply these functions to the Axoltl data?
+
+### Hey, wait, these only work on one "Value" column...
+
+You may have noticed that we've been throwing around just one value column. What if you have two - say, density and average height? Or three? Or more? In other words, a not-long-not-wide-but-in-between data set. These are common.
+
+Well, tidyr isn't flexible on that count. Instead, you need to `unite` those columns into something that's easy to `separate` later down the line. Which we do with... regular expressions!  Yes, they are everywhere.  Let's take an example of height in the mammals data set.
+
+```{r}
+mamh <- mammals %>%
+  mutate(height=rnorm(6,30,3))
+```
+
+So now we want to do everything above, but with density and height! So, we unite them, using a `_` as our separator. We could have used anything, but I like _ because it's used for so few other things with numbers. `tidyr` just needs to know the name of the new column, and then which columns will be united
+
+```{r}
+mamh2 <- mamh %>%
+  unite(measurement, density, height, sep="_")
+
+mamh2
+```
+
+We can now proceed as normal. Let's say, for example, that you wanted to fill in all of the empty species-site combos with zeroes.  Here's one workflow to do that.
+
+```{r}
+mamh_long <- mamh2 %>%
+  spread(taxon, measurement, fill="0_0") %>%
+  gather(taxon, measurement, -site)
+
+mamh_long
+```
+
+OK, great! We have all of the "0_0" entries (notice what I did there for the fill?), but, now we want to restore our old measurements. For that, we have `separate` which takes the relevant column, the new column names in a vector, and the pattern you match to split them.
+
+```{r}
+mamh_long <- mamh_long %>%
+  separate(measurement, into = c("density", "height"), sep="_")
+
+mamh_long
+```
+
+One note - these new columns will be treated as characters (you did split a string after all), so you'll need to do some cleanup
+
+```{r}
+mamh_long <- mamh_long %>%
+  mutate(density = as.numeric(density),
+         height = as.numeric(height))
+```
+And there you go! You can now do exciting things like plot the density-height relationship, grouping by taxon, for example.
+
+```{r}
+qplot(density, height, data=mamh_long, 
+      color=taxon, geom="point") +
+  stat_smooth(method="lm", fill=NA)
+```
+
+OK, to make sure you got `separate` and `unite` down, first, separate the taxon into two columns - Genus and species (taxon is currently a latin binomial).
+
+Then, add four columsn to the original mammals frame. Now use any technique above (which may or may not involve unite) to fill in 0s for all four columns. 
+
+## Exercise
+
+1) Load the hemlock data.
+```{r load_hemlock, echo=FALSE}
+library(readxl)
+hemlock <- read_excel("./data/18/hemlock.xlsx")
+```
+
+2) Note that there are a bunch of different densities. Plot the relationship between Hemlock density and dead Hemlock density.
+
+3) Well that was uninformative. We want to look at a timeseries of both - heck, maybe even with a timeseries of total tree density as well.  Take this wide data set, select out The `Hem Den`, `Dead Hem Den`, and `Tree Den` column sas well as Stand, Year, Lat, and Long as your identifing columns. Then make this wide data set long with those three density columns as your new variable values.
+
+```{r gather, echo=FALSE}
+hem_gath <- hemlock %>%
+  select(Stand:Latitude, `Hem Den`, `Dead Hem Den`, `Tree Den`) %>%
+  gather(Variable, Value, `Hem Den`, `Dead Hem Den`, `Tree Den`)
+```
+
+4) Plot the three variables by year. Color by variable.
+```{r plot, echo=FALSE}
+qplot(Year, Value, data=hem_gath, color=Variable)
+```
+
+5) Well that was uninformative. Try taking an average by year and lot that timeseries.  
+
+6) We can also use `separate` on the stand name to get town and stand number instead of individual stand. Do that, and plot the timeseries of average density of each variable in each town. Use facets, colors, and shapes as you will.  
+
+7) Well, now you have the density per stand. Sometimes averages are better than individual data values. Spread back to a wide format, and plot each pariwise density combination - e.g., Average dead hemlock density per town v average tree density.  

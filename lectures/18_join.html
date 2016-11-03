@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2" data-background="images/18/join_title.jpg">
+<h1></h1>
+</section>
+<section id="merging-data" class="slide level2">
+<h1>Merging Data</h1>
+<ul>
+<li>Problem: I have two data sets<br />
+<br />
+</li>
+<li>One is biological information<br />
+<br />
+</li>
+<li>One is physical information<br />
+<br />
+</li>
+<li>They have a common key - e.g., Lat/Long</li>
+</ul>
+</section>
+<section id="join" class="slide level2">
+<h1>Join</h1>
+<p><br><br> <img src="images/18/join.jpg" style="width:55.0%" /></p>
+</section>
+<section id="section-1" class="slide level2" data-background="images/18/hemlock.jpg">
+<h1></h1>
+</section>
+<section id="the-data" class="slide level2">
+<h1>The data</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hemlock_data &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;./data/18/hemlock.xlsx&quot;</span>)
+
+<span class="kw">str</span>(hemlock_data)</code></pre></div>
+<pre><code>Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   98 obs. of  11 variables:
+ $ Stand        : chr  &quot;Athol 1&quot; &quot;Athol 2&quot; &quot;Athol 4&quot; &quot;Athol 6&quot; ...
+ $ Year         : num  2003 2003 2003 2003 2004 ...
+ $ Longitude    : num  -72.2 -72.2 -72.2 -72.2 -72.1 ...
+ $ Latitude     : num  42.5 42.5 42.5 42.6 42.6 ...
+ $ Live BA      : num  36.3 31.2 35.9 32.6 23 ...
+ $ Dead Hem BA  : num  0.46 0.46 0 0 0 2.87 0 0 0 1.15 ...
+ $ Hem Vigor    : num  1.6 1.18 1.47 1.86 1.25 1.9 1.91 1.56 1 1.81 ...
+ $ Hem Den      : num  1450 1250 900 725 600 725 825 450 400 925 ...
+ $ Dead Hem Den : num  50 50 0 50 0 150 50 50 0 100 ...
+ $ Tree Den     : num  2125 1725 1700 1100 1075 ...
+ $ Borer Density: num  0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+</section>
+<section id="environmental-information" class="slide level2">
+<h1>Environmental Information</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hemlock_sites &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;./data/18/hemlock.xlsx&quot;</span>, <span class="dt">sheet=</span><span class="dv">2</span>)
+
+<span class="kw">str</span>(hemlock_sites)</code></pre></div>
+<pre><code>Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   111 obs. of  11 variables:
+ $ Stand      : chr  &quot;Athol 1&quot; &quot;Athol 2&quot; &quot;Athol 3&quot; &quot;Athol 4&quot; ...
+ $ Year       : num  2003 2003 2003 2003 2003 ...
+ $ Mapped Code: chr  &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;B&quot; ...
+ $ Aspect     : num  213.2 357 292.5 80.5 227.5 ...
+ $ Slope      : num  3.8 27.83 23.83 8.78 12.17 ...
+ $ Longitude  : num  -72.2 -72.2 -72.2 -72.2 -72.2 ...
+ $ Latitude   : num  42.5 42.5 42.6 42.5 42.6 ...
+ $ Elevation  : num  269 220 231 247 233 ...
+ $ Area       : num  35.8 36.6 33.7 94.7 40.7 ...
+ $ Humus      : num  9.9 5.92 5.58 6.89 3.71 5.25 7.33 12.4 6.75 8.85 ...
+ $ Logged     : num  1 1 1 1 1 1 1 0 1 1 ...</code></pre>
+</section>
+<section id="the-problem" class="slide level2">
+<h1>The problem</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hemlock_data)</code></pre></div>
+<pre><code>[1] 98</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hemlock_sites)</code></pre></div>
+<pre><code>[1] 111</code></pre>
+</section>
+<section id="mismatched-data-sets-with-common-keys" class="slide level2">
+<h1>Mismatched Data Sets with Common Keys</h1>
+<p><br><br> <img src="images/18/mismatch.jpg" style="width:50.0%" /></p>
+</section>
+<section id="mismatched-data-sets-with-common-keys-1" class="slide level2">
+<h1>Mismatched Data Sets with Common Keys</h1>
+<p><br><br> <img src="images/18/common_keys.jpg" style="width:50.0%" /></p>
+</section>
+<section id="inner-join" class="slide level2">
+<h1>Inner Join</h1>
+<p><br> <img src="images/18/inner_join.jpg" style="width:55.0%" /><br />
+<br />
+<br />
+Creates new Data with rows that exist in both data sets</p>
+</section>
+<section id="reducing-data-in-inner-joins" class="slide level2">
+<h1>Reducing Data in Inner Joins</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hem_inner &lt;-<span class="st"> </span><span class="kw">inner_join</span>(hemlock_data, hemlock_sites)</code></pre></div>
+<pre><code>Joining, by = c(&quot;Stand&quot;, &quot;Year&quot;, &quot;Longitude&quot;, &quot;Latitude&quot;)</code></pre>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hemlock_data)</code></pre></div>
+<pre><code>[1] 98</code></pre>
+</div>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hemlock_sites)</code></pre></div>
+<pre><code>[1] 111</code></pre>
+</div>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hem_inner)</code></pre></div>
+<pre><code>[1] 87</code></pre>
+</div>
+</section>
+<section id="plotting-paired-data" class="slide level2">
+<h1>Plotting Paired Data</h1>
+<p><img src="18_join_files/figure-revealjs/plot_inner-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="outer-joins" class="slide level2">
+<h1>Outer Joins</h1>
+<p><img src="images/18/outer_joins.png" style="width:45.0%" /></p>
+</section>
+<section id="left-join-retain-rows-with-nas-in-first-dataset" class="slide level2">
+<h1>Left Join: Retain Rows with NAs in First Dataset</h1>
+<p><img src="images/18/left_join.jpg" style="width:45.0%" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hem_left &lt;-<span class="st"> </span><span class="kw">left_join</span>(hemlock_data, hemlock_sites)</code></pre></div>
+<pre><code>Joining, by = c(&quot;Stand&quot;, &quot;Year&quot;, &quot;Longitude&quot;, &quot;Latitude&quot;)</code></pre>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hem_left)</code></pre></div>
+<pre><code>[1] 98</code></pre>
+</div>
+</section>
+<section id="right-join-retain-rows-with-nas-in-second-dataset" class="slide level2">
+<h1>Right Join: Retain Rows with NAs in Second Dataset</h1>
+<p><img src="images/18/right_join.jpg" style="width:45.0%" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hem_right &lt;-<span class="st"> </span><span class="kw">right_join</span>(hemlock_data, hemlock_sites)</code></pre></div>
+<pre><code>Joining, by = c(&quot;Stand&quot;, &quot;Year&quot;, &quot;Longitude&quot;, &quot;Latitude&quot;)</code></pre>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hem_right)</code></pre></div>
+<pre><code>[1] 111</code></pre>
+</div>
+</section>
+<section id="full-join-bring-it-all-together" class="slide level2">
+<h1>Full Join: Bring it All Together</h1>
+<img src="images/18/full_join.jpg" style="width:45.0%" /><br />
+<strong>Good to see the full dataset</strong>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hem_full &lt;-<span class="st"> </span><span class="kw">full_join</span>(hemlock_data, hemlock_sites)</code></pre></div>
+<pre><code>Joining, by = c(&quot;Stand&quot;, &quot;Year&quot;, &quot;Longitude&quot;, &quot;Latitude&quot;)</code></pre>
+</div>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hem_full)</code></pre></div>
+<pre><code>[1] 122</code></pre>
+</div>
+</section>
+<section id="the-joins" class="slide level2">
+<h1>The Joins</h1>
+<p><br><br> <img src="images/18/joins_venn.jpg" style="width:85.0%" /></p>
+</section>
+<section id="filtering-joins" class="slide level2">
+<h1>Filtering Joins</h1>
+<ul>
+<li>I only want data that matches a set of criteria<br />
+<br />
+<br />
+</li>
+<li>Like outer joins with a second na.omit step</li>
+</ul>
+</section>
+<section id="semi-join-x-in-y" class="slide level2">
+<h1>Semi Join: X %in% Y</h1>
+<img src="images/18/semi_join.jpg" style="width:45.0%" /><br />
+<strong>Good before data pre-processing</strong>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hem_semi &lt;-<span class="st"> </span><span class="kw">semi_join</span>(hemlock_data, hemlock_sites)</code></pre></div>
+<pre><code>Joining, by = c(&quot;Stand&quot;, &quot;Year&quot;, &quot;Longitude&quot;, &quot;Latitude&quot;)</code></pre>
+</div>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hem_semi)</code></pre></div>
+<pre><code>[1] 87</code></pre>
+</div>
+</section>
+<section id="anti-join-x-not-in-y" class="slide level2">
+<h1>Anti Join: X NOT %in% Y</h1>
+<img src="images/18/anti_join.jpg" style="width:45.0%" /><br />
+<strong>Good for diagnosing data mismatch</strong>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hem_anti &lt;-<span class="st"> </span><span class="kw">anti_join</span>(hemlock_data, hemlock_sites)</code></pre></div>
+<pre><code>Joining, by = c(&quot;Stand&quot;, &quot;Year&quot;, &quot;Longitude&quot;, &quot;Latitude&quot;)</code></pre>
+</div>
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nrow</span>(hem_anti)</code></pre></div>
+<pre><code>[1] 11</code></pre>
+</div>
+</section>
+<section id="exercise-1" class="slide level2">
+<h1>Exercise 1</h1>
+<ul>
+<li>You want to plot a map of the sites<br />
+<br />
+</li>
+<li>You want size of points to be area<br />
+<br />
+</li>
+<li>You want color of points to be dead Hemlock area</li>
+</ul>
+</section>
+<section id="exercise-2" class="slide level2">
+<h1>Exercise 2</h1>
+<ul>
+<li>You want to plot a map of the sites<br />
+<br />
+</li>
+<li>BUT - you want to show which sites are missing environmental data<br />
+<br />
+</li>
+<li>AND - you want to show which sites are missing biological data<br />
+<br />
+</li>
+<li>(this might be more than one plot and more than one data join!)</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
