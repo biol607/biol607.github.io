@@ -1,0 +1,19 @@
+http://yihui.name/knitr/options/ for more on options
+
+```{r code_block, cache=TRUE}
+#This take a really really really long time
+```
+
+```{r dont_show_code, echo=FALSE}
+#Code I want to execute but not show
+```
+
+```{r code_to_show_but_not_run, eval=FALSE}
+#show something pretty
+```
+
+```{r suppress_messages_in_this_block, warning=FALSE, message=FALSE}
+#Do some things
+#but supress printing of messages
+#and warnings
+```

@@ -79,7 +79,8 @@ __In Class Code:__ [Bayesian Data Analysis](in_class_code_2016/08_bayes.R)
 __Lecture:__ [Joins](lectures/18_join.html), [Tidy data](lectures/17_tidy.html)\
 __Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  
 __Reading:__  [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), G&W Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)     
-__Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy
+__Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy  
+__In Class Code:__ [Tidy](in_class_code_2016/09_tidy.R), [markdown options](in_class_code_2016/00_rmarkdown_options.Rmd)  
   
 ### Week 10.   
 __Lecture:__ Experimental design and ANOVA  

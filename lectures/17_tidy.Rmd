@@ -12,7 +12,7 @@ library(tidyr)
 library(dplyr)
 ```
 
-First - today's etherpad, along with the mammal data, is at 
+First - today's etherpad, along with the mammal data, is at  http://etherpad.wikimedia.org/p/607-tidy
 
 ## Why Tidy?
 
@@ -213,7 +213,7 @@ hem_gath <- hemlock %>%
 qplot(Year, Value, data=hem_gath, color=Variable)
 ```
 
-5) Well that was uninformative. Try taking an average by year and lot that timeseries.  
+5) Well that was uninformative. Try taking an average by year and variable and plot these timeseries.  
 
 6) We can also use `separate` on the stand name to get town and stand number instead of individual stand. Do that, and plot the timeseries of average density of each variable in each town. Use facets, colors, and shapes as you will.  
 
