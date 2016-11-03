@@ -76,8 +76,9 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-bayes
 __In Class Code:__ [Bayesian Data Analysis](in_class_code_2016/08_bayes.R)  
 
 ### Week 9.   
-__Lecture:__ Functions, Tidy data for statistical analysis  
-__Reading:__ Borer et al. 2009. [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), G&W Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)     
+__Lecture:__ [Joins](lectures/18_join.html), [Tidy data](lectures/17_tidy.html)\
+__Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  
+__Reading:__  [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), G&W Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)     
   
 ### Week 10.   
 __Lecture:__ Experimental design and ANOVA  
