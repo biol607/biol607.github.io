@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2" data-background="images/19/urchin_diet_expt.jpg">
+<h1></h1>
+<p><br></p>
+<h1 style="background-color:white; font-size:68pt">
+Experiments and ANOVA
+</h1>
+</section>
+<section id="outline" class="slide level2">
+<h1>Outline</h1>
+<a href="https://etherpad.wikimedia.org/p/607-anova" class="uri">https://etherpad.wikimedia.org/p/607-anova</a> <br><br>
+<div style="font-size:34pt; text-align:left">
+<ol type="1">
+<li>Experiments &amp; Design<br />
+<br />
+</li>
+<li>Analysis of Experiments with Categorical Treatments
+<ul>
+<li>ANOVA!!!</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="section-1" class="slide level2" data-background="images/19/fires.jpg">
+<h1></h1>
+<h2 style="background-color:goldenrod">
+Why Do Experiments?
+</h2>
+</section>
+<section id="causal-diagram-of-the-world" class="slide level2">
+<h1>Causal Diagram of the World</h1>
+<p><img src="images/19/causal_expt_Slide1.png" alt="image" style="width:60.0%" /></p>
+<p>In an experiment, we want to isolate effects between pairs of variables.</p>
+</section>
+<section id="manipulation-to-determine-causal-relationship" class="slide level2">
+<h1>Manipulation to Determine Causal Relationship</h1>
+<p><img src="images/19/causal_expt_Slide2.png" alt="image" style="width:60.0%" /></p>
+</section>
+<section id="manipulation-to-determine-causal-relationship-1" class="slide level2">
+<h1>Manipulation to Determine Causal Relationship</h1>
+<p><img src="images/19/causal_expt_Slide3.png" alt="image" style="width:60.0%" /></p>
+<p>Experimental manipulation (done right) severs the link between a driver and its causes. We can now test the causal effect of changing one this driver on a response variable.</p>
+</section>
+<section id="other-sources-of-variation-are-noise" class="slide level2">
+<h1>Other Sources of Variation are “Noise”</h1>
+<p><img src="images/19/causal_expt_Slide3.png" alt="image" style="width:60.0%" /></p>
+<p>Properly designed experiments will have a distribution of other variables effecting our response variable. We want to reduce BIAS due to biological processes</p>
+</section>
+<section id="how-can-experimental-replicates-go-awry" class="slide level2">
+<h1>How can experimental replicates go awry?</h1>
+<div style="font-size:32pt">
+<ul>
+<li class="fragment">Conditions in replicates are not <strong>representative</strong><br />
+<br />
+</li>
+<li class="fragment">Replicates do not have <strong>equal chance</strong> of all types of environmental variability<br />
+<br />
+</li>
+<li class="fragment">Replicates are not is not <strong>independent</strong></li>
+</ul>
+</div>
+</section>
+<section id="how-would-you-place-replicates-across-this-field" class="slide level2">
+<h1>How would you place replicates across this “field”?</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/spatialBias-1.jpeg" title="" alt="" width="576" style="display: block; margin: auto;" /></p>
+</section>
+<section id="stratified-or-random-treatment-assignment" class="slide level2">
+<h1>Stratified or Random Treatment Assignment</h1>
+<ul>
+<li><p>How is your population defined?</p></li>
+<li><p>What is the scale of your inference?</p></li>
+<li><p>What might influence the inclusion of a environmental variability?</p></li>
+<li><p>How important are external factors you know about?</p></li>
+<li><p>How important are external factors you cannot assess?</p></li>
+</ul>
+</section>
+<section id="other-sources-of-variation-are-now-noise" class="slide level2">
+<h1>Other Sources of Variation are now “Noise”</h1>
+<p><img src="images/19/causal_expt_Slide4.png" alt="image" style="width:60.0%" /></p>
+<p><span class="fragment">AND - this term also includes observer error. We must minimize OBSERVER BIAS as well.</span><br />
+</p>
+</section>
+<section id="removing-bias-and-confounding-effects" class="slide level2">
+<h1>Removing Bias and Confounding Effects</h1>
+<p><img src="images/19/sources_of_error.jpg" alt="image" style="width:50.0%" /></p>
+<p>(Hurlbert 1984)</p>
+</section>
+<section id="ensuring-that-our-signal-comes-from-our-manipulation" class="slide level2">
+<h1>Ensuring that our Signal Comes from our Manipulation</h1>
+<p><br> <strong><font color="red">CONTROL</font></strong></p>
+<ul>
+<li><p>A treatment against which others are compared</p></li>
+<li><p>Separate out causal v. experimental effects</p></li>
+<li><p>Techniques to remove spurious effects of time, space, gradients, etc.</p></li>
+</ul>
+</section>
+<section id="ensuring-our-signal-is-real" class="slide level2">
+<h1>Ensuring our Signal is Real</h1>
+<p><br> <strong><font color="red">REPLICATION</font></strong></p>
+<ul>
+<li><p>How many points to fit a probability distribution?</p></li>
+<li><p>Ensure that your effect is not a fluke10</p></li>
+<li>$ frac{p^{3/2}}{n}$ should approach 0 for Likelihood
+<ul>
+<li><span style="font-size:12pt">Portnoy 1988 Annals of Statistics</span></li>
+</ul></li>
+<li><p>i.e.,$ sim$ 5-10 samples per paramter (1 treatment = 1 parameter, but this is total # of samples)</p></li>
+</ul>
+</section>
+<section id="outline-1" class="slide level2">
+<h1>Outline</h1>
+<a href="https://etherpad.wikimedia.org/p/607-anova" class="uri">https://etherpad.wikimedia.org/p/607-anova</a> <br><br>
+<div style="font-size:34pt; text-align:left">
+<ol type="1">
+<li>Experiments &amp; Design<br />
+<br />
+</li>
+<li>Analysis of Experiments with Categorical Treatments
+<ul>
+<li>ANOVA!!!</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="section-2" class="slide level2">
+<h1></h1>
+<h1 style="font-size:64pt">
+Analysis of Models with Categorical Predictors
+</h1>
+</section>
+<section id="what-are-our-treatments" class="slide level2">
+<h1>What are our “treatments?”</h1>
+<p><img src="images/19/causal_expt_Slide4.png" alt="image" style="width:60.0%" /></p>
+<p>Treatments can be continuous - or grouped into discrete categories</p>
+</section>
+<section id="why-categories-for-treatments" class="slide level2">
+<h1>Why categories for treatments?</h1>
+<ul>
+<li class="fragment">When we think of experiments, we think of manipulating categories<br />
+ </li>
+<li class="fragment">Control, Treatment 1, Treatment 2<br />
+<br />
+</li>
+<li class="fragment">Models with <em>categorical predictors</em> still reflect an underlying data and error generating processes<br />
+<br />
+</li>
+<li class="fragment">In many ways, it’s like having many processes generating data, with each present or absent<br />
+<br />
+</li>
+<li class="fragment">Big advantage: don’t make assumptions of linearity about relationships between treatments</li>
+</ul>
+</section>
+<section id="categorical-predictors-ubiquitous" class="slide level2">
+<h1>Categorical Predictors Ubiquitous</h1>
+<ul>
+<li>Treatments in an Experiment<br />
+<br />
+</li>
+<li>Spatial groups - plots, Sites, States, etc.<br />
+<br />
+</li>
+<li>Individual sampling units<br />
+<br />
+</li>
+<li>Temporal groups - years, seasons, months</li>
+</ul>
+</section>
+<section id="section-3" class="slide level2">
+<h1></h1>
+<br><br><br>
+<h1 style="text-align:left">
+Modeling categorical predictors in experiments
+</h1>
+</section>
+<section id="categorical-predictors-gene-expression-and-mental-disorders" class="slide level2">
+<h1>Categorical Predictors: Gene Expression and Mental Disorders</h1>
+<p><img src="images/19/neuron_label.jpeg" alt="image" style="width:30.0%" /> <img src="images/19/myelin.jpeg" alt="image" style="width:40.0%" /><br />
+</p>
+</section>
+<section id="the-data" class="slide level2">
+<h1>The data</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/boxplot-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="the-steps-of-statistical-modeling" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li>Evaluate test results</li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="traditional-way-to-think-about-categories" class="slide level2">
+<h1>Traditional Way to Think About Categories</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/meansplot-1.jpeg" title="" alt="" width="768" /></p>
+<p>What is the variance between groups v. within groups?</p>
+</section>
+<section id="but-what-is-the-underlying-model" class="slide level2">
+<h1>But What is the Underlying Model ?</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/brainGene_points-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="but-what-is-the-underlying-model-1" class="slide level2">
+<h1>But What is the Underlying Model ?</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/brainGene_points_fit-1.jpeg" title="" alt="" width="768" /></p>
+<p><span class="fragment">Underlying linear model with control = intercept, dummy variable for bipolar<span></p>
+</section>
+<section id="but-what-is-the-underlying-model-2" class="slide level2">
+<h1>But What is the Underlying Model ?</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/brainGene_points_fit1-1.jpeg" title="" alt="" width="768" /></p>
+<p>Underlying linear model with control = intercept, dummy variable for bipolar</p>
+</section>
+<section id="but-what-is-the-underlying-model-3" class="slide level2">
+<h1>But What is the Underlying Model ?</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/brainGene_points_fit_2-1.jpeg" title="" alt="" width="768" /></p>
+<p>Underlying linear model with control = intercept, dummy variable for schizo</p>
+</section>
+<section id="different-ways-to-write-a-categorical-model" class="slide level2">
+<h1>Different Ways to Write a Categorical Model</h1>
+<p><br><br> <span class="math display">\[1) y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})\]</span><br />
+<span class="math display">\[2) y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )\]</span><br />
+<span class="math display">\[3) y_{j} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{j}, \qquad x_{i} = 0,1\]</span></p>
+</section>
+<section id="partioning-model" class="slide level2">
+<h1>Partioning Model</h1>
+<span class="math display">\[  large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})\]</span><br />
+
+<div style="text-align:left">
+<li>
+Shows partitioning of variation<br />
+<br />
+
+<li>
+Consider it an intercept, deviations from intercept by treatment, and residuals
+</div>
+</section>
+<section id="means-model" class="slide level2">
+<h1>Means Model</h1>
+<span class="math display">\[  large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )\]</span><br />
+
+<div style="text-align:left">
+<li>
+Different mean for each group<br />
+<br />
+
+<li>
+Focus is on specificity of a categorical predictor
+</div>
+</section>
+<section id="linear-dummy-variable-model" class="slide level2">
+<h1>Linear Dummy Variable Model</h1>
+<p><span class="math display">\[  large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1\]</span><br />
+<span class="math display">\[  epsilon_{ij} \sim N(0, \sigma^{2})\]</span>  </p>
+<ul>
+<li><span class="math inline">\(x_{i}\)</span> inidicates presence/abscence (1/0) of a category<br />
+<br />
+</li>
+<li>Note similarities to a linear regression<br />
+<br />
+</li>
+<li>Often one category set to $ beta_{0}$ for ease of fitting, and other $ beta$s are different from it</li>
+</ul>
+</section>
+<section id="the-steps-of-statistical-modeling-1" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li>Evaluate test results</li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="you-have-fit-a-valid-model.-now" class="slide level2">
+<h1>You have Fit a Valid Model. Now…</h1>
+<ol type="1">
+<li><p>Does your model explain variation in the data?</p></li>
+<li><p>Are your coefficients different from 0?</p></li>
+<li><p>How much variation is retained by the model?</p></li>
+<li><p>How confident can you be in model predictions?</p></li>
+</ol>
+</section>
+<section id="testing-the-model" class="slide level2">
+<h1>Testing the Model</h1>
+<p>Ho = The model predicts no variation in the data.<br />
+<br />
+<br />
+<br />
+Ha = The model predicts variation in the data.</p>
+</section>
+<section id="introducing-anova-comparing-variation" class="slide level2">
+<h1>Introducing ANOVA: Comparing Variation</h1>
+<br><br>
+<center>
+Central Question: <strong>Is the variation in the data explained by the data generating process greater than that explained by the error generating process?</strong>
+</center>
+<br>
+<div class="fragment">
+Test: Is a ratio of variability from data generating process v. error generating process large?
+</div>
+<br>
+<div class="fragment">
+Ratio of two normal distributions = F Distribution
+</div>
+</section>
+<section id="hypothesis-testing-with-a-categorical-model-anova" class="slide level2">
+<h1>Hypothesis Testing with a Categorical Model: ANOVA</h1>
+<p><span class="math display">\[H_{0} = \mu_{1} = \mu{2} = \mu{3} = ...\]</span></p>
+<p>OR</p>
+<p><span class="math display">\[  beta_{0} = \mu, \qquad \beta_{i} = 0\]</span></p>
+</section>
+<section id="linking-your-model-to-your-question" class="slide level2">
+<h1>Linking your Model to Your Question</h1>
+<div style="text-align:left">
+<p>Data Generating Process:<span class="math display">\[  beta_{0} + \sum \beta_{i}x_{i}\]</span> <br><br>VERSUS<br><br> Error Generating Process <span class="math display">\[  epsilon_i \sim N(0,\sigma)\]</span></p>
+<div class="fragment">
+If groups are a meaningful explanatory variable, what does that imply about variability in th data?
+</div>
+</div>
+</section>
+<section id="variability-due-to-dgp-versus-egp" class="slide level2">
+<h1>Variability due to DGP versus EGP</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/brain_anova_viz_1-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="variability-due-to-dgp-versus-egp-1" class="slide level2">
+<h1>Variability due to DGP versus EGP</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/brain_anova_viz_2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="variability-due-to-dgp-versus-egp-2" class="slide level2">
+<h1>Variability due to DGP versus EGP</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/brain_anova_viz_3-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="f-test-to-compare" class="slide level2">
+<h1>F-Test to Compare</h1>
+<p><br><br> <span class="math inline">\(SS_{Total} = SS_{Between} + SS_{Within}\)</span><br />
+<br />
+<span class="fragment">(Regression: <span class="math inline">\(SS_{Total} = SS_{Model} + SS_{Error}\)</span> )</span></p>
+</section>
+<section id="f-test-to-compare-1" class="slide level2">
+<h1>F-Test to Compare</h1>
+<p><span class="math inline">\(SS_{Between} = \sum_{i}\sum_{j}(\bar{Y_{i}} - \bar{Y})^{2}\)</span>, df=k-1<br />
+<br />
+<span class="math inline">\(SS_{Within} = \sum_{i}\sum_{j}(Y_{ij} - \bar{Y_{i}})^2\)</span>, df=n-k<br />
+<br />
+To compare them, we need to correct for different DF. This is the Mean Square.<br />
+<br />
+MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span><br />
+</p>
+</section>
+<section id="f-test-to-compare-2" class="slide level2">
+<h1>F-Test to Compare</h1>
+<p><span class="math inline">\(F = \frac{MS_{B}}{MS_{W}}\)</span> with DF=k-1,n-k<br />
+<br />
+(note similarities to <span class="math inline">\(SS_{R}\)</span> and <span class="math inline">\(SS_{E}\)</span> notation of regression)</p>
+</section>
+<section id="anova" class="slide level2">
+<h1>ANOVA</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>group</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.5402533</td>
+<td style="text-align: right;">0.2701267</td>
+<td style="text-align: right;">7.823136</td>
+<td style="text-align: right;">0.0012943</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">1.4502267</td>
+<td style="text-align: right;">0.0345292</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<p><span class="fragment"> Is using ANOVA valid?</span></p>
+</section>
+<section id="assumptions-of-linear-models-with-categorical-variables" class="slide level2">
+<h1>Assumptions of Linear Models with Categorical Variables</h1>
+<ul>
+<li><p>Independence of data points</p></li>
+<li><p>Normality within groups (of residuals)</p></li>
+<li><p>No relationship between fitted and residual values</p></li>
+<li><p>Homoscedasticity (homogeneity of variance) of groups</p></li>
+</ul>
+</section>
+<section id="fitted-v.-residuals" class="slide level2">
+<h1>Fitted v. Residuals</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/unnamed-chunk-1-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="residuals" class="slide level2">
+<h1>Residuals!</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/unnamed-chunk-2-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="leverage" class="slide level2">
+<h1>Leverage</h1>
+<p><img src="19_expts_anova_files/figure-revealjs/unnamed-chunk-3-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="levenes-test-of-homogeneity-of-variance" class="slide level2">
+<h1>Levene’s Test of Homogeneity of Variance</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>group</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1.006688</td>
+<td style="text-align: right;">0.3740735</td>
+</tr>
+<tr class="even">
+<td></td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<p>Levene’s test robust to departures from normality</p>
+</section>
+<section id="what-do-i-do-if-i-violate-assumptions" class="slide level2">
+<h1>What do I do if I Violate Assumptions?</h1>
+<ul>
+<li><p>Nonparametric Kruskal-Wallace (uses ranks)</p></li>
+<li><p>log(x+1) or otherwise transform</p></li>
+<li><p>GLM with ANODEV (two weeks!)</p></li>
+</ul>
+</section>
+<section id="kruskal-wallace-test" class="slide level2">
+<h1>Kruskal Wallace Test</h1>
+<pre><code>
+    Kruskal-Wallis rank sum test
+
+data:  PLP1.expression by group
+Kruskal-Wallis chi-squared = 13.198, df = 2, p-value = 0.001361</code></pre>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

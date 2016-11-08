@@ -1,0 +1,530 @@
+---
+title:
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+
+## {data-background="images/19/urchin_diet_expt.jpg"}
+<br>
+
+<h1 style="background-color:white; font-size:68pt">Experiments and ANOVA</h1>
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4.5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(ggplot2)
+
+```
+
+## Outline
+https://etherpad.wikimedia.org/p/607-anova
+<br><br>
+<div style="font-size:34pt; text-align:left">
+1. Experiments & Design  
+\
+2. Analysis of Experiments with Categorical Treatments  
+      - ANOVA!!!
+</div>
+
+##  {data-background="images/19/fires.jpg"}
+<h2 style="background-color:goldenrod">Why Do Experiments?</h2>
+
+## Causal Diagram of the World
+
+![image](./images/19/causal_expt_Slide1.png){width="60%"}
+
+In an experiment, we want to isolate effects between pairs of variables.
+
+
+
+## Manipulation to Determine Causal Relationship
+
+![image](./images/19/causal_expt_Slide2.png){width="60%"}
+
+
+
+## Manipulation to Determine Causal Relationship
+
+![image](./images/19/causal_expt_Slide3.png){width="60%"}
+
+Experimental manipulation (done right) severs the link between a
+driver and its causes. We can now test the causal effect of changing
+one this driver on a response variable.
+
+
+
+## Other Sources of Variation are “Noise”
+
+![image](./images/19/causal_expt_Slide3.png){width="60%"}
+
+Properly designed experiments will have a distribution of other
+variables effecting our response variable. We want to reduce BIAS due to
+biological processes
+
+
+          
+## How can experimental replicates go awry?
+<div style="font-size:32pt">
+> * Conditions in replicates are not **representative**  
+\
+> * Replicates do not have **equal chance** of all types of environmental variability  
+\
+> * Replicates are not is not **independent**  
+</div>
+
+
+          
+## How would you place replicates across this "field"?
+```{r spatialBias,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+set.seed(30)
+popMax<-100
+popData<-data.frame(x=runif(popMax,1,popMax), 
+                    y=runif(popMax,1,popMax), 
+                    colorSize1 = runif(popMax,.01,popMax/10),
+                    colorSize2 = runif(popMax,.01,popMax/10))
+
+
+extraNoise<-runif(popMax, 0,popMax/10)
+spatialPlot<-qplot(x, colorSize1*10+extraNoise, size=colorSize1, colour=colorSize2, data=popData) + 
+  theme_void() +xlab("")+ylab("") +
+  scale_color_gradientn(guide=FALSE, colours = c("grey", rainbow(15), "black")) + 
+  scale_size_continuous(guide=FALSE, range=c(1,10))
+
+spatialPlot
+```
+
+
+
+## Stratified or Random Treatment Assignment
+
+- How is your population defined?  
+
+
+- What is the scale of your inference?  
+
+
+- What might influence the inclusion of a environmental variability?  
+
+
+- How important are external factors you know about?  
+
+
+- How important are external factors you cannot assess?  
+
+
+## Other Sources of Variation are now "Noise"
+
+![image](./images/19/causal_expt_Slide4.png){width="60%"}
+
+<span class="fragment">AND - this term also includes observer error. We must minimize OBSERVER
+BIAS as well.</span>\
+
+
+## Removing Bias and Confounding Effects
+
+![image](./images/19/sources_of_error.jpg){width="50%"}
+
+(Hurlbert 1984)
+
+## Ensuring that our Signal Comes from our Manipulation
+<br>
+**<font color="red">CONTROL</font>**
+
+-   A treatment against which others are compared
+
+-   Separate out causal v. experimental effects
+
+-   Techniques to remove spurious effects of time, space,
+    gradients, etc.
+
+
+## Ensuring our Signal is Real
+<br>
+**<font color="red">REPLICATION</font>**
+
+-   How many points to fit a probability distribution?
+
+-   Ensure that your effect is not a fluke10
+
+-   $  frac{p^{3/2}}{n}$ should approach 0 for Likelihood 
+      - <span style="font-size:12pt">Portnoy 1988 Annals of Statistics</span>
+
+-   i.e.,$  sim$ 5-10 samples per paramter (1 treatment = 1 parameter, but
+    this is total \# of samples)
+
+## Outline
+https://etherpad.wikimedia.org/p/607-anova
+<br><br>
+<div style="font-size:34pt; text-align:left">
+1. Experiments & Design  
+\
+2. Analysis of Experiments with Categorical Treatments  
+      - ANOVA!!!
+</div>
+
+##
+<h1 style="font-size:64pt">Analysis of Models with Categorical Predictors</h1>
+
+
+## What are our "treatments?"
+
+![image](./images/19/causal_expt_Slide4.png){width="60%"}
+
+Treatments can be continuous - or grouped into discrete categories
+
+
+## Why categories for treatments?
+
+> -   When we think of experiments, we think of manipulating categories    
+\ 
+> -   Control, Treatment 1, Treatment 2  
+\
+> -   Models with *categorical predictors* still reflect an underlying data and error generating processes  
+\
+> -   In many ways, it’s like having many processes generating data, with each present or absent  
+\
+> -   Big advantage: don't make assumptions of linearity about relationships between treatments
+
+
+## Categorical Predictors Ubiquitous
+
+-   Treatments in an Experiment  
+\
+-   Spatial groups - plots, Sites, States, etc.  
+\
+-   Individual sampling units  
+\
+-   Temporal groups - years, seasons, months  
+
+##
+<br><br><br>
+<h1 style="text-align:left">Modeling categorical predictors in experiments</h1>
+
+## Categorical Predictors: Gene Expression and Mental Disorders
+
+![image](./images/19/neuron_label.jpeg){width="30.00000%"}
+![image](./images/19/myelin.jpeg){width="40.00000%"}\
+```{r load_brains}
+brainGene <- read.csv("./data/19/15q06DisordersAndGeneExpression.csv") %>%
+  mutate(group = forcats::fct_relevel(group, c("control", "schizo", "bipolar")))
+```
+
+## The data
+```{r boxplot}
+ggplot(brainGene, aes(x=group, y=PLP1.expression, fill = group)) +
+  geom_boxplot() +
+  scale_fill_discrete(guide=FALSE)+
+  theme_bw(base_size=17)
+```
+
+
+## The Steps of Statistical Modeling
+1. What is your question?
+2. What model of the world matches your question?
+3. Build a test
+4. Evaluate test assumptions
+5. Evaluate test results
+6. Visualize
+
+## Traditional Way to Think About Categories
+```{r meansplot}
+ggplot(brainGene, aes(x=group, y=PLP1.expression, color = group)) +
+#  geom_boxplot() +
+  stat_summary() +
+  scale_color_discrete(guide=FALSE) +
+  theme_bw(base_size=17)
+```
+
+What is the variance between groups v. within groups?
+
+
+## But What is the Underlying Model  ?
+
+```{r brainGene_points}
+
+bgsub1 <- subset(brainGene, brainGene$group != "schizo")
+bgPoints <- ggplot(bgsub1, aes(x=group, y=PLP1.expression)) +
+                 geom_point(size=1.5) +
+  theme_bw(base_size=24)
+                   
+bgPoints
+```
+
+
+
+## But What is the Underlying Model  ?
+
+```{r brainGene_points_fit}
+bgPoints + stat_smooth(method="lm", mapping=aes(group=1), color="red", lwd=2)
+
+```
+
+<span class="fragment">Underlying linear model with control = intercept, dummy variable for bipolar<span>
+
+## But What is the Underlying Model  ?
+
+```{r brainGene_points_fit1}
+bgPoints + stat_smooth(method="lm", mapping = aes(group=1), color="red", lwd=2) +
+scale_x_discrete(labels=c("0", "1"))
+
+```
+
+Underlying linear model with control = intercept, dummy variable for bipolar
+
+
+
+
+## But What is the Underlying Model  ?
+
+```{r brainGene_points_fit_2}
+bgsub2 <- subset(brainGene, brainGene$group != "bipolar")
+bgPoints2 <- ggplot(bgsub2, aes(x=group, y=PLP1.expression)) +
+  geom_point(size=1.5) +
+  theme_bw() + 
+  stat_smooth(method="lm", mapping = aes(group=1), color="red", lwd=2)+
+  theme_bw(base_size=24)
+
+bgPoints2
+```
+
+Underlying linear model with control = intercept, dummy variable for schizo
+
+
+## Different Ways to Write a Categorical Model
+<br><br>
+$$1) y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$
+\
+$$2) y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )$$
+\
+$$3) y_{j} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{j}, \qquad x_{i} = 0,1$$  
+
+
+
+## Partioning Model
+
+$$  large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$
+\
+<div style="text-align:left">
+<li> Shows partitioning of variation  
+\
+<li> Consider it an intercept, deviations from intercept by treatment, and residuals
+</div>
+
+## Means Model
+$$  large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )$$
+\
+<div style="text-align:left">
+<li> Different mean for each group  
+\
+<li> Focus is on specificity of a categorical predictor
+</div>
+
+## Linear Dummy Variable Model
+$$  large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1$$  
+$$  epsilon_{ij} \sim N(0, \sigma^{2})$$
+\ 
+
+- $x_{i}$ inidicates presence/abscence (1/0) of a category\
+\
+- Note similarities to a linear regression  
+\
+- Often one category set to $  beta_{0}$ for ease of fitting, and other $  beta$s are different from it
+
+
+
+## The Steps of Statistical Modeling
+1. What is your question?
+2. What model of the world matches your question?
+3. Build a test
+4. Evaluate test assumptions
+5. Evaluate test results
+6. Visualize
+
+
+
+## You have Fit a Valid Model. Now...
+
+1.  Does your model explain variation in the data?
+
+2.  Are your coefficients different from 0?
+
+3.  How much variation is retained by the model?
+
+4.  How confident can you be in model predictions?
+
+
+## Testing the Model
+
+Ho = The model predicts no variation in the data.  
+\
+\
+\
+Ha = The model predicts variation in the data.
+
+
+## Introducing ANOVA: Comparing Variation
+<br><br>
+<center>Central Question: **Is the variation in the data explained by the data generating process greater than that explained by the error generating process?**</center>
+<br>
+<div class="fragment">Test: Is a ratio of variability from data generating process v. error generating process large?</div>
+<br>
+<div class="fragment">Ratio of two normal distributions = F Distribution</div>
+
+## Hypothesis Testing with a Categorical Model: ANOVA
+
+$$H_{0} = \mu_{1} = \mu{2} = \mu{3} = ...$$
+
+OR
+
+$$  beta_{0} = \mu, \qquad \beta_{i} = 0$$
+
+
+## Linking your Model to Your Question
+<div style="text-align:left">
+Data Generating Process:$$  beta_{0} + \sum \beta_{i}x_{i}$$
+<br><br>VERSUS<br><br>
+Error Generating Process $$  epsilon_i \sim N(0,\sigma)$$ 
+
+<div class="fragment">If groups are a meaningful explanatory variable, what does that imply about variability in th data?</div>
+</div>
+
+## Variability due to DGP versus EGP
+```{r brain_anova_viz_1}
+brainGene$subj <- 1:nrow(brainGene)
+jls <- brainGene %>%
+  group_by(group) %>%
+  summarise(mean_expression = mean(PLP1.expression)) %>%
+  ungroup()
+
+data_plot <- ggplot(data=brainGene, mapping=aes(x=group, y=PLP1.expression, color=group)) +
+  geom_point(mapping=aes(group=subj), position=position_dodge(width=0.5)) +
+  theme_bw(base_size=14)
+
+data_plot
+```
+
+## Variability due to DGP versus EGP
+```{r brain_anova_viz_2}
+model_plot <- data_plot +
+    geom_boxplot(data=jls, mapping=aes(x=group, y=mean_expression))
+
+model_plot
+```
+
+## Variability due to DGP versus EGP
+```{r brain_anova_viz_3}
+brainGene <- brainGene %>%
+  group_by(group) %>%
+  mutate(mean_expression = mean(PLP1.expression)) %>%
+  ungroup()
+
+model_plot + 
+  geom_linerange(data = brainGene, mapping=aes(x=group, ymin = mean_expression, ymax = PLP1.expression, group=subj), position=position_dodge(width=0.5))
+```
+
+
+
+## F-Test to Compare
+<br><br>
+$SS_{Total} = SS_{Between} + SS_{Within}$ \
+\
+<span class="fragment">(Regression: $SS_{Total} = SS_{Model} + SS_{Error}$ )</span>
+
+
+## F-Test to Compare
+
+$SS_{Between} = \sum_{i}\sum_{j}(\bar{Y_{i}} - \bar{Y})^{2}$, df=k-1 \
+\
+$SS_{Within} = \sum_{i}\sum_{j}(Y_{ij} - \bar{Y_{i}})^2$, df=n-k \
+\
+
+To compare them, we need to correct for different DF. This is the Mean Square.\
+\
+MS = SS/DF, e.g, $MS_{W} = \frac{SS_{W}}{n-k}$ \
+
+
+## F-Test to Compare
+
+$F = \frac{MS_{B}}{MS_{W}}$ with DF=k-1,n-k\
+
+\
+
+(note similarities to $SS_{R}$ and $SS_{E}$ notation of regression)
+
+
+## ANOVA
+
+```{r brainGene_anova}
+brain_lm <- lm(PLP1.expression ~ group, data=brainGene)
+knitr::kable(anova(lm(PLP1.expression ~ group, data=brainGene)))
+```
+
+<span class="fragment"> Is using ANOVA valid?</span>
+
+
+## Assumptions of Linear Models with Categorical Variables
+
+-   Independence of data points
+
+-   Normality within groups (of residuals)
+
+-   No relationship between fitted and residual values
+
+-   Homoscedasticity (homogeneity of variance) of groups
+
+## Fitted v. Residuals
+```{r}
+plot(brain_lm, which=1)
+```
+
+## Residuals!
+```{r}
+plot(brain_lm, which=2)
+```
+
+## Leverage
+```{r}
+plot(brain_lm, which=5)
+```
+
+
+
+## Levene’s Test of Homogeneity of Variance
+
+```{r brainGene_levene}
+library(car)
+knitr::kable(leveneTest(PLP1.expression ~ group, data=brainGene))
+```
+
+Levene’s test robust to departures from normality
+
+
+## What do I do if I Violate Assumptions?
+
+-   Nonparametric Kruskal-Wallace (uses ranks)
+
+-   log(x+1) or otherwise transform
+
+-   GLM with ANODEV (two weeks!)
+
+## Kruskal Wallace Test
+
+```{r brainGene_kruska}
+kruskal.test(PLP1.expression ~ group, data=brainGene)
+```
+
+
