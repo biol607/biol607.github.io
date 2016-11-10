@@ -79,7 +79,7 @@
 
 <section id="section" class="slide level2" data-background="images/19/urchin_diet_expt.jpg">
 <h1></h1>
-<p><br></p>
+<br> <!-- review this slide for continuity and some missing conclusion slides -->
 <h1 style="background-color:white; font-size:68pt">
 Experiments and ANOVA
 </h1>
@@ -178,11 +178,11 @@ Why Do Experiments?
 <ul>
 <li><p>How many points to fit a probability distribution?</p></li>
 <li><p>Ensure that your effect is not a fluke10</p></li>
-<li>$ frac{p^{3/2}}{n}$ should approach 0 for Likelihood
+<li><span class="math inline">\(frac{p^{3/2}}{n}\)</span> should approach 0 for Likelihood
 <ul>
 <li><span style="font-size:12pt">Portnoy 1988 Annals of Statistics</span></li>
 </ul></li>
-<li><p>i.e.,$ sim$ 5-10 samples per paramter (1 treatment = 1 parameter, but this is total # of samples)</p></li>
+<li><p>i.e.,<span class="math inline">\(sim\)</span> 5-10 samples per paramter (1 treatment = 1 parameter, but this is total # of samples)</p></li>
 </ul>
 </section>
 <section id="outline-1" class="slide level2">
@@ -302,7 +302,7 @@ Modeling categorical predictors in experiments
 </section>
 <section id="partioning-model" class="slide level2">
 <h1>Partioning Model</h1>
-<span class="math display">\[  large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})\]</span><br />
+<span class="math display">\[\large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})\]</span><br />
 
 <div style="text-align:left">
 <li>
@@ -315,7 +315,8 @@ Consider it an intercept, deviations from intercept by treatment, and residuals
 </section>
 <section id="means-model" class="slide level2">
 <h1>Means Model</h1>
-<span class="math display">\[  large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )\]</span><br />
+<span class="math display">\[\large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}\]</span><br />
+<span class="math display">\[\epsilon_{ij} \sim N(0, \sigma^{2} )\]</span><br />
 
 <div style="text-align:left">
 <li>
@@ -328,8 +329,8 @@ Focus is on specificity of a categorical predictor
 </section>
 <section id="linear-dummy-variable-model" class="slide level2">
 <h1>Linear Dummy Variable Model</h1>
-<p><span class="math display">\[  large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1\]</span><br />
-<span class="math display">\[  epsilon_{ij} \sim N(0, \sigma^{2})\]</span>  </p>
+<p><span class="math display">\[\large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1\]</span><br />
+<span class="math display">\[\epsilon_{ij} \sim N(0, \sigma^{2})\]</span>  </p>
 <ul>
 <li><span class="math inline">\(x_{i}\)</span> inidicates presence/abscence (1/0) of a category<br />
 <br />
@@ -387,12 +388,12 @@ Ratio of two normal distributions = F Distribution
 <h1>Hypothesis Testing with a Categorical Model: ANOVA</h1>
 <p><span class="math display">\[H_{0} = \mu_{1} = \mu{2} = \mu{3} = ...\]</span></p>
 <p>OR</p>
-<p><span class="math display">\[  beta_{0} = \mu, \qquad \beta_{i} = 0\]</span></p>
+<p><span class="math display">\[\beta_{0} = \mu, \qquad \beta_{i} = 0\]</span></p>
 </section>
 <section id="linking-your-model-to-your-question" class="slide level2">
 <h1>Linking your Model to Your Question</h1>
 <div style="text-align:left">
-<p>Data Generating Process:<span class="math display">\[  beta_{0} + \sum \beta_{i}x_{i}\]</span> <br><br>VERSUS<br><br> Error Generating Process <span class="math display">\[  epsilon_i \sim N(0,\sigma)\]</span></p>
+<p>Data Generating Process:<span class="math display">\[\beta_{0} + \sum \beta_{i}x_{i}\]</span> <br><br>VERSUS<br><br> Error Generating Process <span class="math display">\[\epsilon_i \sim N(0,\sigma)\]</span></p>
 <div class="fragment">
 If groups are a meaningful explanatory variable, what does that imply about variability in th data?
 </div>
@@ -526,11 +527,24 @@ MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span
 </section>
 <section id="kruskal-wallace-test" class="slide level2">
 <h1>Kruskal Wallace Test</h1>
-<pre><code>
-    Kruskal-Wallis rank sum test
-
-data:  PLP1.expression by group
-Kruskal-Wallis chi-squared = 13.198, df = 2, p-value = 0.001361</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">parameter</th>
+<th style="text-align: left;">method</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">13.1985</td>
+<td style="text-align: right;">0.0014</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Kruskal-Wallis rank sum test</td>
+</tr>
+</tbody>
+</table>
 </section>
     </div>
   </div>

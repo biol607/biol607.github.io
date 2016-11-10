@@ -16,6 +16,7 @@ output:
 ## {data-background="images/19/urchin_diet_expt.jpg"}
 <br>
 <!-- review this slide for continuity and some missing conclusion slides -->
+<!-- explain what levene test and Kruskal-Wallace test are doing -->
 <h1 style="background-color:white; font-size:68pt">Experiments and ANOVA</h1>
 
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
@@ -160,10 +161,10 @@ BIAS as well.</span>\
 
 -   Ensure that your effect is not a fluke10
 
--   $  frac{p^{3/2}}{n}$ should approach 0 for Likelihood 
+-   $frac{p^{3/2}}{n}$ should approach 0 for Likelihood 
       - <span style="font-size:12pt">Portnoy 1988 Annals of Statistics</span>
 
--   i.e.,$  sim$ 5-10 samples per paramter (1 treatment = 1 parameter, but
+-   i.e.,$sim$ 5-10 samples per paramter (1 treatment = 1 parameter, but
     this is total \# of samples)
 
 ## Outline
@@ -316,7 +317,7 @@ $$3) y_{j} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{j}, \qquad x_{i} = 0,1$
 
 ## Partioning Model
 
-$$  large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$
+$$\large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$
 \
 <div style="text-align:left">
 <li> Shows partitioning of variation  
@@ -325,7 +326,8 @@ $$  large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$
 </div>
 
 ## Means Model
-$$  large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )$$
+$$\large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}$$  
+$$\epsilon_{ij} \sim N(0, \sigma^{2} )$$
 \
 <div style="text-align:left">
 <li> Different mean for each group  
@@ -334,8 +336,8 @@ $$  large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N
 </div>
 
 ## Linear Dummy Variable Model
-$$  large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1$$  
-$$  epsilon_{ij} \sim N(0, \sigma^{2})$$
+$$\large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1$$  
+$$\epsilon_{ij} \sim N(0, \sigma^{2})$$
 \ 
 
 - $x_{i}$ inidicates presence/abscence (1/0) of a category\
@@ -390,14 +392,14 @@ $$H_{0} = \mu_{1} = \mu{2} = \mu{3} = ...$$
 
 OR
 
-$$  beta_{0} = \mu, \qquad \beta_{i} = 0$$
+$$\beta_{0} = \mu, \qquad \beta_{i} = 0$$
 
 
 ## Linking your Model to Your Question
 <div style="text-align:left">
-Data Generating Process:$$  beta_{0} + \sum \beta_{i}x_{i}$$
+Data Generating Process:$$\beta_{0} + \sum \beta_{i}x_{i}$$
 <br><br>VERSUS<br><br>
-Error Generating Process $$  epsilon_i \sim N(0,\sigma)$$ 
+Error Generating Process $$\epsilon_i \sim N(0,\sigma)$$ 
 
 <div class="fragment">If groups are a meaningful explanatory variable, what does that imply about variability in th data?</div>
 </div>
@@ -524,7 +526,7 @@ Levene’s test robust to departures from normality
 ## Kruskal Wallace Test
 
 ```{r brainGene_kruska}
-kruskal.test(PLP1.expression ~ group, data=brainGene)
+knitr::kable(broom::tidy(kruskal.test(PLP1.expression ~ group, data=brainGene)), digits=4)
 ```
 
 
