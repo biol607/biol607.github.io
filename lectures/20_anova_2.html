@@ -116,7 +116,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <section id="section" class="slide level2" data-background="images/19/urchin_diet_expt.jpg">
 <h1></h1>
-<br> <!-- review this slide for continuity and some missing conclusion slides -->
+<br> <!-- review this slide for continuity and some re-ordering in posthocs. That section is a bit of a mess Also Bayes needs more detail. And likelihood tables are ugly. Broom?-->
 <h1 style="background-color:white; font-size:68pt">
 After the ANOVA
 </h1>
@@ -147,7 +147,7 @@ After the ANOVA
 </section>
 <section id="means-model" class="slide level2">
 <h1>Means Model</h1>
-<span class="math display">\[  large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )\]</span><br />
+<span class="math display">\[\large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )\]</span><br />
 
 <div style="text-align:left">
 <li>
@@ -192,6 +192,7 @@ Ha = The model predicts variation in the data.</p>
 <br />
 </li>
 <li>How confident can you be in model predictions?<br />
+<br />
 </li>
 <li>Are groups different from each other</li>
 </ol>
@@ -209,6 +210,7 @@ Ha = The model predicts variation in the data.</p>
 <br />
 </li>
 <li>How confident can you be in model predictions?<br />
+<br />
 </li>
 <li>Are groups different from each other</li>
 </ol>
@@ -259,6 +261,7 @@ Ha = The model predicts variation in the data.</p>
 <br />
 </li>
 <li>How confident can you be in model predictions?<br />
+<br />
 </li>
 <li>Are groups different from each other</li>
 </ol>
@@ -276,6 +279,7 @@ Ha = The model predicts variation in the data.</p>
 <br />
 </li>
 <li>How confident can you be in model predictions?<br />
+<br />
 </li>
 <li><font color="red">Are groups different from each other</font></li>
 </ol>
@@ -627,6 +631,81 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </section>
 <section id="banova" class="slide level2">
 <h1>BANOVA</h1>
+<pre><code>
+SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 1).
+
+Chain 1, Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1, Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1, Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1, Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1, Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1, Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1, Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1, Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 1, Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 1, Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 1, Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 1, Iteration: 2000 / 2000 [100%]  (Sampling)
+ Elapsed Time: 0.080866 seconds (Warm-up)
+               0.08541 seconds (Sampling)
+               0.166276 seconds (Total)
+
+
+SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 2).
+
+Chain 2, Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2, Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 2, Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 2, Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 2, Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 2, Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2, Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2, Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 2, Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 2, Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 2, Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 2, Iteration: 2000 / 2000 [100%]  (Sampling)
+ Elapsed Time: 0.068858 seconds (Warm-up)
+               0.063094 seconds (Sampling)
+               0.131952 seconds (Total)
+
+
+SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 3).
+
+Chain 3, Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3, Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 3, Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 3, Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 3, Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 3, Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3, Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3, Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 3, Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 3, Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 3, Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 3, Iteration: 2000 / 2000 [100%]  (Sampling)
+ Elapsed Time: 0.054466 seconds (Warm-up)
+               0.096178 seconds (Sampling)
+               0.150644 seconds (Total)
+
+
+SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 4).
+
+Chain 4, Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 4, Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 4, Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 4, Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 4, Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 4, Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4, Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4, Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 4, Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 4, Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 4, Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 4, Iteration: 2000 / 2000 [100%]  (Sampling)
+ Elapsed Time: 0.079157 seconds (Warm-up)
+               0.088166 seconds (Sampling)
+               0.167323 seconds (Total)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">brain_bayes &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(PLP1.expression ~<span class="st"> </span>group -<span class="st"> </span><span class="dv">1</span>,
                  <span class="dt">family=</span><span class="kw">gaussian</span>(),
                  <span class="dt">data =</span> brainGene)</code></pre></div>
@@ -645,9 +724,9 @@ Chain 1, Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Chain 1, Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1, Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.069421 seconds (Warm-up)
-               0.081888 seconds (Sampling)
-               0.151309 seconds (Total)
+ Elapsed Time: 1.34429 seconds (Warm-up)
+               0.844418 seconds (Sampling)
+               2.18871 seconds (Total)
 
 
 SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 2).
@@ -664,9 +743,9 @@ Chain 2, Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Chain 2, Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2, Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.072502 seconds (Warm-up)
-               0.085696 seconds (Sampling)
-               0.158198 seconds (Total)
+ Elapsed Time: 0.917152 seconds (Warm-up)
+               1.10817 seconds (Sampling)
+               2.02533 seconds (Total)
 
 
 SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 3).
@@ -683,9 +762,9 @@ Chain 3, Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Chain 3, Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3, Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.082055 seconds (Warm-up)
-               0.075523 seconds (Sampling)
-               0.157578 seconds (Total)
+ Elapsed Time: 0.95174 seconds (Warm-up)
+               0.753277 seconds (Sampling)
+               1.70502 seconds (Total)
 
 
 SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 4).
@@ -702,87 +781,9 @@ Chain 4, Iteration: 1400 / 2000 [ 70%]  (Sampling)
 Chain 4, Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4, Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.051171 seconds (Warm-up)
-               0.061668 seconds (Sampling)
-               0.112839 seconds (Total)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">brain_bayes_lmer &lt;-<span class="st"> </span><span class="kw">stan_lmer</span>(PLP1.expression ~<span class="st"> </span><span class="dv">1</span>+<span class="st"> </span>(<span class="dv">1</span>|group),
-                <span class="co"># family=gaussian(),</span>
-                 <span class="dt">data =</span> brainGene)</code></pre></div>
-<pre><code>
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 1).
-
-Chain 1, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 1, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 1, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 1, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 1, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 1, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 1, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 1, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 1, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 1, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 1, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 1, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 1.40348 seconds (Warm-up)
-               0.726771 seconds (Sampling)
-               2.13025 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 2).
-
-Chain 2, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 2, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 2, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 2, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 2, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 2, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 2, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 2, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 2, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 2, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 2, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 2, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.929048 seconds (Warm-up)
-               0.847096 seconds (Sampling)
-               1.77614 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 3).
-
-Chain 3, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 3, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 3, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 3, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 3, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 3, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 3, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 3, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 3, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 3, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 3, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 3, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.957706 seconds (Warm-up)
-               0.654124 seconds (Sampling)
-               1.61183 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 4).
-
-Chain 4, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 4, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 4, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 4, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 4, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 4, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 4, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 4, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 4, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 4, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 4, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 4, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 1.00292 seconds (Warm-up)
-               1.97456 seconds (Sampling)
-               2.97748 seconds (Total)</code></pre>
+ Elapsed Time: 1.10924 seconds (Warm-up)
+               2.09969 seconds (Sampling)
+               3.20893 seconds (Total)</code></pre>
 </section>
 <section id="banova-1" class="slide level2">
 <h1>BANOVA</h1>

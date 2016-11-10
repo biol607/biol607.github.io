@@ -15,7 +15,7 @@ output:
 
 ## {data-background="images/19/urchin_diet_expt.jpg"}
 <br>
-<!-- review this slide for continuity and some missing conclusion slides -->
+<!-- review this slide for continuity and some re-ordering in posthocs. That section is a bit of a mess Also Bayes needs more detail. And likelihood tables are ugly. Broom?-->
 <h1 style="background-color:white; font-size:68pt">After the ANOVA</h1>
 
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
@@ -73,7 +73,7 @@ ggplot(brainGene, aes(x=group, y=PLP1.expression, color = group)) +
 
 
 ## Means Model
-$$  large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )$$
+$$\large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )$$
 \
 <div style="text-align:left">
 <li> Different mean for each group  
@@ -117,7 +117,7 @@ k = number of groups, n = sample size
 \
 3.  How much variation is retained by the model?  
 \
-4.  How confident can you be in model predictions?
+4.  How confident can you be in model predictions?  
 \
 5. Are groups different from each other
 
@@ -129,7 +129,7 @@ k = number of groups, n = sample size
 \
 3.  How much variation is retained by the model?  
 \
-4.  How confident can you be in model predictions?
+4.  How confident can you be in model predictions?  
 \
 5. Are groups different from each other
 
@@ -148,7 +148,7 @@ knitr::kable(anova(lm(PLP1.expression ~ group, data=brainGene)))
 \
 3.  How much variation is retained by the model?  
 \
-4.  How confident can you be in model predictions?
+4.  How confident can you be in model predictions?  
 \
 5. Are groups different from each other
 
@@ -161,7 +161,7 @@ knitr::kable(anova(lm(PLP1.expression ~ group, data=brainGene)))
 \
 3.  How much variation is retained by the model?  
 \
-4.  How confident can you be in model predictions?
+4.  How confident can you be in model predictions?  
 \
 5. <font color="red">Are groups different from each other</font>  
 
@@ -421,13 +421,19 @@ summary(bg_tukey_lik)
 ```
 
 ## BANOVA
-```{r banova, echo=TRUE, cache=TRUE}
+```{r banova, echo=FALSE, cache=TRUE}
 brain_bayes <- stan_glm(PLP1.expression ~ group - 1,
                  family=gaussian(),
                  data = brainGene)
 ```
 
-```{r banova_2, echo=TRUE, cache=TRUE}
+
+```{r banova_show, echo=TRUE, eval=FALSE}
+brain_bayes <- stan_glm(PLP1.expression ~ group - 1,
+                 family=gaussian(),
+                 data = brainGene)
+```
+```{r banova_2, echo=FALSE, cache=TRUE}
 brain_bayes_lmer <- stan_lmer(PLP1.expression ~ 1+ (1|group),
                 # family=gaussian(),
                  data = brainGene)
