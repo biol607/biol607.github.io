@@ -444,7 +444,16 @@ summary(brain_bayes, prob = c(0.05, 0.1, 0.5, 0.9, 0.95), digits=2)
 posterior_interval(brain_bayes, prob = 0.8)
 ```
 
-## What is the variability between treatments v. sigma?
+## What are the sources of variation from the model?
+1. We can look at the SD between  means from a set of categorical predictors  
+\
+2. This SD tells us how much variability is driven by a set of treatments
+\
+3. Not directly comparable to MSE for comparison to sigma.  
+\
+4. Given units of response variable, is the variability meaningful?
+
+## What are the sources of variation from the model?
 ```{r banova_variability, cache=TRUE}
 chains <- as.data.frame(brain_bayes)
 
@@ -458,6 +467,7 @@ chains <- chains %>%
 ggplot(chains %>% dplyr::select(sigma, treatment_sigma) %>% tidyr::gather(variable, value), 
        mapping = aes(x=variable, y=value)) +
   stat_summary(fun.data = "mean_sdl") +
+  geom_hline(yintercept=0, lty=2) +
   theme_bw(base_size=17) +
   coord_flip()
 
