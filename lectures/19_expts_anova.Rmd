@@ -15,7 +15,7 @@ output:
 
 ## {data-background="images/19/urchin_diet_expt.jpg"}
 <br>
-
+<!-- review this slide for continuity and some missing conclusion slides -->
 <h1 style="background-color:white; font-size:68pt">Experiments and ANOVA</h1>
 
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}

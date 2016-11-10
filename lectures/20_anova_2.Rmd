@@ -1,0 +1,491 @@
+---
+title:
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+
+## {data-background="images/19/urchin_diet_expt.jpg"}
+<br>
+<!-- review this slide for continuity and some missing conclusion slides -->
+<h1 style="background-color:white; font-size:68pt">After the ANOVA</h1>
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4.5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(ggplot2)
+library(contrast)
+library(multcomp)
+library(car)
+library(rstanarm)
+```
+
+## Outline
+https://etherpad.wikimedia.org/p/607-anova
+<br><br>
+<div style="font-size:34pt; text-align:left">
+1. Beyond ANOVA: T and Posthoc Tests 
+\
+2. ANOVA in a Likelihood and Bayesian Context
+</div>
+
+
+
+## Categorical Predictors: Gene Expression and Mental Disorders
+
+![image](./images/19/neuron_label.jpeg){width="30.00000%"}
+![image](./images/19/myelin.jpeg){width="40.00000%"}\
+```{r load_brains}
+brainGene <- read.csv("./data/19/15q06DisordersAndGeneExpression.csv") %>%
+  mutate(group = forcats::fct_relevel(group, c("control", "schizo", "bipolar")))
+```
+
+## The data
+```{r boxplot}
+ggplot(brainGene, aes(x=group, y=PLP1.expression, fill = group)) +
+  geom_boxplot() +
+  scale_fill_discrete(guide=FALSE)+
+  theme_bw(base_size=17)
+```
+
+
+## Comparison of Means
+```{r meansplot}
+ggplot(brainGene, aes(x=group, y=PLP1.expression, color = group)) +
+#  geom_boxplot() +
+  stat_summary() +
+  scale_color_discrete(guide=FALSE) +
+  theme_bw(base_size=17)
+```
+
+
+## Means Model
+$$  large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )$$
+\
+<div style="text-align:left">
+<li> Different mean for each group  
+\
+<li> Focus is on specificity of a categorical predictor
+</div>
+
+
+## Questions we could ask
+
+1.  Does your model explain variation in the data?
+
+2.  Are your coefficients different from 0?
+
+3.  How much variation is retained by the model?
+
+4.  How confident can you be in model predictions?
+
+
+## Testing the Model
+
+Ho = The model predicts no variation in the data.  
+\
+\
+\
+Ha = The model predicts variation in the data.
+
+
+## F-Tests
+
+F = Mean Square Variability Explained by Model / Mean Square Error<br>
+<br>
+DF for Numerator = k-1 DF for Denominator = n-k<br>
+k = number of groups, n = sample size
+
+## Questions we could ask
+
+1.  Does your model explain variation in the data?  
+\
+2.  Are your coefficients different from 0?  
+\
+3.  How much variation is retained by the model?  
+\
+4.  How confident can you be in model predictions?
+\
+5. Are groups different from each other
+
+## Questions we could ask
+
+1.  <font color="red">Does your model explain variation in the data?</font>  
+\
+2.  Are your coefficients different from 0?  
+\
+3.  How much variation is retained by the model?  
+\
+4.  How confident can you be in model predictions?
+\
+5. Are groups different from each other
+
+## ANOVA
+
+```{r brainGene_anova}
+brain_lm <- lm(PLP1.expression ~ group, data=brainGene)
+knitr::kable(anova(lm(PLP1.expression ~ group, data=brainGene)))
+```
+
+## Questions we could ask
+
+1.  Does your model explain variation in the data?  
+\
+2.  Are your coefficients different from 0?  
+\
+3.  How much variation is retained by the model?  
+\
+4.  How confident can you be in model predictions?
+\
+5. Are groups different from each other
+
+
+## Questions we could ask
+
+1.  Does your model explain variation in the data?  
+\
+2.  <font color="red">Are your coefficients different from 0?</font>  
+\
+3.  How much variation is retained by the model?  
+\
+4.  How confident can you be in model predictions?
+\
+5. <font color="red">Are groups different from each other</font>  
+
+
+
+## ANOVA, F, and T-Tests
+
+F-Tests | T-Tests
+------------------|------------------
+Tests if data generating process different than error | Tests if parameter is different from 0
+
+Essentially comparing a variation explained by a model with versus without a data generating process included.
+
+
+
+## The Coefficients
+
+```{r lm_summary}
+knitr::kable(coef(summary(brain_lm)))
+```
+
+<span class="fragment">Treatment contrasts - set one group as a baseline<br>Useful with a control</span>
+
+
+
+## Default “Treatment” Contrasts
+
+```{r brainGene_contrasts}
+contrasts(brainGene$group)
+```
+
+## Actual Group Means Compared to 0
+
+```{r brainGene_noint}
+brain_lm_noint <- lm(PLP1.expression ~ group-1, data=brainGene)
+knitr::kable(coef(summary(brain_lm_noint)))
+
+```
+
+## But which groups are different from each other?
+```{r meansplot}
+```
+
+<span class="fragment">Many T-tests....mutiple comparisons!</span>
+
+## The Problem of Multiple Comparisons
+```{r anim_mult_test, cache=TRUE, message=FALSE, warning=FALSE, errors=FALSE}
+library(animation)
+set.seed(2002)
+sim_df <- data.frame(trial=1:100, x=rnorm(100*5)) %>%
+  group_by(trial) %>%
+  summarise(mean_x = mean(x), 
+            ci_x = 1.96*sd(x)/sqrt(5), 
+            p = pt(mean_x/(sd(x)/sqrt(5)), 4)) %>%
+  ungroup()
+invisible(saveGIF({
+  for(i in 1:100){
+  print(ggplot(data=sim_df[1:i,], aes(x=trial, y=p)) +
+    geom_point() +
+    xlim(c(0,100)) + ylim(c(0,1)) + theme_classic(base_size=14) +
+    geom_hline(yintercept=0.05, lwd=1, lty=2, color="red"))
+  }
+}, movie.name="multcomp.gif", interval=0.3))
+```
+<img src="./multcomp.gif">
+
+
+## Solutions to Multiple Comparisons and Family-wise Error Rate?
+<div style="text-align:left">
+> 1. Ignore it - a test is a test
+>     + *a priori contrasts*
+>     + Least Squares Difference test
+
+
+> 2. Lower your $\alpha$ given m = # of comparisons
+>     + Bonferroni $\alpha/m$
+>     + False Discovery Rate $k\alpha/m$ where k is rank of test
+  
+ 
+>3. Other multiple comparinson correction
+>     + Tukey's Honestly Significant Difference
+
+</div>
+
+## ANOVA is an Omnibus Test
+
+Remember your Null:\
+$$H_{0} = \mu_{1} = \mu{2} = \mu{3} = ...$$\
+\
+This had nothing to do with specific comparisons of means.
+
+
+
+## A priori contrasts
+
+Specific sets of <span>*a* priori</span> null hypotheses:
+$$\mu_{1} = \mu{2}$$\
+$$\mu_{1} = \mu{3} = ...$$\
+\
+Use t-tests.
+
+
+
+## A priori contrasts
+
+```{r contrast1, warning=FALSE, message=FALSE}
+options(digits=3)
+
+contrast(brain_lm, list(group="control"), 
+         list(group="schizo"))
+```
+
+
+
+## A priori contrasts
+
+```{r contrast2}
+options(digits=3)
+
+contrast(brain_lm, list(group="control"), 
+         list(group=c("schizo", "bipolar")),
+         cnames = c("Control v. Schizo", "Control v. Bipolar"))
+``` 
+
+Note: can only do k-1, as each takes 1df
+
+
+## Orthogonal A priori contrasts
+
+Sometimes you want to test very specific hypotheses about the structure
+of your groups 
+```{r ortho1, echo=FALSE, message=FALSE, warning=TRUE}
+
+contrast_mat <- matrix(c(1, -0.5, -0.5,
+                 0,   1,     -1), nrow=2, byrow=T)
+colnames(contrast_mat) <- levels(brainGene$group)
+rownames(contrast_mat) <- c("Control v. Disorders", "Bipolar v. Schizo")
+contrast_mat
+
+``` 
+
+Note: can only do k-1, as each takes 1df
+
+## Orthogonal A priori contrasts with Grouping
+
+```{r contrast_test}
+options(digits=3)
+bg_orthogonal <- glht(brain_lm, linfct=contrast_mat, 
+                  test=adjusted("none"))
+#
+summary(bg_orthogonal)
+```
+
+
+
+## Post hoc contrasts
+
+I want to test all possible comparisons!
+
+
+## No Correction: Least Square Differences
+```{r pairs, echo=TRUE}
+pairwise.t.test(brainGene$PLP1.expression, brainGene$group, 
+                p.adjust.method="none")
+```
+
+## P-Value Adjustments
+
+Bonferroni : $\alpha_{adj} = \frac{\alpha}{m}$ where m = \# of tests\
+- VERY conservative\
+\
+False Discovery Rate: $\alpha_{adj} = \frac{k\alpha}{m}$\
+- Order your p values from smallest to largest, rank = k,\
+- Adjusts for small v. large p values\
+- Less conservative\
+\
+Other Methods: Sidak, Dunn, Holm, etc.\
+We’re very focused on p here!
+
+
+## Bonferroni Corrections
+```{r bonf, echo=TRUE}
+pairwise.t.test(brainGene$PLP1.expression, brainGene$group, 
+                p.adjust.method="bonferroni")
+```
+
+## FDR
+```{r fdr, echo=TRUE}
+pairwise.t.test(brainGene$PLP1.expression, brainGene$group, 
+                p.adjust.method="fdr")
+```
+
+
+## Other Methods Use Critical Values
+
+-   Tukey’s Honestly Significant Difference
+
+-   Dunnet’s Test for Comparison to Controls
+
+-   Ryan’s Q (sliding range)
+
+-   etc...
+
+
+## Tukey's Honestly Significant Difference
+```{r tukey}
+brain_aov <- aov(PLP1.expression ~ group, data=brainGene)
+TukeyHSD(brain_aov)
+```
+
+
+## Visualizing Comparisons
+```{r tukey-viz}
+plot(TukeyHSD(brain_aov))
+```
+
+## Final Notes of Caution
+
+-   Often you DO have a priori contrasts in mind
+
+-   If you reject Ho with ANOVA, differences between groups exist
+
+-   Consider Type I v. Type II error before correcting
+
+
+
+## Outline
+https://etherpad.wikimedia.org/p/607-anova
+<br><br>
+<div style="font-size:34pt; text-align:left">
+1. Beyond ANOVA: T and Posthoc Tests 
+\
+2. ANOVA in a Likelihood and Bayesian Context
+</div>
+
+
+## Fitting an ANOVA model with Likelihood
+```{r like_anova_mod, echo=TRUE}
+brain_lik <- glm(PLP1.expression ~ group,
+                 family=gaussian(),
+                 data = brainGene)
+```
+
+## $\chi^2$ LR Test and ANOVA
+<br><br>
+```{r like_anova}
+knitr::kable(Anova(brain_lik), digits=5)
+```
+
+## Likelihood and Posthocs
+```{r tukey_lik}
+options(digits=2)
+bg_tukey_lik <- glht(brain_lm, linfct=mcp(group="Tukey"), 
+                  test=adjusted("none"))
+#
+summary(bg_tukey_lik)
+```
+
+## BANOVA
+```{r banova, echo=TRUE, cache=TRUE}
+brain_bayes <- stan_glm(PLP1.expression ~ group - 1,
+                 family=gaussian(),
+                 data = brainGene)
+```
+
+```{r banova_2, echo=TRUE, cache=TRUE}
+brain_bayes_lmer <- stan_lmer(PLP1.expression ~ 1+ (1|group),
+                # family=gaussian(),
+                 data = brainGene)
+```
+
+## BANOVA
+```{r show_banova1}
+summary(brain_bayes, prob = c(0.05, 0.1, 0.5, 0.9, 0.95), digits=2)
+```
+
+
+## BANOVA
+```{r show_banova}
+posterior_interval(brain_bayes, prob = 0.8)
+```
+
+## What is the variability between treatments v. sigma?
+```{r banova_variability, cache=TRUE}
+chains <- as.data.frame(brain_bayes)
+
+chains <- chains %>%
+  rowwise() %>%
+    mutate(treatment_sigma = sd(c(groupcontrol,  groupschizo,  groupbipolar)),
+         control_v_schizo = groupcontrol - groupschizo,
+        control_v_bipolar = groupcontrol -groupbipolar )  %>%
+  ungroup()
+
+ggplot(chains %>% dplyr::select(sigma, treatment_sigma) %>% tidyr::gather(variable, value), 
+       mapping = aes(x=variable, y=value)) +
+  stat_summary(fun.data = "mean_sdl") +
+  theme_bw(base_size=17) +
+  coord_flip()
+
+```
+
+## Are Groups Different?
+```{r bayes_posthoc}
+ggplot(chains %>% dplyr::select(control_v_schizo, control_v_bipolar) %>% tidyr::gather(variable, value), 
+       mapping = aes(x=variable, y=value)) +
+  stat_summary(fun.data = "mean_sdl") +
+  theme_bw(base_size=17) +
+  geom_hline(yintercept=0, lty=2) +
+  coord_flip() 
+```
+
+## Are Groups Different?
+```{r show differences_numbers}
+cat("Control v. Schizo\n")
+quantile(chains$control_v_schizo)
+
+cat("\nControl v. Bipolar\n")
+quantile(chains$control_v_bipolar)
+
+```
+
+## Alternate methods
+1. Likelihood uses $\chi^2$, but other methods are identical to least squares
+\
+2. Bayesian methods conservative, but use chains for identical inferences to ANOVA
+\
+3. Sidenote: Bayesian methods are less likely to commit type II errors
