@@ -98,13 +98,14 @@ __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readin
 ### Week 12.   
 __Lecture:__ Multiple Regression and Interaction Effects, Information Theoretic Approaches  
 __Lab Topic:__ Multiple Regression, Multimodel Inference  
-__Readings:__ Symonds and Moussalli 2010, Ecology Special Section on P Values  
+__Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf)  
+__Optional Readings:__ The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
   
   
 ### Week 13.   
 __Lecture:__ Entering a non-normal world - Modeling count data with Genearlized linear models. Overdispersed continuous data.  
 __Lab Topic:__ Generalized Linear Models. Diagnostics with DHARMa.  
-__Reading:__ O'Hara 2009, O'Hara and Kotze 2010, Wharton and Hui 2011  
+__Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_2009_glmm.pdf) through section on GLMs, [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html)  
   
   
 ### Week 14.   
