@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2" data-background="images/21/blocked_designs/Slide4.jpg">
+<h1></h1>
+<br> <!-- review this slide for continuity and some re-ordering in posthocs. That section is a bit of a mess Also Bayes needs more detail. And likelihood tables are ugly. Broom?-->
+<h1 style="background-color:white; font-size:68pt">
+Many Treatments: Multi-Way ANOVA
+</h1>
+</section>
+<section id="section-1" class="slide level2">
+<h1></h1>
+<p><br><br> <img src="images/21/anova-3.jpg" alt="image" style="width:50.0%" /></p>
+</section>
+<section id="effects-of-stickleback-density-on-zooplankton" class="slide level2">
+<h1>Effects of Stickleback Density on Zooplankton</h1>
+<p><br><br> <img src="images/21/daphnia.jpeg" alt="image" style="width:40.0%" /> <img src="images/21/threespine_stickleback.jpeg" alt="image" style="width:50.0%" /></p>
+</section>
+<section id="where-would-you-place-replicates" class="slide level2">
+<h1>Where Would You Place Replicates?</h1>
+<p><img src="images/21/blocked_designs/Slide1.jpg" alt="image" style="width:70.0%" /></p>
+</section>
+<section id="randomization" class="slide level2">
+<h1>Randomization</h1>
+<p><img src="images/21/blocked_designs/Slide2.jpg" alt="image" style="width:70.0%" /></p>
+<p><span class="fragment">Costs? Benefits?</span></p>
+</section>
+<section id="blocked-design" class="slide level2">
+<h1>Blocked Design</h1>
+<p><img src="images/21/blocked_designs/Slide2.jpg" alt="image" style="width:70.0%" /></p>
+<p><span class="fragment">Incorporates Gradient<Br>n=1 per block</span></p>
+</section>
+<section id="randomized-controlled-blocked-design" class="slide level2">
+<h1>Randomized Controlled Blocked Design</h1>
+<p><img src="images/21/blocked_designs/Slide3.jpg" alt="image" style="width:70.0%" /></p>
+<p><span class="fragment">Randomization within blocks</span></p>
+</section>
+<section id="effects-of-stickleback-density-on-zooplankton-1" class="slide level2">
+<h1>Effects of Stickleback Density on Zooplankton</h1>
+<p><br><br> <img src="images/21/daphnia.jpeg" alt="image" style="width:40.0%" /> <img src="images/21/threespine_stickleback.jpeg" alt="image" style="width:50.0%" /></p>
+<p>Units placed across a lake so that 1 set of each treatment was ’blocked’ together</p>
+</section>
+<section id="treatment-and-block-effects" class="slide level2">
+<h1>Treatment and Block Effects</h1>
+<p><img src="21_multiway_anova_files/figure-revealjs/zooplankton_boxplot-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="the-steps-of-statistical-modeling" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li>Evaluate test results</li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="multiway-anova" class="slide level2">
+<h1>Multiway ANOVA</h1>
+<ul>
+<li class="fragment">Many different treatment types
+<ul>
+<li class="fragment">2-Way ANOVA is for Treatment and block</li>
+<li class="fragment">3-Way for, e.g., Sticklebacks, Nutrients, and block</li>
+<li class="fragment">4-way, etc., all possible<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">Assumes treatments are fully orthogonal
+<ul>
+<li class="fragment">Each type of treatment type A has all levels of treatment type B</li>
+<li class="fragment">E.g., Each stickleback treatment is present in each block<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">Experiment is <strong>balanced</strong> for <strong>simple effects</strong>
+<ul>
+<li class="fragment">Simple effect is the unique combination of two or more treatments<br />
+</li>
+<li class="fragment">Balance implies the sample size for each treatment combination is the same</li>
+</ul></li>
+</ul>
+</section>
+<section id="model-for-multiway-anovaanodev" class="slide level2">
+<h1>Model for Multiway ANOVA/ANODEV</h1>
+<p><br />
+<span class="math display">\[y_{k} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \epsilon_{k}\]</span><br />
+<br />
+<span class="math display">\[\epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{i} = 0,1\]</span><br />
+Or, with matrices…<br />
+<br />
+<span class="math display">\[\boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}\]</span></p>
+</section>
+<section id="assumptions-of-multiway-anova" class="slide level2">
+<h1>Assumptions of Multiway Anova</h1>
+<ul>
+<li><p>Independence of data points</p></li>
+<li><p>Normality within groups (of residuals)</p></li>
+<li><p>No relationship between fitted and residual values</p></li>
+<li><p>Homoscedasticity (homogeneity of variance) of groups</p></li>
+<li><p>Additivity of Treatments</p></li>
+</ul>
+</section>
+<section id="the-usual-suspects-of-assumptions" class="slide level2">
+<h1>The Usual Suspects of Assumptions</h1>
+<p><img src="21_multiway_anova_files/figure-revealjs/zoop_assumptions-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="group-residuals" class="slide level2">
+<h1>Group Residuals</h1>
+<p><img src="21_multiway_anova_files/figure-revealjs/zoop_group_assumptions-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="tukeys-test-of-non-additivity" class="slide level2">
+<h1>Tukey’s Test of Non-additivity:</h1>
+<ul>
+<li class="fragment">Our model is <span class="math inline">\(y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}\)</span><br />
+<br />
+</li>
+<li class="fragment">But, if A and B are non-additive, results are incorrect.<br />
+<br />
+</li>
+<li class="fragment">We don’t have the DF with n=1 per treatment combination to calculate an interaction, so…<br />
+<br />
+</li>
+<li class="fragment">Assume a model of <span class="math inline">\(y_{ij} = \mu + \alpha_i + \beta_j + \lambda\alpha_i\beta_j\)</span><br />
+<br />
+</li>
+<li class="fragment">We can then test for <span class="math inline">\(SS_{AB}\)</span> using <span class="math inline">\(\lambda\alpha_i\beta_j\)</span></li>
+</ul>
+<div class="fragment">
+<pre><code>Test stat  Pr(&gt;|t|) 
+    0.474     0.635 </code></pre>
+</div>
+</section>
+<section id="hypotheses-for-multiway-anovaanodev" class="slide level2">
+<h1>Hypotheses for Multiway ANOVA/ANODEV</h1>
+<p>TreatmentHo: <span class="math inline">\(\mu_{i1} = \mu{i2} = \mu{i3} = ...\)</span><br />
+<br />
+<br />
+Block Ho: <span class="math inline">\(\mu_{j1} = \mu{j2} = \mu{j3} = ...\)</span><br />
+<br />
+i.e., The variane due to each treatment type is no different than noise</p>
+</section>
+<section id="we-decompose-sums-of-squares-for-multiway-anova" class="slide level2">
+<h1>We Decompose Sums of Squares for Multiway ANOVA</h1>
+<p><span class="math inline">\(SS_{Total} = SS_{Between A} + SS_{Between B} + SS_{Within}\)</span></p>
+<ul>
+<li>Factors are Orthogonal and Balanced, so, Model SS can be split<br />
+<br />
+</li>
+<li>F-Test using Mean Squares as Before</li>
+</ul>
+</section>
+<section id="f-test" class="slide level2">
+<h1>F-Test</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">sumsq</th>
+<th style="text-align: right;">meansq</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">treatment</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6.857333</td>
+<td style="text-align: right;">3.428667</td>
+<td style="text-align: right;">16.365951</td>
+<td style="text-align: right;">0.0014881</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">block</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2.340000</td>
+<td style="text-align: right;">0.585000</td>
+<td style="text-align: right;">2.792363</td>
+<td style="text-align: right;">0.1010308</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Residuals</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1.676000</td>
+<td style="text-align: right;">0.209500</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-to-evaluate-effects-of-each-treatment" class="slide level2">
+<h1>How to evaluate effects of each treatment</h1>
+<ol type="1">
+<li>Examine means estimates<br />
+<br />
+</li>
+<li>Evaluate treatment after parcelling out effect of other treatment<br />
+<br />
+</li>
+<li>Evaluate treatment at the median or mean level of other treatment</li>
+</ol>
+</section>
+<section id="evaluating-treatment-effects" class="slide level2">
+<h1>Evaluating Treatment Effects</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">treatmentcontrol</td>
+<td style="text-align: right;">3.42</td>
+<td style="text-align: right;">0.3126766</td>
+<td style="text-align: right;">10.9378182</td>
+<td style="text-align: right;">0.0000043</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">treatmenthigh</td>
+<td style="text-align: right;">1.78</td>
+<td style="text-align: right;">0.3126766</td>
+<td style="text-align: right;">5.6927826</td>
+<td style="text-align: right;">0.0004582</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">treatmentlow</td>
+<td style="text-align: right;">2.40</td>
+<td style="text-align: right;">0.3126766</td>
+<td style="text-align: right;">7.6756619</td>
+<td style="text-align: right;">0.0000588</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">block2</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.3737200</td>
+<td style="text-align: right;">0.0000000</td>
+<td style="text-align: right;">1.0000000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">block3</td>
+<td style="text-align: right;">-0.70</td>
+<td style="text-align: right;">0.3737200</td>
+<td style="text-align: right;">-1.8730599</td>
+<td style="text-align: right;">0.0979452</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">block4</td>
+<td style="text-align: right;">-1.00</td>
+<td style="text-align: right;">0.3737200</td>
+<td style="text-align: right;">-2.6757998</td>
+<td style="text-align: right;">0.0281084</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">block5</td>
+<td style="text-align: right;">-0.30</td>
+<td style="text-align: right;">0.3737200</td>
+<td style="text-align: right;">-0.8027399</td>
+<td style="text-align: right;">0.4453163</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="parcelling-out-second-treatment" class="slide level2">
+<h1>Parcelling Out Second Treatment</h1>
+<p><img src="21_multiway_anova_files/figure-revealjs/visualize_treatments-1.jpeg" title="" alt="" width="768" /></p>
+<p>Component-Residual Plots take examine unique effect of one treatment after removing influence of the other.</p>
+</section>
+<section id="median-value-of-second-treatment" class="slide level2">
+<h1>Median Value of Second Treatment</h1>
+<p><img src="21_multiway_anova_files/figure-revealjs/visreg-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="comparison-of-differences-at-average-of-other-treatment" class="slide level2">
+<h1>Comparison of Differences at Average of Other Treatment</h1>
+<pre><code> contrast       estimate        SE df t.ratio p.value
+ control - high     1.64 0.2894823  8   5.665  0.0012
+ control - low      1.02 0.2894823  8   3.524  0.0190
+ high - low        -0.62 0.2894823  8  -2.142  0.1424
+
+Results are averaged over the levels of: block 
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</section>
+<section id="what-if-my-design-is-unbalanced" class="slide level2">
+<h1>What if my design is unbalanced?</h1>
+<p align="left">
+Uh oh… a cat ate my treatment!<br />
+<br />
+<span class="fragment"><strong>This is a big problem</strong></span><br />
+<br />
+<span class="fragment">Sums of Squares are not ‘unbalanced’ - more information goes into one than the other</span><br />
+<br />
+<span class="fragment"> Suddenly, order matters…
+</p>
+</section>
+<section id="entering-treatment-first" class="slide level2">
+<h1>Entering Treatment First</h1>
+<pre><code>zooplankton ~ treatment + block</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>treatment</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.171</td>
+<td style="text-align: right;">2.086</td>
+<td style="text-align: right;">18.046</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="even">
+<td>block</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.749</td>
+<td style="text-align: right;">0.437</td>
+<td style="text-align: right;">3.783</td>
+<td style="text-align: right;">0.060</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.809</td>
+<td style="text-align: right;">0.116</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<pre><code>zooplankton ~ block + treatment</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>block</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.878</td>
+<td style="text-align: right;">0.469</td>
+<td style="text-align: right;">4.062</td>
+<td style="text-align: right;">0.052</td>
+</tr>
+<tr class="even">
+<td>treatment</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.043</td>
+<td style="text-align: right;">2.021</td>
+<td style="text-align: right;">17.490</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.809</td>
+<td style="text-align: right;">0.116</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="whats-going-on-type-i-and-ii-sums-of-squares" class="slide level2">
+<h1>What’s Going On: Type I and II Sums of Squares</h1>
+<div style="text-align:left">
+<p><strong>Type I Sums of Squares:</strong><br />
+<span class="fragment">    SS for A calculated from a model with A + Intercept versus just Intercept</span><br />
+<br />
+<span class="fragment">    SS for B calculated from a model with A + B + Intercept versus A + Intercept</span><br />
+<br />
+<br />
+<span class="fragment">This is <strong>fine</strong> for a balanced design. Variation evenly partitioned.</span></p>
+</div>
+</section>
+<section id="whats-going-on-type-i-and-ii-sums-of-squares-1" class="slide level2">
+<h1>What’s Going On: Type I and II Sums of Squares</h1>
+<p align="left">
+<strong>Type II Sums of Squares:</strong><br />
+<span class="fragment">    SS for A calculated from a model with A + B + Intercept versus B + Intercept</span><br />
+<br />
+<span class="fragment">    SS for B calculated from a model with A + B + Intercept versus A + Intercept</span><br />
+<br />
+<br />
+<span class="fragment">Each SS is the unique contribution of a treatment</span><br />
+<span class="fragment">If the design is balanced, no different than type I</span>
+</p>
+</section>
+<section id="whats-going-on-type-i-and-ii-sums-of-squares-2" class="slide level2">
+<h1>What’s Going On: Type I and II Sums of Squares</h1>
+<h4>
+<table>
+<tbody>
+<tr class="odd">
+<td></td>
+<td style="text-align: center;">Type I</td>
+<td style="text-align: center;">Type II</td>
+</tr>
+<tr class="even">
+<td>Test for A</td>
+<td style="text-align: center;">A v. 1</td>
+<td style="text-align: center;">A + B v. B <br><br></td>
+</tr>
+<tr class="odd">
+<td>Test for B</td>
+<td style="text-align: center;">A + B v. A</td>
+<td style="text-align: center;">A + B v. A <br><br></td>
+</tr>
+</tbody>
+</table>
+</h4>
+<p><br />
+Sequential SS v. Marginal SS</p>
+</section>
+<section id="type-ii-ss-to-the-rescue" class="slide level2">
+<h1>Type II SS to the Rescue</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>treatment</td>
+<td style="text-align: right;">4.043</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">17.490</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="even">
+<td>block</td>
+<td style="text-align: right;">1.749</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3.783</td>
+<td style="text-align: right;">0.060</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">0.809</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>Compare to zooplankton ~ treatment + block:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>treatment</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.171</td>
+<td style="text-align: right;">2.086</td>
+<td style="text-align: right;">18.046</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="even">
+<td>block</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.749</td>
+<td style="text-align: right;">0.437</td>
+<td style="text-align: right;">3.783</td>
+<td style="text-align: right;">0.060</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.809</td>
+<td style="text-align: right;">0.116</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="type-ii-ss-to-the-rescue-1" class="slide level2">
+<h1>Type II SS to the Rescue</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>treatment</td>
+<td style="text-align: right;">4.043</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">17.490</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="even">
+<td>block</td>
+<td style="text-align: right;">1.749</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3.783</td>
+<td style="text-align: right;">0.060</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">0.809</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<p>Compare to zooplankton ~ block + treatment:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>block</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.878</td>
+<td style="text-align: right;">0.469</td>
+<td style="text-align: right;">4.062</td>
+<td style="text-align: right;">0.052</td>
+</tr>
+<tr class="even">
+<td>treatment</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.043</td>
+<td style="text-align: right;">2.021</td>
+<td style="text-align: right;">17.490</td>
+<td style="text-align: right;">0.002</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.809</td>
+<td style="text-align: right;">0.116</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="beyond-2-way-anova" class="slide level2">
+<h1>Beyond 2-Way ANOVA</h1>
+<p align="left">
+Latin Squares Design
+</p>
+<p><img src="images/21/blocked_designs/Slide5.jpg" alt="image" style="width:70.0%" /></p>
+<p><span class="fragment">Accomodates multiple gradients</span></p>
+</section>
+<section id="latin-squares" class="slide level2">
+<h1>Latin Squares</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">Col 1</th>
+<th style="text-align: center;">Col 2</th>
+<th style="text-align: center;">Col 3</th>
+<th style="text-align: center;">Col 4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Row 1</td>
+<td style="text-align: center;">A</td>
+<td style="text-align: center;">B</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">D</td>
+</tr>
+<tr class="even">
+<td>Row 2</td>
+<td style="text-align: center;">B</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">A</td>
+</tr>
+<tr class="odd">
+<td>Row 3</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">A</td>
+<td style="text-align: center;">B</td>
+</tr>
+<tr class="even">
+<td>Row 4</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">A</td>
+<td style="text-align: center;">B</td>
+<td style="text-align: center;">C</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+<br />
+Every row and column contains one replicate of a treatment.<br />
+Can be generalized to n gradients <span class="fragment"> <span class="math display">\[y_{ijkl} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{k}x_{k} +\epsilon_{ijkl}\]</span><br />
+<br />
+<span class="math display">\[\epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{i} = 0,1\]</span> </span></p>
+</section>
+<section id="many-treatments" class="slide level2">
+<h1>Many Treatments</h1>
+<p><img src="images/21/4_way_anova.jpg" alt="image" style="width:70.0%" /></p>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
