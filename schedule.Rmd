@@ -90,7 +90,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-anova
   
   
 ### Week 11.   
-__Lectures:__ Experimental Design in a Multicausal World  
+__Lectures:__ Experimental Design in a Multicausal World - [Multiway ANOVA](lectures/21_multiway_anova.Rmd)
 __Lab Topic:__ Factorial ANOVA, Discussion of Hurlbert  
 __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf), [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
   

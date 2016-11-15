@@ -211,7 +211,7 @@ par(mfrow=c(1,1))
 
 ## Comparison of Differences at Average of Other Treatment
 ```{r lsmeans}
-contrast( lsmeans(zoop_lm, "treatment"), "tukey")
+contrast( lsmeans(zoop_lm, "treatment"), "tukey", adjust="tukey")
 ```
 
 
