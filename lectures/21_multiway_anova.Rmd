@@ -54,12 +54,12 @@ library(lsmeans)
 <span class="fragment">Costs? Benefits?</span>
 
 ## Blocked Design
-![image](./images/21/blocked_designs/Slide2.jpg){width="70.00000%"}  
+![image](./images/21/blocked_designs/Slide3.jpg){width="70.00000%"}  
 
 <span class="fragment">Incorporates Gradient<Br>n=1 per block</span>
 
 ## Randomized Controlled Blocked Design
-![image](./images/21/blocked_designs/Slide3.jpg){width="70.00000%"} 
+![image](./images/21/blocked_designs/Slide4.jpg){width="70.00000%"} 
 
 <span class="fragment">Randomization within blocks</span>
 
@@ -205,7 +205,7 @@ Component-Residual Plots take examine unique effect of one treatment after remov
 ## Median Value of Second Treatment
 ```{r visreg}
 par(mfrow=c(1,2))
-visreg::visreg(zoop_lm, type="effect")
+visreg::visreg(zoop_lm)
 par(mfrow=c(1,1))
 ```
 
