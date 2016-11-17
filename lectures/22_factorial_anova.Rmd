@@ -13,10 +13,7 @@ output:
     css: style.css
 ---
 
-## 
-
-Factorial Designs & Interaction Effects
-
+## Factorial Designs & Interaction Effects
 
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
@@ -34,8 +31,23 @@ library(lsmeans)
 
 ```
 
+```{r plot_algae}
+algae <- read.csv("./data/22/18e3IntertidalAlgae.csv")
+
+algae_plot <- qplot(height, sqrtarea,  data=algae, geom="boxplot", fill=herbivores) + theme_bw(base_size=16)
+algae_plot
+```
+
+
 ```{r lecture22prep}
 ```
+
+## Outline
+1. Factorial ANOVA  
+\
+2. Posthocs  
+\
+3. Unbalanced Designs  
 
 ## Is the world additive?
 
@@ -63,10 +75,6 @@ What happens if you fit this data using \* instead of + in the linear model?
 
 ## The Data
 ```{r plot_algae}
-algae <- read.csv("./data/22/18e3IntertidalAlgae.csv")
-
-algae_plot <- qplot(height, sqrtarea,  data=algae, geom="boxplot", fill=herbivores) + theme_bw(base_size=16)
-algae_plot
 ```
 
 ## Humdrum Linear Model
@@ -79,7 +87,17 @@ graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
 knitr::kable(Anova(graze_linear))
 ```
 
+## Residuals Look Weird
+```{r graze_assumptions, fig.height=7}
+par(mfrow=c(2,2))
+plot(graze_linear, which=c(1,2,5), cex.lab=1.4)
+par(mfrow=c(1,1))
+```
 
+## Group Residuals Look Odd
+```{r zoop_group_assumptions, fig.height=7}
+residualPlots(graze_linear, cex.lab=1.4, test=FALSE)
+```
 
 ## Pattern in Fitted v. Residuals
 
@@ -164,6 +182,13 @@ residualPlot(graze_int, variable="fitted", type="response")
 ```
 
 
+## Other Assumptions are Met
+```{r graze_assumptions_int, fig.height=7}
+par(mfrow=c(2,2))
+plot(graze_int, which=c(1,2,5), cex.lab=1.4)
+par(mfrow=c(1,1))
+```
+
 
 ## F-Tests for Interactions
 
@@ -194,13 +219,18 @@ knitr::kable(Anova(graze_int))
 ```{r graze_interaction_coefs}
 ```
 
-
-
 ## What does the Interaction Coefficient Mean?
 
 ```{r algae_plot}
 knitr::kable(summary(update(graze_int, .~.-1))$coefficients)
 ```
+
+## Outline
+1. Factorial ANOVA  
+\
+2. <font color="red">Posthocs</font>  
+\
+3. Unbalanced Designs  
 
 ## Post-hoc Tests!
 ![image](./images/22/gosling_p_value.jpg){width="70.00000%"}
@@ -246,6 +276,13 @@ contrast( lsmeans(graze_int, c("height", "herbivores")), "tukey", adjust="none")
 ```{r graze_posthoc_plot}
 plot(contrast( lsmeans(graze_int, c("height", "herbivores")), "tukey", adjust="none"), cex.lab=1,2, cex.axis=1.3, cex=1.2)
 ```
+
+## Outline
+1. Factorial ANOVA  
+\
+2. Posthocs  
+\
+3. <font color="red">Unbalanced Designs</font>  
 
 ## Oh no! I lost a replicate (or two)
 \
