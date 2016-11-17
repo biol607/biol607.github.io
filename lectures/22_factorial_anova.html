@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h1></h1>
+<p>Factorial Designs &amp; Interaction Effects</p>
+</section>
+<section id="is-the-world-additive" class="slide level2">
+<h1>Is the world additive?</h1>
+<ul>
+<li class="fragment">Until now, we have assumed factors combine additively<br />
+<br />
+</li>
+<li class="fragment">BUT - what if the effect of one factor depends on another?<br />
+<br />
+</li>
+<li class="fragment">This is an <strong>INTERACTION</strong> and is quite common<br />
+<br />
+</li>
+<li class="fragment">Yet, challenging to think about, and visualize</li>
+</ul>
+</section>
+<section id="intertidal-grazing" class="slide level2">
+<h1>Intertidal Grazing!</h1>
+<p><img src="images/22/grazing-expt.jpeg" alt="image" style="width:70.0%" /><br />
+Do grazers reduce algal cover in the intertidal?</p>
+</section>
+<section id="experiment-replicated-on-two-ends-of-a-gradient" class="slide level2">
+<h1>Experiment Replicated on Two Ends of a gradient</h1>
+<p><img src="images/22/zonation.jpg" alt="image" style="width:70.0%" /><br />
+What happens if you fit this data using * instead of + in the linear model?</p>
+</section>
+<section id="the-data" class="slide level2">
+<h1>The Data</h1>
+<p><img src="22_factorial_anova_files/figure-revealjs/plot_algae-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="humdrum-linear-model" class="slide level2">
+<h1>Humdrum Linear Model</h1>
+<h3 style="text-align:left">
+sqrtarea ~ height + herbivores
+</h3>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>height</td>
+<td style="text-align: right;">88.97334</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.3213845</td>
+<td style="text-align: right;">0.5728570</td>
+</tr>
+<tr class="even">
+<td>herbivores</td>
+<td style="text-align: right;">1512.18349</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.4622243</td>
+<td style="text-align: right;">0.0227309</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">16887.47793</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="pattern-in-fitted-v.-residuals" class="slide level2">
+<h1>Pattern in Fitted v. Residuals</h1>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_linear_diagnostics-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="nonlinearity-seen-in-the-tukey-test" class="slide level2">
+<h1>Nonlinearity seen in the Tukey Test!</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Test stat</th>
+<th style="text-align: right;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>height</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td>herbivores</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td>Tukey test</td>
+<td style="text-align: right;">-3.317</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+</tbody>
+</table>
+<p>(Note: This test is typically used when there is no replication within blocks)</p>
+</section>
+<section id="factorial-blocked-experiment" class="slide level2">
+<h1>Factorial Blocked Experiment</h1>
+<p><img src="images/22/factorial_blocks.jpg" alt="image" style="width:80.0%" /><br />
+</p>
+</section>
+<section id="factorial-design" class="slide level2">
+<h1>Factorial Design</h1>
+<p><img src="images/22/factorial_layout.jpg" alt="image" style="width:80.0%" /><br />
+Note: You can have as many treatment types as you want (and then 3-way, 4-way, etc. interactions)</p>
+</section>
+<section id="problem-categorical-predictors-are-not-additive" class="slide level2">
+<h1>Problem: Categorical Predictors are Not Additive!</h1>
+<p><img src="22_factorial_anova_files/figure-revealjs/plot_algae-1.jpeg" title="" alt="" width="768" /></p>
+<p>You can only see this if you have replication of treatments (grazing) within blocks (tide height)</p>
+</section>
+<section id="the-model-for-a-factorial-anovaanodev" class="slide level2">
+<h1>The Model For a Factorial ANOVA/ANODEV</h1>
+<p><span class="math display">\[y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}\]</span><br />
+<br />
+<span class="math display">\[\epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{i} = 0,1\]</span></p>
+<p><br />
+&gt; - Note the new last term<br />
+<br />
+&gt; - Deviation due to treatment combination</p>
+</section>
+<section id="the-general-linear-model" class="slide level2">
+<h1>The General Linear Model</h1>
+<p><span class="math display">\[\boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}\]</span></p>
+<ul>
+<li class="fragment"><span class="math inline">\(\boldsymbol X\)</span> can have Nonlinear predictors<br />
+<br />
+</li>
+<li class="fragment">e.g., It can encompass A, B, and A*B</li>
+</ul>
+</section>
+<section id="how-do-you-fit-an-interaction-effect" class="slide level2">
+<h1>How do you Fit an Interaction Effect?</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea ~<span class="st"> </span>height +<span class="st"> </span>herbivores +<span class="st"> </span>herbivores:height, 
+                <span class="dt">data=</span>algae)</code></pre></div>
+<br />
+<br />
+
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea ~<span class="st"> </span>height*herbivores, <span class="dt">data=</span>algae)</code></pre></div>
+</div>
+</section>
+<section id="no-more-pattern-in-fitted-v.-residuals" class="slide level2">
+<h1>No More Pattern in Fitted v. Residuals</h1>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_int_resplot-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="f-tests-for-interactions" class="slide level2">
+<h1>F-Tests for Interactions</h1>
+<span class="math inline">\(SS_{Total} = SS_{A} + SS_{B} + SS_{AB} +SS_{Error}\)</span><br />
+<br />
+<span class="math inline">\(SS_{AB} = n\sum_{i}\sum_{j}(\bar{Y_{ij}} - \bar{Y_{i}}- \bar{Y_{j}} - \bar{Y})^{2}\)</span>, df=(i-1)(j-1)<br />
+<br />
+<br />
+
+<div class="fragment">
+MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span><br />
+<br />
+<span class="math inline">\(F = \frac{MS_{AB}}{MS_{Error}}\)</span> with DF=(j-1)(k-1),n - 1 - (i-1) - (j-1) - (i-1)(j-1)<br />
+
+</div>
+</section>
+<section id="anova-shows-an-interaction-effect" class="slide level2">
+<h1>ANOVA shows an Interaction Effect</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>height</td>
+<td style="text-align: right;">88.97334</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.3740858</td>
+<td style="text-align: right;">0.5430962</td>
+</tr>
+<tr class="even">
+<td>herbivores</td>
+<td style="text-align: right;">1512.18349</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.3579319</td>
+<td style="text-align: right;">0.0143595</td>
+</tr>
+<tr class="odd">
+<td>height:herbivores</td>
+<td style="text-align: right;">2616.95555</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11.0029142</td>
+<td style="text-align: right;">0.0015486</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">14270.52238</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-does-the-interaction-coefficient-mean" class="slide level2">
+<h1>What does the Interaction Coefficient Mean?</h1>
+</section>
+<section id="what-does-the-interaction-coefficient-mean-1" class="slide level2">
+<h1>What does the Interaction Coefficient Mean?</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t value</th>
+<th style="text-align: right;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>heightlow</td>
+<td style="text-align: right;">32.91450</td>
+<td style="text-align: right;">3.855532</td>
+<td style="text-align: right;">8.536955</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+<tr class="even">
+<td>heightmid</td>
+<td style="text-align: right;">22.48360</td>
+<td style="text-align: right;">3.855532</td>
+<td style="text-align: right;">5.831516</td>
+<td style="text-align: right;">0.0000002</td>
+</tr>
+<tr class="odd">
+<td>herbivoresplus</td>
+<td style="text-align: right;">-22.51075</td>
+<td style="text-align: right;">5.452546</td>
+<td style="text-align: right;">-4.128484</td>
+<td style="text-align: right;">0.0001146</td>
+</tr>
+<tr class="even">
+<td>heightmid:herbivoresplus</td>
+<td style="text-align: right;">25.57809</td>
+<td style="text-align: right;">7.711064</td>
+<td style="text-align: right;">3.317064</td>
+<td style="text-align: right;">0.0015486</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="post-hoc-tests" class="slide level2">
+<h1>Post-hoc Tests!</h1>
+<p><img src="images/22/gosling_p_value.jpg" alt="image" style="width:70.0%" /></p>
+</section>
+<section id="posthocs-and-factorial-designs" class="slide level2">
+<h1>Posthocs and Factorial Designs</h1>
+<ul>
+<li><p>Must look at simple effects first</p>
+<ul>
+<li>The effects of individual treatment combinations</li>
+</ul>
+<br />
+<br />
+</li>
+<li><p>Main effects describe effects of one variable in the complete absence of the other</p>
+<ul>
+<li>Useful only if one treatment CAN be absent</li>
+</ul></li>
+</ul>
+</section>
+<section id="posthoc-comparisons-within-blocks" class="slide level2">
+<h1>Posthoc Comparisons Within Blocks</h1>
+<pre><code> contrast     estimate       SE df t.ratio p.value
+ minus - plus 9.721701 3.855532 60   2.521  0.0144
+
+Results are averaged over the levels of: height </code></pre>
+</section>
+<section id="posthoc-comparisons-of-blocks" class="slide level2">
+<h1>Posthoc Comparisons of Blocks</h1>
+<pre><code> contrast   estimate       SE df t.ratio p.value
+ low - mid -2.358142 3.855532 60  -0.612  0.5431
+
+Results are averaged over the levels of: herbivores </code></pre>
+</section>
+<section id="posthoc-with-simple-effects-model" class="slide level2">
+<h1>Posthoc with Simple Effects Model</h1>
+<pre><code> contrast                estimate       SE df t.ratio p.value
+ low,minus - mid,minus  10.430905 5.452546 60   1.913  0.0605
+ low,minus - low,plus   22.510748 5.452546 60   4.128  0.0001
+ low,minus - mid,plus    7.363559 5.452546 60   1.350  0.1819
+ mid,minus - low,plus   12.079843 5.452546 60   2.215  0.0305
+ mid,minus - mid,plus   -3.067346 5.452546 60  -0.563  0.5758
+ low,plus - mid,plus   -15.147189 5.452546 60  -2.778  0.0073</code></pre>
+</section>
+<section id="posthoc-with-simple-effects-model-1" class="slide level2">
+<h1>Posthoc with Simple Effects Model</h1>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_posthoc_plot-1.jpeg" title="" alt="" width="768" /></p>
+</section>
+<section id="oh-no-i-lost-a-replicate-or-two" class="slide level2">
+<h1>Oh no! I lost a replicate (or two)</h1>
+<p><br />
+<br />
+<br />
+</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">algae_unbalanced &lt;-<span class="st"> </span>algae[-<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">5</span>), ]</code></pre></div>
+</section>
+<section id="type-of-sums-of-squares-matters" class="slide level2">
+<h1>Type of Sums of Squares Matters</h1>
+<p>Type I</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Mean Sq</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>height</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">151.8377</td>
+<td style="text-align: right;">151.8377</td>
+<td style="text-align: right;">0.6380017</td>
+<td style="text-align: right;">0.4278712</td>
+</tr>
+<tr class="even">
+<td>herbivores</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1384.0999</td>
+<td style="text-align: right;">1384.0999</td>
+<td style="text-align: right;">5.8158020</td>
+<td style="text-align: right;">0.0192485</td>
+</tr>
+<tr class="odd">
+<td>height:herbivores</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2933.5934</td>
+<td style="text-align: right;">2933.5934</td>
+<td style="text-align: right;">12.3265653</td>
+<td style="text-align: right;">0.0008998</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">13089.4237</td>
+<td style="text-align: right;">237.9895</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+Type II</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>height</td>
+<td style="text-align: right;">77.87253</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.3272099</td>
+<td style="text-align: right;">0.5696373</td>
+</tr>
+<tr class="even">
+<td>herbivores</td>
+<td style="text-align: right;">1384.09995</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.8158020</td>
+<td style="text-align: right;">0.0192485</td>
+</tr>
+<tr class="odd">
+<td>height:herbivores</td>
+<td style="text-align: right;">2933.59337</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12.3265653</td>
+<td style="text-align: right;">0.0008998</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">13089.42369</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="enter-type-iii" class="slide level2">
+<h1>Enter Type III</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td style="text-align: right;">14188.804</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">59.619447</td>
+<td style="text-align: right;">0.0000000</td>
+</tr>
+<tr class="even">
+<td>height</td>
+<td style="text-align: right;">1175.967</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.941256</td>
+<td style="text-align: right;">0.0303521</td>
+</tr>
+<tr class="odd">
+<td>herbivores</td>
+<td style="text-align: right;">4242.424</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">17.826097</td>
+<td style="text-align: right;">0.0000915</td>
+</tr>
+<tr class="even">
+<td>height:herbivores</td>
+<td style="text-align: right;">2933.593</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12.326565</td>
+<td style="text-align: right;">0.0008998</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">13089.424</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<br />
+
+<div class="fragment">
+<p>Compare to type II</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>height</td>
+<td style="text-align: right;">77.87253</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.3272099</td>
+<td style="text-align: right;">0.5696373</td>
+</tr>
+<tr class="even">
+<td>herbivores</td>
+<td style="text-align: right;">1384.09995</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.8158020</td>
+<td style="text-align: right;">0.0192485</td>
+</tr>
+<tr class="odd">
+<td>height:herbivores</td>
+<td style="text-align: right;">2933.59337</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12.3265653</td>
+<td style="text-align: right;">0.0008998</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">13089.42369</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="whats-going-on-type-i-ii-and-iii-sums-of-squares" class="slide level2">
+<h1>What’s Going On: Type I, II, and III Sums of Squares</h1>
+<p align="left">
+<strong>Type I Sums of Squares:</strong><br />
+<span class="fragment">    SS for A calculated from a model with A + Intercept versus just Intercept</span><br />
+<br />
+<span class="fragment">    SS for B calculated from a model with A + B + Intercept versus A + Intercept</span><br />
+<br />
+<span class="fragment">    SS for A:B calculated from a model with A + B + A:B +Intercept versus A + B + Intercept</span><br />
+<br />
+<br />
+<span class="fragment">This is <strong>fine</strong> for a balanced design. Variation evenly partitioned.</span>
+</p>
+</section>
+<section id="whats-going-on-type-i-ii-and-iii-sums-of-squares-1" class="slide level2">
+<h1>What’s Going On: Type I, II, and III Sums of Squares</h1>
+<p align="left">
+<strong>Type II Sums of Squares:</strong><br />
+<span class="fragment">    SS for A calculated from a model with A + B + Intercept versus B + Intercept</span><br />
+<br />
+<span class="fragment">    SS for B calculated from a model with A + B + Intercept versus A + Intercept</span><br />
+<br />
+<span class="fragment">    SS for A:B calculated from a model with A + B + A:B +Intercept versus A + B + Intercept</span><br />
+<br />
+<br />
+<span class="fragment">Interaction not incorporated in assessing main effects</span>
+</p>
+</section>
+<section id="whats-going-on-type-i-ii-and-iii-sums-of-squares-2" class="slide level2">
+<h1>What’s Going On: Type I, II, and III Sums of Squares</h1>
+<p align="left">
+<strong>Type III Sums of Squares:</strong><br />
+<span class="fragment">    SS for A calculated from a model with A + B + A:B + Intercept versus B + A:B + Intercept</span><br />
+<br />
+<span class="fragment">    SS for B calculated from a model with A + B + A:B + Intercept versus A + A:B + Intercept</span><br />
+<br />
+<span class="fragment">    SS for A:B calculated from a model with A + B + A:B +Intercept versus A + B + Intercept</span><br />
+<br />
+<span class="fragment">Each SS is the unique contribution of a treatment</span><br />
+<span class="fragment"><strong>very conservative</strong></span>
+</p>
+</section>
+<section id="which-ss-to-use" class="slide level2">
+<h1>Which SS to Use?</h1>
+<ul>
+<li class="fragment">Traditionally, urged to use Type III<br />
+<br />
+</li>
+<li class="fragment">What do type III models mean?
+<ul>
+<li class="fragment">A + B + A:B v. B + A:B<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">Interactions the same for all, and if A:B is real, main effects not important<br />
+<br />
+</li>
+<li class="fragment">Type III has lower power for main effects<br />
+<br />
+</li>
+<li class="fragment">Type II produces more meaningful results if main effects are a concern - which they are!</li>
+</ul>
+</section>
+<section id="many-treatments" class="slide level2">
+<h1>Many Treatments</h1>
+<p><img src="images/22/4_way_interaction.jpg" alt="image" style="width:60.0%" /></p>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
