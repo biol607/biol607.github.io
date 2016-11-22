@@ -1,0 +1,531 @@
+---
+title: "ANOVA"
+author: "Biol 607"
+date: "10/31/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+```
+
+For this lab, see the etherpad at  https://etherpad.wikimedia.org/p/607-anova
+
+## 1.One-Way ANOVA Model
+We'll start today with the dataset `15e1KneesWhoSayNight.csv` about an experiment to help resolve jetlag by having people shine lights at different parts of themselves to try and shift their internal clocks.
+
+```{r knees}
+knees <- read.csv("./data/10/15e1KneesWhoSayNight.csv")
+```
+
+We can see the outcomes with `ggplot2`
+
+```{r knees_plot}
+library(ggplot2)
+ggplot(knees, mapping=aes(x=treatment, y=shift)) +
+  stat_summary(color="red", size=1.3) +
+    geom_point(alpha=0.7) +
+  theme_bw(base_size=17)
+```
+
+##### 1.1 LM, AOV, and Factors
+As the underlying model of ANOVA is a linear one, we fit ANOVAs using `lm()` just as with linear regression.
+
+```{r intro_knees}
+knees <- read.csv("./data/10/15e1KneesWhoSayNight.csv")
+
+knees_lm <- lm(shift ~ treatment, data=knees)
+```
+
+Now, there are two things to notice here. One, note that treatment is a factor. Well, it could be a factor or a character (for those of you that used `read_csv()` from `readr`). If it is not, because we are using `lm()`, it will be fit like a linear regression. So, beware!
+
+There **is** an ANOVA-specific model fitting function - `aov`.
+
+```{r aov}
+knees_aov <- aov(shift ~ treatment, data=knees)
+```
+
+It's ok, I guess, and works with a few functions that `lm()` objects do not. But, in general, I find it too limiting. You can't see coefficients, etc. Boooooring.
+
+##### 1.2 Assumption Evaluation
+
+Because this is an lm, we can check our assumptions as before - with one new one.  First, some oldies but goodies.
+
+```{r assumptions}
+#The whole par thing lets me make a multi-panel plot
+par(mfrow=c(2,2))
+plot(knees_lm, which=c(1,2,5))
+par(mfrow=c(1,1))
+```
+
+Now, the residuals v. fitted lets us see how the residuals are distributed by treatment, but I often find it insufficient. I could roll my own plot of resudials versus treatment, but, there's a **wonderful** package called `car` - which is from the book *Companion to Applied Regression* by John Fox. I recommend it highly! It has a function in it called `residualPlots()` which is useful here.
+
+```{r residualPlots}
+library(car)
+residualPlots(knees_lm)
+```
+
+Note how it both does fitted v. residuals but also a boxplot by treatment. Handy, no?
+
+##### 1.3 Assumption Evaluation
+
+OK, so, let's see the ANOVA table! With the function....`anova()`!
+
+```{r anova}
+anova(knees_lm)
+```
+
+Now....this is a type I sums of squares test. Which is fine for a 1-way ANOVA. If you want to start getting into the practice of using type II, `car` provides a function `Anova()` - note the capital A - which defaults to type II and I use instead. In fact, I use it all the time, as it handles a wide set of different models.
+
+```{r Anova}
+Anova(knees_lm)
+```
+
+Here it matters not a whit as you get the same table.
+
+Note, if you had done this using likelihood, you could have done all of this with a LR Chisq also using `Anova()`
+
+```{r glm_anova}
+knees_glm <- glm(shift ~ treatment, data=knees,
+                 family=gaussian())
+
+Anova(knees_glm)
+```
+
+##### 1.4 Post-hoc Tests
+
+So, there are a lot of things we can do with a fit model
+
+###### 1.4.0 Summary Output
+
+```{r anova_summar}
+summary(knees_lm)
+```
+
+Ew. That's the treatment contrasts. Not super useful. To not get an intercept term, you need to refit the model without the intercept. You can fit a whole new model with `-1` in the model formulation. Or, as I like to do to ensure I don't frak anything up, you can `update()` your model. Just use `.` to signify *what was there before*.
+
+```{r update_summary}
+knees_lm_no_int <- update(knees_lm, formula = . ~ . -1)
+
+summary(knees_lm_no_int)
+```
+
+OK - that makes more sense. We see means and if they are different from 0. But....what about post-hoc tests
+
+###### 1.4.1 A Priori Contrasts
+
+If you have a priori contrasts, you can use the `constrat` library to test them. You give contrast an a list and a b list. Then we get all comparisons of a v. b, in order. It's not great syntactically, but, it lets you do some pretty creative things.
+
+```{r contrasts, message=FALSE}
+library(contrast)
+contrast(knees_lm, 
+         a = list(treatment = "control"), 
+         b = list(treatment = "eyes"))
+```
+
+###### 1.4.2 Tukey's HSD
+Meh. 9 times out of 10 we want to do something more like a Tukey Test. There is a `TukeyHSD` function that works on `aov` objects, but, if you're doing anything with an `lm`, it borks on you. There's a wonderful package called `lsmeans`, which stands for Least Square Means. It is wonderful as it's designed to work with ANOVA and ANCOVA models with complicated structures such that, for post-hocs, it adjusts to the mean or median level of all other factors. Very handy. One merely tells it what 
+
+```{r tukey_lsmeans}
+library(lsmeans)
+contrast(lsmeans(knees_lm, specs ="treatment"),
+        method = "tukey")
+```
+
+We don't need to worry about many of the fancier things that lsmeans does for the moment - those will become more useful with other models. But for now, Tukey test!
+
+###### 1.4.2 Dunnet's Test
+
+We can similarly use this to look at a Dunnett's test, which compares against the control
+```{r bunnett_lsmeans}
+contrast(lsmeans(knees_lm, specs ="treatment"),
+        method = "dunnett")
+```
+
+Note, if the "control" had not been the first treatment, you can either re-order the factor using `forcats` or just specify which of the levels is the control. For example, eyes is the second treatment. Let's make it our new reference.
+
+```{r bunnett_lsmeans_2}
+contrast(lsmeans(knees_lm, specs ="treatment"),
+        method = "dunnett", ref=2)
+```
+
+###### 1.4.2 Bonferroni Correction and FDR
+
+Let's say you wanted to do all pairwise tests, but, compare using a Bonferroni correction or FDR. Or none! No problem! There's an `adjust` argument
+
+```{r tukey_lsmeans_other_adjust}
+contrast(lsmeans(knees_lm, specs ="treatment"),
+        method = "tukey", adjust="bonferroni")
+
+
+contrast(lsmeans(knees_lm, specs ="treatment"),
+        method = "tukey", adjust="fdr")
+
+contrast(lsmeans(knees_lm, specs ="treatment"),
+        method = "tukey", adjust="none")
+```
+
+###### 1.4.4 Bayesian Post-Hocs
+
+So you want ot be fancy and go Bayesian? Cool. BANOVA is a great way to do post-hocs without worrying about type S error.  We can fit our BANOVA model simply using `stan_glm`.  Since we're going to want to work with the treatment means, it behooves us to remove the intercept for easier manipulation later. But you can do what you'd like.
+
+
+```{r banova_eval, echo=FALSE, cache=TRUE, message=FALSE,results="hide"}
+library(rstanarm)
+suppressMessages( knees_banova <- stan_glm(shift ~ treatment -1,
+                         data = knees,
+                         family=gaussian()) )
+
+knees_chains <- as.data.frame(knees_banova)
+```
+
+```{r banova, cache=TRUE, message=FALSE, echo=TRUE, eval=FALSE}
+library(rstanarm)
+knees_banova <- stan_glm(shift ~ treatment -1,
+                         data = knees,
+                         family=gaussian())
+
+knees_chains <- as.data.frame(knees_banova)
+```
+
+We can now do two things. First, see the SD between treatment relative to the residual SD. Let's use `dplyr` to help us out
+
+```{r variability, message=FALSE}
+library(dplyr)
+
+#The first three columns are are treatments
+head(knees_chains)
+
+
+#now get a column that is between treatment variability
+knees_chains <- knees_chains %>% 
+  rowwise() %>%
+  mutate(trt_sigma = sd(c(treatmentcontrol, treatmenteyes, treatmentknee))) %>%
+  ungroup()
+
+#Between Treatment variability
+quantile(knees_chains$trt_sigma)
+
+#Now, the residual SD
+quantile(knees_chains$sigma)
+```
+
+You can plot this and do much more here as well.
+
+For posthocs, simply look at the difference btween columns
+```{r bayesian_posthocs}
+#A Dunnett's test
+quantile(knees_chains$treatmentcontrol - knees_chains$treatmenteyes, prob=c(0.1, 0.9))
+quantile(knees_chains$treatmentcontrol - knees_chains$treatmentknee, prob=c(0.1, 0.9))
+```
+
+We can see that eyes might be different from the control, but not so much knees.
+
+Bayesians, get on it. The rest - enjoy.
+
+##### 1.5 Faded Examples
+Let's try three ANOVAs!
+First - do landscape characteristics affect the number of generations plant species can exist before local extinction?
+
+```{r plants, eval=FALSE}
+plants <- read.csv("./data/10/15q01PlantPopulationPersistence.csv")
+
+#Visualize
+qplot(treatment, generations, data=plants, geom="boxplot")
+
+#fit
+plant_lm <- lm(generations ~ treatment, data=plants)
+
+#assumptions
+plot(plant_lm, which=c(1,2,4,5))
+
+#ANOVA
+anova(plant_lm)
+
+#Tukey's HSD
+contrast(lsmeans(plant_lm, spec = "treatment"), method = "tukey")
+```
+
+Second, how do different host types affect nematode longevity?
+
+
+```{r nemetods, eval=FALSE}
+worms <- read.csv("./data/10/15q19NematodeLifespan.csv")
+
+#Visualize
+qplot(treatment, lifespan, data=____, geom="____")
+
+#fit
+worm_lm <- lm(______ ~ ______, data=worms)
+
+#assumptions
+plot(______, which=c(1,2,4,5))
+
+#ANOVA
+anova(______)
+
+#Tukey's HSD
+contrast(lsmeans(______, spec = "______"), method = "tukey")
+```
+
+And last, how about how number of genotypes affect eelgrass productivity. Note, THERE IS A TRAP HERE. Look at your dataset before you do ANYTHING.
+
+```{r eelgrass, eval=FALSE}
+eelgrass <- read.csv("./data/10/15q05EelgrassGenotypes.csv")
+
+#Visualize
+________(treatment.genotypes, shoots, data=____, geom="____")
+
+#fit
+eelgrass_lm <- __(______ ~ ______, data=________)
+
+#assumptions
+________(______, which=c(1,2,4,5))
+
+#ANOVA
+________(______)
+
+#Tukey's HSD
+contrast(________(______, spec = "______"), method = "________")
+```
+
+
+## 2. Two-Way ANOVA
+We'll work with the zooplankton depdredation dataset for two-way ANOVA. This is a blocked experiment, so, each treatment is in each block just once.
+
+```{r zoop}
+zooplankton <- read.csv("./data/10/18e2ZooplanktonDepredation.csv")
+
+qplot(treatment, zooplankton, data=zooplankton, geom="boxplot")
+qplot(block, zooplankton, data=zooplankton, geom="boxplot")
+```
+
+Oh. That's odd. What is up with block? AH HA! It's continuous. We need to make it discrete to work with it.
+
+```{r zoop_factor}
+zooplankton$block  <- factor(zooplankton$block)
+qplot(block, zooplankton, data=zooplankton, geom="boxplot")
+```
+
+There we go. Always check! 
+
+##### 2.1 Fit and Assumption Evaluation
+Fit is quite easy. We just add one more factor to an lm model!
+
+```{r zoop_fit}
+zooplankton_lm <- lm(zooplankton ~ treatment + block,
+                     data = zooplankton)
+```
+
+We then evaluate residuals almost as usual...
+
+```{r zoop_assume}
+par(mfrow=c(2,2))
+plot(zooplankton_lm, which=c(1,2,5))
+```
+
+We want to look more deeply by treatment and block. For which we use `car`'s `residualPlots()`
+
+```{r zoop_car}
+residualPlots(zooplankton_lm)
+```
+
+Notice that this pops out a Tukey test, and we are looking...GOOD!
+
+##### 2.2 Type II Sums of Squares
+Given that we now have multiple factors, in case of unbalance, we should use type II sums of squares.
+
+```{r Anova_zoop}
+Anova(zooplankton_lm)
+```
+
+##### 2.3 Post-Hocs
+
+Here, `lsmeans` gets interesting.
+
+```{r ref}
+contrast(lsmeans(zooplankton_lm, spec="treatment"), "tukey")
+```
+
+Note the message that we've averaged over the levels of block.  Now, because this is a balanced design, this should produce nothing untoward. Let's look at the explicit comparison of the lsmeans results and the raw results from summary
+
+```{r summary_block}
+lsmeans(zooplankton_lm, spec="treatment")
+
+coef(summary(update(zooplankton_lm, .~.-1)))
+```
+
+Note that the treatment results here are for within block 1 with coef. So lsmeans lets us get the whole block thing out of the equation.
+
+##### 2.4 Faded Examples
+
+Given then similarity with 1-way ANOVA, let's just jump right into two examples, noting a key difference or two here and there.
+
+To start with, let's look at gene expression by different types of bees.
+
+```{r bees_1, eval=FALSE}
+bees <- read.csv("./data/10/18q07BeeGeneExpression.csv")
+
+#Visualize
+________(type, Expression, data=____, geom="____")
+
+#fit
+bee_lm <- __(______ ~ ______ + _____, data=________)
+
+#assumptions
+________(______, which=c(1,2,4,5))
+
+residualPlots(bee_lm)
+
+#ANOVA
+________(______)
+
+#Tukey's HSD
+contrast(________(______, spec = "______"), method = "________")
+```
+
+Wow, not that different, save adding one more term and the residualPlots.
+
+OK, one more.... repeating an experiment in the intertidal?
+```{r echo=FALSE}
+intertidal <- read.csv("./data/10/18e3IntertidalAlgae.csv")
+```
+
+```{r intertidal_1, eval=FALSE}
+intertidal <- read.csv("./data/10/18e3IntertidalAlgae.csv")
+
+#Visualize
+________(herbivores, sqrtarea, data=____, geom="____")
+
+#fit
+mouse_lm <- __(______ ~ ______ + _____, data=________)
+
+#assumptions
+________(______, which=c(1,2,4,5))
+
+residualPlots(bee_lm)
+
+#ANOVA
+________(______)
+
+#Tukey's HSD
+________(________(______, spec = "______"), method = "________")
+```
+
+Did that last one pass the test of non-additivity?
+
+
+## 2. Factorial ANOVA
+Going with that last mouse example, if you really looked, it was a factorial design, with multiple treatments and conditions.
+
+```{r plot_mice}
+qplot(herbivores, sqrtarea, data=intertidal, fill=height, geom="boxplot")
+```
+
+##### 2.1 Fit and Assumption Evaluation
+We fit factorial models using one of two different notations - both expand to the same thing
+
+```{r int_fact}
+intertidal_lm <- lm(sqrtarea ~ herbivores + height + herbivores:height, data=intertidal)
+
+intertidal_lm <- lm(sqrtarea ~ herbivores*height, data=intertidal)
+```
+
+Both mean the same thing as `:` is the interaction. `*` just means, expand all the interactions.
+
+But, after that's done...all of the assumption tests are the same. Try them out.
+
+##### 2.2 Type II and III Sums of Squares
+Now, we can choose type II or III SS once we have >n=1 for simple effects. Let's see the difference. Both are from `Anova()` from the car package.
+
+```{r Anova_compare}
+Anova(intertidal_lm)
+
+Anova(intertidal_lm, method="III")
+```
+
+##### 2.3 Post-Hocs
+Post-hocs are a bit funnier. But not by much. As we have an interaction, let's look at the simple effects:
+
+```{r tukey_simple}
+contrast(lsmeans(intertidal_lm, spec=c("herbivores", "height")), "tukey")
+```
+
+Well, that's it, actually. You could begin to look at one of the main effects or the other, but as we know, that's not going to get you very far. You can of course come up with other contrast structures so that you don't lose as much power with respect to your p-values, but, there you go.
+
+And, yeah, it works the same in BANOVA as all the way back in 1-way ANOVA. Only you have to hand-code it.
+
+##### 2.3 A Kelpy example
+
+Let's just jump right in with an example, as you should have all of this well in your bones by now. This was from a kelp, predator-diversity experiment I ran ages ago. Note, some things that you want to be factors might be loaded as 
+```{r echo=FALSE}
+kelp <- read.csv("./data/10/kelp_pred_div_byrnesetal2006.csv")
+```
+
+```{r kelp_1, eval=FALSE}
+kelp <- read.csv("./data/10/kelp_pred_div_byrnesetal2006.csv")
+
+## Check and correct for non-factors
+____________
+_________
+
+#Visualize
+________(Treatment, Porp_Change, data=____, geom="____", fill=Trial)
+
+#fit
+kelp_lm <- __(______ ~ ______ * _____, data=________)
+
+#assumptions
+________(______, which=c(1,2,4,5))
+
+residualPlots(_________)
+
+#ANOVA
+________(______)
+
+#Tukey's HSD
+________(________(______, spec = "______"), method = "________")
+```
+
+###### 2.3.1 The Cost of Tukey
+So, the kelp example is an interesting one, as this standard workflow is *not* what I wanted when I ran this experiment. I was not interested in a Tukey test of all possible treatments. Run it with no adjustement - what do you see?
+
+```{r no_adjust, eval=FALSE}
+#Pariwise Comparison without P-Value adjustment - The LSD test
+________(________(______, spec = "______"), method = "________", adjust="_____")
+```
+
+
+Instead, I was interested in asking whether predator diversity - having a mixture versus only one species of predator - led to less kelp loss than any of the other treatments.  There are a few ways to assess the answer to that question.
+
+First, a Dunnet's test with the Predator Mixture as the control.  Try that out. Note, the default "control" is Dungeness crabs, so, you might want to revisit that.
+
+```{r kelp_dunnet, eval=FALSE}
+#Dunnet's Test
+________(________(______, spec = "______"), method = "________", ref=____)
+```
+
+What did you learn? 
+
+###### 2.3.2 Replicated Regression
+
+So.... this was actually a replicated regression design. There are a few ways to deal with this. Note the column `Predator_Diversity`
+
+
+Try this whole thing as a regression. What do you see?
+
+Make a new column that is `Predator_Diversity` as a factor. Refit the factorial ANOVA with this as your treatment. NOW try a Tukey test. What do you see?
+
+###### 2.3.3 A Priori Contrast F tests
+
+OK, one more way to look at this. What we're actually asking in comparing monocultures and polycultures is, do we explain more variation with a monoculture v. poyculture split than if not?
+
+```{r contrast_anova}
+kelp_contr <- lm(Change_g ~ C(factor(Predator_Diversity), c(0,1,-1))*Trial, data=kelp)
+
+Anova(kelp_contr)
+```
+
+Now we see that, yes, we explain variation when we partition things into monoculture versus polyculture than when we do not.
+
+Setting up a priori ways of partitioning your sums of squares (that must be orthogonal) is a powerful way to test grouping hypotheses and worth keeping in your back pocket for future explorations.
