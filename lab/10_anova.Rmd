@@ -398,12 +398,12 @@ intertidal <- read.csv("./data/10/18e3IntertidalAlgae.csv")
 ________(herbivores, sqrtarea, data=____, geom="____")
 
 #fit
-mouse_lm <- __(______ ~ ______ + _____, data=________)
+intertidal_lm <- __(______ ~ ______ + _____, data=________)
 
 #assumptions
 ________(______, which=c(1,2,4,5))
 
-residualPlots(bee_lm)
+residualPlots(intertidal_lm)
 
 #ANOVA
 ________(______)
@@ -415,14 +415,14 @@ ________(________(______, spec = "______"), method = "________")
 Did that last one pass the test of non-additivity?
 
 
-## 2. Factorial ANOVA
+## 3. Factorial ANOVA
 Going with that last mouse example, if you really looked, it was a factorial design, with multiple treatments and conditions.
 
 ```{r plot_mice}
 qplot(herbivores, sqrtarea, data=intertidal, fill=height, geom="boxplot")
 ```
 
-##### 2.1 Fit and Assumption Evaluation
+##### 3.1 Fit and Assumption Evaluation
 We fit factorial models using one of two different notations - both expand to the same thing
 
 ```{r int_fact}
@@ -435,7 +435,7 @@ Both mean the same thing as `:` is the interaction. `*` just means, expand all t
 
 But, after that's done...all of the assumption tests are the same. Try them out.
 
-##### 2.2 Type II and III Sums of Squares
+##### 3.2 Type II and III Sums of Squares
 Now, we can choose type II or III SS once we have >n=1 for simple effects. Let's see the difference. Both are from `Anova()` from the car package.
 
 ```{r Anova_compare}
@@ -444,7 +444,7 @@ Anova(intertidal_lm)
 Anova(intertidal_lm, method="III")
 ```
 
-##### 2.3 Post-Hocs
+##### 3.3 Post-Hocs
 Post-hocs are a bit funnier. But not by much. As we have an interaction, let's look at the simple effects:
 
 ```{r tukey_simple}
@@ -455,7 +455,7 @@ Well, that's it, actually. You could begin to look at one of the main effects or
 
 And, yeah, it works the same in BANOVA as all the way back in 1-way ANOVA. Only you have to hand-code it.
 
-##### 2.3 A Kelpy example
+##### 3.3 A Kelpy example
 
 Let's just jump right in with an example, as you should have all of this well in your bones by now. This was from a kelp, predator-diversity experiment I ran ages ago. Note, some things that you want to be factors might be loaded as 
 ```{r echo=FALSE}
@@ -487,7 +487,7 @@ ________(______)
 ________(________(______, spec = "______"), method = "________")
 ```
 
-###### 2.3.1 The Cost of Tukey
+###### 3.3.1 The Cost of Tukey
 So, the kelp example is an interesting one, as this standard workflow is *not* what I wanted when I ran this experiment. I was not interested in a Tukey test of all possible treatments. Run it with no adjustement - what do you see?
 
 ```{r no_adjust, eval=FALSE}
@@ -507,7 +507,7 @@ ________(________(______, spec = "______"), method = "________", ref=____)
 
 What did you learn? 
 
-###### 2.3.2 Replicated Regression
+###### 3.3.2 Replicated Regression
 
 So.... this was actually a replicated regression design. There are a few ways to deal with this. Note the column `Predator_Diversity`
 
@@ -516,7 +516,7 @@ Try this whole thing as a regression. What do you see?
 
 Make a new column that is `Predator_Diversity` as a factor. Refit the factorial ANOVA with this as your treatment. NOW try a Tukey test. What do you see?
 
-###### 2.3.3 A Priori Contrast F tests
+###### 3.3.3 A Priori Contrast F tests
 
 OK, one more way to look at this. What we're actually asking in comparing monocultures and polycultures is, do we explain more variation with a monoculture v. poyculture split than if not?
 
