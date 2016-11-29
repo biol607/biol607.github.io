@@ -69,15 +69,22 @@ $$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon} $$
 
 ## Analysis of Covariance
 
-$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon} $$  
+$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$  
+\
 \
 $$Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \epsilon$$  
+
+
+## Analysis of Covariance
+
+$$Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \epsilon$$  
+
+
+-   ANOVA + a continuous predictor\
 \
--   ANOVA + a continuous predictor
-
--   Often used to correct for a gradient or some continuous variable affecting outcome
-
--   OR used to correct a regression due to additional groups that may throw off slope estimates
+-   Often used to correct for a gradient or some continuous variable affecting outcome\
+\
+-   OR used to correct a regression due to additional groups that may throw off slope estimates\
       - e.g. Simpson's Paradox: A positive relationship between test scores and academic performance can be masked by gender differences
 
 
@@ -182,10 +189,12 @@ residualPlots(neand_lm, cex.lab=1.4, test=FALSE)
 We test a model where
 $$Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \sum_{k}^{i=1}\beta_{j}x + \epsilon$$
 <div class="fragment">
+
 ```{r parallel_slopes}
 neand_lm_int <- lm(lnbrain ~ species * lnmass, data=neand)
 knitr::kable(Anova(neand_lm_int))
 ```
+
 </div>
 \
 <div class="fragment">If you have an interaction, welp, that's a different model - slopes vary by group!</div>
@@ -280,7 +289,7 @@ variance/covariance matrix of all *Independent variables*\
 
 ## What causes species richness?
 
-- Distance from fire patch, 
+- Distance from fire patch 
 - Elevation
 - Abiotic index
 - Patch age
@@ -336,7 +345,18 @@ Beyond this, are you getting unique information from each variable?</div>
 
 ## Checking for Multicollinearity: Variance Inflation Factor
 
-$$VIF = \frac{1}{1-R^2_{j}}$$ `
+> - Consider $y = \beta_{0} + \beta_{1}x_{1}  + \beta_{2}x_{2} + \epsilon$ \
+\
+> - And $X_{1} = \alpha_{0} + \alpha_{2}x_{2} + \epsilon_j$ \
+\
+> - $var(\beta_{1}) = \frac{\sigma^2}{(n-1)\sigma^2_{X_1}}\frac{1}{1-R^{2}_1}$
+\
+\
+<span class="fragment">$$VIF = \frac{1}{1-R^2_{1}}$$ </span>
+
+## Checking for Multicollinearity: Variance Inflation Factor
+$$VIF_1 = \frac{1}{1-R^2_{1}}$$ 
+
 
 ```{r klm_vif}
 vif(klm)

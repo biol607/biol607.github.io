@@ -159,17 +159,23 @@ Multiple Predictor Variables in General Linear Models
 </section>
 <section id="analysis-of-covariance" class="slide level2">
 <h1>Analysis of Covariance</h1>
-<p><span class="math display">\[\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon} \]</span><br />
+<p><span class="math display">\[\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}\]</span><br />
 <br />
-<span class="math display">\[Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \epsilon\]</span><br />
 <br />
-- ANOVA + a continuous predictor</p>
+<span class="math display">\[Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \epsilon\]</span></p>
+</section>
+<section id="analysis-of-covariance-1" class="slide level2">
+<h1>Analysis of Covariance</h1>
+<p><span class="math display">\[Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \epsilon\]</span></p>
 <ul>
-<li><p>Often used to correct for a gradient or some continuous variable affecting outcome</p></li>
-<li>OR used to correct a regression due to additional groups that may throw off slope estimates
-<ul>
-<li>e.g. Simpson’s Paradox: A positive relationship between test scores and academic performance can be masked by gender differences</li>
-</ul></li>
+<li>ANOVA + a continuous predictor<br />
+<br />
+</li>
+<li>Often used to correct for a gradient or some continuous variable affecting outcome<br />
+<br />
+</li>
+<li>OR used to correct a regression due to additional groups that may throw off slope estimates<br />
+- e.g. Simpson’s Paradox: A positive relationship between test scores and academic performance can be masked by gender differences</li>
 </ul>
 </section>
 <section id="neanderthals-and-ancova" class="slide level2">
@@ -233,9 +239,47 @@ Groups modify the <em>intercept</em>.</p>
 <h1>Test for Parallel Slopes</h1>
 We test a model where <span class="math display">\[Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \sum_{k}^{i=1}\beta_{j}x + \epsilon\]</span>
 <div class="fragment">
-<pre><code>                 Sum Sq   Df     F value      Pr(&gt;F)</code></pre>
-<hr />
-<p>species 0.0275528 1 6.220266 0.0175024 lnmass 0.1300183 1 29.352684 0.0000045 species:lnmass 0.0048452 1 1.093849 0.3027897 Residuals 0.1550332 35 NA NA</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>species</td>
+<td style="text-align: right;">0.0275528</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.220266</td>
+<td style="text-align: right;">0.0175024</td>
+</tr>
+<tr class="even">
+<td>lnmass</td>
+<td style="text-align: right;">0.1300183</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">29.352684</td>
+<td style="text-align: right;">0.0000045</td>
+</tr>
+<tr class="odd">
+<td>species:lnmass</td>
+<td style="text-align: right;">0.0048452</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.093849</td>
+<td style="text-align: right;">0.3027897</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">0.1550332</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
 </div>
 <br />
 
@@ -347,7 +391,7 @@ Five year study of wildfires &amp; recovery in Southern California shur- blands 
 <section id="what-causes-species-richness" class="slide level2">
 <h1>What causes species richness?</h1>
 <ul>
-<li>Distance from fire patch,</li>
+<li>Distance from fire patch</li>
 <li>Elevation</li>
 <li>Abiotic index</li>
 <li>Patch age</li>
@@ -404,7 +448,21 @@ Beyond this, are you getting unique information from each variable?
 </section>
 <section id="checking-for-multicollinearity-variance-inflation-factor" class="slide level2">
 <h1>Checking for Multicollinearity: Variance Inflation Factor</h1>
-<p><span class="math display">\[VIF = \frac{1}{1-R^2_{j}}\]</span> `</p>
+<ul>
+<li class="fragment">Consider <span class="math inline">\(y = \beta_{0} + \beta_{1}x_{1} + \beta_{2}x_{2} + \epsilon\)</span><br />
+<br />
+</li>
+<li class="fragment">And <span class="math inline">\(X_{1} = \alpha_{0} + \alpha_{2}x_{2} + \epsilon_j\)</span><br />
+<br />
+</li>
+<li class="fragment"><span class="math inline">\(var(\beta_{1}) = \frac{\sigma^2}{(n-1)\sigma^2_{X_1}}\frac{1}{1-R^{2}_1}\)</span><br />
+<br />
+<span class="fragment"><span class="math display">\[VIF = \frac{1}{1-R^2_{1}}\]</span> </span></li>
+</ul>
+</section>
+<section id="checking-for-multicollinearity-variance-inflation-factor-1" class="slide level2">
+<h1>Checking for Multicollinearity: Variance Inflation Factor</h1>
+<p><span class="math display">\[VIF_1 = \frac{1}{1-R^2_{1}}\]</span></p>
 <pre><code>  cover firesev  hetero 
  1.2949  1.2617  1.0504 </code></pre>
 <div style="text-align:left">
