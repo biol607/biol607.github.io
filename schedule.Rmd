@@ -34,7 +34,7 @@ __Homework:__ https://github.com/biol607/2016_homework_03_ggplot2
 ### Week 4.   
 __Lecture:__ [Frequentist Hypothesis Testing](lectures/07_probability_hypotheses.html), [NHST, Z-Tests, and Power](lectures/08_testing_nhst_power.html) \
 __Lab Topic:__ [Distributions in R, Frequentist Hypothesis testing via simulation](lab/05_hypothesis_power.html)  \
-__Reading:__ W&S 5-7, G&W Chapter 7, 16  
+__Reading:__ W&S 5-7, G&W Chapter 7, 16, [Abraham Lincoln and Confidence Intervals](http://andrewgelman.com/2016/11/23/abraham-lincoln-confidence-intervals/) and links therein    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses  
 __In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)  
 __Quiz:__ http://tinyurl.com/hyp-pre-quiz  
@@ -97,11 +97,11 @@ __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readin
   
   
 ### Week 12.   
-__Lecture:__ Multiple Regression and Interaction Effects, Information Theoretic Approaches  
+__Lecture:__ [The General Linear Model: ANCOVA, Multiple Regression, and Interaction Effects](./lectures/23_general_linear_model.html), Information Theoretic Approaches  
 __Lab Topic:__ Multiple Regression, Multimodel Inference  
 __Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf)  
 __Optional Readings:__ The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
-  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr  
   
 ### Week 13.   
 __Lecture:__ Entering a non-normal world - Modeling count data with Genearlized linear models. Overdispersed continuous data.  
@@ -111,7 +111,7 @@ __Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_
   
 ### Week 14.   
 __Lecture:__ Class's Choice  
-__Lab Topic:__ Class's Choice, Final Presentation Open __Lab  
+__Lab Topic:__ Class's Choice, Final Presentation Open Lab  
   
   
 ### Week 15.  

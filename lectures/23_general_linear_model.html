@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h1></h1>
+<img src="images/23/wonka_mult_regression.jpg" />
+<h2>
+Multiple Predictor Variables in General Linear Models
+</h2>
+</section>
+<section id="section-1" class="slide level2">
+<h1></h1>
+ <br />
+<br />
+
+<h3>
+<a href="https://etherpad.wikimedia.org/p/607-mlr" class="uri">https://etherpad.wikimedia.org/p/607-mlr</a>
+</h3>
+</section>
+<section id="data-generating-processes-until-now" class="slide level2">
+<h1>Data Generating Processes Until Now</h1>
+<ul>
+<li>One predictor with one response<br />
+<br />
+</li>
+<li>Except…ANOVA had multiple possible treatment levels</li>
+</ul>
+</section>
+<section id="the-general-linear-model" class="slide level2">
+<h1>The General Linear Model</h1>
+<p><span class="math display">\[\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon} \]</span></p>
+<ul>
+<li><p>This equation is huge. X can be anything - categorical, continuous, squared, sine, etc.</p></li>
+<li><p>There can be straight additivity, or interactions</p></li>
+<li><p>So far, the only model we’ve used with &gt;1 predictor is ANOVA</p></li>
+</ul>
+</section>
+<section id="models-with-many-predictors" class="slide level2">
+<h1>Models with Many Predictors</h1>
+<ol start="0" type="1">
+<li><p>ANOVA</p></li>
+<li><p>ANCOVA</p></li>
+<li><p>Multiple Linear Regression</p></li>
+<li><p>MLR with Interactions</p></li>
+</ol>
+</section>
+<section id="analysis-of-covariance" class="slide level2">
+<h1>Analysis of Covariance</h1>
+<p><span class="math display">\[\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon} \]</span><br />
+<br />
+<span class="math display">\[Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \epsilon\]</span><br />
+<br />
+- ANOVA + a continuous predictor</p>
+<ul>
+<li><p>Often used to correct for a gradient or some continuous variable affecting outcome</p></li>
+<li>OR used to correct a regression due to additional groups that may throw off slope estimates
+<ul>
+<li>e.g. Simpson’s Paradox: A positive relationship between test scores and academic performance can be masked by gender differences</li>
+</ul></li>
+</ul>
+</section>
+<section id="neanderthals-and-ancova" class="slide level2">
+<h1>Neanderthals and ANCOVA</h1>
+<p><img src="images/23/neanlooking.jpeg" alt="image" style="width:60.0%" /></p>
+<p>Who had a bigger brain: Neanderthals or us?</p>
+</section>
+<section id="the-means-look-the-same" class="slide level2">
+<h1>The Means Look the Same…</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/neand_boxplot-1.jpeg" width="768" /></p>
+</section>
+<section id="but-there-appears-to-be-a-relationship-between-body-and-brain-mass" class="slide level2">
+<h1>But there appears to be a Relationship Between Body and Brain Mass</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/neand_plot-1.jpeg" width="768" /></p>
+</section>
+<section id="and-mean-body-mass-is-different" class="slide level2">
+<h1>And Mean Body Mass is Different</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/neand_boxplot2-1.jpeg" width="768" /></p>
+</section>
+<section id="section-2" class="slide level2">
+<h1></h1>
+<p><br />
+<br />
+<img src="images/23/redo_analysis.jpg" /></p>
+</section>
+<section id="analysis-of-covariance-control-for-a-covariate" class="slide level2">
+<h1>Analysis of Covariance (control for a covariate)</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/neand_plot_fit-1.jpeg" width="672" /></p>
+<p>ANCOVA: Evaluate a categorical effect(s), controlling for a <em>covariate</em> (parallel lines)<br />
+Groups modify the <em>intercept</em>.</p>
+</section>
+<section id="the-steps-of-statistical-modeling" class="slide level2">
+<h1>The Steps of Statistical Modeling</h1>
+<ol type="1">
+<li>What is your question?</li>
+<li>What model of the world matches your question?</li>
+<li>Build a test</li>
+<li>Evaluate test assumptions</li>
+<li>Evaluate test results</li>
+<li>Visualize</li>
+</ol>
+</section>
+<section id="assumptions-of-multiway-anova" class="slide level2">
+<h1>Assumptions of Multiway Anova</h1>
+<ul>
+<li><p>Independence of data points</p></li>
+<li><p>Normality and homoscedacticity within groups (of residuals)</p></li>
+<li><p>No relationship between fitted and residual values</p></li>
+<li><p>Additivity of Treatment and Covariate (Parallel Slopes)</p></li>
+</ul>
+</section>
+<section id="the-usual-suspects-of-assumptions" class="slide level2">
+<h1>The Usual Suspects of Assumptions</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/zoop_assumptions-1.jpeg" width="768" /></p>
+</section>
+<section id="group-residuals" class="slide level2">
+<h1>Group Residuals</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/zoop_group_assumptions-1.jpeg" width="768" /></p>
+</section>
+<section id="test-for-parallel-slopes" class="slide level2">
+<h1>Test for Parallel Slopes</h1>
+We test a model where <span class="math display">\[Y = \beta_0 + \beta_{1}x  + \sum_{j}^{i=1}\beta_j + \sum_{k}^{i=1}\beta_{j}x + \epsilon\]</span>
+<div class="fragment">
+<pre><code>                 Sum Sq   Df     F value      Pr(&gt;F)</code></pre>
+<hr />
+<p>species 0.0275528 1 6.220266 0.0175024 lnmass 0.1300183 1 29.352684 0.0000045 species:lnmass 0.0048452 1 1.093849 0.3027897 Residuals 0.1550332 35 NA NA</p>
+</div>
+<br />
+
+<div class="fragment">
+If you have an interaction, welp, that’s a different model - slopes vary by group!
+</div>
+</section>
+<section id="ye-olde-f-test" class="slide level2">
+<h1>Ye Olde F-Test</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>species</td>
+<td style="text-align: right;">0.0275528</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.204092</td>
+<td style="text-align: right;">0.0174947</td>
+</tr>
+<tr class="even">
+<td>lnmass</td>
+<td style="text-align: right;">0.1300183</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">29.276363</td>
+<td style="text-align: right;">0.0000043</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td style="text-align: right;">0.1598784</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<p><span class="fragment">What type of Sums of Squares?</span><br />
+<br />
+<span class="fragment">II!</span></p>
+</section>
+<section id="vsualizing-result" class="slide level2">
+<h1>Vsualizing Result</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/neand_plot_fit-1.jpeg" width="768" /></p>
+</section>
+<section id="parcelling-out-covariate" class="slide level2">
+<h1>Parcelling Out Covariate</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/cr_ancova-1.jpeg" width="768" /></p>
+</section>
+<section id="parcelling-out-covariate-with-posthocs-least-square-menas" class="slide level2">
+<h1>Parcelling Out Covariate with PostHocs &amp; Least Square Menas</h1>
+<pre><code> contrast             estimate     SE df t.ratio p.value
+ neanderthal - recent  -0.0703 0.0282 36   -2.49  0.0175</code></pre>
+<p>Evluated at mean of covariate</p>
+</section>
+<section id="models-with-many-predictors-1" class="slide level2">
+<h1>Models with Many Predictors</h1>
+<ol start="0" type="1">
+<li><p>ANOVA</p></li>
+<li><p>ANCOVA</p></li>
+<li><p><font color="red">Multiple Linear Regression</font></p></li>
+<li><p>MLR with Interactions</p></li>
+</ol>
+</section>
+<section id="one-way-anova-graphically" class="slide level2">
+<h1>One-Way ANOVA Graphically</h1>
+<p><img src="images/23/anova.png" alt="image" style="width:60.0%" /></p>
+</section>
+<section id="multiple-linear-regression" class="slide level2">
+<h1>Multiple Linear Regression?</h1>
+<p><img src="images/23/regression1.png" alt="image" style="width:60.0%" /></p>
+<div style="text-align:left">
+Note no connection between predictors, as in ANOVA. This is ONLY true ifwe have manipulated variables so that there is no relationship between the two. This is not often the case!
+</div>
+</section>
+<section id="multiple-linear-regression-1" class="slide level2">
+<h1>Multiple Linear Regression</h1>
+<p><img src="images/23/regression2.png" alt="image" style="width:60.0%" /></p>
+<div style="text-align:left">
+<p>Curved double-headed arrow indicates COVARIANCE between predictors that we must account for.<br />
+<br />
+MLR controls for the correlation - estimates unique contribution of each predictor.</p>
+</div>
+</section>
+<section id="calculating-multiple-regression-coefficients-with-ols" class="slide level2">
+<h1>Calculating Multiple Regression Coefficients with OLS</h1>
+<p><span class="math display">\[\boldsymbol{Y} = \boldsymbol{b X} + \boldsymbol{\epsilon}\]</span></p>
+<div style="text-align:left">
+Remember in Simple Linear Regression <span class="math inline">\(b = \frac{cov_{xy}}{var_{x}}\)</span>?<br />
+<br />
+In Multiple Linear Regression <span class="math inline">\(\boldsymbol{b} = \boldsymbol{cov_{xy}}\boldsymbol{S_{x}^{-1}}\)</span><br />
+<br />
+where <span class="math inline">\(\boldsymbol{cov_{xy}}\)</span> is the covariances of <span class="math inline">\(\boldsymbol{x_i}\)</span> with <span class="math inline">\(\boldsymbol{y}\)</span> and <span class="math inline">\(\boldsymbol{S_{x}^{-1}}\)</span> is the variance/covariance matrix of all <em>Independent variables</em><br />
+
+</div>
+</section>
+<section id="section-3" class="slide level2" data-background="images/23/fires.jpg">
+<h1></h1>
+<div style="bottom:100%; text-align:left; background:goldenrod">
+Five year study of wildfires &amp; recovery in Southern California shur- blands in 1993. 90 plots (20 x 50m) (data from Jon Keeley et al.)
+</div>
+</section>
+<section id="what-causes-species-richness" class="slide level2">
+<h1>What causes species richness?</h1>
+<ul>
+<li>Distance from fire patch,</li>
+<li>Elevation</li>
+<li>Abiotic index</li>
+<li>Patch age</li>
+<li>Patch heterogeneity</li>
+<li>Severity of last fire</li>
+<li>Plant cover</li>
+</ul>
+</section>
+<section id="many-things-may-influence-species-richness" class="slide level2">
+<h1>Many Things may Influence Species Richness</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/keeley_pairs-1.jpeg" width="768" /></p>
+</section>
+<section id="our-model" class="slide level2">
+<h1>Our Model</h1>
+<br />
+<br />
+<span class="math display">\[Richness =\beta_{0} ̃+ \beta_{1} cover +\beta_{2} firesev + \beta_{3}hetero +\epsilon\]</span><br />
+<br />
+
+<div class="fragment">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">klm &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st"> </span>cover +<span class="st"> </span>firesev +<span class="st"> </span>hetero, <span class="dt">data=</span>keeley)</code></pre></div>
+</div>
+</section>
+<section id="testing-assumptions" class="slide level2">
+<h1>Testing Assumptions</h1>
+<ul>
+<li class="fragment">Data Generating Process: Linearity<br />
+<br />
+</li>
+<li class="fragment">Error Generating Process: Normality &amp; homoscedasticity of residuals<br />
+<br />
+</li>
+<li class="fragment">Data: Outliers not influencing residuals<br />
+<br />
+</li>
+<li class="fragment">Predictors: Minimal multicollinearity</li>
+</ul>
+</section>
+<section id="section-4" class="slide level2">
+<h1></h1>
+<p><img src="images/23/gosling_multicollinearity.jpg" /></p>
+</section>
+<section id="checking-for-multicollinearity-correlation-matrices" class="slide level2">
+<h1>Checking for Multicollinearity: Correlation Matrices</h1>
+<pre><code>           cover   firesev    hetero
+cover    1.00000 -0.437135 -0.168378
+firesev -0.43713  1.000000 -0.052355
+hetero  -0.16838 -0.052355  1.000000</code></pre>
+<div style="text-align:left">
+Correlations over 0.4 can be problematic, but, they may be OK even as high as 0.8.<br />
+<br />
+Beyond this, are you getting unique information from each variable?
+</div>
+</section>
+<section id="checking-for-multicollinearity-variance-inflation-factor" class="slide level2">
+<h1>Checking for Multicollinearity: Variance Inflation Factor</h1>
+<p><span class="math display">\[VIF = \frac{1}{1-R^2_{j}}\]</span> `</p>
+<pre><code>  cover firesev  hetero 
+ 1.2949  1.2617  1.0504 </code></pre>
+<div style="text-align:left">
+<p>VIF <span class="math inline">\(&gt;\)</span> 5 or 10 can be problematic and indicate an unstable solution.<br />
+<br />
+Solution: evaluate correlation and drop a predictor</p>
+</div>
+</section>
+<section id="other-diagnostics-as-usual" class="slide level2">
+<h1>Other Diagnostics as Usual!</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/klm_diag-1.jpeg" width="768" /></p>
+</section>
+<section id="examine-residuals-with-respect-to-each-predictor" class="slide level2">
+<h1>Examine Residuals With Respect to Each Predictor</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/klm_diag2-1.jpeg" width="768" /></p>
+</section>
+<section id="which-variables-explained-variation-type-ii-marginal-ss" class="slide level2">
+<h1>Which Variables Explained Variation: Type II Marginal SS</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cover</td>
+<td style="text-align: right;">1674.18</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12.01</td>
+<td style="text-align: right;">0.00</td>
+</tr>
+<tr class="even">
+<td>firesev</td>
+<td style="text-align: right;">635.65</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.56</td>
+<td style="text-align: right;">0.04</td>
+</tr>
+<tr class="odd">
+<td>hetero</td>
+<td style="text-align: right;">4864.52</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">34.91</td>
+<td style="text-align: right;">0.00</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">11984.57</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<p>If order of entry matters, can use type I. Remember, what models are you comparing?</p>
+</section>
+<section id="whats-going-on-type-i-and-ii-sums-of-squares" class="slide level2">
+<h1>What’s Going On: Type I and II Sums of Squares</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td></td>
+<td style="text-align: center;">Type I</td>
+<td style="text-align: center;">Type II</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Test for A</td>
+<td style="text-align: center;">A v. 1</td>
+<td style="text-align: center;">A + B v. B</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Test for B</td>
+<td style="text-align: center;">A + B v. A</td>
+<td style="text-align: center;">A + B v. A</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br />
+<br />
+- Type II more conservative for A</p>
+</section>
+<section id="the-coefficients" class="slide level2">
+<h1>The coefficients</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t value</th>
+<th style="text-align: right;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td style="text-align: right;">1.68</td>
+<td style="text-align: right;">10.67</td>
+<td style="text-align: right;">0.16</td>
+<td style="text-align: right;">0.88</td>
+</tr>
+<tr class="even">
+<td>cover</td>
+<td style="text-align: right;">15.56</td>
+<td style="text-align: right;">4.49</td>
+<td style="text-align: right;">3.47</td>
+<td style="text-align: right;">0.00</td>
+</tr>
+<tr class="odd">
+<td>firesev</td>
+<td style="text-align: right;">-1.82</td>
+<td style="text-align: right;">0.85</td>
+<td style="text-align: right;">-2.14</td>
+<td style="text-align: right;">0.04</td>
+</tr>
+<tr class="even">
+<td>hetero</td>
+<td style="text-align: right;">65.99</td>
+<td style="text-align: right;">11.17</td>
+<td style="text-align: right;">5.91</td>
+<td style="text-align: right;">0.00</td>
+</tr>
+</tbody>
+</table>
+<p>R<sup>2</sup> = 0.40986</p>
+</section>
+<section id="comparing-coefficients-on-the-same-scale" class="slide level2">
+<h1>Comparing Coefficients on the Same Scale</h1>
+<p><span class="math display">\[r_{xy} = b_{xy}\frac{sd_{x}}{sd_{y}}\]</span></p>
+<pre><code>   cover  firesev   hetero 
+ 0.32673 -0.19872  0.50160 </code></pre>
+</section>
+<section id="visualization-of-4-d-multivariate-models-is-difficult" class="slide level2">
+<h1>Visualization of 4-D Multivariate Models is Difficult!</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/klm_see_effects-1.jpeg" width="768" /></p>
+</section>
+<section id="component-residual-plots-aid-in-visualization" class="slide level2">
+<h1>Component-Residual Plots Aid in Visualization</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/klm_crplot-1.jpeg" width="768" /></p>
+<p>Takes effect of predictor + residual of response</p>
+</section>
+<section id="added-variable-plot-to-show-unique-contributions-when-holding-others-constant" class="slide level2">
+<h1>Added Variable Plot to Show Unique Contributions when Holding Others Constant</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/klm_avplot-1.jpeg" width="768" /></p>
+</section>
+<section id="or-show-regression-at-median-of-other-variables" class="slide level2">
+<h1>Or Show Regression at Median of Other Variables</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/klm_visreg-1.jpeg" width="768" /></p>
+</section>
+<section id="or-show-predictions-overlaid-on-data" class="slide level2">
+<h1>Or Show Predictions Overlaid on Data</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/crazy-1.jpeg" width="768" /></p>
+</section>
+<section id="models-with-many-predictors-2" class="slide level2">
+<h1>Models with Many Predictors</h1>
+<ol start="0" type="1">
+<li><p>ANOVA</p></li>
+<li><p>ANCOVA</p></li>
+<li><p>Multiple Linear Regression</p></li>
+<li><p><font color="red">MLR with Interactions</font></p></li>
+</ol>
+</section>
+<section id="problem-what-if-continuous-predictors-are-not-additive" class="slide level2">
+<h1>Problem: What if Continuous Predictors are Not Additive?</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/keeley_int_plot3d-1.jpeg" width="672" /></p>
+</section>
+<section id="problem-what-if-continuous-predictors-are-not-additive-1" class="slide level2">
+<h1>Problem: What if Continuous Predictors are Not Additive?</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/keeley_int_plot-1.jpeg" width="768" /></p>
+</section>
+<section id="problem-what-if-continuous-predictors-are-not-additive-2" class="slide level2">
+<h1>Problem: What if Continuous Predictors are Not Additive?</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/keeley_int_plot2-1.jpeg" width="768" /></p>
+</section>
+<section id="section-5" class="slide level2">
+<h1></h1>
+<p><br />
+<br />
+<img src="images/23/regression_depression.jpg" /></p>
+</section>
+<section id="model-for-age-interacting-with-elevation-to-influence-fire-severity" class="slide level2">
+<h1>Model For Age Interacting with Elevation to Influence Fire Severity</h1>
+<p><span class="math display">\[y = \beta_0 + \beta_{1}x_{1} + \beta_{2}x_{2}+ \beta_{3}x_{1}x_{2}\]</span><br />
+<br />
+</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_lm_int &lt;-<span class="st"> </span><span class="kw">lm</span>(firesev ~<span class="st"> </span>age*elev, <span class="dt">data=</span>keeley)</code></pre></div>
+</section>
+<section id="testing-assumptions-1" class="slide level2">
+<h1>Testing Assumptions</h1>
+<ul>
+<li class="fragment">Data Generating Process: Linearity<br />
+<br />
+</li>
+<li class="fragment">Error Generating Process: Normality &amp; homoscedasticity of residuals<br />
+<br />
+</li>
+<li class="fragment">Data: Outliers not influencing residuals<br />
+<br />
+</li>
+<li class="fragment">Predictors: Minimal collinearity</li>
+</ul>
+</section>
+<section id="other-diagnostics-as-usual-1" class="slide level2">
+<h1>Other Diagnostics as Usual!</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/klm_diag_int-1.jpeg" width="768" /></p>
+</section>
+<section id="examine-residuals-with-respect-to-each-predictor-1" class="slide level2">
+<h1>Examine Residuals With Respect to Each Predictor</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/klm_diag2_int-1.jpeg" width="768" /></p>
+</section>
+<section id="interactions-vif-and-centering" class="slide level2">
+<h1>Interactions, VIF, and Centering</h1>
+<pre><code>     age     elev age:elev 
+  3.2001   5.5175   8.2871 </code></pre>
+<br />
+
+<div style="text-align:left">
+<p>This isn’t that bad. But it can be.<br />
+<br />
+Often, interactions or nonlinear derived predictors are collinear with one or more of their predictors.<br />
+<br />
+To remove, this, we <strong>center</strong> predictors - i.e., <span class="math inline">\(X_i - mean(X)\)</span></p>
+</div>
+</section>
+<section id="interpretation-of-centered-coefficients" class="slide level2">
+<h1>Interpretation of Centered Coefficients</h1>
+<p><span class="math display">\[\huge X_i - \bar{X}\]</span></p>
+<ul>
+<li class="fragment">Additive coefficients are the effect of a predictor at the mean value of the other predictors<br />
+<br />
+</li>
+<li class="fragment">Intercepts are at the mean value of all predictors<br />
+<br />
+</li>
+<li class="fragment">Visualization will keep you from getting confused!<br />
+</li>
+</ul>
+</section>
+<section id="interactions-vif-and-centering-1" class="slide level2">
+<h1>Interactions, VIF, and Centering</h1>
+<p><span class="math display">\[y = \beta_0 + \beta_{1}(x_{1}-\bar{x_{1}}) + \beta_{2}(x_{2}-\bar{x_{2}})+ \beta_{3}(x_{1}-\bar{x_{1}})(x_{2}-\bar{x_{2}})\]</span></p>
+<br />
+<br />
+
+<p align="left">
+Variance Inflation Factors for Centered Model:
+</p>
+<pre><code>       age_c       elev_c age_c:elev_c 
+      1.0167       1.0418       1.0379 </code></pre>
+</section>
+<section id="f-tests-to-evaluate-model" class="slide level2">
+<h1>F-Tests to Evaluate Model</h1>
+<p>What type of Sums of Squares??</p>
+<div class="fragment">
+
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Sum Sq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">F value</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>age</td>
+<td style="text-align: right;">52.9632</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">27.7092</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="even">
+<td>elev</td>
+<td style="text-align: right;">6.2531</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.2715</td>
+<td style="text-align: right;">0.07399</td>
+</tr>
+<tr class="odd">
+<td>age:elev</td>
+<td style="text-align: right;">22.3045</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11.6693</td>
+<td style="text-align: right;">0.00097</td>
+</tr>
+<tr class="even">
+<td>Residuals</td>
+<td style="text-align: right;">164.3797</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="coefficients" class="slide level2">
+<h1>Coefficients!</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t value</th>
+<th style="text-align: right;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td style="text-align: right;">1.81322</td>
+<td style="text-align: right;">0.61561</td>
+<td style="text-align: right;">2.9454</td>
+<td style="text-align: right;">0.00415</td>
+</tr>
+<tr class="even">
+<td>age</td>
+<td style="text-align: right;">0.12063</td>
+<td style="text-align: right;">0.02086</td>
+<td style="text-align: right;">5.7823</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="odd">
+<td>elev</td>
+<td style="text-align: right;">0.00309</td>
+<td style="text-align: right;">0.00133</td>
+<td style="text-align: right;">2.3146</td>
+<td style="text-align: right;">0.02302</td>
+</tr>
+<tr class="even">
+<td>age:elev</td>
+<td style="text-align: right;">-0.00015</td>
+<td style="text-align: right;">0.00004</td>
+<td style="text-align: right;">-3.4160</td>
+<td style="text-align: right;">0.00097</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+<br />
+R<sup>2</sup> = 0.32352<br />
+<br />
+Note that additive coefficients signify the effect of one predictor in the abscence of all others.</p>
+</section>
+<section id="centered-coefficients" class="slide level2">
+<h1>Centered Coefficients!</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t value</th>
+<th style="text-align: right;">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td style="text-align: right;">4.60913</td>
+<td style="text-align: right;">0.14630</td>
+<td style="text-align: right;">31.5040</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="even">
+<td>age_c</td>
+<td style="text-align: right;">0.05811</td>
+<td style="text-align: right;">0.01176</td>
+<td style="text-align: right;">4.9419</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="odd">
+<td>elev_c</td>
+<td style="text-align: right;">-0.00068</td>
+<td style="text-align: right;">0.00058</td>
+<td style="text-align: right;">-1.1716</td>
+<td style="text-align: right;">0.24460</td>
+</tr>
+<tr class="even">
+<td>age_c:elev_c</td>
+<td style="text-align: right;">-0.00015</td>
+<td style="text-align: right;">0.00004</td>
+<td style="text-align: right;">-3.4160</td>
+<td style="text-align: right;">0.00097</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+<br />
+R<sup>2</sup> = 0.32352<br />
+<br />
+Note that additive coefficients signify the effect of one predictor at the average level of all others.</p>
+</section>
+<section id="interpretation" class="slide level2">
+<h1>Interpretation</h1>
+<ul>
+<li class="fragment">What the heck does an interaction effect mean?<br />
+<br />
+</li>
+<li class="fragment">We can look at the effect of one variable at different levels of the other<br />
+<br />
+</li>
+<li class="fragment">We can look at a surface<br />
+<br />
+</li>
+<li class="fragment">We can construct <em>counterfactual</em> plots showing how changing both variables influences our outcome</li>
+</ul>
+</section>
+<section id="age-at-different-levels-of-elevation" class="slide level2">
+<h1>Age at Different Levels of Elevation</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/int_visreg-1.jpeg" width="768" /></p>
+</section>
+<section id="elevation-at-different-levels-of-age" class="slide level2">
+<h1>Elevation at Different Levels of Age</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/int_visreg_2-1.jpeg" width="768" /></p>
+</section>
+<section id="surfaces-and-other-3d-objects" class="slide level2">
+<h1>Surfaces and Other 3d Objects</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/surf_int-1.jpeg" width="960" /></p>
+</section>
+<section id="or-all-in-one-plot" class="slide level2">
+<h1>Or all in one plot</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/keeley_int_pred-1.jpeg" width="768" /></p>
+</section>
+<section id="without-data-and-including-cis" class="slide level2">
+<h1>Without Data and Including CIs</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/keeley_int_pred_nodata-1.jpeg" width="768" /></p>
+</section>
+<section id="a-heatmap-approach" class="slide level2">
+<h1>A Heatmap Approach</h1>
+<p><img src="23_general_linear_model_files/figure-revealjs/int_heatmap-1.jpeg" width="768" /></p>
+</section>
+<section id="section-6" class="slide level2">
+<h1></h1>
+<p><br />
+<br />
+<img src="images/23/matrix_regression.jpg" /><br />
+<span class="fragment">We can do a <em>lot</em> with the general linear model!<br></span> <span class="fragment">You are only limited by the biological models you can imagine.</span></p>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
