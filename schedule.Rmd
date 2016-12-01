@@ -99,11 +99,10 @@ __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readin
 ### Week 12.   
 __Lecture:__ [The General Linear Model: ANCOVA, Multiple Regression, and Interaction Effects](./lectures/23_general_linear_model.html), [Information Theoretic Approaches](./lectures/24_AIC.html)  
 __Lab Topic:__ Multiple Regression, Multimodel Inference  
-__Lab Data:__ [Multiple Files](lab/data_11.zip)  
 __Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf)  
 __Optional Readings:__ The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr  
-  
+   
 ### Week 13.   
 __Lecture:__ Entering a non-normal world - Modeling count data with Genearlized linear models. Overdispersed continuous data.  
 __Lab Topic:__ Generalized Linear Models. Diagnostics with DHARMa.  
