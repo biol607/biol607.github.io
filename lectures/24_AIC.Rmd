@@ -1,0 +1,525 @@
+---
+title:
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+
+## 
+![](images/24/most_interesting_aic.jpg){width=50%}
+<h3>Information Theoretic Approaches to Model Selection</h3>
+
+```{r prep, cache=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4.5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(car)
+library(rstanarm)
+library(AICcmodavg)
+
+```
+
+## Model Selection in a Nutshell
+
+<span class="fragment">The Frequentist P-Value testing framework emphasizes the evaluation of a
+single hypothesis - the null. We evaluate whether we reject the null.</span>\
+\
+<span class="fragment">This is perfect for an experiment where we are evaluating clean causal
+links, or testing for a a predicted relationship in data.</span>\
+\
+<span class="fragment">Often, though, we have multiple non-nested hypotheses, and wish to
+evaluate each. To do so we need a framework to compare the relative
+amount of information contained in each model and select the best model
+or models. We can then evaluate the individual parameters.</span>
+
+
+
+## Suppose this is the Truth
+
+```{r truth}
+
+truthplot <- ggplot(mtcars, aes(qsec, wt)) + theme_bw()+ stat_smooth(method="loess", fill=NA, color="black", lwd=2) +
+  xlab("X") + ylab("Y")
+
+truthplot
+
+```
+
+
+
+
+## We Can Fit a Model To Descibe Our Data, but it Has Less Information
+
+```{r truth_curve}
+truthplot <- truthplot+ stat_smooth(method="loess", color="orange", fill=NA, lwd=2, lty=3, method.args=list(degree=1))
+
+truthplot
+```
+
+
+
+
+## We Can Fit a Model To Descibe Our Data, but it Has Less Information
+
+```{r truth_line}
+truthplot <- truthplot+ stat_smooth(method="lm", color="red", fill=NA, lwd=2, lty=2)
+truthplot
+```
+
+
+
+
+## Information Loss and Kullback-Leibler Divergence
+
+Information Loss(truth,model) = L(truth)(LL(truth)-LL(model))
+
+\
+\
+Two neat properties:
+
+1.  Comparing Information Loss between model1 and model2, truth drops
+    out as a constant!\
+
+2.  We can therefore define a metric to compare *Relative Information
+    Loss*
+
+
+
+## Defining an Information Criterion
+
+Akaike’s Information Criterion - lower AIC means less information is
+lost by a model <span>$$AIC = -2log(L(\theta | x)) + 2K$$ </span>
+
+
+
+## Balancing General and Specific Truths
+
+Which model better describes a general principle of how the world works?
+```{r general_specific}
+
+set.seed(15)
+x<-rnorm(50)
+y<-rnorm(50, x - x^2+2)
+
+qplot(x,y, color=I("orange"), size=I(2.3)) + 
+  geom_line(color="grey", size=1.5) + 
+  theme_bw() +geom_point(size=2) +
+  stat_smooth(method="lm", formula=y~poly(x,2), color="red", fill=NA, size=2, lty=4)
+```
+
+##
+\
+\
+<h1>How many parameters does it take to draw an elephant?</h1>
+
+
+
+## But Sample Size Can Influence Fit...
+
+$$AIC = -2log(L(\theta | x)) + 2K$$\
+\
+$$AICc = AIC + \frac{2K(K+1)}{n-K-1}K$$
+
+
+
+##
+\
+\
+<h1>Using AIC</h1>
+
+
+
+## How can we Use AIC Values?
+
+$$\Delta AIC = AIC_{i} - min(AIC)$$\
+<div style="text-align:left">
+Rules of Thumb from Burnham and Anderson(2002):\
+\
+\
+
+<span class="fragment"> - $\Delta$ AIC $<$ 2 implies that two models are similar in their fit to the data </span> \
+\
+<span class="fragment"> - $\Delta$ AIC between 3 and 7 indicate moderate, but less, support for
+retaining a model </span> \
+\
+<span class="fragment"> - $\Delta$ AIC $>$ 10 indicates that the model is very unlikely </span> \
+</div>
+
+
+
+##  {data-background="images/23/fires.jpg"}
+<div style="bottom:100%; text-align:left; background:goldenrod">Five year study of wildfires & recovery in Southern California shur- blands in 1993. 90 plots (20 x 50m)
+(data from Jon Keeley et al.)</div>
+
+
+
+## What causes species richness?
+
+- Distance from fire patch 
+- Elevation
+- Abiotic index
+- Patch age
+- Patch heterogeneity
+- Severity of last fire
+- Plant cover
+
+## Many Things may Influence Species Richness
+
+```{r keeley_first}
+keeley <- read.csv("data/23/Keeley_rawdata_select4.csv")
+k <- keeley %>% select(rich, abiotic, firesev, cover) %>%
+  gather(variable, value, -rich)
+
+ggplot(k, mapping=aes(x=value, y=rich)) +
+  facet_wrap(~variable, strip.position="bottom", scale="free_x") +
+  geom_point() +
+  stat_smooth(method = "lm", color="red") +
+  xlab("") +
+  theme_bw(base_size=17)
+```
+
+
+## Implementing AIC: Create Models
+\
+```{r keeley_mods, echo=TRUE}
+k_abiotic <- lm(rich ~ abiotic, data=keeley)
+  
+k_firesev <- lm(rich ~ firesev, data=keeley)
+  
+k_cover <- lm(rich ~ cover, data=keeley)
+```
+
+
+
+
+## Implementing AIC: Compare Models
+
+```{r linear_compare, echo=TRUE}
+AIC(k_abiotic)
+
+AIC(k_firesev)
+
+AIC(k_cover)
+```
+
+## What if You Have a LOT of Potential Drivers?
+
+```{r keeley_pairs}
+keeley <- read.csv("data/23/Keeley_rawdata_select4.csv")
+pairs(keeley)
+```
+
+7 models alone with 1 term each\
+`r sum(choose(7,1:7))` possible without interactions.
+
+
+##
+![](images/24/mmi_aic_batman.jpg)
+
+## A Quantitative Measure of Relative Support
+
+$$w_{i} = \frac{e^{\Delta_{i}/2 }}{\displaystyle \sum^R_{r=1} e^{\Delta_{i}/2 }}$$\
+Where $w_{i}$ is the <span>*r*elative support</span> for model i
+compared to other models in the set being considered.\
+\
+Model weights summed together = 1
+
+
+
+## Begin with a Full Model
+<div style="text-align:left">
+```{r fullmod0, echo=TRUE}
+keeley_full <- lm(rich ~  elev + abiotic + hetero +
+                          distance + firesev + 
+                          age + cover,
+                  data = keeley)
+```
+ We use this model as a jumping off point, and construct a series of nested models with subsets of the variables.\
+\
+Evaluate using AICc Weights!
+</div>
+
+
+## Models with groups of variables
+
+```{r models1, echo=TRUE}
+keeley_soil_fire <- lm(rich ~ elev + abiotic + hetero +
+                          distance + firesev,
+                  data = keeley)
+
+keeley_plant_fire <- lm(rich ~  distance + firesev + 
+                          age + cover,
+                  data = keeley)
+
+keeley_soil_plant <- lm(rich ~  elev + abiotic + hetero +
+                          age + cover,
+                  data = keeley)
+```
+
+
+
+
+## One Factor Models
+
+```{r models2, echo=TRUE}
+keeley_soil <- lm(rich ~  elev + abiotic + hetero,
+                  data = keeley)
+
+keeley_fire <- lm(rich ~  distance + firesev,
+                  data = keeley)
+
+keeley_plant <- lm(rich ~  age + cover,
+                  data = keeley)
+```
+
+
+## Null Model
+\
+\
+```{r models3, echo=TRUE}
+keeley_null <- lm(rich ~  1,
+                  data = keeley)
+
+```
+
+
+
+## Now Compare Models Weights
+
+```{r modelList}
+modelList <- list(keeley_full,
+                  keeley_plant_fire,
+                  keeley_soil_fire,
+                  keeley_soil_plant,
+                  keeley_soil,
+                  keeley_plant,
+                  keeley_fire,
+                  keeley_null)
+
+names(modelList) <- c("full",
+     "plant_fire",
+     "soil_fire",
+     "soil_plant",
+     "soil",
+     "plant",
+     "fire", "null")
+
+```
+
+```{r aicctab}
+knitr::kable(aictab(modelList)[,-8], modnames = names(modelList), digits=3)
+```
+
+##
+\
+\
+<h3>So, I have some sense of good models? What now?</h3>
+
+##
+![](images/24/batman_model_averaging.jpg)
+
+## Variable Weights
+
+How to I evaluate the importance of a variable? \
+\
+Variable Weight = sum of all weights of all models including a variable. Relative support for
+inclusion of parameter in models. 
+
+```{r importance2}
+importance(modelList, parm="firesev", modnames=names(modelList))
+```
+
+
+
+
+## Model Averaged Parameters
+
+$$\hat{\bar{\beta}} = \frac{\sum w_{i}\hat\beta_{i}}{\sum{w_i}}$$\
+\
+$$var(\hat{\bar{\beta}}) = \left [ w_{i} \sqrt{var(\hat\beta_{i}) + (\hat\beta_{i}-\hat{\bar{\beta_{i}}})^2}  \right ]^2$$\
+Buckland et al. 1997
+
+
+
+## Model Averaged Parameters
+
+```{r varEst}
+modavgShrink(modelList, parm="firesev",  modnames=names(modelList))
+```
+
+
+
+
+## Model Averaged Predictions
+
+```{r Predict_data, echo=TRUE}
+
+newData <- data.frame(distance = 50,
+                      elev = 400,
+                      abiotic = 48,
+                      age = 2,
+                      hetero = 0.5,
+                      firesev = 10,
+                      cover=0.4)
+```
+
+```{r predict}
+modavgPred(modelList, modnames=names(modelList), newdata = newData)
+```
+
+
+
+
+## 95% Model Confidence Set
+
+```{r confSet}
+confset(modelList, modnames=names(modelList))
+```
+ Renormalize weights to 1 before using
+confidence set for above model averaging techniques
+
+
+##
+\
+\
+<h3>Is AIC all there is?</h3>
+
+
+## Variations on a Theme: Other IC Measures
+<div style="text-align:left">
+For overdispersed count data, we need to accomodate the overdispersion
+parameter 
+\
+$$QAIC = \frac{-2log(L(\theta | x))}{\hat{c}} + 2K$$\
+\
+where $\hat{c}$ is the overdispersion parameter\
+\
+
+</div>
+
+## AIC v. BIC
+<div style="text-align:left">
+Many other IC metrics for particular cases that deal with model
+complexity in different ways. For example
+$$AIC = -2log(L(\theta | x)) + 2K$$
+
+-   Lowest AIC = Best Model for Predicting New Data
+
+-   Tends to select models with many parameters
+
+\
+\
+$$BIC = -2log(L(\theta | x)) + K ln(n)$$
+
+-   Lowest BIC = Closest to Truth
+
+-   Derived from posterior probabilities
+</div>
+
+##  Information Criteria & Bayes
+
+- In Bayes, $AIC = -2log(y | p(\hat{\theta} )) + 2K$ \
+\
+- Uses mean of the posterior of all parameters \
+\
+- Ignores the full distribution of parameters \
+\
+
+##  Introducing Pointwise Predictive Densities
+
+- For all values of a parameter from our MCMC simulations, each $y_i$ has a density \
+\
+- This density provides information about the predictive ability of a model\
+\ 
+- Consider a Bayesian version of the `keeley_firesev` model
+
+```{r keeley_firesev_lppd, message=FALSE, warn=FALSE, cache=TRUE, results="hide"}
+keeley_firesev_stan <- stan_glm(rich ~ firesev, data=keeley, family=gaussian())
+keeley_plant_stan <- stan_glm(rich ~ cover, data=keeley, family=gaussian())
+# 
+colSD <- function(mat) apply(mat, 2, sd)
+
+post_pred_kf <- posterior_predict(keeley_firesev_stan)
+post_pred_kf_s <- colSD(post_pred_kf)
+# chains <- as.data.frame(keeley_firesev_stan)
+# colVar <- function(mat) apply(mat, 2, var)
+# 
+# llpd_points <-sapply(1:nrow(keeley), function(i) dnorm(keeley$rich[i], 
+#                                               mean=post_pred_kf[,i],
+#                                               sd = chains$sigma[i], log=F)) 
+# sum(log(colMeans(llpd_points)))
+# sum(colVar(log(llpd_points)))
+```
+
+## Example: Probability of First Richness Value over 4000 Draws
+
+```{r post_first}
+p <- dnorm(keeley$rich[1], mean=sort(post_pred_kf[,1]), post_pred_kf_s[1])
+qplot(sort(post_pred_kf[,1]), p, geom="line") +
+  theme_bw(base_size=17) +
+  xlab("firesev parameter value") +
+  ylab("p(y | firesev param)")
+```
+
+## Log-Pointwise Predictive Density
+
+- Summarizes predictive accuracy of model to data\
+\
+- Involves likelihoods of modeled parameters given the data\
+\
+- Can get a measure of its variance as well
+
+$$ computed\;\; lppd = \sum_{i=1}^{n}\left(log\sum_{s=1}^{S}\frac{1}{S}\;p(y_{i}|\theta^{S})\right)$$
+
+## Model Complexity
+
+- Number of parameters is not sufficient for more complex model structure \
+\
+- But, with more parameters comes more variables in the lppd \
+\ 
+- We can use this to estimate the effective number of parameters \
+\
+- For Linear Models, this should be ~ K \
+\
+$$p_{waic} = \sum_{i=1}^{n}var(log(p(y_{i} | \theta^{S})))$$
+
+## Widely Applicable Information Criteria
+$$\large WAIC = -2*LLPD + 2p_{WAIC}$$
+\
+<div style="text-align:left">
+- Familiar, no? \
+    -  Works just the same as AIC, etc \
+\
+- Also has an estimate of SD to evaluate overlap between models\
+\
+```{r waic}
+waic(keeley_firesev_stan)
+```
+
+</div>
+
+## Cautionary Notes
+
+-   AIC analyses aid in model selection. One must still evaluate
+    parameters and parameter error.
+
+-   Your inferences are constrained solely to the range of models
+    you consider. You may have missed the ’best’ model.
+
+-   All inferences <span>**MUST**</span> be based on <span>*a*
+    priori</span> models. Post-hoc model dredging could result in an
+    erroneous ’best’ model suited to your unique data set.
+
+

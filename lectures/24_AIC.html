@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h1></h1>
+<img src="images/24/most_interesting_aic.jpg" style="width:50.0%" />
+<h3>
+Information Theoretic Approaches to Model Selection
+</h3>
+</section>
+<section id="model-selection-in-a-nutshell" class="slide level2">
+<h1>Model Selection in a Nutshell</h1>
+<p><span class="fragment">The Frequentist P-Value testing framework emphasizes the evaluation of a single hypothesis - the null. We evaluate whether we reject the null.</span><br />
+<br />
+<span class="fragment">This is perfect for an experiment where we are evaluating clean causal links, or testing for a a predicted relationship in data.</span><br />
+<br />
+<span class="fragment">Often, though, we have multiple non-nested hypotheses, and wish to evaluate each. To do so we need a framework to compare the relative amount of information contained in each model and select the best model or models. We can then evaluate the individual parameters.</span></p>
+</section>
+<section id="suppose-this-is-the-truth" class="slide level2">
+<h1>Suppose this is the Truth</h1>
+<p><img src="24_AIC_files/figure-revealjs/truth-1.jpeg" width="768" /></p>
+</section>
+<section id="we-can-fit-a-model-to-descibe-our-data-but-it-has-less-information" class="slide level2">
+<h1>We Can Fit a Model To Descibe Our Data, but it Has Less Information</h1>
+<p><img src="24_AIC_files/figure-revealjs/truth_curve-1.jpeg" width="768" /></p>
+</section>
+<section id="we-can-fit-a-model-to-descibe-our-data-but-it-has-less-information-1" class="slide level2">
+<h1>We Can Fit a Model To Descibe Our Data, but it Has Less Information</h1>
+<p><img src="24_AIC_files/figure-revealjs/truth_line-1.jpeg" width="768" /></p>
+</section>
+<section id="information-loss-and-kullback-leibler-divergence" class="slide level2">
+<h1>Information Loss and Kullback-Leibler Divergence</h1>
+<p>Information Loss(truth,model) = L(truth)(LL(truth)-LL(model))</p>
+<p><br />
+<br />
+Two neat properties:</p>
+<ol type="1">
+<li>Comparing Information Loss between model1 and model2, truth drops out as a constant!<br />
+</li>
+<li>We can therefore define a metric to compare <em>Relative Information Loss</em></li>
+</ol>
+</section>
+<section id="defining-an-information-criterion" class="slide level2">
+<h1>Defining an Information Criterion</h1>
+<p>Akaike’s Information Criterion - lower AIC means less information is lost by a model <span><span class="math display">\[AIC = -2log(L(\theta | x)) + 2K\]</span> </span></p>
+</section>
+<section id="balancing-general-and-specific-truths" class="slide level2">
+<h1>Balancing General and Specific Truths</h1>
+<p>Which model better describes a general principle of how the world works? <img src="24_AIC_files/figure-revealjs/general_specific-1.jpeg" width="768" /></p>
+</section>
+<section id="section-1" class="slide level2">
+<h1></h1>
+<br />
+<br />
+
+<h1>
+How many parameters does it take to draw an elephant?
+</h1>
+</section>
+<section id="but-sample-size-can-influence-fit" class="slide level2">
+<h1>But Sample Size Can Influence Fit…</h1>
+<p><span class="math display">\[AIC = -2log(L(\theta | x)) + 2K\]</span><br />
+<br />
+<span class="math display">\[AICc = AIC + \frac{2K(K+1)}{n-K-1}K\]</span></p>
+</section>
+<section id="section-2" class="slide level2">
+<h1></h1>
+<br />
+<br />
+
+<h1>
+Using AIC
+</h1>
+</section>
+<section id="how-can-we-use-aic-values" class="slide level2">
+<h1>How can we Use AIC Values?</h1>
+<span class="math display">\[\Delta AIC = AIC_{i} - min(AIC)\]</span><br />
+
+<div style="text-align:left">
+Rules of Thumb from Burnham and Anderson(2002):<br />
+<br />
+<br />
+<span class="fragment"> - <span class="math inline">\(\Delta\)</span> AIC <span class="math inline">\(&lt;\)</span> 2 implies that two models are similar in their fit to the data </span><br />
+<br />
+<span class="fragment"> - <span class="math inline">\(\Delta\)</span> AIC between 3 and 7 indicate moderate, but less, support for retaining a model </span><br />
+<br />
+<span class="fragment"> - <span class="math inline">\(\Delta\)</span> AIC <span class="math inline">\(&gt;\)</span> 10 indicates that the model is very unlikely </span><br />
+
+</div>
+</section>
+<section id="section-3" class="slide level2" data-background="images/23/fires.jpg">
+<h1></h1>
+<div style="bottom:100%; text-align:left; background:goldenrod">
+Five year study of wildfires &amp; recovery in Southern California shur- blands in 1993. 90 plots (20 x 50m) (data from Jon Keeley et al.)
+</div>
+</section>
+<section id="what-causes-species-richness" class="slide level2">
+<h1>What causes species richness?</h1>
+<ul>
+<li>Distance from fire patch</li>
+<li>Elevation</li>
+<li>Abiotic index</li>
+<li>Patch age</li>
+<li>Patch heterogeneity</li>
+<li>Severity of last fire</li>
+<li>Plant cover</li>
+</ul>
+</section>
+<section id="many-things-may-influence-species-richness" class="slide level2">
+<h1>Many Things may Influence Species Richness</h1>
+<p><img src="24_AIC_files/figure-revealjs/keeley_first-1.jpeg" width="768" /></p>
+</section>
+<section id="implementing-aic-create-models" class="slide level2">
+<h1>Implementing AIC: Create Models</h1>
+<p><br />
+</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">k_abiotic &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st"> </span>abiotic, <span class="dt">data=</span>keeley)
+  
+k_firesev &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st"> </span>firesev, <span class="dt">data=</span>keeley)
+  
+k_cover &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st"> </span>cover, <span class="dt">data=</span>keeley)</code></pre></div>
+</section>
+<section id="implementing-aic-compare-models" class="slide level2">
+<h1>Implementing AIC: Compare Models</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(k_abiotic)</code></pre></div>
+<pre><code>[1] 722.2085</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(k_firesev)</code></pre></div>
+<pre><code>[1] 736.0338</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(k_cover)</code></pre></div>
+<pre><code>[1] 738.796</code></pre>
+</section>
+<section id="what-if-you-have-a-lot-of-potential-drivers" class="slide level2">
+<h1>What if You Have a LOT of Potential Drivers?</h1>
+<p><img src="24_AIC_files/figure-revealjs/keeley_pairs-1.jpeg" width="768" /></p>
+<p>7 models alone with 1 term each<br />
+127 possible without interactions.</p>
+</section>
+<section id="section-4" class="slide level2">
+<h1></h1>
+<p><img src="images/24/mmi_aic_batman.jpg" /></p>
+</section>
+<section id="a-quantitative-measure-of-relative-support" class="slide level2">
+<h1>A Quantitative Measure of Relative Support</h1>
+<p><span class="math display">\[w_{i} = \frac{e^{\Delta_{i}/2 }}{\displaystyle \sum^R_{r=1} e^{\Delta_{i}/2 }}\]</span><br />
+Where <span class="math inline">\(w_{i}\)</span> is the <span><em>r</em>elative support</span> for model i compared to other models in the set being considered.<br />
+<br />
+Model weights summed together = 1</p>
+</section>
+<section id="begin-with-a-full-model" class="slide level2">
+<h1>Begin with a Full Model</h1>
+<div style="text-align:left">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_full &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st">  </span>elev +<span class="st"> </span>abiotic +<span class="st"> </span>hetero +
+<span class="st">                          </span>distance +<span class="st"> </span>firesev +<span class="st"> </span>
+<span class="st">                          </span>age +<span class="st"> </span>cover,
+                  <span class="dt">data =</span> keeley)</code></pre></div>
+<p>We use this model as a jumping off point, and construct a series of nested models with subsets of the variables.<br />
+<br />
+Evaluate using AICc Weights!</p>
+</div>
+</section>
+<section id="models-with-groups-of-variables" class="slide level2">
+<h1>Models with groups of variables</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_soil_fire &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st"> </span>elev +<span class="st"> </span>abiotic +<span class="st"> </span>hetero +
+<span class="st">                          </span>distance +<span class="st"> </span>firesev,
+                  <span class="dt">data =</span> keeley)
+
+keeley_plant_fire &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st">  </span>distance +<span class="st"> </span>firesev +<span class="st"> </span>
+<span class="st">                          </span>age +<span class="st"> </span>cover,
+                  <span class="dt">data =</span> keeley)
+
+keeley_soil_plant &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st">  </span>elev +<span class="st"> </span>abiotic +<span class="st"> </span>hetero +
+<span class="st">                          </span>age +<span class="st"> </span>cover,
+                  <span class="dt">data =</span> keeley)</code></pre></div>
+</section>
+<section id="one-factor-models" class="slide level2">
+<h1>One Factor Models</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_soil &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st">  </span>elev +<span class="st"> </span>abiotic +<span class="st"> </span>hetero,
+                  <span class="dt">data =</span> keeley)
+
+keeley_fire &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st">  </span>distance +<span class="st"> </span>firesev,
+                  <span class="dt">data =</span> keeley)
+
+keeley_plant &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st">  </span>age +<span class="st"> </span>cover,
+                  <span class="dt">data =</span> keeley)</code></pre></div>
+</section>
+<section id="null-model" class="slide level2">
+<h1>Null Model</h1>
+<p><br />
+<br />
+</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_null &lt;-<span class="st"> </span><span class="kw">lm</span>(rich ~<span class="st">  </span><span class="dv">1</span>,
+                  <span class="dt">data =</span> keeley)</code></pre></div>
+</section>
+<section id="now-compare-models-weights" class="slide level2">
+<h1>Now Compare Models Weights</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;">Modnames</th>
+<th style="text-align: right;">K</th>
+<th style="text-align: right;">AICc</th>
+<th style="text-align: right;">Delta_AICc</th>
+<th style="text-align: right;">ModelLik</th>
+<th style="text-align: right;">AICcWt</th>
+<th style="text-align: right;">LL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: left;">full</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">688.162</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.888</td>
+<td style="text-align: right;">-333.956</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td style="text-align: left;">soil_fire</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">692.554</td>
+<td style="text-align: right;">4.392</td>
+<td style="text-align: right;">0.111</td>
+<td style="text-align: right;">0.099</td>
+<td style="text-align: right;">-338.594</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td style="text-align: left;">soil_plant</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">696.569</td>
+<td style="text-align: right;">8.406</td>
+<td style="text-align: right;">0.015</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">-340.601</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td style="text-align: left;">fire</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">707.493</td>
+<td style="text-align: right;">19.331</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">-349.511</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td style="text-align: left;">plant_fire</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">709.688</td>
+<td style="text-align: right;">21.526</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">-348.338</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td style="text-align: left;">soil</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">711.726</td>
+<td style="text-align: right;">23.564</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">-350.506</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td style="text-align: left;">plant</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">737.163</td>
+<td style="text-align: right;">49.001</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">-364.346</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td style="text-align: left;">null</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">747.254</td>
+<td style="text-align: right;">59.092</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">-371.558</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-5" class="slide level2">
+<h1></h1>
+<br />
+<br />
+
+<h3>
+So, I have some sense of good models? What now?
+</h3>
+</section>
+<section id="section-6" class="slide level2">
+<h1></h1>
+<p><img src="images/24/batman_model_averaging.jpg" /></p>
+</section>
+<section id="variable-weights" class="slide level2">
+<h1>Variable Weights</h1>
+<p>How to I evaluate the importance of a variable?<br />
+<br />
+Variable Weight = sum of all weights of all models including a variable. Relative support for inclusion of parameter in models.</p>
+<pre><code>
+Importance values of &#39;firesev&#39;:
+
+w+ (models including parameter): 0.99 
+w- (models excluding parameter): 0.01 </code></pre>
+</section>
+<section id="model-averaged-parameters" class="slide level2">
+<h1>Model Averaged Parameters</h1>
+<p><span class="math display">\[\hat{\bar{\beta}} = \frac{\sum w_{i}\hat\beta_{i}}{\sum{w_i}}\]</span><br />
+<br />
+<span class="math display">\[var(\hat{\bar{\beta}}) = \left [ w_{i} \sqrt{var(\hat\beta_{i}) + (\hat\beta_{i}-\hat{\bar{\beta_{i}}})^2}  \right ]^2\]</span><br />
+Buckland et al. 1997</p>
+</section>
+<section id="model-averaged-parameters-1" class="slide level2">
+<h1>Model Averaged Parameters</h1>
+<pre><code>
+Multimodel inference on &quot;firesev&quot; based on AICc
+
+AICc table used to obtain model-averaged estimate with shrinkage:
+
+           K   AICc Delta_AICc AICcWt Estimate   SE
+full       9 688.16       0.00   0.89    -1.02 0.80
+plant_fire 6 709.69      21.53   0.00    -1.39 0.92
+soil_fire  7 692.55       4.39   0.10    -1.89 0.73
+soil_plant 7 696.57       8.41   0.01     0.00 0.00
+soil       5 711.73      23.56   0.00     0.00 0.00
+plant      4 737.16      49.00   0.00     0.00 0.00
+fire       4 707.49      19.33   0.00    -2.03 0.80
+null       2 747.25      59.09   0.00     0.00 0.00
+
+Model-averaged estimate with shrinkage: -1.09 
+Unconditional SE: 0.84 
+95% Unconditional confidence interval: -2.74, 0.56</code></pre>
+</section>
+<section id="model-averaged-predictions" class="slide level2">
+<h1>Model Averaged Predictions</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">distance =</span> <span class="dv">50</span>,
+                      <span class="dt">elev =</span> <span class="dv">400</span>,
+                      <span class="dt">abiotic =</span> <span class="dv">48</span>,
+                      <span class="dt">age =</span> <span class="dv">2</span>,
+                      <span class="dt">hetero =</span> <span class="fl">0.5</span>,
+                      <span class="dt">firesev =</span> <span class="dv">10</span>,
+                      <span class="dt">cover=</span><span class="fl">0.4</span>)</code></pre></div>
+<pre><code>
+Model-averaged predictions on the response scale
+based on entire model set and 95% confidence interval:
+
+  mod.avg.pred uncond.se lower.CL upper.CL
+1       31.666     6.136    19.64   43.692</code></pre>
+</section>
+<section id="model-confidence-set" class="slide level2">
+<h1>95% Model Confidence Set</h1>
+<pre><code>
+Confidence set for the best model
+
+Method:  raw sum of model probabilities
+
+95% confidence set:
+          K   AICc Delta_AICc AICcWt
+full      9 688.16       0.00   0.89
+soil_fire 7 692.55       4.39   0.10
+
+Model probabilities sum to 0.99 </code></pre>
+<p>Renormalize weights to 1 before using confidence set for above model averaging techniques</p>
+</section>
+<section id="section-7" class="slide level2">
+<h1></h1>
+<br />
+<br />
+
+<h3>
+Is AIC all there is?
+</h3>
+</section>
+<section id="variations-on-a-theme-other-ic-measures" class="slide level2">
+<h1>Variations on a Theme: Other IC Measures</h1>
+<div style="text-align:left">
+<p>For overdispersed count data, we need to accomodate the overdispersion parameter<br />
+<span class="math display">\[QAIC = \frac{-2log(L(\theta | x))}{\hat{c}} + 2K\]</span><br />
+<br />
+where <span class="math inline">\(\hat{c}\)</span> is the overdispersion parameter<br />
+<br />
+</p>
+</div>
+</section>
+<section id="aic-v.-bic" class="slide level2">
+<h1>AIC v. BIC</h1>
+<div style="text-align:left">
+<p>Many other IC metrics for particular cases that deal with model complexity in different ways. For example <span class="math display">\[AIC = -2log(L(\theta | x)) + 2K\]</span></p>
+<ul>
+<li><p>Lowest AIC = Best Model for Predicting New Data</p></li>
+<li><p>Tends to select models with many parameters</p></li>
+</ul>
+<p><br />
+<br />
+<span class="math display">\[BIC = -2log(L(\theta | x)) + K ln(n)\]</span></p>
+<ul>
+<li><p>Lowest BIC = Closest to Truth</p></li>
+<li>Derived from posterior probabilities</li>
+</ul>
+</div>
+</section>
+<section id="information-criteria-bayes" class="slide level2">
+<h1>Information Criteria &amp; Bayes</h1>
+<ul>
+<li>In Bayes, <span class="math inline">\(AIC = -2log(y | p(\hat{\theta} )) + 2K\)</span><br />
+<br />
+</li>
+<li>Uses mean of the posterior of all parameters<br />
+<br />
+</li>
+<li>Ignores the full distribution of parameters<br />
+<br />
+</li>
+</ul>
+</section>
+<section id="introducing-pointwise-predictive-densities" class="slide level2">
+<h1>Introducing Pointwise Predictive Densities</h1>
+<ul>
+<li>For all values of a parameter from our MCMC simulations, each <span class="math inline">\(y_i\)</span> has a density<br />
+<br />
+</li>
+<li>This density provides information about the predictive ability of a model<br />
+ </li>
+<li>Consider a Bayesian version of the <code>keeley_firesev</code> model</li>
+</ul>
+</section>
+<section id="example-probability-of-first-richness-value-over-4000-draws" class="slide level2">
+<h1>Example: Probability of First Richness Value over 4000 Draws</h1>
+<p><img src="24_AIC_files/figure-revealjs/post_first-1.jpeg" width="768" /></p>
+</section>
+<section id="log-pointwise-predictive-density" class="slide level2">
+<h1>Log-Pointwise Predictive Density</h1>
+<ul>
+<li>Summarizes predictive accuracy of model to data<br />
+<br />
+</li>
+<li>Involves likelihoods of modeled parameters given the data<br />
+<br />
+</li>
+<li>Can get a measure of its variance as well</li>
+</ul>
+<p><span class="math display">\[ computed\;\; lppd = \sum_{i=1}^{n}\left(log\sum_{s=1}^{S}\frac{1}{S}\;p(y_{i}|\theta^{S})\right)\]</span></p>
+</section>
+<section id="model-complexity" class="slide level2">
+<h1>Model Complexity</h1>
+<ul>
+<li>Number of parameters is not sufficient for more complex model structure<br />
+<br />
+</li>
+<li>But, with more parameters comes more variables in the lppd<br />
+ </li>
+<li>We can use this to estimate the effective number of parameters<br />
+<br />
+</li>
+<li>For Linear Models, this should be ~ K<br />
+<br />
+<span class="math display">\[p_{waic} = \sum_{i=1}^{n}var(log(p(y_{i} | \theta^{S})))\]</span></li>
+</ul>
+</section>
+<section id="widely-applicable-information-criteria" class="slide level2">
+<h1>Widely Applicable Information Criteria</h1>
+<span class="math display">\[\large WAIC = -2*LLPD + 2p_{WAIC}\]</span><br />
+
+<div style="text-align:left">
+<ul>
+<li>Familiar, no?<br />
+- Works just the same as AIC, etc<br />
+<br />
+</li>
+<li>Also has an estimate of SD to evaluate overlap between models<br />
+<br />
+</li>
+</ul>
+<pre><code>Computed from 4000 by 90 log-likelihood matrix
+
+          Estimate   SE
+elpd_waic   -367.7  5.0
+p_waic         2.5  0.4
+waic         735.4 10.0</code></pre>
+</div>
+</section>
+<section id="cautionary-notes" class="slide level2">
+<h1>Cautionary Notes</h1>
+<ul>
+<li><p>AIC analyses aid in model selection. One must still evaluate parameters and parameter error.</p></li>
+<li><p>Your inferences are constrained solely to the range of models you consider. You may have missed the ’best’ model.</p></li>
+<li><p>All inferences <span><strong>MUST</strong></span> be based on <span><em>a</em> priori</span> models. Post-hoc model dredging could result in an erroneous ’best’ model suited to your unique data set.</p></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
