@@ -117,6 +117,7 @@ And there we have nice parallel lines with model predicted confidence intervals!
 ### 1.4 Examples
 I've provided two data sets:  
 1) `18e4MoleRatLayabouts.csv` looking at how caste and mass affect the energy mole rates expend  
+\
 2) `18q11ExploitedLarvalFish.csv` looking at how status of a marine area - protected or not - influences the CV around age of maturity of a number of different fish (so, age is a predictor)
 
 Using the following workflow, analyze these data sets.
@@ -140,5 +141,153 @@ Using the following workflow, analyze these data sets.
 
 
 ## 2. Multiple Linear Regression
+Multiple linear regression is conceptially very similar to ANCOVA. Let's use the keeley fire severity plant richness data to see it in action.
+
+```{r keeley}
+keeley <- read.csv("data/11/Keeley_rawdata_select4.csv")
+
+head(keeley)
+```
+
+For our purposes, we'll focus on fire severity and plant cover as predictors.
+
+### 2.1 Visualizing
+I'm not going to lie, visualizing multiple continuous variables is as much of an art as a science. One can use colors and sizes of points, or slice up the data into chunks and facet that. Here are a few examples.
+
+```{r plot_keeley}
+qplot(cover, rich, color=firesev, data=keeley) +
+  scale_color_gradient(low="yellow", high="red") +
+  theme_bw()
+
+qplot(cover, rich, color=firesev, data=keeley) +
+  scale_color_gradient(low="yellow", high="red") +
+  theme_bw() +
+  facet_wrap(~cut_number(firesev, 4))
+```
+
+Note the new faceting otion. Cool, no?
+
+What other plots can you make?
+
+### 2.2 Fit and Evaluate Assumptions
+Fitting is straightforward for an additive MLR model. It's just a linear model!
+
+```{r k_fit}
+keeley_mlr <- lm(rich ~ firesev + cover, data=keeley)
+```
+
+As for assumptions, we have the usual
+
+```{r k_assume}
+par(mfrow=c(2,2))
+plot(keeley_mlr, which=c(1,2,5))
+par(mfrow=c(1,1))
+```
+
+But now we also need to think about how the residuals relate to each predictor. Fortunately, there's still `residualPlots`.
+
+```{r k_resid}
+residualPlots(keeley_mlr, test=FALSE)
+```
+
+Odd bow shape - but not too bad. Maybe there's an interaction? Maybe we want to log transform something? Who knows!
+
+We also want to look at multicollinearity. There are two steps for that. First, the `vif`
+
+```{r vif}
+vif(keeley_mlr)
+```
+
+Not bad. We might also want to look at the correlation matrix. Dplyr can help us here as we want to select down to just relevant columns.
+
+```{r k_cor}
+library(dplyr)
+
+keeley %>%
+  select(firesev, cover) %>%
+  cor()
+```
+
+
+### 2.3 Evaluation
+
+We evaluate the same way as usual
+
+```{r k_eval}
+Anova(keeley_mlr)
+```
+
+And then the coefficients and R<sup>2</sup>
+
+```{r k_coef}
+summary(keeley_mlr)
+```
+
+Not amazing fit, but, the coefficients are clearly different from 0.
+
+### 2.3 Visualization
+
+This is where things get sticky. We have two main approaches. First, visualizing with component + residual plots
+
+```{r cr_k}
+crPlots(keeley_mlr, smooth=FALSE)
+```
+
+But the values on the y axis are....odd. We get a sense of what's going on and the scatter after accounting for our predictor of interest, but we might want to look at, say, evaluation of a variable at the mean of the other.
+
+For that, we have `visreg`
+
+```{r k_visreg}
+library(visreg)
+par(mfrow=c(1,2))
+visreg(keeley_mlr)
+par(mfrow=c(1,1))
+```
+
+Now the axes make far more sense, and we have a sense of the relationship.
+
+We can actually whip this up on our own using `crossing`, the median of each value, and predict.
+
+```{r k_pred}
+k_med_firesev <- data.frame(firesev = median(keeley$firesev),
+                                 cover = seq(0,1.5, length.out = 100))
+k_med_firesev <- cbind(k_med_firesev, predict(keeley_mlr, 
+                                              newdata = k_med_firesev,
+                                              interval="confidence"))
+  
+ggplot() +
+  geom_point(data=keeley, mapping = aes(x=cover, y = rich)) +
+  geom_line(data = k_med_firesev, mapping=aes(x=cover, y=fit), color="blue") +
+  geom_ribbon(data = k_med_firesev, mapping = aes(x=cover, 
+                                                  ymin = lwr,
+                                                  ymax = upr),
+              fill="lightgrey", alpha=0.5)
+```
+
+### 2.4 Examples
+OK, here are two datasets to work with:\
+
+1) `planktonSummary.csv` showing plankton from Lake Biakal (thanks, Stephanie Hampton). Evluate how Chlorophyll (`CHLFa`) is affected by other predictors.  
+\
+2) `SwaddleWestNile2002NCEAS_shortnames.csv` is about the prevalence of West Nile virus in Birds around Sacramento county in California. What predicts human WNV?\
+
+Using the following workflow, analyze these data sets.
+
+```{r sampe_workflow_mlr}
+# Load the data
+
+# Perform a preliminary visualization. Play with this and choose two predictors
+
+# Fit a MLR model
+
+# Test Asssumptions and modeify model if needed
+
+# Evaluate results
+
+# Visualize results
+```
+
 ## 3. Interaction Effects in MLR
+
+
 ## 4. Information Criteria
