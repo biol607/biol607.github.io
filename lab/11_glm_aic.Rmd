@@ -1,0 +1,144 @@
+---
+title: "General Linear Models"
+author: "Biol 607"
+date: "December 1, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. ANCOVA
+Combining categorical and continuous variables is not that different from multiway ANOVA. To start with, let's look at the neanderthal data.
+```{r neand}
+neand <- read.csv("./data/11/18q09NeanderthalBrainSize.csv")
+head(neand)
+```
+
+We can clearly see both the categorical variable we're interested in, and the covariate.
+
+To get a preliminary sense of what's going on here, do some exploratory visualization with `ggplot2` why doncha!
+
+```{r plot_neand}
+library(ggplot2)
+
+qplot(lnmass, lnbrain, color=species, data=neand) +
+  stat_smooth(method="lm")
+```
+
+Now, the CIs are going to be off as this wasn't all tested in the same model, but you begin to get a sense of whether things are parallel or not, and whether this covariate is important.
+
+What other plots might you produce?
+
+As this is a general linear model, good olde `lm()` is still there for us.
+```{r neand_lm}
+neand_lm <- lm(lnbrain ~ species + lnmass, data=neand)
+```
+
+### 1.1 Testing Assumptions of ANCOVA
+
+In addition to the ususal tests, we need to make sure that the slopes really are parallel. We do that by fitting a model with an interaction and testing it (which, well, if there *was* and interaction, might that be interesting).
+
+First, the usual
+
+```{r neand_tests}
+par(mfrow=c(2,2))
+plot(neand_lm, which=c(1,2,5))
+par(mfrow=c(1,1))
+
+#And now look at residuals by group/predictors
+library(car)
+residualPlots(neand_lm, tests=FALSE)
+```
+
+To test the parallel presumption
+
+```{r neand_parallel}
+neand_int <- lm(lnbrain ~ species*lnmass, data=neand)
+
+Anova(neand_int)
+```
+
+### 1.2 Assessing results
+
+So, first we have our F-tests.
+
+```{r f_neand}
+Anova(neand_lm)
+```
+
+Both the treatment and covariate matter.
+
+Second, we might want to compare covariate adjusted groups and/or look at covariate adjusted means.
+
+```{r neand_lsmeans}
+library(lsmeans)
+adj_means <- lsmeans(neand_lm, specs="species")
+
+#adjusted means
+adj_means
+
+#comparisons
+contrast(adj_means, method="tukey", adjust="none")
+```
+
+If you have an interaction, this method is no longer valid. Instead, you'll need to monkey with your posthocs (if you even want to use them - often we don't) to look at tests at different levels of the covariate.
+
+### 1.3 Visualization
+
+Visualization is funny, as you want to make parallel lines and also get the CIs right. Rather than rely on `ggplot2` to do this natively, we need to futz around a bit with generating predictions
+
+```{r neand_predictions}
+neand_predict <- predict(neand_lm, interval="confidence")
+
+head(neand_predict)
+```
+
+So, here we have fit values, lower confidence interval, and upper confidence intervals. As we have not fed `predict()` any new data, these values line up with our `neand` data frame, so we can cbind it all together, and then use these values to make a prediction plot.
+
+```{r neand_plot_predict}
+neand <- cbind(neand, neand_predict)
+
+ggplot(data=neand) +
+  geom_point(mapping=aes(x=lnmass, y=lnbrain, color=species)) +
+  geom_line(mapping = aes(x = lnmass, y=fit, color=species)) + 
+  geom_ribbon(data=neand, aes(x = lnmass, 
+                              ymin=lwr, 
+                              ymax=upr,
+                              group = species), 
+              fill="lightgrey", 
+              alpha=0.5) +
+  theme_bw()
+```
+
+And there we have nice parallel lines with model predicted confidence intervals!
+
+### 1.4 Examples
+I've provided two data sets:  
+1) `18e4MoleRatLayabouts.csv` looking at how caste and mass affect the energy mole rates expend  
+2) `18q11ExploitedLarvalFish.csv` looking at how status of a marine area - protected or not - influences the CV around age of maturity of a number of different fish (so, age is a predictor)
+
+Using the following workflow, analyze these data sets.
+
+```{r sampe_workflow}
+# Load the data
+
+# Perform a preliminary visualization
+
+# Fit an ANCOVA model
+
+# Test Asssumptions and modeify model if needed
+
+# Evaluate results
+
+# Post-hocs if you can
+
+# Visualize results
+```
+
+
+
+## 2. Multiple Linear Regression
+## 3. Interaction Effects in MLR
+## 4. Information Criteria
