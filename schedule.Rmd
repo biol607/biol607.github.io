@@ -94,6 +94,8 @@ __Lectures:__ Experimental Design in a Multicausal World - [Multiway ANOVA](lect
 __Lab Topic:__  Discussion of Hurlbert, [Factorial ANOVA](lab/10_anova.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf), [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
+__In Class Code:__ [lots of anova](./in_class_code_2016/10_anova.R)  
+
   
   
 ### Week 12.   
@@ -102,6 +104,7 @@ __Lab Topic:__ [Multiple Regression, Multimodel Inference](lab/11_glm_aic.html) 
 __Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf)  
 __Optional Readings:__ The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr  
+__In Class Code:__ [ancova, mlr, and aic](./in_class_code_2016/11_linear_model_aic.R)  
    
 ### Week 13.   
 __Lecture:__ Entering a non-normal world - Modeling count data with Genearlized linear models. Overdispersed continuous data.  
