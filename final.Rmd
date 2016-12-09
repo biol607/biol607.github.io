@@ -6,7 +6,7 @@
 The goal of your project is to apply the analytic skills you have gained in the course to a project that is relevant to your own research. Towards that end, your project could take many forms. 
 
 #### Products and Due Dates  
-You will have a final presentation on the last day of class. Project write-ups will be due the first day of exams.
+You will have a final presentation on the last day of class. Project write-ups will be due on 12/22.
 
 
 #### Sample Projects  
@@ -49,6 +49,37 @@ Before you begin work, you are required to have my premission and/or address any
 #### Group Work  
 Some projects are enormous in scope, and will take many hands to gather the data and/or perform all of the analyses. For these projects, group work is a-ok. I expect that 1) given the scope of the project, you all make a commitment towards pushing this work to publication and 2) that you will give me a clear breakdown of who is doing what. Everyone should be making a substantial investment of time and energy. No freeloading! Please include this breakdown in your proposal.
 
+#### Presentations
+
+The first part of your final project is a presentations. This presentation should be 5-7 minutes with 2 minutes for questions. I recommend a five slide strategy. With a standard deviation of two.  
+1) Some relevant background  
+2) Given this background, what question are you asking?  
+3) What techniques did you use to answer this question?  
+4) What do we need to know about your analysis?
+5) What did your analysis tell you?  
+
+The presentation is graded out of 30 points to the extent address the above five points and an extra five points on aesthetics.
+
+Bonus points for doing it all using Markdown slides of some sort and making it look good.
+
+#### Final Paper
+
+For the final paper, I expect a 10-12 page fully referenced paper with a brief introduction that introduces the major question and hypotheses, an extended methods section that talks about what you did in detail and why you chose the methods you did, a results section that not only shows your results but full evaluation of assumptions of your methods, and a discussion of what your results mean in the context of your question(s) and/or hypotheses.
+
+Grading will follow the rubric below, with each question corresponding to five points:
+
+- Clear statement of questions & hypotheses?
+- Did you choose the right analyses?
+- Did you justify the analysis?
+- Did you execute it properly?
+- Did you overcome assumption violations, or inferential traps (p-values, etc.)?
+- Did you describe their results cleanly and clearly?
+
+This is a total of 30 points.
+
+#### Final Grade
+
+Your grade on the final is the sum of your paper and presentation - so, a total of 60 points.
 
 
 #### Extra Credit

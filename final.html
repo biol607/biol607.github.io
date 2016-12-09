@@ -19,12 +19,11 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
-<link rel="stylesheet"
-      href="site_libs/highlight/default.css"
-      type="text/css" />
-<script src="site_libs/highlight/highlight.js"></script>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
@@ -94,6 +93,7 @@ button.code-folding-btn:focus {
 }
 </style>
 
+
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
@@ -150,7 +150,6 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="site_libs/navigation-1.0/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -229,7 +228,7 @@ $(document).ready(function () {
 </div>
 <div id="products-and-due-dates" class="section level4">
 <h4>Products and Due Dates</h4>
-<p>You will have a final presentation on the last day of class. Project write-ups will be due the first day of exams.</p>
+<p>You will have a final presentation on the last day of class. Project write-ups will be due on 12/22.</p>
 </div>
 <div id="sample-projects" class="section level4">
 <h4>Sample Projects</h4>
@@ -265,6 +264,34 @@ $(document).ready(function () {
 <h4>Group Work</h4>
 <p>Some projects are enormous in scope, and will take many hands to gather the data and/or perform all of the analyses. For these projects, group work is a-ok. I expect that 1) given the scope of the project, you all make a commitment towards pushing this work to publication and 2) that you will give me a clear breakdown of who is doing what. Everyone should be making a substantial investment of time and energy. No freeloading! Please include this breakdown in your proposal.</p>
 </div>
+<div id="presentations" class="section level4">
+<h4>Presentations</h4>
+<p>The first part of your final project is a presentations. This presentation should be 5-7 minutes with 2 minutes for questions. I recommend a five slide strategy. With a standard deviation of two.<br />
+1) Some relevant background<br />
+2) Given this background, what question are you asking?<br />
+3) What techniques did you use to answer this question?<br />
+4) What do we need to know about your analysis? 5) What did your analysis tell you?</p>
+<p>The presentation is graded out of 30 points to the extent address the above five points and an extra five points on aesthetics.</p>
+<p>Bonus points for doing it all using Markdown slides of some sort and making it look good.</p>
+</div>
+<div id="final-paper" class="section level4">
+<h4>Final Paper</h4>
+<p>For the final paper, I expect a 10-12 page fully referenced paper with a brief introduction that introduces the major question and hypotheses, an extended methods section that talks about what you did in detail and why you chose the methods you did, a results section that not only shows your results but full evaluation of assumptions of your methods, and a discussion of what your results mean in the context of your question(s) and/or hypotheses.</p>
+<p>Grading will follow the rubric below, with each question corresponding to five points:</p>
+<ul>
+<li>Clear statement of questions &amp; hypotheses?</li>
+<li>Did you choose the right analyses?</li>
+<li>Did you justify the analysis?</li>
+<li>Did you execute it properly?</li>
+<li>Did you overcome assumption violations, or inferential traps (p-values, etc.)?</li>
+<li>Did you describe their results cleanly and clearly?</li>
+</ul>
+<p>This is a total of 30 points.</p>
+</div>
+<div id="final-grade" class="section level4">
+<h4>Final Grade</h4>
+<p>Your grade on the final is the sum of your paper and presentation - so, a total of 60 points.</p>
+</div>
 <div id="extra-credit" class="section level4">
 <h4>Extra Credit</h4>
 <p>If you are able to publish the analysis that you put together in this project, I will raise your grade retroactively by one level (e.g., from a B+ to an A). It’ll take some paperwork, but I’m excited to do it!</p>
@@ -278,9 +305,13 @@ $(document).ready(function () {
 <script>
 
 // add bootstrap table styles to pandoc tables
-$(document).ready(function () {
+function bootstrapStylePandocTables() {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
 });
+
 
 </script>
 
