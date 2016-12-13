@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h1></h1>
+<img src="images/25/gosling_normality.jpg" style="width:40.0%" /><br />
+
+<h3>
+Nonlinear Regression and Genearlized Linear Models
+</h3>
+</section>
+<section id="going-the-distance" class="slide level2">
+<h1>Going the Distance</h1>
+<ol type="1">
+<li>Nonlinear Models with Normal Error<br />
+<br />
+</li>
+<li>Generalized Linear Models
+<ul>
+<li>Assessing Error Assumptions<br />
+<br />
+</li>
+</ul></li>
+<li>Poisson Regression<br />
+<br />
+</li>
+<li>Logistic Regression</li>
+</ol>
+</section>
+<section id="the-general-linear-model" class="slide level2">
+<h1>The General Linear Model</h1>
+<span class="math display">\[\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}\]</span><br />
+<br />
+
+<div style="text-align:left">
+<ul>
+<li>We have seen this model can accomodate interaction (products)<br />
+<br />
+</li>
+<li>X can also have other nonlinear terms<br />
+<br />
+</li>
+<li>The key is that nonlinear terms have coefficients and add up<br />
+&gt; - “Linear” data generating process<br />
+</li>
+<li>ML, Bayes, and Algorithmic Least Squares can all fit these models</li>
+</ul>
+</div>
+</section>
+<section id="daphnia-parasites" class="slide level2">
+<h1>Daphnia Parasites</h1>
+<p><img src="images/25/daphnia500.jpg" /></p>
+</section>
+<section id="daphnia-parasites-1" class="slide level2">
+<h1>Daphnia Parasites</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/daph_plot-1.jpeg" width="768" /></p>
+</section>
+<section id="does-this-looks-right" class="slide level2">
+<h1>Does this looks right?</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/daph_plot_line-1.jpeg" width="768" /></p>
+</section>
+<section id="what-do-you-do-when-you-dont-have-a-line" class="slide level2">
+<h1>What do you do when you don’t have a line?</h1>
+<ol type="1">
+<li>Pray</li>
+<li>If nonlinear terms are additive fit with OLS<br />
+</li>
+<li>Transform? But think about what it will do to error.</li>
+<li>Nonlinear Least Squares<br />
+</li>
+<li>Generalized Linear Models</li>
+</ol>
+</section>
+<section id="but-model-assessment-is-wonky" class="slide level2">
+<h1>But Model Assessment is Wonky</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/daph_qq-1.jpeg" width="768" /></p>
+</section>
+<section id="what-is-our-data-generating-process" class="slide level2">
+<h1>What is our Data Generating Process?</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/daph_plot-1.jpeg" width="768" /></p>
+</section>
+<section id="the-general-linear-model-1" class="slide level2">
+<h1>The General Linear Model</h1>
+<p><span class="math display">\[\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}\]</span><br />
+<br />
+<strong>Why not have Spores = Longevity + Longevity<sup>2</sup></strong><br />
+<br />
+</p>
+</section>
+<section id="those-posthocs-are-all-right" class="slide level2">
+<h1>Those Posthocs are All Right?</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/daph_qq_sq-1.jpeg" width="768" /></p>
+</section>
+<section id="squared" class="slide level2">
+<h1>Squared?</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/daph_plot_sq-1.jpeg" width="768" /></p>
+</section>
+<section id="going-the-distance-1" class="slide level2">
+<h1>Going the Distance</h1>
+<ol type="1">
+<li>Nonlinear Models with Normal Error<br />
+<br />
+</li>
+<li>Generalized Linear Models
+<ul>
+<li>Assessing Error Assumptions<br />
+<br />
+</li>
+</ul></li>
+<li>Poisson Regression<br />
+<br />
+</li>
+<li>Logistic Regression</li>
+</ol>
+</section>
+<section id="what-if-the-relationship-isnt-additive" class="slide level2">
+<h1>What if the relationship isn’t additive?</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/metabolism-1.jpeg" width="768" /></p>
+<p>Metabolic Rate = a ∗ mass<sup>b</sup></p>
+</section>
+<section id="transformations" class="slide level2">
+<h1>Transformations</h1>
+<ul>
+<li>log(y): exponential</li>
+<li>log(y) and log(x): power function</li>
+<li>arcsin(sqrt(y)): bounded data</li>
+<li>logit(y): for bounded data (more well behaved)<br />
+</li>
+<li>Box-Cox Transform<br />
+<br />
+<span class="fragment">May have to add 0.01, 0.5, or 1 in cases with 0s </span><br />
+<br />
+<span class="fragment">You must ask, what do the transformed variables mean?</span></li>
+</ul>
+</section>
+<section id="log-log-fit" class="slide level2">
+<h1>Log-Log Fit</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/meta_nonlinear_plot-1.jpeg" width="768" /></p>
+<p>log(Metabolic Rate) = a + b*log(mass) + error</p>
+</section>
+<section id="careful-about-error-structure" class="slide level2">
+<h1>Careful About Error Structure</h1>
+<p>log(MetabolicRate) = log(a) + b ∗ log(mass) + error implies<br />
+<br />
+<span class="math display">\[Metabolic Rate = a ∗ mass^b ∗ error\]</span><br />
+but we often want<br />
+<br />
+<span class="math display">\[Metabolic Rate = a ∗ mass^b + error\]</span></p>
+</section>
+<section id="many-ways-to-fit" class="slide level2">
+<h1>Many Ways to Fit</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">primate.nls &lt;-<span class="st"> </span><span class="kw">nls</span>(bmr.watts ~<span class="st"> </span>a*mass.g^b,
+                    <span class="dt">data=</span>metabolism, 
+                    <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">a =</span> <span class="fl">0.0172858</span>, <span class="dt">b =</span> <span class="fl">0.74160</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">primate.mle &lt;-<span class="st"> </span><span class="kw">mle2</span>(bmr.watts ~<span class="st"> </span><span class="kw">dnorm</span>(a*mass.g^b, sigma),
+                    <span class="dt">data=</span>metabolism, 
+                    <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">a =</span> <span class="fl">0.0172858</span>, <span class="dt">b =</span> <span class="fl">0.74160</span>, <span class="dt">sigma=</span><span class="dv">5</span>))</code></pre></div>
+<p><br />
+<span class="fragment">But this may not solve the problem as…</span></p>
+</section>
+<section id="but-not-all-error-generating-processes-are-normal" class="slide level2">
+<h1>But Not All Error Generating Processes Are Normal</h1>
+<p><br />
+<br />
+<img src="images/25/whalberg_assumptions.jpg" /></p>
+</section>
+<section id="the-general-linear-model-is-a-special-case" class="slide level2">
+<h1>The General Linear Model is a Special Case</h1>
+<p><span class="math display">\[\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}\]</span><br />
+<br />
+Implies that: <span class="math display">\[\boldsymbol{\hat{Y}} = \boldsymbol{\beta X}\]</span><br />
+and<br />
+<span class="math display">\[\boldsymbol{Y} \sim N(\boldsymbol{\hat{Y}})\]</span><br />
+<span class="fragment">But what if We don’t want a Normal Distribution?</p>
+</section>
+<section id="the-generalized-linear-model" class="slide level2">
+<h1>The Generalized Linear Model</h1>
+<p><span class="math display">\[\boldsymbol{\eta} = \boldsymbol{\beta X}\]</span><br />
+<span class="math display">\[f(\boldsymbol{\hat{Y}}) = \boldsymbol{\eta}\]</span><br />
+<br />
+f(y) is called the <strong>link</strong> function<br />
+<br />
+<span class="math display">\[\boldsymbol{Y} = E(\boldsymbol{\hat{Y}}, \theta)\]</span><br />
+E is any distribution from the Exponential Family<br />
+<span class="math inline">\(\theta\)</span> is an error parameter, and can be a function of Y</p>
+</section>
+<section id="generalized-linear-models-link-functions" class="slide level2">
+<h1>Generalized Linear Models: Link Functions</h1>
+<p>Basic Premise:</p>
+<ol type="1">
+<li><span>We have a linear predictor, <span class="math inline">\(\eta_i = a+Bx\)</span></span><br />
+<br />
+</li>
+<li>That predictor is linked to the fitted value of <span class="math inline">\(Y_i\)</span>, <span class="math inline">\(\mu_i\)</span><br />
+<br />
+</li>
+<li>We call this a link function, such that <span class="math inline">\(g(\mu_i) = \eta_i\)</span><br />
+
+<ul>
+<li>For example, for a linear function, <span class="math inline">\(\mu_i = \eta_i\)</span><br />
+</li>
+<li>For an exponential function, <span class="math inline">\(log(\mu_i) = \eta_i\)</span></li>
+</ul></li>
+</ol>
+</section>
+<section id="some-common-links" class="slide level2">
+<h1>Some Common Links</h1>
+<ul>
+<li><p>Identity: $= $ - e.g. <span class="math inline">\(\mu = a + bx\)</span></p></li>
+<li><p>Log: $log() = $ - e.g. <span class="math inline">\(\mu = e^{a + bx}\)</span></p></li>
+<li><p>Logit: $logit() = $ - e.g. <span class="math inline">\(\mu = \frac{e^{a + bx}}{1+e^{a + bx}}\)</span></p></li>
+<li><p>Inverse: $ = $ - e.g. <span class="math inline">\(\mu = (a + bx)^{-1}\)</span></p></li>
+</ul>
+</section>
+<section id="generalized-linear-models-error" class="slide level2">
+<h1>Generalized Linear Models: Error</h1>
+<p>Basic Premise:</p>
+<ol type="1">
+<li><p><span>The error distribution is from the <span><em>exponential</em></span> family</span></p>
+<ul>
+<li>e.g., Normal, Poisson, Binomial, and more.</li>
+</ul>
+<br />
+<br />
+</li>
+<li><p>For these distributions, the variance is a funciton of the fitted value on the curve: <span class="math inline">\(var(Y_i) = \theta V(\mu_i)\)</span></p>
+<ul>
+<li>For a normal distribution, <span class="math inline">\(var(\mu_i) = \theta*1\)</span> as <span class="math inline">\(V(\mu_i)=1\)</span><br />
+</li>
+<li>For a poisson distribution, <span class="math inline">\(var(\mu_i) = 1*\mu_i\)</span> as <span class="math inline">\(V(\mu_i)=\mu_i\)</span></li>
+</ul></li>
+</ol>
+</section>
+<section id="distributions-canonical-links-and-dispersion" class="slide level2">
+<h1>Distributions, Canonical Links, and Dispersion</h1>
+<table>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>Canonical Link</th>
+<th>Variance Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Normal</td>
+<td>identity</td>
+<td><span class="math inline">\(\theta\)</span></td>
+</tr>
+<tr class="even">
+<td>Poisson</td>
+<td>log</td>
+<td><span class="math inline">\(\mu\)</span></td>
+</tr>
+<tr class="odd">
+<td>Quasipoisson</td>
+<td>log</td>
+<td><span class="math inline">\(\mu\theta\)</span></td>
+</tr>
+<tr class="even">
+<td>Binomial</td>
+<td>logit</td>
+<td><span class="math inline">\(\mu(1-\mu)\)</span></td>
+</tr>
+<tr class="odd">
+<td>Quasibinomial</td>
+<td>logit</td>
+<td><span class="math inline">\(\mu(1-\mu)\theta\)</span></td>
+</tr>
+<tr class="even">
+<td>Negative Binomial</td>
+<td>log</td>
+<td><span class="math inline">\(\mu + \kappa\mu^2\)</span></td>
+</tr>
+<tr class="odd">
+<td>Gamma</td>
+<td>inverse</td>
+<td><span class="math inline">\(\mu^2\)</span></td>
+</tr>
+<tr class="even">
+<td>Inverse Normal</td>
+<td><span class="math inline">\(1/\mu^2\)</span></td>
+<td><span class="math inline">\(\mu^3\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="distributions-and-other-links" class="slide level2">
+<h1>Distributions and Other Links</h1>
+<table>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Normal</td>
+<td>identity, log, inverse</td>
+</tr>
+<tr class="even">
+<td>Poisson</td>
+<td>log, identity, sqrt</td>
+</tr>
+<tr class="odd">
+<td>Quasipoisson</td>
+<td>log, identity, sqrt</td>
+</tr>
+<tr class="even">
+<td>Binomial</td>
+<td>logit, probit, cauchit, log, log-log</td>
+</tr>
+<tr class="odd">
+<td>Quasibinomial</td>
+<td>logit, probit, cauchit, log, log-log</td>
+</tr>
+<tr class="even">
+<td>Negative Binomial</td>
+<td>log, identity, sqrt</td>
+</tr>
+<tr class="odd">
+<td>Gamma</td>
+<td>inverse, identity, log</td>
+</tr>
+<tr class="even">
+<td>Inverse Normal</td>
+<td><span class="math inline">\(1/\mu^2\)</span>, inverse, identity, log</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="general---generalized-linear-model" class="slide level2">
+<h1>General -&gt; Generalized Linear Model</h1>
+<p><span class="math display">\[\boldsymbol{\eta} = \boldsymbol{\beta X}\]</span><br />
+<span class="math display">\[\boldsymbol{\hat{Y}} = \boldsymbol{\eta}\]</span><br />
+<br />
+identity <strong>link</strong> function<br />
+<br />
+<span class="math display">\[\boldsymbol{Y} \sim N(\boldsymbol{\hat{Y}}, \theta)\]</span> <span class="math inline">\(\theta\)</span> is the SD</p>
+</section>
+<section id="going-the-distance-2" class="slide level2">
+<h1>Going the Distance</h1>
+<ol type="1">
+<li>Nonlinear Models with Normal Error<br />
+<br />
+</li>
+<li>Generalized Linear Models
+<ul>
+<li>Assessing Error Assumptions<br />
+<br />
+</li>
+</ul></li>
+<li>Poisson Regression<br />
+<br />
+</li>
+<li>Logistic Regression</li>
+</ol>
+</section>
+<section id="poisson-regression-with-a-log-link" class="slide level2">
+<h1>Poisson Regression with a Log Link</h1>
+<p><span class="math display">\[\boldsymbol{\eta} = \boldsymbol{\beta X}\]</span><br />
+<span class="math display">\[log(\boldsymbol{\hat{Y}}) = \boldsymbol{\eta}\]</span><br />
+log(y) translates to an exponential function<br />
+<br />
+<span class="math display">\[\boldsymbol{Y} \sim P(\boldsymbol{\hat{Y}})\]</span> <span class="math inline">\(\theta\)</span> is <span class="math inline">\(\hat{y}\)</span></p>
+</section>
+<section id="what-is-the-relationship-between-kelp-holdfast-size-and-number-of-fronds" class="slide level2">
+<h1>What is the relationship between kelp holdfast size and number of fronds?</h1>
+<p><img src="images/25/Giant_kelp_adult.jpeg" /></p>
+</section>
+<section id="what-about-kelp-holdfasts" class="slide level2">
+<h1>What About Kelp Holdfasts?</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/kelp-1.jpeg" width="768" /></p>
+</section>
+<section id="how-bout-dem-residuals" class="slide level2">
+<h1>How ’bout dem residuals?</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kelp_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(FRONDS ~<span class="st"> </span>HLD_DIAM, <span class="dt">data=</span>kelp)</code></pre></div>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/plot_lelp-1.jpeg" width="768" /></p>
+</section>
+<section id="what-is-our-data-and-error-generating-process" class="slide level2">
+<h1>What is our data and error generating process?</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/kelp-1.jpeg" width="768" /></p>
+</section>
+<section id="what-is-our-data-and-error-generating-process-1" class="slide level2">
+<h1>What is our data and error generating process?</h1>
+<ul>
+<li class="fragment">Data generating process should be exponential
+<ul>
+<li class="fragment">No values less than 1<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">Error generating process should be Poisson
+<ul>
+<li class="fragment">Count data</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-is-our-data-and-error-generating-process-2" class="slide level2">
+<h1>What is our data and error generating process?</h1>
+<p><br />
+<br />
+</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kelp_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(FRONDS ~<span class="st"> </span>HLD_DIAM, <span class="dt">data=</span>kelp,
+                <span class="dt">family=</span><span class="kw">poisson</span>(<span class="dt">link=</span><span class="st">&quot;log&quot;</span>))</code></pre></div>
+</section>
+<section id="but-how-do-we-assess-assumptions" class="slide level2">
+<h1>But how do we assess assumptions?</h1>
+<ul>
+<li class="fragment">Should still be no fitted v. residual relationship<br />
+<br />
+</li>
+<li class="fragment">But QQ plots lose meaning
+<ul>
+<li class="fragment">Not a normal distribution</li>
+<li class="fragment">Mean scales with variance<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">Also many types of residuals
+<ul>
+<li class="fragment">Deviance, Pearson, raw, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="randomized-quantile-residuals" class="slide level2">
+<h1>Randomized quantile residuals</h1>
+<ul>
+<li class="fragment">If model fits well, quantiles of residuals should be uniformly distributed<br />
+<br />
+</li>
+<li class="fragment">I.E., for any point, if we had its distribution, there should be no bias in its quantile<br />
+<br />
+</li>
+<li class="fragment">We do this via simulation<br />
+<br />
+</li>
+<li class="fragment">Works for <strong>many</strong> models, and naturally via Bayesian simuation</li>
+</ul>
+</section>
+<section id="randomized-quantile-residuals-steps" class="slide level2">
+<h1>Randomized quantile residuals: Steps</h1>
+<ol type="1">
+<li>Get 250 (or more!) simulations of model coefficients<br />
+<br />
+</li>
+<li>For each response (y) value, create an empirical distribution from the simuations<br />
+<br />
+</li>
+<li>For each response, determine it’s quantile from that empirical distribution<br />
+<br />
+</li>
+<li>The quantiles of all y values should be uniformly distributed
+<ul>
+<li>QQ plot of a uniform distribution!<br />
+</li>
+</ul></li>
+</ol>
+</section>
+<section id="randomized-quantile-residuals-visualize" class="slide level2">
+<h1>Randomized quantile residuals: Visualize</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/rqr-1.jpeg" width="768" /></p>
+</section>
+<section id="randomized-quantile-residuals-visualize-1" class="slide level2">
+<h1>Randomized quantile residuals: Visualize</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/rqr1-1.jpeg" width="768" /></p>
+</section>
+<section id="randomized-quantile-residuals-visualize-2" class="slide level2">
+<h1>Randomized quantile residuals: Visualize</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/rqr2-1.jpeg" width="768" /></p>
+</section>
+<section id="randomized-quantile-residuals-visualize-3" class="slide level2">
+<h1>Randomized quantile residuals: Visualize</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/rqr3-1.jpeg" width="768" /></p>
+</section>
+<section id="randomized-quantile-residuals-visualize-4" class="slide level2">
+<h1>Randomized quantile residuals: Visualize</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/rqr4-1.jpeg" width="768" /></p>
+</section>
+<section id="quantile-residuals-for-kelp-glm" class="slide level2">
+<h1>Quantile Residuals for Kelp GLM</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DHARMa)
+simulationOutput &lt;-<span class="st"> </span><span class="kw">simulateResiduals</span>(kelp_glm, 
+                                      <span class="dt">n =</span> <span class="dv">250</span>)
+<span class="kw">plot</span>(simulationOutput)</code></pre></div>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/kelp_resid_dharma-1.jpeg" width="768" /></p>
+</section>
+<section id="kelp-glm-results" class="slide level2">
+<h1>Kelp GLM Results</h1>
+<p>LR Test</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">LR Chisq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Pr(&gt;Chisq)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HLD_DIAM</td>
+<td style="text-align: right;">456.6136</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+Coefficients:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">1.778059</td>
+<td style="text-align: right;">0.0572585</td>
+<td style="text-align: right;">31.05319</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HLD_DIAM</td>
+<td style="text-align: right;">0.023624</td>
+<td style="text-align: right;">0.0010502</td>
+<td style="text-align: right;">22.49521</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="kelp-glm-results-1" class="slide level2">
+<h1>Kelp GLM Results</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kelp_plot +
+<span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;glm&quot;</span>, 
+              <span class="dt">method.args=</span><span class="kw">list</span>(<span class="dt">family=</span><span class="kw">poisson</span>(<span class="dt">link=</span><span class="st">&quot;log&quot;</span>)))</code></pre></div>
+</section>
+<section id="kelp-glm-results-2" class="slide level2">
+<h1>Kelp GLM Results</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/kelpplot2-1.jpeg" width="768" /></p>
+</section>
+<section id="going-the-distance-3" class="slide level2">
+<h1>Going the Distance</h1>
+<ol type="1">
+<li>Nonlinear Models with Normal Error<br />
+<br />
+</li>
+<li>Generalized Linear Models
+<ul>
+<li>Assessing Error Assumptions<br />
+<br />
+</li>
+</ul></li>
+<li>Poisson Regression<br />
+<br />
+</li>
+<li>Logistic Regression</li>
+</ol>
+</section>
+<section id="what-about-binary-responses" class="slide level2" data-background="./images/25/cryptosporidiosis-cryptosporidium-hominis.jpeg">
+<h1>What about Binary Responses?</h1>
+</section>
+<section id="section-1" class="slide level2" data-background="./images/25/mouseinject.jpg">
+<h1></h1>
+</section>
+<section id="cryptosporidum-infection-rates" class="slide level2">
+<h1>Cryptosporidum Infection Rates</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/crypto_plot-1.jpeg" width="768" /></p>
+</section>
+<section id="binomial-distribution" class="slide level2">
+<h1>Binomial Distribution</h1>
+<p><span class="math display">\[ Y_i \sim B(prob, size) \]</span></p>
+<ul>
+<li class="fragment">Discrete Distribution</li>
+<li class="fragment">prob = probability of something happening</li>
+<li class="fragment">size = # of discrete trials</li>
+<li class="fragment">Used for frequency or probability data</li>
+<li class="fragment">We estimate coefficients that influence prob</li>
+</ul>
+</section>
+<section id="logit-link" class="slide level2">
+<h1>Logit Link</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/crypto_logit-1.jpeg" width="768" /></p>
+</section>
+<section id="generalized-linear-model-with-logit-link" class="slide level2">
+<h1>Generalized Linear Model with Logit Link</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crypto_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(Y/N ~<span class="st"> </span>Dose,
+                  <span class="dt">weight=</span>N,
+                  <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link=</span><span class="st">&quot;logit&quot;</span>),
+                  <span class="dt">data=</span>crypto)</code></pre></div>
+<p>OR, with Success and Failures</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crypto_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">cbind</span>(Y, Y-N) ~<span class="st"> </span>Dose,
+                  <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link=</span><span class="st">&quot;logit&quot;</span>),
+                  <span class="dt">data=</span>crypto)</code></pre></div>
+</section>
+<section id="quantile-residuals" class="slide level2">
+<h1>Quantile Residuals</h1>
+<p><img src="25_generalized_linear_models_files/figure-revealjs/quant_crypto-1.jpeg" width="768" /></p>
+<p><span class="fragment">Possible overdispersion, use quasibinomial</span></p>
+</section>
+<section id="outputs" class="slide level2">
+<h1>Outputs</h1>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">LR Chisq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Pr(&gt;Chisq)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Dose</td>
+<td style="text-align: right;">233.8357</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>And logit coefficients</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-1.4077690</td>
+<td style="text-align: right;">0.1484785</td>
+<td style="text-align: right;">-9.481298</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dose</td>
+<td style="text-align: right;">0.0134684</td>
+<td style="text-align: right;">0.0010464</td>
+<td style="text-align: right;">12.870912</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-odds" class="slide level2">
+<h1>The Odds</h1>
+<span class="math display">\[Odds  = \frac{p}{1-p}\]</span><br />
+<br />
+
+<div class="fragment">
+<p><span class="math display">\[Log-Odds = Log\frac{p}{1-p} = logit(p)\]</span></p>
+</div>
+</section>
+<section id="the-meaning-of-a-logit-coefficient" class="slide level2">
+<h1>The Meaning of a Logit Coefficient</h1>
+Logit Coefficient: A 1 unit increase in a predictor = an increase of <span class="math inline">\(\beta\)</span> increase in the log-odds of the response.<br />
+<br />
+
+<div class="fragment">
+<p><span class="math display">\[\beta = logit(p_2) - logit(p_1)\]</span></p>
+</div>
+<div class="fragment">
+<p><span class="math display">\[\beta =  Log\frac{p_1}{1-p_1} -  Log\frac{p_2}{1-p_2}\]</span></p>
+</div>
+<br />
+
+<div class="fragment">
+We need to know both p1 and <span class="math inline">\(\beta\)</span> to interpret this.<br />
+
+</div>
+<div class="fragment">
+If p1 = 0.5, <span class="math inline">\(\beta\)</span> = 0.01347, then p2 = 0.503 
+</div>
+<div class="fragment">
+If p1 = 0.7, <span class="math inline">\(\beta\)</span> = 0.01347, then p2 = 0.702<br />
+
+</div>
+</section>
+<section id="our-nonlinear-and-non-normal-adventure" class="slide level2">
+<h1>Our Nonlinear and Non-Normal Adventure</h1>
+<ul>
+<li class="fragment">You MUST think about your data and error generating process<br />
+<br />
+</li>
+<li class="fragment">For any data generating process, we can build whatever model we’d like<br />
+<br />
+</li>
+<li class="fragment">BUT, think about the resulting error, and fit accordingly<br />
+<br />
+</li>
+<li class="fragment">GLMs are but a beginning<br />
+<br />
+</li>
+<li class="fragment">We can cook up a <strong>lot</strong> of different error structures, and will in the future!</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
