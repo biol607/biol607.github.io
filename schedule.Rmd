@@ -107,7 +107,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr
 __In Class Code:__ [ancova, mlr, and aic](./in_class_code_2016/11_linear_model_aic.R)  
    
 ### Week 13.   
-__Lecture:__ Entering a non-normal world - Modeling count data with Genearlized linear models. Overdispersed continuous data.  
+__Lecture:__ [Entering a non-normal world](lectures/25_generalized_linear_models.html) - Modeling count data with Genearlized linear models. Overdispersed continuous data.  
 __Lab Topic:__ Generalized Linear Models. Diagnostics with DHARMa.  
 __Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_2009_glmm.pdf) through section on GLMs, [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html)  
   
