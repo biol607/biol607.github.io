@@ -19,12 +19,11 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
-<link rel="stylesheet"
-      href="site_libs/highlight/default.css"
-      type="text/css" />
-<script src="site_libs/highlight/highlight.js"></script>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
@@ -94,6 +93,7 @@ button.code-folding-btn:focus {
 }
 </style>
 
+
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
@@ -150,7 +150,6 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="site_libs/navigation-1.0/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -225,12 +224,15 @@ $(document).ready(function () {
 
 <div id="r" class="section level3">
 <h3>R</h3>
-<p><a href="https://bookdown.org/rdpeng/rprogdatascience/">R Programming for Data Science</a>. 2016. Roger D. Peng. Provides a more detailed intro to basic R programming.<br />
+<p><a href="https://ismayc.github.io/rbasics-book/index.html">Getting used to R, RStudio, and R Markdown</a> 2017. Chester Ismay. The basics.<br />
+<a href="https://bookdown.org/rdpeng/rprogdatascience/">R Programming for Data Science</a>. 2016. Roger D. Peng. Provides a more detailed intro to basic R programming.<br />
 <a href="https://bookdown.org/rdpeng/exdata/">Exploratory Data Analysis with R</a>. 2016. Roger D. Peng. Uses the tidyverse and ggplot2 for data exploration. Great introduction to these packages and how they can be made to sing together.<br />
 <a href="https://bookdown.org/csgillespie/efficientR/">Efficient R Programming</a>. 2016. Colin Gillespe and Robin Lovelace<br />
 <a href="http://adv-r.had.co.nz/">Advanced R</a>. 2014. Great walkthrough of the details and guts of R. From novices to R wizards, you will learn things you never thought possible (or the actual reasoning behind that hacky stuff you’ve been doing for years).<br />
 <a href="https://bookdown.org/ccolonescu/RPoE4/">Principles of Econometrics with R</a> 2016. Constantin Colonescu. Yes, it’s econometrics, but there’s a lot here that’s very generalizable to biological data analysis in R as well.<br />
-<a href="http://stat545.com/">STAT545</a> UBC Course by Jenny Bryan that covers many similar topics to us - probably better - and more!</p>
+<a href="http://stat545.com/">STAT545</a> UBC Course by Jenny Bryan that covers many similar topics to us - probably better - and more!<br />
+<a href="http://tts.smac-group.com/">A Tour of Time Series Analysis with R</a><br />
+<a href="https://ismayc.github.io/moderndiver-book/index.html">ModernDive: An Introduction to Statistical and Data Sciences via R</a>. 2017. Chester Ismay and Albert Y. Kim Nice intro stats book (for undergrads) using all R examples</p>
 </div>
 <div id="github" class="section level3">
 <h3>Github</h3>
@@ -308,9 +310,13 @@ $(document).ready(function () {
 <script>
 
 // add bootstrap table styles to pandoc tables
-$(document).ready(function () {
+function bootstrapStylePandocTables() {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
 });
+
 
 </script>
 
