@@ -14,7 +14,7 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 
 **Email:** jarrett.byrnes@umb.edu
 
-**Weekly Schedule:** Tuesday & Thursday 11-12:30, Lab Thursday 12:30-3
+**Weekly Schedule:** Monday & Wednesday 2:30-4:00, Lab Thursday 12:30-3
 
 **Office Hours:** Prof. Byrnes will hold office hours Tuesday from 1:30-3 and Wednesday 11-12:30.
 
@@ -24,18 +24,3 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 &nbsp;  
 
 ## Course News:  
-*11/2/2016* A [Bayesian election forecast](http://www.slate.com/features/pkremp_forecast/report.html) with STAN in R  
-  
-*10/27/2016* Midterm exam [is out](https://github.com/biol607/exam_2016)  
-  
-*9/19/16* Hadley Wickham special session [on quora](https://www.quora.com/session/Hadley-Wickham/1)  
-  
-*9/16/16* For a one-stop-shop for the tidyverse, there's now a [package](https://blog.rstudio.org/2016/09/15/tidyverse-1-0-0/) that will load it all.
-
-*9/8/16* New issue of [The R Journal](https://journal.r-project.org/archive/2016-1/)
-
-*9/7/16* Check out [Interview with a Data Sucker](http://simplystatistics.org/open%20science/2016/09/07/interview-with-a-data-sucker/)
-
-*9/6/16* Sticky notes are available at the bookstore in Desk Supplies section. Walk in, and go straight to the back.
-
-*9/5/16* Welcome to the class! Please browse around the site or download the [syllabus](./biol607_syllabus_2016.doc)!
