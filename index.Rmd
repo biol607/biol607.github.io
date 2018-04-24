@@ -14,7 +14,7 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 
 **Email:** jarrett.byrnes@umb.edu
 
-**Weekly Schedule:** Monday & Wednesday 2:30-4:00, Lab Thursday 12:30-3
+**Weekly Schedule:** Monday & Wednesday 2:30-4:00, Lab Friday 10-12:30pm in the Wheatley Biology Conference Room
 
 **Office Hours:** Prof. Byrnes will hold office hours Tuesday from 1:30-3 and Wednesday 11-12:30.
 
