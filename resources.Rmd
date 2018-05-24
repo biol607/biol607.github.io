@@ -7,11 +7,15 @@ title: "Resources, Blogs, and More"
 [R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/). 2016. Roger D. Peng. Provides a more detailed intro to basic R programming.  
 [Exploratory Data Analysis with R](https://bookdown.org/rdpeng/exdata/). 2016. Roger D. Peng. Uses the tidyverse and ggplot2 for data exploration. Great introduction to these packages and how they can be made to sing together.  
 [Efficient R Programming](https://bookdown.org/csgillespie/efficientR/). 2016.  Colin Gillespe and Robin Lovelace\
+[Statistical Inference for Data Science](https://leanpub.com/LittleInferenceBook/read). 2018. Brian Caffo. A wonderful book that is a companion to his Coursera course, but is open, and full of gret concepts and R examples.\
+[Regression Models for Data Science in R](https://leanpub.com/regmods/read). 2018. Brian Caffo. A wonderful primer on regression models. Incredibly thorough.\
 [Advanced R](http://adv-r.had.co.nz/). 2014. Great walkthrough of the details and guts of R. From novices to R wizards, you will learn things you never thought possible (or the actual reasoning behind that hacky stuff you've been doing for years).\
 [Principles of Econometrics with  R](https://bookdown.org/ccolonescu/RPoE4/) 2016. Constantin Colonescu. Yes, it's econometrics, but there's a lot here that's very generalizable to biological data analysis in R as well.\
 [STAT545](http://stat545.com/) UBC Course by Jenny Bryan that covers many similar topics to us - probably better - and more!  
 [A Tour of Time Series Analysis with R](http://tts.smac-group.com/)  
-[ModernDive: An Introduction to Statistical and Data Sciences via R](https://ismayc.github.io/moderndiver-book/index.html). 2017. Chester Ismay and Albert Y. Kim  Nice intro stats book (for undergrads) using all R examples
+[ModernDive: An Introduction to Statistical and Data Sciences via R](https://ismayc.github.io/moderndiver-book/index.html). 2017. Chester Ismay and Albert Y. Kim  Nice intro stats book (for undergrads) using all R examples  
+[Fundamentals of Data Visualization](http://serialmentor.com/dataviz/). 2018. Claus Wilke. A wonderful online collection of best principles and practices for data viz.  
+[Forecasting: Principles and Practice](http://otexts.org/fpp2/). 2018. Rob Hyndman and George Athanasaopoules. A great intro to timeseries and forecasting in R.  
 
 ### Github
 [Using Git and Github with Rstudio](http://www.molecularecologist.com/2013/11/using-github-with-r-and-rstudio/)\
