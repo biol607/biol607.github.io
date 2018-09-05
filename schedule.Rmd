@@ -3,7 +3,9 @@
 ---  
   While the topics covered are broad, each week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
   
-  W&S = Whitlock and Schluter, G&W = [Grolemund and Wickham](http://r4ds.had.co.nz), U/P for linked pdfs = biol607
+  W&S = Whitlock and Schluter, W&G = [Wickham and Grolemund](http://r4ds.had.co.nz), U/P for linked pdfs = biol607  
+  
+  Change .html to .Rmd in your browser to get the markdown
 
 ```{r dates, echo=FALSE, message=FALSE, warning=FALSE}
 library(lubridate)
@@ -15,7 +17,7 @@ datestring <- paste(month(current_date), day(current_date), year(current_date), 
 `r datestring`   
 __Lecture:__ [How do we use data to understand how the world works?](lectures/01_intro.html)\
 __Lab:__ [Intro to R](lectures/02_r_intro.html). [Matrices, Lists and Data Frames](lectures/02a_r_intro_list_matrix_df.html). [Introduction to Markdown](lab/01_markdown_intro.html)    
-__Reading:__ G&W  [Preface](http://r4ds.had.co.nz/introduction.html), [Intro](http://r4ds.had.co.nz/explore-intro.html), [Workflow basics](http://r4ds.had.co.nz/workflow-basics.html), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Markdown](http://r4ds.had.co.nz/r-markdown.html) Chapters, [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)  
+__Reading:__ W&G  [Preface](http://r4ds.had.co.nz/introduction.html), [Intro](http://r4ds.had.co.nz/explore-intro.html), [Workflow basics](http://r4ds.had.co.nz/workflow-basics.html), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Markdown](http://r4ds.had.co.nz/r-markdown.html) Chapters, [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)  
 __In Class Code:__ [R Intro Code from Lab](in_class_code_2016/01_r_intro.R)\
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-intro-2018
   
@@ -27,7 +29,7 @@ datestring <- paste(month(current_date), day(current_date), year(current_date), 
 `r datestring`   
 __Lecture:__ [Sampling](lectures/03_sampling_lecture.html) and [Simulation for Estimation](lectures/04_simulation_estimation.html). Descriptive statistics, and the creation of good observational sampling designs.   
 __Lab Topic:__ [Sampling and simulation](lab/02_sim_samp.html). Libraries in R. Dplyr.   
-__Reading:__ W&S 1,3-4, G&W Chapter 5, 11, 18, [Dplyr cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdfPaperpile)  
+__Reading:__ W&S 1,3-4, W&G Chapter 5, 11, 18, [Dplyr cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdfPaperpile)  
 __Optional Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf), [Simpler Coding with Pipes](https://www.r-statistics.com/2014/08/simpler-r-coding-with-pipes-the-present-and-future-of-the-magrittr-package/), [Managing Data Frames with the Dplyr package](https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2018  
 __In Class Code:__ [Code from Lab](in_class_code_2016/02_samp_sim.R)\
@@ -39,7 +41,7 @@ __Homework:__ https://github.com/biol607/2016_homework_02_sampling
 `r datestring`   
 __Lecture:__ [Data visualization](lectures/05_data_viz_principles.pptx).\
 __Lab Topic:__ [Data import](lab/03_read_data_libraries.html) and [introduction to ggplot2](lab/04_ggplot_intro.html). Forcats and factors.  Data for lab [here](lab/data_03_04.zip).  
-__Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), G&W Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)  
+__Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)  
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf)\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2018  
 __In Class Code:__ [Loading Data](in_class_code_2016/03_load_data.R), [Intro to ggplot2](in_class_code_2016/04_ggplot2_intro.R)\
@@ -51,7 +53,7 @@ __Homework:__ https://github.com/biol607/2016_homework_03_ggplot2
 `r datestring`   
 __Lecture:__ [Frequentist Hypothesis Testing](lectures/07_probability_hypotheses.html), [NHST, Z-Tests, and Power](lectures/08_testing_nhst_power.html) \
 __Lab Topic:__ [Distributions in R, Frequentist Hypothesis testing via simulation](lab/05_hypothesis_power.html)  \
-__Reading:__ W&S 5-7, G&W Chapter 7, 16, [Abraham Lincoln and Confidence Intervals](http://andrewgelman.com/2016/11/23/abraham-lincoln-confidence-intervals/) and links therein    
+__Reading:__ W&S 5-7, W&G Chapter 7, 16, [Abraham Lincoln and Confidence Intervals](http://andrewgelman.com/2016/11/23/abraham-lincoln-confidence-intervals/) and links therein    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses-2018  
 __In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)  
 __Quiz:__ http://tinyurl.com/hyp-pre-quiz  
@@ -66,7 +68,7 @@ __Homework:__ https://github.com/biol607/2016_homework_04_hypothesis_power
 `r datestring`   
 __Lecture:__ [T tests](lectures/09_the_t_test.html),  [χ2 tests](lectures/10_chisq.html), and p  
 __Lab Topic:__ [Statistical analysis functions for t and $\chi^2$ in R](lab/05_chisq_t.html), [data](lab/data_05.zip)   
-__Reading:__ W&S 8-12, G&W Chapter 10, 20  
+__Reading:__ W&S 8-12, W&G Chapter 10, 20  
 __Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes/biol607/readings/Wasserstein_Lazar_2016_The_American_Statistician.pdf), And choose one of the accompanying [rejoinders](http://byrneslab.net/classes/biol607/readings/p_value_statements.zip)
 (sign up in [here](https://etherpad.wikimedia.org/p/607-t_tests-2018))  (also feel free to read them all)
 __Additional Readings on P-Values__: [Peaceful negotiation in the face of so-called ‘methodological terrorism’](https://errorstatistics.com/2016/10/01/a-new-front-in-the-statistics-wars-peaceful-negotiation-in-the-face-of-so-called-methodological-terrorism/), [P-value madness: A puzzle about the latest test ban (or ‘don’t ask, don’t tell’)](https://errorstatistics.com/2015/10/10/p-value-madness-a-puzzle-about-the-latest-test-ban-or-dont-ask-dont-tell/), [The Paradox of Replication, and the vindication of the P-value (but she can go deeper) ](https://errorstatistics.com/2015/08/31/the-paradox-of-replication-and-the-vindication-of-the-p-value-but-she-can-go-deeper-i/)  
@@ -79,7 +81,7 @@ __In Class Code:__ [t and chi square](in_class_code_2016/06_t_chisq.R)
 `r datestring`   
 __Lecture:__ Least Squares Linear Regression: [Correlation and Regression](lectures/11_cor_linear_model.html), [Fit and Power](lectures/12_linear_model_fit.html)  
 __Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), and [data](lab/data_06.zip) \
-__Reading:__ W&S 16-17, G&W on [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html)  
+__Reading:__ W&S 16-17, W&G on [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-2018  
 __In Class Code:__ [lm](in_class_code_2016/06_lm_inclass.R)  
   
@@ -89,7 +91,7 @@ __In Class Code:__ [lm](in_class_code_2016/06_lm_inclass.R)
 `r datestring`   
 __Lecture:__ [Linear Model Power Analysis](lab/06a_power_analysis.html), [Likelihood](lectures/13_likelihood.html), [Fitting a line with Likelihood](lectures/14_likelihood_2.html)  
 __Lab Topic:__ [Calculating and visualizing Likelihoods, fitting a line with bbmle](lab/07_likelihood.html)\
-__Reading:__ W&S 20, G&W Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
+__Reading:__ W&S 20, W&G Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-likelihood-2018  
 __In Class Code:__ [power analysis](in_class_code_2016/06a_power_lm.R), [linear models with likelihood](in_class_code_2016/07a_likelihood_lm.R)  
   
@@ -110,7 +112,7 @@ __In Class Code:__ [Bayesian Data Analysis](in_class_code_2016/08_bayes.R)
 `r datestring`   
 __Lecture:__ [Joins](lectures/18_join.html), [Tidy data](lectures/17_tidy.html)  
 __Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  
-__Reading:__  [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), G&W Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)     
+__Reading:__  [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)     
 __Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2018  
 __In Class Code:__ [Tidy](in_class_code_2016/09_tidy.R), [markdown options](in_class_code_2016/00_rmarkdown_options.Rmd)  
   
