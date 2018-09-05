@@ -28,7 +28,7 @@ https://biol607.github.io/</span></center>
 
 
 ## First, Some New Technology
-https://etherpad.wikimedia.org/p/607-intro
+https://etherpad.wikimedia.org/p/607-intro-2018
 
 - This class will use collaborative note-taking
 
@@ -55,7 +55,6 @@ https://etherpad.wikimedia.org/p/607-intro
 2. Who are we?  
 3. How will this course work?  
 4. A Philosophy of answering scientific questions with data   
-5. R!  
 
 ##   
 ![](images/01/data_says_no.jpg)
@@ -63,40 +62,29 @@ https://etherpad.wikimedia.org/p/607-intro
 
 ## Computational
 <small style="font-size:.7em">
-```{r eval=FALSE}
+````{r codex, eval=FALSE}
+#------------
+# Split Data into Train/Test
+#------------
+keeley_train <- keeley[1:80,] 
+keeley_test <- keeley[81:90,] 
 
-#subset consumptionData into mixed diet treatments only (mixed diet BOX #'s are multiples of 5)
-mixedData<-consumptionData[consumptionData$BOX %% 5 == 0,]
-mixedData$delta<-mixedData$ADD_WT - mixedData$REM_WT
-mixedData$rate<-mixedData$delta/mixedData$days
+#------------
+# Random Forest Models
+#------------
+rf1 <- randomForest(rich ~ cover + firesev + 
+                      hetero, data = keeley_train)
 
-#reshape to get species-specific consumption rate table
-mixed.summary<-ddply(mixedData,.(BOX,SP_CODE),function(x){
-  data.frame(CONSUMPTION_RATE=mean(x$rate,na.rm=TRUE))
-	})
+rf2 <- randomForest(cover ~ firesev + age + 
+                      abiotic + elev, data = keeley_train)           
 
-#############fit linear models (not including consumption--see below)
-LMtestChange <- lm(formula = TEST_CHANGE ~ TREATMENT, data = expData, na.action = na.omit)
 ```
 </small>
-<p class="fragment" align=center><big style="color:red; font-size:2em;">Code Forces You to Be Explicity About Theory</big></p>
+<p class="fragment" align=center><big style="color:red; font-size:2em;">Code Forces You to Be Explicit About Theory</big></p>
 
 ## Computational
 <small style="font-size:.7em">
-```{r eval=FALSE}
-
-#subset consumptionData into mixed diet treatments only (mixed diet BOX #'s are multiples of 5)
-mixedData<-consumptionData[consumptionData$BOX %% 5 == 0,]
-mixedData$delta<-mixedData$ADD_WT - mixedData$REM_WT
-mixedData$rate<-mixedData$delta/mixedData$days
-
-#reshape to get species-specific consumption rate table
-mixed.summary<-ddply(mixedData,.(BOX,SP_CODE),function(x){
-  data.frame(CONSUMPTION_RATE=mean(x$rate,na.rm=TRUE))
-	})
-
-#############fit linear models (not including consumption--see below)
-LMtestChange <- lm(formula = TEST_CHANGE ~ TREATMENT, data = expData, na.action = na.omit)
+```{r codex, eval=FALSE}
 ```
 </small>
 <p class="fragment" align=center><big style="color:red; font-size:2em;">Coding is power</big></p>
@@ -104,21 +92,9 @@ LMtestChange <- lm(formula = TEST_CHANGE ~ TREATMENT, data = expData, na.action 
 
 ## Computational
 <small style="font-size:.7em">
-```{r eval=FALSE}
-
-#subset consumptionData into mixed diet treatments only (mixed diet BOX #'s are multiples of 5)
-mixedData<-consumptionData[consumptionData$BOX %% 5 == 0,]
-mixedData$delta<-mixedData$ADD_WT - mixedData$REM_WT
-mixedData$rate<-mixedData$delta/mixedData$days
-
-#reshape to get species-specific consumption rate table
-mixed.summary<-ddply(mixedData,.(BOX,SP_CODE),function(x){
-  data.frame(CONSUMPTION_RATE=mean(x$rate,na.rm=TRUE))
-  })
-
-#############fit linear models (not including consumption--see below)
-LMtestChange <- lm(formula = TEST_CHANGE ~ TREATMENT, data = expData, na.action = na.omit)
+```{r codex, eval=FALSE}
 ```
+
 </small>
 <p align=center><span style="color:red; font-size:2em;">Repeatable Research</span></p>
 
@@ -170,13 +146,10 @@ http://simplystatistics.org/2016/08/24/replication-crisis/
 
 ## Course Goals
 
-> 1. Learn how to think about your research in a systematic way to design efficient observational & experimental studies.
-  
-> 2. Understand how to get the most bang for your buck from your data.
-  
-> 3. Make you effective collaborators with statisticians.
-  
-> 4. Make you comfortable enough to learn and grow beyond this class.
+> 1. Learn how to think about your research in a systematic way to design efficient observational & experimental studies.  <br><br> 
+> 2. Understand how to get the most bang for your buck from your data.  <br><br> 
+> 3. Make you effective collaborators with statisticians.  <br><br> 
+> 4. Make you comfortable enough to learn and grow beyond this class.  
 
 ## Who are You?
 1. Name  
@@ -194,12 +167,11 @@ http://simplystatistics.org/2016/08/24/replication-crisis/
 2. Who are we?  
 3. <span style="color:red">How will this course work?  </span>
 4. A Philosophy of answering scientific questions with data   
-5. R!  
 
 ## Lecture and Lab
- - T/Th Lecutre on Concepts
+ - M/W Lecutre on Concepts
  - Occasional Paper Discussion
- - Th Lab (which will cover some homework problems!)
+ - F Lab (which will cover some homework problems!)
  
 
 ## Yes, Lectures are Coded
@@ -218,7 +190,7 @@ http://whitlockschluter.zoology.ubc.ca/
   
   Chapter 1 this week!
 
-## Readings for Class: Grolemund & Wickham
+## Readings for Class: Wickham & Grolemund
 ![http://r4ds.had.co.nz](images/01/r4ds_cover.png)
 <br><br>  
 Grolemund, G., and Wickham, W. 2016. R for Data Science.  
@@ -242,7 +214,7 @@ http://r4ds.had.co.nz
 ## Midterm
  - Advanced problem set
 
-- Due Nov 4th
+- Due Nov 2nd
 
 - 20% of your grade
 
@@ -254,9 +226,9 @@ http://r4ds.had.co.nz
  &nbsp;  
  
 - Dates
-  - Proposal Due Oct 7th
-  - Presentations on Dec 15th
-  - Paper due Dec 16th (but earlier fine!)
+  - Proposal Due Oct 11th
+  - Presentations on Dec 14th
+  - Paper due Dec 18th (but earlier fine!)
  &nbsp;  
  
 - 30% of your grade
@@ -264,23 +236,41 @@ http://r4ds.had.co.nz
 ## Extra Credit 1: Use Github
 ![](images/01/github.png)  
 
-- This whole class is a github repo
-- Homeworks will be posted as part of the repo
-- If you submit your homework via a pull request, +1
-> - There will be a github tutorial outside of class hours
+- This whole class is a github repo  
+- Having a github presence is becoming a real advantage  
+- So.... create a class repository!
+- If you submit a link to your homework in a repo, +1 per homework!  
+- There will be a github tutorial outside of class hours
 
-## Extra Credit 2: Be Nate Silver
-![](images/01/silver.jpg)
+## Extra Credit 2: Be Nate Silver (before the general election)
+![](images/01/silver_congress.jpg)
+
+## Extra Credit 2: Be Nate Silver (before the general election)
+![](images/01/silver_congress.jpg){width=40%}
+  
+- 5 points for getting the correct answer  
+- 5 extra points for explicitly stating the confidence of your estimates  
+- 5 points for a clear explanation of the methodology  
+- 1 point for each thing you do beyond a weighted average of polls
 
 ## Extra Credit 3: Livin' La Vida Data Science
 |                       |                       |
 |-----------------------|-----------------------|
 |![](images/01/nssd.jpg)|![](images/01/hadley.jpg)|
 
-## Extra Credit 4: Data Science for Social Good
-![](images/01/dssg.png)
+## Extra Credit 3: Livin' La Vida Data Science
+- Check out http://www.r-bloggers.com/  
+- Listen to podcasts like https://itunes.apple.com/us/podcast/not-so-standard-deviations/  
+- Follow data science greats on Twitter (see https://twitter.com/jebyrnes/lists/stats-r-on-twitter)  
+- +1 point per cool thing you bring up in the beginning of each class
 
-http://www.meetup.com/Data-Science-for-Social-Good/
+
+## Extra Credit 4: Further Data Science at UMB
+![](images/01/umbrug.jpg)
+
+- +3 for joining the UMBRUG slack group and the Biol607 channel
+     * https://umbrug.slack.com/ <br> \    
+- +5 for attending Stats Snack on Tuesdays in Science S4-6401  
 
 <!-- SECTION BREAK -->
 ## Outline for Today
@@ -288,8 +278,41 @@ http://www.meetup.com/Data-Science-for-Social-Good/
 2. Who are we?  
 3. How will this course work?  
 4. <span style="color:red">A Philosophy of answering scientific questions with data </span>
-5. R!  
 
+## How Biostats is Often Thought of
+
+![](./images/01/many_paths.jpg)
+
+## Our Philosophy
+
+> 1. What is your question?  
+> 2. Conceive of a model of your system  
+> 3. How much do you need to know to answer your question?  
+> 4. What data do you need to parameterize your model of the world?
+>      - Do you need an experiment?  
+>      - What breadth of observations do you need?
+> 5. Fit your model of the world  
+> 6. Query your model to answer your question
+
+##
+<br><br><bR><h3>What is your question?</h5>
+
+## Conceive of a model of your system
+![](./images/01/ocean_toy.jpg)
+
+## How much do you need to know to answer your question?
+![](./images/01/sealife_toys.jpg)
+
+## What data do you need to parameterize your model of the world?
+![](./images/01/human_subjects.png)
+
+<p align="left">http://xkcd.com</p>
+
+## Fit your model of the world  
+![](./images/09/golem.png){width=50%}
+
+## Query your model to answer your question
+![](./images/01/justask.jpg)
 
 ## Our Approach to Data Analysis
 <center>
@@ -343,7 +366,7 @@ Big Picture **DATA GENERATING PROCESS**
 What is your **ERROR GENERATING PROCESS**?
 </center>
 
-## Construct a Causal Model of the System
+## How much do you need to know to answer your question?
 <center>
 <img src="images/01/grass3.jpg">
 
@@ -352,7 +375,7 @@ What can you isolate?
 
 
 
-## Collect the Data to Best Estimate & Test the Model
+## What data do you need to parameterize your model of the world?
 
 <center>
 <img src="images/01/grass1.jpg">
@@ -373,7 +396,7 @@ qplot(treatment.genotypes, shoots, data=eelgrass, geom="point")+
 ```
 <p class="fragment">Fit a model(s), chosen to suit data & error generating process!</p>
 
-## Analysis!
+## Fit your model of the world & Query It
 ```{r genotypes3, echo=FALSE, fig.align='center'}
 qplot(treatment.genotypes, shoots, data=eelgrass, geom="point")+
   geom_point(size=2) +
@@ -398,176 +421,6 @@ Many Methods of Sharing Data, Methods, and Results Beyond Publication
 
 4. Dryad or Other Repository - post-publication data sharing
   
-## Questions
+## 
+<br><br><br><br><h2>Questions?</h2>
 
-
-
-<!-- SECTION BREAK R -->
-## Outline for Today
-1. What are we doing here?  
-2. Who are we?  
-3. How will this course work?  
-4. A Philosophy of answering scientific questions with data   
-5. <span style="color:red">R!  </span>
-
-
-## What is R?
-&nbsp;
-&nbsp;
-<center> **A programming language uniquely developed for statistical analysis** </center>
-
-## Why R?
-
-1. Free  
-2. Huge growing community  
-3. Packages to do almost anything  
-4. Makes reusable research easy  
-5. C-based language  
-6. Syntax naturally matches analytical thinking
-
-## What is R Studio?
-
-<img src="images/01/rstudio-windows.png">
-
-- Cross-Platform Graphical User Interface for R
-- It is not R
-
-
-## Let's Fire It Up!
-<center>
-**Open R-Studio.<br><br> Don't have it?  Download it from http://rstudio.org**</center>
-
-## What do you see?
-
-<center><img src="images/01/blank_rstudio.jpg"></center>
-
-## The Console and Math
-
-&nbsp;  
-
-```{r math1}
-1+1
-```
-&nbsp; 
-
-<span style="color:red">You try - different mathematical operators</span>
-
-## Everything is an Object
-
-&nbsp;
-```{r objCode1}
-a.number<-1+1
-```
-
-```{r objCode2}
-a.number
-```
-&nbsp;  
-&nbsp;  
-
-<span style="color:red">You try - what can you save as an object?</span>
-
-## Note: Comment Your Code as You Write with `#`
-
-The text after `#` is not evaluated.  
-
-```{r}
-#This is going to be the number two
-a.number<-1+1
-```
-
-<small style="font-size:.8em">
-```{r comment2}
-#####----------
-
-# You can get creative with comments to separate code blocks
-# And write a lot, which is good practice
-
-#####----------
-```
-</small>
-Your comments tell readers - including yourself - what you are doing
-
-
-## Functions Work on Objects
-
-&nbsp;
-
-```{r funcCode}
-sin(a.number)
-```
-
-
-How to get help for a function
-```{r helpCode, eval=FALSE}
-?cos
-
-help(cos)
-
-??'cosine function'
-```
-
-## Lots of Object Types - like Data!
-&nbsp;
-
-```{r dataCode}
-head(cars, n=3) #note the n= argument!
-```
-
-> <red>Try looking at all of cars and names(cars)</red>  
-
-## Graphics are a Snap
-
-```{r plotCode, fig.width=7, fig.height=5}
-plot(speed ~ dist, data=cars)
-```
-
-<span class="fragment">Look at ?plot to see other arguments to change appearance</span>
-
-
-## Installing Packages
-
-<center><img src="images/01/packages1.jpg"><center>
-
-
-
-## Installing Packages
-
-<center><img src="images/01/packages2.jpg"><center>
-
-## Installing Packages
-
-You can also install packages from the command line.  
-<small style="font-size:.8em;">
-
-```{r pkg-install, eval=FALSE}
-install.packages('ggplot2', repos='http://cran.case.edu/', dependencies=TRUE)
-```
-</small>  
-
-Using one of the above methods, install the package ggplot2 and its dependencies now.
-
-
-
-## Using a Package
-```{r qplotCode, fig.align='center', fig.height=5, fig.width=7}
-library(ggplot2)
-
-qplot(dist, speed, data=cars)
-```
-
-## You Try It
-
-1. Load ggplot2 and look at the mtcars data set  
-   
-2.Look at the qplot help file & demos  
-  
-3. Make two plots (ggplot or plot)  
-
-```{r plotcode2,  fig.align='center', fig.width=4, fig.height=4, echo=FALSE}
-library(ggplot2)
-
-qplot(factor(cyl), mpg, data=mtcars, geom="boxplot")
-```
-
-## Questions
