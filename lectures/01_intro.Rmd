@@ -21,7 +21,7 @@ output:
 -->
 <br><br><center><div style="font-size: 2em;font-weight: bold; color:black;background-color:white;opacity:0.8;"> Introduction  to An  Introduction  to  Computational  Data  Analysis  for  Biology  </div>  
   
-  
+<br>  
 <div style="background-color:white;font-size:1em;opacity:0.8;">Jarrett Byrnes  
 UMass Boston  
 https://biol607.github.io/</span></center>
@@ -341,7 +341,7 @@ Does seagrass genetic diversity increase productivity?
 
 3. Disciplinary History
 
-## Construct a Causal Model of the System
+## Conceive of a model of your system  
 
 &nbsp;  
 &nbsp;  
@@ -352,14 +352,14 @@ This is your **DATA GENERATING PROCESS**
 </center>
 
 
-## Construct a Causal Model of the System
+## Conceive of a model of your system  
 <center>
 <img src="images/01/grass2.jpg">
 
 Big Picture **DATA GENERATING PROCESS**
 </center>
 
-## Construct a Causal Model of the System
+## Conceive of a model of your system  
 <center>
 <img src="images/01/grass2.jpg">
 
