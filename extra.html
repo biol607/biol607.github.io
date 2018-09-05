@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -19,22 +19,23 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
-<link rel="stylesheet"
-      href="site_libs/highlight/default.css"
-      type="text/css" />
-<script src="site_libs/highlight/highlight.js"></script>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -94,6 +95,7 @@ button.code-folding-btn:focus {
 }
 </style>
 
+
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
@@ -150,7 +152,6 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="site_libs/navigation-1.0/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -224,10 +225,10 @@ $(document).ready(function () {
 
 
 <p>Throughout the course, there will be multiple opportunities for extra credit. I’ll add more as we go along, but here are the first few. Each extra credit opportunity below can be worth 5% of your total grade.</p>
-<p><strong>Be Your Own Nate Silver</strong> It’s an election year. Given that you’re in this class, I’m sure you are following along at <a href="http://fivethirtyeight.com/" class="uri">http://fivethirtyeight.com/</a> and their model with great interest. You’re also, of course, listening to their elections podcast – and definitely the Friday special edition on how they build their model. I want you to forecast the election. You can find poll data using the pollstR package (<a href="https://cran.r-project.org/web/packages/pollstR/vignettes/introduction.html" class="uri">https://cran.r-project.org/web/packages/pollstR/vignettes/introduction.html</a>) or other sources (<a href="http://is-r.tumblr.com/post/36059986744/gathering-realclearpolitics-polling-trends-with" class="uri">http://is-r.tumblr.com/post/36059986744/gathering-realclearpolitics-polling-trends-with</a>) and there are plenty of other data sources out there (<a href="http://guides.library.harvard.edu/c.php?g=310717&amp;p=2072692" class="uri">http://guides.library.harvard.edu/c.php?g=310717&amp;p=2072692</a> as just a start – Google around). For this extra credit, 5 points for getting the correct answer, 5 extra points for explicitly stating the confidence of your estimates, and 5 points for a clear explanation of the methodology. 1 point for each thing you do beyond a weighted average of polls. Because, come on, that’s easy. Scored out of 16. So, theoretically, you could get extra credit on your extra credit.</p>
-<p><strong>Become a Git Addict</strong> I’m going to give you little directory-lets for your assignments. But, really, these are directories on Github. You <em>could</em> just issue a pull request with your homework assignment, plopping it right into the repo directory. This requires learning git and github. There are numerous tutorials on how to do so both as web pages and on youtube (e.g., <a href="http://product.hubspot.com/blog/git-and-github-tutorial-for-beginners" class="uri">http://product.hubspot.com/blog/git-and-github-tutorial-for-beginners</a>) - so find what works for you. I’ll also host a mini-tutorial sometime in the first few weeks. +10% on each homework that is submitted via a pull request instead of emailed to me.</p>
-<p><strong>Join the Conversation</strong> There are a wealth of great conversations out there about data science both in and out of biology. Starting to listen to the conversation will enable you to keep abreast of how the field is developing, and enable you to learn toolsets that will put you a cut above your colleagues as you consider new and sophisticated analyses. I’d recommend checking out sites list <a href="http://www.r-bloggers.com/" class="uri">http://www.r-bloggers.com/</a> daily, listening to podcasts such as Not So Standard Deviations <a href="https://itunes.apple.com/us/podcast/not-so-standard-deviations/" class="uri">https://itunes.apple.com/us/podcast/not-so-standard-deviations/</a> or following different data science/biology luminaries (such as <span class="citation">[@hadleywickham]</span>(<a href="http://twitter.com/hadleywickham" class="uri">http://twitter.com/hadleywickham</a>), <span class="citation">[@_inundata]</span>(<a href="http://twitter.com/_inundata" class="uri">http://twitter.com/_inundata</a>), <span class="citation">[@rdpeng]</span>(<a href="http://twitter.com/rdpeng" class="uri">http://twitter.com/rdpeng</a>), <span class="citation">[@hspter]</span>(<a href="http://twitter.com/hspter" class="uri">http://twitter.com/hspter</a>), <span class="citation">[@kara_woo]</span>(<a href="http://twitter.com/kara_woo" class="uri">http://twitter.com/kara_woo</a>), <span class="citation">[@sckottie]</span>(<a href="http://twitter.com/sckottie" class="uri">http://twitter.com/sckottie</a>), and more). There are a ton of other blogs and people who are relevant to what you are doing for your research, so look around! Each class, I’ll try and give an opportunity to share neat things you’ve seen in the ether. +1 for each contribution you make to the class. +10 if you end up at <a href="http://unconf.ropensci.org/">ROpenSci</a>.</p>
-<p><strong>Data Science for Social Good</strong> The data science techniques you are learning here have a broad suite of applications for the good of society. Heck, many of you are doing projects you feel are socially important. Want some extra credit? Join <a href="http://www.meetup.com/Data-Science-for-Social-Good/" class="uri">http://www.meetup.com/Data-Science-for-Social-Good/</a> - half credit for just going to their meetings, full credit for contributing to one of their projects. Extra extra credit for initiating a new one.</p>
+<p><strong>Be Your Own Nate Silver</strong> It’s an election year. Given that you’re in this class, I’m sure you are following along at <a href="http://fivethirtyeight.com/" class="uri">http://fivethirtyeight.com/</a> and their model with great interest. You’re also, of course, listening to their elections podcast – and definitely the Friday special edition on how they build their model. I want you to forecast one or more elections. You can find poll data using the pollstR package (<a href="https://cran.r-project.org/web/packages/pollstR/vignettes/introduction.html" class="uri">https://cran.r-project.org/web/packages/pollstR/vignettes/introduction.html</a>) or other sources (<a href="http://is-r.tumblr.com/post/36059986744/gathering-realclearpolitics-polling-trends-with" class="uri">http://is-r.tumblr.com/post/36059986744/gathering-realclearpolitics-polling-trends-with</a>) and there are plenty of other data sources out there (<a href="http://guides.library.harvard.edu/c.php?g=310717&amp;p=2072692" class="uri">http://guides.library.harvard.edu/c.php?g=310717&amp;p=2072692</a> as just a start – Google around). For this extra credit, 5 points for getting the correct answer, 5 extra points for explicitly stating the confidence of your estimates, and 5 points for a clear explanation of the methodology. 1 point for each thing you do beyond a weighted average of polls. Because, come on, that’s easy. Scored out of 16. So, theoretically, you could get extra credit on your extra credit.</p>
+<p><strong>Become a Git Addict</strong> Make a github repository for all of your work in this class! Structure it well, with a homework, lab, and project section. Inside of each should be a well structured set of directories (we’ll talk about this). To get this repo up and running, This requires learning git and github. There are numerous tutorials on how to do so both as web pages and on youtube (e.g.,<a href="http://happygitwithr.com/" class="uri">http://happygitwithr.com/</a> which is one of my favs) - so find what works for you. I’ll also host a mini-tutorial sometime in the first few weeks. +1 point on each homework that is submitted as a link. +10 if you make your repo into a github.io website that is fully navigable (requires learning some webpage building in R)</p>
+<p><strong>Join the Conversation</strong> There are a wealth of great conversations out there about data science both in and out of biology. Starting to listen to the conversation will enable you to keep abreast of how the field is developing, and enable you to learn toolsets that will put you a cut above your colleagues as you consider new and sophisticated analyses. I’d recommend checking out sites list <a href="http://www.r-bloggers.com/" class="uri">http://www.r-bloggers.com/</a> daily, listening to podcasts such as Not So Standard Deviations <a href="https://itunes.apple.com/us/podcast/not-so-standard-deviations/" class="uri">https://itunes.apple.com/us/podcast/not-so-standard-deviations/</a> or following different data science/biology luminaries (such as <span class="citation">[@hadleywickham]</span>(<a href="http://twitter.com/hadleywickham" class="uri">http://twitter.com/hadleywickham</a>), <span class="citation">[@_inundata]</span>(<a href="http://twitter.com/_inundata" class="uri">http://twitter.com/_inundata</a>), <span class="citation">[@rdpeng]</span>(<a href="http://twitter.com/rdpeng" class="uri">http://twitter.com/rdpeng</a>), <span class="citation">[@hspter]</span>(<a href="http://twitter.com/hspter" class="uri">http://twitter.com/hspter</a>), <span class="citation">[@kara_woo]</span>(<a href="http://twitter.com/kara_woo" class="uri">http://twitter.com/kara_woo</a>), <span class="citation">[@sckottie]</span>(<a href="http://twitter.com/sckottie" class="uri">http://twitter.com/sckottie</a>), and more). I’ve also made a full list at <a href="https://twitter.com/jebyrnes/lists/stats-r-on-twitter" class="uri">https://twitter.com/jebyrnes/lists/stats-r-on-twitter</a>. There are a ton of other blogs and people who are relevant to what you are doing for your research, so look around! Each class, I’ll try and give an opportunity to share neat things you’ve seen in the ether. +1 for each contribution you make to the class. +10 if you end up at <a href="http://unconf.ropensci.org/">ROpenSci</a>.</p>
+<p><strong>Engage in Data Science at UMB</strong> This is a gimme. So, I’ve started a a UMB R Users Group that has a slack channel at <a href="https://umbrug.slack.com/" class="uri">https://umbrug.slack.com/</a>. Join it and the biol607 channel (where we can talk live) for +3 points on your final grade. Also, there is a Stats Snack group run by the psych department. It meets Tuesdays in Science S4-6401 from 12-1. +5 for attending!</p>
 
 
 
@@ -237,9 +238,13 @@ $(document).ready(function () {
 <script>
 
 // add bootstrap table styles to pandoc tables
-$(document).ready(function () {
+function bootstrapStylePandocTables() {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
 });
+
 
 </script>
 
@@ -248,7 +253,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
