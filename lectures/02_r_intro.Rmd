@@ -6,7 +6,103 @@ output: html_document
 
 Hello!  So, today we're going to begin to code in R. We're going to cover the basics of using R with a focus on data frame objects.
 
-But let's begin. To talk about what's going on and take notes offline, use this week's etherpad at https://etherpad.wikimedia.org/p/607-intro
+But let's begin. To talk about what's going on and take notes offline, use this week's etherpad at https://etherpad.wikimedia.org/p/607-intro-2018
+
+### Let's start at the very beginning - directory structure!
+Everything we do this semester is going to be scripted. There will be scripts. There will be data. There will be figures. If you're working on a project, you'll also have a manuscript, tables, raw data, derived, data, and more.  Ai ya! That's a lot of stuff. Putting it all in one directory is a **terrible** idea, as you will inevitably get lost.
+
+Instead, every project you have should have
+
+#### 1) It's own directory
+#### 2) A standardized directory structure
+
+Why standardization? Once you get used to a standardized directory structure, creating new projects becomes easier, and navigating and finding things becomes EVEN EASIER. Standardized directory structures are a great way of protecting future you from hours of searching for THAT ONE FILE.
+
+I often use something like this:
+
+```{r eval=FALSE}
+My Project 
+| 
+|- data 
+|- scripts 
+|- figures 
+|- reports 
+
+```
+
+Or, if you want to see how real it gets...
+
+
+```{r eval=FALSE}
+My Project 
+| 
+|- raw_data 
+|- derived_data 
+|- model_outputs 
+|- scripts 
+   |-----data_cleaning 
+   |-----modeling 
+   |-----visualization 
+|- figures 
+|- tables 
+|- manuscript 
+
+```
+
+And/or I will prepend `01_`, `02_`, `03_` etc. to my code files so I remember what order to run them in. But, hey, we're not there yet.
+
+
+**EXERCISE**: Set up a folder for this class. In that folder, create a project for homeworks, the midterm, your final project, and the lab.
+
+### R Scripts and Comments
+For this and all in class code exercises, I want you to save what you do in a file.   
+  
+What are the benefits of a script file? Well, 
+1. You won't forget what you just did. It will still be there.
+2. You can debug code if you run it and it borks on you with ease.
+3. You can save the script for future use.
+4. You can share it with collaborators.
+5. You create a permanent re-usable archive of what you have done. Your science is now repeatable.
+  
+How do I create a script file? To do that, open a new file. Awesome. Now, before we do anything, I want to talk about commenting. In R, we can write comments. Comments are never interpreted. So, for example, put the following in your file, and then copy and paste it (or hit cmd-enter or ctrl-enter) into your console. Notice nothing happens.  
+
+```{r a_comment}
+#Nothing is going to happen
+```
+
+Comments are terribly useful, because you can use them to add information to a file. Often, before I start a script, I'll lay it out in a few chunks. First, I'll supply header information. Second, I'll write out my workflow in plain english comments. For example:
+
+```{r more_comments}
+###########################
+#' my_first_file.R
+#' 
+#' This script is my first R file
+#' and it doesn't do much, but it's mine.
+#'
+#' @author Jarrett Byrnes
+#'
+#' @changelog
+#' 2018-02-01 Added a changelog
+#' 2018-01-31 finished this file
+###########################
+
+## Do some things here ####
+
+## Do some other things here ####
+
+```
+
+A few more advanced things to notice here. First, in the header, I have `#'` a lot. This is a convention in R such that whenever you add a linebreak, you'll start off with more comments on the next line. There also some `@` stuff. There is actually a standard vocabulary here, but for now, know that when you do that in `#'` comments, it gets highlighted, and is a nice way to help delimit different fields in your headers.  
+  
+Second, in the blocks of comments after the header, I used a `####`. This is a really nice feature for Rstudio where then whatever was before that is recognized as a section header by RStudio. It will make your file easier to work with later.
+
+**ALWAYS COMMENT THE HECK OUT OF YOUR CODE TO HELP OUT FUTURE YOU!**  I'll include some comments in the code today to show you examples.
+
+Commenting in your scripts is particularly helpful, as it will enable you to known what you've done, when, and how. Make your comments useful!
+
+**EXERCISE:** Setup a script file for today! Give it a useful name! Save it in the right place! Makes some comments in it to remind you what it's all about.   
+
+OK, that's comments - now, on to the code!
 
 ###I have this cursor sitting here. What can I do with it?
 
@@ -28,12 +124,14 @@ Whoah!  You can add!  Wonderful.  Let's try a few other operations.
 2^7
 ```
 
-Yes, basic arithmatic is right there at your fingertips.
+Yes, basic arithmetic is right there at your fingertips.
+
+**EXERCISE:** Try some other basic arithmetic operators. Anything not work the way you think it should?
 
 
 ###Arithmatic is great. But I want more
 
-While arithmatic is cool (and necessary) we often want R to do more for us. Perhaps calculating more compelling mathematical functions. One that we commonly use is logarithms. Let's say you want the natural log of 10.
+While arithmetic is cool (and necessary) we often want R to do more for us. Perhaps calculating more compelling mathematical functions. One that we commonly use is logarithms. Let's say you want the natural log of 10.
 
 ```{r}
 log(10)
@@ -70,68 +168,9 @@ Sometimes, we don't know the name of a function we're looking for. For example, 
 ```
 
 Notice this brings up a list of helpfiles that have the word arcsine in them. Bueno! You can now track down the right function.
+  
+**EXERCISE:** Think of a simple mathematical function. Find its helpfile and then implement it in R.
 
-###Getting out of the console
-So, all this is well and good. We like the console. It's where our code is executed. Which sounds morbid. Because, we want our code to be a living breathing thing. We want to be able to alter our code, to work with it, to love it.  That's why there is the script editing window.
-
-Try typing some of the code above into the script pane. Perhaps:
-
-```{r eval=FALSE}
-log(10, base=10)
-```
-
-Did anything happen? No! It shouldn't have. It just sits there, mutely staring back. To make R do something, select the code and type Cmd-Enter (Mac) or Ctrl-Enter (PC). AH HA! It runs! The selected code runs. Indeed, if you want to run a single line, hitting those keys will run whatever line your cursor currently happens to be on.
-
-What are the benefits of a script file? Well, 
-1. You won't forget what you just did. It will still be there.
-2. You can debug code if you run it and it borks on you with ease.
-3. You can save the script for future use.
-4. You can share it with collaborators.
-5. You create a permanent re-usable archive of what you have done. Your science is now repeatable.
-
-In this class, start a new script file for every class. Name it something useful, like `01_r_intro.R`. Keep all of your course scripts in a single folder, so it's easy to find what you need.
-
-###A little note about directory structure
-This is going to seem pedantic, but, good organization can save you hours of head-banging and gigabytes of duplicated data. For every topic or project I work on, I usually setup a directory like so:
-
-I often use something like this:
-
-```{r eval=FALSE}
-My Project 
-| 
-|- Data 
-|- R 
-|- Notes 
-|- Images 
-```
-
-In this way, I keep my data and scripts separate, and I always know where to look for different pieces of information. Your directory structure may vary, but this isn't a bad one. Sometimes I even get saucy, and have no R folder, but isntead put it all at the toplevel. Like I said, very saucy.
-
-I'd suggest doing something like this for in-class code. And each homework assignment should have its own directory (and I'll be sending them out like that).
-
-OK, back to scripts.
-
-###Before we go any further, a comment on comments
-
-It can be VERY easy to get lost in a sea of R code, not knowing what is going on. Fortunately, R provides something called *comments*.  In a comment, R stops evaluating code, and let's you write whatever love notes to yourself that you want to write.  In R the comment character is `#`.  For example.
-
-```{r}
-#this is a comments
-
-### This is also a comment
-
-3+4 #hey, I commented after 3+4
-
-########################################
-##### Oh, a comment box
-##### that I can use to delinieate
-##### blocks of code
-########################################
-```
-
-**ALWAYS COMMENT THE HECK OUT OF YOUR CODE TO HELP OUT FUTURE YOU!**  I'll include some comments in the code today to show you examples.
-
-Commenting in your scripts is particularly helpful, as it will enable you to known what you've done, when, and how. Make your comments useful!
 
 ###Variables and You
 
@@ -216,7 +255,7 @@ No one likes an NA, and often we have to find ways around them!
 
 ###Combining values into larger objects
 
-Now that we have a few object times down, what is we have a bunch of them we want to work with together?  Let's start with what we call a vector.
+Now that we have a few object types down, what is we have a bunch of them we want to work with together?  Let's start with what we call a vector.
 
 What is a vector? A vector is a bunch of numbers (or other things) all in one single object that we can reference with an index.  Thing of it as a column in a spreadsheet. For example, let's say I had a column containing all of the integers from 5 through 10, and I wanted to know the 2nd integer.
 
@@ -269,3 +308,5 @@ Last, often you just want some summary information about your vector. You'll wan
 ```{r}
 summary(my_numbers)
 ```
+
+**EXERCISE:** Make two vectors and add them together. First try it with numbers. Then try vectors of different object types. What happens?
