@@ -14,6 +14,11 @@ output:
 
 ---
 
+ 
+## Today's Etherpad
+<br><br><br><center>https://etherpad.wikimedia.org/p/sampling-2018</center>
+(with an exercise and a link to a quiz)
+
 ##  {data-background="images/03/mice_men.jpg"}
 <!-- move stratification to after random, reduce number of
 things on Qs for how to decide sampling design slide 
@@ -28,6 +33,8 @@ library(knitr)
 read_chunk("./03_sampling_lecture.R")
 opts_chunk$set(fig.height=5, comment=NA, warning=FALSE)
 library(ggplot2)
+theme_set(theme_bw(base_size=16))
+
 ```
 
 1. Sampling Nature
@@ -37,9 +44,6 @@ library(ggplot2)
 ## Today's Quiz
 <br><br><br><center>http://tinyurl.com/sampling-pre</center>
  
- 
-## Today's Etherpad
-<br><br><br><center>https://etherpad.wikimedia.org/p/sampling</center>
           
 ## What is a population?
 ```{r population,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
@@ -193,10 +197,11 @@ Size = Color + Location + ???
 
       
 ## Exercise
-<div style="font-size: 1.4em;">
-Draw a causal graph of the influences on one thing you measure
 
-How would you sample your population?
+<div style="font-size: 1.4em; align: left; ">
+1. Draw a causal graph of the influences on one thing you measure<br>  
+
+2. How would you sample your population?
 
 </div>
 
@@ -204,7 +209,7 @@ How would you sample your population?
   
 1. Sampling Nature  
   
-<span style="color:red">2. Describing your Sample</span>  
+2. <span style="color:red">Describing your Sample</span>  
   
 3. Using a Sample to Describe a Population
 
@@ -227,7 +232,8 @@ samp
 
 ```{r sampPlot, echo=FALSE}
 qplot(samp, geom="histogram", bins=30) +
-  theme_bw(base_size=17)
+  theme_bw(base_size=17) +
+  xlim(c(30.14803, 53.75905))
 ```
 
 
@@ -312,7 +318,7 @@ Whiskers show 1.5x the IQR
   
 2. Describing your Sample  
   
-<span style="color:red">3. Using a Sample to Describe a Population</span>
+3. <span style="color:red">Using a Sample to Describe a Population</span>
 
 ## This is Just a Sample
 
@@ -323,11 +329,12 @@ Whiskers show 1.5x the IQR
 ## How Does our Sample Compare to the Population?
 
 ```{r sampDist, echo=FALSE, warning=FALSE}
+set.seed(2012)
+samp <- rnorm(15, 45,5)
 x <- seq(30,57,.1)
 y <- dnorm(x, 45, 5)
 y <- y*3/max(y)
 basePlot <- qplot(samp, geom="histogram", bins=30) +
-  theme_bw(base_size=17)+
   xlim(c(30.14803, 53.75905))
   
 splot <- basePlot +
@@ -337,12 +344,9 @@ splot
 ```
 
 ## Estimating Population Parameters
-
-> * Before we described the sample  
-  
-> * We want to estimate **population** parameters
-  
-> * N.B. Greek Letters = Population, English = Sample
+>* Before we described the sample<br><br>  
+>* We want to estimate **population** parameters<br><br>  
+>* N.B. Greek Letters = Population, English = Sample<br><br>  
 
 ## Sample Properties: Mean {.bigger}
 &nbsp;  
@@ -351,12 +355,14 @@ splot
 $\bar{Y} = \frac{ \displaystyle \sum_{i=1}^{n}{y_{i}} }{n}$
 </center>
 
+<div style="align:left;">
 $\large \bar{Y}$ - The average value of a sample  
 $y_{i}$ - The value of a measurement for a single individual   
 n - The number of individuals in a sample  
 &nbsp;  
 $\mu$ - The average value of a population  
 (Greek = population, Latin = Sample)
+</div>
 
 ## How Good is our Estimate?
 ```{r sampDistMean, echo=FALSE, warning=FALSE}

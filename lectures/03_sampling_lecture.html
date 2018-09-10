@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title></title>
+  <title>03_sampling_lecture.utf8</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -54,22 +54,394 @@
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
 
 </head>
 <body>
@@ -77,17 +449,26 @@
     <div class="slides">
 
 
+<section id="todays-etherpad" class="slide level2">
+<h2>Today’s Etherpad</h2>
+<br><br><br>
+<center>
+<a href="https://etherpad.wikimedia.org/p/sampling-2018" class="uri">https://etherpad.wikimedia.org/p/sampling-2018</a>
+</center>
+<p>(with an exercise and a link to a quiz)</p>
+</section>
 <section id="section" class="slide level2" data-background="images/03/mice_men.jpg">
-<h1></h1>
+<h2></h2>
 <!-- move stratification to after random, reduce number of
-things on Qs for how to decide sampling design slide-->
+things on Qs for how to decide sampling design slide 
+add Law of Large Numbers animation http://vis.supstat.com/2013/04/law-of-large-numbers/ -->
 <br><br><br><br><br><br><br><br>
 <div style="align:center; background:black; color:white; font-size: 2em;font-weight: bold;">
 Sampling
 </div>
 </section>
 <section id="sampling" class="slide level2">
-<h1>Sampling</h1>
+<h2>Sampling</h2>
 <ol type="1">
 <li>Sampling Nature</li>
 <li>Describing your Sample</li>
@@ -95,36 +476,29 @@ Sampling
 </ol>
 </section>
 <section id="todays-quiz" class="slide level2">
-<h1>Today’s Quiz</h1>
+<h2>Today’s Quiz</h2>
 <br><br><br>
 <center>
 <a href="http://tinyurl.com/sampling-pre" class="uri">http://tinyurl.com/sampling-pre</a>
 </center>
 </section>
-<section id="todays-etherpad" class="slide level2">
-<h1>Today’s Etherpad</h1>
-<br><br><br>
-<center>
-<a href="https://etherpad.wikimedia.org/p/sampling" class="uri">https://etherpad.wikimedia.org/p/sampling</a>
-</center>
-</section>
 <section id="what-is-a-population" class="slide level2">
-<h1>What is a population?</h1>
-<img src="03_sampling_lecture_files/figure-revealjs/population-1.png" title="" alt="" width="576" style="display: block; margin: auto;" />
+<h2>What is a population?</h2>
+<img src="03_sampling_lecture_files/figure-revealjs/population-1.png" width="576" style="display: block; margin: auto;" />
 <div class="fragment">
  <br />
 Population = All Individuals
 </div>
 </section>
 <section id="what-is-a-sample" class="slide level2">
-<h1>What is a sample?</h1>
-<img src="03_sampling_lecture_files/figure-revealjs/sample-1.png" title="" alt="" width="576" style="display: block; margin: auto;" />
+<h2>What is a sample?</h2>
+<img src="03_sampling_lecture_files/figure-revealjs/sample-1.png" width="576" style="display: block; margin: auto;" />
 <div class="fragment">
 A <b>sample</b> of individuals in a randomly distributed population.
 </div>
 </section>
 <section id="how-can-sampling-a-population-go-awry" class="slide level2">
-<h1>How can sampling a population go awry?</h1>
+<h2>How can sampling a population go awry?</h2>
 <div style="font-size:32pt">
 <ul>
 <li class="fragment">Sample is not <strong>representative</strong></li>
@@ -134,25 +508,25 @@ A <b>sample</b> of individuals in a randomly distributed population.
 </div>
 </section>
 <section id="bias-from-unequal-representation" class="slide level2">
-<h1>Bias from Unequal Representation</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/colorSize-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> If you only chose one color, you would only get one range of sizes.</p>
+<h2>Bias from Unequal Representation</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/colorSize-1.png" width="576" style="display: block; margin: auto;" /> If you only chose one color, you would only get one range of sizes.</p>
 </section>
 <section id="bias-from-unequal-change-of-sampling" class="slide level2">
-<h1>Bias from Unequal Change of Sampling</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/spatialBias-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> <span class="fragment">Spatial gradient in size</span></p>
+<h2>Bias from Unequal Change of Sampling</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/spatialBias-1.png" width="576" style="display: block; margin: auto;" /> <span class="fragment">Spatial gradient in size</span></p>
 </section>
 <section id="bias-from-unequal-change-of-sampling-1" class="slide level2">
-<h1>Bias from Unequal Change of Sampling</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/spatialSample-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> Oh, I’ll just grab those individuals closest to me…</p>
+<h2>Bias from Unequal Change of Sampling</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/spatialSample-1.png" width="576" style="display: block; margin: auto;" /> Oh, I’ll just grab those individuals closest to me…</p>
 </section>
 <section id="solution-stratified-sampling" class="slide level2">
-<h1>Solution: <strong>Stratified</strong> Sampling</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/stratified-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> Sample over a known gradient, aka <strong>cluster sampling</strong></p>
+<h2>Solution: <strong>Stratified</strong> Sampling</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/stratified-1.png" width="576" style="display: block; margin: auto;" /> Sample over a known gradient, aka <strong>cluster sampling</strong></p>
 <p>Can incorporate multiple gradients</p>
 </section>
 <section id="solution-random-sampling" class="slide level2">
-<h1>Solution: Random Sampling</h1>
-<img src="03_sampling_lecture_files/figure-revealjs/spatialSample2-1.png" title="" alt="" width="576" style="display: block; margin: auto;" />
+<h2>Solution: Random Sampling</h2>
+<img src="03_sampling_lecture_files/figure-revealjs/spatialSample2-1.png" width="576" style="display: block; margin: auto;" />
 <div id="fragment">
 Two sampling schemes:
 </div>
@@ -163,15 +537,15 @@ Two sampling schemes:
 </ul>
 </section>
 <section id="non-independence-haphazard-sampling" class="slide level2">
-<h1>Non-Independence &amp; Haphazard Sampling</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/samplePath-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> <span class="fragment">What if there are interactions between individuals?</span></p>
+<h2>Non-Independence &amp; Haphazard Sampling</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/samplePath-1.png" width="576" style="display: block; margin: auto;" /> <span class="fragment">What if there are interactions between individuals?</span></p>
 </section>
 <section id="solution-chose-samples-randomly" class="slide level2">
-<h1>Solution: Chose Samples Randomly</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/samplePath2-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /> Path chosen with random number generator</p>
+<h2>Solution: Chose Samples Randomly</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/samplePath2-1.png" width="576" style="display: block; margin: auto;" /> Path chosen with random number generator</p>
 </section>
 <section id="deciding-sampling-design" class="slide level2">
-<h1>Deciding Sampling Design</h1>
+<h2>Deciding Sampling Design</h2>
 <p> <br />
  </p>
 <p>What influences the measurement you are interested in?  </p>
@@ -185,7 +559,7 @@ Causal Graph
 </div>
 </section>
 <section id="stratified-or-random" class="slide level2">
-<h1>Stratified or Random?</h1>
+<h2>Stratified or Random?</h2>
 <p> <br />
  </p>
 <p>Do you know all of the influences?</p>
@@ -193,7 +567,7 @@ Causal Graph
 <p><img src="images/03/dag2.jpg" width=500></p>
 </section>
 <section id="stratified-or-random-1" class="slide level2">
-<h1>Stratified or Random?</h1>
+<h2>Stratified or Random?</h2>
 <p> <br />
  </p>
 <p>Do you know all of the influences?</p>
@@ -208,7 +582,7 @@ You can represent this as an equation:<br> Size = Color + Location + ???
 </div>
 </section>
 <section id="stratified-or-random-2" class="slide level2">
-<h1>Stratified or Random?</h1>
+<h2>Stratified or Random?</h2>
 <ul>
 <li><p>How is your population defined?</p></li>
 <li><p>What is the scale of your inference?</p></li>
@@ -218,40 +592,40 @@ You can represent this as an equation:<br> Size = Color + Location + ???
 </ul>
 </section>
 <section id="exercise" class="slide level2">
-<h1>Exercise</h1>
-<div style="font-size: 1.4em;">
-<p>Draw a causal graph of the influences on one thing you measure</p>
-<p>How would you sample your population?</p>
+<h2>Exercise</h2>
+<div style="font-size: 1.4em; align: left; ">
+<ol type="1">
+<li><p>Draw a causal graph of the influences on one thing you measure<br></p></li>
+<li><p>How would you sample your population?</p></li>
+</ol>
 </div>
 </section>
 <section id="sampling-1" class="slide level2">
-<h1>Sampling</h1>
+<h2>Sampling</h2>
 <ol type="1">
-<li>Sampling Nature</li>
-</ol>
-<p><span style="color:red">2. Describing your Sample</span></p>
-<ol start="3" type="1">
-<li>Using a Sample to Describe a Population</li>
+<li><p>Sampling Nature</p></li>
+<li><p><span style="color:red">Describing your Sample</span></p></li>
+<li><p>Using a Sample to Describe a Population</p></li>
 </ol>
 </section>
 <section id="taking-a-descriptive" class="slide level2">
-<h1>Taking a Descriptive</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sample-1.png" title="" alt="" width="576" style="display: block; margin: auto;" /></p>
+<h2>Taking a Descriptive</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sample-1.png" width="576" style="display: block; margin: auto;" /></p>
 <center>
 <p>How big are individuals in this population?</p>
 </section>
 <section id="our-sample" class="slide level2">
-<h1>Our ‘Sample’</h1>
+<h2>Our ‘Sample’</h2>
 <pre><code> [1] 41.11041 42.11062 48.31628 45.44011 51.28539 41.85113 43.02021
  [8] 46.86495 47.03553 38.87441 46.56152 51.24369 40.79575 46.86209
 [15] 31.41510</code></pre>
 </section>
 <section id="how-can-we-understand-our-sample" class="slide level2">
-<h1>How can we Understand Our Sample</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" title="" alt="" width="768" /></p>
+<h2>How can we Understand Our Sample</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" width="768" /></p>
 </section>
 <section id="median---dead-center" class="slide level2">
-<h1>Median - Dead Center</h1>
+<h2>Median - Dead Center</h2>
 <pre><code> [1] 31.41510 38.87441 40.79575 41.11041 41.85113 42.11062 43.02021
  [8] 45.44011 46.56152 46.86209 46.86495 47.03553 48.31628 51.24369
 [15] 51.28539</code></pre>
@@ -265,8 +639,8 @@ Middle Value = 50th Percentile = 0.5 Quantile = Median
 </div>
 </section>
 <section id="what-about-the-variability" class="slide level2">
-<h1>What About the Variability?</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" title="" alt="" width="768" /></p>
+<h2>What About the Variability?</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" width="768" /></p>
 Other Quantiles!<br />
 
 <div class="fragment">
@@ -274,7 +648,7 @@ Other Quantiles!<br />
 </div>
 </section>
 <section id="quantiles-and-quartiles" class="slide level2">
-<h1>Quantiles and Quartiles</h1>
+<h2>Quantiles and Quartiles</h2>
 <pre><code> [1] 31.41510 38.87441 40.79575 41.11041 41.85113 42.11062 43.02021
  [8] 45.44011 46.56152 46.86209 46.86495 47.03553 48.31628 51.24369
 [15] 51.28539</code></pre>
@@ -292,7 +666,7 @@ Other Quantiles!<br />
 </div>
 </section>
 <section id="inter-quartile-range" class="slide level2">
-<h1>Inter-Quartile Range</h1>
+<h2>Inter-Quartile Range</h2>
 <p>IQR = Range from 0.25 to 0.75 Quantile</p>
 <pre><code>      5%      10%      50%      90%      95% 
 36.63662 39.64295 45.44011 50.07273 51.25620 </code></pre>
@@ -302,85 +676,85 @@ Other Quantiles!<br />
 </div>
 </section>
 <section id="boxplots-show-quantiles" class="slide level2">
-<h1>Boxplots Show Quantiles</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/boxplot-1.png" title="" alt="" width="576" /></p>
+<h2>Boxplots Show Quantiles</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/boxplot-1.png" width="576" /></p>
 <p>Whiskers show 1.5x the IQR</p>
 </section>
 <section id="section-1" class="slide level2">
-<h1></h1>
+<h2></h2>
 <br><br><br>
 <center>
 <strong>What do we learn from these measures?</strong>
 </center>
 </section>
 <section id="sampling-2" class="slide level2">
-<h1>Sampling</h1>
+<h2>Sampling</h2>
 <ol type="1">
 <li><p>Sampling Nature</p></li>
 <li><p>Describing your Sample</p></li>
+<li><p><span style="color:red">Using a Sample to Describe a Population</span></p></li>
 </ol>
-<p><span style="color:red">3. Using a Sample to Describe a Population</span></p>
 </section>
 <section id="this-is-just-a-sample" class="slide level2">
-<h1>This is Just a Sample</h1>
-<img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" title="" alt="" width="768" />
+<h2>This is Just a Sample</h2>
+<img src="03_sampling_lecture_files/figure-revealjs/sampPlot-1.png" width="768" />
 <div class="fragment">
 An estimate of the population
 </div>
 </section>
 <section id="how-does-our-sample-compare-to-the-population" class="slide level2">
-<h1>How Does our Sample Compare to the Population?</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampDist-1.png" title="" alt="" width="768" /></p>
+<h2>How Does our Sample Compare to the Population?</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDist-1.png" width="768" /></p>
 </section>
 <section id="estimating-population-parameters" class="slide level2">
-<h1>Estimating Population Parameters</h1>
+<h2>Estimating Population Parameters</h2>
 <ul>
-<li class="fragment">Before we described the sample</li>
-</ul>
-<ul>
-<li class="fragment">We want to estimate <strong>population</strong> parameters</li>
-</ul>
-<ul>
-<li class="fragment">N.B. Greek Letters = Population, English = Sample</li>
+<li class="fragment">Before we described the sample<br><br><br />
+</li>
+<li class="fragment">We want to estimate <strong>population</strong> parameters<br><br><br />
+</li>
+<li class="fragment">N.B. Greek Letters = Population, English = Sample<br><br></li>
 </ul>
 </section>
 <section id="sample-properties-mean" class="slide level2 bigger">
-<h1>Sample Properties: Mean</h1>
+<h2>Sample Properties: Mean</h2>
  <br />
  <br />
 
 <center>
 <span class="math inline">\(\bar{Y} = \frac{ \displaystyle \sum_{i=1}^{n}{y_{i}} }{n}\)</span>
 </center>
+<div style="align:left;">
 <p><span class="math inline">\(\large \bar{Y}\)</span> - The average value of a sample<br />
 <span class="math inline">\(y_{i}\)</span> - The value of a measurement for a single individual<br />
 n - The number of individuals in a sample<br />
  <br />
 <span class="math inline">\(\mu\)</span> - The average value of a population<br />
 (Greek = population, Latin = Sample)</p>
+</div>
 </section>
 <section id="how-good-is-our-estimate" class="slide level2">
-<h1>How Good is our Estimate?</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistMean-1.png" title="" alt="" width="768" /></p>
+<h2>How Good is our Estimate?</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistMean-1.png" width="768" /></p>
 </section>
 <section id="how-good-is-our-estimate-1" class="slide level2">
-<h1>How Good is our Estimate?</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistMean2-1.png" title="" alt="" width="768" /></p>
+<h2>How Good is our Estimate?</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistMean2-1.png" width="768" /></p>
 </section>
 <section id="describing-population-variation" class="slide level2">
-<h1>Describing Population Variation</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistVar-1.png" title="" alt="" width="768" /></p>
+<h2>Describing Population Variation</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistVar-1.png" width="768" /></p>
 <blockquote>
 <p>What is the range of values for 2/3 of a population?</p>
 </blockquote>
 </section>
 <section id="describing-population-variation-1" class="slide level2">
-<h1>Describing Population Variation</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistVar2-1.png" title="" alt="" width="768" /></p>
+<h2>Describing Population Variation</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistVar2-1.png" width="768" /></p>
 <p>What is the range of values for 2/3 of a population?</p>
 </section>
 <section id="sample-properties-variance" class="slide level2">
-<h1>Sample Properties: Variance</h1>
+<h2>Sample Properties: Variance</h2>
 <p>How variable was that population? <span class="math display">\[\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(Y_i - \bar{Y})^2}} {n-1}\]</span></p>
 <ul>
 <li>Sums of Squares over n-1<br />
@@ -392,7 +766,7 @@ n - The number of individuals in a sample<br />
 </ul>
 </section>
 <section id="sample-properties-standard-deviation" class="slide level2">
-<h1>Sample Properties: Standard Deviation</h1>
+<h2>Sample Properties: Standard Deviation</h2>
 <p><span class="math display">\[ \large s = \sqrt{s^2}\]</span></p>
 <ul>
 <li>Units the same as the measurement</li>
@@ -402,15 +776,15 @@ n - The number of individuals in a sample<br />
 </ul>
 </section>
 <section id="how-well-did-we-do-67" class="slide level2">
-<h1>How Well did we Do: 67%?</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistSD-1.png" title="" alt="" width="768" /></p>
+<h2>How Well did we Do: 67%?</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDistSD-1.png" width="768" /></p>
 </section>
 <section id="how-well-did-we-do-95" class="slide level2">
-<h1>How Well did we Do: 95%?</h1>
-<p><img src="03_sampling_lecture_files/figure-revealjs/sampDist2SD-1.png" title="" alt="" width="768" /></p>
+<h2>How Well did we Do: 95%?</h2>
+<p><img src="03_sampling_lecture_files/figure-revealjs/sampDist2SD-1.png" width="768" /></p>
 </section>
 <section id="post-quiz" class="slide level2">
-<h1>Post-Quiz</h1>
+<h2>Post-Quiz</h2>
 <br><br><br>
 <center>
 <a href="http://tinyurl.com/sampling-post" class="uri">http://tinyurl.com/sampling-post</a>
@@ -419,8 +793,8 @@ n - The number of individuals in a sample<br />
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -440,6 +814,8 @@ n - The number of individuals in a sample<br />
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -450,7 +826,7 @@ n - The number of individuals in a sample<br />
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>
