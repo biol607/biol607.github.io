@@ -1,0 +1,50 @@
+---
+title: "First R Exercises"
+output: html_document
+---
+
+Show all code and outputs in any problems below that use R. 3 points per problem. Show all of your work. Read each question completely before answering. You'd be surprised how many people miss details...
+
+0. Free 3 points - complete this homework in Rmarkdown!  
+
+1. Create a vector of 100 randomly distributed numbers between 0 and 100 using `runif` and save the vector into the variable `my_vec`. If you cannot figure out runif, try `?runif`. What information does `str` and `summary` tell you about `my_vec`?  How do they differ?  
+
+```{r echo=FALSE, eval=FALSE}
+my_vec <- runif(100, 0, 100)
+
+str(my_vec)
+summary(my_vec)
+
+#str shows what information is in the vector and its length. summary 
+#gives information about the distribution of the data
+```
+
+2. Try out a little plot. What does `hist(my_vec)` show you? What information does the helpfile for `hist` tell you about what you just did?  
+```{r echo=FALSE, eval=FALSE}
+hist(my_vec)
+
+#This is a histogram of my_vec
+#showing frequently data occurs in a set of bins
+```
+
+3. Load up the `mtcars` data set using `data(mtcars)`.  Apply the following functions to mtcars: `class`, `str`, `summary`.  What do these three functions tell you about mtcars?  
+
+```{r echo=FALSE, eval=FALSE}
+data(mtcars)
+class(mtcars)
+str(mtcars)
+summary(mtcars)
+
+
+#mtcars is a data frame with 32 values in 11 columns. The values
+#are numeric, and summary shows me how they are distributed
+```
+
+4. Look at the help file for the class `data.frame`.  What does it tell you about these objects?  
+
+```{r echo=FALSE, eval=FALSE}
+#data.frames are both lists and matrices, and are fundamental to most of the modeling
+#in R
+```
+
+5. What  are you thinking about working with for your final project? Give me a brief description of your current idea. I know this might be early, but I'm guessing you've got something in mind.

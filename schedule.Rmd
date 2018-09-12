@@ -36,7 +36,7 @@ __Optional Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrnesla
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2018  
 __Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages("dplyr")`  
 __In Class Code:__ [Code from Lab](in_class_code_2016/02_samp_sim.R)\
-__Homework:__ https://github.com/biol607/2016_homework_02_sampling  
+__Homework:__ [R, Dplyr, and Sampling](./homework_2018/02_sampling.html)
 
 
 ### Week 3.   
