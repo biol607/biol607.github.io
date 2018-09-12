@@ -49,7 +49,7 @@ __Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/re
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf)\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2018  
 __In Class Code:__ [Loading Data](in_class_code_2016/03_load_data.R), [Intro to ggplot2](in_class_code_2016/04_ggplot2_intro.R)\
-__Homework:__ https://github.com/biol607/2016_homework_03_ggplot2  
+<!-- __Homework:__ https://github.com/biol607/2016_homework_03_ggplot2  -->
   
 ### Week 4.   
 ```{r next_date, echo=FALSE}
@@ -62,7 +62,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses-2018
 __In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)  
 __Quiz:__ http://tinyurl.com/hyp-pre-quiz  
 __In Class Code:__  [Distributions and Power](in_class_code_2016/05_distributions_power.R)\
-__Homework:__ https://github.com/biol607/2016_homework_04_hypothesis_power
+<!-- __Homework:__ https://github.com/biol607/2016_homework_04_hypothesis_power -->
 
   
   
