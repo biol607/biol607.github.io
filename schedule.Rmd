@@ -6,6 +6,17 @@
   W&S = Whitlock and Schluter, W&G = [Wickham and Grolemund](http://r4ds.had.co.nz), U/P for linked pdfs = biol607  
   
   Change .html to .Rmd in your browser to get the markdown
+  
+**Turning in Homework**: All homework should be completed using RMarkdown. You'll freely mix answers in text and code there. Please submit both the .Rmd and .html output of your homework. If there are data files associated with your homework, when working on it, please make sure you are using the   
+  
+homework/  
+&nbsp; |--- markdown  
+&nbsp; |--- data  
+
+directory structure, so that all data is in `../data/` relative to where your homework markdown and outputs are. Please standardize filenames as follows: `number_lastName_firstName_2018.Rmd` where number is the homework number (you'll see it in the homework assignment's filename), and your last and first names - well, you should know them!  
+  
+To submit homework, go to https://www.dropbox.com/request/MgLy0OxePC4QN8ZDgQ0X and upload the files.
+
 
 ```{r dates, echo=FALSE, message=FALSE, warning=FALSE}
 library(lubridate)
