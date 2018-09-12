@@ -15,7 +15,7 @@ homework/
 
 directory structure, so that all data is in `../data/` relative to where your homework markdown and outputs are. Please standardize filenames as follows: `number_lastName_firstName_2018.Rmd` where number is the homework number (you'll see it in the homework assignment's filename - and make sure to include the 0s for numbers like 01), and your last and first names - well, you should know them!  
   
-To submit homework, go to https://www.dropbox.com/request/MgLy0OxePC4QN8ZDgQ0X and upload the files. I'll take it from there.
+To submit homework, go to https://www.dropbox.com/request/MgLy0OxePC4QN8ZDgQ0X and upload the files. 
 
 
 ```{r dates, echo=FALSE, message=FALSE, warning=FALSE}
