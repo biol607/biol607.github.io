@@ -54,9 +54,9 @@ __Homework:__ [R, Dplyr, and Sampling](./homework_2018/02_sampling.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [Data visualization](lectures/05_data_viz_principles.pptx).\
-__Lab Topic:__ [Data import](lab/03_read_data_libraries.html) and [introduction to ggplot2](lab/04_ggplot_intro.html). Forcats and factors.  Data for lab [here](lab/data_03_04.zip).  
-__Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)  
+__Lecture:__ [Data visualization](lectures/05_data_viz_principles.pptx), [Data Creation](https://datacarpentry.org/spreadsheet-ecology-lesson/)\
+__Lab Topic:__  [Data import and libraries](lectures/06_read_data_libraries.html) and [Introduction to ggplot2](lab/04_ggplot_intro.html). Forcats and factors.  Data for lab [here](lab/data_03_04.zip).  
+__Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html), [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)  
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf)\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2018  
 __In Class Code:__ [Loading Data](in_class_code_2016/03_load_data.R), [Intro to ggplot2](in_class_code_2016/04_ggplot2_intro.R)\
