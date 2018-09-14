@@ -1,0 +1,260 @@
+---
+title: "Reading Data & Libraries"
+author: "Intro to Data Science for Biology"
+output: html_document
+---
+
+<!-- things to add - tibbles versus data frames, exercises, check to make sure data
+obeys structure we're trying to teach them-->
+
+There's a surprising amount that goes into the one simple act of reading in a data file to produce a data frame. Today we're going to explore that in all its complexity, and add in libraries to boot, as our data often requires external libraries to load.
+
+### Let's start at the very beginning - directory structure!
+First, as we enter our data, where should we save it?  Every project you have should have 
+####1) It's own directory
+####2) A standardized directory structure
+
+I often use something like this:
+
+```{r eval=FALSE}
+My Project 
+| 
+|- Data 
+|- Scripts 
+|- Figures 
+|- Reports 
+
+```
+
+You may build something more elaborate, but this is a good starting point for any project - be it a homework, research project, lab report, or anything.
+
+Now, enter that data!
+
+![](./images/excel_entry.jpg)
+
+### Data entered! Can I just save it and move on?
+
+Let's say you've entered your data. How do you save it so that R can read it? Well, what does an Excel file look like to R?
+
+![It ain't pretty](./images/binary_data.jpg)
+
+Oh no.  Oh no no no. That is not the way. Excel files are saved in a particular proprietary format that requires particular functionality to load. We'll get how to do that later. But this is an excellent object lesson. Programs change over time. Their save formats change over time. In 40 years, who is to say anything will be able to load that mess?  
+
+Furthermore, what if you're bouncing between computers, and maybe bouncing between spreadsheet programs. Wouldn't it be better to have a standard human-readable saved data format?  
+
+There are a lot of formats like these. We call them 'delimited'. A file can be tab delimited (tabs separate columns), space deliminted, semi-colon delimited, or, perhaps the most common, comma delimited. There are of course any number of arbitrary delimited formates, but, best to keep with the standards.  The above data in comma delimited format would look like so:
+
+```{r, eval=FALSE}
+Column_1,Column_2,Column_3,TheBiggestColumnNameEverThatIWantToWite,
+4,8,Fred,5,
+4,8,Fred,6,
+4,8,Fred,4,
+4,8,Fred,3,
+4,8,Fred,7,
+4,8,George,3,
+4,8,Fred,5,
+4,8,Fred,3,
+4,9,Fred,7,
+4,10,Nancy,3,
+4,11,George,6,
+```
+
+Way more readable, no?  So, how do we save our file like this? Under the Save As option in Excel, there are a myriad of different file formats. Comma delimited is one of them.
+
+![CSV creation](./images/save_as_csv.jpg)
+
+Let's save this as `my_data.csv` (csv is a common file extension for comma separated files). Save it in your `data` directory for this project
+
+
+**Excercise** Download the two files from the website and put them into your working directory. Keep it neat and give them a data folder!  
+
+###OK! Time to Load?
+
+YES!  Fire up R, and save the script file you will be working on in your `R` directory.  Now, it's just hop-skip-and-a-jump to loading?
+
+Well, almost. We have the `read.csv` function in R for reading CSVs. The first - and main - argument is `file`. But as we look at the description of the file argument, we see we can't just enter the name of the file. We need to say something about the directory:
+
+"If it does not contain an absolute path, the file name is relative to the current working directory, getwd(). Tilde-expansion is performed where supported. "
+
+What is this path stuff?  Working directory?  Huh?
+
+You're all familiar with your computers file explorer or finder. You're used to navigating back and forth between folders or directories.  You're also used to the fact that the folders are nested within each other. For example both `R` and `Data` are here nested within `Project`.  There is a tree-like structure to all of the directories on your computer, from some toplevel, which is refered to as `/` all the way down to any other directory.
+
+When you open R, based on how you've set it up, it assumes that it's got some directory open in front of it, just as if you opened a directory yourself. We call this the *working directory*.  Anything we do with respect to files - saving, loading, etc. - assumes we are in this directory. You can see your current directory with `getwd`.  So
+
+```{r}
+getwd()
+```
+
+Notice it starts at a top level and presents a hierarchy of directories all the way down to the one this file is being generated from.  
+
+OK, great. So how do I change my working directory so I can tell R where to load the data from?  There are a few ways - the `setwd` function for one. This is good for a nice mature script that you always want to run the same way every time on one computer with the same directory structure. Often we'll want to be more dynamic than that. R Studio provides a nice option to set your working directory to wherever your script file is saved.
+
+As you've saved your script file to the directory `R` within project, that will mean this is now your working directory.
+
+![](./images/setwd.jpg)
+
+###Now can I load things? A relative question.
+
+Almost!  Now, you **could** use `getwd` and then change `R` to `data` for the directory name you use when loading your data. Or, you could be a little sneaky, and acknoledge that, when your working directory is `R` the `data` will always be one directory up, and then down in the `data` directory. Think about it in terms of walking up one branch of a tree to the trunk, and then going down the branch next door. 
+
+This idea of **realtive paths** has a nice standard implementation.  One directory up is **../**  So, the full path to the data file from your current working directory is `../data/` - not so bad, no?  
+
+Armed with this, we can finally load our data
+
+```{r, eval=FALSE}
+my_data <- read.csv("../data/my_data.csv")
+
+head(my_data)
+```
+
+```{r, echo=FALSE}
+my_data <- read.csv("../Data/my_data.csv")
+
+head(my_data)
+```
+
+**Excercise** Go green when you have your data loaded!
+
+###Factoring out our expectations
+
+Did everything go as planned? `head` makes it look so, but let's dig further.
+
+```{r}
+str(my_data)
+```
+
+Oh now that's odd. What is this factor thing in Column 3?
+
+```{r}
+my_data$Column_3
+```
+
+A factor is a new class. We have had numerics, logicals, characters (which one would assume would be column 3) but factors are a slightly different beast. Factors are our controlled vocabularies made manifest. They are an object that can only take certain values. We can check those values with
+
+```{r}
+levels(my_data$Column_3)
+```
+
+Internally, factors are actually stored as an integer:
+
+```{r}
+as.numeric(my_data$Column_3)
+```
+
+But that integer is references to the levels before being shown as output.  Factors have a lot to recommend them - you cannot combine factors with different levels to keep your data safe, you can order them non-alphabetically for nicer plotting, and more.  
+
+However, factors are also a nuissance. You cannot manipulate them the same way you can manipulate a string. As such, we often use the `stringsAsFactors` argument and set it to FALSE.
+
+```{r, eval=FALSE}
+my_data <- read.csv("../data/my_data.csv", 
+                    stringsAsFactors=FALSE)
+
+str(my_data)
+```
+
+```{r, echo=FALSE}
+my_data <- read.csv("../Data/my_data.csv", 
+                    stringsAsFactors=FALSE)
+
+str(my_data)
+```
+
+Ah, better.
+
+###What other arguments might I want to think about in read.csv?
+
+There's a lot to ponder here. There's a `skip` argument to skip lines at the head of a file in case there's metadata or header information there, `na.strings` let's you state whether there were any non-standard ways of specifying NAs, and more.
+
+
+###Back to Excel... and libraries
+But what if I don't want to save a CSV? What if this is a project in motion, and saving a CSV will just be a huge PITA every time I want to load things right from Excel?
+
+As R has no native Excel loading capacity we need to find a *package* that does it for us.
+
+One of the joys of R is that folk can write their own custom functions and wrap them up into packages that extend R's base functionality. Indeed, a lot of the functions we use come from a few preloaded packages - base, graphics, and stat.  There are a lot of sources of packages out there. The main clearninghouse is called CRAN - the Comprehensive R Archive Network. There are others, but we'll focus on CRAN.
+
+It can be a bit of work to find exactly the package you need - either googling, using http://rseek.org or browsing https://cran.r-project.org/web/views/ for subject areas. Once you find what you need, though, it's easy to get it going. We're going to look at the package `readxl` from Hadley Wickham. We'll talk more about Hadley and the Tidyverse next week.
+
+To install a library, you can either go through The Tools/Install Packages dropdown in R studio (this can help with package discovery) or just use 
+
+```{r, eval=FALSE}
+install.packages("readxl")
+```
+
+Some additional helper packaged might be installed as well that your package requires. That's OK.  Once you've installed a package, you load it with `library` - 
+
+```{r}
+library("readxl")
+```
+**Excercise** Install and load the readxl library!
+
+Readxl has a function called `read_excel` which is going to be our main function of interest here. Take a look at it's help file.  Note, it takes a few arguments - a path to the file (which includes the file name) the sheet (because your spreadsheet might not be the first one in the workbook), as well as a few others about specifying information about the columns. It does have an argument for missing value specification - but it's just `na` not `na.strings`. You also have a skip argument.  That's it.  Let's take it for a spin.
+
+```{r, eval=FALSE}
+my_data_excel <- read_excel("../data/my_data.xlsx")
+
+str(my_data_excel)
+```
+
+```{r, echo=FALSE}
+my_data_excel <- read_excel("../data/my_data.xlsx")
+
+
+str(my_data_excel)
+```
+
+Note a few things - first off, our data now has multiple classes - data.frame, of course, but also tbl_df and tbl. We'll talk about these other classes later. For now, you can strip them off with
+
+```{r}
+my_data_excel <- as.data.frame(my_data_excel)
+
+str(my_data_excel)
+```
+
+Better.
+
+Notice second, that there are no factors. Heck, `read_excel` doesn't even provide the option for factors! If you really want one, sure, you can create it later. But Hadley doesn't want you to mess with factors unless you know you need to.
+
+### Tibbles
+Remember earlier in the lesson when our data had the class "tbl_df"? Tibbles are a modern object class that has some advantages over the standard, base R data.frame. First, lets make one. 
+
+There are a group of packages called the Tidyverse - these share similar syntax and build off one another (and utilize tibbles!). Lets grab the `readr` package now and use it to read our data in again.
+
+**Excercise** Install and load the `readr` package.
+```{r}
+my_data_tibble <- readr::read_csv("../Data/my_data.csv") #read_csv is MUCH faster too.
+
+str(my_data_tibble)
+```
+Great - we now have our data in R, as a Tibble. Tibbles do a few things better than regular data frames. 
+First, they print more nicely.
+```{r}
+my_data
+my_data_tibble
+```
+
+Notice how it only displays what fits nicely in the console? 
+
+Second - remember how `read.csv()` changed our names from characters to factors? By default, tibbles created with `read_csv` do not convert strings to factors.
+```{r}
+str(my_data)
+str(my_data_tibble)
+```
+
+Tibbles have a number of under the hood advantages. For example, lets see what happens when we screw up.
+```{r, error = TRUE}
+my_data["Coolumn_1"]
+my_data_tibble["Coolumn_1"]
+```
+Tibble error messages tend to be more helpful.  
+All in all, working with tibbles feels almost identical as working with data frames - don't think of them any differently. All of your indexing/subsetting tools will still work (and will conventiently generate more tibbles!).
+###A parting shot - a world without library
+
+Sometimes, we don't want to load a library and all that it entails. Because R is a wild and woolly ecosystem, folk often write packages that have function names that overlap.  To access a function within a package without loading the entire package itself we use `::` as follows
+
+```{r, eval=FALSE}
+my_data_excel <- readxl::read_excel("../data/my_data.xlsx")
+```
+
+Simple, no?
