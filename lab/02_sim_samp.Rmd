@@ -50,7 +50,7 @@ Notice that we supplied no argument to sum. Now, what if wanted to take the squa
 
 Notice how I separated different steps on different lines? This is a more readable code. Future me can track what's going on, line by line, instead of having to read a looooong single line of code.
 
-Let's try a few exercises with pipes.
+Let's try a few **exercises** with pipes.
 
 a) Use pipes to sum the log of 100:200.
 
@@ -88,13 +88,13 @@ plot(y ~ x, data=my_df)
 
 Now, you can supply all sorts of arguments on plot - look at the help file. We're not really going to worry about those today.
 
-Let's try some examples.
+Let's try some example **exercises**.
 
 a) Using `mtcars`, plot mpg by cyl. What happens if you set pch to 19 or 5?
 
-b) `boxplot()` works like plot. Use it for `mpg ~ vs`. Now try the col argument. Give it a vector of two colors, like `c("red", "blue")`.
+b) `boxplot()` works like plot. Use it for `mpg ~ vs`. Now try the `col` argument. Give it a vector of two colors, like `c("red", "blue")`.
 
-## 2. Dplyr
+## 2. dplyr
 
 `dplyr` will change your life. It is the data munging tool you didn't know you needed until now. To learn our way around it, we'll use it with the `mtcars` data frame. `dplyr` is a collection of functions that manipulate data frames (or data tables, or tibbles, or other objects that work like data frames - more on those later). It's functions largely take the data frame object as the first argument, and then return data frames as the output, so pipes are a natural fit for `dplyr`.  Indeed, if you load `dplyr`, `magrittr` is loaded by default.
 
@@ -102,7 +102,7 @@ b) `boxplot()` works like plot. Use it for `mpg ~ vs`. Now try the col argument.
 
 Often, we want to make a column that uses information from other columns. For this, we have mutate. For example, what if we wanted to make a log transformed column of `mpg`? Note, I'm going to wrap the whole thing in head, so we only get the first 6 lines of the result
 
-```{r mutate_mpg}
+```{r mutate_mpg, message=FALSE}
 library(dplyr)
 
 mtcars2 <-  mutate(mtcars, log_mpg = log(mpg)) 
@@ -193,6 +193,13 @@ mtcars %>%
   filter(!is.na(cyl))
 ```
 
+**Exercises**  
+1. Add some columns to `mtcars` to plot the log of `mpg` by the square root of `hp`.  
+  
+2. Get the average `hp` per `gear` and plot them against each other.  
+  
+3. Make a data fame for only 6 cylinder engines with only the `disp` and `carb` columns. Create a boxplot. of how carb influences `disp`.
+
 
 ## 3. Simulation and Sample Size
 
@@ -216,19 +223,19 @@ So, we can pull a random sample from a perfect population anytime we'd like. How
 Why, with the sample function. Let's sample the sample we've greated above, and draw five different elements.
 
 ```{r sample1}
-sample(samp, 5)
+sample(samp, size = 5)
 ```
 
 This is *incredibly* useful in a wide variety of context. For example, let's say we wanted five rows of mtcars.
 
 ```{r sample_mtcars}
-mtcars[sample(1:nrow(mtcars), 5), ]
+mtcars[sample(1:nrow(mtcars), size = 5), ]
 ```
 
 Of course, for that kind of thing, `dplyr` has you covered with 
 
 ```{r sample_dplyr}
-sample_n(mtcars, 5)
+sample_n(mtcars, size = 5)
 ```
 
 Or, you can even use a porportions - so, here's a random sampling of 10% of mtcars
@@ -242,12 +249,12 @@ But that is neither here nor there.
 One thing that all of these sample functions let you do is sample with or without replacement. If we're assuming a sample is representative of a population and we want to bootstrap resample it, we're going to need to sample **with replacement**. Fortunately, that's just one more argument.
 
 ```{r sample_replace}
-sample(1:3, 15, replace = TRUE)
+sample(1:3, size = 15, replace = TRUE)
 ```
 
 This will come in handy shortly!
 
-### 3.2 Using `group_by()` for simulation
+### 3.2 Using `rowwise()` for simulation
 
 The other tool we'll need to simulate sampling a population is some output. Let's go through this step by step. First, let's say we are going to have 10 samples per sample size, and try sample sizes from 3 to 50. We begin by creating a data frame with this information, as we're going to want to plot this information later.
 
@@ -256,13 +263,7 @@ The other tool we'll need to simulate sampling a population is some output. Let'
 sampSim <- data.frame(samp_size = rep(3:50, times = 10))
 ```
 
-We also want to keep track of simulation number, as we're going to want to perform independent actions for each sim.
-
-```{r setup_sim}
-sampSim$sim_number = 1:nrow(sampSim)
-```
-
-Now, we're ready to go! What we want to do is, for each simulation, generate a sample population and take a mean. So, something like
+We can view each row as one simulated replicate. Now, we're ready to go! What we want to do is, for each simulation, generate a sample population and take a mean. So, something like
 
 ```{r take_mean, eval=FALSE}
 mean(rnorm(n = 10, mean = 10, sd = 3))
@@ -274,7 +275,7 @@ So, we want to work this into a `dplyr` workflow.  Now, what I often do it write
 
 ```{r comment_dplyr}
 # Take the data frame
-# For each individual simulation
+# For each row
 # Use samp_size to get the mean of a random normal population with mean 10 and sd 3
 # Also draw a mean from the samp vector with n = samp_size, with replacement
 ```
@@ -284,7 +285,7 @@ Reasonable, no? You could have written this out. Now, let's operationalize this.
 # Take the data frame
 sampSim <- sampSim %>%
 # For each individual simulation
-  group_by(sim_number) %>%
+  rowwise() %>%
 # Use samp_size to get the mean of a random normal population with mean 10 and sd 3
   mutate(mean_pop = mean(rnorm(samp_size, mean = 10, sd = 3)),
          
@@ -301,11 +302,10 @@ Let's try this out, and have you fill in what's missing in these faded examples.
 set.seed(42)
 samp <- rnorm(100, 10, 3)
 sampSim <- data.frame(samp_size = rep(3:50, times = 10))
-sampSim$sim_number = 1:nrow(sampSim)
 
 #Mean simulations
 sampSim %>%
-  group_by(sim_number) %>%
+  rowwise() %>%
   mutate(mean_pop = mean(rnorm(samp_size, mean = 10, sd = 3)),
          mean_sample = mean(sample(samp, size = samp_size, replace=T))) %>%
   ungroup()
@@ -314,14 +314,14 @@ sampSim %>%
 
 #Median simulations
 sampSim %>%
-  group_by(sim_number) %>%
+  rowwise() %>%
   mutate(median_pop = ____(rnorm(samp_size, mean = 10, sd = 3)),
          median_sample = ____(sample(samp, size = samp_size, replace=T))) %>%
   ungroup()
 
 #SD simulations
 sampSim %>%
-  group_by(____) %>%
+  ____() %>%
   ____(sd_pop = ____(rnorm(____, mean = 10, sd = 3)),
          sd_sample = ____(sample(samp, size = ____, ____)) %>%
   ungroup()
@@ -331,7 +331,7 @@ sampSim %>%
 #IQR simulations
 #function for interquartile range is IQR
 sampSim %>%
-  ____(____) %>%
+  ____() %>%
   ____(IQE_pop = ____(____(____, mean = 10, sd = 3)),
          IQR_sample = ____(____(samp, size = ____, ____)) %>%
   ungroup()
@@ -389,7 +389,7 @@ As for the result, we can see that, eh, 46 has the lowest SD, but things bounce 
 
 a) Look at the resulting simulations using the sample. Would you chose a different optimal sample size?
 
-b) Repeat this process, but for the sample median. What is the optimal sample size?
+b) Repeat this whole process, but for the sample median. What is the optimal sample size? Feel free to reuse code or modify code in place (for the simulations).
 
 
 ## 4. Standard Errors
@@ -442,7 +442,7 @@ Now, we can take these, and for each simulation, draw a median from a sample of 
 
 ```{r se_dplyr}
 median_sims <- median_sims %>%
-  group_by(sims) %>%
+  rowwise() %>%
   mutate(median_sim = median(sample(samp, size=10, replace = TRUE))) %>%
   ungroup()
 
@@ -466,7 +466,7 @@ To take this for a spin, let's try some faded examples.
 se_sims <- data.frame(sample_size=rep(5:50, 100))
 
 median_se_sims <- se_sims %>%
-  group_by(1:n()) %>%
+  rowwise() %>%
   mutate(median_sim = median(sample(samp, size = sample_size, replace=TRUE))) %>%
   ungroup() %>%
   group_by(sample_size) %>%
@@ -476,7 +476,7 @@ plot(median_se ~ sample_size, data=median_se_sims, type="l")
 
 #mean se sims
 mean_se_sims <- se_sims %>%
-  ___(1:n()) %>%
+  ___() %>%
   mutate(mean_sim = mean(___(samp, size = sample_size, replace=TRUE))) %>%
   ungroup() %>%
   group_by(___) %>%
@@ -487,7 +487,7 @@ plot(mean_se ~ sample_size, data=___, type="l")
 
 #iqr se sims
 iqr_se_sims <- se_sims %>%
-  ___(1:n()) %>%
+  ___() %>%
   ___(iqr_sim = IQR(___(samp, size = sample_size, replace=TRUE))) %>%
   ungroup() %>%
   group_by(___) %>%
@@ -499,7 +499,7 @@ plot(___ ~ ___, data=___, type="l")
 
 #sd se sims
 sd_se_sims <- se_sims %>%
-  ___(1:n()) %>%
+  ___() %>%
   ___(sd_sim = sd(___(samp, size = ___, ___=___))) %>%
   ungroup() %>%
   ___(___) %>%
