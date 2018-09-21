@@ -1,0 +1,32 @@
+---
+title: 'Homework 3: Data Visualization'
+author: "Biol 607"
+output: html_document
+---
+
+**1)** Complete problems 10 and 17-18 on pg. 109-111. Use R where possible. Data sets (so you don’t have to type things in) are available at http://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets.html.
+
+**2)** A little while back, [Dave Curran](https://twitter.com/iamreddave) using some of the code from our lab made a wonderful animation of change in arctic sea ice.
+
+![](https://i.redd.it/9r9ook3d5xlx.gif)
+
+He used data from   
+
+ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final_v2.csv
+ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt_v2.csv
+
+I'm providing you with a cleaned form of his data (his code is [here](https://gist.github.com/cavedave/c5c2224c8c38661236c1c1ce894fd28f)) for you to work with in a few plots. The data file is called `NH_seaice_extent_monthly_1978_2016.csv`
+
+**2.1)** Load the data using `readr` and make the `Month_Names` column into a factor whose levels are in order of month.
+
+**2.2)** Make a boxplot showing the variability in sea ice extent every month.
+
+**2.3)** Use `dplyr` to get the annual minimum sea ice. Plot minimum ice by year, and add a trendline (either a smooth spline or a straight line).
+
+**2.4)** Plot sea ice by year, with different lines for different months. Then, add a new column (`mutate`!) using the ggplot2 function `cut_interval(Month, n=4)` - this will create four even bins. Seasons, if you will. Use `facet_wrap` on the same plot and split the plot into seasons.
+
+**2.5)** Last, make a line plot of sea ice by month. Gussy it up with colors by year, a different theme, and whatever other annotations, changes to axes, etc., you think best show the story of this data.
+
+**2.6 Extra Credit)** Make it animated. Just like above.  
+  
+**2.7 Extra Credit)** Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
