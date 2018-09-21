@@ -30,3 +30,6 @@ I'm providing you with a cleaned form of his data (his code is [here](https://gi
 **2.6 Extra Credit)** Make it animated. Just like above.  
   
 **2.7 Extra Credit)** Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
+  
+**2.8 Extra Credit)** Go to the internet, and find a package with some cool theme you want to use in ggplot2. Replot one of them with the plot. The cooler the theme, the more points we'll give!
+Note - this guy - http://byrneslab.net/project/hensel/ - is in charge of deciding how cool it is.  

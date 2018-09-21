@@ -60,7 +60,7 @@ __Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/re
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf), [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/) - note, this is a whole book, but scan it - it's amazing\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2018  
 __Packages used this Week:__ [ggplot2](https://ggplot2.tidyverse.org/), [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), [forcats](https://forcats.tidyverse.org/), [readr](https://readr.tidyverse.org/), [readxl](https://readxl.tidyverse.org/), [tibble](https://tibble.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/) - `install.packages(c("ggplot2", "ggridges", "forcats", "readr", "readxl", "tibble", "lubridate"))`  
-__In Class Code:__ [Loading Data](in_class_code_2016/03_load_data.R), [Intro to ggplot2](in_class_code_2016/04_ggplot2_intro.R)\
+__In Class Code:__  [Intro to data and  ggplot2](in_class_code_2018/scripts/03_files_ggplot2.R)\
 __Homework:__ [ggplot2 homework](./homework_2018/03_ggplot.html)  
   
 ### Week 4.   
