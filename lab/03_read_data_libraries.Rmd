@@ -1,14 +1,18 @@
 ---
 title: "Reading Data & Libraries"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
 ---
 
 There's a surprising amount that goes into the one simple act of reading in a data file to produce a data frame. Today we're going to explore that in all its complexity, and add in libraries to boot, as our data often requires external libraries to load.
 
 ### Let's start at the very beginning - directory structure!
 First, as we enter our data, where should we save it?  Every project you have should have 
-####1) It's own directory
-####2) A standardized directory structure
+#### 1) It's own directory
+#### 2) A standardized directory structure
 
 I often use something like this:
 
@@ -61,7 +65,7 @@ Way more readable, no?  So, how do we save our file like this? Under the Save As
 
 Let's save this as `my_data.csv` (csv is a common file extension for comma separated files). Save it in your `data` directory for this project
 
-###OK! Time to Load?
+### OK! Time to Load?
 
 YES!  Fire up R, and save the script file you will be working on in your `R` directory.  Now, it's just hop-skip-and-a-jump to loading?
 
@@ -87,7 +91,7 @@ As you've saved your script file to the directory `R` within project, that will 
 
 ![](./images/03/setwd.jpg)
 
-###Now can I load things? A relative question.
+### Now can I load things? A relative question.
 
 Almost!  Now, you **could** use `getwd` and then change `R` to `data` for the directory name you use when loading your data. Or, you could be a little sneaky, and acknoledge that, when your working directory is `R` the `data` will always be one directory up, and then down in the `data` directory. Think about it in terms of walking up one branch of a tree to the trunk, and then going down the branch next door. 
 
@@ -107,7 +111,7 @@ my_data <- read.csv("./data/03/my_data.csv")
 head(my_data)
 ```
 
-###Factoring out our expectations
+### Factoring out our expectations
 
 Did everything go as planned? `head` makes it look so, but let's dig further.
 
@@ -153,11 +157,11 @@ str(my_data)
 
 Ah, better.
 
-###What other arguments might I want to think about in read.csv?
+### What other arguments might I want to think about in read.csv?
 
 There's a lot to ponder here. There's a `skip` argument to skip lines at the head of a file in case there's metadata or header information there, `na.strings` let's you state whether there were any non-standard ways of specifying NAs, and more.
 
-###Is there a better way to deal with csvs?
+### Is there a better way to deal with csvs?
 
 `read.csv()` can be a pain - remembering stringsAsFactors=FALSE, it doesn't handle dates well, and it can be really slow for large data files. And don't even get me started on how it destroys date formatting. It also inserts `.` anytime there is a space in column names which can be confusing.
 
@@ -172,7 +176,7 @@ my_data
 
 Note that we also no longer have a data frame, but a tibble, which displays more easily.
 
-###Back to Excel... and libraries
+### Back to Excel... and libraries
 But what if I don't want to save a CSV? What if this is a project in motion, and saving a CSV will just be a huge PITA every time I want to load things right from Excel?
 
 As R has no native Excel loading capacity we need to find a *package* that does it for us. The package `readxl` from Hadley Wickham. He's everywhere.
