@@ -1,30 +1,34 @@
 ---
 title: "Introduction to Graphics and Temperature Change"
-author: "Biol 607"
-output: html_document
+author: "Biol607"
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
 ---
 
 Good data visualizations can have a strong impact on how you think about a phenomena. Earlier in 2016, a single image made by Ed Hawkins brought home how much our global average temperature has changed in a way that even the famous hockey stick graph didn't. 
 
-<center>![http://www.climatecentral.org/news/see-earths-temperature-spiral-toward-2c-20332](images/04/hawkins_hadcrut.gif)\
+<center>![http://www.climatecentral.org/news/see-earths-temperature-spiral-toward-2c-20332](images/ggplot/hawkins_hadcrut.gif)\
 from http://www.climatecentral.org/news/see-earths-temperature-spiral-toward-2c-20332</center>
 
-There is a **lot** going on in this image. It's truly stunning. And a lot of it illustrates all of the best principles of data visualization - and it can be done in ggplot2! So, today, we're going to use this graph as our point of entry into exploring data visualization and ggplot2.
+There is a **lot** going on in this image. It's truly stunning. And a lot of it illustrates all of the best principles of data visualization - and it can be done in ggplot2! So, today, we're going to use this graph as our point of entry into exploring data visualization and ggplot2. Along the way we're going to explore many many aspects of `ggplot2` that are available to us.
 
 ### 1. Load the data
 
 We'll begin by loading in the data using `readr`. We're doing this so that, later, we can do some ordering by month - but can determine that ordering ourselves. We'll also load `dplyr` as we'll use its functions in a few places today.
 
-```{r load_data, messages=TRUE}
+```{r load_data, messages=FALSE}
 library(readr)
-library(dplyr)
 
-hadcrut_temp_anomoly <- read_csv("./data/04/hadcrut_temp_anomoly_1850_2015.csv")
+hadcrut_temp_anomoly <- read_csv("./data/hadcrut_temp_anomoly_1850_2015.csv")
 
 hadcrut_temp_anomoly
 ```
 
 Here we see a data table with year, month, temperature anomoly for that month, and a name for the month. The month name is convenient - but - if we want to use it as an ordered variable later, we're going to have problems. R by default orders alphabetically. 
+
 
 #### 1.1 Factors and Forcats
 
@@ -33,8 +37,7 @@ To impose a different ordering schema on `month_name`, we'll need to turn it int
 To create a factor, we can use `factor()`.  We can see the order of the levels with `levels()`.
 
 ```{r make_factor}
-hadcrut_temp_anomoly <- hadcrut_temp_anomoly %>%
-  mutate(month_name = factor(month_name))
+hadcrut_temp_anomoly$month_name <- factor(hadcrut_temp_anomoly$month_name)
 
 levels(hadcrut_temp_anomoly$month_name)
 ```
@@ -44,9 +47,7 @@ Uh oh - alphabetical! Enter `forcats` - a wonderful library from the `tidyverse`
 ```{r forcats_relevel}
 library(forcats)
 
-
-hadcrut_temp_anomoly <- hadcrut_temp_anomoly %>%
-  mutate(month_name = fct_inorder(month_name))
+hadcrut_temp_anomoly$month_name <- fct_inorder(hadcrut_temp_anomoly$month_name)
 
 levels(hadcrut_temp_anomoly$month_name)
 ```
@@ -57,23 +58,82 @@ Notice now that `month_name`'s class changes when we look at `hadcrut_temp_anomo
 hadcrut_temp_anomoly
 ```
 
-### 2. Types of plots
+**Exercise:** Make a new column that contains the same information as `month_name`. Now, try `fct_rev()`, `fct_relevel()`, and last, `fct_recode()` on it to futz with the factor levels. After each one, look at the output of `levels()` to see what you did. 
 
-#### 2.1 Starting a plot
-`ggplot2` contains a number of different types of geometries for displaying points. However, all of them begin by giving ggplot2 some information. What data is going to be used? What elements of that data will map onto different aesthetic values and scales in the plot? We'll start by creating the base of our plot with the x-axis being month and the y-axis being temperature anomoly.
+### 2. Your first ggplot
 
-```{r ggplot_base}
+#### 2.1 Visualizing distributions 
+
+All right! Let's try out `ggplot2`. `ggplot2` works simply by you specifying things in roughly the following order:  
+1. A `ggplot2` object which links to a data set and has information about aesthetics.  
+2. A `geom` or geometry which specifies how the data is to be seen.  
+3. Other bells and whistles which we will get to.  
+  
+We add these pieces together with a `+` sign. So let's start with something simple, just visualizing a distribution. First, we have to create a ggplot. We'll link it to the `hadcrut_temp_anomoly` data, and map x to anomaly using the `aes` function, as we're going to look at the distribution of anomaly.
+
+```{r first_ggplot}
 library(ggplot2)
 
+had_dens <- ggplot(data = hadcrut_temp_anomoly,
+       mapping = aes(x = anomaly))
+
+had_dens
+```
+
+Wait, what? Nothing happened! That actually makes sense, as we haven't told `ggplot2` anything about plotting! There's no `geom`. For starters, let's try the simple `geom_histogram()`
+
+```{r hist}
+had_dens +
+  geom_histogram()
+``` 
+
+Nice! Aside from R yelling at us and giving telling us to use a different bin size, it's not bad!  
+  
+**Exercise:** Now you try `geom_density`. How's it look? If you want, try adding arguments like `fill`, `color`, and `alpha` to `geom_density()` if you want to get fancy.
+
+#### 2.2 Visualizing multiple distributions 
+
+To view multiple distributions, we'll need aesthetics that specify groupings. We'll look in a minute at how we put those on an axis themselves, but for now, let's introduce `group`.
+
+```{r dens_group}
+had_dens_group <- ggplot(data = hadcrut_temp_anomoly,
+       mapping = aes(x = anomaly, group=month_name))
+```
+
+There's a lot we can try here. Let's revisit one old friend.
+
+```{r hist_stack}
+had_dens_group + 
+  geom_density()
+```
+
+Well that shows something interesting, doesn't it! What if we don't overlap? We can try a few different 'position' arguments.
+
+```{r dens_stack}
+had_dens_group + 
+  geom_density(position="stack")
+
+had_dens_group + 
+  geom_density(position=position_dodge(width=3))
+```
+
+
+**Exercise:** Now you try `geom_histogram`. How's it look? Bad, right? Try different colors, alphas, and fills to see if you can improve. Maybe a different position?
+
+
+### 3. Two dimensions.
+
+#### 3.1 Starting a plot
+`ggplot2` contains a number of different types of geometries for displaying information in two dimensions However, all of them begin by giving ggplot2 some information, just as before. What data is going to be used? What elements of that data will map onto different aesthetic values and scales in the plot? We'll start by creating the base of our plot with the x-axis being month and the y-axis being temperature anomoly.
+
+```{r ggplot_base}
 had_plot_base <- ggplot(data = hadcrut_temp_anomoly,
                         mapping = aes(x = month_name, y = anomaly))
 ```
 
-Great! We have the basics of our plot saved as an object. We do this as, like `dplyr`, we build succesively onto each `ggplot` - with addition rather than a pipeline, but the principle is the same.
+Great! We have the basics of our plot saved as an object. 
 
-Now, note, if you just type `had_plot_base` into R right now, a blank plot comes up. That's because, while we've given the plot data to work with, we haven't specified how we want the plot displayed.
-
-#### 2.2 Scatterplots
+#### 3.2 Scatterplots
 
 To take a basic plot and add a geometry choice to it, we use one of the family of `geom_`s in `ggplot2`. One of the most basic plot types we ever encounter is the scatterplot. y versus x. That's all. For that, we have `geom_point()`
 
@@ -92,7 +152,7 @@ had_plot_base +
 Note - all of these are relative to 1. Well, now we can see the distribution of points a bit better, given overlap. But....
 
 
-#### 2.3 Jitter
+#### 3.3 Jitter
 Maybe we want to add a bit of random noise to the points, to better visualize what's going on here. For that, there's `geom_jitter`.
 
 ```{r jitter}
@@ -107,42 +167,23 @@ had_plot_base +
   geom_jitter(width=0.5, height=0, alpha=0.8)
 ```
 
-#### 2.4 Boxplot, Violins, and stacking.
-This is all well and good, but, eyeballing is not the same as some solid information on the distribution of the data. For that, there is our old friend the boxplot.
+#### 2.4 Exercise: Boxplot, Violins, and stacking.
+This is all well and good, but, eyeballing is not the same as some solid information on the distribution of the data. Let's try some of the 2D ways of visualizing data.   
 
-```{r boxplot}
-had_plot_base +
-  geom_boxplot()
+1. Try out the following geoms - `geom_boxplot()`, `geom_violin()`, `stat_summary()`. Which do you prefer?  
+2. Try adding multiple geoms together. Does order matter?  
+3. If you want to get saucy, install `ggridges`. You'll have to swap x and y in your mapping, but, try out `geom_density_ridges()`  
+
+```{r ridges, echo=FALSE, message=FALSE}
+library(ggridges)
+ggplot(data = subset(hadcrut_temp_anomoly, hadcrut_temp_anomoly$year>1990),
+                        mapping = aes(y =factor(year), x = anomaly)) + geom_density_ridges()
 ```
 
-Note, with the boxplot, you can monkey with a few other options - both `color` and `fill` are different.
 
-```{r boxplot_color}
-had_plot_base +
-  geom_boxplot(color="orange", fill="lightblue")
-```
 
-Ugly, but you see what I'm getting at.
-
-To see the distribution in more detail, we also have the violin plot from `geom_violin` which shows even more distribution detail with kernel density estimation.
-
-```{r violin}
-had_plot_base +
-  geom_violin()
-```
-
-Neat. What if we want something like a violin plot, but to also see the data? The beauty of having separate geometries for data is that we can layer them.
-
-```{r viopoint}
-had_plot_base +
-  geom_violin() +
-  geom_point(alpha=0.6, size=3)
-```
-
-You could also try this with a boxplot and jittering.
-
-#### 2.5 Lines
-OK - but if we're going to build the animation, we need lines, no? There is, of course, a `geom_line` that shows lines connecting points, but does not show the points (yes, you can layer both `geom_line` and `geom_point`).
+#### 3.5 Lines
+OK - but these are timeseries! We need lines, no? There is, of course, a `geom_line` that shows lines connecting points, but does not show the points (yes, you can layer both `geom_line` and `geom_point`).
 
 ```{r line_bad}
 had_plot_base +
@@ -160,22 +201,14 @@ had_plot_base +
 
 Perfect! We are on our way!
 
-#### 2.6 Exercises
+**Exericise:** Try a line plot, using `group = month`. Feel free to play with other elements of the plot, such as alpha.
 
-1) Using `geom_hist`, what does the distribtion of anomolies look like.
-
-1) Plot anomoly by year. First, plot the points.
-
-2) Now, try it as a boxplot. You'll need to add `group = year` to the mapping.
-
-3) Last, try a line plot, using `group = month`.
-
-### 3. Adding information via aesthetic mapping
-We've got our line plot working the way we want it to. But we need to add other information for later visualization. 
+### 4. Adding information via aesthetic mapping
+We've got our line plot working the way we want it to. But we have other information.
 
 R provides a number of different scales that can all be tied to a variable inside the `aes` function. Most commonly, we'll use color, fill, alpha, size, and shape. There are other options, such as lty for line type, but those will be specific to the geom.
 
-### 3.1 Color
+#### 4.1 Color
 
 As color is the most common modification, let's concentrate on that. The lessons can be used broadly for other scales.
 
@@ -197,7 +230,7 @@ had_lines +
 
 This works great. We could also have used `scale_color_gradient` exactly the same way to achieve the same results. If you want to know more of what colors are available in R, see [this post](http://research.stowers-institute.org/efg/R/Color/Chart/) or 
 
-#### 3.2 More on Gradients
+#### 4.2 More on Gradients
 
 This is **much** better. But it's still hard to see the middle ranges of years  For that, we have the `scale_gradient_2` function, which takes an argument for what the midpoint color should be, but then **you** have to specify the value for that midpoint. Let's just go with the 1925.
 
@@ -243,7 +276,7 @@ demo.pal(n)
 ```
 Try one, and see what it does to you!
 
-#### 3.3 More Organized Gradients
+#### 4.3 More Organized Gradients
 
 There are of course a ton of packages with other pallates our there. One of the most popular, because it's color selection is based on research looking at color blindness, and how we see sequential or diverging palattes of color, is `RColorBrewer`. You can view a lot more about it at http://colorbrewer2.org/ - for now, let's take a gander at what it provides.
 
@@ -258,10 +291,11 @@ That's a lot. Which of these do you think is best for seeing differences between
 
 ```{r brewer1}
 had_lines +
-  scale_color_gradientn(colors=brewer.pal(7, "BrBG"))
+  scale_color_gradientn(colors=brewer.pal(n = 7, 
+                                          name = "BrBG"))
 ```
 
-#### 3.4 More Color Packages
+#### 4.4 More Color Packages
 In point of fact, there are **many** different color palette packages out there. I'll just leave you with two more. The first is my *personal* favorite - the Wes Anderson package - https://github.com/karthik/wesanderson. Don't worry, there are install packages on the github page. 
 
 The second is the viridis palatte. This is a pretty common yellow--blue-based palette (and the package - https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html - also comes with a 'magma' palette as well.) These two palettes are great as they show up well for people with color blindness. Heck - if you really want to have color-blind safe color schemes, you might also want to check out the [`dichromat`](https://cran.rstudio.com/web/packages/dichromat/index.html) package - it not only contains multiple colorblind safe palettes, but it also allows you to see what your color palette will look like under different forms of color blindness.
@@ -270,22 +304,20 @@ So, it's no accident that viridis is what was used for the original animation. L
 
 ```{r viridis}
 library(viridis)
-had_lines_color <- had_lines +
+had_lines +
   scale_color_viridis(guide="none")
-
-had_lines_color
 ```
 
-#### 3.5 Exercises
+#### 4.5 Exercises
 
-1) What happens to our histogram if we add a fill argument. Try `fill = factor(year)` (note that without the factor, nothing happens!).
+1. What happens to our histogram if we add a fill argument. Try `fill = month` and `fill = factor(year)` (note that without the factor, nothing happens!). You might also want to remove the guide with `+ guides(fill = "none")`.
 
-2) Returning to our line plot of year by anomoly, try coloring *also* by anomoly. First use the default palatte, and then try a blue-white-red.
+2. Create a line plot of year on the x and anomoly on the y. Include month as a group. Try coloring by anomoly as well. First use the default palatte, and then try a blue-white-red.
 
-3) Now color by month. Try at least two different palettes either of your own devising or from an additional package. Note, if you use `month_name`, you'll be mucking about with `scale_color_manual`. RColorBrewer handles discrete groups easily. 
+3. Now color that line plot by month. Try at least two different palettes either of your own devising or from an additional package. Note, if you use `month_name`, you'll be mucking about with `scale_color_manual`. Or you can use RColorBrewer which handles discrete groups easily using `scale_color_brewer()`. 
 
 
-### 4. Facets to see grouped information
+### 5. Facets to see grouped information
 
 Before we get to the circular animation hotness, I wanted to take a brief digression to show another way to visualize multiple dimensions. Figures often have multiple panels, each of which shows a different slice of the data. In `ggplot`, these are called facets. Before we jump whole hog into seeing this big timeseries, I want us to really look at each month and see if there are trends there. So, I want us to begin a slightly different plot - let's look at temperature anomoly over time, but with different lines showing different months, and the x axis is year.
 
@@ -308,18 +340,23 @@ had_months +
 
 The second is a function that allows us to facet with two variables - one with rows and one with columns.  We can't do that with this example, but, in essence, you would use a similar tilda notation as above - `facet_grid(rows ~ cols)`
 
-#### 4.1 Exercises
+#### 5.2 Faceting by continuous values
+It's a little bit more difficult to facet our monthly plot. Maybe we want to split it up by decade. But, wait, year is continuous. What to do? R and `ggplot2` have a number of functions based off of the base function `cut()`. Let's try the first, that can make decadal plots.
 
-1) It's a little bit more difficult to facet our monthly plot. We have too many years. But, what about splitting by decade? Use dplyr to create a decade column where to get decade, simply `round(year/10)*10).
+```{r cut}
+had_lines +
+  facet_wrap(~cut_width(year, 10))
+```
 
-2) Now facet out lineplot by decade.
-
-3) Use dplyr to get the average anomoly for each month/decade combination.
-
-4) Plot the relationship between year and anomoly, faceting by month.
+It's not pretty (that's a lot of decades!), but you can see the principle.
 
 
-### 5. Visualizing trends and summaries
+**Exercise:** 
+1. Try out `cut_interval` and `cut_number`. What do they do?  
+2. Make a plot where facets and colors reflect the same information.
+
+
+### 6. Visualizing trends and summaries
 
 As we move further into statistical visualization, `ggplot2` has a number of statistical summary plots. THe first, for grouped data, is `stat_summary`. This function will take grouped data and calculate means and other summary information. `fun.data` takes a function as an argument to calculate summary statistics. For example:
 
@@ -344,10 +381,11 @@ had_months +
   stat_smooth(method="lm")
 ```
 
-### 6. Making your plot theme your own
+### 7. Making your plot theme your own
 
 OK, getting back to our initial graph - the grey background, the font type, etc., might not really be doing it for you.
 ```{r echo=FALSE}
+had_lines_color <- had_lines + scale_color_viridis()
 had_lines_color
 ```
 
@@ -386,15 +424,13 @@ had_lines_color_theme <- had_lines_color +
   theme_solarized(light=FALSE)
 ```
 
-#### 6.1 Exercises
+**Exercise:** Take the year by anomoly plots and apply three different themes of your choice to them.
 
-1) Take the year by anomoly plots and apply three different themes of your choice to them.
-
-### 7. Plot annotation
+### 8. Plot annotation
 OK, now for the fripperies and frills - annotating our plots with information! In the GIF above, we wad demarcations of certain critical threshold as well as a title. There were also years that changed as time went by, but we'll save that for a moment.
 
-#### 7.1 Adding lines
-First, there were two critical lines - 1.5 and 2.0 degrees C. To add a vertical or horizontal line to the plot, we use `geom_vline` or `geom_hline`. These accept a `xintercept` or `yintercept`, respectively, to indicate where they should cross a plot. So, to add to our current plot.
+#### 8.1 Adding lines
+First, there are two critical lines - 1.5 and 2.0 degrees C. To add a vertical or horizontal line to the plot, we use `geom_vline` or `geom_hline`. These accept a `xintercept` or `yintercept`, respectively, to indicate where they should cross a plot. So, to add to our current plot.
 
 ```{r add_lines}
 had_lines_annotated <- had_lines_color_theme +
@@ -403,7 +439,7 @@ had_lines_annotated <- had_lines_color_theme +
 had_lines_annotated
 ```
 
-### 7.2 Adding text annotations
+### 8.2 Adding text annotations
 
 We also want to have some annotations on the lines that say what each one is. For that, we could use `geom_text`, but, that can get messy with facets, etc. Better to use `annotate`. This function takes an x and y coordinate, a `geom` type, and then all of the arguments needed for that geom. Now, often we use this with just `geom_text`, but that gets tricky given that we want to overlay this on a line.
 
@@ -427,7 +463,7 @@ had_lines_annotated
 
 Gorgeous!
 
-#### 7.3 Title
+#### 8.3 Title
 
 And last, titles are easy. There's a function for it! `ggtitle`
 
@@ -438,11 +474,11 @@ had_lines_annotated <- had_lines_annotated +
 had_lines_annotated
 ```
 
-### 8. Modifying axes
+### 9. Modifying axes
 
-We're coming down the home stretch. And before we animate, we need to change to that round axis. And remove some of the axis cruft.
+Of course, we've done this with simple cartesian axes that we haven't modified at all. We don't always want to do that.
 
-#### 8.1 Axis limits
+#### 9.1 Axis limits
 
 First, we want to have the lines extend all the way to the edges of the graph. So, to do that, we want the limits of the x-axis to be set to Jan and Dec. The `xlim()` function (and there is a `ylim()` function as well) should take care of that. If we had a continuous scale, we'd just feed a vector, with minimum and maximum - e.g. `c(1,12)`. 
 
@@ -450,14 +486,14 @@ But, here we want to feed the factor vector from which everything is derived. We
 
 ```{r xlim}
 had_lines_annotated_final <- had_lines_annotated + 
-  scale_x_discrete(expand=c(0,0))
+  coord_cartesian(expand=FALSE)
   
 had_lines_annotated_final
 ```
 
 The labels get cut off - but they'll come back in a second!
 
-#### 8.2 Axis modification
+#### 9.2 Axis modification
 
 There are a number of ways to modify an axis. Using `scale_x_continuous()` provides access to a rich number of ways to modify the x axis (or replace with y, and you get the picture).
 
@@ -470,18 +506,19 @@ had_lines_annotated_final +
 
 Here, this isn't a great idea, as we lose the negative numbers. But, you can begin to see the power of how the different axis scales can work. We can invoke an arbitrary scale using the `trans` argument of `scale_x_continuous()`, although there are many already buit in.
 
-We want a circular plot, however, which implies polar coordinates. And there's an option for that, too!
+We want a circular plot, however, which implies polar coordinates. And there's an option for that, too! We'll also have to deal with that expansion issue again.
 
 ```{r polar}
 had_lines_annotated_final <- had_lines_annotated_final +
-  coord_polar()
+  coord_polar()+ 
+  scale_x_discrete(expand=c(0,0))
   
 had_lines_annotated_final
 ```
 
 Oh! Fancy! Almost there!
 
-#### 8.3 Axis labeling
+#### 9.3 Axis labeling
 The whole month name, anomaly think on the axes is a little odd. Fortunately, we can replace the string labels on either axis. We could have put in other things, but for now, let's go blank.
 
 ```{r axis_lab}
@@ -492,34 +529,44 @@ had_lines_annotated_final <- had_lines_annotated_final +
 had_lines_annotated_final
 ```
 
-### 9. Animation
-
-The last step we're going to take for now is to make the animation. To make an animation,we need to use the gganimate package and add a new aesthetic to our figure - first, `frame=year` which tells us that year is the property we're going to iterate over. Second, `cumulative=TRUE` which means we'll be building up lines as we go along.
-
-```{r animate, message=FALSE, warning=FALSE, cache=TRUE,  output=FALSE, results="hide"}
-library(gganimate)
-
-had_animation <- had_lines_annotated_final +
-  aes(frame=year, cumulative = TRUE)
-
-gg_animate(had_animation, saver="gif", "animate.gif", interval=0.2)
-```
-![](animate.gif)
-
-This works beautifully, but wither year? For that, we'll have to add an additional annotation. We'll do that with `geom_text` as we can add a frame aesthetic.
-
-```{r animate2, message=FALSE, warning=FALSE, cache=TRUE, output=FALSE, results="hide"}
-library(gganimate)
-
-had_animation <- had_animation +
-  geom_text(mapping=aes(label=year, frame=year, cumulative = FALSE), 
-            x=1, y=-1, 
-            color="white")
-
-gg_animate(had_animation, saver="gif", "animate_text.gif", interval=0.2)
-```
-![](animate_text.gif)
-
-Is it exactly the same? No. And there are things we could have done to clean it up. But, man, that is close - and shows a number of different principles that were used in creating this particular figure.
-
 For more great ggplot2 extensions, see https://www.ggplot2-exts.org/
+
+
+### 10. Animation
+
+Right now, we're in the midst of a great re-write of the package that actually performs animations with ggplot. The [gganimate](https://github.com/thomasp85/gganimate) package attempts to implement a nice consistent grammer of animation, much like a grammar for graphics. It's not on CRAN yet, so we'll have to install it and its companion, `transformr` with devtools.
+
+```{r, eval=FALSE}
+install.packages("devtools") #if you don't have it yet
+devtools::install_github("thomasp85/farver")
+devtools::install_github("thomasp85/tweenr")
+devtools::install_github("thomasp85/transformr")
+devtools::install_github("thomasp85/gganimate")
+```
+
+`gganimate` introduces a few new aesthetics for animations. The first is the `transition_*` series that defines how elements move between each other in a plot. For example, to generate the initial animation, we'd use the `transition_reveal()` which gradually adds pieces to the animation. It uses the first argument to say what is being added and the `along` argument to say in what order it should be added.
+
+```{r animate, cache=TRUE}
+library(gganimate)
+
+had_lines_annotated_final  + 
+   transition_reveal(year, along = year) 
+```
+
+What happens if you use `along=as.numeric(month_name)`? Note, we convert to a numeric as `gganimate` needs a number, and does not know how to order characters.
+
+There are many many other elements to gganimate - it's a growing library - such as leaving trails behind points, and more - but that's a tutorial for another time (or one you should write!)
+
+```{r trail, cache=TRUE}
+
+had_points <- ggplot(data = hadcrut_temp_anomoly %>% filter(year < 1870),
+                     aes(x = year, y = anomaly, color = month_name)) +
+  geom_point() 
+
+had_points_anim <- had_points +
+  transition_time(year) 
+
+had_points_anim +
+  shadow_trail(0.05, max_frames=10) +
+  exit_fade()
+```
