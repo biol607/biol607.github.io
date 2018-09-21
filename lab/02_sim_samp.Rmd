@@ -1,6 +1,10 @@
 ---
 title: "Simulation for Estimation of Parameter Uncertainty"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
