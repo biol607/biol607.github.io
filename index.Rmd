@@ -16,7 +16,7 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 
 **Weekly Schedule:** Monday & Wednesday 2:30-4:00, Lab Friday 10-12:30pm in the Wheatley Biology Conference Room
 
-**Office Hours:** Prof. Byrnes will hold office hours Tuesday from 1:30-3 and Wednesday 11-12:30.
+**Office Hours:** Prof. Byrnes will hold office hours Thursday from 2-4:30 or by appointment. 3130 in the ISC.
 
 **Source for this Website:** https://github.com/biol607/biol607.github.io/
 &nbsp;  
