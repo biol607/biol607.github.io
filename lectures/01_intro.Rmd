@@ -16,9 +16,11 @@ output:
 
 ## {data-background="images/01/Sonoma_coast.jpg"}
 <!-- comments for next year 
-  - futz with philosophy example
-  - eliminate last part of class
+  - Maybe give the what is this class first before technology, etc.
+  - It gets janky at the beginning
+  - Make first pop quiz ticky box only
 -->
+
 <br><br><center><div style="font-size: 2em;font-weight: bold; color:black;background-color:white;opacity:0.8;"> Introduction  to An  Introduction  to  Computational  Data  Analysis  for  Biology  </div>  
   
 <br>  

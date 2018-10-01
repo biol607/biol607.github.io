@@ -1,0 +1,37 @@
+---
+title: "Hypothesis Testing"
+author: "Biol 607"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 1) W&S Chapter 6 questions 15, 21, and 29
+
+### 2) W&S Chapter 7 question 22 - use R to calculate a p-value
+
+### 3) From the Lab: Many SDs and Alphas
+Here's the exercise we started in lab. Feel free to look back copiously at the lab handout if you're getting stuck. Remember, for each step, write-out in comments what you want to do, and then follow behing with code.
+
+Now, let's assume an average population-wide resting heart rate of 80 beats per minute with a standard deviation of 6 BPM.
+
+A given drug speeds people's heart rates up on average by 5 BPM. What sample size do we need to achieve a power of 0.8?
+
+#### 3.1) Start up your simulation
+Make a simulated data frame to look at the effects of multiple sample sizes: from 1-20, with 500 simulations per sample size, and also multiple SD values, from 3 through 10 (just 3:10, no need for non-integer values). You're going to want `crossing` with your intitial data frame of just sample sizes and a vector of sd values to start. Then generate samples from the appropriate random normal distribution.
+
+#### 3.2) Z!
+OK, now that you've done that, calculate the results from z-tests. Plot p by sample size, using `facet_wrap` for different SD values.
+
+#### 3.3) P and Power
+Now plot power for an alpha of 0.05, but use color for different SD values. Include our threshold power of 0.8.
+
+#### 3.4) Many alphas
+Last, use `crossing` again to explore changing alphas from 0.01 to 0.1. Plot power curves with different alphas as different colors, and use faceting to look at different SDs. 
+
+#### 3.5) What does it all mean? What do you learn about how alpha and SD affect power? 
+
+#### 3.6) How do you think that changing the effect size would affect power? 
+You can just answer this without coding out anything. Based on what we've learned so far - what do you think?
