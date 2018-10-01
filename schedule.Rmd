@@ -71,7 +71,6 @@ __Lecture:__ [Frequentist Hypothesis Testing](lectures/07_probability_hypotheses
 __Lab Topic:__ [Distributions in R, Frequentist Hypothesis testing via simulation](lab/05_hypothesis_power.html)  \
 __Reading:__ W&S 5-7, W&G Chapter 7, 16, [Abraham Lincoln and Confidence Intervals](http://andrewgelman.com/2016/11/23/abraham-lincoln-confidence-intervals/) and links therein    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses-2018  
-__In Class Code:__ [Distributions and Power](in_class_code_2016/05_distributions_power.R)  
 __Quiz:__ http://tinyurl.com/hyp-pre-quiz  
 __In Class Code:__  [Distributions and Power](in_class_code_2016/05_distributions_power.R)\
 __Homework:__ [hypothesis testing and power](./homework_2018/04_hypothesis_power.html)  
@@ -89,7 +88,7 @@ __Discussion Reading:__ [ASA Statement on P-Values](http://byrneslab.net/classes
 (sign up in [here](https://etherpad.wikimedia.org/p/607-t_tests-2018))  (also feel free to read them all)  
 __Additional Readings on P-Values__: [Peaceful negotiation in the face of so-called ‘methodological terrorism’](https://errorstatistics.com/2016/10/01/a-new-front-in-the-statistics-wars-peaceful-negotiation-in-the-face-of-so-called-methodological-terrorism/), [P-value madness: A puzzle about the latest test ban (or ‘don’t ask, don’t tell’)](https://errorstatistics.com/2015/10/10/p-value-madness-a-puzzle-about-the-latest-test-ban-or-dont-ask-dont-tell/), [The Paradox of Replication, and the vindication of the P-value (but she can go deeper) ](https://errorstatistics.com/2015/08/31/the-paradox-of-replication-and-the-vindication-of-the-p-value-but-she-can-go-deeper-i/)  
 __Etherpad__: https://etherpad.wikimedia.org/p/607-t_tests-2018  
-__In Class Code:__ [t and chi square](in_class_code_2016/06_t_chisq.R)
+<!-- __In Class Code:__ [t and chi square](in_class_code_2016/06_t_chisq.R) -->
   
 ### Week 6.   
 ```{r next_date, echo=FALSE}
