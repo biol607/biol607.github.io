@@ -7,11 +7,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -54,22 +54,394 @@
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
 
 </head>
 <body>
@@ -78,21 +450,30 @@
 
 
 <section id="section" class="slide level2" data-background="images/09/guiness.png">
-<h1></h1>
+<h2></h2>
+<!-- next year, a few small fixes of formulae - what is sample size 
+of unpaired t-test, show more formulae?-->
 <br><br><br><br>
 <div style="background-color:white; align:center; font-size: 2em;">
 Differences Between Two Groups
 </div>
 </section>
+<section id="quiz" class="slide level2">
+<h2>Quiz!</h2>
+<br><br><br>
+<h1>
+<a href="http://bit.ly/t-test-pre-2018" class="uri">http://bit.ly/t-test-pre-2018</a>
+</h1>
+</section>
 <section id="section-1" class="slide level2">
-<h1></h1>
+<h2></h2>
 <Br><br><br>
 <h1>
-<a href="https://etherpad.wikimedia.org/p/607-t_tests" class="uri">https://etherpad.wikimedia.org/p/607-t_tests</a>
+<a href="https://etherpad.wikimedia.org/p/607-t_tests-2018" class="uri">https://etherpad.wikimedia.org/p/607-t_tests-2018</a>
 </h1>
 </section>
 <section id="outline" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Statistical Golems, Z, and T<br />
 <br />
@@ -104,17 +485,17 @@ Differences Between Two Groups
 </ol>
 </section>
 <section id="statistical-golems" class="slide level2">
-<h1>Statistical Golems</h1>
+<h2>Statistical Golems</h2>
 <center>
 (sensu Richard McElreath)
 </center>
 <p><img src="images/09/golem.png" style="width:42.0%" /></p>
 </section>
 <section id="section-2" class="slide level2" data-background="images/08/Welchcorgipembroke.JPG">
-<h1></h1>
+<h2></h2>
 </section>
 <section id="the-z-test" class="slide level2">
-<h1>The Z-Test</h1>
+<h2>The Z-Test</h2>
 <ul>
 <li class="fragment">Let’s assume I have a BOX of 15 Corgis. I suspect fraud.<br />
 <br />
@@ -127,8 +508,31 @@ Differences Between Two Groups
 <span class="fragment"><span class="math display">\[\Large H_o: \bar{X} - \mu = 0\]</span></li>
 </ul>
 </section>
-<section id="when-how-to-use-z-test" class="slide level2">
-<h1>When &amp; How to use Z-Test</h1>
+<section id="our-philosophy" class="slide level2">
+<h2>Our Philosophy</h2>
+<ol type="1">
+<li class="fragment">What is your question?<br />
+</li>
+<li class="fragment">Conceive of a model of your system<br />
+</li>
+<li class="fragment">How much do you need to know to answer your question?<br />
+</li>
+<li class="fragment">What data do you need to parameterize your model of the world?
+<ul>
+<li class="fragment">Do you need an experiment?<br />
+</li>
+<li class="fragment">What breadth of observations do you need?</li>
+</ul></li>
+<li class="fragment">Fit your model of the world
+<ul>
+<li class="fragment">Make sure you don’t burn down Prague<br />
+</li>
+</ul></li>
+<li class="fragment">Query your model to answer your question</li>
+</ol>
+</section>
+<section id="when-how-to-use-z-test-our-model-of-the-world" class="slide level2">
+<h2>When &amp; How to use Z-Test: Our Model of the World</h2>
 <center>
 We want to calculate a test statistic (z) &amp; compare it to the standard normal curve (<span class="math inline">\(\mu = 0, \sigma=1\)</span>)
 </center>
@@ -140,15 +544,15 @@ We want to calculate a test statistic (z) &amp; compare it to the standard norma
 <span class="fragment"> 3. Now calculate a test statistic </span><br />
 
 </p>
-<p><span class="fragment"><span class="math display">\[\Large z = \frac{\bar{X} - \mu}{\sigma_{\bar{X}}}\]</span></span></p>
+<p><span class="fragment"><span class="math display">\[\Large z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}\]</span></span></p>
 </section>
 <section id="this-is-a-golem" class="slide level2">
-<h1>This is a Golem</h1>
+<h2>This is a Golem</h2>
 <div id="left">
-<br><span class="math display">\[\LARGE z = \frac{\bar{X} - \mu}{\sigma_{\bar{X}}}\]</span>
+<br><span class="math display">\[\LARGE z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}\]</span>
 </div>
 <div id="right">
-<p><img src="09_the_t_test_files/figure-revealjs/norm-1.jpeg" title="" alt="" width="768" /></p>
+<p><img src="09_the_t_test_files/figure-revealjs/norm-1.jpeg" width="768" /></p>
 </div>
 <div class="fragment" style="position:relative">
 <ul>
@@ -160,46 +564,41 @@ We want to calculate a test statistic (z) &amp; compare it to the standard norma
 </div>
 </section>
 <section id="what-drives-my-golem" class="slide level2">
-<h1>What Drives my Golem?</h1>
+<h2>What Drives my Golem?</h2>
 <p><br><br> <img src="images/09/z.jpg" id="noborder" align="left" style="width:75.0%" /> <img src="images/09/golem_2.jpg" id="noborder" align="right" style="width:20.0%" /></p>
 </section>
 <section id="is-this-a-good-golumn-for-realistic-sample-sizes" class="slide level2">
-<h1>Is this a Good Golumn for Realistic Sample Sizes?</h1>
-<video width="768"  controls loop>
-<source src="09_the_t_test_files/figure-revealjs/t-anim-.webm" />
-<p>
-video of chunk t-anim
-</p>
-</video>
+<h2>Is this a Good Golumn for Realistic Sample Sizes?</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/t-anim-1.gif" /></p>
 </section>
-<section id="is-this-a-good-golumn-for-realistic-sample-sizes-1" class="slide level2">
-<h1>Is this a Good Golumn for Realistic Sample Sizes?</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/t-non-anim-1.jpeg" title="" alt="" width="768" /></p>
+<section id="with-your-sample-size-might-you-burn-down-prague" class="slide level2">
+<h2>With your sample size, might you burn down Prague?</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/t-non-anim-1.jpeg" width="768" /></p>
 <ul>
 <li class="fragment">Fat tails, leptokurtic, but better with higher n</li>
 </ul>
 </section>
 <section id="section-3" class="slide level2" data-background="images/09/guiness_full.jpg">
-<h1></h1>
+<h2></h2>
 </section>
 <section id="section-4" class="slide level2" data-background="images/09/gosset.jpg">
-<h1></h1>
+<h2></h2>
 </section>
 <section id="section-5" class="slide level2" data-background="black">
-<h1></h1>
+<h2></h2>
 <Br><br><br> <img src="images/09/t_distribution.png" style="width:90.0%" /> <Br><br>
 <div style="position:absolute; bottom:0px; left:0px; font-size:0.5em">
 xkcd
 </div>
 </section>
-<section id="a-t-distributed-golem" class="slide level2">
-<h1>A T-Distributed Golem</h1>
+<section id="a-t-distributed-golem-a-new-model-of-the-world" class="slide level2">
+<h2>A T-Distributed Golem: A New Model of the World</h2>
 <p><br />
 <br />
 <img src="images/09/t.png" id="noborder" /></p>
 </section>
 <section id="t-versus-normal" class="slide level2">
-<h1>T Versus Normal</h1>
+<h2>T Versus Normal</h2>
 <ul>
 <li class="fragment">A Normal Distribution is defined by a mean and a SD
 <ul>
@@ -210,7 +609,7 @@ xkcd
 </ul>
 </section>
 <section id="degrees-of-what" class="slide level2">
-<h1>Degrees of what?</h1>
+<h2>Degrees of what?</h2>
 <ul>
 <li class="fragment">Let’s say you <strong>estimate</strong> a mean<br />
 <br />
@@ -226,11 +625,11 @@ xkcd
 </ul>
 </section>
 <section id="df-and-distribution-shape" class="slide level2">
-<h1>DF and Distribution Shape</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/dist_shape_t-1.jpeg" title="" alt="" width="768" /></p>
+<h2>DF and Distribution Shape</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/dist_shape_t-1.jpeg" width="768" /></p>
 </section>
 <section id="using-our-t-statistic" class="slide level2">
-<h1>Using our T Statistic</h1>
+<h2>Using our T Statistic</h2>
 <p><img src="images/09/t_blank.jpg" id="noborder" style="width:30.0%" /></p>
 <ul>
 <li class="fragment">To test for difference from 0, we assume <span class="math inline">\(\mu = 0\)</span></li>
@@ -238,7 +637,7 @@ xkcd
 </ul>
 </section>
 <section id="outline-1" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Statistical Golems, Z, and T<br />
 <br />
@@ -249,8 +648,39 @@ xkcd
 <li>Comparing Means with a t-test</li>
 </ol>
 </section>
+<section id="does-bird-immunococompetence-decrease-after-a-testosterone-impant" class="slide level2">
+<h2>Does bird immunococompetence decrease after a testosterone impant?</h2>
+<p><img src="images/09/blackbird.jpg" /></p>
+</section>
+<section id="differences-in-antibody-performance" class="slide level2">
+<h2>Differences in Antibody Performance</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/blackbird_plot-1.jpeg" width="768" /></p>
+</section>
+<section id="our-philosophy-1" class="slide level2">
+<h2>Our Philosophy</h2>
+<ol type="1">
+<li class="fragment">What is your question?<br />
+</li>
+<li class="fragment">Conceive of a model of your system<br />
+</li>
+<li class="fragment">How much do you need to know to answer your question?<br />
+</li>
+<li class="fragment">What data do you need to parameterize your model of the world?
+<ul>
+<li class="fragment">Do you need an experiment?<br />
+</li>
+<li class="fragment">What breadth of observations do you need?</li>
+</ul></li>
+<li class="fragment">Fit your model of the world
+<ul>
+<li class="fragment">Make sure you didn’t burn down Prague<br />
+</li>
+</ul></li>
+<li class="fragment">Query your model to answer your question</li>
+</ol>
+</section>
 <section id="comparing-paired-groups-h_0-difference-0" class="slide level2">
-<h1>Comparing Paired Groups<br><span class="math inline">\(H_0\)</span>: Difference = 0</h1>
+<h2>Comparing Paired Groups<br><span class="math inline">\(H_0\)</span>: Difference = 0</h2>
 <p><img src="images/09/t_paired.jpg" id="noborder" style="width:30.0%" /></p>
 <ul>
 <li class="fragment"><span class="math inline">\(\bar{x_d}\)</span> is the mean difference between paired samples</li>
@@ -260,21 +690,13 @@ xkcd
 </ul></li>
 </ul>
 </section>
-<section id="does-bird-immunococompetence-decrease-after-a-testosterone-impant" class="slide level2">
-<h1>Does bird immunococompetence decrease after a testosterone impant?</h1>
-<p><img src="images/09/blackbird.jpg" /></p>
-</section>
-<section id="differences-in-antibody-performance" class="slide level2">
-<h1>Differences in Antibody Performance</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/blackbird_plot-1.jpeg" title="" alt="" width="768" /></p>
-</section>
 <section id="whats-the-difference" class="slide level2">
-<h1>What’s The Difference?</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/blackbird_diff-1.jpeg" title="" alt="" width="768" /></p>
+<h2>What’s The Difference?</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/blackbird_diff-1.jpeg" width="768" /></p>
 <p><span class="fragment" style="color:red">Does this look normal?</span></p>
 </section>
-<section id="evaluating-your-golem-assumptions" class="slide level2">
-<h1>Evaluating Your Golem: Assumptions</h1>
+<section id="evaluating-your-golem-assumptions-to-keep-prague-fire-free" class="slide level2">
+<h2>Evaluating Your Golem: Assumptions to Keep Prague Fire-Free</h2>
 <ul>
 <li class="fragment">Before we look at p-values and all that, we need to test assumptions<br />
 <br />
@@ -289,7 +711,7 @@ xkcd
 </ul>
 </section>
 <section id="assessing-normality" class="slide level2">
-<h1>Assessing Normality</h1>
+<h2>Assessing Normality</h2>
 <ul>
 <li class="fragment">There are many ways…<br />
  </li>
@@ -306,12 +728,12 @@ xkcd
 </ul>
 </section>
 <section id="the-qq-plot" class="slide level2">
-<h1>The QQ Plot</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/qqnorm_diff-1.jpeg" title="" alt="" width="768" /></p>
+<h2>The QQ Plot</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/qqnorm_diff-1.jpeg" width="768" /></p>
 <p><span class="fragment"><strong>What does this mean?</strong></p>
 </section>
 <section id="quantiles-of-a-normal-distribution" class="slide level2">
-<h1>Quantiles of a Normal Distribution</h1>
+<h2>Quantiles of a Normal Distribution</h2>
 <p>We’re familiar with quantiles - let’s say you have a normally distributed random variable:</p>
 <pre><code>         0%         25%         50%         75%        100% 
 -3.78067252 -0.67818866 -0.01041209  0.67146298  3.61989650 </code></pre>
@@ -324,30 +746,30 @@ xkcd
 </div>
 </section>
 <section id="we-can-event-plot-the-quantiles-of-a-normal-distribution" class="slide level2">
-<h1>We Can Event Plot the Quantiles of a Normal Distribution</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/quant_plot-1.jpeg" title="" alt="" width="768" /></p>
+<h2>We Can Event Plot the Quantiles of a Normal Distribution</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/quant_plot-1.jpeg" width="768" /></p>
 <p><span class="fragment">N.B. Quantiles are the 1-tailed P-Value!</span></p>
 </section>
 <section id="our-data-has-quantiles" class="slide level2">
-<h1>Our data has Quantiles</h1>
+<h2>Our data has Quantiles</h2>
 <pre><code>       0% 8.333333% 16.66667%       25% 33.33333% 41.66667%       50% 
       -26       -24       -23       -19       -16       -12        -9 
 58.33333% 66.66667%       75% 83.33333% 91.66667%      100% 
        -6        -2         4        11        17        20 </code></pre>
 <div id="left">
-<p><img src="09_the_t_test_files/figure-revealjs/dif_quant_plot-1.jpeg" title="" alt="" width="384" /></p>
+<p><img src="09_the_t_test_files/figure-revealjs/dif_quant_plot-1.jpeg" width="384" /></p>
 </div>
 <div id="right">
 <p><span class="fragment"><br><br>A Normal QQ Plot shows these values plotted against the corresponding quantiles of a Normal Distribtion</span></p>
 </div>
 </section>
 <section id="the-qq-plot-1" class="slide level2">
-<h1>The QQ Plot</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/qqnorm_diff-1.jpeg" title="" alt="" width="768" /></p>
+<h2>The QQ Plot</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/qqnorm_diff-1.jpeg" width="768" /></p>
 <p>If these values were normally distibuted, there would be a linear relationship, as the pattern of quantiles would be the same.</p>
 </section>
 <section id="our-golem-is-angry-what-to-do-about-assumption-violations" class="slide level2">
-<h1>Our Golem Is Angry: What to Do about Assumption Violations</h1>
+<h2>Our Golem Is Angry: What to Do about Assumption Violations</h2>
 <ul>
 <li class="fragment">Choose a different Golem
 <ul>
@@ -362,15 +784,17 @@ xkcd
 </ul>
 </section>
 <section id="difference-on-a-log-scale" class="slide level2">
-<h1>Difference on a Log Scale</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/blackbird_diff_log-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Difference on a Log Scale</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/blackbird_diff_log-1.jpeg" width="768" /></p>
 <div class="fragment">
 
-<pre><code>     estimate statistic   p.value parameter            method alternative
-1 -0.05615385 -1.271409 0.2276739        12 One Sample t-test   two.sided</code></pre>
+<pre><code># A tibble: 1 x 6
+  estimate statistic p.value parameter method            alternative
+     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;             &lt;chr&gt;      
+1  -0.0562     -1.27   0.228        12 One Sample t-test two.sided  </code></pre>
 </section>
 <section id="general-testing-workflow" class="slide level2">
-<h1>General Testing Workflow</h1>
+<h2>General Testing Workflow</h2>
 <ol type="1">
 <li>Build a Test<br />
 <br />
@@ -385,7 +809,7 @@ xkcd
 </ol>
 </section>
 <section id="outline-2" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Statistical Golems, Z, and T<br />
 <br />
@@ -397,72 +821,91 @@ xkcd
 </ol>
 </section>
 <section id="horned-lizard-survivorship" class="slide level2">
-<h1>Horned Lizard Survivorship</h1>
+<h2>Horned Lizard Survivorship</h2>
 <p><img src="images/09/horned_lizard.jpg" style="width:50.0%" /></p>
 <p>Horns prevent these lizards from being eaten by birds. Are horn lengths different between living and dead lizards?</p>
 </section>
 <section id="the-data" class="slide level2">
-<h1>The Data</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/lizard_load-1.jpeg" title="" alt="" width="768" /></p>
+<h2>The Data</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/lizard_load-1.jpeg" width="768" /></p>
 <p><span class="fragment">What is the data generating process?</span></p>
 </section>
 <section id="data-generating-process-as-a-model" class="slide level2">
-<h1>Data Generating Process as a Model</h1>
+<h2>Data Generating Process as a Model</h2>
 <p><span class="fragment"><span class="math display">\[Horn\: Length_{ij} = \beta_i\]</span></span><br />
 <span class="fragment"><span class="math display">\[\beta_i = Horn\: Length\, for\, group\: i\]</span></span></p>
 </section>
 <section id="error-generating-process-in-the-model" class="slide level2">
-<h1>Error Generating Process in the Model</h1>
+<h2>Error Generating Process in the Model</h2>
 <p><span class="math display">\[Horn\: Length_{ij} = \beta_i + \epsilon_j\]</span><br />
 <span class="math display">\[\beta_i = Horn\: Length\: for\, group\: i\]</span><br />
 <span class="fragment"><span class="math display">\[\epsilon \sim N(0,\sigma)\]</span></span></p>
 </section>
 <section id="the-unpaired-t-test" class="slide level2">
-<h1>The Unpaired T-Test</h1>
-<p><br><br> <span class="math display">\[\LARGE t = \frac{\bar{x_1} - \bar{x_2}}{s_{12}\sqrt(n)}\]</span> <span class="fragment"><br><br>s<sub>12</sub> is a pooled standard deviation:<br></span> <span class="fragment"><span class="math display">\[\large s_{12} = \sqrt(s_1 + s_2)\]</span></span></p>
+<h2>The Unpaired T-Test</h2>
+<p><br><br> <span class="math display">\[\LARGE t = \frac{\bar{x_1} - \bar{x_2}}{s_{12}\sqrt{2/n}}\]</span> <span class="fragment"><br><br>s<sub>12</sub> is a pooled standard deviation:<br></span> <span class="fragment"><span class="math display">\[\large s_{12} = \sqrt{(s_1^2 + s_2^2)/2}\]</span></span></p>
 </section>
 <section id="evaluating-error-generating-process" class="slide level2">
-<h1>Evaluating Error Generating Process</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/horn_hist-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Evaluating Error Generating Process</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/horn_hist-1.jpeg" width="768" /></p>
 </section>
 <section id="evaluating-residuals-for-normality" class="slide level2">
-<h1>Evaluating Residuals for Normality</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/horn_qq-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Evaluating Residuals for Normality</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/horn_qq-1.jpeg" width="768" /></p>
 </section>
 <section id="unequal-sample-size" class="slide level2">
-<h1>Unequal Sample Size?</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/count_lizards-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Unequal Sample Size?</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/count_lizards-1.jpeg" width="768" /></p>
 <p><span class="fragment">There’s a formula for that!</span></p>
 </section>
-<section id="troubleshooting-your-golem" class="slide level2">
-<h1>Troubleshooting Your Golem</h1>
+<section id="keeping-your-t-test-from-burning-down-prague" class="slide level2">
+<h2>Keeping Your T-Test from Burning Down Prague</h2>
 <ol type="1">
 <li><p>Unequal Sample Sizes - Alternate Formula for Denominator</p></li>
 <li><p>Unequal Population Variances - Welch’s T-Test (different denominator and DF)</p></li>
 <li><p>Residuals Not Normal - Transform - Non-Parametric Test - Golem with a different error structure</p></li>
 </ol>
 </section>
-<section id="ok-evaluate-the-results" class="slide level2">
-<h1>OK, Evaluate the Results!</h1>
-<pre><code>
-    Welch Two Sample t-test
-
-data:  Squamosal horn length by Status
-t = -3.8175, df = 46.93, p-value = 0.000394
-alternative hypothesis: true difference in means is not equal to 0
-95 percent confidence interval:
- -3.264484 -1.011215
-sample estimates:
-  mean in group Dead mean in group Living 
-            21.98667             24.12452 </code></pre>
+<section id="ok-query-your-golem-and-evaluate-the-results" class="slide level2">
+<h2>OK, Query Your Golem and Evaluate the Results!</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">estimate1</th>
+<th style="text-align: right;">estimate2</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">parameter</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+<th style="text-align: left;">method</th>
+<th style="text-align: left;">alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">-2.294502</td>
+<td style="text-align: right;">21.98667</td>
+<td style="text-align: right;">24.28117</td>
+<td style="text-align: right;">-4.26337</td>
+<td style="text-align: right;">0.0001178</td>
+<td style="text-align: right;">40.37206</td>
+<td style="text-align: right;">-3.381912</td>
+<td style="text-align: right;">-1.207092</td>
+<td style="text-align: left;">Welch Two Sample t-test</td>
+<td style="text-align: left;">two.sided</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="visualization" class="slide level2">
-<h1>Visualization</h1>
-<p><img src="09_the_t_test_files/figure-revealjs/t_viz-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Visualization</h2>
+<p><img src="09_the_t_test_files/figure-revealjs/t_viz-1.jpeg" width="768" /></p>
 <p><span class="fragment">What is being shown here?</span></p>
 </section>
 <section id="t-tests" class="slide level2">
-<h1>T-tests</h1>
+<h2>T-tests</h2>
 <table style="width:85%;">
 <colgroup>
 <col style="width: 26%" />
@@ -496,7 +939,7 @@ sample estimates:
 </table>
 </section>
 <section id="wrap-up" class="slide level2">
-<h1>Wrap-Up</h1>
+<h2>Wrap-Up</h2>
 <ol type="1">
 <li>Even if the world is normal, your sample isn’t<br />
 <br />
@@ -507,11 +950,18 @@ sample estimates:
 <li>Guiness has given us many ways to handle testing one or two means</li>
 </ol>
 </section>
+<section id="post-quiz" class="slide level2">
+<h2>Post-Quiz</h2>
+<br><br><br>
+<h1>
+<a href="http://bit.ly/t-test-post-2018" class="uri">http://bit.ly/t-test-post-2018</a>
+</h1>
+</section>
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -531,6 +981,8 @@ sample estimates:
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -541,7 +993,7 @@ sample estimates:
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>

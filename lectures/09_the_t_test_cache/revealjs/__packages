@@ -1,7 +1,14 @@
 base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
 knitr
 ggplot2
-gganimate
+magrittr
 dplyr
 tidyr
-magrittr
+gganimate
+purrr

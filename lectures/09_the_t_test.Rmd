@@ -30,9 +30,13 @@ library(dplyr)
 library(tidyr)
 ```
 
+## Quiz!
+<br><br><br>
+<h1>http://bit.ly/t-test-pre-2018</h1>
+
 ## 
 <Br><br><br>
-<h1>https://etherpad.wikimedia.org/p/607-t_tests</h1>
+<h1>https://etherpad.wikimedia.org/p/607-t_tests-2018</h1>
 
 ## Outline
 1. Statistical Golems, Z, and T\
@@ -56,7 +60,19 @@ library(tidyr)
 \
 <span class="fragment">$$\Large H_o: \bar{X} - \mu = 0$$ 
 
-## When & How to use Z-Test
+## Our Philosophy
+
+> 1. What is your question?  
+> 2. Conceive of a model of your system  
+> 3. How much do you need to know to answer your question?  
+> 4. What data do you need to parameterize your model of the world?
+>      - Do you need an experiment?  
+>      - What breadth of observations do you need?
+> 5. Fit your model of the world  
+>      - Make sure you don't burn down Prague  
+> 6. Query your model to answer your question
+
+## When & How to use Z-Test: Our Model of the World
 <center>We want to calculate a test statistic (z) & compare it to the standard normal curve ($\mu = 0, \sigma=1$)</center>
 <p align="left">
 <span class="fragment"> 1. I have a known population mean ($\mu$) and standard deviation ($\sigma$) </span> \
@@ -65,11 +81,11 @@ library(tidyr)
 \
 <span class="fragment"> 3. Now calculate a test statistic </span> \
 </p>
-<span class="fragment">$$\Large z = \frac{\bar{X} - \mu}{\sigma_{\bar{X}}}$$</span>
+<span class="fragment">$$\Large z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$$</span>
 
 ## This is a Golem
 
-<div id="left"><br>$$\LARGE z = \frac{\bar{X} - \mu}{\sigma_{\bar{X}}}$$</div>
+<div id="left"><br>$$\LARGE z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$$</div>
 
 <div id = "right">
 ```{r norm}
@@ -97,29 +113,32 @@ normplot +
 
 
 ## Is this a Good Golumn for Realistic Sample Sizes?
-```{r t-anim, cache=TRUE,  fig.show = "animate", cache=TRUE}
+```{r t-anim, cache=TRUE}
 library(gganimate)
 library(dplyr)
 library(tidyr)
+library(purrr)
 set.seed(31415)
 
-samps <- data.frame(sample_size=3:20) %>%
-  group_by(sample_size) %>%
-  do(samp = rnorm(.$sample_size[1])) %>%
-  unnest(samp)
+samps <- map_df(3:20, ~data.frame(samp = rnorm(.x)), .id = "sample_size")
 
 dists <- ggplot() +
   geom_line(mapping=aes(x=vals, y=z), lwd=1.3) +
   theme_bw(base_size=17) + xlab("z") +  ylab("Probability Density") + 
   geom_density(data = samps, 
-               mapping=aes(x=samp, frame=sample_size, group=sample_size),
+               mapping=aes(x=samp, group=sample_size),
                color="red") +
-  annotate(1,0.4, geom="text", label="Golem", size=10)
+  annotate(1,0.4, geom="text", label="Golem", size=10) +
+  transition_states(factor(sample_size), 
+                    transition_length = 2,
+    state_length = 1) + 
+  labs(title = "n = {closest_state}")
 
-gg_animate(dists, interval=0.6, loop=1)
+animate(dists,device="png")
+
 ```
 
-## Is this a Good Golumn for Realistic Sample Sizes?
+## With your sample size, might you burn down Prague?
 ```{r t-non-anim, warning=FALSE}
 dfd <- data.frame(x=rep(vals, 2), y=rep(z,2), 
                            sample_size=c(rep(6,100), rep(18, 100)))
@@ -147,7 +166,7 @@ ggplot() +
 <Br><br>
 <div style="position:absolute; bottom:0px; left:0px; font-size:0.5em">xkcd</div>
 
-## A T-Distributed Golem
+## A T-Distributed Golem: A New Model of the World
 \
 \
 ![](images/09/t.png){id="noborder"}
@@ -207,13 +226,6 @@ ggplot() +
 3. Comparing Means with a t-test
 
 
-## Comparing Paired Groups<br>$H_0$: Difference = 0
-![](images/09/t_paired.jpg){id="noborder" width=30%}
-  
-> - $\bar{x_d}$ is the mean difference between paired samples
-> - Evaluate against T Distribution with n-1 Degrees of Freedom
->       - n = # of pairs
-
 ## Does bird immunococompetence decrease after a testosterone impant?
 ![](images/09/blackbird.jpg)
 
@@ -234,19 +246,38 @@ ggplot(data=b_tidy, aes(x=When, y=Antibody, group=Bird)) +
   theme_bw(base_size=18)
 ```
 
+## Our Philosophy
+
+> 1. What is your question?  
+> 2. Conceive of a model of your system  
+> 3. How much do you need to know to answer your question?  
+> 4. What data do you need to parameterize your model of the world?
+>      - Do you need an experiment?  
+>      - What breadth of observations do you need?
+> 5. Fit your model of the world  
+>      - Make sure you didn't burn down Prague  
+> 6. Query your model to answer your question
+
+## Comparing Paired Groups<br>$H_0$: Difference = 0
+![](images/09/t_paired.jpg){id="noborder" width=30%}
+  
+> - $\bar{x_d}$ is the mean difference between paired samples
+> - Evaluate against T Distribution with n-1 Degrees of Freedom
+>       - n = # of pairs
+
 
 ## What's The Difference?
 
 ```{r blackbird_diff}
 ggplot(data=blackbird, aes(x=dif)) +
-  geom_histogram(bins=10)+
+  geom_histogram(bins=5)+
   theme_classic(base_size=17) +
   xlab("Difference (After-Before)")
 ```
 
 <span class="fragment" style="color:red">Does this look normal?</span>
 
-## Evaluating Your Golem: Assumptions
+## Evaluating Your Golem: Assumptions to Keep Prague Fire-Free
 
 > - Before we look at p-values and all that, we need to test assumptions \
 \
@@ -365,9 +396,10 @@ broom::tidy(t.test(blackbird$dif.in.logs)) [-c(5:6)]
 Horns prevent these lizards from being eaten by birds. Are horn lengths different between living and dead lizards?
 
 ## The Data
-```{r lizard_load}
+```{r lizard_load, warning=FALSE}
 library(readr)
-lizards <- read_csv("./data/09/12e3HornedLizards.csv") %>%
+lizards <- read_csv("./data/09/12e3HornedLizards.csv",
+                    col_types = "di") %>%
   mutate(Status = ifelse(Survive==1, "Living", "Dead"))
 
 ggplot(lizards) +
@@ -392,9 +424,9 @@ $$\beta_i = Horn\: Length\: for\, group\: i$$
 
 ## The Unpaired T-Test
 <br><br>
-$$\LARGE t = \frac{\bar{x_1} - \bar{x_2}}{s_{12}\sqrt(n)}$$
+$$\LARGE t = \frac{\bar{x_1} - \bar{x_2}}{s_{12}\sqrt{2/n}}$$
 <span class="fragment"><br><br>s<sub>12</sub> is a pooled standard deviation:<br></span>
-<span class="fragment">$$\large s_{12} = \sqrt(s_1 + s_2)$$</span>
+<span class="fragment">$$\large s_{12} = \sqrt{(s_1^2 + s_2^2)/2}$$</span>
 
 ## Evaluating Error Generating Process
 ```{r horn_hist}
@@ -427,7 +459,7 @@ ggplot(data=l_count) +
 
 <span class="fragment">There's a formula for that!</span>
 
-## Troubleshooting Your Golem
+## Keeping Your T-Test from Burning Down Prague
 1. Unequal Sample Sizes
         - Alternate Formula for Denominator
 
@@ -439,9 +471,9 @@ ggplot(data=l_count) +
         - Non-Parametric Test
         - Golem with a different error structure
 
-## OK, Evaluate the Results!
+## OK, Query Your Golem and Evaluate the Results!
 ```{r t_test}
-t.test(`Squamosal horn length` ~ Status, data=lizards)
+knitr::kable(broom::tidy(t.test(`Squamosal horn length` ~ Status, data=lizards)))
 ```
 
 ## Visualization
@@ -469,3 +501,7 @@ ggplot(lizards) +
 2. Statistical models are just that - you have to build them  
 \
 3. Guiness has given us many ways to handle testing one or two means  
+
+## Post-Quiz
+<br><br><br>
+<h1>http://bit.ly/t-test-post-2018</h1>

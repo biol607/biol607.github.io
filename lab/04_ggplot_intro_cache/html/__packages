@@ -7,3 +7,6 @@ RColorBrewer
 viridis
 ggthemes
 gganimate
+ggridges
+viridisLite
+bindrcpp
