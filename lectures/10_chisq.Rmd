@@ -101,6 +101,71 @@ kable(births, "html") %>% kable_styling(bootstrap_options = "striped")
 <span class="fragment">$\chi^2$ = `r with(births, sum((Births-Expectation)^2/Expectation))` with 6 DF<span><br><br>
 <span class="fragment">p = `r pchisq(with(births, sum((Births-Expectation)^2/Expectation)), 6, lower.tail=FALSE)`</span>
 
+## What if you have more than One Set of Categories?
+![](./images/10/eizaguirre_lab_fish_parasite.jpg){width="80%"}
+<br><br><font size="-1" style = "text-align:left">Eizaguirre lab</font>
+
+## The contingency Table
+
+```{r ctab, echo=FALSE}
+library(tibble)
+
+my_counts <- tribble(
+  ~Is_Eaten, ~Infection, ~Count,
+  "Eaten by Birds", "Uninfected", 1,
+  "Eaten by Birds", "Lightly Infected", 10, 
+  "Eaten by Birds", "Heavily Infected", 37,
+  "Not Eaten by Birds", "Uninfected", 49,
+  "Not Eaten by Birds", "Lightly Infected", 35,
+  "Not Eaten by Birds", "Heavily Infected", 9
+  
+)
+
+ctab <- xtabs(Count ~ Is_Eaten + Infection, data = my_counts)
+
+kable(ctab, "html") %>% kable_styling("striped")
+
+```
+
+
+## What is our expected frequency?
+
+p(eaten AND uninfected) = p(eaten) x p(infected)
+
+<div class="fragment">
+```{r}
+rowSums(ctab)
+```
+
+</div>
+
+<div class="fragment">
+```{r}
+colSums(ctab)
+```
+
+</div>
+<br>
+
+<div class="fragment">
+p(eaten AND uninfected) = 48/141 * 50/141
+<div>
+
+
+<div class="fragment">
+E(eaten AND uninfected) = `r round(48/141 * 50/141 * 141)`
+<div>
+
+##  $\chi^2$ test For Contingency Tables
+$$\chi^2 = \sum_{row=1}^{r}\sum_{col = 1}^{c}\frac{\displaystyle(O_{r,c}-E_{r,c})^2}{E_{r,c}}$$
+<br><br>df = (r-1)(c-1)  
+<br>
+
+<div class="fragment">
+```{r chisq_contingency}
+chisq.test(ctab)
+```
+
 ## Assumptions of $\chi^2$ test
 
 <p align="left">Given that the goal is to detect deviations from expectations given normal error, this test has a few assumptions:</p>

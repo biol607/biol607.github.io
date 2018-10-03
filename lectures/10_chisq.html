@@ -677,6 +677,94 @@ Saturday
 <p><br><br />
 <span class="fragment"><span class="math inline">\(\chi^2\)</span> = 15.24 with 6 DF<span><br><br> <span class="fragment">p = 0.01847</span></p>
 </section>
+<section id="what-if-you-have-more-than-one-set-of-categories" class="slide level2">
+<h2>What if you have more than One Set of Categories?</h2>
+<p><img src="images/10/eizaguirre_lab_fish_parasite.jpg" style="width:80.0%" /> <br><br><font size="-1" style = "text-align:left">Eizaguirre lab</font></p>
+</section>
+<section id="the-contingency-table" class="slide level2">
+<h2>The contingency Table</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Heavily Infected
+</th>
+<th style="text-align:right;">
+Lightly Infected
+</th>
+<th style="text-align:right;">
+Uninfected
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Eaten by Birds
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Not Eaten by Birds
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+49
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-is-our-expected-frequency" class="slide level2">
+<h2>What is our expected frequency?</h2>
+<p>p(eaten AND uninfected) = p(eaten) x p(infected)</p>
+<div class="fragment">
+<pre><code>    Eaten by Birds Not Eaten by Birds 
+                48                 93 </code></pre>
+</div>
+<div class="fragment">
+<pre><code>Heavily Infected Lightly Infected       Uninfected 
+              46               45               50 </code></pre>
+</div>
+<p><br></p>
+<div class="fragment">
+p(eaten AND uninfected) = 48/141 * 50/141
+<div>
+
+
+<div class="fragment">
+E(eaten AND uninfected) = 17
+<div>
+
+</section>
+<section id="chi2-test-for-contingency-tables" class="slide level2">
+<h2><span class="math inline">\(\chi^2\)</span> test For Contingency Tables</h2>
+<p><span class="math display">\[\chi^2 = \sum_{row=1}^{r}\sum_{col = 1}^{c}\frac{\displaystyle(O_{r,c}-E_{r,c})^2}{E_{r,c}}\]</span> <br><br>df = (r-1)(c-1)<br />
+<br></p>
+<div class="fragment">
+
+<pre><code>
+    Pearson&#39;s Chi-squared test
+
+data:  ctab
+X-squared = 69.756, df = 2, p-value = 7.124e-16</code></pre>
+</section>
 <section id="assumptions-of-chi2-test" class="slide level2">
 <h2>Assumptions of <span class="math inline">\(\chi^2\)</span> test</h2>
 <p align="left">
