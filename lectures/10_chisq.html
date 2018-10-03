@@ -7,11 +7,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -54,23 +54,396 @@
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
 
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 </head>
 <body>
   <div class="reveal">
@@ -78,7 +451,7 @@
 
 
 <section id="section" class="slide level2" data-background="images/10/bacteria-in-a-petri-dish-compressed.jpg">
-<h1></h1>
+<h2></h2>
 <!-- next year add contingency tables -->
 <br><br><br><br>
 <div style="backround:white; font-size:1.5em">
@@ -86,22 +459,24 @@ Quantifying Goodness of Fit: the <span class="math display">\[\chi^2\]</span>
 </div>
 </section>
 <section id="number-of-observations-in-categories" class="slide level2">
-<h1>Number of Observations in Categories</h1>
+<h2>Number of Observations in Categories</h2>
 <p>Consider the following data generating process:</p>
 <ul>
 <li>We have a number of categories<br />
 <br />
 </li>
-<li>We expect some number of observations in each category<br />
-<br />
-<span class="fragment">Then add this error generating process:<br />
-<br />
-&gt; - Small random errors generating variation in observed values<br />
-  &gt; - This error is <em>normal</em></li>
+<li>We expect some number of observations in each category</li>
+</ul>
+<div class="fragment">
+<p><br><br>Then add this error generating process:</p>
+<ul>
+<li><p>Small random errors generating variation in observed values</p></li>
+<li>This error is <em>normal</em>
+</div></li>
 </ul>
 </section>
 <section id="do-our-observed-values-fit-our-expectations" class="slide level2">
-<h1>Do our observed values fit our expectations?</h1>
+<h2>Do our observed values fit our expectations?</h2>
 <ul>
 <li class="fragment"><span class="math inline">\(H_0\)</span>: Observations = Expectations<br />
 <br />
@@ -121,41 +496,189 @@ Quantifying Goodness of Fit: the <span class="math display">\[\chi^2\]</span>
 </ul>
 </section>
 <section id="the-chi2-distribution" class="slide level2">
-<h1>The <span class="math inline">\(\chi^2\)</span> Distribution</h1>
+<h2>The <span class="math inline">\(\chi^2\)</span> Distribution</h2>
 <p><span class="math display">\[\chi^2 = \sum\frac{\displaystyle(O_i-E_i)^2}{E_i}\]</span></p>
-<p><img src="10_chisq_files/figure-revealjs/chisq-1.jpeg" title="" alt="" width="768" /></p>
+<p><img src="10_chisq_files/figure-revealjs/chisq-1.jpeg" width="768" /></p>
 </section>
 <section id="birth-days" class="slide level2">
-<h1>Birth Days</h1>
-<p><img src="images/10/baby-home-frame.jpg" />{width = 80%}</p>
+<h2>Birth Days</h2>
+<p><img src="images/10/baby-home-frame.jpg" style="width:80.0%" /></p>
 <p>Are births evenly spread across the week?</p>
 </section>
 <section id="birth-days-1" class="slide level2">
-<h1>Birth Days</h1>
-<pre><code>  Day.of.the.Week Births
-1          Sunday     33
-2          Monday     41
-3         Tuesday     63
-4       Wednesday     63
-5        Thursday     47
-6          Friday     56
-7        Saturday     47</code></pre>
+<h2>Birth Days</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Day of the Week
+</th>
+<th style="text-align:right;">
+Births
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sunday
+</td>
+<td style="text-align:right;">
+33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monday
+</td>
+<td style="text-align:right;">
+41
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tuesday
+</td>
+<td style="text-align:right;">
+63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wednesday
+</td>
+<td style="text-align:right;">
+63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Thursday
+</td>
+<td style="text-align:right;">
+47
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Friday
+</td>
+<td style="text-align:right;">
+56
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saturday
+</td>
+<td style="text-align:right;">
+47
+</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="even-expectations" class="slide level2">
-<h1>Even Expectations</h1>
-<pre><code>  Day.of.the.Week Births Expectation
-1          Sunday     33          50
-2          Monday     41          50
-3         Tuesday     63          50
-4       Wednesday     63          50
-5        Thursday     47          50
-6          Friday     56          50
-7        Saturday     47          50</code></pre>
+<h2>Even Expectations</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Day of the Week
+</th>
+<th style="text-align:right;">
+Births
+</th>
+<th style="text-align:right;">
+Expectation
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sunday
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monday
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tuesday
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wednesday
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Thursday
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Friday
+</td>
+<td style="text-align:right;">
+56
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Saturday
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+</tbody>
+</table>
 <p><br><br />
 <span class="fragment"><span class="math inline">\(\chi^2\)</span> = 15.24 with 6 DF<span><br><br> <span class="fragment">p = 0.01847</span></p>
 </section>
 <section id="assumptions-of-chi2-test" class="slide level2">
-<h1>Assumptions of <span class="math inline">\(\chi^2\)</span> test</h1>
+<h2>Assumptions of <span class="math inline">\(\chi^2\)</span> test</h2>
 <p align="left">
 Given that the goal is to detect deviations from expectations given normal error, this test has a few assumptions:
 </p>
@@ -181,8 +704,8 @@ Given that the goal is to detect deviations from expectations given normal error
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -202,6 +725,8 @@ Given that the goal is to detect deviations from expectations given normal error
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -212,7 +737,7 @@ Given that the goal is to detect deviations from expectations given normal error
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>

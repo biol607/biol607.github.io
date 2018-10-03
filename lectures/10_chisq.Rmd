@@ -19,6 +19,7 @@ output:
 <div style="backround:white; font-size:1.5em">Quantifying Goodness of Fit: the $$\chi^2$$</div>
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
+library(kableExtra)
 opts_chunk$set(fig.height=4.5, comment=NA, 
                warning=FALSE, message=FALSE, 
                dev="jpeg", echo=FALSE)
@@ -34,12 +35,15 @@ Consider the following data generating process:
 - We have a number of categories  
 \
 - We expect some number of observations in each category  
-\
-<span class="fragment">Then add this error generating process:  
-\
-> - Small random errors generating variation in observed values  
-\ 
-> - This error is *normal*
+
+
+<div class="fragment"><br><br>Then add this error generating process:
+  
+- Small random errors generating variation in observed values  
+   
+- This error is *normal*</div>
+  
+
 
 ## Do our observed values fit our expectations?
 > - $H_0$: Observations = Expectations  
@@ -71,7 +75,7 @@ qplot(x, dchisq(x, df=df), data=chdata, geom="line", color=factor(df), group=df,
 ```
 
 ## Birth Days
-![](images/10/baby-home-frame.jpg){width = 80%}
+![](images/10/baby-home-frame.jpg){width="80%"}
 
 Are births evenly spread across the week?
 
@@ -80,9 +84,9 @@ Are births evenly spread across the week?
 library(tibble)
 days <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
 birth_vec <- c(33,	41,	63,	63,	47,	56,	47)
-births <- data.frame(`Day of the Week` = days, Births = birth_vec)
+births <- tibble(`Day of the Week` = days, Births = birth_vec)
 
-births
+kable(births, "html") %>% kable_styling(bootstrap_options = "striped")
 ```
 
 ## Even Expectations
@@ -90,7 +94,8 @@ births
 ```{r even_births}
 births$Expectation <- sum(births$Births)/7
 
-births
+kable(births, "html") %>% kable_styling(bootstrap_options = "striped")
+
 ```
 <br>  
 <span class="fragment">$\chi^2$ = `r with(births, sum((Births-Expectation)^2/Expectation))` with 6 DF<span><br><br>
