@@ -14,7 +14,6 @@ output:
 ---
 
 ## {data-background="images/10/bacteria-in-a-petri-dish-compressed.jpg"}
-<!-- next year add contingency tables -->
 <br><br><br><br>
 <div style="backround:white; font-size:1.5em">Quantifying Goodness of Fit: the $$\chi^2$$</div>
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
