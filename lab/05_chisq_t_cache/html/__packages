@@ -1,0 +1,14 @@
+base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
+dplyr
+readr
+ggplot2
+patchwork
+broom
+bindrcpp
+tidyr

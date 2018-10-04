@@ -13,7 +13,7 @@ library(dplyr)
 Today we're going to bein our exploration of how R handles performing statistical tests. Within R, there are many functions that enable one to do statistical testing. These functions typically force a user to be explicit about what they want R to do. In today's lab, we're going to first examine the simplicity of the $\chi^2$ test and begin to build a workflow for data analysis. We'll then dig into the t-test and more formally develop a data analysis workflow.
 
 ### 2. $\chi^2$
-The $\chi^2$ test is a fairly straightforward test. It and its variations are ubiquitos in evaluating expectations. We also see it in likelihood ratio tests and evaluations of model fit across a variety of other techniques, all verifying whether or not our models adequately the data at hand.
+The $\chi^2$ test is a fairly straightforward test. It and its variations are ubiquitous in evaluating expectations. We also see it in likelihood ratio tests and evaluations of model fit across a variety of other techniques, all verifying whether or not our models adequately the data at hand.
 
 #### 2.1 Day of Birth
 In class we used a dataset looking at day of birth. Let's load that up and visualize it.
@@ -156,6 +156,61 @@ chisq.test(boys$_____,
 ```
 
 
+#### 2.4 Contingency Tables
+Briefly, let's consider an extension of the $\chi^2$ test, the contingency table. The first difference between contingency table data and what we've already considered is that there are multiple columns with categories instead of just one.
+
+```{r read_parasite, message=FALSE}
+parasite <- read_csv("./data/09e3ParasiteBrainWarp.csv")
+
+parasite
+```
+
+How can we visualize this? Well, we have two options. The first is as a stacked bar plot. This lets us see if, whatever we put on the x axis, is roughly evenly distributed. Let's look at it both ways using `patchwork` to put it into one figure.
+
+```{r plot_cont_tab}
+#install.packages("patchwork") #if you don't have it.
+
+library(patchwork)
+
+a <- ggplot(parasite, 
+       mapping = aes(fill=`infection status`, y = frequency, 
+                     x=eaten)) +
+  geom_col() 
+
+b <- ggplot(parasite, 
+       mapping = aes(x=`infection status`, y = frequency, 
+                     fill=eaten)) +
+  geom_col() 
+
+a + b
+```
+
+Often times, we want to view the contingency table as is. For that, we can use `geom_raster` to make colored blocks - and we can even include the numbers as a form of redundant coding.
+
+```{r plot_cont_tab_raster}
+ggplot(parasite, 
+       mapping = aes(x=`infection status`, y = eaten, 
+                     fill=frequency, label = frequency)) +
+  geom_raster() +
+  scale_fill_gradient(low = "white", high = "orange") +
+  geom_text()
+```
+
+
+Our data, on the other hand, doesn't look like the contingency table presented here. It needs a bit of reshaping for `chisq.test` to consider it as one. For that, we use the `xtabs` function - which, incidentally, will generalize into an array for an n x n contingency table.
+
+```{r cont_tabl}
+cont_tab <- xtabs(frequency ~ eaten + `infection status`, data = parasite)
+
+cont_tab
+```
+
+Perfect - now we can just plug it into `chisq.test` and get our answer.
+
+```{r cont_chisq}
+chisq.test(cont_tab)
+```
+
 ### 3. T-Tests
 
 T-tests are among the most frequently used tests in data analysis. They're delightfully simple, and provide a robust example of how to examine the entire workflow of a data analysis. These are steps you'll take with any analysis you do in the future, no matter how complex the model! 
@@ -166,13 +221,11 @@ For a one sample t-test, we're merely testing whether or not a vector of observa
 
 Let's look at the W&S data on blackbird immunoresponse before and after testosterone implants. So, first, load the data and visualize the change in immunoresponse.
 
-```{r blackbird}
-#We will need to add an individual bird identifier
-blackbird <- read_csv("data/05/12e2BlackbirdTestosterone.csv") %>%
-  mutate(Bird = 1:n())
+```{r blackbird, message=FALSE}
+blackbird <- read_csv("data/05/12e2BlackbirdTestosterone.csv")
 
 ggplot(data = blackbird, mapping=aes(x=dif)) + 
-  geom_histogram(bins=10) +
+  geom_density() +
   geom_vline(xintercept=0, lty=2)
 ```
 
@@ -188,7 +241,7 @@ t.test(x, y = NULL,
        conf.level = 0.95, ...)
 ```
 
-We can feed it different alternatives (it defaults to two=tails), specify a hypothesis we're testing against (it defaults to a null hypothesis with mu=0), and we can give it either just a sample of observations, or also a vector with groups. We can also tell it whether we're worried about equal variances, if we're giving it paired data, and more.
+We can feed it different alternatives (it defaults to two tails), specify a hypothesis we're testing against (it defaults to a null hypothesis with mu=0), and we can give it either just a sample of observations, or also a vector with groups. We can also tell it whether we're worried about equal variances, if we're giving it paired data, and more.
 
 In this case, for a one-sample t-test, we just want to feed it our differences.
 
@@ -212,7 +265,7 @@ For a two sample t-test, we can feed in a vector of groups, or, `t.test()` is th
 
 First, we'll load and plot the data.
 
-```{r chinook}
+```{r chinook, message=FALSE}
 chinook <- read_csv("data/05/12e4BrookTrout.csv")
 
 ggplot(data=chinook, mapping=aes(x=`brook trout?`, y=`Mean chinook survival`)) +
@@ -221,7 +274,7 @@ ggplot(data=chinook, mapping=aes(x=`brook trout?`, y=`Mean chinook survival`)) +
 
 We have some unequal variances in the data here, which is of note. We also have two groups.  
 
-As with base plot, R has a formula syntax that we can use to specify a relationship where we have a predictor and response. Broadly, it looks like:
+As with `xtabs` above, R has a formula syntax that we can use to specify a relationship where we have a predictor and response. Broadly, it looks like:
 
 $$response \sim predictor$$
 
@@ -269,10 +322,10 @@ We can then evaluate for normality. Let's use the blackbird example. First, we'd
 
 ```{r resid_hist}
 ggplot(data = blackbird, mapping=aes(x=resid)) +
-  geom_histogram(bins=11)
+  geom_density()
 ```
 
-OK - still not looking good. But, who knows, this is a binned histogram. Maybe we need something more accurate - like a qqplot. For a qqplot, we invoke two functions in base plot (if we want the fit line - `ggplot2` still doesn't do this, but give it time).
+Again, not looking good. But, who knows, this is a density estimated off of not many data points. Maybe we need something more accurate - like a qqplot. For a qqplot, we invoke two functions in base plot (if we want the fit line - `ggplot2` still doesn't do this, but give it time).
 
 The functions are `qqnorm` and `qqline`. We use them sequentially.
 
@@ -291,13 +344,13 @@ shapiro.test(blackbird$resid)
 
 OK, so, what does that p-value mean? In this case, it means we would fail to reject the null hypothesis that this data comes from a normal distribution. So, we should actually be OK going forward! This is one case where we don't want to have a p value smaller than our alpha.
 
-**Exercise** - repeat this normality analysis for the chinook salmon!
+**Exercise** - Repeat this normality analysis for the chinook salmon!
 
 #### 3.3 Plotting results
 
 For a one-sample t-test, plotting a result - a mean and SE - might not be necessary. But for a two-sample test, it's highly informative! It should be the final step in any analysis in order to aid interpretation. Here, `ggplot2`'s stat_summary function is invaluable, as it defaults to plotting mean and standard errors.
 
-```{r plot_salmon_means, warning=FALSE}
+```{r plot_salmon_means, message=FALSE}
 salmon_means <- ggplot(data=chinook, 
                        mapping=aes(x=`brook trout?`, 
                                    y=`Mean chinook survival`)) +
@@ -308,10 +361,11 @@ salmon_means
 
 Nice. If you want to see this relative to the data, you can still include it.
 
-```{r plot_salmon_data}
+```{r plot_salmon_data, message=FALSE}
 salmon_means+
-  geom_point(color="red")
+  geom_jitter(color="red")
 ```
+
 #### 3.4 Workflow and Faded Examples
 As we've talked about, our general workflow for an analysis is
 
@@ -413,3 +467,148 @@ t.test(____ ~ ____ , data = monogomy,
 ggplot(data=____, mapping=aes(x=____ ,y=____)) +
   ____(size=1.5)
 ```
+
+### 4. T and Power
+
+Trying to think about power analysis by simulation can be a daunting prospect. However, for any type of modeling endeavour, you can think about the various steps you'll need to execute in order to come up with a straightforward workflow.  You know that for any set of parameters you are monkeying with, you'll need to:  
+  
+1. Simulate a data set with those parameters.  
+2. Fit a model to that simulated dataset and extract a p-value.  
+3. Execute steps 1-2 some number of times.  
+4. From those p-values, calculate power (1 - proportion of wrong p-values at a prespecified $\alpha$).  
+
+For each of the above steps, we can write a nice simple function! And then use some `dplyr` magic to put the whole effort together. Let's walk through this, piece by piece.
+
+#### 4.1 Simulating Data with a Function
+
+The basic underlying model of a t-test is $y_{ij} ~ N(\mu_i, \sigma)$ where i us the group identity. We know there are only two means. So, we can whip up a simple function that returns a data frame with two groups, and data for each at some pre-specified sample size.
+
+```{r fake_data}
+make_t_data <- function(m1, m2, s, n){
+  #make a data frame, repeating treatments n number of times
+  #and use rnorm to get values
+  data.frame(treatment = c(rep("A", n), rep("B", n)),
+             value = rnorm(n*2, mean = c(rep(m1,n), rep(m2, n)), s))
+}
+```
+
+To test if it works, you can record values for all of the parameters and see if the guts of the function work. We can also test it.
+
+```{r test}
+make_t_data(m1 = 1, m2 = 2, s = 1, n = 3)
+```
+
+#### 4.2 Fit a model and extract a p-value
+
+OK, our next function needs to take a data set, and instead of all of the t-output, return the p-value of a t-test. If we look at the `t.test` helpfile, we can see that the output of any `t.test` is a list with an entry called `p.value`. So, we can write a simple extraction function, given the dataset from above.
+
+```{r get_p_fun}
+get_p_from_t_test <- function(sim_data){
+  #run the t test on the data
+  test <- t.test(value ~ treatment, data = sim_data)
+  test$p.value
+}
+```
+
+Let's test that out.
+
+```{r}
+get_p_from_t_test(make_t_data(m1 = 1, m2 = 2, s = 1, n = 3))
+```
+
+#### 4.3 Repeat some number of times
+
+This is great! Now, we know we want some huge vector of p-values. Let's say we want 100 simulated p-values. For that, we've already introduced the `replicate()` function. Indeed, we can take the above statement, and show how it works with replicate.
+
+```{r rep}
+replicate(10,
+          get_p_from_t_test(make_t_data(m1 = 1, m2 = 2, s = 1, n = 3)))
+```
+
+The nice thing about this approach is that, rather than generating a lot of data sets, and then testing each one indivudally - which would eat a lot of memory with a large number of simulations - we do things one at a time, so we're only limited by processor power (and could later multithread if we wanted).
+
+We can also eyeball the above statement and see what the power is visually. What fraction are wrong? For a tiny sample size, and a SD that is the same as the difference between the means, we should see that our test has low power (i.e., most p values will be larger than some pre-specified low value of alpha assuming we should be rejecting our null). If that wasn't the case, you'd want to go back and see what went wrong.
+
+Now, the above statement is, indeed, something we could wrap into a function quite nicely. A function for calculating power, which brings us to....
+
+#### 4.4 Calculating Power from a vector of p-values.
+OK, we have the parameters we need for simulations. We also need some number of simulations - let's call that `nsims` - and some pre-specified `alpha` in order to calculate power `1-(# of p > alpha)/nsims`. Let's code out a brief function just in comments, giving a default value for `nsims` and `alpha`.
+
+```{r get_p_comments}
+get_t_power <- function(m1, m2, s, n, nsims = 100, alpha = 0.07){
+  #get a vector of p values
+  
+  #calculate the number of p values that are incorrect given
+  #that we should be rejecting the null
+  
+  #return power
+}
+```
+
+Put that way, we can fill the above function in with things we have already discussed. Remember, for booleans `TRUE = 1` and `FALSE = 0`
+
+```{r get_p}
+get_t_power <- function(m1, m2, s, n, nsims = 100, alpha = 0.07){
+  #get a vector of p values
+  p <- replicate(nsims,
+          get_p_from_t_test(make_t_data(m1, m2, s, n)))
+  
+  #calculate the number of p values that are incorrect given
+  #that we should be rejecting the null
+  num_wrong <- sum(p > alpha)
+  
+  #return power
+  1 - num_wrong/nsims
+}
+```
+
+We can again test and make sure this produces sensible results.
+
+```{r test_pow}
+get_t_power(m1 = 1, m2 = 2, s = 1, n = 3, nsims = 100, alpha=0.07)
+```
+
+Yeah, that's not great power - nor should it be! We can test again, just to make sure, by putting in something that should have high power.
+
+```{r test_pow_bigdiff}
+get_t_power(m1 = 1, m2 = 5, s = 1, n = 3, nsims = 100, alpha=0.07)
+```
+
+Much better. Now... let's put the whole shebang together.
+
+#### Power analysis!
+
+Let's make a data frame where we look at a few effect sizes (difference between means), standard deviations, and sample sizes. We'll use the `tidyr` function `crossing()` which gets all possible combinations of parameter values, and then `dplyr::rowwise()` to iterate through our set of parameters, one by one. Note, this might take a little while.
+
+```{r pow, message = FALSE, warning = FALSE, cache = TRUE}
+
+#power!
+library(tidyr)
+library(dplyr)
+
+pow_df <- crossing(diff = 1:5, s = 1:5, n = 5:10) %>%
+  rowwise() %>%
+  mutate(power = get_t_power(m1 = 0, m2 = diff, s = s, n = n, nsims=100, alpha=0.05)) %>%
+  ungroup()
+
+```
+
+Now we can visualize this using ggplot2. For funsies, let's use the `beyonce` set of color palattes. YAS KWEEN!
+
+```{r}
+library(ggplot2)
+
+#devtools::install_github("dill/beyonce")
+library(beyonce)
+
+
+ggplot(pow_df, aes(x=n, y = power, color = factor(diff))) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~s) +
+  scale_color_manual(values = beyonce_palette(79)) 
+```
+
+NICE!
+
+**EXERCISE**: Try analyses that vary alpha, n, and the effect size. Or get crazy and vary those three *and* the SD.
