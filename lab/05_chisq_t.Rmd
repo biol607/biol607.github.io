@@ -1,12 +1,17 @@
 ---
 title: "Using Test Statistics"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
-
+library(ggplot2)
+theme_set(theme_bw(base_size=17))
 ```
 
 ### 1. Put it to the Test
@@ -168,7 +173,7 @@ parasite
 How can we visualize this? Well, we have two options. The first is as a stacked bar plot. This lets us see if, whatever we put on the x axis, is roughly evenly distributed. Let's look at it both ways using `patchwork` to put it into one figure.
 
 ```{r plot_cont_tab}
-#install.packages("patchwork") #if you don't have it.
+#devtools::install_github("thomasp85/patchwork") #if you don't have it.
 
 library(patchwork)
 
