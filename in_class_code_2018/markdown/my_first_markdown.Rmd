@@ -1,0 +1,23 @@
+---
+title: "My First R Markdown"
+author: "Jarrett Byrnes"
+date: "9/7/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1. Problem 1
+
+Here is the answer to this problem that didn't require R
+
+# 2. Problem 2
+Here is an answer that required R
+
+```{r}
+data(mtcars)
+summary(mtcars)
+```
+
+# Problem 3
