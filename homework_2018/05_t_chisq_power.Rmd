@@ -7,10 +7,15 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
-<!-- next year, purge /data/05 from all -->
-## 1. W&S $\chi^2$ questions...  
+
+Note: Datasets are available at http://whitlockschluter.zoology.ubc.ca/data so you don't have to type anything in (and have to load it!)  
+\
+
+## 1. W&S $\chi^2$ questions
+Please answer W&S Chapter 8 Questions 12 and 24, and Chapter 9 Questions 16 and 27. User R where possible.
   
-## 2. W&S t-test questions...  
+## 2. W&S t-test questions  
+Please Answer W&S Chapter 11 Question 21 and Chapter 12 Questions 20,  26, and 30
   
 ## 3. Power and T
 
