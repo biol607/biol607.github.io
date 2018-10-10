@@ -36,7 +36,7 @@ library(ggplot2)
 
 ## Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-lm</h3></center>
+<center><h3>https://etherpad.wikimedia.org/p/607-lm-2018</h3></center>
 
 
 ## Review
@@ -97,6 +97,7 @@ $X \sim MVN(\mu, \Sigma)$</center>
 
 ## Example: Wolf Inbreeding and Litter Size
 <div id="left">
+
 ```{r wolf_scatterplot, fig.height=5, fig.width=5}
 wolves <- read.csv("./data/11/16e2InbreedingWolves.csv")
 
@@ -105,6 +106,7 @@ xlab("Inbreeding Coefficient") + ylab("# of Pups") +
 geom_point(size=3) +
 theme_bw(base_size=24)
 ```
+
 </div>
 
 <div id="right">
@@ -150,6 +152,7 @@ $$\sigma_{XY} = \frac{\sum (X-\bar{X})(y-\bar{Y})}{n-1}$$
 
 <div id="right">
 <div class="fragment" style="vertical-align: text-top;">
+
 ```{r rnormPlot_cov, echo=FALSE, fig.height=4, fig.width=5}
 #create a data frame to show a multivariate normal distribution
 sigma <- matrix(c(3,2,2,4), ncol=2)
@@ -208,6 +211,7 @@ text(-2,2, paste("cor(x,y) = ",round(cor(data_rmnorm)[1,2],3), sep=""))
 </div>
 
 <div id="right">
+
 ```{r mvnorm_persp, echo=FALSE, fig.height=5, fig.width=5}
 
 facetCols<-heat.colors(length(unique(data_mvnorm$freq)))
@@ -219,6 +223,7 @@ with(data_mvnorm,
            col="lightblue", cex.axis=2
            ))
 ```
+
 </div>
 
 
@@ -284,6 +289,7 @@ round(cor(wolves),2)
 ```
 </div>
 <br><br>
+
 <div class="fragment">
 
 ```{r wolves_cor_test}
@@ -294,7 +300,7 @@ cTest <- wolves %>%
 
 rownames(cTest) <- ""
 
-knitr::kable(round(cTest[1:4],3))
+knitr::kable(round(cTest[1:4],3), "html")
 ```
 </div>
 
@@ -513,12 +519,12 @@ $$Visits \sim Resemblance$$<br>
 <center>Assume: Linearity (reasonable first approximation)</center>
 <br><br>
 <p align="left">**Error Generating Process:**</p>
-<center>Variation in Predator Behavior</center>
+<center>Variation in Predator Behavior<br>Assume: Normally distributed error (also reasonable)</center>
 
 ## Quantiative Model of Process
 $$\Large Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i$$
 <br><br>
-$$\Large \epsilon_i ~ N(0, \sigma)$$
+$$\Large \epsilon_i \sim N(0, \sigma)$$
 
 ## Today
 
@@ -531,13 +537,6 @@ $$\Large \epsilon_i ~ N(0, \sigma)$$
 3.  <font color="red">Testing Asssumptions of SLR </font>  \
     \
 
-
-## What questions will we test?
-> - Does resemblance explain variation in predator behavior?
-<br><br>
-> - Is the slope of the relationship positive or negative?
-<br><br>
-> - All questions will be tested using a fit linear model with T and F tests
 
 ## Testing Assumptions
 > - **Data Generating Process: Linearity**
@@ -612,4 +611,5 @@ plot(puffer_lm, which=5, cex.lab=1.4, cex.main=2, cex.axis=1.1)
 ```
 
 Should be a cloud with no trend
+
 
