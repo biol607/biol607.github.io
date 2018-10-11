@@ -1,8 +1,11 @@
 ---
 title: "Linear Regression"
 author: "Bill 607"
-date: "October 13, 2016"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
 ---
 
 Believe it or not, despite all of the complexity under the hood, fitting a linear model in R with least squares is quite simple with a straightfoward workflow.
@@ -23,7 +26,7 @@ Let's go through each step with an example of seals. Are older seals larger?
 library(dplyr)
 library(ggplot2)
 
-seals <- read.csv("./data/06/17e8ShrinkingSeals Trites 1996.csv")
+seals <- read.csv("./data/17e8ShrinkingSeals Trites 1996.csv")
 
 seal_base <- ggplot(seals, aes(x=age.days, y=length.cm)) +
   geom_point() +
@@ -227,7 +230,7 @@ Fist, the relationship between how lean you are and how quickly you lose fat. Im
 
 ```{r, eval=FALSE}
 library(ggplot2)
-fat <- read.csv("./data/06/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
+fat <- read.csv("./data/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
 
 #initial visualization to determine if lm is appropriate
 fat_plot <- ggplot(data=fat, aes(x=leanness, y=lossrate)) + 
@@ -255,7 +258,7 @@ fat_plot +
 For your first faded example, let's look at the relationship between DEET and mosquito bites.
 
 ```{r eval=FALSE}
-deet <- read.csv("./data/06/17q24DEETMosquiteBites.csv")
+deet <- read.csv("./data/17q24DEETMosquiteBites.csv")
 
 deet_plot <- ggplot(data=___, aes(x=dose, y=bites)) + 
   geom_point()
@@ -311,7 +314,7 @@ deet_plot +
 Do longer lived species also have larger home ranges? Let's test this!
 ```{r eval=FALSE}
 
-zoo <- read.csv("./data/06/17q02ZooMortality Clubb and Mason 2003 replica.csv")
+zoo <- read.csv("./data/17q02ZooMortality Clubb and Mason 2003 replica.csv")
 
 zoo_plot <- ggplot(data=___, aes(x=mortality, y=homerange)) + 
   ___()
@@ -359,129 +362,6 @@ zoo_plot +
   scale_y_continuous(trans="___")+
   ___(method=___, formula=___)
 
-```
-
-
-##### 6. Power
-
-OK, this is great, but what about power?  Let's look at our seal fit again - maybe we want to know what would have happened with a lower sample size?
-
-Note, I'm going to use a knitr function to neaten up the table for markdown. Try it in your own homeworks!
-
-```{r seal_coef}
-knitr::kable(tidy(seal_lm))
-```
-
-What about the residual SD?
-
-```{r seal_SD}
-knitr::kable(glance(seal_lm)[,1:3])
-```
-
-All right - there are our target values.  Now, we can change a lof ot things. The effect size (slope), range of values, sigma, and more. But let's try sample size.
-
-
-###### 5.1 Make a Table of Parameters, some of which vary
-
-The first step of a power analysis is to setup a data frame with all of the different possibilities that you might want to assess for power. For linear regression, we have the following parameters, all of which might vary:
-
-1. Slope
-2. Intercept
-3. Residual variance
-4. Sample Size
-5. Range of X values
-
-To do a power analysis via simulation for a linear regression, we begin by building our simulation data frame with the parameters and information that varies. In this case, sample size.
-
-```{r simPop}
-set.seed(607)
-
-simPopN <- data.frame(slope = 0.00237, 
-                      intercept=115.767,
-                      sigma = 5.6805,
-                      n=10:100) 
-```
-
-###### 5.2 Expand to have a number of rows for each simulated sample with each parameter combination
-
-OK, now we need to expand this out, and have some number of samples for each n.For that, we can use the function in `tidyr` (same library as crossings), `expand()`.
-
-```{r add_samp_size}
-library(tidyr)
-
-simPopN <- simPopN %>%
-  group_by(slope, intercept, sigma, n) %>%
-  expand(reps = 1:n) %>%
-  ungroup()
-```
-
-###### 5.3 Expand to create repeated simulated data sets for each combination of parameters
-
-Now, if we want to simulate each of these, say, 500 times, we need to assign unique sim numbers, so for each n and sim number we have a unique data set.
-
-```{r increase_sims}
-simPopN <- simPopN  %>%
-  crossing(sim = 1:500)
-```
-
-Great - almost ready to go! Now we just need to add in fitted values. Fortunately, as `rnorm()` works with vectors, we can just use a mutate here. We'll also need to simulate random draws of ages, but that's just another random number.
-
-###### 5.3 Simulate the data
-
-```{r add_length}
-simPopN <- simPopN %>%
-  mutate(age.days = runif(n(), 1000, 8500)) %>%
-  mutate(length.cm = rnorm(n(), intercept + slope*age.days, sigma))
-```
-
-Yatzee! Ready to run!
-
-###### 5.4 Fit models and extract coefficients
-
-
-First, we now need to generate a lot of fit models. Dplyr doesn't take too kindly to including fit things, so, we can use two powerful functions here - first, `nest` and `unnest()` allow us to collapse grouped data down into little pieces and re-expand it.
-```{r simNest}
-fits <- simPopN %>%
-    group_by(slope, intercept, sigma, n, sim) %>%
-    nest()
-
-fits
-```
-Second, the `map` function in the purrr library allows us to iterate over different levels or grouped data frames, and perform some function. In this case, we'll fit a model, get it's coefficients using `broom`.
-
-```{r simFit, cache=TRUE}
-fits <- fits %>%
-    mutate(mod = purrr:::map(data, ~lm(length.cm ~ age.days, data=.))) %>%
-    mutate(coefs = purrr::map(mod, ~tidy(.)))
-
-fits  
-```
-
-Last, we cleanup - we `unnest`, which takes one set of coefficients out. We'll also filter for just the slope.
-
-```{r simUnnest}
-fits <- fits %>%
-  unnest(coefs) %>%
-  ungroup() %>%
-  filter(term == "age.days")
-
-fits
-```
-
-###### 5.5 Calculate your Power
-
-Notice that we do indeed have p-values, so we can use these fits to get power for each sample size. We can now do our normal process - in this case grouping by sample size - to get power. And then we can plot the result!
-
-```{r pow}
-pow <- fits %>%
-    group_by(n) %>%
-    summarise(power = 1-sum(p.value>0.05)/n()) %>%
-    ungroup() 
-
-
-qplot(n, power,  data=pow, geom=c("point", "line")) +
-  theme_bw(base_size=17) +
-  geom_hline(yintercept=0.8, lty=2)
 ```
 
 
