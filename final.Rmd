@@ -75,7 +75,7 @@ Grading will follow the rubric below, with each question corresponding to five p
 - Did you overcome assumption violations, or inferential traps (p-values, etc.)?
 - Did you describe their results cleanly and clearly?
 
-This is a total of 30 points.
+This is a total of 30 points. It should be written in markdown and include all code. 
 
 #### Final Grade
 
