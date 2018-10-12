@@ -100,12 +100,13 @@ __Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), 
 __Reading:__ W&S 16-17, W&G on [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-2018  
 __In Class Code:__ [lm](in_class_code_2016/06_lm_inclass.R)  
+__Homework:__ Work through [Linear Model Power Analysis](lab/06b_power_analysis.html), and then...  
   
 ### Week 7.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [Linear Model Power Analysis](lab/06a_power_analysis.html), [Likelihood](lectures/13_likelihood.html), [Fitting a line with Likelihood](lectures/14_likelihood_2.html)  
+__Lecture:__ [Likelihood](lectures/13_likelihood.html), [Fitting a line with Likelihood](lectures/14_likelihood_2.html)  
 __Lab Topic:__ [Calculating and visualizing Likelihoods, fitting a line with bbmle](lab/07_likelihood.html)\
 __Reading:__ W&S 20, W&G Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-likelihood-2018  

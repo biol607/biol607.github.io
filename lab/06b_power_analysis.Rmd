@@ -1,0 +1,269 @@
+---
+title: "Power for Linear Regression"
+author: "Bill 607"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(ggplot2)
+library(kableExtra)
+seals <- read.csv("./data/17e8ShrinkingSeals Trites 1996.csv")
+seal_lm <- lm(length.cm ~ age.days, data=seals)
+
+```
+
+## Power
+
+OK, we can fit and evluate linear regression models, but what about their power?  Let's look at our [seal fit](https://biol607.github.io/lab/06_lm.html) again - maybe we want to know what would have happened with a lower sample size?
+
+Note, I'm going to use a knitr function, `kable` to neaten up the table for markdown. Try it in your own homeworks!
+
+```{r seal_coef}
+knitr::kable(tidy(seal_lm), "html") %>% kable_styling(bootstrap_options = "striped")
+```
+
+What about the residual SD?
+
+```{r seal_SD}
+knitr::kable(glance(seal_lm)[,1:3], "html")%>% kable_styling()
+```
+
+All right - there are our target values.  Now, we can change a lof ot things. The effect size (slope), range of values, sigma, and more. But let's try sample size.
+
+Now, the steps of a power analysis as discussed previously are
+
+1. Simulate a data set with relevant parameters.  
+2. Fit a model to that simulated dataset and extract a p-value of interest.  
+3. Execute steps 1-2 some number of times.  
+4. From those p-values, calculate power (1 - proportion of wrong p-values at a prespecified $\alpha$).  
+
+## 1. Simulate a data set with relevant parameters
+
+The first step of a power analysis is to write a function that returns a data frame based on the different possibilities that you might want to assess for power. For linear regression, we have the following parameters, all of which might vary:
+
+1. Slope  
+2. Intercept  
+3. Residual variance  
+4. Sample Size  
+5. Range of X values (minimum and maximum)  
+
+
+That's a lot! But, as we're talking about a straight linear model, it's not a huge deal to write a function to create a data frame.  We can break this down into a skeleton of a function that utilized the parameters above.
+
+```{r skel_data}
+make_linear_data <- function(slope, intercept, resid_sd, n, xmin, xmax){
+  
+  #first, get values of x
+  #we will assume a uniform distribution
+  
+  #second, with those values of x, calculate values of y due only to x
+  
+  #now, add variation for true simulated values of y
+  
+  #return a data frame
+  
+}
+```
+
+Broken into steps, it's not so daunting. We want to
+
+1. Draw a bunch of random numbers for x  
+2. Do a simple bit of arithmetic to get values of y
+3. Add some noise to y
+4. Wrap the whole shebang in a data frame and return it.
+
+So, let's fill out that skeleton based on the steps above
+
+```{r make_data}
+make_linear_data <- function(slope, intercept, resid_sd, n, xmin, xmax){
+  
+  #first, get values of x
+  #we will assume a uniform distribution
+  x <- runif(n, xmin, xmax)
+  
+  #second, with those values of x, calculate values of y due only to x
+  y <- intercept + slope * x
+  
+  #now, add variation for true simulated values of y
+  y <- rnorm(n, mean = y, sd = resid_sd)
+  
+  #return a data frame
+  return(data.frame(x=x, y=y))
+}
+```
+
+That is our model of how the world works!
+
+## 2. Fit a model and extract p-value of interest
+
+OK, next we need a function that takes that input data frame, and then returns one, and only one, p value. Now, what p value do you want? Well, it depends on your goal. It could be the p value for the slope coefficient. It could be the p value for the intercept. It could be for the f-test for the model. This later is often a good one to examine (it's typically what we mean when we're looking at overall model power), but, this is just to say as we get to fancier models with multiple predictors, there are a lot of different things you could examine for power.  
+\
+For now, we want a function that will give us a p-value from an F test. Let's write out the skeleton
+
+```{r p_skel}
+get_lm_p_value <- function(sim_data){
+  #fit a model with y~x from the data
+  
+  #get the F table
+  
+  #extract the p-value
+  
+}
+```
+
+Three simple steps. The one that seems tricky is the p-value extraction, but, if we look at the output from `anova()`
+
+```{r anova}
+a <- anova(seal_lm)
+
+class(a)
+```
+
+We can see it's a data frame! Heck,
+
+```{r anova_tab}
+names(a)
+
+a$`Pr(>F)`[1] 
+```
+
+gives us that p value!
+
+So....
+
+```{r p_fun}
+get_lm_p_value <- function(sim_data){
+  #fit a model with y~x from the data
+  mod <- lm(y ~ x, data = sim_data)
+  
+  #get the F table
+  f_tab <- anova(mod)
+  
+  #extract the p-value
+  return(f_tab$`Pr(>F)`[1])
+}
+
+```
+
+is our function. Let's test it!
+
+```{r fun_test}
+#expect small
+get_lm_p_value(make_linear_data(slope = 1, intercept = 0, resid_sd = 2,
+                                n = 10, xmin = 0, xmax = 10))
+
+#expect large
+
+get_lm_p_value(make_linear_data(slope = 0, intercept = 0, resid_sd = 2,
+                                n = 10, xmin = 0, xmax = 10))
+
+```
+
+Bueno!
+
+## 3. Get a LOT of p-values
+
+OK, so, now we just need to write a function that takes ALL of the arguments of `make_linear_data()`, but also the number of simulations! We then just use that as a wrapper to call the relevant use of `replicate()`. I'm just going to launch right in, rather than write a skeleton
+
+```{r get_lotsa_p}
+get_many_lm_p_values <- function(nsim, slope, intercept, resid_sd,
+                                 n, xmin, xmax){
+  
+  replicate(nsim, get_lm_p_value(make_linear_data(slope = slope, intercept = intercept, 
+                                                  resid_sd = resid_sd, n = n, xmin = xmin,
+                                                  xmax = xmax)))
+
+}
+
+#test!
+get_many_lm_p_values(10, slope = 1, intercept = 0, resid_sd = 2,
+                                n = 10, xmin = 0, xmax = 10)
+```
+
+## 4. Get the power!
+
+OK, last function - get the power based on all of those p-values. The only other argument we need is our $\alpha$, and then it's off to the races with a fairly standard power calculation.  Again, no skeleton needed here - it's just get the p-values, figure out how many are greater than our alpha, despite that not being the case, and then return 1-fraction wrong. I'll also set a default $\alpha$ of 0.08. Because why not!
+
+```{r get_lm_power}
+get_lm_power <- function(nsim, slope, intercept, resid_sd,
+                                 n, xmin, xmax, alpha = 0.08){
+  
+  #get p values
+  p <- get_many_lm_p_values(nsim = nsim, slope = slope, intercept = intercept, 
+                       resid_sd = resid_sd, n = n, xmin = xmin,
+                       xmax = xmax)
+  
+  #how many are "wrong"
+  wrong_p <- sum(p>alpha)
+  
+  #return the power
+  return(1-wrong_p/nsim)
+}  
+
+
+#test with good power
+get_lm_power(nsim = 10, slope = 1, intercept = 0, 
+             resid_sd = 2, n = 10, xmin = 0, xmax = 10,
+             alpha = 0.08)
+
+
+#test with low power
+get_lm_power(nsim = 10, slope = 0.1, intercept = 0, 
+             resid_sd = 2, n = 10, xmin = 0, xmax = 10,
+             alpha = 0.08)
+
+```
+
+
+## 5. A power analysis
+Now, let's see the power (heehee) of this fully operational set of functions! Let's say, for example, you wanted to look at that slope of 1, and see how changing both sample size and residual SD change power. OK! Let's start by setting up a data frame using `tidyr::crossing()`.
+
+```{r sim_data}
+library(tidyr)
+
+#setup that tibble!
+pow_frame <- crossing(nsim = 100,
+                      slope = 1,
+                      intercept = 0,
+                      resid_sd = 1:10,
+                      n = 4:10,
+                      xmin = 0, 
+                      xmax = 10)
+
+pow_frame
+
+```
+
+Great! We can use dplyr to do the rest!
+
+```{r dplyr_power, cache=TRUE}
+pow_frame <- pow_frame %>%
+  rowwise() %>%
+  mutate(power = get_lm_power(nsim = nsim, slope = slope, intercept = intercept, 
+                       resid_sd = resid_sd, n = n, xmin = xmin,
+                       xmax = xmax)) %>%
+  ungroup()
+```
+
+And `ggplot2` to show us what we've learned!
+
+```{r plot_power}
+ggplot(pow_frame,
+       aes(x = resid_sd, y = power, color = factor(n))) +
+  geom_line() + 
+  geom_point()
+```
+
+Neat! A higher sample size means more power, but, more SD means lower power!
+
+
+## 6. Exercises
+
+Try the following:  
+A. Look at how changing the range of values of x affects power and how that interacts with changing the resid_sd
+B. Does the intercept choice ever change power?  
+C. Using your p-value function as an exaple, write a new function to get the power for the t-test for the intercept. Does sample size and residual SD change power for the intercept? Is there a relationship between power of the F-test and power of t-test for the intercept?
