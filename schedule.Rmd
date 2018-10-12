@@ -99,8 +99,8 @@ __Lecture:__ Least Squares Linear Regression: [Correlation and Regression](lectu
 __Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), and [data](lab/data_06.zip) \
 __Reading:__ W&S 16-17, W&G on [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-2018  
-__In Class Code:__ [lm](in_class_code_2016/06_lm_inclass.R)  
-__Homework:__ Work through [Linear Model Power Analysis](lab/06b_power_analysis.html), and then...  
+__In Class Code:__ [lm](in_class_code_2018/scripts/lm_code.R)  
+__Homework:__ [Correlation and Linear Models](homework_2018/06_correlation_regression.html)  
   
 ### Week 7.   
 ```{r next_date, echo=FALSE}
