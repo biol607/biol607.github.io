@@ -28,6 +28,9 @@ library(dplyr)
 library(tidyr)
 ```
 
+<!-- next year, don't have people talk through responses to asa, but instead 
+have them talk p - pro v con and what do they do in the future -->
+
 ## Number of Observations in Categories 
 Consider the following data generating process:
 

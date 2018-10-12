@@ -294,6 +294,7 @@ http://r4ds.had.co.nz
 >      - Do you need an experiment?  
 >      - What breadth of observations do you need?
 > 5. Fit your model of the world  
+>      - Make sure you didn't burn down Prague  
 > 6. Query your model to answer your question
 
 ##

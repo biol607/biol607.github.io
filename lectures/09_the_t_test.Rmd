@@ -473,7 +473,9 @@ ggplot(data=l_count) +
 
 ## OK, Query Your Golem and Evaluate the Results!
 ```{r t_test}
-knitr::kable(broom::tidy(t.test(`Squamosal horn length` ~ Status, data=lizards)))
+library(kableExtra)
+knitr::kable(broom::tidy(t.test(`Squamosal horn length` ~ Status, data=lizards)), digits=3) %>%
+  kable_styling(full_width = FALSE, bootstrap_options = "responsive")
 ```
 
 ## Visualization

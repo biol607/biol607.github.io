@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title></title>
+  <title>12_linear_model_fit.utf8.md</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -54,22 +54,394 @@
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
 
 </head>
 <body>
@@ -78,14 +450,23 @@
 
 
 <section id="evaluating-fit-linear-models" class="slide level2">
-<h1>Evaluating Fit Linear Models</h1>
-<p><br> <img src="images/12/linear_regression_love.gif" style="width:45.0%" /></p>
+<h2>Evaluating Fit Linear Models</h2>
+<p><br> <img data-src="images/12/linear_regression_love.gif" style="width:45.0%" /></p>
 <p align="left" style="font-size:10pt; font-color:black;">
 <a href="http://www.smbc-comics.com/?id=2469/" class="uri">http://www.smbc-comics.com/?id=2469/</a>
 </p>
 </section>
+<section id="etherpad" class="slide level2">
+<h2>Etherpad</h2>
+<br><br>
+<center>
+<h3>
+<a href="https://etherpad.wikimedia.org/p/607-lm-2018" class="uri">https://etherpad.wikimedia.org/p/607-lm-2018</a>
+</h3>
+</center>
+</section>
 <section id="outline" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Putting your model to the test<br />
 <br />
@@ -100,7 +481,7 @@
 </ol>
 </section>
 <section id="the-steps-of-statistical-modeling" class="slide level2">
-<h1>The Steps of Statistical Modeling</h1>
+<h2>The Steps of Statistical Modeling</h2>
 <ol type="1">
 <li>What is your question?</li>
 <li>What model of the world matches your question?</li>
@@ -111,7 +492,7 @@
 </ol>
 </section>
 <section id="our-puffer-example" class="slide level2">
-<h1>Our Puffer Example</h1>
+<h2>Our Puffer Example</h2>
 <div id="left">
 <ul>
 <li>Pufferfish are toxic/harmful to predators<br />
@@ -122,16 +503,16 @@
 </ul>
 </div>
 <div id="right">
-<img src="images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
-
+<p><img data-src="./images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
+</p>
 </div>
 </section>
 <section id="question-does-resembling-a-pufferfish-reduce-predator-visits" class="slide level2">
-<h1>Question: Does Resembling a Pufferfish Reduce Predator Visits?</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/puffershow-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Question: Does Resembling a Pufferfish Reduce Predator Visits?</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffershow-1.jpeg" width="768" /></p>
 </section>
 <section id="you-have-fit-a-valid-model.-now" class="slide level2">
-<h1>You have Fit a Valid Model. Now…</h1>
+<h2>You have Fit a Valid Model. Now…</h2>
 <ol type="1">
 <li><p>Does your model explain variation in the data?</p></li>
 <li><p>Are your coefficients different from 0?</p></li>
@@ -140,7 +521,7 @@
 </ol>
 </section>
 <section id="testing-the-model" class="slide level2">
-<h1>Testing the Model</h1>
+<h2>Testing the Model</h2>
 <p>Ho = The model predicts no variation in the data.<br />
 Ha = The model predicts variation in the data.</p>
 <p><br />
@@ -150,25 +531,25 @@ Ha = The model predicts variation in the data.</p>
 <span class="fragment"><span class="math display">\[SS_{Total} = SS_{Regression} + SS_{Error}\]</span></span></p>
 </section>
 <section id="sums-of-squares-of-error-visually" class="slide level2">
-<h1>Sums of Squares of Error, Visually</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/linefit-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Sums of Squares of Error, Visually</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/linefit-1.jpeg" width="768" /></p>
 </section>
 <section id="sums-of-squares-of-regression-visually" class="slide level2">
-<h1>Sums of Squares of Regression, Visually</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/grandmean-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Sums of Squares of Regression, Visually</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/grandmean-1.jpeg" width="768" /></p>
 </section>
 <section id="sums-of-squares-of-regression-visually-1" class="slide level2">
-<h1>Sums of Squares of Regression, Visually</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/ssr-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Sums of Squares of Regression, Visually</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/ssr-1.jpeg" width="768" /></p>
 <p>Distance from <span class="math inline">\(\hat{y}\)</span> to <span class="math inline">\(\bar{y}\)</span></p>
 </section>
 <section id="components-of-the-total-sums-of-squares" class="slide level2">
-<h1>Components of the Total Sums of Squares</h1>
-<span class="math inline">\(SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}\)</span>, df=1<br />
+<h2>Components of the Total Sums of Squares</h2>
+<p><span class="math inline">\(SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}\)</span>, df=1<br />
 <br />
 <span class="math inline">\(SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2\)</span>, df=n-2<br />
 <br />
-
+</p>
 <div class="fragment">
 <p>To compare them, we need to correct for different DF. This is the Mean Square.<br />
 <br />
@@ -178,13 +559,13 @@ e.g, <span class="math inline">\(MS_{E} = \frac{SS_{E}}{n-2}\)</span></p>
 </div>
 </section>
 <section id="the-f-distribution-and-ratios-of-variances" class="slide level2">
-<h1>The F Distribution and Ratios of Variances</h1>
+<h2>The F Distribution and Ratios of Variances</h2>
 <p><span class="math inline">\(F = \frac{MS_{R}}{MS_{E}}\)</span> with DF=1,n-2</p>
-<p><img src="12_linear_model_fit_files/figure-revealjs/f-1.jpeg" title="" alt="" width="768" /></p>
+<p><img src="12_linear_model_fit_files/figure-revealjs/f-1.jpeg" width="768" /></p>
 <p>1-Tailed Test</p>
 </section>
 <section id="f-test-and-pufferfish" class="slide level2">
-<h1>F-Test and Pufferfish</h1>
+<h2>F-Test and Pufferfish</h2>
 <table>
 <thead>
 <tr class="header">
@@ -221,7 +602,7 @@ We reject the null hypothesis that resemblance does not explain variability in p
 </div>
 </section>
 <section id="testing-the-coefficients" class="slide level2">
-<h1>Testing the Coefficients</h1>
+<h2>Testing the Coefficients</h2>
 <ul>
 <li class="fragment">F-Tests evaluate whether elements of the model contribute to variability in the data
 <ul>
@@ -240,7 +621,7 @@ We reject the null hypothesis that resemblance does not explain variability in p
 </ul>
 </section>
 <section id="error-in-the-slope-estimate" class="slide level2">
-<h1>Error in the Slope Estimate</h1>
+<h2>Error in the Slope Estimate</h2>
 <br> <span class="math inline">\(\Large SE_{b} = \sqrt{\frac{MS_{E}}{SS_{X}}}\)</span><br />
 <br />
 <br />
@@ -252,7 +633,7 @@ We reject the null hypothesis that resemblance does not explain variability in p
 <span class="fragment">(~ 1.96 when N is large)</span></p>
 </section>
 <section id="assessing-the-slope-with-a-t-test" class="slide level2">
-<h1>Assessing the Slope with a T-Test</h1>
+<h2>Assessing the Slope with a T-Test</h2>
 <br> <span class="math display">\[\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}\]</span><br />
 <br />
 
@@ -264,7 +645,7 @@ DF=n-2
 <span class="math inline">\(H_0: \beta_{0} = 0\)</span>, but we can test other hypotheses</p>
 </section>
 <section id="slope-of-puffer-relationship" class="slide level2">
-<h1>Slope of Puffer Relationship</h1>
+<h2>Slope of Puffer Relationship</h2>
 <table>
 <thead>
 <tr class="header">
@@ -295,7 +676,7 @@ DF=n-2
 <p><Br> We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept.</p>
 </section>
 <section id="the-steps-of-statistical-modeling-1" class="slide level2">
-<h1>The Steps of Statistical Modeling</h1>
+<h2>The Steps of Statistical Modeling</h2>
 <ol type="1">
 <li>What is your question?</li>
 <li>What model of the world matches your question?</li>
@@ -306,11 +687,11 @@ DF=n-2
 </ol>
 </section>
 <section id="visualize-your-fit" class="slide level2">
-<h1>Visualize Your Fit</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_line_1-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Visualize Your Fit</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_line_1-1.jpeg" width="768" /></p>
 </section>
 <section id="outline-1" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Putting your model to the test<br />
 <br />
@@ -325,7 +706,7 @@ DF=n-2
 </ol>
 </section>
 <section id="evaluating-goodness-of-fit" class="slide level2">
-<h1>Evaluating Goodness of Fit</h1>
+<h2>Evaluating Goodness of Fit</h2>
 <p><br></p>
 <ul>
 <li class="fragment">You can have a strong slope, reject and F-test, and still have a meaningless result<br />
@@ -338,7 +719,7 @@ DF=n-2
 </ul>
 </section>
 <section id="coefficient-of-determination" class="slide level2">
-<h1>Coefficient of Determination</h1>
+<h2>Coefficient of Determination</h2>
 <p><span class="math inline">\(R^2\)</span> = The porportion of Y is predicted by X.<br />
 <br />
 <span class="fragment"> <span class="math display">\[R^2 = \frac{SS_{regression}}{SS_{total}}\]</span><br />
@@ -346,31 +727,31 @@ DF=n-2
 <span class="fragment"> <span class="math display">\[= 1 - \frac{SS_{regression}}{SS_{error}}\]</span> </span></p>
 </section>
 <section id="coefficient-of-determination-1" class="slide level2">
-<h1>Coefficient of Determination</h1>
-<br> <img src="images/12/linear_regression.png" /> <br>
+<h2>Coefficient of Determination</h2>
+<br> <img data-src="images/12/linear_regression.png" /> <br>
 <p align="left" style="font-size:10pt; font-color:black;">
 <a href="https://xkcd.com/1725/" class="uri">https://xkcd.com/1725/</a>
 </p>
 </section>
 <section id="how-well-does-our-line-fit" class="slide level2">
-<h1>How well does our line fit?</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_line-1.jpeg" title="" alt="" width="768" /> <br> R<sup>2</sup> = 0.603</p>
+<h2>How well does our line fit?</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_line-1.jpeg" width="768" /> <br> R<sup>2</sup> = 0.603</p>
 </section>
 <section id="confidence-intervals-around-fit" class="slide level2">
-<h1>Confidence Intervals Around <strong>Fit</strong></h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_fit-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Confidence Intervals Around <strong>Fit</strong></h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_fit-1.jpeg" width="768" /></p>
 <p>Accomodates uncertainty (SE) in slope &amp; intercept</p>
 </section>
 <section id="or-fit-confidence-interval-via-simulation-using-coefficient-ses" class="slide level2">
-<h1>Or, <strong>Fit</strong> Confidence Interval via Simulation using Coefficient SEs</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_sims-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Or, <strong>Fit</strong> Confidence Interval via Simulation using Coefficient SEs</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/puffer_sims-1.jpeg" width="768" /></p>
 <ul>
 <li>Values close to mean of X and Y are more certain.</li>
 <li>Uncertainty increases at edges.</li>
 </ul>
 </section>
 <section id="confidence-intervals-around-fit-1" class="slide level2">
-<h1>Confidence Intervals Around Fit</h1>
+<h2>Confidence Intervals Around Fit</h2>
 <span class="math inline">\(\hat{y}\pm t_{n-2}s_{y}\sqrt{\frac{1}{n}+\frac{(x^{*}-x)^2}{(n-1)s_{x}^2}}\)</span><br />
 <br />
 <br />
@@ -389,7 +770,7 @@ t value for desired CI of fit. Note, for 95% CI, as n is large, multiplier conve
 </div>
 </section>
 <section id="confidence-intervals-around-prediction" class="slide level2">
-<h1>Confidence Intervals Around Prediction</h1>
+<h2>Confidence Intervals Around Prediction</h2>
 <p><br></p>
 <ul>
 <li class="fragment">Fit CIs show results of imprecise estimation of parameters<br />
@@ -407,15 +788,33 @@ t value for desired CI of fit. Note, for 95% CI, as n is large, multiplier conve
 <li class="fragment">Note: Extrapolation beyond range of data is bad practice</li>
 </ul>
 </section>
+<section id="fit-intervals-v.-prediction-intervals" class="slide level2">
+<h2>Fit Intervals v. Prediction intervals</h2>
+<ul>
+<li class="fragment">Fit Intervals are about uncertainty in parameter estimates<br />
+<br />
+</li>
+<li class="fragment">Fit Intervals do not show uncertainty due to factors other than the predictor<br />
+<br />
+</li>
+<li class="fragment">Fit Intervals tell you what the world could look like if X=x and there are no other influences on Y<br />
+<br />
+</li>
+<li class="fragment">Prediction Intervals accomodate full range of uncertainty<br />
+<br />
+</li>
+<li class="fragment">Prediction Intervals tell you what the world could look like if X=x</li>
+</ul>
+</section>
 <section id="coefficient-of-determination-2" class="slide level2">
-<h1>Coefficient of Determination</h1>
-<br> <img src="images/12/extrapolating.png" /> <br>
+<h2>Coefficient of Determination</h2>
+<br> <img data-src="images/12/extrapolating.png" /> <br>
 <p align="left" style="font-size:10pt; font-color:black;">
 <a href="https://xkcd.com/605/" class="uri">https://xkcd.com/605/</a>
 </p>
 </section>
 <section id="confidence-intervals-around-prediction-of-a-new-value" class="slide level2">
-<h1>Confidence Intervals Around Prediction of a New Value</h1>
+<h2>Confidence Intervals Around Prediction of a New Value</h2>
 <p><span class="math inline">\(\hat{y}\pm t_{n-2}s_{y}\sqrt{1+\frac{1}{n}+\frac{(x^{*}-x)^2}{(n-1)s_{x}^2}}\)</span></p>
 <p><br />
 <br />
@@ -423,11 +822,11 @@ Confidence of where the true value of <span class="math inline">\(\hat{y}\)</spa
 Large n converges on t distribution of fitted value.</p>
 </section>
 <section id="prediction-confidence-interval" class="slide level2">
-<h1>Prediction Confidence Interval</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/predict_ci-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Prediction Confidence Interval</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/predict_ci-1.jpeg" width="768" /></p>
 </section>
 <section id="outline-2" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Putting your model to the test<br />
 <br />
@@ -442,34 +841,35 @@ Large n converges on t distribution of fitted value.</p>
 </ol>
 </section>
 <section id="the-obese-n" class="slide level2">
-<h1>The “Obese N”</h1>
+<h2>The “Obese N”</h2>
 <p>High sample size can lead to a low p-value, even if no association exists<br />
-<img src="12_linear_model_fit_files/figure-revealjs/obeseN-1.jpeg" title="" alt="" width="768" /></p>
+</p>
+<p><img src="12_linear_model_fit_files/figure-revealjs/obeseN-1.jpeg" width="768" /></p>
 </section>
 <section id="sample-size-and-r2" class="slide level2">
-<h1>Sample Size and <span class="math inline">\(R^2\)</span></h1>
+<h2>Sample Size and <span class="math inline">\(R^2\)</span></h2>
 <p>High sample size can decrease <span class="math inline">\(R^2\)</span> if residual SD is high relative to slope<br />
-<img src="12_linear_model_fit_files/figure-revealjs/obeseN2-1.jpeg" title="" alt="" width="768" /></p>
+<img src="12_linear_model_fit_files/figure-revealjs/obeseN2-1.jpeg" width="768" /></p>
 </section>
 <section id="little-variation-in-a-predictor-low-power" class="slide level2">
-<h1>Little Variation in a Predictor = Low Power</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/predictionRange1-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Little Variation in a Predictor = Low Power</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/predictionRange1-1.jpeg" width="768" /></p>
 <p><span class="fragment">But is this all there is to X?</span></p>
 </section>
 <section id="but-is-that-all-there-is" class="slide level2">
-<h1>But is that all there is?</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/predRange2-1.jpeg" title="" alt="" width="768" /></p>
+<h2>But is that all there is?</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/predRange2-1.jpeg" width="768" /></p>
 </section>
 <section id="how-should-this-population-be-sampled" class="slide level2">
-<h1>How Should this Population be Sampled?</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/PredictionRange3-1.jpeg" title="" alt="" width="768" /></p>
+<h2>How Should this Population be Sampled?</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/PredictionRange3-1.jpeg" width="768" /></p>
 </section>
 <section id="same-n-higher-variation-in-x-more-power" class="slide level2">
-<h1>Same N, Higher Variation in X = More Power</h1>
-<p><img src="12_linear_model_fit_files/figure-revealjs/predRange4-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Same N, Higher Variation in X = More Power</h2>
+<p><img src="12_linear_model_fit_files/figure-revealjs/predRange4-1.jpeg" width="768" /></p>
 </section>
 <section id="outline-3" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Putting your model to the test<br />
 <br />
@@ -484,7 +884,7 @@ Large n converges on t distribution of fitted value.</p>
 </ol>
 </section>
 <section id="what-influences-power-of-a-regression" class="slide level2">
-<h1>What Influences Power of a Regression?</h1>
+<h2>What Influences Power of a Regression?</h2>
 <ol type="1">
 <li>Sample Size<br />
 <br />
@@ -499,7 +899,7 @@ Large n converges on t distribution of fitted value.</p>
 </ol>
 </section>
 <section id="power-analysis-of-regression" class="slide level2">
-<h1>Power Analysis of Regression</h1>
+<h2>Power Analysis of Regression</h2>
 <ul>
 <li class="fragment">Yes, we can do this with equations<br />
 <br />
@@ -508,7 +908,7 @@ Large n converges on t distribution of fitted value.</p>
 </ul>
 </section>
 <section id="relevant-info-for-pufferfish" class="slide level2">
-<h1>Relevant Info for Pufferfish</h1>
+<h2>Relevant Info for Pufferfish</h2>
 <table>
 <thead>
 <tr class="header">
@@ -564,22 +964,22 @@ Large n converges on t distribution of fitted value.</p>
 </table>
 </section>
 <section id="lets-try-different-effect-sizes-0.5-5.5" class="slide level2">
-<h1>Let’s try different effect sizes: 0.5-5.5</h1>
+<h2>Let’s try different effect sizes: 0.5-5.5</h2>
 <p><img src="12_linear_model_fit_files/figure-revealjs/eff_size-1.jpeg" title="" alt="" width="768" /></p>
 </section>
 <section id="lets-try-different-sigmas---1-to-10" class="slide level2">
-<h1>Let’s try different Sigmas - 1 to 10</h1>
+<h2>Let’s try different Sigmas - 1 to 10</h2>
 <p><img src="12_linear_model_fit_files/figure-revealjs/sigma_pow-1.jpeg" title="" alt="" width="768" /></p>
 </section>
 <section id="lets-try-different-sample-sizes-per-treatment---2-to-10" class="slide level2">
-<h1>Let’s try different Sample Sizes Per Treatment - 2 to 10</h1>
+<h2>Let’s try different Sample Sizes Per Treatment - 2 to 10</h2>
 <p><img src="12_linear_model_fit_files/figure-revealjs/sigma_samp-1.jpeg" title="" alt="" width="768" /></p>
 </section>
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -599,6 +999,8 @@ Large n converges on t distribution of fitted value.</p>
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -609,7 +1011,7 @@ Large n converges on t distribution of fitted value.</p>
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>

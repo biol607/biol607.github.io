@@ -31,6 +31,11 @@ library(ggplot2)
 
 ```
 
+## Etherpad
+<br><br>
+<center><h3>https://etherpad.wikimedia.org/p/607-lm-2018</h3></center>
+
+
 ## Outline
 1. Putting your model to the test
 \
@@ -351,6 +356,18 @@ multiplier converges to 1.96 </div>
 > - If we want to make a **new prediction** we need to incorporate the SD around the line - `r summary(puffer_lm)$sigma` in the puffer model  
 \
 > - Note: Extrapolation beyond range of data is bad practice
+
+## Fit Intervals v. Prediction intervals
+> - Fit Intervals are about uncertainty in parameter estimates  
+\
+> - Fit Intervals do not show uncertainty due to factors other than the predictor  
+\
+> - Fit Intervals tell you what the world could look like if X=x and there are no other influences on Y  
+\
+> - Prediction Intervals accomodate full range of uncertainty  
+\
+> - Prediction Intervals tell you what the world could look like if X=x
+
 
 ## Coefficient of Determination
 <br>
