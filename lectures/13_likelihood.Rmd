@@ -12,17 +12,9 @@ output:
     lib_dir: libs
     css: style.css
 ---
-## Announcements
-1. Schedule a meeting with me this week or next to discuss final project\
-\
-2. Exam questions starting to post Thursday\
-\
-3. Three weeks for exam! \
-\
-4. https://etherpad.wikimedia.org/p/607-likelihood
-
 ## Likelihood!
-![](images/13/i_can_haz_statz_fb_lolstatz.png){width=45%}
+<h1>Estimation with Likelihood!</h1><br><br>
+![](images/13/hey_gurl_liklihood.jpeg){width=45%}
 
 
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
@@ -35,6 +27,17 @@ library(tidyr)
 library(ggplot2)
 
 ```
+
+
+
+## Announcements
+1. Schedule a meeting with me next week to discuss final project\
+\
+2. Exam questions post next Friday\
+\
+3. Two weeks for exam! \
+\
+4. https://etherpad.wikimedia.org/p/607-likelihood-2018
 
 
 ## Review
@@ -80,6 +83,23 @@ $$\Large L(H | D) = p(D | H)$$
 
 \
 <p align="left">Where the D is the data and H is the hypothesis (model) including a both a data generating process with some choice of parameters (aften called $\theta$). The error generating process is inherent in the choice of probability distribution used for calculation.</p>
+
+## Thinking in Terms of Models and Likelihood
+
+>- First we have a **Data Generating Process**
+>          - This is our hypothesis about how the world works
+>          - $\hat{y}_i = a + bx_i$ <br><br>
+>- Then we have a likelihood of the data given this hypothesis
+>          - This allows us to calculate the likelihood of observing our data given the hypothesis
+>          - Called the **Likelihood Function**
+>          - $y_{i} = N(\hat{y}_i, \sigma)$
+
+## All Kinds of Likelihood functions
+> - Probability density functions are the most common<br><Br>
+> - But, hey, $\sum(y_{i} - \hat{y}_i)^2$ is one as well<br><Br>
+> - Extremely flexible<Br><Br>
+> - The key is a function that can find a minimum or maximum value, depending on your parameters
+
 
 ## Likelihood of a Single Value
 What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1. 
@@ -127,10 +147,9 @@ Compare <font color="red">p(x = D | H)</font> to <font color="blue">p(x \ge D | 
 
 ## Maximum Likelihood
 <br>
-<h2 style="text-align:left">The Maximum Likelihood Estimate is the value at which $p(D | \theta)$ is
-highest.</h2>
+<h2 style="text-align:left">The Maximum Likelihood Estimate is the value at which $p(D | \theta)$ - our likelihood function -  is highest.</h2>
 <br>
-<span class="fragment" style="text-align:left">Note the explicit choice of parameters.
+<span class="fragment" style="text-align:left">Note it depends on the explicit choice of parameters.
 
 
 ## Example of Maximum Likelihood
@@ -156,7 +175,7 @@ abline(v=10, col="red", lwd=2, lty=2)
 $$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$ 
 <br>where we search all possible values of &lambda;
 <Br><br>
-<span class="fragment">Brute force, or simple iterative ML</span>
+<span class="fragment">Grid Sampling (setup a grid of values to test)</span>
 </div>
 
 
@@ -243,7 +262,7 @@ $$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
 </div>
 
 
-## Can Compare p(data | H) for alternate Parameter Values
+## Can Compare p(Data | H) for alternate Parameter Values
 
 ```{r likelihoodDemo3}
 poisCurve15 <- dpois(lambdaVals, 15)
@@ -525,7 +544,7 @@ Estimates: mean = `r round(m_seals, 2)`, SD = `r round(s_seals, 2)`
 
 1.  What Log-Likelihood Values Are Used for 95% CI?
 
-2.  Brute-Force Becomes Slow
+2.  Grid Sampling Becomes Slow
 
 3.  Algorithmic Solutions Necessary
 
@@ -539,6 +558,13 @@ Estimates: mean = `r round(m_seals, 2)`, SD = `r round(s_seals, 2)`
 \ 
 3. Values of your parameter with a Log Likelihood 1.92 from the peak are in your CI
 
+
+## How do we get a likelihood profile?
+Let's say you have to parameters, b<sub>1</sub> and b<sub>2</sub> with MLE estimates.  <Br>
+> 1. Setup a grid of values for  b<sub>1</sub> that you think span >95% CI  <br>
+> 2. For each value, get the MLE of b<sub>2</sub>. Record the MLL  <br>
+> 3. Now, plot the vaue of  b<sub>1</sub> versis the MLL and use this MLL **profile** to calculate your CI  
+> 4. If you do not have a nice parabola, consider problems with model
 
 ## Likelihood Profile of One Coefficient Along ML Estimates of the Other
 
@@ -655,13 +681,13 @@ confint(mleSeals)
 
 
 ## Did You Say Minimum?
-<h2 style="text-align:left">
+<h3 style="text-align:left">
 <span class="fragment">YES!\ </span>
 <br><br>
 <span class="fragment">We optimize using -sum(LL Function)\ </span>
 <br><br>
-<span class="fragment">Deviance = -2 \* LL </span>
-</h2>
+<span class="fragment">**Deviance** = -2 \* LL </span>
+</h3>
 
 
 ## Searching Likelihood Space
