@@ -561,9 +561,10 @@ Estimates: mean = `r round(m_seals, 2)`, SD = `r round(s_seals, 2)`
 
 ## How do we get a likelihood profile?
 Let's say you have to parameters, b<sub>1</sub> and b<sub>2</sub> with MLE estimates.  <Br>
-> 1. Setup a grid of values for  b<sub>1</sub> that you think span >95% CI  <br>
-> 2. For each value, get the MLE of b<sub>2</sub>. Record the MLL  <br>
-> 3. Now, plot the vaue of  b<sub>1</sub> versis the MLL and use this MLL **profile** to calculate your CI  
+
+> 1. Setup a grid of values for  b<sub>1</sub> that you think span >95% CI  <br><br>
+> 2. For each value, get the MLE of b<sub>2</sub>. Record the MLL  <br><br>
+> 3. Now, plot the vaue of  b<sub>1</sub> versis the MLL and use this MLL **profile** to calculate your CI  <br><br>
 > 4. If you do not have a nice parabola, consider problems with model
 
 ## Likelihood Profile of One Coefficient Along ML Estimates of the Other
