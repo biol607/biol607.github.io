@@ -26,6 +26,7 @@ library(dplyr)
 library(tidyr)
 library(broom)
 library(ggplot2)
+theme_set(theme_bw(base_size=13))
 
 ```
 
@@ -186,6 +187,8 @@ ll_pois <- sapply(lambdaVals,
 plot(lambdaVals, ll_pois, ylab="Log-Likelihood", xlab=expression(lambda), pch=19, cex.lab=1.5)
 abline(v=17, lty=2, col="red", lwd=2)
 abline(v=14, lty=2, col="blue", lwd=2)
+legend(x = 30, y = -250, col = c("blue", "red"), legend = c(expression(paste(lambda, "= 14")), 
+                                                          expression(paste(lambda, "= 17"))), lty=2)
 ```
 
 $$G = \frac{L(\lambda = 14 | D)}{L(\lambda = 17 | D)}$$  
@@ -249,7 +252,7 @@ $$Visits \sim Resemblance$$<br>
 <center>Assume: Linearity (reasonable first approximation)</center>
 <br><br>
 <p align="left">**Error Generating Process:**</p>
-<center>Variation in Predator Behavior</center>
+<center>Variation in Predator Behavior<br>Assume: Normally distributed error (also reasonable)</center>
 
 ## Quantiative Model of Process
 <br><br>
@@ -269,7 +272,7 @@ $$L(\theta_j | Data) = \prod_{i=1}^n \mathcal{N}(Visits_i\; |\; \beta_{0j} + \be
 where $\beta_{0j}, \beta_{1j}, \sigma_j$ are elements of $\theta_j$
 
 ## Fit Your Model!
-```{r bblme, echo=TRUE}
+```{r bblme, echo=FALSE, eval=FALSE}
 library(bbmle)
 
 puffer_mle <- mle2(predators ~ dnorm(b0 + b1*resemblance, sd = resid_sd),
@@ -277,12 +280,17 @@ puffer_mle <- mle2(predators ~ dnorm(b0 + b1*resemblance, sd = resid_sd),
                    start=list(b0=1, b1=1, resid_sd = 2))
 ```
 
+```{r puffer_lm, echo=TRUE}
+puffer_glm <- glm(predators ~ resemblance, data = puffer,
+                  family = gaussian(link = "identity"))
+```
+
 ## The *Same* Diagnostics
 <div id="left">
 ```{r diag1, fig.height=6, fig.width=5}
 library(ggplot2)
 ggplot() +
-  aes(x=predict(puffer_mle), y=residuals(puffer_mle)) +
+  aes(x=predict(puffer_glm), y=residuals(puffer_glm)) +
   geom_point() + 
   xlab("Fitted") + ylab("Observed") +
   theme_bw(base_size=17)
@@ -290,21 +298,58 @@ ggplot() +
 </div>
 <div id="right">
 ```{r diag2, fig.height=6, fig.width=5}
-qqnorm(residuals(puffer_mle), cex.lab=1.5)
-qqline(residuals(puffer_mle))
+qqnorm(residuals(puffer_glm), cex.lab=1.5)
+qqline(residuals(puffer_glm))
 ```
 </div>
 
 ## But - What do the Likelihood Profiles Look Like?
-```{r profile}
-plot(profile(puffer_mle), cex.lab=1.5)
+```{r profileR, echo=FALSE, message=FALSE, warning=FALSE}
+library(profileModel)
+prof <- profileModel(puffer_glm,
+                     objective = "ordinaryDeviance",
+                     quantile = qchisq(0.95, 1),
+                     verbose = FALSE)
+
+#plot(prof, mfrow=c(1,2))
+
+
+as.data.frame.profileModel <- function(obj){
+  out <- lapply(obj$profiles, function(x){
+    x <- as.data.frame(x)
+    x$Parameter <- names(x)[1]
+    names(x)[1] <- "Value"
+    x[c("Parameter", "Value", "Differences")]
+  }
+  )
+  
+  do.call(rbind, out)
+}
+
+prof_data <- as.data.frame.profileModel(prof)
+
+qplot(x = Value, y = Differences, data = prof_data, geom = "line") +
+  facet_wrap(~Parameter, scale = "free_x") +
+  geom_hline(yintercept = 2*1.92, lty = 2, color = "red") +
+  ylab("Difference from Minimum Deviance")
+
 ```
 
 Are these nice symmetric slices?
 
+## Sometimes Easier to See with a Straight Line
+```{r profile}
+library(MASS)
+plot(profile(puffer_glm), cex.lab=1.5)
+```
+
+tau = signed sqrt of difference from deviance
+
+
+
 ## Evaluate Coefficients
 ```{r mle_coef}
-knitr::kable(tidy(puffer_mle))
+knitr::kable(tidy(puffer_glm), digits = 3, "html") %>% kableExtra::kable_styling("striped")
 ```
 
 <br>
@@ -314,27 +359,35 @@ Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Int
 ## Confidence Intervals
 Quadratic Assumption
 ```{r mle_confint}
-knitr::kable(confint(puffer_mle))
+knitr::kable(confint(puffer_glm), digits = 3, "html") %>% kableExtra::kable_styling("striped")
 ```
 
 <br><Br>
 Spline Fit to Likelihood Surface
 ```{r mle_confint_spline}
-knitr::kable(confint(puffer_mle, method="spline"))
+knitr::kable(confint(puffer_glm,  method="spline"), 
+             digits = 3, "html") %>% kableExtra::kable_styling("striped")
+
 ```
 
 ## To test the model, need an alternate hypothesis
 <br>
-```{r bblme_null, echo=TRUE}
+```{r bblme_null, echo=FALSE, eval = FALSE}
 puffer_null_mle <- mle2(predators ~ dnorm(b0, sd = resid_sd),
                    data=puffer, 
                    start=list(b0=14, resid_sd = 10))
 ```
 
+```{r alt}
+puffer_null_glm <- glm(predators ~ 1,
+                       data = puffer,
+                       family = gaussian(link = "identity"))
+```
 ## Put it to the Likelihood Ratio Test!
 <Br>
 ```{r mle_chisq}
-anova(puffer_mle, puffer_null_mle)
+anova(puffer_null_glm, puffer_glm,
+      test = "LRT")
 ```
 
 ## Compare to Linear Regression
@@ -346,17 +399,22 @@ Likelihood:
 Least Squares
 ```{r ls_coef}
 lm_mod <- lm(predators ~ resemblance, data=puffer)
-knitr::kable(tidy(lm_mod))
+knitr::kable(tidy(lm_mod), digits=3) %>% kableExtra::kable_styling("striped")
 ```
 
 
 ## Compare to Linear Regression: F and Chisq
 Likelihood:
-```{r mle_coef}
+```{r chisq}
+anova(puffer_null_glm, puffer_glm,
+      test = "LRT") %>%
+  knitr::kable(digits = 3) %>%
+  kableExtra::kable_styling("striped")
 ```
 
 <br><br>
 Least Squares
 ```{r ls_anova}
-knitr::kable(anova(lm_mod))
+knitr::kable(anova(lm_mod))%>%
+  kableExtra::kable_styling("striped")
 ```

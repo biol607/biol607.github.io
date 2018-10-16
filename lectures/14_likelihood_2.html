@@ -3,52 +3,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title></title>
+  <title>14_likelihood_2.utf8.md</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -91,23 +117,396 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
 
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 </head>
 <body>
   <div class="reveal">
@@ -115,11 +514,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <section id="fitting-models-with-likelihood" class="slide level2">
-<h1>Fitting Models with Likelihood!</h1>
-<p><img src="images/14/scientists_see_the_world.jpg" style="width:45.0%" /></p>
+<h2>Fitting Models with Likelihood!</h2>
+<p><img data-src="images/14/scientists_see_the_world.jpg" style="width:45.0%" /></p>
 </section>
 <section id="outline" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Review of Likelihood<br />
 <br />
@@ -132,7 +531,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 </section>
 <section id="deriving-truth-from-data" class="slide level2">
-<h1>Deriving Truth from Data</h1>
+<h2>Deriving Truth from Data</h2>
 <ul>
 <li class="fragment"><strong>Frequentist Inference:</strong> Correct conclusion drawn from repeated experiments
 <ul>
@@ -155,20 +554,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 </section>
 <section id="section" class="slide level2">
-<h1></h1>
+<h2></h2>
 <p><br><br><br></p>
 <h1 style="text-align:left">
 Likelihood: how well data support a given hypothesis.
 </h2>
+<p><br />
 <br />
-<br />
-
+</p>
 <h4 style="text-align:left">
 <span class="fragment">Note: Each and every parameter choice IS a hypothesis</span>
 </h4>
 </section>
 <section id="likelihood-defined" class="slide level2">
-<h1>Likelihood Defined</h1>
+<h2>Likelihood Defined</h2>
 <p><br><br> <span class="math display">\[\Large L(H | D) = p(D | H)\]</span></p>
 <br />
 
@@ -177,10 +576,10 @@ Where the D is the data and H is the hypothesis (model) including a both a data 
 </p>
 </section>
 <section id="example-of-maximum-likelihood-fit" class="slide level2">
-<h1>Example of Maximum Likelihood Fit</h1>
+<h2>Example of Maximum Likelihood Fit</h2>
 <p>Let’s say we have counted 10 individuals in a plot. Given that the population is Poisson distributed, what is the value of <span class="math inline">\(\lambda\)</span>?</p>
 <div id="left" style="width:60%">
-<p><img src="14_likelihood_2_files/figure-revealjs/likelihoodSapply-1.jpeg" title="" alt="" width="576" /></p>
+<p><img src="14_likelihood_2_files/figure-revealjs/likelihoodSapply-1.jpeg" width="576" /></p>
 </div>
 <div id="right", style="width:40%">
 <br><br>
@@ -189,21 +588,24 @@ $$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$
 </div>
 </section>
 <section id="likelihood-function" class="slide level2">
-<h1>Likelihood Function</h1>
+<h2>Likelihood Function</h2>
 <p><span class="math display">\[\Large p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}\]</span> <br><br></p>
 <ul>
 <li class="fragment">This is a <strong>Likelihood Function</strong> for one sample<br />
-- It is the Poisson Probability Density function<br />
+
+<ul>
+<li class="fragment">It is the Poisson Probability Density function<br />
 <br />
 </li>
+</ul></li>
 <li class="fragment"><span class="math inline">\(Dpois = \frac{\lambda^{x}e^{-\lambda}}{x!}\)</span><br />
 </li>
 </ul>
 </section>
 <section id="what-is-the-probability-of-the-data-given-the-parameter" class="slide level2">
-<h1>What is the probability of the data given the parameter?</h1>
+<h2>What is the probability of the data given the parameter?</h2>
 <div id="left", style="width:60%">
-<img src="14_likelihood_2_files/figure-revealjs/likelihoodDemo2-1.jpeg" title="" alt="" width="576" />
+<img src="14_likelihood_2_files/figure-revealjs/likelihoodDemo2-1.jpeg" width="576" />
 
 </div>
 <div id="right", style="width:40%">
@@ -216,7 +618,7 @@ $$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
 </div>
 </section>
 <section id="outline-1" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Review of Likelihood<br />
 <br />
@@ -229,12 +631,12 @@ $$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
 </ol>
 </section>
 <section id="can-compare-pdata-h-for-alternate-parameter-values" class="slide level2">
-<h1>Can Compare p(data | H) for alternate Parameter Values</h1>
-<p><img src="14_likelihood_2_files/figure-revealjs/likelihoodDemo3-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Can Compare p(data | H) for alternate Parameter Values</h2>
+<p><img src="14_likelihood_2_files/figure-revealjs/likelihoodDemo3-1.jpeg" width="768" /></p>
 <p>Compare <span class="math inline">\(p(D|\theta_{1})\)</span> versus <span class="math inline">\(p(D|\theta_{2})\)</span></p>
 </section>
 <section id="likelihood-ratios" class="slide level2">
-<h1>Likelihood Ratios</h1>
+<h2>Likelihood Ratios</h2>
 <p><br> <span class="math display">\[\LARGE G = \frac{L(H_1 | D)}{L(H_2 | D)}\]</span></p>
 <ul>
 <li class="fragment">G is the ratio of <em>Maximum Likelihoods</em> from each model<br />
@@ -250,35 +652,33 @@ $$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
 </ul>
 </section>
 <section id="likelihood-ratio-test" class="slide level2">
-<h1>Likelihood Ratio Test</h1>
+<h2>Likelihood Ratio Test</h2>
 <ul>
 <li class="fragment">A new test statistic: <span class="math inline">\(D = -2 log(G)\)</span><br />
  </li>
 <li class="fragment"><span class="math inline">\(= 2 [Log(L(H_2 | D)) - Log(L(H_1 | D))]\)</span><br />
 <br />
 </li>
-<li class="fragment">It’s <span class="math inline">\(\chi^2\)</span> distributed!
-<ul>
-<li class="fragment">DF = Difference in # of Parameters<br />
+<li class="fragment">It’s <span class="math inline">\(\chi^2\)</span> distributed!<br />
+- DF = Difference in # of Parameters<br />
 <br />
 </li>
-</ul></li>
 <li class="fragment">If <span class="math inline">\(H_1\)</span> is the Null Model, we have support for our alternate model</li>
 </ul>
 </section>
 <section id="likelihood-ratio-at-work" class="slide level2">
-<h1>Likelihood Ratio at Work</h1>
-<p><img src="14_likelihood_2_files/figure-revealjs/LL-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Likelihood Ratio at Work</h2>
+<p><img src="14_likelihood_2_files/figure-revealjs/LL-1.jpeg" width="768" /></p>
 <p><span class="math display">\[G = \frac{L(\lambda = 14 | D)}{L(\lambda = 17 | D)}\]</span><br />
 <span class="fragment">=0.0494634</fragment></p>
 </section>
 <section id="likelihood-ratio-test-at-work" class="slide level2">
-<h1>Likelihood Ratio Test at Work</h1>
-<p><img src="14_likelihood_2_files/figure-revealjs/LL-1.jpeg" title="" alt="" width="768" /> <span class="math display">\[D = 2 [Log(L(\lambda = 14 | D)) - Log(L(\lambda = 17 | D))]\]</span> <span class="fragment">=6.0130449 with 1DF</fragment><br />
+<h2>Likelihood Ratio Test at Work</h2>
+<p><img src="14_likelihood_2_files/figure-revealjs/LL-1.jpeg" width="768" /> <span class="math display">\[D = 2 [Log(L(\lambda = 14 | D)) - Log(L(\lambda = 17 | D))]\]</span> <span class="fragment">=6.0130449 with 1DF</fragment><br />
 <span class="fragment">p =0.01</fragment></p>
 </section>
 <section id="outline-2" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Review of Likelihood<br />
 <br />
@@ -291,7 +691,7 @@ $$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
 </ol>
 </section>
 <section id="putting-likelihood-into-practice-with-pufferfish" class="slide level2">
-<h1>Putting Likelihood Into Practice with Pufferfish</h1>
+<h2>Putting Likelihood Into Practice with Pufferfish</h2>
 <div id="left">
 <ul>
 <li>Pufferfish are toxic/harmful to predators<br />
@@ -302,16 +702,16 @@ $$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
 </ul>
 </div>
 <div id="right">
-<img src="images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
-
+<p><img data-src="./images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
+</p>
 </div>
 </section>
 <section id="does-resembling-a-pufferfish-reduce-predator-visits" class="slide level2">
-<h1>Does Resembling a Pufferfish Reduce Predator Visits?</h1>
-<p><img src="14_likelihood_2_files/figure-revealjs/puffershow-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Does Resembling a Pufferfish Reduce Predator Visits?</h2>
+<p><img src="14_likelihood_2_files/figure-revealjs/puffershow-1.jpeg" width="768" /></p>
 </section>
 <section id="the-steps-of-statistical-modeling" class="slide level2">
-<h1>The Steps of Statistical Modeling</h1>
+<h2>The Steps of Statistical Modeling</h2>
 <ol type="1">
 <li>What is your question?</li>
 <li>What model of the world matches your question?</li>
@@ -322,7 +722,7 @@ $$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$
 </ol>
 </section>
 <section id="the-world-of-pufferfish" class="slide level2">
-<h1>The World of Pufferfish</h1>
+<h2>The World of Pufferfish</h2>
 <p align="left">
 <strong>Data Generating Process:</strong>
 </p>
@@ -335,291 +735,449 @@ Assume: Linearity (reasonable first approximation)
 <strong>Error Generating Process:</strong>
 </p>
 <center>
-Variation in Predator Behavior
+Variation in Predator Behavior<br>Assume: Normally distributed error (also reasonable)
 </center>
 </section>
 <section id="quantiative-model-of-process" class="slide level2">
-<h1>Quantiative Model of Process</h1>
+<h2>Quantiative Model of Process</h2>
 <p><br><br> <span class="math display">\[\Large Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i\]</span> <br><br><br> <span class="math display">\[\Large \epsilon_i \sim N(0, \sigma)\]</span></p>
 </section>
 <section id="likelihood-function-for-linear-regression" class="slide level2">
-<h1>Likelihood Function for Linear Regression</h1>
+<h2>Likelihood Function for Linear Regression</h2>
 <br><br><br>
 <center>
 Will often see:<br><br> <span class="math inline">\(\large L(\theta | D) = \prod_{i=1}^n p(y_i\; | \; x_i;\ \beta_0, \beta_1, \sigma)\)</span>
 </center>
 </section>
 <section id="likelihood-function-for-linear-regression-1" class="slide level2">
-<h1>Likelihood Function for Linear Regression</h1>
+<h2>Likelihood Function for Linear Regression</h2>
 <p><br><br> <span class="math display">\[L(\theta_j | Data) = \prod_{i=1}^n \mathcal{N}(Visits_i\; |\; \beta_{0j} + \beta_{1j} Resemblance_i, \sigma_j)\]</span> <br><br> where <span class="math inline">\(\beta_{0j}, \beta_{1j}, \sigma_j\)</span> are elements of <span class="math inline">\(\theta_j\)</span></p>
 </section>
 <section id="fit-your-model" class="slide level2">
-<h1>Fit Your Model!</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bbmle)
-
-puffer_mle &lt;-<span class="st"> </span><span class="kw">mle2</span>(predators ~<span class="st"> </span><span class="kw">dnorm</span>(b0 +<span class="st"> </span>b1*resemblance, <span class="dt">sd =</span> resid_sd),
-                   <span class="dt">data=</span>puffer, 
-                   <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">b0=</span><span class="dv">1</span>, <span class="dt">b1=</span><span class="dv">1</span>, <span class="dt">resid_sd =</span> <span class="dv">2</span>))</code></pre></div>
+<h2>Fit Your Model!</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">puffer_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, <span class="dt">data =</span> puffer,</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">                  <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>))</a></code></pre></div>
 </section>
 <section id="the-same-diagnostics" class="slide level2">
-<h1>The <em>Same</em> Diagnostics</h1>
+<h2>The <em>Same</em> Diagnostics</h2>
 <div id="left">
-<p><img src="14_likelihood_2_files/figure-revealjs/diag1-1.jpeg" title="" alt="" width="480" /></p>
+<p><img src="14_likelihood_2_files/figure-revealjs/diag1-1.jpeg" width="480" /></p>
 </div>
 <div id="right">
-<p><img src="14_likelihood_2_files/figure-revealjs/diag2-1.jpeg" title="" alt="" width="480" /></p>
+<p><img src="14_likelihood_2_files/figure-revealjs/diag2-1.jpeg" width="480" /></p>
 </div>
 </section>
 <section id="but---what-do-the-likelihood-profiles-look-like" class="slide level2">
-<h1>But - What do the Likelihood Profiles Look Like?</h1>
-<p><img src="14_likelihood_2_files/figure-revealjs/profile-1.jpeg" title="" alt="" width="768" /></p>
+<h2>But - What do the Likelihood Profiles Look Like?</h2>
+<p><img src="14_likelihood_2_files/figure-revealjs/profileR-1.jpeg" width="768" /></p>
 <p>Are these nice symmetric slices?</p>
 </section>
+<section id="sometimes-easier-to-see-with-a-straight-line" class="slide level2">
+<h2>Sometimes Easier to See with a Straight Line</h2>
+<p><img src="14_likelihood_2_files/figure-revealjs/profile-1.jpeg" width="768" /></p>
+<p>tau = signed sqrt of difference from deviance</p>
+</section>
 <section id="evaluate-coefficients" class="slide level2">
-<h1>Evaluate Coefficients</h1>
-<table>
+<h2>Evaluate Coefficients</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p.value</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">b0</td>
-<td style="text-align: right;">1.924604</td>
-<td style="text-align: right;">1.4291143</td>
-<td style="text-align: right;">1.346711</td>
-<td style="text-align: right;">0.1780732</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.925
+</td>
+<td style="text-align:right;">
+1.506
+</td>
+<td style="text-align:right;">
+1.278
+</td>
+<td style="text-align:right;">
+0.218
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">b1</td>
-<td style="text-align: right;">2.989502</td>
-<td style="text-align: right;">0.5420939</td>
-<td style="text-align: right;">5.514730</td>
-<td style="text-align: right;">0.0000000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">resid_sd</td>
-<td style="text-align: right;">2.896527</td>
-<td style="text-align: right;">0.4579823</td>
-<td style="text-align: right;">6.324540</td>
-<td style="text-align: right;">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+resemblance
+</td>
+<td style="text-align:right;">
+2.989
+</td>
+<td style="text-align:right;">
+0.571
+</td>
+<td style="text-align:right;">
+5.232
+</td>
+<td style="text-align:right;">
+0.000
+</td>
 </tr>
 </tbody>
 </table>
 <p><br> Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Interval</p>
 </section>
 <section id="confidence-intervals" class="slide level2">
-<h1>Confidence Intervals</h1>
-<p>Quadratic Assumption</p>
-<table>
+<h2>Confidence Intervals</h2>
+Quadratic Assumption
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th></th>
-<th style="text-align: right;">2.5 %</th>
-<th style="text-align: right;">97.5 %</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+2.5 %
+</th>
+<th style="text-align:right;">
+97.5 %
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>b0</td>
-<td style="text-align: right;">-1.016771</td>
-<td style="text-align: right;">4.866158</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+-1.028
+</td>
+<td style="text-align:right;">
+4.877
+</td>
 </tr>
-<tr class="even">
-<td>b1</td>
-<td style="text-align: right;">1.873731</td>
-<td style="text-align: right;">4.105253</td>
-</tr>
-<tr class="odd">
-<td>resid_sd</td>
-<td style="text-align: right;">2.187663</td>
-<td style="text-align: right;">4.092085</td>
+<tr>
+<td style="text-align:left;">
+resemblance
+</td>
+<td style="text-align:right;">
+1.870
+</td>
+<td style="text-align:right;">
+4.109
+</td>
 </tr>
 </tbody>
 </table>
-<p><br><Br> Spline Fit to Likelihood Surface</p>
-<table>
+<br><Br> Spline Fit to Likelihood Surface
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th></th>
-<th style="text-align: right;">2.5 %</th>
-<th style="text-align: right;">97.5 %</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+2.5 %
+</th>
+<th style="text-align:right;">
+97.5 %
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>b0</td>
-<td style="text-align: right;">-1.016771</td>
-<td style="text-align: right;">4.866158</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+-1.028
+</td>
+<td style="text-align:right;">
+4.877
+</td>
 </tr>
-<tr class="even">
-<td>b1</td>
-<td style="text-align: right;">1.873731</td>
-<td style="text-align: right;">4.105253</td>
-</tr>
-<tr class="odd">
-<td>resid_sd</td>
-<td style="text-align: right;">2.187663</td>
-<td style="text-align: right;">4.092085</td>
+<tr>
+<td style="text-align:left;">
+resemblance
+</td>
+<td style="text-align:right;">
+1.870
+</td>
+<td style="text-align:right;">
+4.109
+</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="to-test-the-model-need-an-alternate-hypothesis" class="slide level2">
-<h1>To test the model, need an alternate hypothesis</h1>
+<h2>To test the model, need an alternate hypothesis</h2>
 <p><br></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">puffer_null_mle &lt;-<span class="st"> </span><span class="kw">mle2</span>(predators ~<span class="st"> </span><span class="kw">dnorm</span>(b0, <span class="dt">sd =</span> resid_sd),
-                   <span class="dt">data=</span>puffer, 
-                   <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">b0=</span><span class="dv">14</span>, <span class="dt">resid_sd =</span> <span class="dv">10</span>))</code></pre></div>
 </section>
 <section id="put-it-to-the-likelihood-ratio-test" class="slide level2">
-<h1>Put it to the Likelihood Ratio Test!</h1>
+<h2>Put it to the Likelihood Ratio Test!</h2>
 <p><Br></p>
-<pre><code>Likelihood Ratio Tests
-Model 1: puffer_mle, predators~dnorm(b0+b1*resemblance,sd=resid_sd)
-Model 2: puffer_null_mle, predators~dnorm(b0,sd=resid_sd)
-  Tot Df Deviance Chisq Df Pr(&gt;Chisq)    
-1      3   99.298                        
-2      2  117.788 18.49  1  1.708e-05 ***
+<pre><code>Analysis of Deviance Table
+
+Model 1: predators ~ 1
+Model 2: predators ~ resemblance
+  Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    
+1        19     422.95                          
+2        18     167.80  1   255.15 1.679e-07 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </section>
 <section id="compare-to-linear-regression" class="slide level2">
-<h1>Compare to Linear Regression</h1>
-<p>Likelihood:</p>
-<table>
+<h2>Compare to Linear Regression</h2>
+Likelihood:
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p.value</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">b0</td>
-<td style="text-align: right;">1.924604</td>
-<td style="text-align: right;">1.4291143</td>
-<td style="text-align: right;">1.346711</td>
-<td style="text-align: right;">0.1780732</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.925
+</td>
+<td style="text-align:right;">
+1.506
+</td>
+<td style="text-align:right;">
+1.278
+</td>
+<td style="text-align:right;">
+0.218
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">b1</td>
-<td style="text-align: right;">2.989502</td>
-<td style="text-align: right;">0.5420939</td>
-<td style="text-align: right;">5.514730</td>
-<td style="text-align: right;">0.0000000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">resid_sd</td>
-<td style="text-align: right;">2.896527</td>
-<td style="text-align: right;">0.4579823</td>
-<td style="text-align: right;">6.324540</td>
-<td style="text-align: right;">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+resemblance
+</td>
+<td style="text-align:right;">
+2.989
+</td>
+<td style="text-align:right;">
+0.571
+</td>
+<td style="text-align:right;">
+5.232
+</td>
+<td style="text-align:right;">
+0.000
+</td>
 </tr>
 </tbody>
 </table>
-<p><br><br> Least Squares</p>
-<table>
+<br><br> Least Squares
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p.value</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">1.924694</td>
-<td style="text-align: right;">1.5064163</td>
-<td style="text-align: right;">1.277664</td>
-<td style="text-align: right;">0.2176012</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.925
+</td>
+<td style="text-align:right;">
+1.506
+</td>
+<td style="text-align:right;">
+1.278
+</td>
+<td style="text-align:right;">
+0.218
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">resemblance</td>
-<td style="text-align: right;">2.989492</td>
-<td style="text-align: right;">0.5714163</td>
-<td style="text-align: right;">5.231724</td>
-<td style="text-align: right;">0.0000564</td>
+<tr>
+<td style="text-align:left;">
+resemblance
+</td>
+<td style="text-align:right;">
+2.989
+</td>
+<td style="text-align:right;">
+0.571
+</td>
+<td style="text-align:right;">
+5.232
+</td>
+<td style="text-align:right;">
+0.000
+</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="compare-to-linear-regression-f-and-chisq" class="slide level2">
-<h1>Compare to Linear Regression: F and Chisq</h1>
-<p>Likelihood:</p>
-<table>
+<h2>Compare to Linear Regression: F and Chisq</h2>
+Likelihood:
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p.value</th>
+<tr>
+<th style="text-align:right;">
+Resid. Df
+</th>
+<th style="text-align:right;">
+Resid. Dev
+</th>
+<th style="text-align:right;">
+Df
+</th>
+<th style="text-align:right;">
+Deviance
+</th>
+<th style="text-align:right;">
+Pr(&gt;Chi)
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">b0</td>
-<td style="text-align: right;">1.924604</td>
-<td style="text-align: right;">1.4291143</td>
-<td style="text-align: right;">1.346711</td>
-<td style="text-align: right;">0.1780732</td>
+<tr>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+422.950
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">b1</td>
-<td style="text-align: right;">2.989502</td>
-<td style="text-align: right;">0.5420939</td>
-<td style="text-align: right;">5.514730</td>
-<td style="text-align: right;">0.0000000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">resid_sd</td>
-<td style="text-align: right;">2.896527</td>
-<td style="text-align: right;">0.4579823</td>
-<td style="text-align: right;">6.324540</td>
-<td style="text-align: right;">0.0000000</td>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+167.797
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+255.153
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 </tbody>
 </table>
-<p><br><br> Least Squares</p>
-<table>
+<br><br> Least Squares
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th></th>
-<th style="text-align: right;">Df</th>
-<th style="text-align: right;">Sum Sq</th>
-<th style="text-align: right;">Mean Sq</th>
-<th style="text-align: right;">F value</th>
-<th style="text-align: right;">Pr(&gt;F)</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Df
+</th>
+<th style="text-align:right;">
+Sum Sq
+</th>
+<th style="text-align:right;">
+Mean Sq
+</th>
+<th style="text-align:right;">
+F value
+</th>
+<th style="text-align:right;">
+Pr(&gt;F)
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>resemblance</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">255.1532</td>
-<td style="text-align: right;">255.153152</td>
-<td style="text-align: right;">27.37094</td>
-<td style="text-align: right;">5.64e-05</td>
+<tr>
+<td style="text-align:left;">
+resemblance
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+255.1532
+</td>
+<td style="text-align:right;">
+255.153152
+</td>
+<td style="text-align:right;">
+27.37094
+</td>
+<td style="text-align:right;">
+5.64e-05
+</td>
 </tr>
-<tr class="even">
-<td>Residuals</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">167.7968</td>
-<td style="text-align: right;">9.322047</td>
-<td style="text-align: right;">NA</td>
-<td style="text-align: right;">NA</td>
+<tr>
+<td style="text-align:left;">
+Residuals
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+167.7968
+</td>
+<td style="text-align:right;">
+9.322047
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
 </tr>
 </tbody>
 </table>
@@ -627,8 +1185,8 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -648,6 +1206,8 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -658,7 +1218,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>
