@@ -8,9 +8,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 library(dplyr)
 library(tidyr)
-library(purrr)
-library(bbmle)
 library(ggplot2)
+library(MASS)
 ```
 
 #### 1. Likelihood of a Single Data Point
@@ -92,11 +91,46 @@ ggplot(pois_10, aes(x=lambda_vals, y=log_likelihood)) +
 
 Note, I'm not logging after the fact. That's because we'll get different estimates if we log within the function versus after a really really small value is spit out.
 
+##### 1.4 A Real Likelihood "Function"
+
+This is all well and good, but, as we move into more complex models, and more data, we're not going to be able to include a simple `dpois()` statement or otherwise in our mutate. Instead, we need to think of the model as a whole, and write out a likelihood generating **function**. This will have other advantages, too, as we do things like profile, etc.  The general struction of a likelihood function should be something like as follows:
+
+```{r lfun}
+my_likelihood_function <- function(observations, predictors, parameters){
+  
+  #a data generating process that makes
+  #fitted values of your response variable
+  
+  #a likelihood function that compares observations 
+  #to predicted values
+  
+}
+```
+
+
+For example, in the case of our Poisson data, we can write something like so:
+
+```{r pois_lik}
+
+pois_likelihood <- function(y, lambda){
+  # Data Generating Process
+  y_hat <- lambda
+  
+  #likelihood function
+  sum(dpois(y, lambda = y_hat, log = TRUE))
+  
+  
+}
+
+```
+
+Why include the sum? Well, in this case, it makes the function scalable to look at many data points, as we will see below! If we were looking at the straight likelihood, we'd use `prod()` instead. But, as we've talked about, go with `dat log-likelihood!
+
 #### 2. Likelihood of a Data Set
 
 #### 2.1 Integrating Likelihood over Many Data Points 
 
-Here's the beauty of a data set. The only two differences between the workflow for 1 point and many is first, that you use either `prod()` (for likelihood) or `sum()` (for log-likelihood) to get the total value. Second, as the density functions don't take kindly to a vector of data and a vector of parameters, we'll use `rowwise()` to iterate over rows, but `ungroup()` after for other operations.
+Here's the beauty of a data set. The only two differences between the workflow for 1 point and many is first, that you use either `prod()` (for likelihood) or `sum()` (for log-likelihood) to get the total value. Second, as the density functions don't take kindly to a vector of data and a vector of parameters, we'll use `rowwise()` to iterate over rows, but `ungroup()` after for other operations. As we've written our likelihood functoin, as well, we're really in good shape to just nail this.
 
 Let's try this for a random dataset that we generate from a Poisson distribution with a lambda of 10.
 
@@ -108,8 +142,7 @@ pois_data <- rpois(10, lambda=10)
 
 pois_mle <- data.frame(lambda_vals = 0:20) %>%
   rowwise() %>%
-  mutate(likelihood = prod(dpois(x = pois_data, lambda = lambda_vals)),
-         log_likelihood = sum(dpois(x = pois_data, lambda = lambda_vals, log=TRUE))) %>%
+  mutate(log_likelihood = pois_likelihood(y = pois_data, lambda = lambda_vals)) %>%
   ungroup()
 
 #Plot the surface
@@ -120,12 +153,6 @@ pois_mle %>%
   filter(log_likelihood == max(log_likelihood))
 ```
 
-This example also shows why we use Log-Likelihood over Likelihood. Let's look at the first few rows of the output:
-```{r pois_out}
-pois_mle
-```
-
-Notice that we cannot differentiate the first four values using likelihood because they are so small? But the difference is clear for Log Likelihood.
 
 #### 2.2 Confidence Intervals 
 
@@ -136,36 +163,52 @@ pois_mle %>%
   filter(log_likelihood > (max(log_likelihood) - 1.92) )
 ```
 
-So, our CI is between 8 and 11.
+So, our CI is between 8 and 10.
 
 #### 2.3 Examples
 
-1. You have run 5 trials of flipping 20 coins. The number of heads in each trial is: 11, 10,  8,  9,  7. What's the maximum likelihood estimate of the probability getting heads?
+1. You have run 5 trials of flipping 20 coins. The number of heads in each trial is: 11, 10,  8,  9,  7. What's the maximum likelihood estimate of the probability getting heads? Use `dbinom()` here for the binomial distribution.
 
 
 #### 3. Likelihood with Two Parameters
 
 ##### 3.1 Two parameters and crossing!
 
-The great thing about multiple parameters is that, heck, it's no different than one parameter. Let's use the seals example from last week and look at estimating the mean and SD of the seal age distribution. TO start with, what's the range of values we should choose to test? Let's look at the data!
+The great thing about multiple parameters is that, heck, it's no different than one parameter. Let's use the seals example from last week and look at estimating the mean and SD of the seal age distribution. To start with, what's the range of values we should choose to test? Let's look at the data!
 
 ```{r seals}
-seals <- read.csv("data/06/17e8ShrinkingSeals Trites 1996.csv")
+seals <- read.csv("data/17e8ShrinkingSeals Trites 1996.csv")
 
 hist(seals$age.days)
 ```
 
-Eyeballing this, I'd say the mean is between 3700 and 3800 and the SD is...oh, between 1280 and 1310
+Eyeballing this, I'd say the mean is between 3720 and 3740 and the SD is...oh, between 1280 and 1310.  
+  
 
-Fair enough.  We can use `crossing` in `tidyr` to generate a set of parameters to test, and then literally nothing is different from the workflow before. Let's just look at the Log Likelihood.
+OK, we're going to need a likelihood function for this - one that takes a mean and a SD. Let's do this!
+
+```{r norm_lik}
+norm_likelihood <- function(obs, mean_est, sd_est){
+  
+  #data generating process
+  est <- mean_est
+  
+  #log likelihood
+  sum(dnorm(obs, mean = est, sd = sd_est, log = TRUE))
+  
+}
+```
+
+
+
+Now, we can use `crossing` in `tidyr` to generate a set of parameters to test, and then literally nothing is different from the workflow before. Let's just look at the Log Likelihood.
 
 ```{r seal_ll, cache=TRUE}
 seal_dist <- crossing(m = seq(3720, 3740, by = 0.1), 
                       s=seq(1280, 1310, by = 0.1)) %>%
   rowwise() %>%
-  mutate(log_lik = sum(dnorm(seals$age.days, mean = m, sd = s, log=TRUE))) %>%
+  mutate(log_lik = norm_likelihood(obs = seals$age.days, mean_est = m, sd_est = s)) %>% 
   ungroup()
-
 ```
 
 Notice that took a bit That's because we searched `r nrow(seal_dist)` combinations of values. And we didn't even do that with high precision!  And I gave you a really narrow band of possible values! If anything can convince you that we need an algorithmic solution rather than something brute force - I hope this does!
@@ -184,11 +227,11 @@ ggplot(seal_dist, aes(x=m, y=s, z=log_lik)) +
   geom_contour(aes(color = ..level..))
 ```
 
-Note that odd color thing enables you to see the contours.
+Note that odd color thing enables you to see the contours. Yeah, I don't like it, either.
 
 ##### 3.2 Profile Likelihoods for CIs
 
-So, how do we get profile likelihoods from this mess?
+So, how do we get profile likelihoods from this mess? 
 
 Simply put, for each variable we want the profile of, we look at the MLE estimate at each value of the other parameter. So, group by the **other** parameter and filter out the MLE.  So for the mean - 
 
@@ -198,7 +241,7 @@ seal_sd_profile <- seal_dist %>%
   filter(log_lik == max(log_lik)) %>%
   ungroup()
 
-qplot(s, log_lik, data=seal_sd_profile)
+qplot(s, log_lik, data=seal_sd_profile, geom = "line")
 ```
 
 OK, nice profile.
@@ -216,36 +259,29 @@ So, now we see the CI of our SD is from 1280 to 1310 - at least from this grid.
 
 ##### 3.3 Exercises
 
-1. Using the seal data, get the mean and SD of the seal lengths. Actually use `mean` and `sd` to derive reasonable parameter ranges likelihood surface.  
+1. Using the seal data, get the mean and SD of the seal lengths. Actually use `mean` and `sd` to derive reasonable parameter ranges likelihood surface so you don't take forever.  
 \
 2. What is the profile estimate of the CIs of the mean?
 
 
-#### 4. Linear Regression and Likelihood: `bbmle`
+#### 4. Linear Regression and Likelihood: `glm`
 
-So, you want to fit a model with multiple parameters using Likelihood? We've seen that brute force is not the way. We need algorithms to search parameter space. R has multiple optimizer functions that seek to fund the minimum value of a function (likelihood or otherwise). `bbmle` is Ben Bolker's package that seeks to create an easy interface to these functions. You can tweak to your heart's delight all of the details of the optimizer, but at the end of the day, much of the code is fairly straightforward.
+So, you want to fit a model with multiple parameters using Likelihood? We've seen that brute force is not the way. We need algorithms to search parameter space. R has multiple optimizer functions that seek to fund the minimum value of a function (likelihood or otherwise). Many require you to write your own likelihood function in order to fit, and this are **incredibly** flexible. But, for many workaday needs, we will use the function `glm()` which stands for Generalized Linear Model (more on that at the end of the course) and uses the iteratively reweighted least squares algorithm.
 
-##### 4.1 Seal Regression with `mle2`
+##### 4.1 Seal Regression with `glm`
 
-The function at the core of `bbmle` is `mle2`. Let's fit the seal regression as before, and look at what is different.
+The great thing about `glm()` is that it is incredibly similar to `lm()` only - now you have to specify what distribution you're drawing from, in order to get the likelihood correct. You should also specify the shape of the curve, as many different curves are possible now.  Let's take a look.
 
 ```{r bbmle_seals}
-seals <- read.csv("data/06/17e8ShrinkingSeals Trites 1996.csv")
+seals <- read.csv("./data/17e8ShrinkingSeals Trites 1996.csv")
 
-seal_mle <- mle2(length.cm ~ dnorm(b0 + b1 * age.days, resid_sd),
-                 start = list(b0 = 5, b1 = 5, resid_sd = 500),
-                 data = seals)
+seal_mle <- glm(length.cm ~ age.days,
+                family = gaussian(link = "identity"),
+                data = seals)
+  
 ```
 
-First, whoah! We had to specify `dnorm` to say that this was a normal error distribution! In essence, we were specifying our likelihood function here explicitly.  That's new.
-
-Second, we had to **name** our coefficients. Explicitly. And write out our model. No more canned routines for us.
-
-Third, we had to specify a list of start values. Remember, we're using an algorithm. So where you you start?  This opens up a host of problems - you can fall into a local minimum. So, always best to start with different sets of start values to make sure that's not a problem. Particularly for more complex models.
-
-Last, that should have thrown a bunch of warnings for you - these warnings indicate that the algorithm tried to explore non-possible values (negative SDs, actually). This happens.
-
-Try different start values. Do you get different errors or warnings?
+This looks pretty similar! Only, notice now we have this `family` argument for a distribution. We're going to go all `gaussian` all the time for now. We also specify what's called a `link` function. Basically, how do we translate linear predictors into the shape of a curve. For now, we can just use `"identity"` which means a 1:1 translation between our linear predictors and the shape of the curve.
 
 ##### 4.2 Testing Assumptions
 
@@ -280,21 +316,52 @@ hist(res)
 
 Again, looks good!
 
+
+##### 4.3 The Profile
+
 Now, what about looking at the surface? We don't have a nice way of visualizing a 4-D surface, so, instead we look at the profile likelihoods of each parameter. For that, we use the `profile` function which gets a profile of any function that can be accessed with the `logLik()` function. Note, this might take some time.
 
 ```{r profile_mle2}
+library(MASS)
 plot(profile(seal_mle))
 ```
 
-This largely looks ok...except the prfile for b0 looks somewhat suspicious. Welcome to the world of fiddling with likelihood. One issue here might be that it's not searching a wide enough region. We can manually set the region to search using the `std.err` argument. I'll try setting that to 0.05, just to give it an area to search.
+Well that's not what we expect. What is going on here? In essence, `profile.glm()` takes the profile of a parameter, subtracts the optimized deviance (thus centering it at 0), and takes a signed square root. This produces a straight line from which it's much easier to see deviations. Which is great in terms of diagnostics!
 
-```{r profile_b0}
-plot(profile(seal_mle, which="b0", std.err=0.05))
+It's not great if you want to see CIs and such. For that, we can use the `profileModel` library. Let's take a look.
+
+```{r profileModel}
+library(profileModel)
+
+prof <- profileModel(seal_mle,
+                     objective = "ordinaryDeviance")
 ```
 
-Voila. Explore `?profile` for other tricks here. It can get a little hairy.
+Here we see that we can request how we want the deviance transformed. In this case, not at all. Let's see how this looks.
 
-##### 4.3 Coefficients and CIs
+```{r plot_prof}
+plot(prof)
+```
+
+Much nicer. To see the sampling grid used:
+
+```{r prof_grid}
+plot(prof, print.grid.points = TRUE)
+```
+
+We can also look at the CIs here naturally.
+
+```{r prof_ci_profmod}
+
+prof <- profileModel(seal_mle,
+                     objective = "ordinaryDeviance",
+                     quantile = qchisq(0.95, 1))
+
+plot(prof)
+```
+
+
+##### 4.4 Coefficients and CIs
 
 OK, now that we've done this and feel comfortable with our fit, what are our coefficients?
 
@@ -312,119 +379,67 @@ First, let's see how that compares to an `lm()` fit.
 broom::tidy(lm(length.cm ~ age.days, data=seals))
 ```
 
-Not bad. Pretty close.
+Not bad. Pretty close. Note that `glm()` uses something called a `dispersion parameter` which is a general name for additional factors related to spread in the data. For a Gaussian model, it's just the residual variance.
 
 Note, the SEs are based on the assumption that the profiles are well behaved. If we want to get into more detail and change that assumption, we use `confint()`.
 
 ```{r confint_mle}
 #based off of profile
 confint(seal_mle)
-
-#based off of apprxoimation
-confint(seal_mle, method="uniroot")
-
-#based off of quadratic assumption
-confint(seal_mle, method="quad")
 ```
 
-You can see the last method prodiced similar results to searching the profile - and didn't fall prey to the profile problem we hit earlier.
 
-##### 4.4 Model Comparison
+##### 4.5 Model Comparison
 So, how do we compare models? Unfortunately, there's not an automated way. This is likelihood, so you have to specify your null or alternate models. You have to think. In this case, a null model would only have an intercept - a mean - term.
 
 ```{r null_mod}
 
-seal_mle_null <- mle2(length.cm ~ dnorm(b0, resid_sd),
-                 start = list(b0 = 5, resid_sd = 500),
-                 data = seals)
+seal_mle_null <- glm(length.cm ~ 1,
+                family = gaussian(link = "identity"),
+                data = seals)
 ```
 
-We can now compare these models using a LRT.
+We can now compare these models using a LRT. Note that we use the `anova()` function, and now have to specify what kind of test we want
 
 ```{r mod_compare}
-anova(seal_mle, seal_mle_null)
+anova(seal_mle_null, seal_mle, test = "LRT")
 ```
 
-Yes! They are different!  If we wanted to do an AIC comparison
+Yes! They are different!  
 
-```{r aic_compare}
-AIC(seal_mle)
-AIC(seal_mle_null)
+##### 4.6 Plotting a fit glm
+
+To plot, we can use the same strategy as before, only, now we need to specify two things to `stat_smooth()`. First, our method is now `glm`, but second, we need to tell it about the family and link we're using. `stat_smooth` takes a list of arguments that are passed to the method. So, let's try it out.
+
+```{r seal_plot_glm}
+ggplot(seals, 
+       mapping = aes(x = age.days, y = length.cm)) +
+  geom_point() +
+  stat_smooth(method = "glm", method.args = list(family = gaussian(link="identity")))
 ```
 
-Quite different! Even after adjusting for parsiony, we need Age to understand what is going on here.
+Works!
 
-##### 4.6 Algorithms
-
-So, one thing that has been annoying up until now is these warnings we get due to our algorithm putting a negative value on our SD. Now, there are a number of different algorithms out there. Some even have constraints!
-
-Now, when I started developing this example, I began with a resid_sd startvalue of 5 - close to the real one. I immediately got convergence errors and a note about setting SDs to 1. If I summarized it, I would get no SE for some coefficients
-```{r start}
-summary(mle2(length.cm ~ dnorm(b0 + b1*age.days, resid_sd),
-                 start = list(b0 = 5, b1=5, resid_sd = 5),
-                 data = seals))
-```
-
-How do I solve this? One idea is to try different methods or optimizers. First, let's try simulated annealing, which searches parameter space, but is slow.
-
-```{r optimizers, cache=TRUE}
-#Simulated annealing
-summary(mle2(length.cm ~ dnorm(b0 + b1*age.days, resid_sd),
-                 start = list(b0 = 5, b1 = 5, resid_sd = 5),
-                 data = seals, method="SANN"))
-```
-
-A second option is to use a method that includes a constraint. L-BFGS-B allows for box constraints (set a lower and upper bound), so, we can set the lower bound of resid_sd to something very small - close to 0 even.
-
-The bobyqa algorithm in the `optimx` package also allows for box constraints.
-
-```{r optimizers_constraint, cache=TRUE}
-#"L-BFGS-B
-summary(mle2(length.cm ~ dnorm(b0 + b1*age.days, resid_sd),
-                 start = list(b0 = 5, b1=5, resid_sd = 5),
-                 data = seals, method="L-BFGS-B", 
-                 lower = c(b0 = -Inf, b1 = -Inf, resid_sd = 0.0001),
-                 upper = c(b0 = Inf, b1 = Inf, resid_sd = Inf)))
-
-#bobyqa
-library(optimx)
-summary(mle2(length.cm ~ dnorm(b0 + b1*age.days, resid_sd),
-                 start = list(b0 = 5, b1=5, resid_sd = 5),
-                 data = seals, 
-                 optimizer = "optimx", method="bobyqa", 
-                 lower = c(b0 = -Inf, b1 = -Inf, resid_sd = 0.0001),
-                 upper = c(b0 = Inf, b1 = Inf, resid_sd = Inf)))
-                 
-```
-
-OK, that works!
-
-Which optimizer is right for you I will leave as a further topic for your research as you get into progressively complex likelihood methods.
-
-
-##### 4.5 Faded Examples
+##### 4.7 Faded Examples
 Let's revisit the examples from our lm lab the other day.
 
 #### A Fat Model
 Fist, the relationship between how lean you are and how quickly you lose fat. Implement this to get a sense ot the general workflow for analysis
 
 ```{r, eval=FALSE}
-fat <- read.csv("./data/06/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
+fat <- read.csv("../data/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
 
 #initial visualization to determine if lm is appropriate
 fat_plot <- ggplot(data=fat, aes(x=leanness, y=lossrate)) + 
   geom_point()
 fat_plot
 
-#get some sensible start values
-lm_coefs <- coef(lm(lossrate ~ leanness, data=fat))
-
-fat_mod <- mle2(lossrate ~ dnorm(b0 + b1*leanness, resid_sd),
-                start = list(b0 = lm_coefs[1], b1 =lm_coefs[2], resid_sd = 4),
-                data = fat)
+#fit that model
+fat_mod <- glm(lossrate ~ leanness, 
+               family = gaussian(link = "identity"), 
+               data=fat)
   
   
-
 #assumptions
 fat_fit <- predict(fat_mod)
 fat_res <- residuals(fat_mod)
@@ -437,11 +452,11 @@ qqline(fat_res)
 plot(profile(fat_mod))
 
 #LRT test of model
-fat_mod_null <- mle2(lossrate ~ dnorm(b0 , resid_sd),
-                start = list(b0 = 1, resid_sd = 4),
-                data = fat)
+fat_mod_null <- glm(lossrate ~ 1, 
+               family = gaussian(link = "identity"), 
+               data=fat)
   
-anova(fat_mod, fat_mod_null)
+anova(fat_mod_null, fat_mod, test = "LRT")
 
 #t-tests of parameters
 summary(fat_mod)
@@ -451,19 +466,17 @@ summary(fat_mod)
 For your first faded example, let's look at the relationship between DEET and mosquito bites.
 
 ```{r eval=FALSE}
-deet <- read.csv("./data/06/17q24DEETMosquiteBites.csv")
+deet <- read.csv("../data/17q24DEETMosquiteBites.csv")
 
 deet_plot <- ggplot(data=___, aes(x=dose, y=bites)) + 
   geom_point()
 
 deet_plot
 
-#get start values
-deet_coef <- coef(lm(bites ~ dose, data=deet))
-
-deet_mod <- <- mle2(___ ~ dnorm(b0 + b1*dose, resid_sd),
-                start = list(b0 = deet_coef[1], b1 =deet_coef[2], resid_sd = 4),
-                data = ____)
+#fit that model
+deet_mod <-  glm(bites ~ dose, 
+                   family = gaussian(link = "______")
+                   data=___)
   
 
 #assumptions
@@ -478,11 +491,11 @@ qqline(_____)
 plot(profile(____))
 
 #f-tests of model
-deet_mod_null <- mle2(____ ~ dnorm(b0 + _____),
-                start = list(b0 = 1, resid_sd = 4),
-                data = deet)
+deet_mod_null <- glm(bites ~ ___, 
+                   family = gaussian(link = "______")
+                   data=___)
 
-anova(___, _____)
+anova(___, _____, test = "LRT")
 
 #t-tests of parameters
 summary(___)
@@ -493,18 +506,14 @@ summary(___)
 Do longer lived species also have larger home ranges? Let's test this!
 ```{r eval=FALSE}
 
-zoo <- read.csv("./data/06/17q02ZooMortality Clubb and Mason 2003 replica.csv")
+zoo <- read.csv("../data/17q02ZooMortality Clubb and Mason 2003 replica.csv")
 
 zoo_plot <- ggplot(data=___, aes(x=mortality, y=homerange)) + 
   ___()
 
-___
-
-zoo_coef <- coef(___(___~___, data=___))
-
-
-zoo_mod <- <- mle2(___ ~ dnorm(____ + ____*mortality, ____),
-                start = list(____ = zoo_coef[1], ____ =zoo_coef[2], ____ = 4),
+#fit that model
+zoo_mod <- glm(___~___,
+              family = ____(____ = _____),
                 data = ____)
 
 #assumptions
@@ -518,12 +527,16 @@ qqline(____)
 
 plot(_____(____))
 
-#f-tests of model
-zoo_mod_null <- <- mle2(___ ~ dnorm(____, ____),
-                start = list(____ = 1, ____ = 4),
+#LRT-tests of model
+zoo_mod_null <- <- glm(___~___,
+              family = ____(____ = _____),
                 data = ____)
-anova(___,_____)
+
+anova(___, _____, ________)
 
 #z-tests of parameters
 _____(___)
 ```
+
+
+For this last one, I want you to also also try something. Try changing `link = "identity"` to `link = "log"`. What do you see? How does this compare to the log transformed model? Try also to `ggplot` the results with the two different links!
