@@ -254,11 +254,15 @@ $$Visits \sim Resemblance$$<br>
 <p align="left">**Error Generating Process:**</p>
 <center>Variation in Predator Behavior<br>Assume: Normally distributed error (also reasonable)</center>
 
-## Quantiative Model of Process
+## Quantiative Model of Process Using Likelihood
+<p align = "left">
 <br><br>
-$$\Large Visits_i = \beta_0 + \beta_1 Resemblance_i + \epsilon_i$$
+**Likelihood:**  
+$Visits_i \sim \mathcal{N}(\hat{Visits_i}, \sigma)$  
 <br><br><br>
-$$\Large \epsilon_i \sim N(0, \sigma)$$
+**Data Generating Process:**  
+$\hat{Visits_i} = \beta_{0}  +  \beta_{1} Resemblance_i$
+</p>
 
 ## Likelihood Function for Linear Regression
 <br><br><br>
@@ -267,9 +271,20 @@ $\large L(\theta | D) = \prod_{i=1}^n p(y_i\; | \; x_i;\ \beta_0, \beta_1, \sigm
 
 ## Likelihood Function for Linear Regression
 <br><br>
-$$L(\theta_j | Data) = \prod_{i=1}^n \mathcal{N}(Visits_i\; |\; \beta_{0j} + \beta_{1j} Resemblance_i, \sigma_j)$$
+$$L(\theta | Data) = \prod_{i=1}^n \mathcal{N}(Visits_i\; |\; \beta_{0} + \beta_{1} Resemblance_i, \sigma)$$
 <br><br>
-where $\beta_{0j}, \beta_{1j}, \sigma_j$ are elements of $\theta_j$
+where $\beta_{0}, \beta_{1}, \sigma$ are elements of $\theta$
+
+## Quantiative Model of Process Using Likelihood
+<p align = "left">
+<br><br>
+**Likelihood:**  
+$Visits_i \sim \mathcal{N}(\hat{Visits_i}, \sigma)$  
+<br><br><br>
+**Data Generating Process:**  
+$\hat{Visits_i} = \beta_{0}  +  \beta_{1} Resemblance_i$
+</p>
+
 
 ## Fit Your Model!
 ```{r bblme, echo=FALSE, eval=FALSE}
@@ -281,7 +296,8 @@ puffer_mle <- mle2(predators ~ dnorm(b0 + b1*resemblance, sd = resid_sd),
 ```
 
 ```{r puffer_lm, echo=TRUE}
-puffer_glm <- glm(predators ~ resemblance, data = puffer,
+puffer_glm <- glm(predators ~ resemblance, 
+                  data = puffer,
                   family = gaussian(link = "identity"))
 ```
 
