@@ -27,7 +27,8 @@ library(tidyr)
 library(ggplot2)
 
 ```
-
+<!-- next year review for typos and move some things over from review in next lecture
+  In particular, do better with likelihood fuction - have an f(X) kind of thing -->
 
 
 ## Announcements
