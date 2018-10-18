@@ -111,7 +111,8 @@ __Lab Topic:__ [Calculating and visualizing Likelihoods, fitting a line with bbm
 __Reading:__ W&S 20, W&G Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-likelihood-2018  
 __In Class Code:__ [power analysis](in_class_code_2016/06a_power_lm.R), [linear models with likelihood](in_class_code_2016/07a_likelihood_lm.R)  
-  
+__Homework:__[pufferfish and likelihood](./homework_2018/07_likelihood.html)  
+
 ### Week 8.   
 ```{r next_date, echo=FALSE}
 ```
