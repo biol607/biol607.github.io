@@ -24,7 +24,7 @@ output:
   - How to use a Credible Interval
 -->
 
-![image](./images/15/bayes.png)
+![image](./images/15/bayes-and-hus-theory.png)
 
 
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
@@ -99,7 +99,7 @@ library(ggplot2)
 > - Likelhoodist: p( D &#x7c; H)  
 \
 \
-> -  p(H &#x7c; D)
+> -  Bayesian: p(H &#x7c; D)
 
 </h1>
 
@@ -125,7 +125,7 @@ And Also... \
 \
 $$\huge p(a\ and\ b) = p(b)p(a|b)$$
 <div class="fragment">![](images/15/tree2.jpg)</div><br>
-<div class="fragment"><center>as $p(b) = p(b+a)+p(b|!a)$</center></div>
+<div class="fragment"><center>as $p(b) = p(b|a)+p(b|!a)$</center></div>
 
 ## Bayes Theorem
 And so... \
@@ -138,10 +138,10 @@ And thus... \
 \
 $$\huge  p(a|b) =   \frac{p(b|a)p(a)}{p(b)} $$
 
-<div class = "fragment">![](images/15/bayes.png){width="45%"}</div>
+<div class = "fragment">![](images/15/bayes.png){width="40%"}</div>
 
 ##
-![](images/15/seashell.png){width="50%"}
+![](images/15/seashell.png){width="45%"}
 
 ## Bayes Theorem and Data 
 \
@@ -179,7 +179,7 @@ post +
   geom_vline(xintercept=10, color="blue", lty=2)
 ```
 
-The probability that the parameter is 13 is 0.4
+The probability that the parameter is 13 is 0.4  
 The probability that the parameter is 10 is 0.044
 
 
@@ -278,7 +278,8 @@ where p(H|D) is your posterior probability of a hypothesis
 ## Prior Probability
 ![](images/15/prior.jpg)
 <br><br>
-<p align="left"><span class="fragment">This is why Bayes is different from Likelihood!</span</p>
+<p align="left"><span class="fragment">This is why Bayes is different from Likelihood!</span></p>
+
 ## How do we Choose a Prior?
 
 > -   A prior is a powerful tool, but it can also influence our results of
@@ -345,9 +346,6 @@ legend(-2,3, col=c("black", "red", "blue"), lty=1:3, legend=c("Prior", "n=3", "n
 ## p(data) is just a big summation/integral
 ![](images/15/marginal.jpg)
 
-<div class="fragment">
-![](images/15/tree2.jpg)
-</div>
 
 
 ## Denominator: The Marginal Distribution
@@ -391,6 +389,7 @@ p(Yes) = P(Yes $|$ Sun Explodes)p(Sun Explodes) \
 <br><br>
 <p align="left" style="font-size:10pt">credit: Amelia Hoover</p>
 
+<!--
 
 ## Bayes Theorem in Action
 
@@ -423,6 +422,7 @@ $$p(Sun Explodes | Yes) = \frac{p(Yes | Sun Explodes)p(Sun Explodes)}{p(Yes)}$$\
 <span class="fragment">Note, we can also  evaluate the probability of the alternate
 hypothesis - p(Sun Doesn’t Explode $|$ Yes)</span>
 </p>
+-->
 
 ## Where have we gone?
 ![](images/15/ellison_table.jpg)

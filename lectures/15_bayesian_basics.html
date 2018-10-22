@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title></title>
+  <title>15_bayesian_basics.utf8.md</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -54,22 +54,394 @@
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
 
 </head>
 <body>
@@ -78,7 +450,7 @@
 
 
 <section id="bayesian-statistics-an-introduction" class="slide level2">
-<h1>Bayesian Statistics: an introduction</h1>
+<h2>Bayesian Statistics: an introduction</h2>
 <!-- Objectives
 1) Understand Bayes theorem
   - Contrast to likelihood and frequentist approaches
@@ -88,10 +460,10 @@
   - Posterior Distributions
   - How to use a Credible Interval
 -->
-<p><img src="images/15/bayes.png" alt="image" /></p>
+<p><img data-src="./images/15/bayes-and-hus-theory.png" alt="image" /></p>
 </section>
 <section id="deriving-truth-from-data" class="slide level2">
-<h1>Deriving Truth from Data</h1>
+<h2>Deriving Truth from Data</h2>
 <ul>
 <li class="fragment"><strong>Frequentist Inference:</strong> Correct conclusion drawn from repeated experiments
 <ul>
@@ -114,7 +486,7 @@
 </ul>
 </section>
 <section id="similarities-in-frequentist-and-likelihoodist-inference" class="slide level2">
-<h1>Similarities in Frequentist and Likelihoodist Inference</h1>
+<h2>Similarities in Frequentist and Likelihoodist Inference</h2>
 <ul>
 <li><p><strong>Frequentist inference</strong> with Linear Models</p>
 <ul>
@@ -135,9 +507,10 @@
 </div>
 </section>
 <section id="bayesian-inference" class="slide level2">
-<h1>Bayesian Inference</h1>
-<p><img src="images/15/neon_bayes_theorem.jpeg" alt="image" style="width:40.0%" /><br />
-<font size="6"></p>
+<h2>Bayesian Inference</h2>
+<p><img data-src="./images/15/neon_bayes_theorem.jpeg" alt="image" style="width:40.0%" /><br />
+</p>
+<p><font size="6"></p>
 <ul>
 <li><p>Estimate probability of a parameter</p></li>
 <li><p>State degree of believe in specific parameter values</p></li>
@@ -147,7 +520,7 @@
 <p></font></p>
 </section>
 <section id="section" class="slide level2">
-<h1></h1>
+<h2></h2>
 <h1>
 <ul>
 <li class="fragment">Frequentist: p(x ≤ D | H)<br />
@@ -158,12 +531,12 @@
 <br />
 <br />
 </li>
-<li class="fragment">p(H | D)</li>
+<li class="fragment">Bayesian: p(H | D)</li>
 </ul>
 </h1>
 </section>
 <section id="why-is-ph-d-awesome" class="slide level2">
-<h1>Why is p(H | D) awesome?</h1>
+<h2>Why is p(H | D) awesome?</h2>
 <ul>
 <li class="fragment">Up until now we have never thought about the probability of a hypothesis<br />
 <br />
@@ -178,50 +551,50 @@
 </ul>
 </section>
 <section id="bayes-theorem" class="slide level2">
-<h1>Bayes Theorem</h1>
+<h2>Bayes Theorem</h2>
 We know…<br />
 <br />
 <span class="math display">\[\huge p(a\ and\ b) = p(a)p(b|a)\]</span>
 <div class="fragment">
-<img src="images/15/tree1.jpg" />
+<img data-src="images/15/tree1.jpg" />
 </div>
 </section>
 <section id="bayes-theorem-1" class="slide level2">
-<h1>Bayes Theorem</h1>
+<h2>Bayes Theorem</h2>
 And Also…<br />
 <br />
 <span class="math display">\[\huge p(a\ and\ b) = p(b)p(a|b)\]</span>
 <div class="fragment">
-<img src="images/15/tree2.jpg" />
+<img data-src="images/15/tree2.jpg" />
 </div>
 <br>
 <div class="fragment">
 <center>
-as <span class="math inline">\(p(b) = p(b+a)+p(b|!a)\)</span>
+as <span class="math inline">\(p(b) = p(b|a)+p(b|!a)\)</span>
 </center>
 </div>
 </section>
 <section id="bayes-theorem-2" class="slide level2">
-<h1>Bayes Theorem</h1>
+<h2>Bayes Theorem</h2>
 <p>And so…<br />
 <br />
 <span class="math display">\[\huge  p(a)p(b|a) =   p(b)p(a|b) \]</span></p>
 </section>
 <section id="bayes-theorem-3" class="slide level2">
-<h1>Bayes Theorem</h1>
+<h2>Bayes Theorem</h2>
 <p>And thus…<br />
 <br />
 <span class="math display">\[\huge  p(a|b) =   \frac{p(b|a)p(a)}{p(b)} \]</span></p>
 <div class="fragment">
-<img src="images/15/bayes.png" style="width:45.0%" />
+<img data-src="images/15/bayes.png" style="width:40.0%" />
 </div>
 </section>
 <section id="section-1" class="slide level2">
-<h1></h1>
-<p><img src="images/15/seashell.png" style="width:50.0%" /></p>
+<h2></h2>
+<p><img data-src="images/15/seashell.png" style="width:45.0%" /></p>
 </section>
 <section id="bayes-theorem-and-data" class="slide level2">
-<h1>Bayes Theorem and Data</h1>
+<h2>Bayes Theorem and Data</h2>
 <p><br />
 <br />
 <span class="math display">\[\huge  p(H|D)  =   \frac{p(D|H)p(H)}{p(D)} \]</span><br />
@@ -229,31 +602,32 @@ as <span class="math inline">\(p(b) = p(b+a)+p(b|!a)\)</span>
 where p(H|D) is your posterior probability of a hypothesis</p>
 </section>
 <section id="what-is-a-posterior-distribution" class="slide level2">
-<h1>What is a posterior distribution?</h1>
-<p><img src="15_bayesian_basics_files/figure-revealjs/post_1-1.jpeg" title="" alt="" width="768" /></p>
+<h2>What is a posterior distribution?</h2>
+<p><img src="15_bayesian_basics_files/figure-revealjs/post_1-1.jpeg" width="768" /></p>
 </section>
 <section id="what-is-a-posterior-distribution-1" class="slide level2">
-<h1>What is a posterior distribution?</h1>
-<p><img src="15_bayesian_basics_files/figure-revealjs/post_2-1.jpeg" title="" alt="" width="768" /></p>
+<h2>What is a posterior distribution?</h2>
+<p><img src="15_bayesian_basics_files/figure-revealjs/post_2-1.jpeg" width="768" /></p>
 <p>The probability that the parameter is 13 is 0.4</p>
 </section>
 <section id="what-is-a-posterior-distribution-2" class="slide level2">
-<h1>What is a posterior distribution?</h1>
-<p><img src="15_bayesian_basics_files/figure-revealjs/post_3-1.jpeg" title="" alt="" width="768" /></p>
-<p>The probability that the parameter is 13 is 0.4 The probability that the parameter is 10 is 0.044</p>
+<h2>What is a posterior distribution?</h2>
+<p><img src="15_bayesian_basics_files/figure-revealjs/post_3-1.jpeg" width="768" /></p>
+<p>The probability that the parameter is 13 is 0.4<br />
+The probability that the parameter is 10 is 0.044</p>
 </section>
 <section id="what-is-a-posterior-distribution-3" class="slide level2">
-<h1>What is a posterior distribution?</h1>
-<p><img src="15_bayesian_basics_files/figure-revealjs/post2-1.jpeg" title="" alt="" width="768" /></p>
+<h2>What is a posterior distribution?</h2>
+<p><img src="15_bayesian_basics_files/figure-revealjs/post2-1.jpeg" width="768" /></p>
 <p>Probability that parameter is between 12 and 13 = 0.3445473</p>
 </section>
 <section id="bayesian-credible-interval" class="slide level2">
-<h1>Bayesian Credible Interval</h1>
-<p><img src="15_bayesian_basics_files/figure-revealjs/post3-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Bayesian Credible Interval</h2>
+<p><img src="15_bayesian_basics_files/figure-revealjs/post3-1.jpeg" width="768" /></p>
 <p>Area that contains 95% of the probability mass of the posterior distribution</p>
 </section>
 <section id="evaluation-of-a-posterior-bayesian-credible-intervals" class="slide level2">
-<h1>Evaluation of a Posterior: Bayesian Credible Intervals</h1>
+<h2>Evaluation of a Posterior: Bayesian Credible Intervals</h2>
 <div style="text-align:left">
 <p>In Bayesian analyses, the <span><strong>95% Credible Interval</strong></span> is the region in which we find 95% of the possible parameter values. The observed parameter is drawn from this distribution. For normally distributed parameters:<br />
 <br />
@@ -263,7 +637,7 @@ where p(H|D) is your posterior probability of a hypothesis</p>
 </div>
 </section>
 <section id="evaluation-of-a-posterior-frequentist-confidence-intervals" class="slide level2">
-<h1>Evaluation of a Posterior: Frequentist Confidence Intervals</h1>
+<h2>Evaluation of a Posterior: Frequentist Confidence Intervals</h2>
 <div style="text-align:left">
 In Frequentist analyses, the <span><strong>95% Confidence Interval</strong></span> of a parameter is the region in which, were we to repeat the experiment an infinite number of times, the <em>true value</em> would occur 95% of the time. For normal distributions of parameters:
 </div>
@@ -272,7 +646,7 @@ In Frequentist analyses, the <span><strong>95% Confidence Interval</strong></spa
 <span class="math display">\[\hat{\beta} - t(\alpha, df)SE_{\beta} \le \beta \le \hat{\beta} +t(\alpha, df)SE_{\beta}\]</span></p>
 </section>
 <section id="credible-intervals-versus-confidence-intervals" class="slide level2">
-<h1>Credible Intervals versus Confidence Intervals</h1>
+<h2>Credible Intervals versus Confidence Intervals</h2>
 <ul>
 <li class="fragment">Frequentist Confidence Intervals tell you the region you have confidence a <strong>true value</strong> of a parameter may occur<br />
 <br />
@@ -287,18 +661,18 @@ In Frequentist analyses, the <span><strong>95% Confidence Interval</strong></spa
 </ul>
 </section>
 <section id="degree-of-believe-in-a-result" class="slide level2">
-<h1>Degree of believe in a result</h1>
-<p><img src="15_bayesian_basics_files/figure-revealjs/p-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Degree of believe in a result</h2>
+<p><img src="15_bayesian_basics_files/figure-revealjs/p-1.jpeg" width="768" /></p>
 <div style="text-align:left">
 You can discuss the probability that your parameter is opposite in sign to its posterior modal estimate. This yields a degree of belief that you at least have the sign correct (i.e., belief in observing a non-zero value)
 </div>
 </section>
 <section id="talking-about-uncertainty-the-ipcc-way" class="slide level2">
-<h1>Talking about Uncertainty the IPCC Way</h1>
-<p><img src="images/15/ipcc_uncertainty_ar5.jpg" /></p>
+<h2>Talking about Uncertainty the IPCC Way</h2>
+<p><img data-src="images/15/ipcc_uncertainty_ar5.jpg" /></p>
 </section>
 <section id="what-are-the-other-parts-of-bayes-theorem" class="slide level2">
-<h1>What are the other parts of Bayes Theorem?</h1>
+<h2>What are the other parts of Bayes Theorem?</h2>
 <p><br />
 <br />
 <span class="math display">\[\huge  p(H|D)  =   \frac{p(D|H)p(H)}{p(D)} \]</span><br />
@@ -306,18 +680,18 @@ You can discuss the probability that your parameter is opposite in sign to its p
 where p(H|D) is your posterior probability of a hypothesis</p>
 </section>
 <section id="hello-again-likelihood" class="slide level2">
-<h1>Hello Again, Likelihood</h1>
-<p><img src="images/15/likelihood.jpg" /></p>
+<h2>Hello Again, Likelihood</h2>
+<p><img data-src="images/15/likelihood.jpg" /></p>
 </section>
 <section id="prior-probability" class="slide level2">
-<h1>Prior Probability</h1>
-<img src="images/15/prior.jpg" /> <br><br>
+<h2>Prior Probability</h2>
+<img data-src="images/15/prior.jpg" /> <br><br>
 <p align="left">
-<span class="fragment">This is why Bayes is different from Likelihood!&lt;/span
+<span class="fragment">This is why Bayes is different from Likelihood!</span>
 </p>
 </section>
 <section id="how-do-we-choose-a-prior" class="slide level2">
-<h1>How do we Choose a Prior?</h1>
+<h2>How do we Choose a Prior?</h2>
 <ul>
 <li class="fragment">A prior is a powerful tool, but it can also influence our results of chosen poorly. This is a highly debated topic.<br />
 <br />
@@ -332,31 +706,28 @@ where p(H|D) is your posterior probability of a hypothesis</p>
 </ul>
 </section>
 <section id="section-2" class="slide level2">
-<h1></h1>
-<p><img src="images/15/frequentists_vs_bayesians.png" /></p>
+<h2></h2>
+<p><img data-src="images/15/frequentists_vs_bayesians.png" /></p>
 </section>
 <section id="the-influence-of-priors" class="slide level2">
-<h1>The Influence of Priors</h1>
-<p><img src="images/15/priors_and_lik.jpg" /></p>
+<h2>The Influence of Priors</h2>
+<p><img data-src="images/15/priors_and_lik.jpg" /></p>
 </section>
 <section id="the-influence-of-priors-1" class="slide level2">
-<h1>The Influence of Priors</h1>
-<p><img src="images/15/posteriors.jpg" /></p>
+<h2>The Influence of Priors</h2>
+<p><img data-src="images/15/posteriors.jpg" /></p>
 </section>
 <section id="priors-and-sample-size" class="slide level2">
-<h1>Priors and Sample Size</h1>
-<p><img src="15_bayesian_basics_files/figure-revealjs/priorStrong-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Priors and Sample Size</h2>
+<p><img src="15_bayesian_basics_files/figure-revealjs/priorStrong-1.jpeg" width="768" /></p>
 </section>
 <section id="pdata-is-just-a-big-summationintegral" class="slide level2">
-<h1>p(data) is just a big summation/integral</h1>
-<p><img src="images/15/marginal.jpg" /></p>
-<div class="fragment">
-<p><img src="images/15/tree2.jpg" /></p>
-</div>
+<h2>p(data) is just a big summation/integral</h2>
+<p><img data-src="images/15/marginal.jpg" /></p>
 </section>
 <section id="denominator-the-marginal-distribution" class="slide level2">
-<h1>Denominator: The Marginal Distribution</h1>
-<img src="images/15/marginal.jpg" /><br />
+<h2>Denominator: The Marginal Distribution</h2>
+<img data-src="images/15/marginal.jpg" /><br />
 Essentially, all alternate hypotheses<br />
 <br />
 
@@ -365,26 +736,26 @@ Denominator - marginal distribution - becomes an integral of likelihoods if <spa
 </div>
 </section>
 <section id="section-3" class="slide level2">
-<h1></h1>
-<p><img src="images/15/marginal_comic_1.jpg" /></p>
+<h2></h2>
+<p><img data-src="images/15/marginal_comic_1.jpg" /></p>
 </section>
 <section id="section-4" class="slide level2">
-<h1></h1>
-<p><img src="images/15/marginal_comic_2.jpg" /></p>
+<h2></h2>
+<p><img data-src="images/15/marginal_comic_2.jpg" /></p>
 </section>
 <section id="section-5" class="slide level2">
-<h1></h1>
-<p><img src="images/15/marginal_comic_3.jpg" /></p>
+<h2></h2>
+<p><img data-src="images/15/marginal_comic_3.jpg" /></p>
 </section>
 <section id="bayes-theorem-in-action" class="slide level2">
-<h1>Bayes Theorem in Action</h1>
-<p><img src="images/15/frequentists_vs_bayesians.png" alt="image" style="width:40.0%" /></p>
+<h2>Bayes Theorem in Action</h2>
+<p><img data-src="./images/15/frequentists_vs_bayesians.png" alt="image" style="width:40.0%" /></p>
 <p align="left" style="font-size:8pt">
 <a href="http://xkcd.com/1132/" class="uri">http://xkcd.com/1132/</a>
 </p>
 </section>
 <section id="bayes-theorem-in-action-1" class="slide level2">
-<h1>Bayes Theorem in Action</h1>
+<h2>Bayes Theorem in Action</h2>
 <span class="math display">\[p(Sun Explodes | Yes) = \frac{p(Yes | Sun Explodes)p(Sun Explodes)}{p(Yes)}\]</span><br />
 
 <p align="left">
@@ -400,40 +771,44 @@ p(Yes) = P(Yes <span class="math inline">\(|\)</span> Sun Explodes)p(Sun Explode
 <p align="left" style="font-size:10pt">
 credit: Amelia Hoover
 </p>
-</section>
-<section id="bayes-theorem-in-action-2" class="slide level2">
-<h1>Bayes Theorem in Action</h1>
-<p><span class="math display">\[p(Sun Explodes | Yes) = \frac{p(Yes | Sun Explodes)p(Sun Explodes)}{p(Yes)}\]</span></p>
-<p align="left">
-We can calculate:<br />
-p(Yes) <span class="fragment">= P(Yes <span class="math inline">\(|\)</span> Sun Explodes)p(Sun Explodes) + <br>    P(Yes <span class="math inline">\(|\)</span> Sun Doesn’t Explode)p(Sun Doesn’t Explodes) </span><br />
-<br />
-<span class="fragment">= 35/36 * 0.0001 + 1/36 * 0.9999 </span><br />
-<br />
-<span class="fragment">= 0.0277775 </span><br />
+<!--
 
+## Bayes Theorem in Action
+
+$$p(Sun Explodes | Yes) = \frac{p(Yes | Sun Explodes)p(Sun Explodes)}{p(Yes)}$$
+  
+<p align="left">We can calculate:\
+p(Yes) <span class="fragment">= P(Yes $|$ Sun Explodes)p(Sun Explodes) + <br>&nbsp; &nbsp; P(Yes $|$ Sun Doesn’t
+Explode)p(Sun Doesn’t Explodes) </span> \
+\
+<span class="fragment">= 35/36 * 0.0001 + 1/36 * 0.9999  </span> \
+\
+<span class="fragment">= 0.0277775 </span> \
 </p>
 <br><br><br>
-<p align="left" style="font-size:10pt">
-credit: Amelia Hoover
-</p>
-</section>
-<section id="bayes-theorem-in-action-3" class="slide level2">
-<h1>Bayes Theorem in Action</h1>
-<span class="math display">\[p(Sun Explodes | Yes) = \frac{p(Yes | Sun Explodes)p(Sun Explodes)}{p(Yes)}\]</span><br />
-<br />
+<p align="left" style="font-size:10pt">credit: Amelia Hoover</p>
 
-<p align="left">
-<span class="fragment"><span class="math display">\[p(Sun Explodes | Yes) = \frac{0.0001*35/36}{0.028}\]</span> </span> <span class="fragment"><span class="math display">\[= 0.0035\]</span> </span><br />
-<span class="fragment">Incorporating Prior Information about the Sun Exploding gives us a <span><em>very</em></span> different answer</span><br />
-<br />
-<br />
-<span class="fragment">Note, we can also evaluate the probability of the alternate hypothesis - p(Sun Doesn’t Explode <span class="math inline">\(|\)</span> Yes)</span>
+
+
+## Bayes Theorem in Action
+
+$$p(Sun Explodes | Yes) = \frac{p(Yes | Sun Explodes)p(Sun Explodes)}{p(Yes)}$$\
+\
+<p align="left"><span class="fragment">$$p(Sun Explodes | Yes) = \frac{0.0001*35/36}{0.028}$$ </span>
+<span class="fragment">$$= 0.0035$$ </span>
+\
+<span class="fragment">Incorporating Prior Information about the Sun Exploding gives us a
+<span>*very*</span> different answer</span> \
+\
+\
+<span class="fragment">Note, we can also  evaluate the probability of the alternate
+hypothesis - p(Sun Doesn’t Explode $|$ Yes)</span>
 </p>
+-->
 </section>
 <section id="where-have-we-gone" class="slide level2">
-<h1>Where have we gone?</h1>
-<img src="images/15/ellison_table.jpg" /> <br><br>
+<h2>Where have we gone?</h2>
+<img data-src="images/15/ellison_table.jpg" /> <br><br>
 <div style="text-align:left; position:absolute; top:100%">
 Ellison 1996
 </div>
@@ -441,8 +816,8 @@ Ellison 1996
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -462,6 +837,8 @@ Ellison 1996
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -472,7 +849,7 @@ Ellison 1996
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>
