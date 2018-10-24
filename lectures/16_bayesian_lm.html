@@ -506,6 +506,7 @@ style.innerHTML = style_script;
 document.getElementsByTagName('head')[0].appendChild(style);
 </script>
 
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 </head>
 <body>
   <div class="reveal">
@@ -872,21 +873,29 @@ Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" c
 </section>
 <section id="implementing-the-puffer-model-in-rstanarm" class="slide level2">
 <h2>Implementing the Puffer Model in rstanarm</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">puffer_mod &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">                      <span class="dt">data=</span>puffer,</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">                      <span class="dt">family=</span><span class="kw">gaussian</span>())</a></code></pre></div>
 </section>
 <section id="what-were-the-priors" class="slide level2">
 <h2>What were the priors?</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">puffer_mod_p &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">                      <span class="dt">data=</span>puffer,</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">                      <span class="dt">family=</span><span class="kw">gaussian</span>(),</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">                      <span class="dt">prior=</span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="fl">2.5</span>),</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">                      <span class="dt">prior_intercept=</span><span class="kw">normal</span>(<span class="dv">0</span>,<span class="dv">10</span>))</a></code></pre></div>
-<p>Note that these are weakly informative!</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">prior_summary</span>(puffer_brms)</a></code></pre></div>
+<pre><code>                 prior     class        coef group resp dpar nlpar bound
+1                              b                                        
+2                              b resemblance                            
+3 student_t(3, 10, 10) Intercept                                        
+4  student_t(3, 0, 10)     sigma                                        </code></pre>
+<p>Note that these are flat (slope) or weakly informative!</p>
+</section>
+<section id="mcmc-diagnostics---convergence-and-posterior-behavior" class="slide level2">
+<h2>MCMC diagnostics - Convergence and Posterior Behavior</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/converge-1.jpeg" width="768" /></p>
 </section>
 <section id="section-1" class="slide level2">
+<h2></h2>
+<br><br><br>
+<h1 style="text-align:left">
+These are all checks of the model fitting process. If they fail, either tweak the MCMC process (e.g., nsims), or your model is incompatible with the data
+</h1>
+</section>
+<section id="section-2" class="slide level2">
 <h2></h2>
 <br><br><br>
 <h1 style="text-align:left">
@@ -913,16 +922,16 @@ All assumptions of linear regression hold - and then there are a few checks for 
 <h2>Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/pp_hist-1.jpeg" width="768" /></p>
 </section>
-<section id="does-distribution-of-sample-estimates-match-distribution-of-simulated-sample-estimates-1" class="slide level2">
-<h2>Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?</h2>
+<section id="does-distribution-of-error-match-distribution-of-simulated-error-estimates" class="slide level2">
+<h2>Does Distribution of Error Match Distribution of Simulated Error Estimates?</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/pp_hist_2-1.jpeg" width="768" /></p>
 </section>
 <section id="how-sensitive-is-our-simulation-to-leaving-out-one-value" class="slide level2">
 <h2>How sensitive is our simulation to leaving out one value?</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/loo-1.jpeg" width="768" /></p>
-<p>Only one point with a moderate test statistic - not bad! If &gt;1, inspect that point!</p>
+<p>If &gt;1, inspect that point!</p>
 </section>
-<section id="section-2" class="slide level2">
+<section id="section-3" class="slide level2">
 <h2></h2>
 <br><br>
 <h1>
@@ -931,55 +940,32 @@ These are all data and error generating process checks. If they fail, you may ne
 </p>
 </h1>
 </section>
-<section id="mcmc-diagnostics---did-we-converge" class="slide level2">
-<h2>MCMC diagnostics - Did we converge?</h2>
-<p><img src="16_bayesian_lm_files/figure-revealjs/converge-1.jpeg" width="768" /></p>
-</section>
-<section id="are-our-posterior-distributions-well-behaved" class="slide level2">
-<h2>Are our posterior distributions well behaved?</h2>
-<p><img src="16_bayesian_lm_files/figure-revealjs/check-1.jpeg" width="768" /></p>
-</section>
-<section id="section-3" class="slide level2">
-<h2></h2>
-<br><br><br>
-<h1 style="text-align:left">
-These are all checks of the model fitting process. If they fail, either tweak the MCMC process (e.g., burnin, nsims), or your model is incompatible with the data
-</h1>
-</section>
 <section id="finally---the-parameters" class="slide level2">
 <h2>Finally - the Parameters</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/mcmc_params-1.jpeg" width="768" /></p>
 </section>
 <section id="so.-what-did-we-get" class="slide level2">
 <h2>So…. what did we get?</h2>
-<pre><code>
-Model Info:
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: predators ~ resemblance 
+   Data: puffer (Number of observations: 20) 
+Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup samples = 4000
 
- function:    
- family:       gaussian [identity]
- formula:      predators ~ resemblance
- algorithm:    sampling
- priors:       see help(&#39;prior_summary&#39;)
- sample:       4000 (posterior sample size)
- observations: 20
+Population-Level Effects: 
+            Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+Intercept       2.00      1.65    -1.08     5.35       3168 1.00
+resemblance     2.97      0.62     1.66     4.19       3252 1.00
 
-Estimates:
-                mean   sd    2.5%   25%   50%   75%   97.5%
-(Intercept)     2.0    1.5  -1.0    1.0   2.0   3.0   5.0  
-resemblance     3.0    0.6   1.8    2.6   3.0   3.3   4.1  
-sigma           3.2    0.6   2.4    2.8   3.1   3.5   4.5  
-mean_PPD        9.0    1.0   6.9    8.3   9.0   9.6  10.9  
-log-posterior -59.6    1.3 -62.9  -60.1 -59.2 -58.6 -58.2  
+Family Specific Parameters: 
+      Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+sigma     3.26      0.59     2.36     4.67       2873 1.00
 
-Diagnostics:
-              mcse Rhat n_eff
-(Intercept)   0.0  1.0  2072 
-resemblance   0.0  1.0  2574 
-sigma         0.0  1.0  2329 
-mean_PPD      0.0  1.0  3208 
-log-posterior 0.0  1.0  1719 
-
-For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</code></pre>
+Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+is a crude measure of effective sample size, and Rhat is the potential 
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p><Br>Note Rhat values - must = 1!!!</p>
 </section>
 <section id="or-just-look-at-your-credible-interval" class="slide level2">
 <h2>Or, just look at your Credible Interval</h2>
@@ -991,76 +977,171 @@ For 80% Credible Interval:
 </p>
 <p><br />
 </p>
-<pre><code>                     10%      90%
-(Intercept) -0.008701499 3.849364
-resemblance  2.239234508 3.687381
-sigma        2.595004307 3.952061</code></pre>
+<pre><code>                       10%        90%
+b_Intercept    -0.07782262   4.061401
+b_resemblance   2.19418257   3.732649
+sigma           2.59563720   4.026133
+lp__          -57.97553042 -54.865521</code></pre>
 </section>
 <section id="what-is-the-weight-of-the-tail-less-that-0" class="slide level2">
 <h2>What is the weight of the tail less that 0?</h2>
-<p>Weight of Intercept ≤ 0? 0.10075<br />
+<p>Weight of Intercept ≤ 0? 0.1085<br />
 <br />
 Weight of Slope ≤ 0? 0</p>
 </section>
 <section id="talking-about-uncertainty-the-ipcc-way" class="slide level2">
 <h2>Talking about Uncertainty the IPCC Way</h2>
-<p><img data-src="images/15/ipcc_uncertainty_ar5.jpg" /></p>
+<p><img data-src="images/15/ipcc_uncertainty_ar5.jpg" />{width = “80%”}</p>
 </section>
 <section id="compare-to-lm" class="slide level2">
 <h2>Compare to LM</h2>
-<p>Bayesian Fit</p>
-<table>
+Bayesian Fit
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">lower</th>
-<th style="text-align: right;">upper</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+lower
+</th>
+<th style="text-align:right;">
+upper
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">2.001440</td>
-<td style="text-align: right;">1.4660824</td>
-<td style="text-align: right;">-0.5745849</td>
-<td style="text-align: right;">4.45753</td>
+<tr>
+<td style="text-align:left;">
+b_Intercept
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+1.65
+</td>
+<td style="text-align:right;">
+-0.66
+</td>
+<td style="text-align:right;">
+4.69
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">resemblance</td>
-<td style="text-align: right;">2.959374</td>
-<td style="text-align: right;">0.5614372</td>
-<td style="text-align: right;">2.0419708</td>
-<td style="text-align: right;">3.91519</td>
+<tr>
+<td style="text-align:left;">
+b_resemblance
+</td>
+<td style="text-align:right;">
+2.97
+</td>
+<td style="text-align:right;">
+0.62
+</td>
+<td style="text-align:right;">
+1.90
+</td>
+<td style="text-align:right;">
+3.98
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sigma
+</td>
+<td style="text-align:right;">
+3.26
+</td>
+<td style="text-align:right;">
+0.59
+</td>
+<td style="text-align:right;">
+2.47
+</td>
+<td style="text-align:right;">
+4.31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lp__
+</td>
+<td style="text-align:right;">
+-56.14
+</td>
+<td style="text-align:right;">
+1.34
+</td>
+<td style="text-align:right;">
+-58.76
+</td>
+<td style="text-align:right;">
+-54.74
+</td>
 </tr>
 </tbody>
 </table>
-<p>LM Fit</p>
-<table>
+LM Fit
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std.error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p.value</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">1.924694</td>
-<td style="text-align: right;">1.5064163</td>
-<td style="text-align: right;">1.277664</td>
-<td style="text-align: right;">0.2176012</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.92
+</td>
+<td style="text-align:right;">
+1.51
+</td>
+<td style="text-align:right;">
+1.28
+</td>
+<td style="text-align:right;">
+0.22
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">resemblance</td>
-<td style="text-align: right;">2.989492</td>
-<td style="text-align: right;">0.5714163</td>
-<td style="text-align: right;">5.231724</td>
-<td style="text-align: right;">0.0000564</td>
+<tr>
+<td style="text-align:left;">
+resemblance
+</td>
+<td style="text-align:right;">
+2.99
+</td>
+<td style="text-align:right;">
+0.57
+</td>
+<td style="text-align:right;">
+5.23
+</td>
+<td style="text-align:right;">
+0.00
+</td>
 </tr>
 </tbody>
 </table>
@@ -1073,6 +1154,14 @@ Weight of Slope ≤ 0? 0</p>
 <h2>And the distributions of fits</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/dist_fit-1.jpeg" width="768" /></p>
 </section>
+<section id="and-the-distributions-of-fits-1" class="slide level2">
+<h2>And the distributions of fits</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/unnamed-chunk-1-1.jpeg" width="768" /></p>
+</section>
+<section id="add-the-distribution-of-predictions" class="slide level2">
+<h2>Add the distribution of predictions</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/puffer_pred_brms-1.jpeg" width="768" /></p>
+</section>
 <section id="section-4" class="slide level2">
 <h2></h2>
 <h1 style="text-align:left">
@@ -1082,45 +1171,245 @@ OK, ok, but what about the prior…
 </section>
 <section id="see-your-posterior-relative-to-your-prior" class="slide level2">
 <h2>See your posterior relative to your prior</h2>
-<p><img src="16_bayesian_lm_files/figure-revealjs/post_prior-1.jpeg" title="" alt="" width="768" /></p>
+<pre><code>                 prior     class        coef group resp dpar nlpar bound
+1                              b                                        
+2                              b resemblance                            
+3 student_t(3, 10, 10) Intercept                                        
+4  student_t(3, 0, 10)     sigma                                        </code></pre>
 </section>
 <section id="adding-a-stronger-prior" class="slide level2">
 <h2>Adding a stronger prior</h2>
 <p><br></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">puffer_mod_prior &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                      <span class="dt">data=</span>puffer,</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">                      <span class="dt">family=</span><span class="kw">gaussian</span>(),</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">                      <span class="dt">prior =</span> <span class="kw">normal</span>(<span class="dv">10</span>,<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">                      <span class="dt">prior_intercept =</span> <span class="kw">normal</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">  puffer_brms_prior &lt;-<span class="st"> </span><span class="kw">brm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">                   <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                   <span class="dt">data =</span> puffer,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                   <span class="dt">prior =</span> <span class="kw">c</span>(<span class="kw">prior</span>(<span class="kw">normal</span>(<span class="dv">3</span>, <span class="dv">1</span>), <span class="dt">class =</span> Intercept),</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">                             <span class="kw">prior</span>(<span class="kw">normal</span>(<span class="dv">1</span>, <span class="fl">0.5</span>), <span class="dt">class =</span> b),</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">                             <span class="kw">prior</span>(<span class="kw">uniform</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="dt">class =</span> sigma)))</a></code></pre></div>
+<pre><code>  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Dense:1:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Core:531:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Dense:2:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/LU:47:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Dense:3:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Cholesky:12:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Jacobi:29:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Dense:3:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Cholesky:43:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Dense:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/QR:17:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Householder:27:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Dense:5:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/SVD:48:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Dense:6:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Geometry:58:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:14:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Dense:7:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Eigenvalues:58:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:96:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Sparse:26:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/SparseCore:66:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:96:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Sparse:27:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/OrderingMethods:71:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:96:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Sparse:29:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/SparseCholesky:43:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:96:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Sparse:32:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/SparseQR:35:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:96:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/Sparse:33:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/IterativeLinearSolvers:46:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+      #pragma clang diagnostic pop
+                               ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core.hpp:44:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/core/set_zero_all_adjoints.hpp:14:13: warning: unused function &#39;set_zero_all_adjoints&#39; [-Wunused-function]
+  static void set_zero_all_adjoints() {
+              ^
+  In file included from file2676668b5a19.cpp:8:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+  In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat.hpp:70:
+  /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/autocorrelation.hpp:18:8: warning: function &#39;fft_next_good_size&#39; is not needed and will not be emitted [-Wunneeded-internal-declaration]
+  size_t fft_next_good_size(size_t N) {
+         ^
+  15 warnings generated.
+  ld: warning: text-based stub file /System/Library/Frameworks//CoreFoundation.framework/CoreFoundation.tbd and library file /System/Library/Frameworks//CoreFoundation.framework/CoreFoundation are out of sync. Falling back to library file for linking.</code></pre>
 </section>
-<section id="how-influential-was-that-new-prior" class="slide level2">
-<h2>How influential was that new prior?</h2>
-<p><img src="16_bayesian_lm_files/figure-revealjs/post_prior_strong-1.jpeg" title="" alt="" width="768" /></p>
+<section id="did-it-blend" class="slide level2">
+<h2>Did it blend?</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/post_prior_strong-1.jpeg" width="768" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">rhat</span>(puffer_brms_prior)</a></code></pre></div>
+<pre><code>  b_Intercept b_resemblance         sigma          lp__ 
+     1.000209      1.001566      1.002379      1.000968 </code></pre>
+</section>
+<section id="did-it-blend-1" class="slide level2">
+<h2>Did it blend?</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/pp_check_strong_prior-1.jpeg" width="768" /></p>
 </section>
 <section id="compare-results" class="slide level2">
 <h2>Compare results!</h2>
 <p align="left">
 <p>Weak Prior:</p>
-<pre><code>                    5%      95%
-(Intercept) -0.5745849 4.457530
-resemblance  2.0419708 3.915190
-sigma        2.4738777 4.237936</code></pre>
+<pre><code>                    2.5%      97.5%
+b_Intercept    -1.084108   5.347033
+b_resemblance   1.662425   4.190118
+sigma           2.362067   4.672798
+lp__          -59.750270 -54.677054</code></pre>
 <br />
 Strong Prior:
 </p>
-<pre><code>                   5%      95%
-(Intercept) -1.164132 3.965022
-resemblance  2.236086 4.165638
-sigma        2.454073 4.257712</code></pre>
+<pre><code>                       2.5%      97.5%
+  b_Intercept    -0.3301055   4.755686
+  b_resemblance   0.5639942   2.357556
+  sigma           3.2480414   7.916630
+  lp__          -69.9967159 -65.487324</code></pre>
 </section>
-<section id="in-conclusion" class="slide level2">
-<h2>In Conclusion…</h2>
+<section id="compare-results-1" class="slide level2">
+<h2>Compare results!</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/prior_preds-1.jpeg" width="768" /></p>
+<p>Red = Weak Priors, Blue = Strong Prior</p>
+</section>
+<section id="in-conclusionbayes" class="slide level2">
+<h2>In Conclusion…Bayes</h2>
 <ul>
 <li>Yes, it’s more fidly and there are more assumptions<br />
 <br />
 </li>
 <li>BUT - you can now talk in the language or probability<br />
+<br />
+</li>
+<li>AND - drawing from the posterior makes visualization and understanding of uncertainty a snap<br />
 <br />
 </li>
 <li>Inherently recognizes “All models are wrong, some are useful”</li>

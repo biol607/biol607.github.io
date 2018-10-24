@@ -27,6 +27,7 @@ library(broom)
 library(ggplot2)
 library(rstanarm)
 library(brms)
+library(tidybayes)
 
 #legacy - fix
 library(MCMCglmm)
@@ -35,10 +36,14 @@ library(coda)
 options(mc.cores = parallel::detectCores())
 puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
 
+theme_set(theme_bw(base_size=17))
+
 ```
 
 ```{r puffer_brms, cache=TRUE, warning=FALSE, results="hide"}
-puffer_brms <- brm(predators ~ resemblance, data = puffer)
+puffer_brms <- brm(predators ~ resemblance, 
+                   family = gaussian(link = "identity"),
+                   data = puffer)
 ```
 
 ## Our Etherpad
@@ -453,200 +458,246 @@ pufferplot
 
 ## Implementing the Puffer Model in rstanarm
 
-```{r pufferstan, echo=TRUE, cache=TRUE}
-set.seed(100)
-puffer_mod <- stan_glm(predators ~ resemblance, 
-                      data=puffer,
-                      family=gaussian())
-
+```{r puffer_brms, eval = FALSE}
 ```
 
 ## What were the priors?
 
-```{r pufferstan_showprior, echo=TRUE, eval=FALSE}
-puffer_mod_p <- stan_glm(predators ~ resemblance, 
-                      data=puffer,
-                      family=gaussian(),
-                      prior=normal(0, 2.5),
-                      prior_intercept=normal(0,10))
+```{r puffer_brm_showprior, echo=TRUE}
+prior_summary(puffer_brms)
 ```
 
-Note that these are weakly informative!
+Note that these are flat (slope) or weakly informative!
 
-##
+## MCMC diagnostics - Convergence and Posterior Behavior
+  ```{r converge}
+plot(puffer_brms)
+```
+
+## 
 <br><br><br>
-<h1 style="text-align:left">All assumptions of linear regression hold - and then there are a few checks for MCMC fits</h1>
-
+  <h1 style="text-align:left">These are all checks of the model fitting process. If they fail, either tweak the MCMC process (e.g., nsims), or your model is incompatible with the data</h1>
+  
+    
+##
+  <br><br><br>
+  <h1 style="text-align:left">All assumptions of linear regression hold - and then there are a few checks for MCMC fits</h1>
+  
 ## Good ole' QQ
-
-```{r qq_stan}
-qqnorm(residuals(puffer_mod))
-qqline(residuals(puffer_mod))
+  
+  ```{r qq_stan}
+qqnorm(residuals(puffer_brms))
+qqline(residuals(puffer_brms))
 ```
 
 
 
 ## But - often use simulated posterior estimates
 ```{r resid_hist}
-pp_check(puffer_mod, check = "resid", bins=10) +
+pp_check(puffer_brms, type = "error_hist", nsamples = 3, binwidth = 3) +
   ggtitle("Residual Histogram for three simulated datasets")
 ```
 
 ## Observed v. Average of Simulated Fitted Value
 
 ```{r obs_v_fit}
-pp_check(puffer_mod, check = "scatter", nreps=3)
+pp_check(puffer_brms, type = "scatter", nsamples=3)
 ```
 
 ## Do Simulated Posterios of the Data Fit our Observations?
 Blue = Distribution of our observations, Lines = Simulations
 ```{r pp_check}
-pp_check(puffer_mod)
+pp_check(puffer_brms)
 ```
 
 
 ## Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?
 ```{r pp_hist}
-pp_check(puffer_mod, check = "test", test = c("mean"))
+pp_check(puffer_brms, type = "stat", stat = c("mean"), binwidth=0.5)
 ```
 
-## Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?
+## Does Distribution of Error Match Distribution of Simulated Error Estimates?
 ```{r pp_hist_2}
-pp_check(puffer_mod, check = "test", test = c("mean", "sd"))
+pp_check(puffer_brms, type = "stat_2d", stat =  c("mean", "sd"))
 ```
 
 
 ## How sensitive is our simulation to leaving out one value?
-```{r loo}
-plot(rstanarm::loo(puffer_mod), label_points = TRUE, cex=1.1)
+```{r loo, cache=TRUE}
+plot(loo(puffer_brms), label_points = TRUE, cex=1.1)
 ```
 
-Only one point with a moderate test statistic - not bad! If >1, inspect that point!
-
+If >1, inspect that point!
+  
 ## 
-<br><br>
-<h1><p align="left">These are all data and error generating process checks. If they fail, you may need to respecify your model (or your prior)</p></h1>
-
-## MCMC diagnostics - Did we converge?
-```{r converge}
-plot(puffer_mod, pars = c("(Intercept)", "resemblance", "sigma"), plotfun="mcmc_trace")
-```
-
-## Are our posterior distributions well behaved?
-```{r check}
-plot(puffer_mod, pars = c("(Intercept)", "resemblance", "sigma"), 
-     ci_level = 0.67, outer_level = 1, show_density = TRUE) +
-  ggtitle("Posterior Distributions with 67% Credible Intervals")
-```
-
-## 
-<br><br><br>
-<h1 style="text-align:left">These are all checks of the model fitting process. If they fail, either tweak the MCMC process (e.g., burnin, nsims), or your model is incompatible with the data</h1>
+  <br><br>
+  <h1><p align="left">These are all data and error generating process checks. If they fail, you may need to respecify your model (or your prior)</p></h1>
+  
 
 ## Finally - the Parameters
-```{r mcmc_params}
-plot(puffer_mod, fill_color = "skyblue4", est_color = "maroon", 
-     pars = c("(Intercept)", "resemblance", "sigma")) +
+  ```{r mcmc_params}
+puffer_brms %>%
+  spread_draws(b_Intercept, b_resemblance, sigma) %>%
+  gather(parameter, value, b_Intercept:sigma) %>%
+  ggplot(aes(x = value, y = parameter)) +
+  geom_halfeyeh( .width = c(0.8, 0.95)) +
+  ylab("") +
   ggtitle("Posterior Medians with 80% and 95% Credible Intervals")
-
 ```
 
 ## So.... what did we get?
 ```{r puffer_out}
-summary(puffer_mod)
+summary(puffer_brms)
 ```
+
+<Br>Note Rhat values - must = 1!!!
 
 ## Or, just look at your Credible Interval
 \
 \
 <p align="left">For 80% Credible Interval:</p>  
-\
+  \
 ```{r posterior}
-posterior_interval(puffer_mod, prob=0.8)
+posterior_interval(puffer_brms, prob=0.8)
 ```
 
 ## What is the weight of the tail less that 0?
 ```{r pred}
-post_puffer <- as.data.frame(puffer_mod)
+post_puffer <- as.data.frame(puffer_brms)
 ```
 Weight of Intercept &le; 0? `r sum(post_puffer[,1]<0)/nrow(post_puffer)`  
 \
 Weight of Slope &le; 0? `r sum(post_puffer[,2]<0)/nrow(post_puffer)`
 
 ## Talking about Uncertainty the IPCC Way
-![](images/15/ipcc_uncertainty_ar5.jpg)
+![](images/15/ipcc_uncertainty_ar5.jpg){width = "80%"}
 
 ## Compare to LM
 Bayesian Fit
 ```{r compare_lm}
-knitr::kable(tidy(puffer_mod,intervals = TRUE))
+knitr::kable(tidy(puffer_brms,intervals = TRUE), "html", digits=2) %>%
+  kableExtra::kable_styling("striped")
 ```
 
 LM Fit
 ```{r compare_lm_2}
-knitr::kable(tidy(lm(predators ~ resemblance, data=puffer)))
+knitr::kable(tidy(lm(predators ~ resemblance, data=puffer)), "html", digits=2) %>%
+  kableExtra::kable_styling("striped")
 ```
 
 
 ## Visualize the mean fit...
 ```{r fit_fig}
 pufferplot + 
-  geom_abline(slope=coef(puffer_mod)[2], intercept=coef(puffer_mod)[1], color="red")
+  geom_abline(slope=fixef(puffer_brms)[2], intercept=fixef(puffer_brms)[1], color="red")
 ```
 
 ## And the distributions of fits
 ```{r dist_fit}
 
 pufferplot + 
-    geom_abline(slope=post_puffer[,2], intercept=post_puffer[,1], color="lightgrey", alpha=0.1) +
-  geom_abline(slope=coef(puffer_mod)[2], intercept=coef(puffer_mod)[1], color="red")  +
+  geom_abline(slope=post_puffer[,2], intercept=post_puffer[,1], color="lightgrey", alpha=0.1) +
+  geom_abline(slope=fixef(puffer_brms)[2], intercept=fixef(puffer_brms)[1], color="red")  +
   geom_point()
 ```
+
+## And the distributions of fits
+```{r}
+puff_fit <- puffer %>%
+  modelr::data_grid(resemblance)%>%
+  add_fitted_draws(puffer_brms)
+
+ggplot(puff_fit, aes(x = resemblance, y = predators)) +
+  stat_lineribbon(aes(y = .value)) +
+scale_fill_brewer(palette = "Greys") +
+  scale_color_brewer(palette = "Set2") +
+  theme_bw(base_size=17)
+```
+
+## Add the distribution of predictions
+```{r puffer_pred_brms}
+puff_pred <- puffer %>%
+  modelr::data_grid(resemblance)%>%
+  add_predicted_draws(puffer_brms)
+
+ggplot(puff_pred, aes(x = resemblance, y = predators)) +
+  stat_lineribbon(aes(y = .prediction)) +
+  scale_fill_brewer(palette = "Greys") +
+  scale_color_brewer(palette = "Set2") +
+  theme_bw(base_size=17)
+````
 
 ##
 
 <h1 style="text-align:left">OK, ok, but what about the prior...</h1>
-![image](./images/16/prior_odds_solo.jpg)
+  ![image](./images/16/prior_odds_solo.jpg)
 
 ## See your posterior relative to your prior
-```{r post_prior, cache=TRUE}
-posterior_vs_prior(puffer_mod) +
-  ggtitle("Default Priors")
+```{r puffer_brm_showprior}
 ```
 
 ## Adding a stronger prior
 <br>
-```{r prior, cache=TRUE, echo=TRUE}
-set.seed(100)
-puffer_mod_prior <- stan_glm(predators ~ resemblance, 
-                      data=puffer,
-                      family=gaussian(),
-                      prior = normal(10,1),
-                      prior_intercept = normal(2,1))
+  ```{r prior, cache=TRUE, echo=TRUE}
+puffer_brms_prior <- brm(predators ~ resemblance, 
+                   family = gaussian(link = "identity"),
+                   data = puffer,
+                   prior = c(prior(normal(3, 1), class = Intercept),
+                             prior(normal(1, 0.5), class = b),
+                             prior(uniform(0, 10), class = sigma)))
 ```
 
-## How influential was that new prior?
+## Did it blend?
 ```{r post_prior_strong, cache=TRUE}
-posterior_vs_prior(puffer_mod_prior) +
-  ggtitle("Strong Priors")
+plot(puffer_brms_prior)
+```
+```{r rhat_strong, echo=TRUE}
+rhat(puffer_brms_prior)
+```
+
+## Did it blend?
+```{r pp_check_strong_prior, cache=TRUE}
+pp_check(puffer_brms_prior) + ggtitle("Posterior Simulations v. Data Distribution")
 ```
 
 ## Compare results!
 <p align="left">Weak Prior:
-```{r weak_prior}
-posterior_interval(puffer_mod)
+  ```{r weak_prior}
+posterior_interval(puffer_brms)
 ```
 
 \
 Strong Prior:</p>
-```{r strong_prior}
-posterior_interval(puffer_mod_prior)
+  ```{r strong_prior}
+posterior_interval(puffer_brms_prior)
 ```
 
-## In Conclusion...
+
+## Compare results!
+```{r prior_preds}
+puff_fit_prior <- puffer %>%
+  modelr::data_grid(resemblance)%>%
+  add_fitted_draws(puffer_brms_prior)
+
+
+ggplot(puff_fit, aes(x = resemblance, y = predators)) +
+  stat_lineribbon(aes(y = .value)) +
+  scale_fill_brewer(palette = "Greys") +
+  scale_color_brewer(palette = "Set2") +
+  stat_lineribbon(data = puff_fit_prior, color = "blue",
+                  mapping =aes(y = .value)) +
+  geom_point(data= puffer) +
+  theme_bw(base_size=17)
+```
+
+Red = Weak Priors, Blue = Strong Prior
+
+## In Conclusion...Bayes
 
 - Yes, it's more fidly and there are more assumptions  \
 \
 - BUT - you can now talk in the language or probability  
+\
+- AND - drawing from the posterior makes visualization and understanding of uncertainty a snap  
 \
 - Inherently recognizes "All models are wrong, some are useful"
