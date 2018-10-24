@@ -124,7 +124,7 @@ from it:</p>
 
 -   If $\alpha \ge 1$ X(t+1) = Y
 
--   Otherwise, select a uniorm random number between 0 and 1, U
+-   Otherwise, select a uniform random number between 0 and 1, U
 
 -   If $U \le \alpha$, X(t+1) = Y. Otherwise, X(t+1) = X.
 
@@ -354,7 +354,7 @@ plot(seq(1,100,10),modNoThin$Sol[seq(1,100,10)], type="b", ylab="Value", xlab="I
 ![](./images/16/gibbs_strangelove.jpg)
 </div>
 
-## King Hamilton and His BatBoat
+## King Hamilton and His BatBoat (also from McElreath)
 ![](./images/16/Mergui-Archipelago.jpg){width="80%"}
 ![](./images/16/batboat.jpg){width="40%"}
 
@@ -389,7 +389,7 @@ plot(seq(1,100,10),modNoThin$Sol[seq(1,100,10)], type="b", ylab="Value", xlab="I
 \
 <div style="font-size:11pt">Neal 2011, http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html </div>
 
-## Implementing HMCMC via Stan
+## Implementing HMC via Stan
 ![](images/16/stan_team.jpg)
 
 - A few libraries in R use Stan  <br>
@@ -406,7 +406,7 @@ plot(seq(1,100,10),modNoThin$Sol[seq(1,100,10)], type="b", ylab="Value", xlab="I
 ## brms
 
 -   Powerful package that fits bayesian models using 
-    MCMC with Hamiltonian Updating (reduced autocorrelation in chain)
+    Hamiltonian Monte-Carlo (reduced autocorrelation in chain)
 
 -   Available tools to tweak priors
 
@@ -418,7 +418,7 @@ plot(seq(1,100,10),modNoThin$Sol[seq(1,100,10)], type="b", ylab="Value", xlab="I
 
 -   Constantly updated for more weird models (post an issue, I give it 2 days)  
   
--   Compiles model into C code, then samples
+-   Compiles model into C++ code, then samples
 
 -   For maximum flexibility, *rethinking* or *rstan*
 

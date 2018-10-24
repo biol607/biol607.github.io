@@ -584,7 +584,7 @@ If we cannot analytically solve a distribution, we can still simulate from it:
 <li><p>Chose a random set of parameters, Y, based on X</p></li>
 <li><p>Calculate an acceptance ratio, <span class="math inline">\(\alpha\)</span>, based on P(Y)/P(X)</p></li>
 <li><p>If <span class="math inline">\(\alpha \ge 1\)</span> X(t+1) = Y</p></li>
-<li><p>Otherwise, select a uniorm random number between 0 and 1, U</p></li>
+<li><p>Otherwise, select a uniform random number between 0 and 1, U</p></li>
 <li><p>If <span class="math inline">\(U \le \alpha\)</span>, X(t+1) = Y. Otherwise, X(t+1) = X.</p></li>
 <li><p>Rinse and repeat</p></li>
 </ul>
@@ -760,11 +760,11 @@ from <a href="http://www.cnblogs.com/Nietzsche/p/4255948.html" class="uri">http:
 <img data-src="./images/16/gibbs_strangelove.jpg" /></p>
 </div>
 </section>
-<section id="king-hamilton-and-his-batboat" class="slide level2">
-<h2>King Hamilton and His BatBoat</h2>
+<section id="king-hamilton-and-his-batboat-also-from-mcelreath" class="slide level2">
+<h2>King Hamilton and His BatBoat (also from McElreath)</h2>
 <p><img data-src="./images/16/Mergui-Archipelago.jpg" style="width:80.0%" /> <img data-src="./images/16/batboat.jpg" style="width:40.0%" /></p>
 </section>
-<section id="king-hamilton-and-his-batboat-1" class="slide level2">
+<section id="king-hamilton-and-his-batboat" class="slide level2">
 <h2>King Hamilton and His BatBoat</h2>
 <p><img data-src="./images/16/batboat.jpg" /></p>
 <ul>
@@ -807,8 +807,8 @@ Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" c
 Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" class="uri">http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html</a>
 </div>
 </section>
-<section id="implementing-hmcmc-via-stan" class="slide level2">
-<h2>Implementing HMCMC via Stan</h2>
+<section id="implementing-hmc-via-stan" class="slide level2">
+<h2>Implementing HMC via Stan</h2>
 <p><img data-src="images/16/stan_team.jpg" /></p>
 <ul>
 <li>A few libraries in R use Stan <br></li>
@@ -831,13 +831,13 @@ Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" c
 <section id="brms" class="slide level2">
 <h2>brms</h2>
 <ul>
-<li><p>Powerful package that fits bayesian models using MCMC with Hamiltonian Updating (reduced autocorrelation in chain)</p></li>
+<li><p>Powerful package that fits bayesian models using Hamiltonian Monte-Carlo (reduced autocorrelation in chain)</p></li>
 <li><p>Available tools to tweak priors</p></li>
 <li><p>Flexible in error distribution</p></li>
 <li><p>Can accomodate random effects, autocorrelation, etc</p></li>
 <li><p>Uses STAN to fit models, but same syntax as base R models</p></li>
 <li><p>Constantly updated for more weird models (post an issue, I give it 2 days)</p></li>
-<li><p>Compiles model into C code, then samples</p></li>
+<li><p>Compiles model into C++ code, then samples</p></li>
 <li><p>For maximum flexibility, <em>rethinking</em> or <em>rstan</em></p></li>
 </ul>
 </section>
