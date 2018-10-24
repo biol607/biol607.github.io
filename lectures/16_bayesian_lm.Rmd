@@ -132,7 +132,7 @@ from it:</p>
 
 (Note, this is the Metropolis-Hastings Algorithm - there are others)
 
-## King Markov and His Islands
+## King Markov and His Islands (sensu Richard McElreath)
 ![](./images/16/Mergui-Archipelago.jpg)
 
 ## King Markov and His Islands
@@ -403,8 +403,7 @@ plot(seq(1,100,10),modNoThin$Sol[seq(1,100,10)], type="b", ylab="Value", xlab="I
 <br><br><br>
 <h1>Linear Modeling with Bayes
 
-
-## rstanarm
+## brms
 
 -   Powerful package that fits bayesian models using 
     MCMC with Hamiltonian Updating (reduced autocorrelation in chain)
@@ -417,10 +416,11 @@ plot(seq(1,100,10),modNoThin$Sol[seq(1,100,10)], type="b", ylab="Value", xlab="I
 
 -   Uses STAN to fit models, but same syntax as base R models
 
--   For more flexible correlation structure, `MCMCglmm`
+-   Constantly updated for more weird models (post an issue, I give it 2 days)  
+  
+-   Compiles model into C code, then samples
 
 -   For maximum flexibility, *rethinking* or *rstan*
-
 
 ## Bayesian Pufferfish
 <div id = "left">
@@ -456,9 +456,9 @@ pufferplot
 5. Evaluate model results
 6. Visualize
 
-## Implementing the Puffer Model in rstanarm
+## Implementing the Puffer Model in brms
 
-```{r puffer_brms, eval = FALSE}
+```{r puffer_brms, eval = FALSE, echo=TRUE}
 ```
 
 ## What were the priors?

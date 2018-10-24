@@ -590,11 +590,11 @@ If we cannot analytically solve a distribution, we can still simulate from it:
 </ul>
 <p>(Note, this is the Metropolis-Hastings Algorithm - there are others)</p>
 </section>
-<section id="king-markov-and-his-islands" class="slide level2">
-<h2>King Markov and His Islands</h2>
+<section id="king-markov-and-his-islands-sensu-richard-mcelreath" class="slide level2">
+<h2>King Markov and His Islands (sensu Richard McElreath)</h2>
 <p><img data-src="./images/16/Mergui-Archipelago.jpg" /></p>
 </section>
-<section id="king-markov-and-his-islands-1" class="slide level2">
+<section id="king-markov-and-his-islands" class="slide level2">
 <h2>King Markov and His Islands</h2>
 <p><img data-src="./images/16/Mergui-Archipelago.jpg" /> <img data-src="./images/16/boat2.jpg" /></p>
 </section>
@@ -828,15 +828,16 @@ Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" c
 <h1>
 <p>Linear Modeling with Bayes</p>
 </section>
-<section id="rstanarm" class="slide level2">
-<h2>rstanarm</h2>
+<section id="brms" class="slide level2">
+<h2>brms</h2>
 <ul>
 <li><p>Powerful package that fits bayesian models using MCMC with Hamiltonian Updating (reduced autocorrelation in chain)</p></li>
 <li><p>Available tools to tweak priors</p></li>
 <li><p>Flexible in error distribution</p></li>
 <li><p>Can accomodate random effects, autocorrelation, etc</p></li>
 <li><p>Uses STAN to fit models, but same syntax as base R models</p></li>
-<li><p>For more flexible correlation structure, <code>MCMCglmm</code></p></li>
+<li><p>Constantly updated for more weird models (post an issue, I give it 2 days)</p></li>
+<li><p>Compiles model into C code, then samples</p></li>
 <li><p>For maximum flexibility, <em>rethinking</em> or <em>rstan</em></p></li>
 </ul>
 </section>
@@ -871,12 +872,15 @@ Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" c
 <li>Visualize</li>
 </ol>
 </section>
-<section id="implementing-the-puffer-model-in-rstanarm" class="slide level2">
-<h2>Implementing the Puffer Model in rstanarm</h2>
+<section id="implementing-the-puffer-model-in-brms" class="slide level2">
+<h2>Implementing the Puffer Model in brms</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">puffer_brms &lt;-<span class="st"> </span><span class="kw">brm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">                   <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">                   <span class="dt">data =</span> puffer)</a></code></pre></div>
 </section>
 <section id="what-were-the-priors" class="slide level2">
 <h2>What were the priors?</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">prior_summary</span>(puffer_brms)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">prior_summary</span>(puffer_brms)</a></code></pre></div>
 <pre><code>                 prior     class        coef group resp dpar nlpar bound
 1                              b                                        
 2                              b resemblance                            
@@ -1180,12 +1184,12 @@ OK, ok, but what about the prior…
 <section id="adding-a-stronger-prior" class="slide level2">
 <h2>Adding a stronger prior</h2>
 <p><br></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">  puffer_brms_prior &lt;-<span class="st"> </span><span class="kw">brm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">                   <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                   <span class="dt">data =</span> puffer,</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">                   <span class="dt">prior =</span> <span class="kw">c</span>(<span class="kw">prior</span>(<span class="kw">normal</span>(<span class="dv">3</span>, <span class="dv">1</span>), <span class="dt">class =</span> Intercept),</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">                             <span class="kw">prior</span>(<span class="kw">normal</span>(<span class="dv">1</span>, <span class="fl">0.5</span>), <span class="dt">class =</span> b),</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">                             <span class="kw">prior</span>(<span class="kw">uniform</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="dt">class =</span> sigma)))</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">  puffer_brms_prior &lt;-<span class="st"> </span><span class="kw">brm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">                   <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">                   <span class="dt">data =</span> puffer,</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">                   <span class="dt">prior =</span> <span class="kw">c</span>(<span class="kw">prior</span>(<span class="kw">normal</span>(<span class="dv">3</span>, <span class="dv">1</span>), <span class="dt">class =</span> Intercept),</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">                             <span class="kw">prior</span>(<span class="kw">normal</span>(<span class="dv">1</span>, <span class="fl">0.5</span>), <span class="dt">class =</span> b),</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">                             <span class="kw">prior</span>(<span class="kw">uniform</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="dt">class =</span> sigma)))</a></code></pre></div>
 <pre><code>  In file included from file2676668b5a19.cpp:8:
   In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/src/stan/model/model_header.hpp:4:
   In file included from /Library/Frameworks/R.framework/Versions/3.5/Resources/library/StanHeaders/include/stan/math.hpp:4:
@@ -1369,7 +1373,7 @@ OK, ok, but what about the prior…
 <section id="did-it-blend" class="slide level2">
 <h2>Did it blend?</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/post_prior_strong-1.jpeg" width="768" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">rhat</span>(puffer_brms_prior)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">rhat</span>(puffer_brms_prior)</a></code></pre></div>
 <pre><code>  b_Intercept b_resemblance         sigma          lp__ 
      1.000209      1.001566      1.002379      1.000968 </code></pre>
 </section>
