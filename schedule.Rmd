@@ -72,7 +72,7 @@ __Lab Topic:__ [Distributions in R, Frequentist Hypothesis testing via simulatio
 __Reading:__ W&S 5-7, W&G Chapter 7, 16, [Abraham Lincoln and Confidence Intervals](http://andrewgelman.com/2016/11/23/abraham-lincoln-confidence-intervals/) and links therein    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-hypotheses-2018  
 __Quiz:__ http://tinyurl.com/hyp-pre-quiz  
-<!-- __In Class Code:__  [Distributions and Power](in_class_code_2018/05_distributions_power.R)\ -->
+__In Class Code:__  [Distributions and Power](in_class_code_2018/scripts/power_analysis_lab_in_class_code.R)  
 __Homework:__ [hypothesis testing and power](./homework_2018/04_hypothesis_power.html)  
 
   
@@ -111,6 +111,7 @@ __Lab Topic:__ [Likelihood and linear models](lab/07_likelihood.html), [data](./
 __Reading:__ W&S 20, W&G Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-likelihood-2018  
 __In Class Code:__  [linear models with likelihood](in_class_code_2018/scripts/likelihood.R)  
+__Packages for The Week:__ `install.packages(c("MASS", "profileModel", "bbmle"))`  
 __Homework:__[pufferfish and likelihood](./homework_2018/07_likelihood.html)  
 
 ### Week 8.   
@@ -121,6 +122,7 @@ __Lecture:__ [Bayesian Inference](lectures/15_bayesian_basics.html), [Fitting a 
 __Lab Topic:__ Bayesian computation in R, [Fitting a line with Bayesian techniques](lab/08_bayes.html)   
 __Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1](http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and [Chapter 2](http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf), [R Users will Now Inevitably Become Bayesians](https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/)  
 __Additional Reading on rstanarm__: [How to use it](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html), [Linear Models in rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html), [more vignettes](https://cran.r-project.org/web/packages/rstanarm/index.html), [rstanarm and more](http://andrewgelman.com/2016/01/14/rstanarm-and-more/), [Bayesian basics with R](http://m-clark.github.io/docs/IntroBayes.html)  
+__Packages for The Week:__ `install.packages(c("brms", "rstanarm", "arm", "rethinking"))`  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-bayes-2018  
 __In Class Code:__ [Bayesian Data Analysis](in_class_code_2016/08_bayes.R)  
 

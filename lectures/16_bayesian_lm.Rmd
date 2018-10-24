@@ -14,7 +14,7 @@ output:
 ---
 
 ## Fitting Linear Models with Bayes
-![image](./images/15/bayes.png)
+![image](./images/16/modified_bayes_theorem_2x.png){width="80%"}
 
 ```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
@@ -26,14 +26,24 @@ library(tidyr)
 library(broom)
 library(ggplot2)
 library(rstanarm)
+library(brms)
 
 #legacy - fix
 library(MCMCglmm)
 library(coda)
 
 options(mc.cores = parallel::detectCores())
+puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
 
 ```
+
+```{r puffer_brms, cache=TRUE, warning=FALSE, results="hide"}
+puffer_brms <- brm(predators ~ resemblance, data = puffer)
+```
+
+## Our Etherpad
+<br><br><br>
+https://etherpad.wikimedia.org/p/607-bayes-2018  
 
 ## Bayesian Inference
 
@@ -61,21 +71,25 @@ options(mc.cores = parallel::detectCores())
 -   Modifying our Prior
 
 
-## Bayes Theorem Expanded
-<div style="text-align:left; font-size:24pt">
+## Bayes Theorem So Far
+<br><br><br>
 $p(\theta | X) = \frac{p(X | \theta)P(\theta)}{\displaystyle \sum_{i=0}^{j} p(X | \theta_{i})p(\theta_{i})}$
 
-- Algebraically Solvable \
+Algebraically Solvable \
 \
 
+
+## What About Continuous Variables
+<br><br><br>
 $p(\theta | X) = \frac{p(X | \theta)P(\theta)}{\int p(X | \theta)p(\theta)d\theta}$
 
-- Analytically Solveable for Conjugate Priors \
-\
+Analytically Solveable for Conjugate Priors...for linear models \
+
+## But Where are we going?
+<br><br><br>
 $p(\theta | X) = \frac{\int p(X | \theta)P(\theta|\eta)p(\eta)d\eta}{\int\int p(X | \theta)p(\theta)d\theta d\eta}$
 
-- Hierarchical Model: need numerical integration approach with random
-hyperparameters</div>
+Non-gaussian models, hierarchical models, and more: need numerical integration approach 
 
 ## Markov Chain Monte Carlo Sampling (MCMC)
 
@@ -85,7 +99,12 @@ mod <- stan_glm(x ~ 1, data=data.frame(x=rnorm(50)), verbose=FALSE, family=gauss
 plot(mod, plotfun="stan_trace")
 ```
 
-
+## Solution: Sampling from the Posterior  
+> - We don't need to integrate/sample everything  <br><br>
+> - What if we tried candidate values of $\theta$ to get p(X|$\theta$)  <br><br>
+> - If we had a clever way of searching parameter space...  <br><br>
+> - Maybe, spending more time sampling more likely values?  <br><br>
+> - Enter the ATOM BOMB!
 
 ## Markov Chain Monte Carlo Sampling (MCMC)
 
@@ -108,8 +127,93 @@ from it:</p>
 
 (Note, this is the Metropolis-Hastings Algorithm - there are others)
 
+## King Markov and His Islands
+![](./images/16/Mergui-Archipelago.jpg)
 
-## Markov Chain Monte Carlo Sampling (MCMC)
+## King Markov and His Islands
+![](./images/16/Mergui-Archipelago.jpg)
+![](./images/16/boat2.jpg)
+
+## How to move around Islands
+![](./images/16/boat2.jpg)
+<p align="left">
+<li class="fragment">Flip a coin. Heads, move. Tails, stay.</li>  
+<li class="fragment">Figure out the number of people on each island.</li>  
+<li class="fragment">Assign a probability, p = next island / (total population)</li>  
+<li class="fragment">Choose a random number. If number &lt; p, move.</li>
+<li class="fragment">Rinse and repeat</li>
+</p>
+
+```{r mcmc, echo=FALSE}
+
+mcmc_ex <- function(num_weeks = 1e5, current=10, positions = rep(0, num_weeks)){
+  for ( i in 1:num_weeks ) {
+    # record current position
+    positions[i] <- current
+  
+    # flip coin to generate proposal
+    proposal <- current + sample( c(-1,1) , size=1 )
+    # now make sure he loops around the archipelago
+    if ( proposal < 1 ) proposal <- 10
+    if ( proposal > 10 ) proposal <- 1
+  
+    # move?
+    prob_move <- proposal/current
+    current <- ifelse( runif(1) < prob_move , proposal , current )
+  }
+
+  positions
+}
+
+```
+
+
+## Metropolis MCMC in Action: 10 Weeks
+Population = Island Number
+```{r met}
+par(mfrow=c(1,2))
+set.seed(2002)
+plot(mcmc_ex(10), xlab="weeks", type="l")
+rethinking::simplehist(mcmc_ex(10))
+par(mfrow=c(1,1))
+```
+
+## Metropolis MCMC in Action: 50 Weeks
+Population = Island Number
+```{r met_50}
+par(mfrow=c(1,2))
+set.seed(2002)
+plot(mcmc_ex(50), xlab="weeks", type="l")
+rethinking::simplehist(mcmc_ex(50))
+par(mfrow=c(1,1))
+```
+
+## Metropolis MCMC in Action: 1000 Weeks
+Population = Island Number
+```{r met_1000}
+par(mfrow=c(1,2))
+set.seed(2002)
+plot(mcmc_ex(1000), xlab="weeks", type="l")
+rethinking::simplehist(mcmc_ex(1000))
+par(mfrow=c(1,1))
+```
+
+## Metropolis MCMC For Models
+<div id="left">
+```{r tmp}
+plot(mcmc_ex(100), xlab="weeks", type="l")
+```
+</div>
+
+<div id="right">
+- Each island is a set of parameter choices  
+\
+- Each "population" is a posterior density  
+\
+- The path is a 'chain'  
+</div>
+
+## Markov Chain Monte Carlo Sampling (MCMC) 
 
 <p align="left">This is a time series. To use it for inference to sample from the final
 stationary distribution:</p>
@@ -202,25 +306,98 @@ plot(seq(1,100,10),modNoThin$Sol[seq(1,100,10)], type="b", ylab="Value", xlab="I
 ```{r mcmcgraphic, echo=FALSE, cache=TRUE} 
 ```
 
+## MCMC In Practice for Models
+![](./images/16/mcmc_in_practice.jpg)  
+\
+\
+\
+<div style="font-size:11pt">from http://www.cnblogs.com/Nietzsche/p/4255948.html</div>
+
+## MCMC is not a Panacea
+![](./images/16/mcmc_fail.jpg)
+
+## MCMC is not a Panacea
+![](./images/16/mcmc_stuck_green_worden_2015.jpg)
+
+## How can MCMC Fail?
+
+- MCMC (particularly Metropolis) can get stuck  
+\
+- Start values can still be important  
+\
+- Particularly a problem with many parameters which are correlated  
+\
+- One way we try and assess is fit with many chains and make sure they converge
+
+
+## MCMC Algorithms
+<div id="left">
+- Metropolis MCMC inefficient  
+\
+- Many algorithms to come up with clever proposed moves to speed up  
+\
+- Gibbs sampling used for BUGS, JAGS, etc.\
+    - Still has same problems as Metropilis  
+\
+- Or... Abandon search and use more deterministic sampling
+    - Hamiltonian MCMC
+</div>
+
+<div id="right">
+\
+\
+![](./images/16/gibbs_strangelove.jpg)
+</div>
+
+## King Hamilton and His BatBoat
+![](./images/16/Mergui-Archipelago.jpg){width="80%"}
+![](./images/16/batboat.jpg){width="40%"}
+
+## King Hamilton and His BatBoat
+![](./images/16/batboat.jpg)
+
+- Boat passes by all of the island, back and forth  
+\
+- Boat slows to see people in porportion to how many folk  
+\
+- We sample position through time, more positions in areas where boat is slow
+
+## Metropolis versus Hamiltonian
+![](images/16/metropolis_hamilton_bivariate.jpg)
+\
+\
+\
+<div style="font-size:11pt">Neal 2011, http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html </div>
+
+## Metropolis versus Hamiltonian
+![](images/16/metropolis_hamilton_sampling.jpg)
+\
+\
+\
+<div style="font-size:11pt">Neal 2011, http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html </div>
+
+
+## Metropolis versus Hamiltonian
+![](images/16/metropolis_hamilton_sampling_high_n.jpg)
+\
+\
+\
+<div style="font-size:11pt">Neal 2011, http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html </div>
+
+## Implementing HMCMC via Stan
+![](images/16/stan_team.jpg)
+
+- A few libraries in R use Stan  <br>
+- `rstanarm` is from the Stan team  
+     - several pre-compiled models <br>
+- `brms` is **constantly** expanding  
+     - Models compiled, but, infinitely flexible
+
+
 ##
 <br><br><br>
 <h1>Linear Modeling with Bayes
 
-## Software Options for MCMC
-
--   WinBUGS <http://www.mrc-bsu.cam.ac.uk/bugs/>
-
--   OpenBUGS <http://www.openbugs.info/w/>
-
--   JAGS <http://mcmc-jags.sourceforge.net/>
-
--   STAN <http://mc-stan.org/>
-    - **rstanarm**
-    - rethinking
-
--   MCMCglmm in R
-
--   MCMCpack in R
 
 ## rstanarm
 
@@ -241,9 +418,6 @@ plot(seq(1,100,10),modNoThin$Sol[seq(1,100,10)], type="b", ylab="Value", xlab="I
 
 
 ## Bayesian Pufferfish
-```{r pufferload}
-puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
-```
 <div id = "left">
 - Pufferfish are toxic/harmful to predators  
 <br>
@@ -355,7 +529,7 @@ Only one point with a moderate test statistic - not bad! If >1, inspect that poi
 
 ## MCMC diagnostics - Did we converge?
 ```{r converge}
-plot(puffer_mod, pars = c("(Intercept)", "resemblance", "sigma"), plotfun="stan_trace")
+plot(puffer_mod, pars = c("(Intercept)", "resemblance", "sigma"), plotfun="mcmc_trace")
 ```
 
 ## Are our posterior distributions well behaved?
@@ -413,9 +587,6 @@ LM Fit
 knitr::kable(tidy(lm(predators ~ resemblance, data=puffer)))
 ```
 
-##
-
-<h1 style="text-align:left">OK, ok, but what about the prior that we get all of the as for?</h1>
 
 ## Visualize the mean fit...
 ```{r fit_fig}
@@ -432,6 +603,10 @@ pufferplot +
   geom_point()
 ```
 
+##
+
+<h1 style="text-align:left">OK, ok, but what about the prior...</h1>
+![image](./images/16/prior_odds_solo.jpg)
 
 ## See your posterior relative to your prior
 ```{r post_prior, cache=TRUE}

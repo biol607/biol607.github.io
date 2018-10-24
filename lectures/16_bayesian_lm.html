@@ -3,52 +3,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title></title>
+  <title>16_bayesian_lm.utf8.md</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -91,22 +117,394 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
 
 </head>
 <body>
@@ -115,13 +513,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <section id="fitting-linear-models-with-bayes" class="slide level2">
-<h1>Fitting Linear Models with Bayes</h1>
-<p><img src="images/15/bayes.png" alt="image" /></p>
+<h2>Fitting Linear Models with Bayes</h2>
+<p><img data-src="./images/16/modified_bayes_theorem_2x.png" alt="image" style="width:80.0%" /></p>
+</section>
+<section id="our-etherpad" class="slide level2">
+<h2>Our Etherpad</h2>
+<p><br><br><br> <a href="https://etherpad.wikimedia.org/p/607-bayes-2018" class="uri">https://etherpad.wikimedia.org/p/607-bayes-2018</a></p>
 </section>
 <section id="bayesian-inference" class="slide level2">
-<h1>Bayesian Inference</h1>
-<p><img src="images/15/neon_bayes_theorem.jpeg" alt="image" style="width:40.0%" /><br />
-<font size="6"></p>
+<h2>Bayesian Inference</h2>
+<p><img data-src="./images/15/neon_bayes_theorem.jpeg" alt="image" style="width:40.0%" /><br />
+</p>
+<p><font size="6"></p>
 <ul>
 <li><p>Estimate probability of a parameter</p></li>
 <li><p>State degree of believe in specific parameter values</p></li>
@@ -131,37 +534,47 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p></font></p>
 </section>
 <section id="today" class="slide level2">
-<h1>Today</h1>
+<h2>Today</h2>
 <ul>
 <li><p>Markov Chain Monte-Carlo Sampling</p></li>
 <li><p>Fitting and evaluating linear models fit with MCMC</p></li>
 <li><p>Modifying our Prior</p></li>
 </ul>
 </section>
-<section id="bayes-theorem-expanded" class="slide level2">
-<h1>Bayes Theorem Expanded</h1>
-<div style="text-align:left; font-size:24pt">
-<p><span class="math inline">\(p(\theta | X) = \frac{p(X | \theta)P(\theta)}{\displaystyle \sum_{i=0}^{j} p(X | \theta_{i})p(\theta_{i})}\)</span></p>
-<ul>
-<li>Algebraically Solvable<br />
+<section id="bayes-theorem-so-far" class="slide level2">
+<h2>Bayes Theorem So Far</h2>
+<p><br><br><br> <span class="math inline">\(p(\theta | X) = \frac{p(X | \theta)P(\theta)}{\displaystyle \sum_{i=0}^{j} p(X | \theta_{i})p(\theta_{i})}\)</span></p>
+<p>Algebraically Solvable<br />
 <br />
-</li>
-</ul>
-<p><span class="math inline">\(p(\theta | X) = \frac{p(X | \theta)P(\theta)}{\int p(X | \theta)p(\theta)d\theta}\)</span></p>
-<ul>
-<li><p>Analytically Solveable for Conjugate Priors<br />
-<br />
-<span class="math inline">\(p(\theta | X) = \frac{\int p(X | \theta)P(\theta|\eta)p(\eta)d\eta}{\int\int p(X | \theta)p(\theta)d\theta d\eta}\)</span></p></li>
-<li>Hierarchical Model: need numerical integration approach with random hyperparameters
-</div></li>
-</ul>
+</p>
+</section>
+<section id="what-about-continuous-variables" class="slide level2">
+<h2>What About Continuous Variables</h2>
+<p><br><br><br> <span class="math inline">\(p(\theta | X) = \frac{p(X | \theta)P(\theta)}{\int p(X | \theta)p(\theta)d\theta}\)</span></p>
+<p>Analytically Solveable for Conjugate Priors…for linear models<br />
+</p>
+</section>
+<section id="but-where-are-we-going" class="slide level2">
+<h2>But Where are we going?</h2>
+<p><br><br><br> <span class="math inline">\(p(\theta | X) = \frac{\int p(X | \theta)P(\theta|\eta)p(\eta)d\eta}{\int\int p(X | \theta)p(\theta)d\theta d\eta}\)</span></p>
+<p>Non-gaussian models, hierarchical models, and more: need numerical integration approach</p>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic-1.jpeg" title="" alt="" width="768" /></p>
 </section>
+<section id="solution-sampling-from-the-posterior" class="slide level2">
+<h2>Solution: Sampling from the Posterior</h2>
+<ul>
+<li class="fragment">We don’t need to integrate/sample everything <br><br></li>
+<li class="fragment">What if we tried candidate values of <span class="math inline">\(\theta\)</span> to get p(X|<span class="math inline">\(\theta\)</span>) <br><br></li>
+<li class="fragment">If we had a clever way of searching parameter space… <br><br></li>
+<li class="fragment">Maybe, spending more time sampling more likely values? <br><br></li>
+<li class="fragment">Enter the ATOM BOMB!</li>
+</ul>
+</section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-1" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
 <p align="left">
 If we cannot analytically solve a distribution, we can still simulate from it:
 </p>
@@ -176,8 +589,67 @@ If we cannot analytically solve a distribution, we can still simulate from it:
 </ul>
 <p>(Note, this is the Metropolis-Hastings Algorithm - there are others)</p>
 </section>
+<section id="king-markov-and-his-islands" class="slide level2">
+<h2>King Markov and His Islands</h2>
+<p><img data-src="./images/16/Mergui-Archipelago.jpg" /></p>
+</section>
+<section id="king-markov-and-his-islands-1" class="slide level2">
+<h2>King Markov and His Islands</h2>
+<p><img data-src="./images/16/Mergui-Archipelago.jpg" /> <img data-src="./images/16/boat2.jpg" /></p>
+</section>
+<section id="how-to-move-around-islands" class="slide level2">
+<h2>How to move around Islands</h2>
+<img data-src="./images/16/boat2.jpg" />
+<p align="left">
+<li class="fragment">
+Flip a coin. Heads, move. Tails, stay.
+</li>
+<li class="fragment">
+Figure out the number of people on each island.
+</li>
+<li class="fragment">
+Assign a probability, p = next island / (total population)
+</li>
+<li class="fragment">
+Choose a random number. If number &lt; p, move.
+</li>
+<li class="fragment">
+Rinse and repeat
+</li>
+</p>
+</section>
+<section id="metropolis-mcmc-in-action-10-weeks" class="slide level2">
+<h2>Metropolis MCMC in Action: 10 Weeks</h2>
+<p>Population = Island Number <img src="16_bayesian_lm_files/figure-revealjs/met-1.jpeg" width="768" /></p>
+</section>
+<section id="metropolis-mcmc-in-action-50-weeks" class="slide level2">
+<h2>Metropolis MCMC in Action: 50 Weeks</h2>
+<p>Population = Island Number <img src="16_bayesian_lm_files/figure-revealjs/met_50-1.jpeg" width="768" /></p>
+</section>
+<section id="metropolis-mcmc-in-action-1000-weeks" class="slide level2">
+<h2>Metropolis MCMC in Action: 1000 Weeks</h2>
+<p>Population = Island Number <img src="16_bayesian_lm_files/figure-revealjs/met_1000-1.jpeg" width="768" /></p>
+</section>
+<section id="metropolis-mcmc-for-models" class="slide level2">
+<h2>Metropolis MCMC For Models</h2>
+<div id="left">
+<p><img src="16_bayesian_lm_files/figure-revealjs/tmp-1.jpeg" width="768" /></p>
+</div>
+<div id="right">
+<ul>
+<li>Each island is a set of parameter choices<br />
+<br />
+</li>
+<li>Each “population” is a posterior density<br />
+<br />
+</li>
+<li>The path is a ‘chain’<br />
+</li>
+</ul>
+</div>
+</section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-2" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
 <p align="left">
 This is a time series. To use it for inference to sample from the final stationary distribution:
 </p>
@@ -189,64 +661,174 @@ This is a time series. To use it for inference to sample from the final stationa
 </ul>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-3" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic1-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic1-1.jpeg" width="768" /></p>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-4" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic2-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic2-1.jpeg" width="768" /></p>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-5" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic3-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic3-1.jpeg" width="768" /></p>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-6" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic4-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic4-1.jpeg" width="768" /></p>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-7" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic5-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic5-1.jpeg" width="768" /></p>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-8" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic6-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic6-1.jpeg" width="768" /></p>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-9" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic100-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic100-1.jpeg" width="768" /></p>
 </section>
 <section id="markov-chain-monte-carlo-sampling-mcmc-10" class="slide level2">
-<h1>Markov Chain Monte Carlo Sampling (MCMC)</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphicThinned-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Markov Chain Monte Carlo Sampling (MCMC)</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphicThinned-1.jpeg" width="768" /></p>
 </section>
 <section id="multiple-chains-to-check-convergence-and-improve-answer" class="slide level2">
-<h1>Multiple Chains to Check Convergence and Improve Answer</h1>
+<h2>Multiple Chains to Check Convergence and Improve Answer</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/mcmcgraphic-1.jpeg" title="" alt="" width="768" /></p>
 </section>
+<section id="mcmc-in-practice-for-models" class="slide level2">
+<h2>MCMC In Practice for Models</h2>
+<img data-src="./images/16/mcmc_in_practice.jpg" /><br />
+<br />
+<br />
+<br />
+
+<div style="font-size:11pt">
+from <a href="http://www.cnblogs.com/Nietzsche/p/4255948.html" class="uri">http://www.cnblogs.com/Nietzsche/p/4255948.html</a>
+</div>
+</section>
+<section id="mcmc-is-not-a-panacea" class="slide level2">
+<h2>MCMC is not a Panacea</h2>
+<p><img data-src="./images/16/mcmc_fail.jpg" /></p>
+</section>
+<section id="mcmc-is-not-a-panacea-1" class="slide level2">
+<h2>MCMC is not a Panacea</h2>
+<p><img data-src="./images/16/mcmc_stuck_green_worden_2015.jpg" /></p>
+</section>
+<section id="how-can-mcmc-fail" class="slide level2">
+<h2>How can MCMC Fail?</h2>
+<ul>
+<li>MCMC (particularly Metropolis) can get stuck<br />
+<br />
+</li>
+<li>Start values can still be important<br />
+<br />
+</li>
+<li>Particularly a problem with many parameters which are correlated<br />
+<br />
+</li>
+<li>One way we try and assess is fit with many chains and make sure they converge</li>
+</ul>
+</section>
+<section id="mcmc-algorithms" class="slide level2">
+<h2>MCMC Algorithms</h2>
+<div id="left">
+<ul>
+<li>Metropolis MCMC inefficient<br />
+<br />
+</li>
+<li>Many algorithms to come up with clever proposed moves to speed up<br />
+<br />
+</li>
+<li>Gibbs sampling used for BUGS, JAGS, etc.<br />
+
+<ul>
+<li>Still has same problems as Metropilis<br />
+<br />
+</li>
+</ul></li>
+<li>Or… Abandon search and use more deterministic sampling
+<ul>
+<li>Hamiltonian MCMC</li>
+</ul></li>
+</ul>
+</div>
+<div id="right">
+<p><br />
+<br />
+<img data-src="./images/16/gibbs_strangelove.jpg" /></p>
+</div>
+</section>
+<section id="king-hamilton-and-his-batboat" class="slide level2">
+<h2>King Hamilton and His BatBoat</h2>
+<p><img data-src="./images/16/Mergui-Archipelago.jpg" style="width:80.0%" /> <img data-src="./images/16/batboat.jpg" style="width:40.0%" /></p>
+</section>
+<section id="king-hamilton-and-his-batboat-1" class="slide level2">
+<h2>King Hamilton and His BatBoat</h2>
+<p><img data-src="./images/16/batboat.jpg" /></p>
+<ul>
+<li>Boat passes by all of the island, back and forth<br />
+<br />
+</li>
+<li>Boat slows to see people in porportion to how many folk<br />
+<br />
+</li>
+<li>We sample position through time, more positions in areas where boat is slow</li>
+</ul>
+</section>
+<section id="metropolis-versus-hamiltonian" class="slide level2">
+<h2>Metropolis versus Hamiltonian</h2>
+<img data-src="images/16/metropolis_hamilton_bivariate.jpg" /><br />
+<br />
+<br />
+
+<div style="font-size:11pt">
+Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" class="uri">http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html</a>
+</div>
+</section>
+<section id="metropolis-versus-hamiltonian-1" class="slide level2">
+<h2>Metropolis versus Hamiltonian</h2>
+<img data-src="images/16/metropolis_hamilton_sampling.jpg" /><br />
+<br />
+<br />
+
+<div style="font-size:11pt">
+Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" class="uri">http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html</a>
+</div>
+</section>
+<section id="metropolis-versus-hamiltonian-2" class="slide level2">
+<h2>Metropolis versus Hamiltonian</h2>
+<img data-src="images/16/metropolis_hamilton_sampling_high_n.jpg" /><br />
+<br />
+<br />
+
+<div style="font-size:11pt">
+Neal 2011, <a href="http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html" class="uri">http://www.cs.utoronto.ca/~radford/ham-mcmc.abstract.html</a>
+</div>
+</section>
+<section id="implementing-hmcmc-via-stan" class="slide level2">
+<h2>Implementing HMCMC via Stan</h2>
+<p><img data-src="images/16/stan_team.jpg" /></p>
+<ul>
+<li>A few libraries in R use Stan <br></li>
+<li><code>rstanarm</code> is from the Stan team
+<ul>
+<li>several pre-compiled models <br></li>
+</ul></li>
+<li><code>brms</code> is <strong>constantly</strong> expanding
+<ul>
+<li>Models compiled, but, infinitely flexible</li>
+</ul></li>
+</ul>
+</section>
 <section id="section" class="slide level2">
-<h1></h1>
+<h2></h2>
 <br><br><br>
 <h1>
 <p>Linear Modeling with Bayes</p>
 </section>
-<section id="software-options-for-mcmc" class="slide level2">
-<h1>Software Options for MCMC</h1>
-<ul>
-<li><p>WinBUGS <a href="http://www.mrc-bsu.cam.ac.uk/bugs/" class="uri">http://www.mrc-bsu.cam.ac.uk/bugs/</a></p></li>
-<li><p>OpenBUGS <a href="http://www.openbugs.info/w/" class="uri">http://www.openbugs.info/w/</a></p></li>
-<li><p>JAGS <a href="http://mcmc-jags.sourceforge.net/" class="uri">http://mcmc-jags.sourceforge.net/</a></p></li>
-<li>STAN <a href="http://mc-stan.org/" class="uri">http://mc-stan.org/</a>
-<ul>
-<li><strong>rstanarm</strong></li>
-<li>rethinking</li>
-</ul></li>
-<li><p>MCMCglmm in R</p></li>
-<li><p>MCMCpack in R</p></li>
-</ul>
-</section>
 <section id="rstanarm" class="slide level2">
-<h1>rstanarm</h1>
+<h2>rstanarm</h2>
 <ul>
 <li><p>Powerful package that fits bayesian models using MCMC with Hamiltonian Updating (reduced autocorrelation in chain)</p></li>
 <li><p>Available tools to tweak priors</p></li>
@@ -258,7 +840,7 @@ This is a time series. To use it for inference to sample from the final stationa
 </ul>
 </section>
 <section id="bayesian-pufferfish" class="slide level2">
-<h1>Bayesian Pufferfish</h1>
+<h2>Bayesian Pufferfish</h2>
 <div id="left">
 <ul>
 <li>Pufferfish are toxic/harmful to predators<br />
@@ -269,16 +851,16 @@ This is a time series. To use it for inference to sample from the final stationa
 </ul>
 </div>
 <div id="right">
-<img src="images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
-
+<p><img data-src="./images/11/puffer_mimics.jpg" alt="image" style="width:80.0%" /><br />
+</p>
 </div>
 </section>
 <section id="does-resembling-a-pufferfish-reduce-predator-visits" class="slide level2">
-<h1>Does Resembling a Pufferfish Reduce Predator Visits?</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/puffershow-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Does Resembling a Pufferfish Reduce Predator Visits?</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/puffershow-1.jpeg" width="768" /></p>
 </section>
 <section id="the-steps-of-statistical-modeling" class="slide level2">
-<h1>The Steps of Statistical Modeling</h1>
+<h2>The Steps of Statistical Modeling</h2>
 <ol type="1">
 <li>What is your question?</li>
 <li>What model of the world matches your question?</li>
@@ -289,59 +871,59 @@ This is a time series. To use it for inference to sample from the final stationa
 </ol>
 </section>
 <section id="implementing-the-puffer-model-in-rstanarm" class="slide level2">
-<h1>Implementing the Puffer Model in rstanarm</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">100</span>)
-puffer_mod &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators ~<span class="st"> </span>resemblance, 
-                      <span class="dt">data=</span>puffer,
-                      <span class="dt">family=</span><span class="kw">gaussian</span>())</code></pre></div>
+<h2>Implementing the Puffer Model in rstanarm</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">puffer_mod &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">                      <span class="dt">data=</span>puffer,</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">                      <span class="dt">family=</span><span class="kw">gaussian</span>())</a></code></pre></div>
 </section>
 <section id="what-were-the-priors" class="slide level2">
-<h1>What were the priors?</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">puffer_mod_p &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators ~<span class="st"> </span>resemblance, 
-                      <span class="dt">data=</span>puffer,
-                      <span class="dt">family=</span><span class="kw">gaussian</span>(),
-                      <span class="dt">prior=</span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="fl">2.5</span>),
-                      <span class="dt">prior_intercept=</span><span class="kw">normal</span>(<span class="dv">0</span>,<span class="dv">10</span>))</code></pre></div>
+<h2>What were the priors?</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">puffer_mod_p &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">                      <span class="dt">data=</span>puffer,</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">                      <span class="dt">family=</span><span class="kw">gaussian</span>(),</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">                      <span class="dt">prior=</span><span class="kw">normal</span>(<span class="dv">0</span>, <span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">                      <span class="dt">prior_intercept=</span><span class="kw">normal</span>(<span class="dv">0</span>,<span class="dv">10</span>))</a></code></pre></div>
 <p>Note that these are weakly informative!</p>
 </section>
 <section id="section-1" class="slide level2">
-<h1></h1>
+<h2></h2>
 <br><br><br>
 <h1 style="text-align:left">
 All assumptions of linear regression hold - and then there are a few checks for MCMC fits
 </h1>
 </section>
 <section id="good-ole-qq" class="slide level2">
-<h1>Good ole’ QQ</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/qq_stan-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Good ole’ QQ</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/qq_stan-1.jpeg" width="768" /></p>
 </section>
 <section id="but---often-use-simulated-posterior-estimates" class="slide level2">
-<h1>But - often use simulated posterior estimates</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/resid_hist-1.jpeg" title="" alt="" width="768" /></p>
+<h2>But - often use simulated posterior estimates</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/resid_hist-1.jpeg" width="768" /></p>
 </section>
 <section id="observed-v.-average-of-simulated-fitted-value" class="slide level2">
-<h1>Observed v. Average of Simulated Fitted Value</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/obs_v_fit-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Observed v. Average of Simulated Fitted Value</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/obs_v_fit-1.jpeg" width="768" /></p>
 </section>
 <section id="do-simulated-posterios-of-the-data-fit-our-observations" class="slide level2">
-<h1>Do Simulated Posterios of the Data Fit our Observations?</h1>
-<p>Blue = Distribution of our observations, Lines = Simulations <img src="16_bayesian_lm_files/figure-revealjs/pp_check-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Do Simulated Posterios of the Data Fit our Observations?</h2>
+<p>Blue = Distribution of our observations, Lines = Simulations <img src="16_bayesian_lm_files/figure-revealjs/pp_check-1.jpeg" width="768" /></p>
 </section>
 <section id="does-distribution-of-sample-estimates-match-distribution-of-simulated-sample-estimates" class="slide level2">
-<h1>Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/pp_hist-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/pp_hist-1.jpeg" width="768" /></p>
 </section>
 <section id="does-distribution-of-sample-estimates-match-distribution-of-simulated-sample-estimates-1" class="slide level2">
-<h1>Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/pp_hist_2-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Does Distribution of Sample Estimates Match Distribution of Simulated Sample Estimates?</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/pp_hist_2-1.jpeg" width="768" /></p>
 </section>
 <section id="how-sensitive-is-our-simulation-to-leaving-out-one-value" class="slide level2">
-<h1>How sensitive is our simulation to leaving out one value?</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/loo-1.jpeg" title="" alt="" width="768" /></p>
+<h2>How sensitive is our simulation to leaving out one value?</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/loo-1.jpeg" width="768" /></p>
 <p>Only one point with a moderate test statistic - not bad! If &gt;1, inspect that point!</p>
 </section>
 <section id="section-2" class="slide level2">
-<h1></h1>
+<h2></h2>
 <br><br>
 <h1>
 <p align="left">
@@ -350,33 +932,36 @@ These are all data and error generating process checks. If they fail, you may ne
 </h1>
 </section>
 <section id="mcmc-diagnostics---did-we-converge" class="slide level2">
-<h1>MCMC diagnostics - Did we converge?</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/converge-1.jpeg" title="" alt="" width="768" /></p>
+<h2>MCMC diagnostics - Did we converge?</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/converge-1.jpeg" width="768" /></p>
 </section>
 <section id="are-our-posterior-distributions-well-behaved" class="slide level2">
-<h1>Are our posterior distributions well behaved?</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/check-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Are our posterior distributions well behaved?</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/check-1.jpeg" width="768" /></p>
 </section>
 <section id="section-3" class="slide level2">
-<h1></h1>
+<h2></h2>
 <br><br><br>
 <h1 style="text-align:left">
 These are all checks of the model fitting process. If they fail, either tweak the MCMC process (e.g., burnin, nsims), or your model is incompatible with the data
 </h1>
 </section>
 <section id="finally---the-parameters" class="slide level2">
-<h1>Finally - the Parameters</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/mcmc_params-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Finally - the Parameters</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/mcmc_params-1.jpeg" width="768" /></p>
 </section>
 <section id="so.-what-did-we-get" class="slide level2">
-<h1>So…. what did we get?</h1>
-<pre><code>stan_glm(formula = predators ~ resemblance, family = gaussian(), 
-    data = puffer)
+<h2>So…. what did we get?</h2>
+<pre><code>
+Model Info:
 
-Family: gaussian (identity)
-Algorithm: sampling
-Posterior sample size: 4000
-Observations: 20
+ function:    
+ family:       gaussian [identity]
+ formula:      predators ~ resemblance
+ algorithm:    sampling
+ priors:       see help(&#39;prior_summary&#39;)
+ sample:       4000 (posterior sample size)
+ observations: 20
 
 Estimates:
                 mean   sd    2.5%   25%   50%   75%   97.5%
@@ -397,7 +982,7 @@ log-posterior 0.0  1.0  1719
 For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</code></pre>
 </section>
 <section id="or-just-look-at-your-credible-interval" class="slide level2">
-<h1>Or, just look at your Credible Interval</h1>
+<h2>Or, just look at your Credible Interval</h2>
 <br />
 <br />
 
@@ -412,17 +997,17 @@ resemblance  2.239234508 3.687381
 sigma        2.595004307 3.952061</code></pre>
 </section>
 <section id="what-is-the-weight-of-the-tail-less-that-0" class="slide level2">
-<h1>What is the weight of the tail less that 0?</h1>
+<h2>What is the weight of the tail less that 0?</h2>
 <p>Weight of Intercept ≤ 0? 0.10075<br />
 <br />
 Weight of Slope ≤ 0? 0</p>
 </section>
 <section id="talking-about-uncertainty-the-ipcc-way" class="slide level2">
-<h1>Talking about Uncertainty the IPCC Way</h1>
-<p><img src="images/15/ipcc_uncertainty_ar5.jpg" /></p>
+<h2>Talking about Uncertainty the IPCC Way</h2>
+<p><img data-src="images/15/ipcc_uncertainty_ar5.jpg" /></p>
 </section>
 <section id="compare-to-lm" class="slide level2">
-<h1>Compare to LM</h1>
+<h2>Compare to LM</h2>
 <p>Bayesian Fit</p>
 <table>
 <thead>
@@ -480,40 +1065,41 @@ Weight of Slope ≤ 0? 0</p>
 </tbody>
 </table>
 </section>
-<section id="section-4" class="slide level2">
-<h1></h1>
-<h1 style="text-align:left">
-OK, ok, but what about the prior that we get all of the as for?
-</h1>
-</section>
 <section id="visualize-the-mean-fit" class="slide level2">
-<h1>Visualize the mean fit…</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/fit_fig-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Visualize the mean fit…</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/fit_fig-1.jpeg" width="768" /></p>
 </section>
 <section id="and-the-distributions-of-fits" class="slide level2">
-<h1>And the distributions of fits</h1>
-<p><img src="16_bayesian_lm_files/figure-revealjs/dist_fit-1.jpeg" title="" alt="" width="768" /></p>
+<h2>And the distributions of fits</h2>
+<p><img src="16_bayesian_lm_files/figure-revealjs/dist_fit-1.jpeg" width="768" /></p>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<h1 style="text-align:left">
+OK, ok, but what about the prior…
+</h1>
+<p><img data-src="./images/16/prior_odds_solo.jpg" alt="image" /></p>
 </section>
 <section id="see-your-posterior-relative-to-your-prior" class="slide level2">
-<h1>See your posterior relative to your prior</h1>
+<h2>See your posterior relative to your prior</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/post_prior-1.jpeg" title="" alt="" width="768" /></p>
 </section>
 <section id="adding-a-stronger-prior" class="slide level2">
-<h1>Adding a stronger prior</h1>
+<h2>Adding a stronger prior</h2>
 <p><br></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">100</span>)
-puffer_mod_prior &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators ~<span class="st"> </span>resemblance, 
-                      <span class="dt">data=</span>puffer,
-                      <span class="dt">family=</span><span class="kw">gaussian</span>(),
-                      <span class="dt">prior =</span> <span class="kw">normal</span>(<span class="dv">10</span>,<span class="dv">1</span>),
-                      <span class="dt">prior_intercept =</span> <span class="kw">normal</span>(<span class="dv">2</span>,<span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">puffer_mod_prior &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(predators <span class="op">~</span><span class="st"> </span>resemblance, </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                      <span class="dt">data=</span>puffer,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                      <span class="dt">family=</span><span class="kw">gaussian</span>(),</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">                      <span class="dt">prior =</span> <span class="kw">normal</span>(<span class="dv">10</span>,<span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">                      <span class="dt">prior_intercept =</span> <span class="kw">normal</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a></code></pre></div>
 </section>
 <section id="how-influential-was-that-new-prior" class="slide level2">
-<h1>How influential was that new prior?</h1>
+<h2>How influential was that new prior?</h2>
 <p><img src="16_bayesian_lm_files/figure-revealjs/post_prior_strong-1.jpeg" title="" alt="" width="768" /></p>
 </section>
 <section id="compare-results" class="slide level2">
-<h1>Compare results!</h1>
+<h2>Compare results!</h2>
 <p align="left">
 <p>Weak Prior:</p>
 <pre><code>                    5%      95%
@@ -529,7 +1115,7 @@ resemblance  2.236086 4.165638
 sigma        2.454073 4.257712</code></pre>
 </section>
 <section id="in-conclusion" class="slide level2">
-<h1>In Conclusion…</h1>
+<h2>In Conclusion…</h2>
 <ul>
 <li>Yes, it’s more fidly and there are more assumptions<br />
 <br />
@@ -543,8 +1129,8 @@ sigma        2.454073 4.257712</code></pre>
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -564,6 +1150,8 @@ sigma        2.454073 4.257712</code></pre>
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -574,7 +1162,7 @@ sigma        2.454073 4.257712</code></pre>
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>
