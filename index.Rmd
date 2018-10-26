@@ -24,3 +24,5 @@ ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
 &nbsp;  
 
 ## Course News:  
+
+2018-10-26: The midterm exam [has been posted!](./exam_2018/exam_2018.html)
