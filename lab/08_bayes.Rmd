@@ -35,33 +35,55 @@ To operationalize this, we can see three things we need to either provide or cal
 
 3) The marginal distribution - i.e., the sum of the product of p(D|H)p(H), as this is a discrete distribution.
 
-So, first, what range of lambdas should we test? And then let's get a likelihood profile.  Well, since our range of data is from 6-12, we can reasonably assume lambda must be between 6 and 13. Could be outside of that, but it's a reasonable suggestion. We can then simple get our likelihood profile using dplyr.
+What's great is that we can fold 1 and 2 into a function! We already wrote a log likelihood function for this very scenario last week, and now all we need to do is include a prior. In essence, any function for Baysian grid sampling includes  
+1) A Data Generating Process  
+2) A Set of Priors  
+3) A Likelihood  
 
-```{r lik}
+Then we either multiple the likelihood and prior - or sum the log likelihood and log prior.
+
+```{r bfun}
+bayes_pois <- function(y, lambda_est){
+  #our DGP
+  lambda <- lambda_est
+  
+  #Our Prior
+  prior <- dunif(lambda_est, 6, 12)
+  
+  #Our Likelihood
+  lik <-prod(dpois(y, lambda))
+  
+  #The numerator of our posterior
+  return(lik * prior)
+  
+  
+}
+```
+
+Great, so, what range of lambdas should we test? Well, since our range of data is from 6-12, we can reasonably assume lambda must be between 6 and 12. Could be outside of that, but it's a reasonable suggestion. We can then sample using our function and dplyr.
+
+```{r lik, warning=FALSE}
 library(dplyr)
 library(tidyr)
 
 bayes_analysis <- data.frame(lambda = 6:13) %>%
   rowwise() %>%
-  mutate(lik = sum(dpois(pois_data, lambda))) %>%
+  mutate(posterior_numerator = bayes_pois(pois_data, lambda)) %>%
   ungroup()
 ```
 
 
-OK, that's our likelihood. We know what to do with that. BUT - now we want to add in a prior.  So, what should our prior be? For the sake of argument here, let's go with a flat prior using a uniform distribution between 6 and 13. Note, this actually is somewhat informative, in that our lambda cannot be outside of these bounds. But that is a choice! We could have done something else - a big flat normal or somesuch. But, let's go with the uniform. After filling it in as a column, we then multiple our likelihood by our prior.
-
-```{r prior}
-bayes_analysis <- bayes_analysis %>%
-  mutate(prior = dunif(lambda, min = 6, max = 13)) %>%
-  mutate(numerator = lik*prior)
-```
-
-OK, now let's get our posterior! To do that, we just divide the numerator of our posterior by the marginal likelihood - which is just the sum of that numerator!
+OK, now let's get our posterior! To do that, we just divide the numerator of our posterior by the marginal probability - which is just the sum of that numerator!
 
 ```{r posterior}
 bayes_analysis <- bayes_analysis %>%
-  mutate(posterior = numerator/sum(numerator))
+  mutate(posterior = posterior_numerator/sum(posterior_numerator))
 
+```
+
+Let's take a look!
+
+```{r plot_post}
 library(ggplot2)
 ggplot(data=bayes_analysis, mapping = aes(x = lambda, y = posterior)) +
   geom_bar(stat="identity")
@@ -72,23 +94,42 @@ Or we can look at a table
 knitr::kable(bayes_analysis)
 ```
 
-From this table, we can see that the 90%CI is wide - ranges from 6-13. That's because we have a weak prior and not much data. Now, what if we'd had a stronger prior? Maybe a poisson distribution with a lambda of 10?
+From this table, we can see that the 90%CI is wide - ranges from 6-13. That's because we have a weak prior and not much data. Now, what if we'd had a stronger prior? Maybe a normal distribution centered on 10 with a SD of 1
 
 ```{r prior2}
+
+bayes_pois_strong_prior <- function(y, lambda_est){
+  #our DGP
+  lambda <- lambda_est
+  
+  #Our Prior
+  prior <- dnorm(lambda_est, 10,1)
+  
+  #Our Likelihood
+  lik <-prod(dpois(y, lambda))
+  
+  #The numerator of our posterior
+  return(lik * prior)
+  
+  
+}
+
 bayes_analysis <- bayes_analysis %>%
-  mutate(prior2 = dpois(lambda, 10),
-         posterior2 = (lik*prior2)/sum(lik*prior2))
+  rowwise() %>%
+  mutate(posterior_numerator_strong = bayes_pois_strong_prior(pois_data, lambda)) %>%
+  ungroup() %>%
+  mutate( posterior_strong = posterior_numerator_strong / sum(posterior_numerator_strong))
 
 ggplot(data=bayes_analysis) +
   geom_area(alpha=0.5, fill="red", mapping=aes(x=lambda, y=posterior)) +
-  geom_area(alpha=0.5, fill="blue", mapping=aes(x=lambda, y=posterior2)) +
+  geom_area(alpha=0.5, fill="blue", mapping=aes(x=lambda, y=posterior_strong)) +
   ggtitle("Red = Flat Priot, Blue = Informative Prior")
 
-knitr::kable(bayes_analysis %>% select(lambda, posterior, posterior2))
+knitr::kable(bayes_analysis %>% select(lambda, posterior, posterior_strong))
 
 ```
 
-A noticable difference. The 90% CI still contains 6 and 13 - but just barely. The 80% CI is only from 7-12.
+A noticable difference. The 90% CI is now from 8-11, and the 80% is even narrower.
 
 What's super near about this is that you can simulate samples from your posterior density. Say, draw 100 sampled lambdas, then, for each lambda, draw a sample of 10 random numbers (as in our initial distribution). We can then see how these posterior predictive distributions compare to the original.
 
@@ -106,8 +147,8 @@ posterior_sims  <- data.frame(sampled_lambda = sample(6:13, size = nsims,
   ungroup()
 
 ggplot() +
-  geom_density(mapping=aes(x=pois_data), fill="lightblue") +
-  geom_density(data=posterior_sims, mapping=aes(group = sim, x=predicted_values), color="grey") +
+    geom_density(data=posterior_sims, mapping=aes(group = sim, x=predicted_values), color="black") +
+  geom_density(mapping=aes(x=pois_data), fill="lightblue", color = "red", alpha = 0.7) +
   theme_bw()
 ```
 
@@ -118,14 +159,14 @@ Today we're going to go through fitting and evaluating a linear regression fit u
 We'll use the seal linear regression as an example.
 
 ```{r load_seals}
-library(rstanarm)
+library(brms)
 
-seals <- read.csv("data/06/17e8ShrinkingSeals Trites 1996.csv")
+seals <- read.csv("data/17e8ShrinkingSeals Trites 1996.csv")
 
 head(seals)
 ```
 
-Note that when you loaded `rstanarm` it gave you some warnings bout wanting to use more cores. THis is great - MCMC is one of those places where using all of your computer's cores (most these days have at least two) can **really** speed things along. And the parallelization is done for you!
+Note that when you loaded `brms` it gave you some warnings bout wanting to use more cores. This is great - MCMC is one of those places where using all of your computer's cores (most these days have at least two) can **really** speed things along. And the parallelization is done for you!
 
 ```{r cores}
 options(mc.cores = parallel::detectCores())
@@ -145,31 +186,19 @@ The basic steps of fitting a linear regression using Bayesian techniques (presum
 
 ### 2.1 Defining Your Model
 
-To begin, let's define our model. The beauty of `rstanarm` is that you merely just tack `stan_` onto most common fitting functions in R. We're not going to use `stan_lm()` (more on that in a second), but instead `stan_glm`. GLM stands for Generalized Linear Model. The reason we're using `stan_glm` is because it allows to set priors for slopes and intercepts.
-
-By default, though, it sets relatively flat priors (slope prior ~ N(0, 2.5) and intercept prior ~ N(0,10)). No intercept is set for the SD, as the SD results from your choice of slope and intercept.
+To begin, let's define our model. By default, though, it sets relatively flat priors for slopes and an intercept prior ~ N(0,10)). No intercept is set for the SD, as the SD results from your choice of slope and intercept.
 
 To specify that we're using a gaussian error, simply set the `family` argument to `gaussian()` - evertyhing else is handled for you.
-
-Note, if you really like being this specific, you can use `glm` to fit all of your linear models. It uses likelihood for the fit.
 
 ```{r fit_seals, cache=TRUE}
 set.seed(607)
 
-seal_lm_bayes <- stan_glm(length.cm ~ age.days,
+seal_lm_bayes <- brm(length.cm ~ age.days,
                          data = seals,
-                         family=gaussian())
+                         family=gaussian(), file = "./brms_fits/seal_lm_bayes")
 ```
 
-Note the output - you can see you're doing something! And you get a sense of speed.
-
-Now, there *is* a `stan_lm` function that works really well - it's prior is just different. Rather than put priors on parameters, you put a prior on your fit. With one parameter, you have to specify the mean, median, or mode. It's a bit fiddly, and you cannot then change the priors for individual parameters, so, I don't do it. But, as an example...
-
-```{r seal_lm, eval=FALSE}
-seal_lm_bayes <- stan_lm(length.cm ~ age.days,
-                         data = seals,
-                         prior = R2(0.5, what='median'))
-```
+Note the output - you can see you're doing something! And you get a sense of speed. And you can see the multiple cores going!
 
 
 ### 2.2 Assessing MCMC Diagnotics
@@ -184,43 +213,50 @@ We're going to check a few diagnostics:
 | Are your posteriors well-behaved? | Longer burning, more interations, check model & priors |
 | Are samples in your chains uncorrelated? | Change your thinning interval |
 
-So, first, did your model converge? The easiest way to see this is to plot the trace of your four chains. Now, `plot()` does a lot of things with `rstanarm objects` - you just have to tell it the `plotfun` you want to use. To see the full list, try `?rstanarm-plots`. The first we will use, `stan_trace` shows the traoce of our chains.
+So, first, did your model converge? The easiest way to see this is to plot the trace of your four chains. We can use `plot' to see both how well our model converged and the distribution of each parameter.
 
 ```{r converge}
-plot(seal_lm_bayes, plotfun="stan_trace")
+plot(seal_lm_bayes)
 ```
 
-Note, there's a `par` argument, so, you can see other chains, like `sigma` for the SD.
+Note, there's a `par` argument, so, you can look at just one chain if you want.
 
-You can assess convergence by examining the Rhat values in `summary(seal_lm_bayes)`. These values are something called the Gelman-Rubin statistic, and it should be at or very close to 1.
-
-
-OK, this looks pretty good - but, are those posteriors normal?
-
-```{r plot_posterior}
-plot(seal_lm_bayes, show_density = TRUE) 
+```{r one_par}
+plot(seal_lm_bayes, par = "b_Intercept")
 ```
 
-Oh, that's weird - the scale of the parameters is so off that we cannot clearly see their distribution. So, instead...
-```{r plot_posterior2}
-plot(seal_lm_bayes, show_density = TRUE, par="age.days") 
-plot(seal_lm_bayes, show_density = TRUE, par="(Intercept)") 
-plot(seal_lm_bayes, show_density = TRUE, par="sigma") 
+This looks pretty good, and those posteriors look pretty normal!
+
+You can also look at just the chains by turning our fit model into a posterior data frame.
+
+```{r post_df}
+seal_posterior <- posterior_samples(seal_lm_bayes, add_chain = T)
+
+head(seal_posterior)
+```
+
+Then, you can make whatever plot you want! The `bayesplot` function `mcmc_trace()` works great here.
+
+```{r plot_df}
+library(bayesplot)
+mcmc_trace(seal_posterior)+
+  scale_color_manual(values = c("red", "blue", "orange", "yellow"))
+```
+
+You can assess convergence by examining the Rhat values in `rhat(seal_lm_bayes)`. These values are something called the Gelman-Rubin statistic, and it should be at or very close to 1. You can also do fun things to visualize them with bayesplot
+
+```{r rhat}
+rhat(seal_lm_bayes)
+
+mcmc_rhat(rhat(seal_lm_bayes))
 ```
 
 Note that the function itself tells you what the intervals are. You can set them yourself, for example for the 67% interval and showing the full width of the distribution using
 
-```{r plot_posterior3}
-plot(seal_lm_bayes, show_density = TRUE, par="age.days",
-     ci_level=0.67, outer=1)
-```
-
-Well, everything looks nice and normal and well behaved!
-
 Last, we want to look at autocorrelation within our chains. We want values in the thinned chain to be uncorelated with each other. So, while they'd have an autocorrelation that might be high at a distance of 1, this should drop to near zero very quickly. If not, we need a different thinning interval.
 
 ```{r autcorrelation}
-plot(seal_lm_bayes, plotfun="stan_ac")
+mcmc_acf(seal_posterior)
 ```
 
 What do you do if you have funky errors?
@@ -250,21 +286,25 @@ So, your MCMC is ok. What now? Well, we have our usual suite of model diagnostic
 
 #### 2.3.1 Classical Point Model Diagnostics
 
-To start with, let's look at the relationships between the fitted and residual values at the estimated parameter values. We'll need to extract those values and work from there.
+Let's start by looking at point diagnostics. Note, because we're dealing with MCMC output here, we have to average over our posterior to get the responses we want. So, we can start by looking at the fitted versus residual values.
 
-```{r res_pred}
-fit_vals <- fitted(seal_lm_bayes)
-res <- residuals(seal_lm_bayes)
+```{r fitres}
+seal_fit <- fitted(seal_lm_bayes) %>% as.data.frame()
+res <- residuals(seal_lm_bayes) %>% as.data.frame()
 
-plot(fit_vals, res)
+plot(seal_fit$Estimate, res$Estimate)
 ```
+
 
 Good. Now the QQ plot.
 
 ```{r qq}
-qqnorm(res)
-qqline(res)
+qqnorm(res$Estimate)
+qqline(res$Estimate)
 ```
+
+
+This looks excellent
 
 #### 2.3.1 Model Diagnostics with Simulations
 
@@ -284,18 +324,18 @@ Not too different. And, hey, now we can look at the average of the posterior pre
 plot(colMeans(pred_vals), colMeans(resid_vals))
 ```
 
-`rstanarm` has a few of these types of diagnostics builtin. They look at simulated draws, as those give you a better idea of how your model is behaving.
+`brms` has a few of these types of diagnostics builtin. They look at simulated draws, as those give you a better idea of how your model is behaving. They use the function`pp_check()` whose options you can see from `?"PPC-overview"`
 
 For residuals, the first is to look at the histogram of residuals from several simulated runs.
 
 ```{r res_hist, cache=TRUE}
-pp_check(seal_lm_bayes, check="residuals", bins=10)
+pp_check(seal_lm_bayes, "error_hist", bins=10)
 ```
 
 We can also look at the relationship between average fitted and observed values
 
 ```{r fit_scatter, cache=TRUE}
-pp_check(seal_lm_bayes, check="scatter")
+pp_check(seal_lm_bayes, "scatter")
 ```
 
 Note, you can add the `nreps` argument to look at individual simulation runs. But, in general there should be a nice cloud around this line. And it should follow a roughly 1:1 relationship.
@@ -303,22 +343,26 @@ Note, you can add the `nreps` argument to look at individual simulation runs. Bu
 Another check is to see if we have reproduced the properties of our observed response variable. The "test" check gets at that. You can one or more properties of the response variable. The default is to look at the mean, but it's often useful to look at both the mean and SD
 
 ```{r properties, cache=TRUE}
-pp_check(seal_lm_bayes, check="test")
-pp_check(seal_lm_bayes, check="test", test=c("mean", "sd"))
+pp_check(seal_lm_bayes, "stat")
+pp_check(seal_lm_bayes, "stat", stat = "sd")
+pp_check(seal_lm_bayes, "stat_2d", stat=c("mean", "sd"))
 ```
 
 Last, we can look at whether simulations of the posterior lineup with the actual distribution of the posterior. If there are wild swings, we know there is a problem.
 
 ```{r check, cache=TRUE}
-pp_check(seal_lm_bayes, check="distributions", nreps=3)
+pp_check(seal_lm_bayes, "dens")
+
+pp_check(seal_lm_bayes, "dens_overlay")
+
 ```
 
 As with all diagnostics, failures indicate a need to consider respecifying a model and/or poor assumptions in the error generating process.
 
 Last, we can look for outliers using `loo` - leave one out. We use a particular form of this function as there are a few.
 
-```{r loo, cache=TRUE}
-plot(rstanarm::loo(seal_lm_bayes), label_points = TRUE, cex=1.1)
+```{r loo, cache=TRUE, eval=FALSE}
+plot(loo(seal_lm_bayes), label_points = TRUE, cex=1.1)
 ```
 
 Points with a score >0.5 are a bit worrisoome, and scores >1.0 have a large deal of leverage and should be examined.
@@ -332,21 +376,24 @@ OK, *phew* we have gotten through the mdoel checking stage. Now, what does our m
 summary(seal_lm_bayes, digits=5)
 ```
 
-Wow. No p-values, no nothing. We have, in the first block, the mean, SD (assuming a gaussian distribution of posteriors), and some of the quantiles of the parameters. There are two slightly mysterious outputs here. `mean_PPD` and `log-posterior`.
+Wow. No p-values, no nothing. We have, in the first block, the mean, SD (assuming a gaussian distribution of posteriors), and some of the quantiles of the parameters. 
 
-`mean_PPD` is just the mean of the response variable's posterior density. Compare it to `mean(seals$length.cm)` which is `r mean(seals$length.cm)`. In essence, you can do a nice comparison of the response variable and it's simulated values.
 
-The `log-posterior` is the log of the combined posterior distribution. This is analagous to a likelihood, or rather, a penalized likelihood. It's used later for model comparison.
-
-We can also visualize coefficients (separating them into multiple plots due to differences in scale)
+We can also visualize coefficients. Here we'll use `tidybayes` which has some really cool plotting tools.
 
 ```{r coef_plot}
-plot(seal_lm_bayes, par="(Intercept)")
-plot(seal_lm_bayes, par="age.days")
-plot(seal_lm_bayes, par="sigma")
-```
+#devtools::install_github("mjskay/tidybayes")
+library(tidybayes)
 
-The second block is diagnostics. It evaluates convergence via the Gelman-Rubin diagnostic - you want a `Rhat` of 1, and the effective number of samples you're working with from your posterior chains given autocorrelation.
+
+seal_lm_bayes %>%
+  spread_draws(b_Intercept, b_age.days, sigma) %>%
+  gather(parameter, value, b_Intercept:sigma) %>%
+  ggplot(aes(x = value, y = parameter)) +
+  geom_halfeyeh( .width = c(0.8, 0.95)) +
+  ylab("") +
+  ggtitle("Posterior Medians with 80% and 95% Credible Intervals")
+```
 
 If we want to know more about the posteriors, we have to begin to explore the chains themselves. To get the chains, we convert the object into a data frame.
 
@@ -359,21 +406,21 @@ head(seal_chains)
 We can now do really interesting things, like, say, as what is the weight of the age coefficient that is less than 0? To get this, we need to know the number of entries in the chain that are <0, and then divide that total by the total length of the chains.
 
 ```{r}
-sum(seal_chains$age.days<0)/nrow(seal_chains)
+sum(seal_chains$b_age.days<0)/nrow(seal_chains)
 ```
 
 Oh, that's 0.  Let's test something more interesting. How much of the PPD of the slope is between  0.00229 and  0.00235?
 
 
 ```{r}
-sum(seal_chains$age.days>0.00229 & 
-      seal_chains$age.days<0.00235) / nrow(seal_chains)
+sum(seal_chains$b_age.days>0.00229 & 
+      seal_chains$b_age.days<0.00235) / nrow(seal_chains)
 ```
 
 28.9% - nice chunk.  We can also look at some other properties of that chain:
 ```{r chain_properties}
-mean(seal_chains$age.days)
-median(seal_chains$age.days)
+mean(seal_chains$b_age.days)
+median(seal_chains$b_age.days)
 ```
 
 To get the Highest Posteriod Density Credible Intervals (often called the HPD intervals)
@@ -401,7 +448,7 @@ seal_plot <- ggplot(data = seals,
 
 #add the fit
 seal_plot + 
-  geom_abline(intercept = coef(seal_lm_bayes)[1], slope = coef(seal_lm_bayes)[2],
+  geom_abline(intercept = fixef(seal_lm_bayes)[1], slope = fixef(seal_lm_bayes)[2],
               color="red")
 ```
 
@@ -412,7 +459,7 @@ This is great, but what if we want to see the CI of the fit? Rather than use an 
 ```{r show_uncertainty}
 seal_plot +
   geom_abline(intercept = seal_chains[,1], slope = seal_chains[,2], color="grey", alpha=0.6) +
-  geom_abline(intercept = coef(seal_lm_bayes)[1], slope = coef(seal_lm_bayes)[2], color="red")
+  geom_abline(intercept = fixef(seal_lm_bayes)[1], slope = fixef(seal_lm_bayes)[2], color="red")
 ```
 
 We can see the tightness of the fit, and that we have high confidence in the output of our model.
@@ -437,7 +484,7 @@ seal_plot +
                mapping=aes(x=x, xend=xend, y=V1, yend=V2), 
                color="lightblue", alpha=0.1)+
   geom_abline(intercept = seal_chains[,1], slope = seal_chains[,2], color="darkgrey", alpha=0.6) +
-  geom_abline(intercept = coef(seal_lm_bayes)[1], slope = coef(seal_lm_bayes)[2], color="red")
+  geom_abline(intercept = fixef(seal_lm_bayes)[1], slope = fixef(seal_lm_bayes)[2], color="red")
 ```
 
 We can now see how much of the range of the data is specified by both our data and error generating process. There's still some data that falls outside of the range, although that's not surprising given our large sample size.
@@ -447,26 +494,22 @@ We can now see how much of the range of the data is specified by both our data a
 What if you wanted to try different priors, and assess the influence of your choice? First, let's see how our current prior relates to our posterior.
 
 ```{r priors, cache=TRUE}
-posterior_vs_prior(seal_lm_bayes, pars="age.days") 
+prior_summary(seal_lm_bayes)
 ```
 
-Eh, not much, most likely. Let' see if we had a different prior on the slope. Maybe a strong prior of a slope of 10. A very strong prior. Our `stan_glm` has two places where we can insert a prior - both in the `prior` for slope and `prior_intercept` for the intercept.
+Eh, not much, most likely. Let' see if we had a different prior on the slope. Maybe a strong prior of a slope of 110. A very strong prior. Our `brms` uses lists to create priors
 
 ```{r strong_prior, cache=TRUE}
-seal_lm_bayes_prior <- stan_glm(length.cm ~ age.days,
+seal_lm_bayes_prior <- brm(length.cm ~ age.days,
                          data = seals,
                          family=gaussian(),
-                         prior = normal(10,0.1),
-                         prior_intercept = normal(0, 10))
+                   prior = c(prior(normal(110, 5), class = Intercept),
+                             prior(normal(1, 1), class = b),
+                             prior(uniform(3, 10), class = sigma)),
+                   file = "brms_fits/seal_lm_bayes_prior")
 ```
 
-Note that this took longer to run due to the odd prior. It took a looooong time for our chains to settle into something reasonable.
-
-We can re-visuzliaze the influence of the prior on our posterior - did it make a difference?
-
-```{r see_prior_influence, cache=TRUE}
-posterior_vs_prior(seal_lm_bayes_prior, pars="age.days") 
-```
+Note that this was faster due to the tighter priors.
 
 ## 3. Faded Examples of Linear Models
 
@@ -475,7 +518,7 @@ posterior_vs_prior(seal_lm_bayes_prior, pars="age.days")
 Fist, the relationship between how lean you are and how quickly you lose fat. Implement this to get a sense ot the general workflow for analysis
 
 ```{r, eval=FALSE}
-fat <- read.csv("./data/06/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
+fat <- read.csv("./data/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
 
 #initial visualization to determine if lm is appropriate
 fat_plot <- ggplot(data=fat, aes(x=leanness, y=lossrate)) + 
@@ -483,34 +526,36 @@ fat_plot <- ggplot(data=fat, aes(x=leanness, y=lossrate)) +
 fat_plot
 
 #fit the model!
-fat_mod <- stan_glm(lossrate ~ leanness,
+fat_mod <- brm(lossrate ~ leanness,
                 data = fat, 
                 family=gaussian())
   
-# Inspect chains
-plot(fat_mod, plotfun = "stan_trace")
+# Inspect chains and posteriors
+plot(fat_mod)
 
-#Inspect Posteriors
-plot(fat_mod, show_density=TRUE)
+#Inspect rhat
+mcmc_rhat(rhat(fat_mod))
 
 #Inspect Autocorrelation
-plot(fat_mod, plotfun = "stan_ac")
+mcmc_acf(as.data.frame(fat_mod))
+
 
 #model assumptions
-fat_fit <- predict(fat_mod)
-fat_res <- residuals(fat_mod)
+fat_fit <- predict(fat_mod) %>% as_tibble
+fat_res <- residuals(fat_mod)%>% as_tibble
+
+qplot(fat_res$Estimate, fat_fit$Estimate)
 
 #fit
-qplot(fat_fit, fat_res)
-pp_check(fat_mod, check="scatter")
+pp_check(fat_mod, type="scatter")
 
 #normality
-qqnorm(fat_res)
-qqline(fat_res)
-pp_check(fat_mod, check="residuals", bins=8)
+qqnorm(fat_res$Estimate)
+qqline(fat_res$Estimate)
+pp_check(fat_mod, type="error_hist", bins=8)
 
 ##match to posterior
-pp_check(fat_mod, check="test", test=c("mean", "sd"))
+pp_check(fat_mod, type="stat_2d", test=c("mean", "sd"))
 pp_check(fat_mod)
 
 #coefficients
@@ -532,7 +577,7 @@ fat_plot +
 For your first faded example, let's look at the relationship between DEET and mosquito bites.
 
 ```{r eval=FALSE}
-deet <- read.csv("./data/06/17q24DEETMosquiteBites.csv")
+deet <- read.csv("./data/17q24DEETMosquiteBites.csv")
 
 deet_plot <- ggplot(data=___, aes(x=dose, y=bites)) + 
   geom_point()
@@ -540,35 +585,36 @@ deet_plot <- ggplot(data=___, aes(x=dose, y=bites)) +
 deet_plot
 
 #fit the model!
-deet_mod <- stan_glm(___ ~ dose,
+deet_mod <- brm(___ ~ dose,
                 data = ____, 
                 family=gaussian())
-# Inspect chains
-plot(deet_mod, plotfun = "stan_trace")
+# Inspect chains and posteriors
+plot(deet_mod)
 
-#Inspect Posteriors
-plot(deet_mod, show_density=TRUE)
+#Inspect rhat
+mcmc_rhat(rhat(deet_mod))
 
 #Inspect Autocorrelation
-plot(___, plotfun = "stan_ac")
+mcmc_acf(as.data.frame(deet_mod))
+
 
 #model assumptions
-deet_fit <- predict(___)
-deet_res <- residuals(___)
+deet_fit <- predict(____) %>% as_tibble
+deet_res <- residuals(____)%>% as_tibble
+
+qplot(____$Estimate, ____$Estimate)
 
 #fit
-qplot(deet_fit, deet_res)
-pp_check(___, check="scatter")
+pp_check(____, type="____")
 
 #normality
-qqnorm(___)
-qqline(___)
-pp_check(___, check="residuals", bins=8)
+qqnorm(____$Estimate)
+qqline(____$Estimate)
+pp_check(____, type="error_hist", bins=8)
 
 ##match to posterior
-pp_check(___, check="test", test=c("mean", "sd"))
-pp_check(___)
-
+pp_check(____, type="stat_2d", test=c("mean", "sd"))
+pp_check(____)
 
 #coefficients
 summary(___, digits=5)
@@ -603,33 +649,23 @@ zoo_mod <- stan_glm(___ ~ ___,
                 data = ____, 
                 family=___)
 
-# Inspect chains
-#Trace of chains
-plot(___, plotfun = "___")
-
-#Inspect Posterior Distributions
-plot(___, ___=TRUE)
-
-#Inspect Autocorrelation
-plot(___, plotfun = "___")
-
 #model assumptions
-zoo_fit <- predict(___)
-zoo_res <- residuals(___)
+deet_fit <- predict(____) %>% as_tibble
+deet_res <- residuals(____)%>% as_tibble
 
-#fit versus residuals
-#and fit versus observed
-qplot(___, ___)
-pp_check(___, check="___")
+qplot(____$____, ____$____)
 
-#normality via residuals
-qqnorm(___)
-qqline(___)
-pp_check(___, check="___", bins=8)
+#fit
+pp_check(____, type="____")
+
+#normality
+qqnorm(____$Estimate)
+qqline(____$Estimate)
+pp_check(____, type="____", bins=____)
 
 ##match to posterior
-pp_check(___, check="___", test=c("mean", "sd"))
-pp_check(___)
+pp_check(____, type="stat_2d", test=c("____", "____"))
+pp_check(____)
 
 #coefficients
 summary(___, digits=5)
