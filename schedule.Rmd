@@ -124,7 +124,7 @@ __Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Elliso
 __Additional Reading__: [how to choose a prior](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations), [bayesian t-tests](https://vuorre.netlify.com/post/2017/how-to-compare-two-groups-with-robust-bayesian-estimation-using-r-stan-and-brms/), [regression models with brms](https://magesblog.com/post/2015-09-01-bayesian-regression-models-using-stan/), [rethinking with brms](https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/) (many very cool examples), [brms tutorials](https://www.rensvandeschoot.com/tutorials/brms/), [How to use rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html), [Linear Models in rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html), [Bayesian basics with R](https://m-clark.github.io/bayesian-basics/)  
 __Packages for The Week:__ `install.packages(c("brms", "rstanarm", "arm", "rethinking"))` and `devtools::install_github("mjskay/tidybayes")`  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-bayes-2018  
-__In Class Code:__ [Bayesian Data Analysis](in_class_code_2016/08_bayes.R)  
+__In Class Code:__ [Bayesian Data Analysis](in_class_code_2018/scripts/bayes.R)  
 
 ### Week 9.   
 ```{r next_date, echo=FALSE}
