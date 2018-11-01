@@ -169,6 +169,22 @@ seal_lm_bayes %>%
   geom_halfeyeh(.width = c(0.4, 0.75))
 
 
+#with ggridges
+coef_chains <- seal_lm_bayes %>%
+  gather_draws(b_Intercept, b_age.days, sigma)
+
+library(ggridges)
+#all coefs
+ggplot(coef_chains, 
+       aes(x = .value, y = .variable, fill = factor(.chain))) +
+  geom_density_ridges()
+
+
+#One coef
+ggplot(coef_chains %>% filter(.variable=="b_age.days"), 
+       aes(x = .value, y = .chain, fill = factor(.chain))) +
+  geom_density_ridges(alpha = 0.8)
+
 posterior_interval(seal_lm_bayes, prob = 0.8)
 
 head(seal_posterior)
