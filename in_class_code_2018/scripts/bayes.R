@@ -247,7 +247,7 @@ seal_plot +
 
 
 #---------
-#priors
+#priors ####
 #---------
 
 prior_summary(seal_lm_bayes)
@@ -262,3 +262,220 @@ seal_lm_bayes_prior <- brm(length.cm ~ age.days,
                            ),
                            file = "seal_lm_bayes_prior.Rds")
 
+#-----------
+# faded examples ####
+#-----------
+
+library(tidyverse)
+library(brms)
+library(bayesplot)
+library(tidybayes)
+
+fat <- read.csv("../data/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
+
+#initial visualization to determine if lm is appropriate
+fat_plot <- ggplot(data=fat, aes(x=leanness, y=lossrate)) + 
+  geom_point()
+fat_plot
+
+#fit the model!
+fat_mod <- brm(lossrate ~ leanness,
+               data = fat, 
+               family=gaussian(),
+               file = "fat_brms.Rds",
+               chains = 2)
+
+# Inspect chains and posteriors
+plot(fat_mod)
+
+#Inspect rhat
+mcmc_rhat(rhat(fat_mod))
+
+#Inspect Autocorrelation
+mcmc_acf(as.data.frame(fat_mod))
+
+#model assumptions
+fat_fit <- predict(fat_mod) %>% as_tibble
+fat_res <- residuals(fat_mod)%>% as_tibble
+
+qplot(fat_fit$Estimate, fat_res$Estimate) +
+  stat_smooth(color = "red", fill = NA)
+
+#fit
+pp_check(fat_mod, type="scatter")
+
+#normality
+qqnorm(fat_res$Estimate)
+qqline(fat_res$Estimate)
+pp_check(fat_mod, type="error_hist", bins=8)
+
+##match to posterior
+pp_check(fat_mod, type="stat_2d", test=c("mean", "sd"))
+pp_check(fat_mod)
+
+#coefficients
+summary(fat_mod, digits=5)
+
+#confidence intervals
+posterior_interval(fat_mod)
+
+#visualize
+fat_chains <- as.data.frame(fat_mod)
+
+fat_plot +
+  geom_abline(intercept=fat_chains[,1], slope = fat_chains[,2], alpha=0.1, color="lightgrey") +
+  geom_abline(intercept=fixef(fat_mod)[1], slope = fixef(fat_mod)[2], color="red") +
+  geom_point()
+
+
+##### Mosquitos
+deet <- read.csv("../data/17q24DEETMosquiteBites.csv")
+
+deet_plot <- ggplot(data=deet, aes(x=dose, y=bites)) + 
+  geom_point()
+
+deet_plot
+
+#fit the model!
+deet_mod <- brm(bites ~ dose,
+                   data = deet, 
+                   family=gaussian(link = "identity"),
+                   file = "deet_brms.Rds")
+
+# Inspect chains and posteriors
+plot(deet_mod)
+
+#Inspect rhat
+mcmc_rhat(rhat(deet_mod))
+
+#Inspect Autocorrelation
+mcmc_acf(as.data.frame(deet_mod))
+
+
+#model assumptions
+deet_fit <- predict(deet_mod) %>% as_tibble
+deet_res <- residuals(deet_mod)%>% as_tibble
+
+qplot(deet_fit$Estimate, deet_res$Estimate)
+
+#fit
+pp_check(deet_mod, type="scatter")
+
+#normality
+qqnorm(deet_res$Estimate)
+qqline(deet_res$Estimate)
+pp_check(deet_mod, type="error_hist", bins=8)
+
+##match to posterior
+pp_check(deet_mod, type="stat_2d", test=c("mean", "sd"))
+pp_check(deet_mod, nsamples = 100)
+
+#coefficients
+summary(deet_mod, digits=5)
+
+#confidence intervals
+posterior_interval(deet_mod)
+
+#visualize
+deet_chains <- as.data.frame(deet_mod)
+
+deet_plot +
+  geom_abline(intercept=deet_chains[,1], slope = deet_chains[,2], alpha=0.1, color="lightgrey") +
+  geom_abline(intercept=fixef(deet_mod)[1], slope = fixef(deet_mod)[2], color="red") +
+  geom_point()
+
+### home ranges
+zoo <- read.csv("../data/17q02ZooMortality Clubb and Mason 2003 replica.csv")
+
+zoo_plot <- ggplot(data=zoo, aes(x=mortality, y=homerange)) + 
+  geom_point()
+
+zoo_plot
+
+
+#fit the model!
+zoo_mod <- brm(homerange ~ mortality,
+                  data = zoo, 
+                  family=gaussian(link = "identity"),
+                  file = "zoo_mod.Rds")
+
+#model assumptions
+zoo_fit <- predict(zoo_mod) %>% as_tibble
+zoo_res <- residuals(zoo_mod)%>% as_tibble
+
+qplot(zoo_fit$Estimate, zoo_res$Estimate)
+
+#fit
+pp_check(zoo_mod, type="scatter")
+
+#normality
+qqnorm(zoo_res$Estimate)
+qqline(zoo_res$Estimate)
+pp_check(zoo_mod, type="error_hist", binwidth = 2)
+
+##match to posterior
+pp_check(zoo_mod, type="stat_2d")
+pp_check(zoo_mod, nsamples = 100)
+
+#coefficients
+summary(zoo_mod, digits=5)
+
+#confidence intervals
+posterior_interval(zoo_mod)
+
+#visualize
+zoo_chains <- as.data.frame(zoo_mod)
+
+zoo_plot +
+  geom_abline(intercept=zoo_chains[,1], 
+              slope = zoo_chains[,2], alpha=0.1, color="lightgrey") +
+  geom_abline(intercept=fixef(zoo_mod)[1], slope = fixef(zoo_mod)[2], color="red") +
+  geom_point() + theme_bw()
+
+
+
+# Log link
+
+zoo_mod_log <- brm(homerange ~ mortality,
+               data = zoo, 
+               family=gaussian(link = "log"),
+               file = "zoo_mod_log.Rds")
+
+pp_check(zoo_mod_log, nsamples = 100)
+
+#plotting nonlinear models
+
+zoo_pred <- fitted(zoo_mod_log,
+                    newdata = data.frame(mortality = 0:70)) %>% 
+  as.tibble() %>%
+  mutate(mortality = 0:70) %>%
+  rename(homerange = Estimate)
+
+zoo_plot +
+  geom_line(data = zoo_pred, color = "red")
+
+#fitted values from chains
+zoo_fit <- fitted(zoo_mod_log,
+                  newdata = data.frame(mortality = 0:70),
+                  summary = FALSE)
+
+#tidybayes to the rescue!
+zoo_fit_tidy <- fitted_draws(zoo_mod_log,
+                             newdata = data.frame(mortality = 0:70),
+                             n = 1000) %>%
+  rename(homerange = .value)
+
+zoo_predict_tidy <- predicted_draws(zoo_mod_log,
+                             newdata = data.frame(mortality = 0:70),
+                             n = 1000) %>%
+  rename(homerange = .prediction)
+
+#plot
+zoo_plot +
+  geom_line(data = zoo_predict_tidy, mapping = aes(group = .draw),
+            color = "lightblue", alpha = 0.05) +
+  geom_line(data = zoo_fit_tidy, mapping = aes(group = .draw),
+            color = "lightgrey", alpha = 0.05) +
+  geom_line(data = zoo_pred, color = "red") +
+  geom_point(data = zoo) +
+  theme_bw()
