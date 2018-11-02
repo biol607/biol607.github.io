@@ -600,7 +600,7 @@ fat_chains <- as.data.frame(fat_mod)
 
 fat_plot +
   geom_abline(intercept=fat_chains[,1], slope = fat_chains[,2], alpha=0.1, color="lightgrey") +
-  geom_abline(intercept=coef(fat_mod)[1], slope = coef(fat_mod)[2], color="red") +
+  geom_abline(intercept=fixef(fat_mod)[1], slope = fixef(fat_mod)[2], color="red") +
   geom_point()
 ```
 
@@ -658,7 +658,7 @@ deet_chains <- as.data.frame(___)
 
 deet_plot +
   geom_abline(intercept=deet_chains[,1], slope = deet_chains[,2], alpha=0.1, color="lightgrey") +
-  geom_abline(intercept=coef(___)[1], slope = coef(___)[2], color="red") +
+  geom_abline(intercept=fixef(___)[1], slope = fixef(___)[2], color="red") +
   geom_point()
 
 ```
@@ -709,6 +709,6 @@ zoo_chains <- as.data.frame(___)
 
 zoot_plot +
   ___(___=___[,1], ___ = ___[,2], alpha=0.1, color="lightgrey") +
-  ___(___=coef(___)[1], ___ = coef(___)[2], color="red") +
+  ___(___=fixef(___)[1], ___ = ____(___)[2], color="red") +
   geom_point()
 ```
