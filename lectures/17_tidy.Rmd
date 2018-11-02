@@ -12,7 +12,19 @@ library(tidyr)
 library(dplyr)
 ```
 
-First - today's etherpad, along with the mammal data, is at  http://etherpad.wikimedia.org/p/607-tidy
+First - today's etherpad, is at  http://etherpad.wikimedia.org/p/607-tidy-2018
+
+## The data for today
+Run the following:
+```{r data}
+
+mammals <- data.frame(site = c(1,1,2,3,3,3), 
+                      taxon = c('Suncus etruscus', 'Sorex cinereus', 
+                                'Myotis nigricans', 'Notiosorex crawfordi', 
+                                'Scuncus etruscus', 'Myotis nigricans'),
+                      density = c(6.2, 5.2, 11.0, 1.2, 9.4, 9.6)
+)
+```
 
 ## Why Tidy?
 
@@ -101,7 +113,32 @@ ggplot(m_wide_0, mapping = aes(x=`Myotis nigricans`,
 
 OK, so, that's not such an impressive plot, but you see what we're getting at here...
 
-###Wide to Long
+## Excercise
+1) Load the hemlock data.
+```{r load_hemlock, echo=FALSE}
+library(readxl)
+hemlock <- read_excel("./data/18/hemlock.xlsx")
+```
+
+2) Note that there are a bunch of different densities. Plot the relationship between Hemlock density and dead Hemlock density.
+
+3) Well that was uninformative. We want to look at a timeseries of both - heck, maybe even with a timeseries of total tree density as well.  Take this wide data set, select out The `Hem Den`, `Dead Hem Den`, and `Tree Den` column sas well as Stand, Year, Lat, and Long as your identifing columns. Then make this wide data set long with those three density columns as your new variable values.
+
+```{r gather, echo=FALSE}
+hem_gath <- hemlock %>%
+  select(Stand:Latitude, `Hem Den`, `Dead Hem Den`, `Tree Den`) %>%
+  gather(Variable, Value, `Hem Den`, `Dead Hem Den`, `Tree Den`)
+```
+
+4) Plot the three variables by year. Color by variable.
+```{r plot, echo=FALSE}
+qplot(Year, Value, data=hem_gath, color=Variable)
+```
+
+5) Well that was uninformative. Try taking an average by year and variable and plot these timeseries.  
+
+
+## Wide to Long
 
 But what if your intrepid mammal researcher had been wise and recorded their data in a wide format (in truth, this is what I do all the time). And instead of a scatterplot, we wanted to compare the densities of all of the different species in a point-range plot?  Well, then we'd have to go from a wide format to long.
 
@@ -192,29 +229,7 @@ Then, add four columsn to the original mammals frame. Now use any technique abov
 
 ## Exercise
 
-1) Load the hemlock data.
-```{r load_hemlock, echo=FALSE}
-library(readxl)
-hemlock <- read_excel("./data/18/hemlock.xlsx")
-```
 
-2) Note that there are a bunch of different densities. Plot the relationship between Hemlock density and dead Hemlock density.
+1) We can also use `separate` on the stand name to get town and stand number instead of individual stand. Do that, and plot the timeseries of average density of each variable in each town. Use facets, colors, and shapes as you will.  
 
-3) Well that was uninformative. We want to look at a timeseries of both - heck, maybe even with a timeseries of total tree density as well.  Take this wide data set, select out The `Hem Den`, `Dead Hem Den`, and `Tree Den` column sas well as Stand, Year, Lat, and Long as your identifing columns. Then make this wide data set long with those three density columns as your new variable values.
-
-```{r gather, echo=FALSE}
-hem_gath <- hemlock %>%
-  select(Stand:Latitude, `Hem Den`, `Dead Hem Den`, `Tree Den`) %>%
-  gather(Variable, Value, `Hem Den`, `Dead Hem Den`, `Tree Den`)
-```
-
-4) Plot the three variables by year. Color by variable.
-```{r plot, echo=FALSE}
-qplot(Year, Value, data=hem_gath, color=Variable)
-```
-
-5) Well that was uninformative. Try taking an average by year and variable and plot these timeseries.  
-
-6) We can also use `separate` on the stand name to get town and stand number instead of individual stand. Do that, and plot the timeseries of average density of each variable in each town. Use facets, colors, and shapes as you will.  
-
-7) Well, now you have the density per stand. Sometimes averages are better than individual data values. Spread back to a wide format, and plot each pariwise density combination - e.g., Average dead hemlock density per town v average tree density.  
+2) Well, now you have the density per stand. Sometimes averages are better than individual data values. Spread back to a wide format, and plot each pariwise density combination - e.g., Average dead hemlock density per town v average tree density.  

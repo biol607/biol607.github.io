@@ -130,7 +130,7 @@ __In Class Code:__ [Bayesian Data Analysis](in_class_code_2018/scripts/bayes.R)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [Tidy data](lectures/17_tidy.html), [Joins](lectures/18_join.html)  
+__Lecture:__ [Joins](lectures/18_join.html), [Tidy data](lectures/17_tidy.html)  
 __Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  
 __Reading:__  [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
 __Packages:__ `install.packages(c("reprex", "datapasta", "lubridate", "tidyr"))`  
