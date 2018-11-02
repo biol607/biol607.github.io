@@ -667,7 +667,7 @@ deet_plot +
 Do longer lived species also have larger home ranges? Let's test this!
 ```{r eval=FALSE}
 
-zoo <- read.csv("./data/06/17q02ZooMortality Clubb and Mason 2003 replica.csv")
+zoo <- read.csv("../data/17q02ZooMortality Clubb and Mason 2003 replica.csv")
 
 zoo_plot <- ggplot(data=___, aes(x=mortality, y=homerange)) + 
   ___()
@@ -676,9 +676,10 @@ ___
 
 
 #fit the model!
-zoo_mod <- stan_glm(___ ~ ___,
+zoo_mod <- brm(___ ~ ___,
                 data = ____, 
-                family=___)
+                family=___,
+                file = "zoo_mod.Rds")
 
 #model assumptions
 deet_fit <- predict(____) %>% as_tibble
