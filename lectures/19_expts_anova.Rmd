@@ -28,11 +28,14 @@ library(dplyr)
 library(tidyr)
 library(broom)
 library(ggplot2)
+library(purrr)
+library(brms)
+library(tidybayes)
 
 ```
 
 ## Outline
-https://etherpad.wikimedia.org/p/607-anova
+https://etherpad.wikimedia.org/p/607-anova-2018
 <br><br>
 <div style="font-size:34pt; text-align:left">
 1. Experiments & Design  
@@ -161,14 +164,14 @@ BIAS as well.</span>\
 
 -   Ensure that your effect is not a fluke10
 
--   $frac{p^{3/2}}{n}$ should approach 0 for Likelihood 
+-   $\frac{p^{3/2}}{n}$ should approach 0  
       - <span style="font-size:12pt">Portnoy 1988 Annals of Statistics</span>
 
--   i.e.,$sim$ 5-10 samples per paramter (1 treatment = 1 parameter, but
+-   i.e.,$\sim$ 5-10 samples per paramter (1 treatment = 1 parameter, but
     this is total \# of samples)
 
 ## Outline
-https://etherpad.wikimedia.org/p/607-anova
+https://etherpad.wikimedia.org/p/607-anova-2018
 <br><br>
 <div style="font-size:34pt; text-align:left">
 1. Experiments & Design  
@@ -306,12 +309,15 @@ Underlying linear model with control = intercept, dummy variable for schizo
 
 
 ## Different Ways to Write a Categorical Model
-<br><br>
-$$1) y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$
+> 1. $y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$
 \
-$$2) y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )$$
 \
-$$3) y_{j} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{j}, \qquad x_{i} = 0,1$$  
+> 2. $y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}$  
+$\epsilon_{ij} \sim N(0, \sigma^{2} )$
+\
+\
+> 3. $y_{j} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{j}$  
+$x_{i} = 0,1$  
 
 
 
@@ -322,7 +328,7 @@ $$\large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$
 <div style="text-align:left">
 <li> Shows partitioning of variation  
 \
-<li> Consider it an intercept, deviations from intercept by treatment, and residuals
+<li> Consider $\bar{y}$ an intercept, deviations from intercept by treatment, and residuals
 </div>
 
 ## Means Model
@@ -341,10 +347,13 @@ $$\epsilon_{ij} \sim N(0, \sigma^{2})$$
 \ 
 
 - $x_{i}$ inidicates presence/abscence (1/0) of a category\
+      - This coding is called a **Dummy variable**\
 \
 - Note similarities to a linear regression  
 \
-- Often one category set to $  beta_{0}$ for ease of fitting, and other $  beta$s are different from it
+- Often one category set to $\beta_{0}$ for ease of fitting, and other $\beta$s are different from it  
+\
+- Or $\beta_{0}$ = 0  
 
 
 
@@ -478,7 +487,7 @@ knitr::kable(anova(lm(PLP1.expression ~ group, data=brainGene)))
 <span class="fragment"> Is using ANOVA valid?</span>
 
 
-## Assumptions of Linear Models with Categorical Variables
+## Assumptions of Linear Models with Categorical Variables - Same as Linear Regression!
 
 -   Independence of data points
 
@@ -486,7 +495,8 @@ knitr::kable(anova(lm(PLP1.expression ~ group, data=brainGene)))
 
 -   No relationship between fitted and residual values
 
--   Homoscedasticity (homogeneity of variance) of groups
+-   Homoscedasticity (homogeneity of variance) of groups  
+     \ - This is just an extension of $\epsilon_i \sim N(0, \sigma)$ where $\sigma$ is constant across all groups
 
 ## Fitted v. Residuals
 ```{r}
@@ -529,4 +539,161 @@ Levene’s test robust to departures from normality
 knitr::kable(broom::tidy(kruskal.test(PLP1.expression ~ group, data=brainGene)), digits=4)
 ```
 
+## Can I do this Bayesian?
+**YES**
+```{r bayes_anova, results = "hide", cache=TRUE}
+library(brms)
+library(emmeans)
+library(tidybayes)
+brain_brm <- brm(PLP1.expression ~ group, data=brainGene,
+                 file = "brain_brm.Rds")
 
+brain_em <- emmeans(brain_brm, ~group)
+
+gather_emmeans_draws(brain_em) %>%
+  ggplot(aes(x = .value, y = group, fill = group)) +
+  geom_halfeyeh()
+
+```
+
+## The question is not *if* group matters, but how much.
+```{r tidy_residuals}
+
+tidy_residuals <- function(model){
+  UseMethod("tidy_residuals")
+}
+
+tidy_residuals.brmsfit <- function(model){
+  res <- residuals(model, summary=FALSE)
+  props <- summary(model)
+  nchains <- props$chains
+  iter <- props$iter - props$warmup
+  
+  start <- seq(1, nrow(res), nrow(res)/nchains)
+  
+  chains <- map(start, ~as.mcmc(res[.x:(.x+iter-1),])) %>%
+    coda::as.mcmc.list()
+  
+  tidy_draws(chains)
+  
+}
+
+gather_residuals <- function(model){
+  tidy_residuals(model) %>% 
+    gather(.variable, .value, -.chain, -.iteration, -.draw)
+}
+
+spread_residuals <- function(model){
+  tidy_residuals(model)
+}
+```
+
+
+```{r bayes_sd}
+group_sd <- gather_emmeans_draws(brain_em) %>%
+  group_by(.draw) %>%
+  summarize(`SD from Groups` = sd(.value)) %>%
+  ungroup()
+
+res_sd <- gather_residuals(brain_brm) %>%
+  group_by(.chain, .iteration) %>%
+  summarize(`SD from Residuals` = sd(.value))
+
+sd_frame <- bind_cols(group_sd, res_sd)
+sd_frame_clean <- bind_cols(group_sd, res_sd) %>%
+  select(-.iteration, -.chain, -.draw)
+
+ggplot(sd_frame_clean %>%
+  gather(sd_type, value),
+       aes(x = value, y = sd_type)) +
+  geom_halfeyeh() + ylab("")
+  
+```
+
+## Compare the relative magnitudes
+```{r}
+
+broom::tidyMCMC(sd_frame_clean, conf.int = TRUE, conf.method = "HPDinterval") %>%
+  knitr::kable("html") %>% kableExtra::kable_styling() 
+
+```
+
+## Percent might be a more familiar way to look at the Problem
+```{r}
+
+broom::tidyMCMC(100 * sd_frame_clean/rowSums(sd_frame_clean), estimate.method = "median",
+         conf.int = TRUE, conf.method = "HPDinterval") %>% 
+  knitr::kable("html") %>% kableExtra::kable_styling() 
+```
+
+##
+<br>
+![](./images/19/comparison-of-means-anova-you-must-do.jpg)
+```{r eval=FALSE}
+brain_brm_h <- brm(PLP1.expression ~ 1|group, data=brainGene)
+
+gather_draws(brain_brm_h, sd_group__Intercept, sigma) %>%
+  ggplot(aes(x = .value, y = .variable)) +
+  geom_halfeyeh()
+
+```
+
+```{r eval=FALSE}
+#from http://www.flutterbys.com.au/stats/tut/tut7.4b.html
+brain_mcmc <- as_tibble(brain_brm)
+wch = grep("b_", colnames(brain_mcmc))
+sd.x = apply(brain_mcmc[, wch], 1, sd)
+
+
+
+newdata = brainGene
+Xmat = model.matrix(~group, newdata)
+## get median parameter estimates
+wch = grep("b_Intercept|b_group", colnames(brain_mcmc))
+coefs =as.matrix( brain_mcmc[, wch])
+fit = coefs %*% t(Xmat)
+resid = sweep(fit, 2, brainGene$PLP1.expression, "-")
+sd.resid = apply(resid, 1, sd)
+
+
+sd.all = cbind(sd.x, sd.resid)
+(fpsd = tidyMCMC(sd.all, conf.int = TRUE, conf.method = "HPDinterval"))
+
+```
+
+```{r nothingburger, eval=FALSE}
+test_df <- data.frame(group = c(rep("A", 5), rep("B", 5), rep("C", 5)),
+                      value = rnorm(30))
+
+
+anova(lm(value ~ group, data = test_df))
+summary(lm(value ~ group, data = test_df))
+
+test_brm <- brm(value ~ group, data = test_df)
+
+
+
+group_sd <- gather_emmeans_draws(emmeans(test_brm, ~group)) %>%
+  group_by(.draw) %>%
+  summarize(group_sd = sd(.value)) %>%
+  ungroup()
+
+res_sd <- gather_residuals(test_brm) %>%
+  group_by(.chain, .iteration) %>%
+  summarize(res_sd = sd(.value))
+
+sd_frame <- bind_cols(group_sd, res_sd) %>%
+  select(-.iteration, -.chain, -.draw)
+
+
+broom::tidyMCMC(sd_frame_clean, conf.int = TRUE, conf.method = "HPDinterval")
+
+broom::tidyMCMC(100 * sd_frame_clean/rowSums(sd_frame_clean), estimate.method = "median",
+         conf.int = TRUE, conf.method = "HPDinterval")
+
+
+ggplot(sd_frame %>%
+         gather(sd_type, value, group_sd, res_sd),
+       aes(x = value, y = sd_type)) +
+  geom_halfeyeh()
+```
