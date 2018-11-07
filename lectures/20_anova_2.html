@@ -3,52 +3,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title></title>
+  <title>20_anova_2.utf8.md</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -91,23 +117,396 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
 
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 </head>
 <body>
   <div class="reveal">
@@ -115,39 +514,42 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <section id="section" class="slide level2" data-background="images/19/urchin_diet_expt.jpg">
-<h1></h1>
+<h2></h2>
 <br> <!-- review this slide for continuity and some re-ordering in posthocs. That section is a bit of a mess Also Bayes needs more detail. And likelihood tables are ugly. Broom?-->
 <h1 style="background-color:white; font-size:68pt">
 After the ANOVA
 </h1>
 </section>
 <section id="outline" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <a href="https://etherpad.wikimedia.org/p/607-anova" class="uri">https://etherpad.wikimedia.org/p/607-anova</a> <br><br>
 <div style="font-size:34pt; text-align:left">
 <ol type="1">
-<li>Beyond ANOVA: T and Posthoc Tests<br />
+<li>What can we ask of ANOVA?<br />
 </li>
-<li>ANOVA in a Likelihood and Bayesian Context</li>
+<li>Looking at treatment means<br />
+<br />
+</li>
+<li>Tests of differences of means</li>
 </ol>
 </div>
 </section>
 <section id="categorical-predictors-gene-expression-and-mental-disorders" class="slide level2">
-<h1>Categorical Predictors: Gene Expression and Mental Disorders</h1>
-<p><img src="images/19/neuron_label.jpeg" alt="image" style="width:30.0%" /> <img src="images/19/myelin.jpeg" alt="image" style="width:40.0%" /><br />
+<h2>Categorical Predictors: Gene Expression and Mental Disorders</h2>
+<p><img data-src="./images/19/neuron_label.jpeg" alt="image" style="width:30.0%" /> <img data-src="./images/19/myelin.jpeg" alt="image" style="width:40.0%" /><br />
 </p>
 </section>
 <section id="the-data" class="slide level2">
-<h1>The data</h1>
-<p><img src="20_anova_2_files/figure-revealjs/boxplot-1.jpeg" title="" alt="" width="768" /></p>
+<h2>The data</h2>
+<p><img src="20_anova_2_files/figure-revealjs/boxplot-1.jpeg" width="768" /></p>
 </section>
 <section id="comparison-of-means" class="slide level2">
-<h1>Comparison of Means</h1>
-<p><img src="20_anova_2_files/figure-revealjs/meansplot-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Comparison of Means</h2>
+<p><img src="20_anova_2_files/figure-revealjs/meansplot-1.jpeg" width="768" /></p>
 </section>
 <section id="means-model" class="slide level2">
-<h1>Means Model</h1>
-<span class="math display">\[\large y_{ij} = \mu + \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )\]</span><br />
+<h2>Means Model</h2>
+<span class="math display">\[\large y_{ij} = \alpha_{i} + \epsilon_{ij}, \qquad \epsilon_{ij} \sim N(0, \sigma^{2} )\]</span><br />
 
 <div style="text-align:left">
 <li>
@@ -159,28 +561,7 @@ Focus is on specificity of a categorical predictor
 </div>
 </section>
 <section id="questions-we-could-ask" class="slide level2">
-<h1>Questions we could ask</h1>
-<ol type="1">
-<li><p>Does your model explain variation in the data?</p></li>
-<li><p>Are your coefficients different from 0?</p></li>
-<li><p>How much variation is retained by the model?</p></li>
-<li><p>How confident can you be in model predictions?</p></li>
-</ol>
-</section>
-<section id="testing-the-model" class="slide level2">
-<h1>Testing the Model</h1>
-<p>Ho = The model predicts no variation in the data.<br />
-<br />
-<br />
-<br />
-Ha = The model predicts variation in the data.</p>
-</section>
-<section id="f-tests" class="slide level2">
-<h1>F-Tests</h1>
-<p>F = Mean Square Variability Explained by Model / Mean Square Error<br> <br> DF for Numerator = k-1 DF for Denominator = n-k<br> k = number of groups, n = sample size</p>
-</section>
-<section id="questions-we-could-ask-1" class="slide level2">
-<h1>Questions we could ask</h1>
+<h2>Questions we could ask</h2>
 <ol type="1">
 <li>Does your model explain variation in the data?<br />
 <br />
@@ -197,8 +578,8 @@ Ha = The model predicts variation in the data.</p>
 <li>Are groups different from each other</li>
 </ol>
 </section>
-<section id="questions-we-could-ask-2" class="slide level2">
-<h1>Questions we could ask</h1>
+<section id="questions-we-could-ask-1" class="slide level2">
+<h2>Questions we could ask</h2>
 <ol type="1">
 <li><font color="red">Does your model explain variation in the data?</font><br />
 <br />
@@ -215,8 +596,23 @@ Ha = The model predicts variation in the data.</p>
 <li>Are groups different from each other</li>
 </ol>
 </section>
+<section id="testing-the-model" class="slide level2">
+<h2>Testing the Model</h2>
+<p>Ho = The model predicts no variation in the data.<br />
+<br />
+<br />
+<br />
+Ha = The model predicts variation in the data.</p>
+</section>
+<section id="f-tests" class="slide level2">
+<h2>F-Tests</h2>
+<div style="text-align:left">
+<p>F = Mean Square Variability Explained by Model / Mean Square Error<br> <br> DF for Numerator = k-1<br />
+DF for Denominator = n-k<br> k = number of groups, n = sample size</p>
+</div>
+</section>
 <section id="anova" class="slide level2">
-<h1>ANOVA</h1>
+<h2>ANOVA</h2>
 <table>
 <thead>
 <tr class="header">
@@ -248,8 +644,287 @@ Ha = The model predicts variation in the data.</p>
 </tbody>
 </table>
 </section>
-<section id="questions-we-could-ask-3" class="slide level2">
-<h1>Questions we could ask</h1>
+<section id="fitting-an-anova-model-with-likelihood" class="slide level2">
+<h2>Fitting an ANOVA model with Likelihood</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">brain_lik &lt;-<span class="st"> </span><span class="kw">glm</span>(PLP1.expression <span class="op">~</span><span class="st"> </span>group,</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">                 <span class="dt">family=</span><span class="kw">gaussian</span>(),</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">                 <span class="dt">data =</span> brainGene)</a></code></pre></div>
+</section>
+<section id="chi2-lr-test-and-anova" class="slide level2">
+<h2><span class="math inline">\(\chi^2\)</span> LR Test and ANOVA</h2>
+<p><br><br></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">LR Chisq</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Pr(&gt;Chisq)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>group</td>
+<td style="text-align: right;">15.64627</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4e-04</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+<br />
+This asks how much does the deviance change when we remove a suite of predictors from the model?</p>
+</section>
+<section id="banova" class="slide level2">
+<h2>BANOVA</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">brain_brm &lt;-<span class="st"> </span><span class="kw">brm</span>(PLP1.expression <span class="op">~</span><span class="st"> </span>group, </a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">                 <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">                 <span class="dt">data=</span>brainGene,</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">                 <span class="dt">file =</span> <span class="st">&quot;brain_brm.Rds&quot;</span>)</a></code></pre></div>
+</section>
+<section id="banova-compare-the-relative-magnitudes-of-variability-due-to-treatments" class="slide level2">
+<h2>BANOVA: Compare the relative magnitudes of variability due to Treatments</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+conf.low
+</th>
+<th style="text-align:right;">
+conf.high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+SD from Groups
+</td>
+<td style="text-align:right;">
+0.1396133
+</td>
+<td style="text-align:right;">
+0.0340588
+</td>
+<td style="text-align:right;">
+0.0740639
+</td>
+<td style="text-align:right;">
+0.2094102
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SD from Residuals
+</td>
+<td style="text-align:right;">
+0.1860021
+</td>
+<td style="text-align:right;">
+0.0046805
+</td>
+<td style="text-align:right;">
+0.1815504
+</td>
+<td style="text-align:right;">
+0.1957638
+</td>
+</tr>
+</tbody>
+</table>
+<p align="left">
+Or via Percentages:
+</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+conf.low
+</th>
+<th style="text-align:right;">
+conf.high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+SD from Groups
+</td>
+<td style="text-align:right;">
+43.09062
+</td>
+<td style="text-align:right;">
+6.148865
+</td>
+<td style="text-align:right;">
+29.89045
+</td>
+<td style="text-align:right;">
+52.81145
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SD from Residuals
+</td>
+<td style="text-align:right;">
+56.90938
+</td>
+<td style="text-align:right;">
+6.148865
+</td>
+<td style="text-align:right;">
+47.18855
+</td>
+<td style="text-align:right;">
+70.10955
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-if-treatment-is-relatively-unimportant" class="slide level2">
+<h2>What if Treatment is relatively unimportant?</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+conf.low
+</th>
+<th style="text-align:right;">
+conf.high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+group_sd
+</td>
+<td style="text-align:right;">
+0.3742119
+</td>
+<td style="text-align:right;">
+0.2061628
+</td>
+<td style="text-align:right;">
+0.0291503
+</td>
+<td style="text-align:right;">
+0.7560807
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+res_sd
+</td>
+<td style="text-align:right;">
+1.1878815
+</td>
+<td style="text-align:right;">
+0.0494847
+</td>
+<td style="text-align:right;">
+1.1421252
+</td>
+<td style="text-align:right;">
+1.2808218
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+conf.low
+</th>
+<th style="text-align:right;">
+conf.high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+group_sd
+</td>
+<td style="text-align:right;">
+22.86571
+</td>
+<td style="text-align:right;">
+9.015793
+</td>
+<td style="text-align:right;">
+4.387725
+</td>
+<td style="text-align:right;">
+38.10253
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+res_sd
+</td>
+<td style="text-align:right;">
+77.13429
+</td>
+<td style="text-align:right;">
+9.015793
+</td>
+<td style="text-align:right;">
+61.897473
+</td>
+<td style="text-align:right;">
+95.61228
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-if-treatment-is-relatively-unimportant-1" class="slide level2">
+<h2>What if Treatment is relatively unimportant?</h2>
+<p><img src="20_anova_2_files/figure-revealjs/unnamed-chunk-4-1.jpeg" width="768" /></p>
+</section>
+<section id="questions-we-could-ask-2" class="slide level2">
+<h2>Questions we could ask</h2>
 <ol type="1">
 <li>Does your model explain variation in the data?<br />
 <br />
@@ -266,8 +941,8 @@ Ha = The model predicts variation in the data.</p>
 <li>Are groups different from each other</li>
 </ol>
 </section>
-<section id="questions-we-could-ask-4" class="slide level2">
-<h1>Questions we could ask</h1>
+<section id="questions-we-could-ask-3" class="slide level2">
+<h2>Questions we could ask</h2>
 <ol type="1">
 <li>Does your model explain variation in the data?<br />
 <br />
@@ -284,12 +959,27 @@ Ha = The model predicts variation in the data.</p>
 <li><font color="red">Are groups different from each other</font></li>
 </ol>
 </section>
+<section id="outline-1" class="slide level2">
+<h2>Outline</h2>
+<a href="https://etherpad.wikimedia.org/p/607-anova" class="uri">https://etherpad.wikimedia.org/p/607-anova</a> <br><br>
+<div style="font-size:34pt; text-align:left">
+<ol type="1">
+<li>What can we ask of ANOVA?<br />
+<br />
+</li>
+<li><font color = "red"> Looking at treatment means</font><br />
+<br />
+</li>
+<li>Tests of differences of means</li>
+</ol>
+</div>
+</section>
 <section id="anova-f-and-t-tests" class="slide level2">
-<h1>ANOVA, F, and T-Tests</h1>
-<table style="width:53%;">
+<h2>ANOVA, F, and T-Tests</h2>
+<table>
 <colgroup>
-<col style="width: 26%" />
-<col style="width: 26%" />
+<col style="width: 50%" />
+<col style="width: 50%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -307,114 +997,221 @@ Ha = The model predicts variation in the data.</p>
 <p>Essentially comparing a variation explained by a model with versus without a data generating process included.</p>
 </section>
 <section id="the-coefficients" class="slide level2">
-<h1>The Coefficients</h1>
+<h2>The Coefficients</h2>
 <table>
 <thead>
-<tr class="header">
-<th></th>
-<th style="text-align: right;">Estimate</th>
-<th style="text-align: right;">Std. Error</th>
-<th style="text-align: right;">t value</th>
-<th style="text-align: right;">Pr(&gt;|t|)</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Std. Error
+</th>
+<th style="text-align:right;">
+t value
+</th>
+<th style="text-align:right;">
+Pr(&gt;|t|)
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>(Intercept)</td>
-<td style="text-align: right;">-0.0040000</td>
-<td style="text-align: right;">0.0479786</td>
-<td style="text-align: right;">-0.0833705</td>
-<td style="text-align: right;">0.9339531</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+-0.0040000
+</td>
+<td style="text-align:right;">
+0.0479786
+</td>
+<td style="text-align:right;">
+-0.0833705
+</td>
+<td style="text-align:right;">
+0.9339531
+</td>
 </tr>
-<tr class="even">
-<td>groupschizo</td>
-<td style="text-align: right;">-0.1913333</td>
-<td style="text-align: right;">0.0678520</td>
-<td style="text-align: right;">-2.8198628</td>
-<td style="text-align: right;">0.0073015</td>
+<tr>
+<td style="text-align:left;">
+groupschizo
+</td>
+<td style="text-align:right;">
+-0.1913333
+</td>
+<td style="text-align:right;">
+0.0678520
+</td>
+<td style="text-align:right;">
+-2.8198628
+</td>
+<td style="text-align:right;">
+0.0073015
+</td>
 </tr>
-<tr class="odd">
-<td>groupbipolar</td>
-<td style="text-align: right;">-0.2586667</td>
-<td style="text-align: right;">0.0678520</td>
-<td style="text-align: right;">-3.8122186</td>
-<td style="text-align: right;">0.0004442</td>
+<tr>
+<td style="text-align:left;">
+groupbipolar
+</td>
+<td style="text-align:right;">
+-0.2586667
+</td>
+<td style="text-align:right;">
+0.0678520
+</td>
+<td style="text-align:right;">
+-3.8122186
+</td>
+<td style="text-align:right;">
+0.0004442
+</td>
 </tr>
 </tbody>
 </table>
 <p><span class="fragment">Treatment contrasts - set one group as a baseline<br>Useful with a control</span></p>
 </section>
 <section id="default-treatment-contrasts" class="slide level2">
-<h1>Default “Treatment” Contrasts</h1>
+<h2>Default “Treatment” Contrasts</h2>
 <pre><code>        schizo bipolar
 control      0       0
 schizo       1       0
 bipolar      0       1</code></pre>
 </section>
 <section id="actual-group-means-compared-to-0" class="slide level2">
-<h1>Actual Group Means Compared to 0</h1>
+<h2>Actual Group Means Compared to 0</h2>
 <table>
 <thead>
-<tr class="header">
-<th></th>
-<th style="text-align: right;">Estimate</th>
-<th style="text-align: right;">Std. Error</th>
-<th style="text-align: right;">t value</th>
-<th style="text-align: right;">Pr(&gt;|t|)</th>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+t.ratio
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>groupcontrol</td>
-<td style="text-align: right;">-0.0040000</td>
-<td style="text-align: right;">0.0479786</td>
-<td style="text-align: right;">-0.0833705</td>
-<td style="text-align: right;">0.9339531</td>
+<tr>
+<td style="text-align:left;">
+control effect
+</td>
+<td style="text-align:right;">
+0.1500000
+</td>
+<td style="text-align:right;">
+0.0391744
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+3.829034
+</td>
+<td style="text-align:right;">
+0.0012669
+</td>
 </tr>
-<tr class="even">
-<td>groupschizo</td>
-<td style="text-align: right;">-0.1953333</td>
-<td style="text-align: right;">0.0479786</td>
-<td style="text-align: right;">-4.0712586</td>
-<td style="text-align: right;">0.0002022</td>
+<tr>
+<td style="text-align:left;">
+schizo effect
+</td>
+<td style="text-align:right;">
+-0.0413333
+</td>
+<td style="text-align:right;">
+0.0391744
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+-1.055112
+</td>
+<td style="text-align:right;">
+0.2974062
+</td>
 </tr>
-<tr class="odd">
-<td>groupbipolar</td>
-<td style="text-align: right;">-0.2626667</td>
-<td style="text-align: right;">0.0479786</td>
-<td style="text-align: right;">-5.4746618</td>
-<td style="text-align: right;">0.0000023</td>
+<tr>
+<td style="text-align:left;">
+bipolar effect
+</td>
+<td style="text-align:right;">
+-0.1086667
+</td>
+<td style="text-align:right;">
+0.0391744
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+-2.773922
+</td>
+<td style="text-align:right;">
+0.0123422
+</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="but-which-groups-are-different-from-each-other" class="slide level2">
-<h1>But which groups are different from each other?</h1>
-<p><img src="20_anova_2_files/figure-revealjs/meansplot-1.jpeg" title="" alt="" width="768" /></p>
+<h2>But which groups are different from each other?</h2>
+<p><img src="20_anova_2_files/figure-revealjs/meansplot-1.jpeg" width="768" /></p>
 <p><span class="fragment">Many T-tests….mutiple comparisons!</span></p>
 </section>
+<section id="outline-2" class="slide level2">
+<h2>Outline</h2>
+<a href="https://etherpad.wikimedia.org/p/607-anova" class="uri">https://etherpad.wikimedia.org/p/607-anova</a> <br><br>
+<div style="font-size:34pt; text-align:left">
+<ol type="1">
+<li>What can we ask of ANOVA?<br />
+<br />
+</li>
+<li>Looking at treatment means<br />
+<br />
+</li>
+<li><font color = "red">Tests of differences of means</font></li>
+</ol>
+</div>
+</section>
 <section id="the-problem-of-multiple-comparisons" class="slide level2">
-<h1>The Problem of Multiple Comparisons</h1>
+<h2>The Problem of Multiple Comparisons</h2>
 <p><img src="multcomp.gif"></p>
 </section>
 <section id="solutions-to-multiple-comparisons-and-family-wise-error-rate" class="slide level2">
-<h1>Solutions to Multiple Comparisons and Family-wise Error Rate?</h1>
+<h2>Solutions to Multiple Comparisons and Family-wise Error Rate?</h2>
 <div style="text-align:left">
 <ol type="1">
 <li class="fragment">Ignore it - a test is a test
 <ul>
 <li class="fragment"><em>a priori contrasts</em></li>
-<li class="fragment">Least Squares Difference test</li>
+<li class="fragment">Least Squares Difference test<br />
+<br />
+<br />
+</li>
 </ul></li>
-</ol>
-<ol start="2" type="1">
 <li class="fragment">Lower your <span class="math inline">\(\alpha\)</span> given m = # of comparisons
 <ul>
 <li class="fragment">Bonferroni <span class="math inline">\(\alpha/m\)</span></li>
-<li class="fragment">False Discovery Rate <span class="math inline">\(k\alpha/m\)</span> where k is rank of test</li>
+<li class="fragment">False Discovery Rate <span class="math inline">\(k\alpha/m\)</span> where k is rank of test<br />
+ <br />
+</li>
 </ul></li>
-</ol>
-<ol start="3" type="1">
 <li class="fragment">Other multiple comparinson correction
 <ul>
 <li class="fragment">Tukey’s Honestly Significant Difference</li>
@@ -423,37 +1220,37 @@ bipolar      0       1</code></pre>
 </div>
 </section>
 <section id="anova-is-an-omnibus-test" class="slide level2">
-<h1>ANOVA is an Omnibus Test</h1>
+<h2>ANOVA is an Omnibus Test</h2>
 <p>Remember your Null:<br />
 <span class="math display">\[H_{0} = \mu_{1} = \mu{2} = \mu{3} = ...\]</span><br />
 <br />
 This had nothing to do with specific comparisons of means.</p>
 </section>
 <section id="a-priori-contrasts" class="slide level2">
-<h1>A priori contrasts</h1>
+<h2>A priori contrasts</h2>
 <p>Specific sets of <span><em>a</em> priori</span> null hypotheses: <span class="math display">\[\mu_{1} = \mu{2}\]</span><br />
 <span class="math display">\[\mu_{1} = \mu{3} = ...\]</span><br />
 <br />
 Use t-tests.</p>
 </section>
 <section id="a-priori-contrasts-1" class="slide level2">
-<h1>A priori contrasts</h1>
+<h2>A priori contrasts</h2>
 <pre><code>lm model parameter contrast
 
   Contrast   S.E.  Lower Upper    t df Pr(&gt;|t|)
 1    0.191 0.0679 0.0544 0.328 2.82 42   0.0073</code></pre>
 </section>
 <section id="a-priori-contrasts-2" class="slide level2">
-<h1>A priori contrasts</h1>
+<h2>A priori contrasts</h2>
 <pre><code>lm model parameter contrast
 
                    Contrast   S.E.  Lower Upper    t df Pr(&gt;|t|)
 Control v. Schizo     0.191 0.0679 0.0544 0.328 2.82 42   0.0073
 Control v. Bipolar    0.259 0.0679 0.1217 0.396 3.81 42   0.0004</code></pre>
-<p>Note: can only do k-1, as each takes 1df</p>
+<p>Note: can only do k-1 before thinking about FWER, as each takes 1df</p>
 </section>
 <section id="orthogonal-a-priori-contrasts" class="slide level2">
-<h1>Orthogonal A priori contrasts</h1>
+<h2>Orthogonal A priori contrasts</h2>
 <p>Sometimes you want to test very specific hypotheses about the structure of your groups</p>
 <pre><code>                     control schizo bipolar
 Control v. Disorders       1   -0.5    -0.5
@@ -461,7 +1258,7 @@ Bipolar v. Schizo          0    1.0    -1.0</code></pre>
 <p>Note: can only do k-1, as each takes 1df</p>
 </section>
 <section id="orthogonal-a-priori-contrasts-with-grouping" class="slide level2">
-<h1>Orthogonal A priori contrasts with Grouping</h1>
+<h2>Orthogonal A priori contrasts with Grouping</h2>
 <pre><code>
      Simultaneous Tests for General Linear Hypotheses
 
@@ -476,26 +1273,101 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 (Adjusted p values reported -- single-step method)</code></pre>
 </section>
 <section id="post-hoc-contrasts" class="slide level2">
-<h1>Post hoc contrasts</h1>
+<h2>Post hoc contrasts</h2>
 <p>I want to test all possible comparisons!</p>
 </section>
 <section id="no-correction-least-square-differences" class="slide level2">
-<h1>No Correction: Least Square Differences</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairwise.t.test</span>(brainGene$PLP1.expression, brainGene$group, 
-                <span class="dt">p.adjust.method=</span><span class="st">&quot;none&quot;</span>)</code></pre></div>
-<pre><code>
-    Pairwise comparisons using t tests with pooled SD 
-
-data:  brainGene$PLP1.expression and brainGene$group 
-
-        control schizo
-schizo  0.007   -     
-bipolar 4e-04   0.327 
-
-P value adjustment method: none </code></pre>
+<h2>No Correction: Least Square Differences</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+t.ratio
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control - schizo
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+2.820
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+control - bipolar
+</td>
+<td style="text-align:right;">
+0.259
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+3.812
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+schizo - bipolar
+</td>
+<td style="text-align:right;">
+0.067
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+0.992
+</td>
+<td style="text-align:right;">
+0.327
+</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="p-value-adjustments" class="slide level2">
-<h1>P-Value Adjustments</h1>
+<h2>P-Value Adjustments</h2>
+<div style="text-align: left">
 <p>Bonferroni : <span class="math inline">\(\alpha_{adj} = \frac{\alpha}{m}\)</span> where m = # of tests<br />
 - VERY conservative<br />
 <br />
@@ -506,39 +1378,190 @@ False Discovery Rate: <span class="math inline">\(\alpha_{adj} = \frac{k\alpha}{
 <br />
 Other Methods: Sidak, Dunn, Holm, etc.<br />
 We’re very focused on p here!</p>
+</div>
 </section>
 <section id="bonferroni-corrections" class="slide level2">
-<h1>Bonferroni Corrections</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairwise.t.test</span>(brainGene$PLP1.expression, brainGene$group, 
-                <span class="dt">p.adjust.method=</span><span class="st">&quot;bonferroni&quot;</span>)</code></pre></div>
-<pre><code>
-    Pairwise comparisons using t tests with pooled SD 
-
-data:  brainGene$PLP1.expression and brainGene$group 
-
-        control schizo
-schizo  0.022   -     
-bipolar 0.001   0.980 
-
-P value adjustment method: bonferroni </code></pre>
+<h2>Bonferroni Corrections</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+t.ratio
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control - schizo
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+2.820
+</td>
+<td style="text-align:right;">
+0.022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+control - bipolar
+</td>
+<td style="text-align:right;">
+0.259
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+3.812
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+schizo - bipolar
+</td>
+<td style="text-align:right;">
+0.067
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+0.992
+</td>
+<td style="text-align:right;">
+0.980
+</td>
+</tr>
+</tbody>
+</table>
+<p>p = m * p</p>
 </section>
 <section id="fdr" class="slide level2">
-<h1>FDR</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairwise.t.test</span>(brainGene$PLP1.expression, brainGene$group, 
-                <span class="dt">p.adjust.method=</span><span class="st">&quot;fdr&quot;</span>)</code></pre></div>
-<pre><code>
-    Pairwise comparisons using t tests with pooled SD 
-
-data:  brainGene$PLP1.expression and brainGene$group 
-
-        control schizo
-schizo  0.011   -     
-bipolar 0.001   0.327 
-
-P value adjustment method: fdr </code></pre>
+<h2>FDR</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+t.ratio
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control - schizo
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+2.820
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+control - bipolar
+</td>
+<td style="text-align:right;">
+0.259
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+3.812
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+schizo - bipolar
+</td>
+<td style="text-align:right;">
+0.067
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+0.992
+</td>
+<td style="text-align:right;">
+0.327
+</td>
+</tr>
+</tbody>
+</table>
+<p>p = <span class="math inline">\(\frac{m}{k}\)</span> * p</p>
 </section>
 <section id="other-methods-use-critical-values" class="slide level2">
-<h1>Other Methods Use Critical Values</h1>
+<h2>Other Methods Use Critical Values</h2>
 <ul>
 <li><p>Tukey’s Honestly Significant Difference</p></li>
 <li><p>Dunnet’s Test for Comparison to Controls</p></li>
@@ -547,329 +1570,428 @@ P value adjustment method: fdr </code></pre>
 </ul>
 </section>
 <section id="tukeys-honestly-significant-difference" class="slide level2">
-<h1>Tukey’s Honestly Significant Difference</h1>
-<pre><code>  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = PLP1.expression ~ group, data = brainGene)
-
-$group
-                   diff    lwr     upr p adj
-schizo-control  -0.1913 -0.356 -0.0265 0.020
-bipolar-control -0.2587 -0.424 -0.0938 0.001
-bipolar-schizo  -0.0673 -0.232  0.0975 0.586</code></pre>
+<h2>Tukey’s Honestly Significant Difference</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+t.ratio
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control - schizo
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+2.820
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+control - bipolar
+</td>
+<td style="text-align:right;">
+0.259
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+3.812
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+schizo - bipolar
+</td>
+<td style="text-align:right;">
+0.067
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+0.992
+</td>
+<td style="text-align:right;">
+0.586
+</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="visualizing-comparisons" class="slide level2">
-<h1>Visualizing Comparisons</h1>
-<p><img src="20_anova_2_files/figure-revealjs/tukey-viz-1.jpeg" title="" alt="" width="768" /></p>
+<section id="visualizing-comparisons-tukey" class="slide level2">
+<h2>Visualizing Comparisons (Tukey)</h2>
+<p><img src="20_anova_2_files/figure-revealjs/tukey-viz-1.jpeg" width="768" /></p>
+</section>
+<section id="dunnetts-comparison-to-controls" class="slide level2">
+<h2>Dunnett’s Comparison to Controls</h2>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+t.ratio
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+schizo - control
+</td>
+<td style="text-align:right;">
+-0.191
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+-2.82
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bipolar - control
+</td>
+<td style="text-align:right;">
+-0.259
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+-3.81
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="20_anova_2_files/figure-revealjs/dunnett-1.jpeg" width="768" /></p>
+</section>
+<section id="likelihood-and-posthocs" class="slide level2">
+<h2>Likelihood and Posthocs</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+group
+</th>
+<th style="text-align:right;">
+emmean
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+asymp.LCL
+</th>
+<th style="text-align:right;">
+asymp.UCL
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:right;">
+-0.004
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+-0.098
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+schizo
+</td>
+<td style="text-align:right;">
+-0.195
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+-0.289
+</td>
+<td style="text-align:right;">
+-0.101
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bipolar
+</td>
+<td style="text-align:right;">
+-0.263
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+-0.357
+</td>
+<td style="text-align:right;">
+-0.169
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="posthocs-use-z-tests" class="slide level2">
+<h2>Posthocs Use Z-tests</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+z.ratio
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control - schizo
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+2.820
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+control - bipolar
+</td>
+<td style="text-align:right;">
+0.259
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+3.812
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+schizo - bipolar
+</td>
+<td style="text-align:right;">
+0.067
+</td>
+<td style="text-align:right;">
+0.068
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+<td style="text-align:right;">
+0.992
+</td>
+<td style="text-align:right;">
+0.582
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="bayes-style" class="slide level2">
+<h2>Bayes-Style!</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+group
+</th>
+<th style="text-align:right;">
+emmean
+</th>
+<th style="text-align:right;">
+lower.HPD
+</th>
+<th style="text-align:right;">
+upper.HPD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:right;">
+-0.003
+</td>
+<td style="text-align:right;">
+-0.100
+</td>
+<td style="text-align:right;">
+0.091
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+schizo
+</td>
+<td style="text-align:right;">
+-0.195
+</td>
+<td style="text-align:right;">
+-0.288
+</td>
+<td style="text-align:right;">
+-0.095
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bipolar
+</td>
+<td style="text-align:right;">
+-0.263
+</td>
+<td style="text-align:right;">
+-0.362
+</td>
+<td style="text-align:right;">
+-0.163
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="bayes-style-1" class="slide level2">
+<h2>Bayes-Style!</h2>
+<p><img src="20_anova_2_files/figure-revealjs/bayes_tukey-1.jpeg" width="768" /></p>
 </section>
 <section id="final-notes-of-caution" class="slide level2">
-<h1>Final Notes of Caution</h1>
+<h2>Final Notes of Caution</h2>
 <ul>
 <li><p>Often you DO have a priori contrasts in mind</p></li>
 <li><p>If you reject Ho with ANOVA, differences between groups exist</p></li>
 <li><p>Consider Type I v. Type II error before correcting</p></li>
 </ul>
 </section>
-<section id="outline-1" class="slide level2">
-<h1>Outline</h1>
-<a href="https://etherpad.wikimedia.org/p/607-anova" class="uri">https://etherpad.wikimedia.org/p/607-anova</a> <br><br>
-<div style="font-size:34pt; text-align:left">
-<ol type="1">
-<li>Beyond ANOVA: T and Posthoc Tests<br />
-</li>
-<li>ANOVA in a Likelihood and Bayesian Context</li>
-</ol>
-</div>
-</section>
-<section id="fitting-an-anova-model-with-likelihood" class="slide level2">
-<h1>Fitting an ANOVA model with Likelihood</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">brain_lik &lt;-<span class="st"> </span><span class="kw">glm</span>(PLP1.expression ~<span class="st"> </span>group,
-                 <span class="dt">family=</span><span class="kw">gaussian</span>(),
-                 <span class="dt">data =</span> brainGene)</code></pre></div>
-</section>
-<section id="chi2-lr-test-and-anova" class="slide level2">
-<h1><span class="math inline">\(\chi^2\)</span> LR Test and ANOVA</h1>
-<p><br><br></p>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th style="text-align: right;">LR Chisq</th>
-<th style="text-align: right;">Df</th>
-<th style="text-align: right;">Pr(&gt;Chisq)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>group</td>
-<td style="text-align: right;">15.6</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">4e-04</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="likelihood-and-posthocs" class="slide level2">
-<h1>Likelihood and Posthocs</h1>
-<pre><code>
-     Simultaneous Tests for General Linear Hypotheses
-
-Multiple Comparisons of Means: Tukey Contrasts
-
-
-Fit: lm(formula = PLP1.expression ~ group, data = brainGene)
-
-Linear Hypotheses:
-                       Estimate Std. Error t value Pr(&gt;|t|)   
-schizo - control == 0   -0.1913     0.0679   -2.82   0.0196 * 
-bipolar - control == 0  -0.2587     0.0679   -3.81   0.0012 **
-bipolar - schizo == 0   -0.0673     0.0679   -0.99   0.5857   
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-(Adjusted p values reported -- single-step method)</code></pre>
-</section>
-<section id="banova" class="slide level2">
-<h1>BANOVA</h1>
-<pre><code>
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 1).
-
-Chain 1, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 1, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 1, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 1, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 1, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 1, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 1, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 1, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 1, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 1, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 1, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 1, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.080866 seconds (Warm-up)
-               0.08541 seconds (Sampling)
-               0.166276 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 2).
-
-Chain 2, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 2, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 2, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 2, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 2, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 2, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 2, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 2, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 2, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 2, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 2, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 2, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.068858 seconds (Warm-up)
-               0.063094 seconds (Sampling)
-               0.131952 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 3).
-
-Chain 3, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 3, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 3, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 3, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 3, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 3, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 3, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 3, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 3, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 3, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 3, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 3, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.054466 seconds (Warm-up)
-               0.096178 seconds (Sampling)
-               0.150644 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 4).
-
-Chain 4, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 4, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 4, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 4, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 4, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 4, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 4, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 4, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 4, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 4, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 4, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 4, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.079157 seconds (Warm-up)
-               0.088166 seconds (Sampling)
-               0.167323 seconds (Total)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">brain_bayes &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(PLP1.expression ~<span class="st"> </span>group -<span class="st"> </span><span class="dv">1</span>,
-                 <span class="dt">family=</span><span class="kw">gaussian</span>(),
-                 <span class="dt">data =</span> brainGene)</code></pre></div>
-<pre><code>
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 1).
-
-Chain 1, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 1, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 1, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 1, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 1, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 1, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 1, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 1, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 1, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 1, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 1, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 1, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 1.34429 seconds (Warm-up)
-               0.844418 seconds (Sampling)
-               2.18871 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 2).
-
-Chain 2, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 2, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 2, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 2, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 2, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 2, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 2, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 2, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 2, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 2, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 2, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 2, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.917152 seconds (Warm-up)
-               1.10817 seconds (Sampling)
-               2.02533 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 3).
-
-Chain 3, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 3, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 3, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 3, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 3, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 3, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 3, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 3, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 3, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 3, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 3, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 3, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 0.95174 seconds (Warm-up)
-               0.753277 seconds (Sampling)
-               1.70502 seconds (Total)
-
-
-SAMPLING FOR MODEL &#39;continuous&#39; NOW (CHAIN 4).
-
-Chain 4, Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 4, Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 4, Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 4, Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 4, Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 4, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 4, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 4, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 4, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 4, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 4, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 4, Iteration: 2000 / 2000 [100%]  (Sampling)
- Elapsed Time: 1.10924 seconds (Warm-up)
-               2.09969 seconds (Sampling)
-               3.20893 seconds (Total)</code></pre>
-</section>
-<section id="banova-1" class="slide level2">
-<h1>BANOVA</h1>
-<pre><code>stan_glm(formula = PLP1.expression ~ group - 1, family = gaussian(), 
-    data = brainGene)
-
-Family: gaussian (identity)
-Algorithm: sampling
-Posterior sample size: 4000
-Observations: 45
-
-Estimates:
-                mean   sd    5%    10%   50%   90%   95%
-groupcontrol   0.00   0.05 -0.08 -0.07  0.00  0.06  0.08
-groupschizo   -0.19   0.05 -0.27 -0.26 -0.19 -0.13 -0.12
-groupbipolar  -0.26   0.05 -0.34 -0.32 -0.26 -0.20 -0.18
-sigma          0.19   0.02  0.16  0.17  0.19  0.22  0.23
-mean_PPD      -0.15   0.04 -0.22 -0.20 -0.15 -0.10 -0.09
-log-posterior  4.22   1.37  1.57  2.40  4.55  5.65  5.81
-
-Diagnostics:
-              mcse Rhat n_eff
-groupcontrol  0.00 1.00 3252 
-groupschizo   0.00 1.00 3444 
-groupbipolar  0.00 1.00 3646 
-sigma         0.00 1.00 3137 
-mean_PPD      0.00 1.00 3737 
-log-posterior 0.03 1.00 2171 
-
-For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</code></pre>
-</section>
-<section id="banova-2" class="slide level2">
-<h1>BANOVA</h1>
-<pre><code>                10%    90%
-groupcontrol -0.066  0.058
-groupschizo  -0.255 -0.134
-groupbipolar -0.322 -0.202
-sigma         0.167  0.218</code></pre>
-</section>
-<section id="what-are-the-sources-of-variation-from-the-model" class="slide level2">
-<h1>What are the sources of variation from the model?</h1>
-<ol type="1">
-<li>We can look at the SD between means from a set of categorical predictors<br />
-<br />
-</li>
-<li>This SD tells us how much variability is driven by a set of treatments<br />
-</li>
-<li>Not directly comparable to MSE for comparison to sigma.<br />
-<br />
-</li>
-<li>Given units of response variable, is the variability meaningful?</li>
-</ol>
-</section>
-<section id="what-are-the-sources-of-variation-from-the-model-1" class="slide level2">
-<h1>What are the sources of variation from the model?</h1>
-<p><img src="20_anova_2_files/figure-revealjs/banova_variability-1.jpeg" title="" alt="" width="768" /></p>
-</section>
-<section id="are-groups-different" class="slide level2">
-<h1>Are Groups Different?</h1>
-<p><img src="20_anova_2_files/figure-revealjs/bayes_posthoc-1.jpeg" title="" alt="" width="768" /></p>
-</section>
-<section id="are-groups-different-1" class="slide level2">
-<h1>Are Groups Different?</h1>
-<pre><code>Control v. Schizo</code></pre>
-<pre><code>    0%    25%    50%    75%   100% 
--0.054  0.146  0.189  0.234  0.489 </code></pre>
-<pre><code>
-Control v. Bipolar</code></pre>
-<pre><code>   0%   25%   50%   75%  100% 
-0.021 0.214 0.258 0.301 0.531 </code></pre>
-</section>
-<section id="alternate-methods" class="slide level2">
-<h1>Alternate methods</h1>
-<ol type="1">
-<li>Likelihood uses <span class="math inline">\(\chi^2\)</span>, but other methods are identical to least squares<br />
-</li>
-<li>Bayesian methods conservative, but use chains for identical inferences to ANOVA<br />
-</li>
-<li>Sidenote: Bayesian methods are less likely to commit type II errors</li>
-</ol>
-</section>
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -889,6 +2011,8 @@ Control v. Bipolar</code></pre>
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -899,7 +2023,7 @@ Control v. Bipolar</code></pre>
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>
