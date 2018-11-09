@@ -142,7 +142,7 @@ __In Class Code:__ [Tidy](in_class_code_2016/09_tidy.R), [markdown options](in_c
 ```
 `r datestring`   
 __Lecture:__ Experimental design and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html)    
-__Lab Topic:__ [One-Way ANOVA](lab/10_anova.html), Midterm work session	  
+__Lab Topic:__ [One-Way ANOVA](lab/10_anova.html) and [data](lab/data/15e1KneesWhoSayNight.csv), Midterm work session	  
 __Reading:__ W&S Chapter 14-15  
 __Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast"))  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-anova-2018
