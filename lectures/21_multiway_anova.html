@@ -3,15 +3,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title></title>
+  <title>21_multiway_anova.utf8.md</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -54,22 +117,394 @@
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
 
 </head>
 <body>
@@ -78,50 +513,50 @@
 
 
 <section id="section" class="slide level2" data-background="images/21/blocked_designs/Slide4.jpg">
-<h1></h1>
+<h2></h2>
 <br> <!-- review this slide for continuity and some re-ordering in posthocs. That section is a bit of a mess Also Bayes needs more detail. And likelihood tables are ugly. Broom?-->
 <h1 style="background-color:white; font-size:68pt">
 Many Treatments: Multi-Way ANOVA
 </h1>
 </section>
 <section id="section-1" class="slide level2">
-<h1></h1>
-<p><br><br> <img src="images/21/anova-3.jpg" alt="image" style="width:50.0%" /></p>
+<h2></h2>
+<p><br><br> <img data-src="./images/21/anova-3.jpg" alt="image" style="width:50.0%" /></p>
 </section>
 <section id="effects-of-stickleback-density-on-zooplankton" class="slide level2">
-<h1>Effects of Stickleback Density on Zooplankton</h1>
-<p><br><br> <img src="images/21/daphnia.jpeg" alt="image" style="width:40.0%" /> <img src="images/21/threespine_stickleback.jpeg" alt="image" style="width:50.0%" /></p>
+<h2>Effects of Stickleback Density on Zooplankton</h2>
+<p><br><br> <img data-src="./images/21/daphnia.jpeg" alt="image" style="width:40.0%" /> <img data-src="./images/21/threespine_stickleback.jpeg" alt="image" style="width:50.0%" /></p>
 </section>
 <section id="where-would-you-place-replicates" class="slide level2">
-<h1>Where Would You Place Replicates?</h1>
-<p><img src="images/21/blocked_designs/Slide1.jpg" alt="image" style="width:70.0%" /></p>
+<h2>Where Would You Place Replicates?</h2>
+<p><img data-src="./images/21/blocked_designs/Slide1.jpg" alt="image" style="width:70.0%" /></p>
 </section>
 <section id="randomization" class="slide level2">
-<h1>Randomization</h1>
-<p><img src="images/21/blocked_designs/Slide2.jpg" alt="image" style="width:70.0%" /></p>
+<h2>Randomization</h2>
+<p><img data-src="./images/21/blocked_designs/Slide2.jpg" alt="image" style="width:70.0%" /></p>
 <p><span class="fragment">Costs? Benefits?</span></p>
 </section>
 <section id="blocked-design" class="slide level2">
-<h1>Blocked Design</h1>
-<p><img src="images/21/blocked_designs/Slide3.jpg" alt="image" style="width:70.0%" /></p>
+<h2>Blocked Design</h2>
+<p><img data-src="./images/21/blocked_designs/Slide3.jpg" alt="image" style="width:70.0%" /></p>
 <p><span class="fragment">Incorporates Gradient<Br>n=1 per block</span></p>
 </section>
 <section id="randomized-controlled-blocked-design" class="slide level2">
-<h1>Randomized Controlled Blocked Design</h1>
-<p><img src="images/21/blocked_designs/Slide4.jpg" alt="image" style="width:70.0%" /></p>
+<h2>Randomized Controlled Blocked Design</h2>
+<p><img data-src="./images/21/blocked_designs/Slide4.jpg" alt="image" style="width:70.0%" /></p>
 <p><span class="fragment">Randomization within blocks</span></p>
 </section>
 <section id="effects-of-stickleback-density-on-zooplankton-1" class="slide level2">
-<h1>Effects of Stickleback Density on Zooplankton</h1>
-<p><br><br> <img src="images/21/daphnia.jpeg" alt="image" style="width:40.0%" /> <img src="images/21/threespine_stickleback.jpeg" alt="image" style="width:50.0%" /></p>
+<h2>Effects of Stickleback Density on Zooplankton</h2>
+<p><br><br> <img data-src="./images/21/daphnia.jpeg" alt="image" style="width:40.0%" /> <img data-src="./images/21/threespine_stickleback.jpeg" alt="image" style="width:50.0%" /></p>
 <p>Units placed across a lake so that 1 set of each treatment was ’blocked’ together</p>
 </section>
 <section id="treatment-and-block-effects" class="slide level2">
-<h1>Treatment and Block Effects</h1>
-<p><img src="21_multiway_anova_files/figure-revealjs/zooplankton_boxplot-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Treatment and Block Effects</h2>
+<p><img src="21_multiway_anova_files/figure-revealjs/zooplankton_boxplot-1.jpeg" width="768" /></p>
 </section>
 <section id="the-steps-of-statistical-modeling" class="slide level2">
-<h1>The Steps of Statistical Modeling</h1>
+<h2>The Steps of Statistical Modeling</h2>
 <ol type="1">
 <li>What is your question?</li>
 <li>What model of the world matches your question?</li>
@@ -132,7 +567,7 @@ Many Treatments: Multi-Way ANOVA
 </ol>
 </section>
 <section id="multiway-anova" class="slide level2">
-<h1>Multiway ANOVA</h1>
+<h2>Multiway ANOVA</h2>
 <ul>
 <li class="fragment">Many different treatment types
 <ul>
@@ -142,13 +577,10 @@ Many Treatments: Multi-Way ANOVA
 <br />
 </li>
 </ul></li>
-<li class="fragment">Assumes treatments are fully orthogonal
-<ul>
-<li class="fragment">Each type of treatment type A has all levels of treatment type B</li>
-<li class="fragment">E.g., Each stickleback treatment is present in each block<br />
+<li class="fragment">Assumes treatments are fully orthogonal<br />
+- Each type of treatment type A has all levels of treatment type B - E.g., Each stickleback treatment is present in each block<br />
 <br />
 </li>
-</ul></li>
 <li class="fragment">Experiment is <strong>balanced</strong> for <strong>simple effects</strong>
 <ul>
 <li class="fragment">Simple effect is the unique combination of two or more treatments<br />
@@ -158,7 +590,7 @@ Many Treatments: Multi-Way ANOVA
 </ul>
 </section>
 <section id="model-for-multiway-anovaanodev" class="slide level2">
-<h1>Model for Multiway ANOVA/ANODEV</h1>
+<h2>Model for Multiway ANOVA/ANODEV</h2>
 <p><br />
 <span class="math display">\[y_{k} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \epsilon_{k}\]</span><br />
 <br />
@@ -168,25 +600,25 @@ Or, with matrices…<br />
 <span class="math display">\[\boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}\]</span></p>
 </section>
 <section id="assumptions-of-multiway-anova" class="slide level2">
-<h1>Assumptions of Multiway Anova</h1>
+<h2>Assumptions of Multiway Anova</h2>
 <ul>
 <li><p>Independence of data points</p></li>
 <li><p>Normality within groups (of residuals)</p></li>
 <li><p>No relationship between fitted and residual values</p></li>
 <li><p>Homoscedasticity (homogeneity of variance) of groups</p></li>
-<li><p>Additivity of Treatments</p></li>
+<li><p><font color = "red">Additivity of Treatments</font></p></li>
 </ul>
 </section>
 <section id="the-usual-suspects-of-assumptions" class="slide level2">
-<h1>The Usual Suspects of Assumptions</h1>
-<p><img src="21_multiway_anova_files/figure-revealjs/zoop_assumptions-1.jpeg" title="" alt="" width="768" /></p>
+<h2>The Usual Suspects of Assumptions</h2>
+<p><img src="21_multiway_anova_files/figure-revealjs/zoop_assumptions-1.jpeg" width="768" /></p>
 </section>
 <section id="group-residuals" class="slide level2">
-<h1>Group Residuals</h1>
-<p><img src="21_multiway_anova_files/figure-revealjs/zoop_group_assumptions-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Group Residuals</h2>
+<p><img src="21_multiway_anova_files/figure-revealjs/zoop_group_assumptions-1.jpeg" width="768" /></p>
 </section>
 <section id="tukeys-test-of-non-additivity" class="slide level2">
-<h1>Tukey’s Test of Non-additivity:</h1>
+<h2>Tukey’s Test of Non-additivity:</h2>
 <ul>
 <li class="fragment">Our model is <span class="math inline">\(y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}\)</span><br />
 <br />
@@ -202,13 +634,16 @@ Or, with matrices…<br />
 </li>
 <li class="fragment">We can then test for <span class="math inline">\(SS_{AB}\)</span> using <span class="math inline">\(\lambda\alpha_i\beta_j\)</span></li>
 </ul>
-<div class="fragment">
-<pre><code>Test stat  Pr(&gt;|t|) 
-    0.474     0.635 </code></pre>
-</div>
+</section>
+<section id="tukeys-test-of-non-additivity-1" class="slide level2">
+<h2>Tukey’s Test of Non-additivity:</h2>
+<pre><code>           Test stat Pr(&gt;|Test stat|)
+treatment                            
+block                                
+Tukey test    0.4742           0.6354</code></pre>
 </section>
 <section id="hypotheses-for-multiway-anovaanodev" class="slide level2">
-<h1>Hypotheses for Multiway ANOVA/ANODEV</h1>
+<h2>Hypotheses for Multiway ANOVA/ANODEV</h2>
 <p>TreatmentHo: <span class="math inline">\(\mu_{i1} = \mu{i2} = \mu{i3} = ...\)</span><br />
 <br />
 <br />
@@ -217,7 +652,7 @@ Block Ho: <span class="math inline">\(\mu_{j1} = \mu{j2} = \mu{j3} = ...\)</span
 i.e., The variane due to each treatment type is no different than noise</p>
 </section>
 <section id="we-decompose-sums-of-squares-for-multiway-anova" class="slide level2">
-<h1>We Decompose Sums of Squares for Multiway ANOVA</h1>
+<h2>We Decompose Sums of Squares for Multiway ANOVA</h2>
 <p><span class="math inline">\(SS_{Total} = SS_{Between A} + SS_{Between B} + SS_{Within}\)</span></p>
 <ul>
 <li>Factors are Orthogonal and Balanced, so, Model SS can be split<br />
@@ -227,7 +662,7 @@ i.e., The variane due to each treatment type is no different than noise</p>
 </ul>
 </section>
 <section id="f-test" class="slide level2">
-<h1>F-Test</h1>
+<h2>F-Test</h2>
 <table>
 <thead>
 <tr class="header">
@@ -243,24 +678,24 @@ i.e., The variane due to each treatment type is no different than noise</p>
 <tr class="odd">
 <td style="text-align: left;">treatment</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">6.857333</td>
-<td style="text-align: right;">3.428667</td>
-<td style="text-align: right;">16.365951</td>
-<td style="text-align: right;">0.0014881</td>
+<td style="text-align: right;">6.857</td>
+<td style="text-align: right;">3.429</td>
+<td style="text-align: right;">16.366</td>
+<td style="text-align: right;">0.001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">block</td>
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">2.340000</td>
-<td style="text-align: right;">0.585000</td>
-<td style="text-align: right;">2.792363</td>
-<td style="text-align: right;">0.1010308</td>
+<td style="text-align: right;">2.340</td>
+<td style="text-align: right;">0.585</td>
+<td style="text-align: right;">2.792</td>
+<td style="text-align: right;">0.101</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Residuals</td>
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">1.676000</td>
-<td style="text-align: right;">0.209500</td>
+<td style="text-align: right;">1.676</td>
+<td style="text-align: right;">0.209</td>
 <td style="text-align: right;">NA</td>
 <td style="text-align: right;">NA</td>
 </tr>
@@ -268,7 +703,7 @@ i.e., The variane due to each treatment type is no different than noise</p>
 </table>
 </section>
 <section id="how-to-evaluate-effects-of-each-treatment" class="slide level2">
-<h1>How to evaluate effects of each treatment</h1>
+<h2>How to evaluate effects of each treatment</h2>
 <ol type="1">
 <li>Examine means estimates<br />
 <br />
@@ -280,7 +715,7 @@ i.e., The variane due to each treatment type is no different than noise</p>
 </ol>
 </section>
 <section id="evaluating-treatment-effects" class="slide level2">
-<h1>Evaluating Treatment Effects</h1>
+<h2>Evaluating Treatment Effects</h2>
 <table>
 <thead>
 <tr class="header">
@@ -345,26 +780,57 @@ i.e., The variane due to each treatment type is no different than noise</p>
 </table>
 </section>
 <section id="parcelling-out-second-treatment" class="slide level2">
-<h1>Parcelling Out Second Treatment</h1>
-<p><img src="21_multiway_anova_files/figure-revealjs/visualize_treatments-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Parcelling Out Second Treatment</h2>
+<p><img src="21_multiway_anova_files/figure-revealjs/visualize_treatments-1.jpeg" width="768" /></p>
 <p>Component-Residual Plots take examine unique effect of one treatment after removing influence of the other.</p>
 </section>
 <section id="median-value-of-second-treatment" class="slide level2">
-<h1>Median Value of Second Treatment</h1>
-<p><img src="21_multiway_anova_files/figure-revealjs/visreg-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Median Value of Second Treatment</h2>
+<p><img src="21_multiway_anova_files/figure-revealjs/visreg-1.jpeg" width="768" /></p>
 </section>
 <section id="comparison-of-differences-at-average-of-other-treatment" class="slide level2">
-<h1>Comparison of Differences at Average of Other Treatment</h1>
-<pre><code> contrast       estimate        SE df t.ratio p.value
- control - high     1.64 0.2894823  8   5.665  0.0012
- control - low      1.02 0.2894823  8   3.524  0.0190
- high - low        -0.62 0.2894823  8  -2.142  0.1424
-
-Results are averaged over the levels of: block 
-P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+<h2>Comparison of Differences at Average of Other Treatment</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">t.ratio</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">control - high</td>
+<td style="text-align: right;">1.64</td>
+<td style="text-align: right;">0.289</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5.665</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">control - low</td>
+<td style="text-align: right;">1.02</td>
+<td style="text-align: right;">0.289</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">3.524</td>
+<td style="text-align: right;">0.019</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">high - low</td>
+<td style="text-align: right;">-0.62</td>
+<td style="text-align: right;">0.289</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">-2.142</td>
+<td style="text-align: right;">0.142</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="what-if-my-design-is-unbalanced" class="slide level2">
-<h1>What if my design is unbalanced?</h1>
+<h2>What if my design is unbalanced?</h2>
 <p align="left">
 Uh oh… a cat ate my treatment!<br />
 <br />
@@ -376,7 +842,7 @@ Uh oh… a cat ate my treatment!<br />
 </p>
 </section>
 <section id="entering-treatment-first" class="slide level2">
-<h1>Entering Treatment First</h1>
+<h2>Entering Treatment First</h2>
 <pre><code>zooplankton ~ treatment + block</code></pre>
 <table>
 <thead>
@@ -457,7 +923,7 @@ Uh oh… a cat ate my treatment!<br />
 </table>
 </section>
 <section id="whats-going-on-type-i-and-ii-sums-of-squares" class="slide level2">
-<h1>What’s Going On: Type I and II Sums of Squares</h1>
+<h2>What’s Going On: Type I and II Sums of Squares</h2>
 <div style="text-align:left">
 <p><strong>Type I Sums of Squares:</strong><br />
 <span class="fragment">    SS for A calculated from a model with A + Intercept versus just Intercept</span><br />
@@ -469,7 +935,7 @@ Uh oh… a cat ate my treatment!<br />
 </div>
 </section>
 <section id="whats-going-on-type-i-and-ii-sums-of-squares-1" class="slide level2">
-<h1>What’s Going On: Type I and II Sums of Squares</h1>
+<h2>What’s Going On: Type I and II Sums of Squares</h2>
 <p align="left">
 <strong>Type II Sums of Squares:</strong><br />
 <span class="fragment">    SS for A calculated from a model with A + B + Intercept versus B + Intercept</span><br />
@@ -482,7 +948,7 @@ Uh oh… a cat ate my treatment!<br />
 </p>
 </section>
 <section id="whats-going-on-type-i-and-ii-sums-of-squares-2" class="slide level2">
-<h1>What’s Going On: Type I and II Sums of Squares</h1>
+<h2>What’s Going On: Type I and II Sums of Squares</h2>
 <h4>
 <table>
 <tbody>
@@ -508,7 +974,7 @@ Uh oh… a cat ate my treatment!<br />
 Sequential SS v. Marginal SS</p>
 </section>
 <section id="type-ii-ss-to-the-rescue" class="slide level2">
-<h1>Type II SS to the Rescue</h1>
+<h2>Type II SS to the Rescue</h2>
 <table>
 <thead>
 <tr class="header">
@@ -586,7 +1052,7 @@ Sequential SS v. Marginal SS</p>
 </div>
 </section>
 <section id="type-ii-ss-to-the-rescue-1" class="slide level2">
-<h1>Type II SS to the Rescue</h1>
+<h2>Type II SS to the Rescue</h2>
 <table>
 <thead>
 <tr class="header">
@@ -661,16 +1127,34 @@ Sequential SS v. Marginal SS</p>
 </tbody>
 </table>
 </section>
+<section id="non-least-squares-approaches" class="slide level2">
+<h2>Non-Least Squares Approaches</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">#Likelihood</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">zoop_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(zooplankton <span class="op">~</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>block,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">                <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">                <span class="dt">data=</span>zoop)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#Bayes</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">library</span>(brms)</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">zoom_brms &lt;-<span class="st"> </span><span class="kw">brm</span>(zooplankton <span class="op">~</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>block, </a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">                 <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">                 <span class="dt">data=</span>zoop,</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">                 <span class="dt">file =</span> <span class="st">&quot;zoop_brms&quot;</span>)</a></code></pre></div>
+</section>
+<section id="variance-paritioning-gets-more-interesting" class="slide level2">
+<h2>Variance Paritioning Gets More Interesting!</h2>
+<p><img src="21_multiway_anova_files/figure-revealjs/bayes_banova-1.jpeg" width="768" /></p>
+</section>
 <section id="beyond-2-way-anova" class="slide level2">
-<h1>Beyond 2-Way ANOVA</h1>
+<h2>Beyond 2-Way ANOVA</h2>
 <p align="left">
 Latin Squares Design
 </p>
-<p><img src="images/21/blocked_designs/Slide5.jpg" alt="image" style="width:70.0%" /></p>
+<p><img data-src="./images/21/blocked_designs/Slide5.jpg" alt="image" style="width:70.0%" /></p>
 <p><span class="fragment">Accomodates multiple gradients</span></p>
 </section>
 <section id="latin-squares" class="slide level2">
-<h1>Latin Squares</h1>
+<h2>Latin Squares</h2>
 <table>
 <thead>
 <tr class="header">
@@ -720,14 +1204,14 @@ Can be generalized to n gradients <span class="fragment"> <span class="math disp
 <span class="math display">\[\epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{i} = 0,1\]</span> </span></p>
 </section>
 <section id="many-treatments" class="slide level2">
-<h1>Many Treatments</h1>
-<p><img src="images/21/4_way_anova.jpg" alt="image" style="width:70.0%" /></p>
+<h2>Many Treatments</h2>
+<p><img data-src="./images/21/4_way_anova.jpg" alt="image" style="width:70.0%" /></p>
 </section>
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -747,6 +1231,8 @@ Can be generalized to n gradients <span class="fragment"> <span class="math disp
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -757,7 +1243,7 @@ Can be generalized to n gradients <span class="fragment"> <span class="math disp
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>
