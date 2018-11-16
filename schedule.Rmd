@@ -142,10 +142,12 @@ __In Class Code:__ [Tidy](in_class_code_2016/09_tidy.R), [markdown options](in_c
 ```
 `r datestring`   
 __Lecture:__ Experimental design and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html)    
-__Lab Topic:__ [One-Way ANOVA](lab/10_anova.html) and [data](lab/data/15e1KneesWhoSayNight.csv), Midterm work session	  
+__Lab Topic:__ [One-Way ANOVA](lab/10_anova.html), Midterm work session	  
+__Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S Chapter 14-15  
 __Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-anova-2018
+__In Class Code:__ [lots of anova](./in_class_code_2018/scripts/10_anova.R)  
   
   
 ### Week 11.   
@@ -153,7 +155,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-anova-2018
 ```
 `r datestring`   
 __Lectures:__ Experimental Design in a Multicausal World - [Multiway ANOVA](lectures/21_multiway_anova.html), [Factorial ANOVA](lectures/22_factorial_anova.html)    
-__Lab Topic:__  Discussion of Hurlbert, Cottingham, [Factorial ANOVA](lab/10a_anova.html)  
+__Lab Topic:__  Discussion of Hurlbert, Cottingham, [Factorial ANOVA](lab/11_anova.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf), [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
 __In Class Code:__ [lots of anova](./in_class_code_2016/10_anova.R)  

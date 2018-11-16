@@ -1,0 +1,295 @@
+---
+title: "Multiway and Factorial ANOVA"
+author: "Biol 607"
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+```
+
+For this lab, see the etherpad at  https://etherpad.wikimedia.org/p/607-anova-2018
+
+Let's start with some libraries from last time!
+```{r libraries}
+library(car)
+library(tidyverse)
+library(ggplot2)
+library(emmeans)
+```
+
+## 1. Two-Way ANOVA
+We'll work with the zooplankton depredation dataset for two-way ANOVA. This is a blocked experiment, so, each treatment is in each block just once.
+
+```{r zoop}
+zooplankton <- read.csv("./data/18e2ZooplanktonDepredation.csv")
+
+qplot(treatment, zooplankton, data=zooplankton, geom="boxplot")
+qplot(block, zooplankton, data=zooplankton, geom="boxplot")
+```
+
+Oh. That's odd. What is up with block? AH HA! It's continuous. We need to make it discrete to work with it.
+
+```{r zoop_factor}
+zooplankton$block  <- factor(zooplankton$block)
+qplot(block, zooplankton, data=zooplankton, geom="boxplot")
+```
+
+There we go. Always check! 
+
+### 1.1 Fit and Assumption Evaluation
+Fit is quite easy. We just add one more factor to an lm model!
+
+```{r zoop_fit}
+zooplankton_lm <- lm(zooplankton ~ treatment + block,
+                     data = zooplankton)
+```
+
+We then evaluate residuals almost as usual...
+
+```{r zoop_assume}
+par(mfrow=c(2,2))
+plot(zooplankton_lm, which=c(1,2,5))
+par(mfrow=c(1,1))
+```
+
+We want to look more deeply by treatment and block. For which we use `car`'s `residualPlots()`
+
+```{r zoop_car}
+residualPlots(zooplankton_lm)
+```
+
+Notice that this pops out a Tukey test, and we are looking...GOOD!
+
+### 1.2 Type II Sums of Squares
+Given that we now have multiple factors, in case of unbalance, we should use type II sums of squares.
+
+```{r Anova_zoop}
+Anova(zooplankton_lm)
+```
+
+### 1.3 Coefficients
+
+If we want to look at coefficients, we have to make means contrasts.
+
+```{r means}
+summary(update(zooplankton_lm, . ~ . -1))
+```
+
+This is still a little odd, though, as our treatments are evaluated in block 1. To truly get just the treatment effect, we need to look at the estimated marginal means - the `emmeans`!  The big thing about `emmeans` is that it creates a reference grid based on the blocks. It then calculates the treatment effect averaged over all blocks, rather than just in block 1.
+
+```{r emmeans}
+zoop_em <- emmeans(zooplankton_lm, ~treatment)
+
+zoop_em
+```
+
+### 1.4 Post-Hocs
+
+Here, `emmeans` gets interesting.
+
+```{r ref}
+contrast(zoop_em, method = "tukey")
+```
+
+Note the message that we've averaged over the levels of block. You can do any sort of posthoc as you wanted before. And, you could have done the same workflow for block as well.  
+
+### 1.5 Faded Examples
+
+Given then similarity with 1-way ANOVA, let's just jump right into two examples, noting a key difference or two here and there.
+
+To start with, let's look at gene expression by different types of bees.
+
+```{r bees_1, eval=FALSE}
+bees <- read.csv("./data/18q07BeeGeneExpression.csv")
+
+#Visualize
+________(type, Expression, data=____, geom="____")
+
+#fit
+bee_lm <- __(______ ~ ______ + _____, data=________)
+
+#assumptions
+________(______, which=c(1,2,4,5))
+
+residualPlots(bee_lm)
+
+#ANOVA
+________(______)
+
+#Tukey's HSD
+contrast(________(______, ____, method = "________")
+```
+
+Wow, not that different, save adding one more term and the residualPlots.
+
+OK, one more.... repeating an experiment in the intertidal?
+```{r echo=FALSE}
+intertidal <- read.csv("./data/18e3IntertidalAlgae.csv")
+```
+
+```{r intertidal_1, eval=FALSE}
+intertidal <- read.csv("./data/18e3IntertidalAlgae.csv")
+
+#Visualize
+________(herbivores, sqrtarea, data=____, geom="____")
+
+#fit
+intertidal_lm <- __(______ ~ ______ + _____, data=________)
+
+#assumptions
+________(______, which=c(1,2,4,5))
+
+residualPlots(______)
+
+#ANOVA
+________(______)
+
+#Tukey's HSD
+contrast(________(______, ____, method = "________")
+```
+
+Did that last one pass the test of non-additivity?
+
+
+## 2. Factorial ANOVA
+Going with that last intertidal example, if you really looked, it was a factorial design, with multiple treatments and conditions.
+
+```{r plot_mice}
+qplot(herbivores, sqrtarea, data=intertidal, fill=height, geom="boxplot")
+```
+
+### 2.1 Fit and Assumption Evaluation
+We fit factorial models using one of two different notations - both expand to the same thing
+
+```{r int_fact}
+intertidal_lm <- lm(sqrtarea ~ herbivores + height + herbivores:height, data=intertidal)
+
+intertidal_lm <- lm(sqrtarea ~ herbivores*height, data=intertidal)
+```
+
+Both mean the same thing as `:` is the interaction. `*` just means, expand all the interactions.
+
+But, after that's done...all of the assumption tests are the same. Try them out.
+
+### 2.2 Type II and III Sums of Squares
+Now, we can choose type II or III SS once we have >n=1 for simple effects. Let's see the difference. Both are from `Anova()` from the car package.
+
+```{r Anova_compare}
+Anova(intertidal_lm)
+
+Anova(intertidal_lm, method="III")
+```
+
+### 2.3 Post-Hocs
+Post-hocs are a bit funnier. But not by much. As we have an interaction, let's look at the simple effects. There are a few ways we can do this
+
+```{r tukey_simple}
+emmeans(intertidal_lm, ~ herbivores + height)
+
+emmeans(intertidal_lm, ~ herbivores | height)
+
+emmeans(intertidal_lm, ~ height | herbivores)
+```
+
+Notice how each presents the information in a different way. The numbers are not different, they just show you information in different ways. The contrasts each reference grid implies *do* make s difference, though, in how p-value corrections for FWER is handled. Consider the first case.
+
+```{r tuk_simp}
+contrast(emmeans(intertidal_lm, ~ herbivores + height), method = "tukey")
+```
+
+OK, cool. Every comparison is made. But what if we don't want to do that? What if we just want to see if the herbivore effect differs by height?
+
+```{r tuk_2}
+contrast(emmeans(intertidal_lm, ~ herbivores |height), method = "tukey")
+```
+
+Notice that, because we're only doing two contrasts, the correction is not as extreme. This method of contrasts might be more what you are interested in given your question. We can also see how this works visuall.
+
+```{r plot_tuk_fact}
+cont <- contrast(emmeans(intertidal_lm, ~ herbivores |height), method = "tukey")
+
+plot(cont) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+You can then use `CLD` or your own annotations to complete the visualization
+
+### 2.4 A Kelpy example
+
+Let's just jump right in with an example, as you should have all of this well in your bones by now. This was from a kelp, predator-diversity experiment I ran ages ago. Note, some things that you want to be factors might be loaded as 
+```{r echo=FALSE}
+kelp <- read.csv("./data/kelp_pred_div_byrnesetal2006.csv")
+```
+
+```{r kelp_1, eval=FALSE}
+kelp <- read.csv("./data/kelp_pred_div_byrnesetal2006.csv")
+
+## Check and correct for non-factors
+____________
+_________
+
+#Visualize
+________(Treatment, Porp_Change, data=____, geom="____", fill=Trial)
+
+#fit
+kelp_lm <- __(______ ~ ______ * _____, data=________)
+
+#assumptions
+________(______, which=c(1,2,4,5))
+
+residualPlots(_________)
+
+#ANOVA
+________(______)
+
+#Tukey's HSD for simple effects
+contrast(________(______, ____, method = "________")
+```
+
+#### 3.3.1 The Cost of Tukey
+So, the kelp example is an interesting one, as this standard workflow is *not* what I wanted when I ran this experiment. I was not interested in a Tukey test of all possible treatments. Run it with no adjustement - what do you see?
+
+```{r no_adjust, eval=FALSE}
+#Pariwise Comparison without P-Value adjustment - The LSD test
+contrast(________(______, ____, method = "________", adjust = "_______")
+```
+
+
+Instead, I was interested in asking whether predator diversity - having a mixture versus only one species of predator - led to less kelp loss than any of the other treatments.  There are a few ways to assess the answer to that question.
+
+First, a Dunnet's test with the Predator Mixture as the control.  Try that out. Note, the default "control" is Dungeness crabs, so, you might want to revisit that.
+
+```{r kelp_dunnet, eval=FALSE}
+#Dunnet's Test
+contrast(________(______, ____, method = "________", ref = _____)
+```
+
+What did you learn? 
+
+#### 3.3.2 Replicated Regression
+
+So.... this was actually a replicated regression design. There are a few ways to deal with this. Note the column `Predator_Diversity`
+
+
+Try this whole thing as a regression. What do you see?
+
+Make a new column that is `Predator_Diversity` as a factor. Refit the factorial ANOVA with this as your treatment. NOW try a Tukey test. What do you see?
+
+#### 3.3.3 A Priori Contrast F tests
+
+OK, one more way to look at this. What we're actually asking in comparing monocultures and polycultures is, do we explain more variation with a monoculture v. poyculture split than if not?
+
+```{r contrast_anova}
+kelp_contr <- lm(Change_g ~ C(factor(Predator_Diversity), c(0,1,-1))*Trial, data=kelp)
+
+Anova(kelp_contr)
+```
+
+Now we see that, yes, we explain variation when we partition things into monoculture versus polyculture than when we do not.
+
+Setting up a priori ways of partitioning your sums of squares (that must be orthogonal) is a powerful way to test grouping hypotheses and worth keeping in your back pocket for future explorations.
