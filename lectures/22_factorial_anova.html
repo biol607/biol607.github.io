@@ -1188,6 +1188,24 @@ Type II</p>
 <li class="fragment">Type II produces more meaningful results if main effects are a concern - which they are!</li>
 </ul>
 </section>
+<section id="non-least-squares-approaches" class="slide level2">
+<h2>Non-Least Squares Approaches</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#Likelihood</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">intertidal_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">*</span><span class="st"> </span>herbivores, </a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">                <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">                <span class="dt">data=</span>algae)</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#Bayes</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="kw">library</span>(brms)</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">intertidal_banova &lt;-<span class="st"> </span><span class="kw">brm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">*</span><span class="st"> </span>herbivores, </a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">                 <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">                 <span class="dt">data=</span>algae,</a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">                 <span class="dt">file =</span> <span class="st">&quot;intertidal_brms&quot;</span>)</a></code></pre></div>
+</section>
+<section id="variance-paritioning-gets-more-interesting" class="slide level2">
+<h2>Variance Paritioning Gets More Interesting!</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/bayes_banova-1.jpeg" width="768" /></p>
+</section>
 <section id="many-treatments" class="slide level2">
 <h2>Many Treatments</h2>
 <p><img data-src="./images/22/4_way_interaction.jpg" alt="image" style="width:60.0%" /></p>

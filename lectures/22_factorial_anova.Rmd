@@ -415,6 +415,71 @@ Compare to type II
 \
 > -   Type II produces more meaningful results if main effects are a concern - which they are!
 
+## Non-Least Squares Approaches
+```{r mods, echo=TRUE}
+#Likelihood
+intertidal_glm <- glm(sqrtarea ~ height * herbivores, 
+                family = gaussian(link = "identity"),
+                data=algae)
+
+#Bayes
+library(brms)
+intertidal_banova <- brm(sqrtarea ~ height * herbivores, 
+                 family = gaussian(link = "identity"),
+                 data=algae,
+                 file = "intertidal_brms")
+```
+
+
+## Variance Paritioning Gets More Interesting!
+```{r bayes_banova}
+library(tidybayes)
+library(stringr)
+
+add_residual_draws <- function(mod){
+  add_predicted_draws(mod, newdata = mod$data) %>%
+    ungroup() %>%
+    mutate(.residual = .prediction - .[[1]]) %>%
+    select(-.prediction)
+  
+}
+
+get_finite_sd <- function(vars, coef_tab){
+  coefs <- coef_tab %>%
+    select(matches(str_c(vars, collapse="|"))) %>%
+    mutate(zeros = 0)
+  
+  if(length(vars)==1){
+    coefs <- coefs %>% select(-contains("."))
+  }
+  
+  coefs %>% rowwise %>%
+    apply(1,sd)
+    
+    
+}
+
+#The coefs and SDs
+intertidal_coefs <- as_tibble(intertidal_banova)
+intertidal_residuals <- add_residual_draws(intertidal_banova)
+
+finite_pop_sd_tibble <- tibble(
+ height_sd = get_finite_sd("height", intertidal_coefs),
+ herbivores_sd = get_finite_sd("herbivores", intertidal_coefs),
+ interaction_sd = get_finite_sd(c("height", "herbivores"), intertidal_coefs),
+ residual_sd = intertidal_residuals %>% group_by(.draw) %>% summarize(.sd = sd(.residual)) %>% pull
+)
+
+
+ggplot(finite_pop_sd_tibble %>% gather(type, .sd) %>%
+         mutate(type = forcats::fct_relevel(factor(type), "residual_sd", "interaction_sd", "height_sd",
+                                            "herbivores_sd")),
+       aes(y = type, x = .sd)) +
+  geom_halfeyeh() +
+  theme_bw(base_size = 17)
+
+```
+
 
 ## Many Treatments
 ![image](./images/22/4_way_interaction.jpg){width="60.00000%"}
