@@ -28,7 +28,9 @@ library(tidyr)
 library(broom)
 library(ggplot2)
 library(car)
-library(lsmeans)
+library(emmeans)
+
+theme_set(theme_minimal(base_size=16))
 
 ```
 
@@ -141,6 +143,7 @@ Note: You can have as many treatment types as you want (and then 3-way,
 You can only see this if you have replication of treatments (grazing) within blocks (tide height)
 
 ## The Model For a Factorial ANOVA/ANODEV
+
 $$y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$  
 \
 $$\epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{i} = 0,1$$ 
@@ -164,7 +167,8 @@ $$\boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$
 ## How do you Fit an Interaction Effect?
 
 ```{r graze_interaction, echo=TRUE}
-graze_int <- lm(sqrtarea ~ height + herbivores + herbivores:height, 
+graze_int <- lm(sqrtarea ~ height + herbivores + 
+                  herbivores:height, 
                 data=algae)
 ```
 \
@@ -275,8 +279,24 @@ contrast( lsmeans(graze_int, c("height", "herbivores")), "tukey", adjust="none")
 ## Posthoc with Simple Effects Model
 
 ```{r graze_posthoc_plot}
-plot(contrast( lsmeans(graze_int, c("height", "herbivores")), "tukey", adjust="none"), cex.lab=1,2, cex.axis=1.3, cex=1.2)
+plot(contrast( emmeans(graze_int, ~herbivores + height), "tukey", adjust="none")) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
 ```
+
+## We are often interested in something simpler...
+
+```{r graze_posthoc_plot2}
+plot(contrast( emmeans(graze_int, ~herbivores | height), "tukey", adjust="none")) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+## Simpler VIsualization of an Interaction Effect
+
+```{r graze_posthoc_plot3}
+plot(contrast( emmeans(graze_int, ~ height | herbivores), "tukey", adjust="none")) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
 
 ## Outline
 1. Factorial ANOVA  
@@ -370,6 +390,17 @@ Compare to type II
 <span class="fragment">**very conservative**</span>  
 </p>
 
+## What’s Going On: Type I and II Sums of Squares
+<h4>  
+
+  ------------ ------------ ------------   ------------
+                  Type I      Type II    
+   Test for A     A v. 1     A + B v. B     A + B + A:B v B + A:B<br><br>  
+   Test for B   A + B v. A   A + B v. A     A + B + A:B v A + A:B<br><br> 
+   Test for B   A + B v. A   A + B v. A     A + B + A:B v A + B<br><br> 
+  ------------ ------------ ------------   ------------  
+</h4>
+\
 
 ## Which SS to Use?
 > -   Traditionally, urged to use Type III  

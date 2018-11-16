@@ -3,52 +3,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title></title>
+  <title>22_factorial_anova.utf8.md</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="libs/reveal.js-3.3.0/css/reveal.css"/>
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<link rel="stylesheet" href="libs/reveal.js-3.3.0/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -91,22 +117,394 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       border-color: gray;
     }
 
+
   </style>
 
     <style type="text/css">code{white-space: pre;}</style>
 
     <link rel="stylesheet" href="style.css"/>
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? 'libs/reveal.js-3.3.0/css/print/pdf.css' : 'libs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="libs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
 
 </head>
 <body>
@@ -115,12 +513,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <section id="factorial-designs-interaction-effects" class="slide level2">
-<h1>Factorial Designs &amp; Interaction Effects</h1>
+<h2>Factorial Designs &amp; Interaction Effects</h2>
 <!-- make a better cover slide -->
-<p><img src="22_factorial_anova_files/figure-revealjs/plot_algae-1.jpeg" title="" alt="" width="768" /></p>
+<p><img src="22_factorial_anova_files/figure-revealjs/plot_algae-1.jpeg" width="768" /></p>
 </section>
 <section id="outline" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Factorial ANOVA<br />
 <br />
@@ -132,7 +530,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 </section>
 <section id="is-the-world-additive" class="slide level2">
-<h1>Is the world additive?</h1>
+<h2>Is the world additive?</h2>
 <ul>
 <li class="fragment">Until now, we have assumed factors combine additively<br />
 <br />
@@ -147,21 +545,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 </section>
 <section id="intertidal-grazing" class="slide level2">
-<h1>Intertidal Grazing!</h1>
-<p><img src="images/22/grazing-expt.jpeg" alt="image" style="width:70.0%" /><br />
+<h2>Intertidal Grazing!</h2>
+<p><img data-src="./images/22/grazing-expt.jpeg" alt="image" style="width:70.0%" /><br />
 Do grazers reduce algal cover in the intertidal?</p>
 </section>
 <section id="experiment-replicated-on-two-ends-of-a-gradient" class="slide level2">
-<h1>Experiment Replicated on Two Ends of a gradient</h1>
-<p><img src="images/22/zonation.jpg" alt="image" style="width:70.0%" /><br />
+<h2>Experiment Replicated on Two Ends of a gradient</h2>
+<p><img data-src="./images/22/zonation.jpg" alt="image" style="width:70.0%" /><br />
 What happens if you fit this data using * instead of + in the linear model?</p>
 </section>
 <section id="the-data" class="slide level2">
-<h1>The Data</h1>
-<p><img src="22_factorial_anova_files/figure-revealjs/plot_algae-1.jpeg" title="" alt="" width="768" /></p>
+<h2>The Data</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/plot_algae-1.jpeg" width="768" /></p>
 </section>
 <section id="humdrum-linear-model" class="slide level2">
-<h1>Humdrum Linear Model</h1>
+<h2>Humdrum Linear Model</h2>
 <h3 style="text-align:left">
 sqrtarea ~ height + herbivores
 </h3>
@@ -201,25 +599,31 @@ sqrtarea ~ height + herbivores
 </table>
 </section>
 <section id="residuals-look-weird" class="slide level2">
-<h1>Residuals Look Weird</h1>
-<p><img src="22_factorial_anova_files/figure-revealjs/graze_assumptions-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Residuals Look Weird</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_assumptions-1.jpeg" width="768" /></p>
 </section>
 <section id="group-residuals-look-odd" class="slide level2">
-<h1>Group Residuals Look Odd</h1>
-<p><img src="22_factorial_anova_files/figure-revealjs/zoop_group_assumptions-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Group Residuals Look Odd</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/zoop_group_assumptions-1.jpeg" width="768" /></p>
 </section>
 <section id="pattern-in-fitted-v.-residuals" class="slide level2">
-<h1>Pattern in Fitted v. Residuals</h1>
-<p><img src="22_factorial_anova_files/figure-revealjs/graze_linear_diagnostics-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Pattern in Fitted v. Residuals</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_linear_diagnostics-1.jpeg" width="768" /></p>
 </section>
 <section id="nonlinearity-seen-in-the-tukey-test" class="slide level2">
-<h1>Nonlinearity seen in the Tukey Test!</h1>
+<h2>Nonlinearity seen in the Tukey Test!</h2>
+<pre><code>           Test stat Pr(&gt;|Test stat|)    
+height                                   
+herbivores                               
+Tukey test   -3.3171        0.0009097 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th></th>
 <th style="text-align: right;">Test stat</th>
-<th style="text-align: right;">Pr(&gt;|t|)</th>
+<th style="text-align: right;">Pr(&gt;|Test stat|)</th>
 </tr>
 </thead>
 <tbody>
@@ -235,40 +639,44 @@ sqrtarea ~ height + herbivores
 </tr>
 <tr class="odd">
 <td>Tukey test</td>
-<td style="text-align: right;">-3.317</td>
-<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">-3.317064</td>
+<td style="text-align: right;">0.0009097</td>
 </tr>
 </tbody>
 </table>
 <p>(Note: This test is typically used when there is no replication within blocks)</p>
 </section>
 <section id="factorial-blocked-experiment" class="slide level2">
-<h1>Factorial Blocked Experiment</h1>
-<p><img src="images/22/factorial_blocks.jpg" alt="image" style="width:80.0%" /><br />
+<h2>Factorial Blocked Experiment</h2>
+<p><img data-src="./images/22/factorial_blocks.jpg" alt="image" style="width:80.0%" /><br />
 </p>
 </section>
 <section id="factorial-design" class="slide level2">
-<h1>Factorial Design</h1>
-<p><img src="images/22/factorial_layout.jpg" alt="image" style="width:80.0%" /><br />
+<h2>Factorial Design</h2>
+<p><img data-src="./images/22/factorial_layout.jpg" alt="image" style="width:80.0%" /><br />
 Note: You can have as many treatment types as you want (and then 3-way, 4-way, etc. interactions)</p>
 </section>
 <section id="problem-categorical-predictors-are-not-additive" class="slide level2">
-<h1>Problem: Categorical Predictors are Not Additive!</h1>
-<p><img src="22_factorial_anova_files/figure-revealjs/plot_algae-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Problem: Categorical Predictors are Not Additive!</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/plot_algae-1.jpeg" width="768" /></p>
 <p>You can only see this if you have replication of treatments (grazing) within blocks (tide height)</p>
 </section>
 <section id="the-model-for-a-factorial-anovaanodev" class="slide level2">
-<h1>The Model For a Factorial ANOVA/ANODEV</h1>
+<h2>The Model For a Factorial ANOVA/ANODEV</h2>
 <p><span class="math display">\[y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}\]</span><br />
 <br />
 <span class="math display">\[\epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{i} = 0,1\]</span></p>
 <p><br />
-&gt; - Note the new last term<br />
+</p>
+<ul>
+<li class="fragment">Note the new last term<br />
 <br />
-&gt; - Deviation due to treatment combination</p>
+</li>
+<li class="fragment">Deviation due to treatment combination</li>
+</ul>
 </section>
 <section id="the-general-linear-model" class="slide level2">
-<h1>The General Linear Model</h1>
+<h2>The General Linear Model</h2>
 <p><span class="math display">\[\boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}\]</span></p>
 <ul>
 <li class="fragment"><span class="math inline">\(\boldsymbol X\)</span> can have Nonlinear predictors<br />
@@ -278,26 +686,27 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 </ul>
 </section>
 <section id="how-do-you-fit-an-interaction-effect" class="slide level2">
-<h1>How do you Fit an Interaction Effect?</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea ~<span class="st"> </span>height +<span class="st"> </span>herbivores +<span class="st"> </span>herbivores:height, 
-                <span class="dt">data=</span>algae)</code></pre></div>
+<h2>How do you Fit an Interaction Effect?</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">+</span><span class="st"> </span>herbivores <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">                  </span>herbivores<span class="op">:</span>height, </a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">                <span class="dt">data=</span>algae)</a></code></pre></div>
 <br />
 <br />
 
 <div class="fragment">
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea ~<span class="st"> </span>height*herbivores, <span class="dt">data=</span>algae)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height<span class="op">*</span>herbivores, <span class="dt">data=</span>algae)</a></code></pre></div>
 </div>
 </section>
 <section id="no-more-pattern-in-fitted-v.-residuals" class="slide level2">
-<h1>No More Pattern in Fitted v. Residuals</h1>
-<p><img src="22_factorial_anova_files/figure-revealjs/graze_int_resplot-1.jpeg" title="" alt="" width="768" /></p>
+<h2>No More Pattern in Fitted v. Residuals</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_int_resplot-1.jpeg" width="768" /></p>
 </section>
 <section id="other-assumptions-are-met" class="slide level2">
-<h1>Other Assumptions are Met</h1>
-<p><img src="22_factorial_anova_files/figure-revealjs/graze_assumptions_int-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Other Assumptions are Met</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_assumptions_int-1.jpeg" width="768" /></p>
 </section>
 <section id="f-tests-for-interactions" class="slide level2">
-<h1>F-Tests for Interactions</h1>
+<h2>F-Tests for Interactions</h2>
 <span class="math inline">\(SS_{Total} = SS_{A} + SS_{B} + SS_{AB} +SS_{Error}\)</span><br />
 <br />
 <span class="math inline">\(SS_{AB} = n\sum_{i}\sum_{j}(\bar{Y_{ij}} - \bar{Y_{i}}- \bar{Y_{j}} - \bar{Y})^{2}\)</span>, df=(i-1)(j-1)<br />
@@ -305,14 +714,15 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 <br />
 
 <div class="fragment">
-MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span><br />
+<p>MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span><br />
 <br />
-<span class="math inline">\(F = \frac{MS_{AB}}{MS_{Error}}\)</span> with DF=(j-1)(k-1),n - 1 - (i-1) - (j-1) - (i-1)(j-1)<br />
-
+</p>
+<p><span class="math inline">\(F = \frac{MS_{AB}}{MS_{Error}}\)</span> with DF=(j-1)(k-1),n - 1 - (i-1) - (j-1) - (i-1)(j-1)<br />
+</p>
 </div>
 </section>
 <section id="anova-shows-an-interaction-effect" class="slide level2">
-<h1>ANOVA shows an Interaction Effect</h1>
+<h2>ANOVA shows an Interaction Effect</h2>
 <table>
 <thead>
 <tr class="header">
@@ -356,10 +766,10 @@ MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span
 </table>
 </section>
 <section id="what-does-the-interaction-coefficient-mean" class="slide level2">
-<h1>What does the Interaction Coefficient Mean?</h1>
+<h2>What does the Interaction Coefficient Mean?</h2>
 </section>
 <section id="what-does-the-interaction-coefficient-mean-1" class="slide level2">
-<h1>What does the Interaction Coefficient Mean?</h1>
+<h2>What does the Interaction Coefficient Mean?</h2>
 <table>
 <thead>
 <tr class="header">
@@ -403,7 +813,7 @@ MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span
 </table>
 </section>
 <section id="outline-1" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Factorial ANOVA<br />
 <br />
@@ -415,19 +825,19 @@ MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span
 </ol>
 </section>
 <section id="post-hoc-tests" class="slide level2">
-<h1>Post-hoc Tests!</h1>
-<p><img src="images/22/gosling_p_value.jpg" alt="image" style="width:70.0%" /></p>
+<h2>Post-hoc Tests!</h2>
+<p><img data-src="./images/22/gosling_p_value.jpg" alt="image" style="width:70.0%" /></p>
 </section>
 <section id="posthocs-and-factorial-designs" class="slide level2">
-<h1>Posthocs and Factorial Designs</h1>
+<h2>Posthocs and Factorial Designs</h2>
 <ul>
 <li><p>Must look at simple effects first</p>
 <ul>
 <li>The effects of individual treatment combinations</li>
 </ul>
+<p><br />
 <br />
-<br />
-</li>
+</p></li>
 <li><p>Main effects describe effects of one variable in the complete absence of the other</p>
 <ul>
 <li>Useful only if one treatment CAN be absent</li>
@@ -435,21 +845,21 @@ MS = SS/DF, e.g, <span class="math inline">\(MS_{W} = \frac{SS_{W}}{n-k}\)</span
 </ul>
 </section>
 <section id="posthoc-comparisons-within-blocks" class="slide level2">
-<h1>Posthoc Comparisons Within Blocks</h1>
+<h2>Posthoc Comparisons Within Blocks</h2>
 <pre><code> contrast     estimate       SE df t.ratio p.value
  minus - plus 9.721701 3.855532 60   2.521  0.0144
 
 Results are averaged over the levels of: height </code></pre>
 </section>
 <section id="posthoc-comparisons-of-blocks" class="slide level2">
-<h1>Posthoc Comparisons of Blocks</h1>
+<h2>Posthoc Comparisons of Blocks</h2>
 <pre><code> contrast   estimate       SE df t.ratio p.value
  low - mid -2.358142 3.855532 60  -0.612  0.5431
 
 Results are averaged over the levels of: herbivores </code></pre>
 </section>
 <section id="posthoc-with-simple-effects-model" class="slide level2">
-<h1>Posthoc with Simple Effects Model</h1>
+<h2>Posthoc with Simple Effects Model</h2>
 <pre><code> contrast                estimate       SE df t.ratio p.value
  low,minus - mid,minus  10.430905 5.452546 60   1.913  0.0605
  low,minus - low,plus   22.510748 5.452546 60   4.128  0.0001
@@ -459,11 +869,19 @@ Results are averaged over the levels of: herbivores </code></pre>
  low,plus - mid,plus   -15.147189 5.452546 60  -2.778  0.0073</code></pre>
 </section>
 <section id="posthoc-with-simple-effects-model-1" class="slide level2">
-<h1>Posthoc with Simple Effects Model</h1>
-<p><img src="22_factorial_anova_files/figure-revealjs/graze_posthoc_plot-1.jpeg" title="" alt="" width="768" /></p>
+<h2>Posthoc with Simple Effects Model</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_posthoc_plot-1.jpeg" width="768" /></p>
+</section>
+<section id="we-are-often-interested-in-something-simpler" class="slide level2">
+<h2>We are often interested in something simpler…</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_posthoc_plot2-1.jpeg" width="768" /></p>
+</section>
+<section id="simpler-visualization-of-an-interaction-effect" class="slide level2">
+<h2>Simpler VIsualization of an Interaction Effect</h2>
+<p><img src="22_factorial_anova_files/figure-revealjs/graze_posthoc_plot3-1.jpeg" width="768" /></p>
 </section>
 <section id="outline-2" class="slide level2">
-<h1>Outline</h1>
+<h2>Outline</h2>
 <ol type="1">
 <li>Factorial ANOVA<br />
 <br />
@@ -475,15 +893,15 @@ Results are averaged over the levels of: herbivores </code></pre>
 </ol>
 </section>
 <section id="oh-no-i-lost-a-replicate-or-two" class="slide level2">
-<h1>Oh no! I lost a replicate (or two)</h1>
+<h2>Oh no! I lost a replicate (or two)</h2>
 <p><br />
 <br />
 <br />
 </p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">algae_unbalanced &lt;-<span class="st"> </span>algae[-<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">5</span>), ]</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">algae_unbalanced &lt;-<span class="st"> </span>algae[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), ]</a></code></pre></div>
 </section>
 <section id="type-of-sums-of-squares-matters" class="slide level2">
-<h1>Type of Sums of Squares Matters</h1>
+<h2>Type of Sums of Squares Matters</h2>
 <p>Type I</p>
 <table>
 <thead>
@@ -576,7 +994,7 @@ Type II</p>
 </table>
 </section>
 <section id="enter-type-iii" class="slide level2">
-<h1>Enter Type III</h1>
+<h2>Enter Type III</h2>
 <table>
 <thead>
 <tr class="header">
@@ -673,7 +1091,7 @@ Type II</p>
 </div>
 </section>
 <section id="whats-going-on-type-i-ii-and-iii-sums-of-squares" class="slide level2">
-<h1>What’s Going On: Type I, II, and III Sums of Squares</h1>
+<h2>What’s Going On: Type I, II, and III Sums of Squares</h2>
 <p align="left">
 <strong>Type I Sums of Squares:</strong><br />
 <span class="fragment">    SS for A calculated from a model with A + Intercept versus just Intercept</span><br />
@@ -687,7 +1105,7 @@ Type II</p>
 </p>
 </section>
 <section id="whats-going-on-type-i-ii-and-iii-sums-of-squares-1" class="slide level2">
-<h1>What’s Going On: Type I, II, and III Sums of Squares</h1>
+<h2>What’s Going On: Type I, II, and III Sums of Squares</h2>
 <p align="left">
 <strong>Type II Sums of Squares:</strong><br />
 <span class="fragment">    SS for A calculated from a model with A + B + Intercept versus B + Intercept</span><br />
@@ -701,7 +1119,7 @@ Type II</p>
 </p>
 </section>
 <section id="whats-going-on-type-i-ii-and-iii-sums-of-squares-2" class="slide level2">
-<h1>What’s Going On: Type I, II, and III Sums of Squares</h1>
+<h2>What’s Going On: Type I, II, and III Sums of Squares</h2>
 <p align="left">
 <strong>Type III Sums of Squares:</strong><br />
 <span class="fragment">    SS for A calculated from a model with A + B + A:B + Intercept versus B + A:B + Intercept</span><br />
@@ -714,8 +1132,43 @@ Type II</p>
 <span class="fragment"><strong>very conservative</strong></span>
 </p>
 </section>
+<section id="whats-going-on-type-i-and-ii-sums-of-squares" class="slide level2">
+<h2>What’s Going On: Type I and II Sums of Squares</h2>
+<h4>
+<table>
+<tbody>
+<tr class="odd">
+<td></td>
+<td style="text-align: center;">Type I</td>
+<td style="text-align: center;">Type II</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Test for A</td>
+<td style="text-align: center;">A v. 1</td>
+<td style="text-align: center;">A + B v. B</td>
+<td>A + B + A:B v B + A:B<br><br></td>
+</tr>
+<tr class="odd">
+<td>Test for B</td>
+<td style="text-align: center;">A + B v. A</td>
+<td style="text-align: center;">A + B v. A</td>
+<td>A + B + A:B v A + A:B<br><br></td>
+</tr>
+<tr class="even">
+<td>Test for B</td>
+<td style="text-align: center;">A + B v. A</td>
+<td style="text-align: center;">A + B v. A</td>
+<td>A + B + A:B v A + B<br><br></td>
+</tr>
+</tbody>
+</table>
+</h4>
+<p><br />
+</p>
+</section>
 <section id="which-ss-to-use" class="slide level2">
-<h1>Which SS to Use?</h1>
+<h2>Which SS to Use?</h2>
 <ul>
 <li class="fragment">Traditionally, urged to use Type III<br />
 <br />
@@ -736,14 +1189,14 @@ Type II</p>
 </ul>
 </section>
 <section id="many-treatments" class="slide level2">
-<h1>Many Treatments</h1>
-<p><img src="images/22/4_way_interaction.jpg" alt="image" style="width:60.0%" /></p>
+<h2>Many Treatments</h2>
+<p><img data-src="./images/22/4_way_interaction.jpg" alt="image" style="width:60.0%" /></p>
 </section>
     </div>
   </div>
 
-  <script src="libs/reveal.js-3.3.0/lib/js/head.min.js"></script>
-  <script src="libs/reveal.js-3.3.0/js/reveal.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
@@ -763,6 +1216,8 @@ Type II</p>
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
 
+
+
         // Optional reveal.js plugins
         dependencies: [
         ]
@@ -773,7 +1228,7 @@ Type II</p>
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>
