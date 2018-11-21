@@ -188,7 +188,8 @@ __Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Class's Choice  
+__Lecture:__ Class's Choice 
+__Reading:__ [Murtaugh 2007](./readings/Murtaugh_2007_Ecology.pdf)  
 __Lab Topic:__ Class's Choice, Final Presentation Open Lab  
   
   
