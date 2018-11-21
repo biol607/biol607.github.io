@@ -141,10 +141,11 @@ __In Class Code:__ [Tidy](in_class_code_2016/09_tidy.R), [markdown options](in_c
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Experimental design and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html)    
+__Lecture:__ Experimental design and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html), Cottingham discussion    
 __Lab Topic:__ [One-Way ANOVA](lab/10_anova.html), Midterm work session	  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
-__Reading:__ W&S Chapter 14-15  
+__Reading:__ W&S Chapter 14-15,  [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
+__Optional Reading:__ [Ecological applications of multilevel analysis of variance](./readings/Qian_et_al-2007-Ecology.pdf) with [appendices](./readings/Qian_Shen.zip)  
 __Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-anova-2018
 __In Class Code:__ [lots of anova](./in_class_code_2018/scripts/10_anova.R)  
@@ -157,7 +158,8 @@ __In Class Code:__ [lots of anova](./in_class_code_2018/scripts/10_anova.R)
 __Lectures:__ Experimental Design in a Multicausal World - [Multiway ANOVA](lectures/21_multiway_anova.html), [Factorial ANOVA](lectures/22_factorial_anova.html)    
 __Lab Topic:__  Discussion of Hurlbert, Cottingham, [Factorial ANOVA](lab/11_anova.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
-__Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf), [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
+__Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf)  
+__Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
 __In Class Code:__ [lots of anova](./in_class_code_2016/10_anova.R)  
 
   
@@ -168,8 +170,8 @@ __In Class Code:__ [lots of anova](./in_class_code_2016/10_anova.R)
 `r datestring`   
 __Lecture:__ [The General Linear Model: ANCOVA, Multiple Regression, and Interaction Effects](./lectures/23_general_linear_model.html), [Information Theoretic Approaches](./lectures/24_AIC.html)  
 __Lab Topic:__ [Multiple Regression, Multimodel Inference](lab/11_glm_aic.html) - [data files](lab/data_11.zip)  
-__Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf)  
-__Optional Readings:__ The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
+__Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf), [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Experimental strategies to assess the biological ramifications of multiple drivers of global ocean change](./readings/Boyd_2018_Glob_Change_Biol.pdf)  
+__Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf), [Model selection for ecologists: the worldviews of AIC and BIC](./readings/Aho_2014_ecolog_bic.pdf), The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr-2018  
 __In Class Code:__ [ancova, mlr, and aic](./in_class_code_2016/11_linear_model_aic.R)  
    
