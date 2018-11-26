@@ -25,7 +25,7 @@ library(broom)
 library(ggplot2)
 library(car)
 library(visreg)
-library(lsmeans)
+library(emmeans)
 
 ```
 ![](images/23/wonka_mult_regression.jpg)
@@ -35,7 +35,7 @@ library(lsmeans)
 \ 
 \
 \
-<h3>https://etherpad.wikimedia.org/p/607-mlr</h3>
+<h3>https://etherpad.wikimedia.org/p/607-mlr-2018</h3>
 
 ## Data Generating Processes Until Now
 
@@ -141,12 +141,15 @@ neand_lm <- lm(lnbrain ~ species + lnmass, data=neand)
 ```{r neand_plot_fit, fig.height=5, fig.width=7}
 neand <- cbind(neand, predict(neand_lm, interval="confidence"))
 
-neand_plot +
-  geom_line(data=neand, aes(y=fit)) + 
-  geom_ribbon(data=neand, aes(ymin=lwr, 
-                              ymax=upr), 
+neand_fit <- ggplot(data = neand,
+       aes(x = lnmass, y = lnbrain, color = species)) +
+  geom_point(size = 3) +
+  geom_line(aes(y=fit)) + 
+  geom_ribbon(aes(ymin=lwr, ymax=upr), 
               fill="lightgrey", 
               alpha=0.5) 
+
+neand_fit
 ```
 
 ANCOVA: Evaluate a categorical effect(s), controlling for a *covariate* (parallel lines)\
@@ -209,7 +212,8 @@ knitr::kable(Anova(neand_lm))
 <span class="fragment">II!</span>
 
 ## Vsualizing Result
-```{r neand_plot_fit, fig.height=6}
+```{r, fig.height=6}
+neand_fit
 ```
 
 ## Parcelling Out Covariate
@@ -218,15 +222,59 @@ knitr::kable(Anova(neand_lm))
 crPlots(neand_lm)
 ```
 
-## Parcelling Out Covariate with PostHocs & Least Square Menas
+## Parcelling Out Covariate with PostHocs & Estimated Marginal Menas
 ```{r cr_lsmanes}
 options(digits=3)
-contrast(lsmeans(neand_lm, spec="species"), "tukey")
+contrast(emmeans(neand_lm, ~species,
+                 at = list(lnmass = mean(neand$lnmass))), method = "tukey") %>%
+  kable(digits=3)
 options(digits=5)
 ```
 
-Evluated at mean of covariate
+This is the difference between lines
 
+## What are the values at, say, mean log mass?
+
+```{r}
+emmeans(neand_lm, ~species,
+                 at = list(lnmass = mean(neand$lnmass))) %>%
+  kable(digits = 3)
+```
+
+## How do the slopes differ?
+```{r}
+emtrends(neand_lm, ~species, var = "lnmass") %>%
+  kable(digits = 3)
+```
+
+## If there had been an interaction...
+```{r int_em}
+neand_lm_int <- lm(lnbrain ~ species * lnmass, data=neand)
+
+emtrends(neand_lm_int, ~species, var = "lnmass", at = list(lnmass = 3.9)) %>%
+  kable(digits = 3)
+```
+
+```{r int_em_fit}
+emtrends(neand_lm_int, ~species, var = "lnmass", at = list(lnmass = 4.4)) %>%
+  kable(digits = 3)
+```
+
+## Differences in groups with an interaction
+At lnmass = 3.9
+```{r}
+emmeans(neand_lm_int, ~species,
+                 at = list(lnmass = 3.9)) %>%
+  kable(digits = 3)
+```
+
+
+At lnmass = 4.4
+```{r}
+emmeans(neand_lm_int, ~species,
+                 at = list(lnmass = 4.4)) %>%
+  kable(digits = 3)
+```
 
 ## Models with Many Predictors
 
@@ -282,7 +330,8 @@ variance/covariance matrix of all *Independent variables*\
 
 
 ##  {data-background="images/23/fires.jpg"}
-<div style="bottom:100%; text-align:left; background:goldenrod">Five year study of wildfires & recovery in Southern California shur- blands in 1993. 90 plots (20 x 50m)
+<div style="bottom:100%; text-align:left; background:goldenrod">Five year study of wildfires & recovery in Southern California shurblands in 1993. 90 plots (20 x 50m)  
+\
 (data from Jon Keeley et al.)</div>
 
 
