@@ -168,7 +168,7 @@ __In Class Code:__ [lots of anova](./in_class_code_2016/10_anova.R)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [The General Linear Model: ANCOVA, Multiple Regression, and Interaction Effects](./lectures/23_general_linear_model.html), [Information Theoretic Approaches](./lectures/24_AIC.html)  
+__Lecture:__ [The General Linear Model: ANCOVA, Multiple Regression, and Interaction Effects](./lectures/23_general_linear_model.html), [Information Theoretic Approaches](./lectures/24_mmi.html)  
 __Lab Topic:__ [Multiple Regression, Multimodel Inference](lab/11_glm_aic.html) - [data files](lab/data_11.zip)  
 __Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf), [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Experimental strategies to assess the biological ramifications of multiple drivers of global ocean change](./readings/Boyd_2018_Glob_Change_Biol.pdf)  
 __Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf), [Model selection for ecologists: the worldviews of AIC and BIC](./readings/Aho_2014_ecolog_bic.pdf), The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  

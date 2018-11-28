@@ -1,0 +1,885 @@
+---
+title:
+css: style.css
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+---
+## 
+![](images/mmi/most_interesting_aic.jpg){width=50%}
+<h3>Information Theoretic Approaches to Model Selection</h3>
+
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(tidyverse)
+
+opts_chunk$set(fig.height=5, fig.width=7, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+
+library(rethinking)
+library(ggplot2)
+library(AICcmodavg)
+library(brms)
+
+theme_set(theme_minimal(base_size = 14))
+
+```
+
+##  {data-background="images/23/fires.jpg"}
+<div style="bottom:100%; text-align:left; background:goldenrod"><b>A firey conundrum!</b></div>
+
+## What causes species richness?
+
+- Distance from fire patch 
+- Elevation
+- Abiotic index
+- Patch age
+- Patch heterogeneity
+- Severity of last fire
+- Plant cover
+
+## We could build a full model...
+```{r eval = FALSE, echo=TRUE}
+keeley_full <- lm(rich ~  elev + abiotic + hetero +
+                          distance + firesev + 
+                          age + cover,
+                  data = keeley)
+```
+<div style="text-align:left">
+But...
+<li>Each parameter increases the SE of other parameter estimates</li>
+<li>So, you can get a great fit, but all parameters overlap 0</li>
+<li>OR - you can OVERFIT</li>
+</div>
+
+## Consider this data...
+```{r, echo=TRUE}
+
+sppnames <- c( "afarensis","africanus",
+               "habilis","boisei",
+               "rudolfensis","ergaster","sapiens")
+
+brainvolcc <- c( 438 , 452 , 612, 521, 752, 871, 1350 )
+masskg <- c( 37.0 , 35.5 , 34.5 , 41.5 , 55.5 , 61.0 , 53.5 )
+
+d <- data.frame( species=sppnames, 
+                 brain=brainvolcc, 
+                 mass=masskg )
+```
+
+## Underfitting
+```{r underfit}
+baseplot <- ggplot(data = d, mapping=aes(y=brainvolcc, x=masskg)) +
+  geom_point(shape=1, size=2) +
+  theme_bw(base_size=18)
+
+baseplot +
+  stat_smooth(method="lm", formula = "y ~ 1") +
+  ggtitle("k=0") 
+```
+
+We have explained nothing!
+
+## Overfitting
+```{r overfit}
+baseplot +
+  stat_smooth(method="glm", formula = "y ~ poly(x,6)")  +
+  ggtitle("k=6")
+```
+
+We have perfectly explained this sample
+
+## What is the right fit?
+```{r medfit}
+library(gridExtra)
+
+grid.arrange(
+baseplot +
+  stat_smooth(method="lm", formula = "y ~ poly(x,1)") +
+  ggtitle("k=1"),
+
+baseplot +
+  stat_smooth(method="lm", formula = "y ~ poly(x,2)") +
+  ggtitle("k=2"), nrow=1 )
+```
+
+
+## How complex a model do you need to be useful?
+![](./images/mmi/matter-model.jpg)
+
+## Some models are simple but good enough
+![](./images/mmi/turtles.jpg)
+
+## More Complex Models are Not Always Better or Right
+![](./images/mmi/helio_geo.jpg)
+
+
+
+## {data-background="images/mmi/GillrayBritannia.jpg"}
+
+## How do we Navigate Between Scylla and Charybdis?
+1. Regularization  
+    - Penalize parameters with weak support  
+\
+2. Optimization for Prediction  
+    - Information Theory  
+    - Draws from comparison of information loss
+
+## Model Selection in a Nutshell
+
+> * The Frequentist P-Value testing framework emphasizes the evaluation of a
+single hypothesis - the null. We evaluate whether we reject the null.\
+\
+> * This is perfect for an experiment where we are evaluating clean causal
+links, or testing for a a predicted relationship in data.\
+\
+> * Often, though, we have multiple non-nested hypotheses, and wish to
+evaluate each. To do so we need a framework to compare the relative
+amount of information contained in each model and select the best model
+or models. We can then evaluate the individual parameters.
+
+
+## In and Out of Sample Deviance
+```{r dev_plot1}
+linplot <- baseplot +
+  stat_smooth(method="lm", formula = "y ~ poly(x,1)") 
+
+linplot
+
+lmreg <- lm(brainvolcc ~ masskg, data=d)
+```
+<div class="fragment">Deviance = -2 * log(dnorm($y_i | \mu_i$))  </div>
+<div class="fragment">The deviance of this linear regression is `r deviance(lmreg)`</div>
+
+## In and Out of Sample Deviance
+```{r dev_plot2}
+linplot +
+  geom_point(size=2, x=50, y=515, color="red")
+```
+
+Prediction: `r predict(lmreg, newdata=data.frame(masskg=50))`, Observe: 515  
+Deviance: `r -2*dnorm(807, 515, log=TRUE)`
+
+## Prediction: A Goal for Judging Models
+- Can we minimize the **out of sample deviance**?  
+\
+- So, fit a model, and evaluate how different the deviance is for a training versus test data set is  
+\
+- This is called **CROSS-VALIDATION**  
+
+
+## In and Out of Sample Deviance
+```{r simtrain, cache=TRUE, results="hide"}
+stt <- function(n=1e3, k=1, b_sigma=100, ...){
+ # print(k)
+  set.seed(2002)
+  ret <- mcreplicate(n, sim.train.test(k=k, ...), mc.cores=4)
+  ret <- as.data.frame(ret)
+  ret$type <- c("Train", "Test")
+  ret %>% gather(v, dev, -type)
+}
+
+simdf <- data.frame(r=1:5) %>%
+  group_by(k=1:5) %>%
+  nest() %>%
+  mutate(var = purrr::map(data, ~stt(k=.$r[1]))) %>%
+  unnest(var) %>%
+  group_by(type, k) %>%
+  summarize(mean_deviance = mean(dev),
+            deviance_lwr = mean_deviance-sd(dev),
+            deviance_upr = mean_deviance+sd(dev)
+  ) %>%
+  ungroup()
+```
+
+```{r simtrainplot}
+base_simplot <- ggplot(simdf, mapping=aes(x=k, y=mean_deviance, 
+                          ymin=deviance_lwr, ymax=deviance_upr,
+                          color=type, shape=type)) +
+  geom_point(size=2) +
+  geom_line() +
+  theme_bw(base_size=17)+
+  scale_shape_manual(values=c(1,2,3)) +
+  scale_color_manual(values=c("black", "blue"))
+
+
+base_simplot
+```
+
+
+## A Criteria Estimating Test Sample Deviance
+- We don't always have enough data for a "test" dataset  
+\
+- What if we could estimate out of sample deviance?  
+\
+- The difference between training and testing deviance shows overfitting  
+\
+
+## What's the difference between train and test deviance?
+```{r regular, results="hide", cache=TRUE}
+
+regulardf <- crossing(k=1:5, sigma=c(1, 0.5, 0.2)) %>%
+  group_by(a=1:15) %>%
+  nest() %>%
+  mutate(var = purrr::map(data, ~stt(k=.$k[1], b_sigma=.$b_sigma[1]))) %>%
+  mutate(var = purrr::map2(data, var, crossing)) %>%
+  unnest(var) %>%
+  group_by(type, k, sigma) %>%
+  summarize(mean_deviance = mean(dev),
+            deviance_lwr = mean_deviance-sd(dev),
+            deviance_upr = mean_deviance+sd(dev)
+  ) %>%
+  ungroup()
+```
+
+
+```{r diff}
+diff_df <- regulardf %>% 
+  select(-deviance_lwr, -deviance_upr) %>%
+  spread(type, mean_deviance) %>%
+  group_by(sigma, k) %>%
+  summarize(difference = Test - Train)
+qplot(k, difference, data=diff_df) +
+  stat_smooth(method="lm")
+```
+
+Slope of `r round(coef(lm(difference ~ k, data=diff_df))[2], 2)` (~2)
+
+## Enter the AIC
+<div id="right">
+![](./images/mmi/hirotugu_akaike.jpg)
+</div>
+<div id="left">
+- So, $E[D_{test}] = D_{train} + 2K$  
+\
+- This is Akaike's Information Criteria (AIC)  
+\
+</div>
+
+$$AIC = Deviance + 2K$$
+
+
+## Suppose this is the Truth
+
+```{r truth}
+
+truthplot <- ggplot(mtcars, aes(qsec, wt)) + theme_bw()+ stat_smooth(method="loess", fill=NA, color="black", lwd=2) +
+  xlab("X") + ylab("Y")
+
+truthplot
+
+```
+
+
+
+## We Can Fit a Model To Descibe Our Data, but it Has Less Information
+
+```{r truth_curve}
+truthplot <- truthplot+ stat_smooth(method="loess", color="orange", fill=NA, lwd=2, lty=3, method.args=list(degree=1))
+
+truthplot
+```
+
+
+
+
+## We Can Fit a Model To Descibe Our Data, but it Has Less Information
+
+```{r truth_line}
+truthplot <- truthplot+ stat_smooth(method="lm", color="red", fill=NA, lwd=2, lty=2)
+truthplot
+```
+
+
+
+
+## Information Loss and Kullback-Leibler Divergence
+
+Information Loss(truth,model<sub>i</sub>) = $\mathscr{L}_{truth}log\frac{\mathscr{L}_{truth}}{\mathscr{L}_{model \thinspace i}}$
+
+\
+\
+Two neat properties:
+
+1.  Comparing Information Loss between model1 and model2, truth drops
+    out as a constant!\
+
+2.  We can therefore define a metric to compare *Relative Information
+    Loss*
+
+
+
+## Defining an Information Criterion
+<div style = "text-align:left">
+Akaike’s Information Criterion - lower AIC means less information is
+lost by a model  
+\
+$$AIC = -2log(L(\theta | x)) + 2K$$
+</div>
+
+
+## Balancing General and Specific Truths
+
+Which model better describes a general principle of how the world works?  
+
+```{r general_specific}
+
+set.seed(15)
+x<-rnorm(50)
+y<-rnorm(50, x - x^2+2)
+
+qplot(x,y, color=I("orange"), size=I(2.3)) + 
+  geom_line(color="grey", size=1.5) + 
+  theme_bw() +geom_point(size=2) +
+  stat_smooth(method="lm", formula=y~poly(x,2), color="red", fill=NA, size=2, lty=4)
+```
+
+##
+\
+\
+<h1>How many parameters does it take to draw an elephant?</h1>
+
+
+## AIC
+- AIC optimized for forecasting (out of sample deviance)  
+\
+- Assumes large N relative to K  
+    - AICc for a correction  
+\
+
+## But Sample Size Can Influence Fit...
+
+$$AIC = -2log(L(\theta | x)) + 2K$$\
+\
+$$AICc = AIC + \frac{2K(K+1)}{n-K-1}K$$
+
+
+## AIC v. BIC
+<div style="text-align:left">
+Many other IC metrics for particular cases that deal with model
+complexity in different ways. For example
+$$AIC = -2log(L(\theta | x)) + 2K$$
+
+-   Lowest AIC = Best Model for Predicting New Data
+
+-   Tends to select models with many parameters
+
+\
+\
+$$BIC = -2log(L(\theta | x)) + K ln(n)$$
+
+-   Lowest BIC = Closest to "Truth""
+
+-   Derived from posterior probabilities
+</div>
+
+
+
+## How can we Use AIC Values?
+
+$$\Delta AIC = AIC_{i} - min(AIC)$$\
+<div style="text-align:left">
+Rules of Thumb from Burnham and Anderson(2002):\
+\
+\
+
+<span class="fragment"> - $\Delta$ AIC $<$ 2 implies that two models are similar in their fit to the data </span> \
+\
+<span class="fragment"> - $\Delta$ AIC between 3 and 7 indicate moderate, but less, support for
+retaining a model </span> \
+\
+<span class="fragment"> - $\Delta$ AIC $>$ 10 indicates that the model is very unlikely </span> \
+</div>
+
+
+
+##  {data-background="images/23/fires.jpg"}
+<div style="bottom:100%; text-align:left; background:goldenrod">Five year study of wildfires & recovery in Southern California shur- blands in 1993. 90 plots (20 x 50m)
+(data from Jon Keeley et al.)</div>
+
+
+
+## What causes species richness?
+
+- Distance from fire patch 
+- Elevation
+- Abiotic index
+- Patch age
+- Patch heterogeneity
+- Severity of last fire
+- Plant cover
+
+## Many Things may Influence Species Richness
+
+```{r keeley_first}
+keeley <- read.csv("./data/23/Keeley_rawdata_select4.csv")
+k <- keeley %>% select(rich, abiotic, firesev, cover) %>%
+  gather(variable, value, -rich)
+
+ggplot(k, mapping=aes(x=value, y=rich)) +
+  facet_wrap(~variable, strip.position="bottom", scale="free_x") +
+  geom_point() +
+  stat_smooth(method = "lm", color="red") +
+  xlab("") +
+  theme_bw(base_size=17)
+```
+
+
+## Implementing AIC: Create Models
+\
+```{r keeley_mods, echo=TRUE}
+k_abiotic <- lm(rich ~ abiotic, data=keeley)
+  
+k_firesev <- lm(rich ~ firesev, data=keeley)
+  
+k_cover <- lm(rich ~ cover, data=keeley)
+```
+
+
+
+
+## Implementing AIC: Compare Models
+
+```{r linear_compare, echo=TRUE}
+AIC(k_abiotic)
+
+AIC(k_firesev)
+
+AIC(k_cover)
+```
+
+## What if You Have a LOT of Potential Drivers?
+
+```{r keeley_pairs}
+keeley <- read.csv("./data/23/Keeley_rawdata_select4.csv")
+pairs(keeley)
+```
+
+7 models alone with 1 term each\
+`r sum(choose(7,1:7))` possible without interactions.
+
+
+##
+![](images/mmi/mmi_aic_batman.jpg)
+
+## A Quantitative Measure of Relative Support
+
+$$w_{i} = \frac{e^{-\Delta_{i}/2 }}{\displaystyle \sum^R_{r=1} e^{-\Delta_{i}/2 }}$$\
+Where $w_{i}$ is the <span>*r*elative support</span> for model i
+compared to other models in the set being considered.\
+\
+Model weights summed together = 1
+
+
+
+## Begin with a Full Model
+<div style="text-align:left">
+```{r fullmod0, echo=TRUE}
+keeley_full <- lm(rich ~  elev + abiotic + hetero +
+                          distance + firesev + 
+                          age + cover,
+                  data = keeley)
+```
+ We use this model as a jumping off point, and construct a series of nested models with subsets of the variables.\
+\
+Evaluate using AICc Weights!
+</div>
+
+
+## Models with groups of variables
+
+```{r models1, echo=TRUE}
+keeley_soil_fire <- lm(rich ~ elev + abiotic + hetero +
+                          distance + firesev,
+                  data = keeley)
+
+keeley_plant_fire <- lm(rich ~  distance + firesev + 
+                          age + cover,
+                  data = keeley)
+
+keeley_soil_plant <- lm(rich ~  elev + abiotic + hetero +
+                          age + cover,
+                  data = keeley)
+```
+
+
+
+
+## One Factor Models
+
+```{r models2, echo=TRUE}
+keeley_soil <- lm(rich ~  elev + abiotic + hetero,
+                  data = keeley)
+
+keeley_fire <- lm(rich ~  distance + firesev,
+                  data = keeley)
+
+keeley_plant <- lm(rich ~  age + cover,
+                  data = keeley)
+```
+
+
+## Null Model
+\
+\
+```{r models3, echo=TRUE}
+keeley_null <- lm(rich ~  1,
+                  data = keeley)
+
+```
+
+
+
+## Now Compare Models Weights
+
+```{r modelList}
+modelList <- list(keeley_full,
+                  keeley_plant_fire,
+                  keeley_soil_fire,
+                  keeley_soil_plant,
+                  keeley_soil,
+                  keeley_plant,
+                  keeley_fire,
+                  keeley_null)
+
+names(modelList) <- c("full",
+     "plant_fire",
+     "soil_fire",
+     "soil_plant",
+     "soil",
+     "plant",
+     "fire", "null")
+
+```
+
+```{r aicctab}
+knitr::kable(aictab(modelList)[,-8], modnames = names(modelList), digits=3)
+```
+
+##
+\
+\
+<h3>So, I have some sense of good models? What now?</h3>
+
+##
+![](images/mmi/batman_model_averaging.jpg)
+
+## Variable Weights
+
+How to I evaluate the importance of a variable? \
+\
+Variable Weight = sum of all weights of all models including a variable. Relative support for
+inclusion of parameter in models. 
+
+```{r importance2}
+importance(modelList, parm="firesev", modnames=names(modelList))
+```
+
+
+
+## {data-background-color="black"}
+\
+![](./images/mmi/bjork-on-phone-yes-i-am-all-about-the-deviance-let-us-make-it-shrink-our-parameters.jpg)
+
+## Model Averaged Parameters
+
+$$\hat{\bar{\beta}} = \frac{\sum w_{i}\hat\beta_{i}}{\sum{w_i}}$$\
+\
+$$var(\hat{\bar{\beta}}) = \left [ w_{i} \sqrt{var(\hat\beta_{i}) + (\hat\beta_{i}-\hat{\bar{\beta_{i}}})^2}  \right ]^2$$\
+Buckland et al. 1997
+
+
+
+## Model Averaged Parameters
+
+```{r varEst}
+modavgShrink(modelList, parm="firesev",  modnames=names(modelList))
+```
+
+## {data-background-color="black"}
+\
+\
+![](./images/mmi/chorus_line_model_selection.jpg)
+
+
+## Model Averaged Predictions
+
+```{r Predict_data, echo=TRUE}
+
+newData <- data.frame(distance = 50,
+                      elev = 400,
+                      abiotic = 48,
+                      age = 2,
+                      hetero = 0.5,
+                      firesev = 10,
+                      cover=0.4)
+```
+
+```{r predict}
+modavgPred(modelList, modnames=names(modelList), newdata = newData)
+```
+
+
+
+## Death to single models!
+- While sometimes the model you should use is clear, more often it is *not*  
+\
+- Further, you made those models for a reason: you suspect those terms are important  
+\
+- Better to look at coefficients across models  
+\
+- For actual predictions, ensemble predictions provide real uncertainty
+
+
+
+## Ensemble Prediction
+- Ensemble prediction gives us better uncertainty estimates  
+\
+- Takes relative weights of predictions into account  
+\
+- Takes weights of coefficients into account  
+\
+- Basicaly, get simulated predicted values, multiply them by model weight
+
+## What about IC Analyses in Bayes?
+![](./images/mmi/hey-girl-the-bayesian-inference-indicates-the-effect-you-have-on-my-life-isnt-too-large.jpg)
+
+## Can we just use AIC?
+- We *do* estimate the posterior distribution of the deviance  
+\
+- Average of the posterior, $\bar{D}$ is our $D_{train}$  
+\
+- But what about # of parameters?  
+    - With flat priors, it's just the # of params!  
+    - But once priors are not flat, we are using additional information  
+    - It is as if we have *fewer* parameters to estimate, so AIC becomes problematic
+    
+## So how do we maximize prediction?
+- Why not look at the pieces that make up the deviance  
+    - The pointwise predictive power of the posterior  
+\
+- We can define the Pr(y<sub>i</sub> | posterior simulations)  
+  - This tells us the distribution of the predictive power of our posterior for each point  
+\
+- $llpd = \sum log Pr(y_i | \theta)$
+  
+## But what about Parameters?
+- We know that as k increases, our uncertainty in coefficients increases  
+     - And priors shrink uncertainty when good  
+\
+- Uncertainty is reflected in the distribution of Pr(y<sub>i</sub> | simulations)   
+\
+- Thus, this variance gives us an effective penalty term  
+\
+- $p_{waic} = \sum Var(log Pr(y_i | \theta))$
+
+## Widely Applicable IC
+$$WAIC = -2 \sum log Pr(y_i | \theta) + 2 \sum Var(log Pr(y_i | \theta))$$  
+\
+$$= -2 llpd + 2 p_{waic}$$
+\
+\
+<div style = "text-align:left">
+<li> Wantanabe's Information Criteria  
+\
+<li> Advantage in being pointwise is that we also get an estimate of uncertainty  
+\
+<li> Disadvantage that inaprporpiate to use with lagged (spatial or temporal) predictors
+</div>
+## WAIC with Cover Only Model
+```{r brm_mods, echo=FALSE, results = "hide"}
+
+k_abiotic_brm <- brm(rich ~ abiotic, data=keeley, file = "24_mmi_cache/abiotic")
+
+k_firesev_brm <- brm(rich ~ firesev, data=keeley, file = "24_mmi_cache/firesev")
+
+k_cover_brm <- brm(rich ~ cover, data=keeley, file = "24_mmi_cache/cover")
+
+
+keeley_full_brm <- brm(rich ~  elev + abiotic + hetero +
+                    distance + firesev + 
+                    age + cover,
+                  data = keeley, file = "24_mmi_cache/full")
+
+
+keeley_soil_fire_brm <- brm(rich ~ elev + abiotic + hetero +
+                         distance + firesev,
+                       data = keeley, file = "24_mmi_cache/soil_file")
+
+keeley_plant_fire_brm <- brm(rich ~  distance + firesev + 
+                          age + cover,
+                        data = keeley, file = "24_mmi_cache/plant_fire")
+
+keeley_soil_plant_brm <- brm(rich ~  elev + abiotic + hetero +
+                          age + cover,
+                        data = keeley, file = "24_mmi_cache/soil_plant")
+
+
+keeley_soil_brm <- brm(rich ~  elev + abiotic + hetero,
+                  data = keeley, file = "24_mmi_cache/soil")
+
+keeley_fire_brm <- brm(rich ~  distance + firesev,
+                  data = keeley, file = "24_mmi_cache/fire")
+
+keeley_plant_brm <- brm(rich ~  age + cover,
+                   data = keeley, file = "24_mmi_cache/plant")
+
+
+keeley_null_brm <- brm(rich ~  1,
+                  data = keeley, file = "24_mmi_cache/null")
+```
+
+```{r brm_waic, echo=TRUE}
+WAIC(k_cover_brm)
+```
+
+## WAIC Across All Models
+```{r brm_all_waic, cache=TRUE}
+
+k_all <- waic(k_abiotic_brm, k_cover_brm, k_firesev_brm,
+               keeley_full_brm,
+               keeley_soil_fire_brm, keeley_plant_fire_brm, keeley_soil_plant_brm,
+               keeley_soil_brm, keeley_fire_brm, keeley_plant_brm, 
+               keeley_null_brm, compare=FALSE)
+
+all_weights <- brms::model_weights(k_abiotic_brm, k_cover_brm, k_firesev_brm,
+               keeley_full_brm,
+               keeley_soil_fire_brm, keeley_plant_fire_brm, keeley_soil_plant_brm,
+               keeley_soil_brm, keeley_fire_brm, keeley_plant_brm, 
+               keeley_null_brm, weights = "waic")
+
+k_comp <- waic(k_abiotic_brm, k_cover_brm, k_firesev_brm,
+               keeley_full_brm,
+               keeley_soil_fire_brm, keeley_plant_fire_brm, keeley_soil_plant_brm,
+               keeley_soil_brm, keeley_fire_brm, keeley_plant_brm, 
+               keeley_null_brm, compare=TRUE)
+
+k_all_tab <- purrr::map_df(k_all, ~cbind(.$model_name, t(.$estimates[3,])) %>% 
+                             as_tibble  %>% 
+                             rename(WAIC = Estimate, Model = V1) %>% 
+                             mutate_at(2:3, as.numeric)) %>%
+  arrange(WAIC)
+
+k_comp_tab <-  as_tibble(k_comp$ic_diffs__, rownames = "Model")
+```
+
+```{r}
+k_all_tab %>% knitr::kable(digits = 2, "html") %>% kableExtra::kable_styling("striped")
+```
+
+## We Can Weight
+```{r waic_tab_weights}
+k_all_tab %>% 
+  mutate(delta_waic = WAIC - min(WAIC)) %>%
+  mutate(weight = exp(delta_waic/-2)/sum(exp(delta_waic/-2))) %>% 
+  knitr::kable(digits = 2, "html") %>%
+  kableExtra::kable_styling("striped")
+```
+
+## The Futility of Model Selection in a Bayesian World
+```{r compare}
+k_comp_tab %>%
+  filter(str_detect(Model, "full")) %>% 
+  arrange(abs(WAIC)-SE) %>% 
+  knitr::kable(digits = 2, "html") %>% kableExtra::kable_styling("striped")
+```
+
+Are these really different?
+
+## The Futility of Model Selection in a Bayesian World
+```{r compare2}
+k_comp_tab 
+```
+
+Maybe average coefficients?
+
+## Model Averaged Coefficients
+![](./images/mmi/bjork-on-phone-yes-i-am-all-about-the-deviance-let-us-make-it-shrink-our-parameters.jpg)
+
+## Model Averaged Coefficients
+- Draw values from posterior of each model with frequency porportional to model weight  
+
+```{r modavgcoef_brms}
+avg_hetero<- brms::posterior_average(k_abiotic_brm, k_cover_brm, k_firesev_brm,
+               keeley_full_brm,
+               keeley_soil_fire_brm, keeley_plant_fire_brm, keeley_soil_plant_brm,
+               keeley_soil_brm, keeley_fire_brm, keeley_plant_brm, 
+               keeley_null_brm,
+           weights = "waic", pars = "b_hetero", missing = 0)
+
+full_hetero <- as_tibble(keeley_full_brm) %>% pull(b_hetero)
+
+broom::tidyMCMC(tibble(Averaged_Hetero = avg_hetero[,1], Full_Model_Hetero = full_hetero), 
+                conf.int = TRUE, conf.method = "HPDinterval") %>%
+  knitr::kable("html") %>% kableExtra::kable_styling() 
+```
+
+## Embracing Full Uncertainty
+- Current controversy over meaning of coefficient weights (even with AIC)  
+\
+- In a Bayesian worldview, we want to embrace uncertainty!  
+     - Look at weighted predictions over all models  
+     - Weights determine probability of drawing from a model's posterior  
+\
+- So, ensemble predictions marginalizing over variables not of interest
+
+## Ensemble Predictions
+```{r pp_predict, cache = TRUE}
+library(modelr)
+newdata <- data_grid(keeley, 
+                     elev = mean(elev),
+                     abiotic = mean(abiotic),
+                     hetero = seq_range(hetero, 50),
+                     distane = mean(distance),
+                     firesev = mean(firesev),
+                     age = mean(age),
+                     cover = mean(cover),
+                     distance = mean(distance))
+
+ens_pred <- pp_average(k_abiotic_brm, k_cover_brm, k_firesev_brm,
+               keeley_full_brm,
+               keeley_soil_fire_brm, keeley_plant_fire_brm, keeley_soil_plant_brm,
+               keeley_soil_brm, keeley_fire_brm, keeley_plant_brm, 
+               keeley_null_brm,
+           weights = "waic", newdata = newdata)
+
+soil_pred <- predict(keeley_soil_fire_brm, newdata = newdata)
+
+ens_pred <- ens_pred %>% as_tibble %>% bind_cols(newdata) %>% mutate(Type = "Ensemble")
+soil_pred <- soil_pred %>% as_tibble %>% bind_cols(newdata) %>% mutate(Type = "Soil Fire Model")
+
+preds <- bind_rows(ens_pred, soil_pred)
+
+ggplot(preds, aes(x = hetero, y = Estimate,
+                     ymin = Q2.5, ymax = Q97.5, color = Type, fill = Type)) +
+  geom_line(lwd = 2) +
+  geom_ribbon(color = NA, alpha = 0.2) +
+  ylab("Richness") +
+  scale_fill_manual(values = c("red", "blue")) +
+  scale_color_manual(values = c("red", "blue"))
+```
+
+
+
+## Final Notes
+
+-   IC analyses aid in model selection. One must still evaluate
+    parameters and parameter error.  
+\
+-   Your inferences are constrained solely to the range of models
+    you consider. You may have missed the ’best’ model.  
+\
+-   All inferences <span>**MUST**</span> be based on <span>*a*
+    priori</span> models. Post-hoc model dredging could result in an
+    erroneous ’best’ model suited to your unique data set.  
+\
+-   Ensemble predictions are a powerful practice to show true unertainty
