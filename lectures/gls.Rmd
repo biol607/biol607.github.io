@@ -1,0 +1,465 @@
+---
+title:
+css: style.css
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+---
+
+##
+<h3>Taking Least Squares From the Ordinary to the General(ized)</h3>
+
+![](./images/gls/hamilton_weight.jpg){width="80.00000%"}\
+
+
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=5, fig.width=7, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+
+library(ggplot2)
+
+library(dplyr)
+library(tidyr)
+library(broom)
+library(MASS)
+library(tibble)
+
+library(lmtest) #for bptest
+library(nlme)
+```
+
+## This is What you All Fear...
+```{r qqbad}
+set.seed(2018)
+mydat <- tibble(x = runif(100)) %>%
+  mutate(y = rnorm(100, x, 2*x))
+
+plot(lm(y~x, data = mydat), which = 2)
+```
+
+<div class = "fragment">What do we do here?</div>
+
+
+## Or, oh no!...
+```{r groupbad}
+set.seed(2018)
+mydat <- tibble(x = factor(rep(letters[1:4], 25)), 
+  y = rnorm(100, rep(c(1,3,5,9), 25), rep(c(1,3,5,9), 25)))
+
+plot(lm(y~x, data = mydat), which = 1)
+```
+
+<div class = "fragment">What do we do here?</div>
+
+## Basic Princples of Ordinary Least Squares
+<br>
+<div style="font-size:32pt">
+> -   Y is determined by X: p(Y $|$ X=x)\  
+\
+\
+> -   The relationship between X and Y is Linear\  
+\
+\
+> -   The residuals of $\widehat{Y_i} = \beta_0 + \beta_1 X_i + \epsilon$ are normally distributed with constant variance\  
+    \
+    (i.e., $\epsilon_i \sim$ N(0,$\sigma$))
+</div>
+
+
+## Basic Principles of Ordinary Least Squares
+
+$\widehat{Y} = \beta_0 + \beta_1 X + \epsilon$ where $\beta_0$ = intercept, $\beta_1$ = slope
+
+```{r linefit, fig.width=4, fig.height=4}
+set.seed(697)
+x<-1:10
+y<-rnorm(10, mean=x,sd=2)
+a<-lm(y~x)
+plot(x,y,pch=19, cex=1.5)
+abline(a, lwd=2)
+segments(x,fitted(a),x,y, col="red", lwd=2)
+``` 
+
+Minimize Residuals defined as $SS_{residuals} = \sum(Y_{i} - \widehat{Y})^2$
+
+## But...what about this?
+
+```{r gls_linefit, fig.width=6, fig.height=6}
+y2 <- rnorm(10, mean=x, sd=x/2)
+a2<-lm(y2~x)
+plot(x,y2,pch=19, cex=1.5)
+abline(a2, lwd=2)
+segments(x,fitted(a2),x,y2, col="red", lwd=2)
+```
+
+Variance-Mean Relationship
+
+## Or...what about this?
+
+```{r gls_linefit_2, fig.width=6, fig.height=6}
+cx <- runif(10, 2,5)
+y3 <- rnorm(10, mean=x, sd=cx)
+a3<-lm(y3~x)
+plot(x,y3,pch=19, cex=cx/1.5)
+abline(a3, lwd=2)
+segments(x,fitted(a3),x,y3, col="red", lwd=2)
+```
+
+Different precision for different data points
+
+
+## Weighted Least Squares
+\
+\
+\
+<center>Minimize Weighted $SS_{residuals} = W_i\sum(Y_{i} - \widehat{Y})^2$</center>
+\
+
+
+## Why weight?
+- Minimized influence of heteroskedasticity  
+\
+- Increases precision of estimates  
+\
+- Decreases influence of imprecision in measurements  
+\ 
+- Minimize sampling bias  
+\
+- Other reasons to count some measurements more than others
+
+## Weighted Least Squares
+
+$$Y_i = \beta X_i + \epsilon_i$$
+$$\epsilon_i \sim \mathcal{N}(0, \sigma_i)$$
+\
+<center>OLS: $\sigma_1 = \sigma_2 = ...$ is constant \
+WLS: $\sigma_i$ is variable</center>  
+
+$$Y_i = \beta X_i + \epsilon_i$$
+$$\epsilon_i \sim \mathcal{N}(0, \sigma_i)$$
+\
+<center>In OLS, this implies $\sigma_i = \sigma I_n$ \
+($I_n$ is an identity matrix with n x n dimensions)</center>  
+\
+<div class="fragment">In WLS, the diagonal of the $\sigma$ matrix can be anything</div>
+<div class="fragment">In **Generalized Least Squares**, the off diagonals can be non-zero, too</div>
+
+## How can we use weighting?
+1. Weighting by variance \
+\
+2. Mean-Variance relationship \
+\
+3. Unequal variance between groups
+
+## SQUID!
+![](./images/gls/loligo_orig.jpeg)
+```{r}
+squid_summary <- read.delim("./data/gls/squid_summary.txt", sep = " ")
+```
+
+## Somatic v. Reproductive Tissues: Variance
+```{r squid_sum_plot}
+ggplot(data=squid_summary, mapping=aes(x=MEAN_DML, y=MEAN_Testisweight, size=1/VAR_DML)) +
+  geom_point() +
+  theme_bw(base_size=17) +
+  stat_smooth(method="lm")
+```
+
+## Somatic v. Reproductive Tissues: N
+```{r squid_sum_plot_N}
+ggplot(data=squid_summary, mapping=aes(x=MEAN_DML, y=MEAN_Testisweight, size=N)) +
+  geom_point() +
+  theme_bw(base_size=17) +
+  stat_smooth(method="lm")
+```
+
+## Weighting by Data Quality
+- We typically weight by 1/variance (precision)  
+        - Or N, or other estimate of sample precision  
+\
+- This is different than variance weighted meta-analysis  
+    - We are still estimating a residual error for fits
+
+## Implementation
+\
+\
+```{r squid_sum_weight, echo=TRUE}
+sq_sum <- lm(MEAN_Testisweight ~ MEAN_DML, 
+             data=squid_summary,
+             weights=1/VAR_DML)
+```
+
+## Did it do anything?
+
+No weights
+```{r coef_compare}
+sq_sum_nw <- lm(MEAN_Testisweight ~ MEAN_DML, data=squid_summary)
+
+knitr::kable(broom::tidy(sq_sum_nw))
+```
+
+Precision Weighted
+```{r coef_compare_2}
+knitr::kable(broom::tidy(sq_sum))
+```
+
+Sample Size Weighted
+```{r coef_compare_3}
+sq_sum_n <- lm(MEAN_Testisweight ~ MEAN_DML, data=squid_summary, weights=N)
+
+knitr::kable(broom::tidy(sq_sum_n))
+```
+
+## How can we use weighting?
+1. Weighting by variance \
+\
+2. **Mean-Variance relationship** \
+\
+3. Unequal variance between groups
+
+## Looking at Individual Squid
+```{r read_squid}
+squid <- read.delim("./data/gls/Squid.txt") %>%
+  na.omit()
+
+squid_plot <- ggplot(squid, aes(x=DML, y=Testisweight)) +
+  geom_point() +
+  theme_bw(base_size=17) +
+  ylab("Testis Weight") +
+  xlab("Dorsal Mantle Length")
+
+squid_plot
+```
+
+## Oh, Yeah, That's Heteroskedasticity
+```{r squid_hetero_plot}
+squid_lm <- lm(Testisweight ~ DML, data=squid)
+plot(squid_lm, which=1)
+```
+
+## Oh, Yeah, That's Heteroskedasticity
+```{r squid_hetero_plot_dml}
+plot(squid$DML, residuals(squid_lm), cex=1.3, xlab="Dorsal Mantle Length")
+```
+
+## OK, But, We Need a test
+- Not every case is clear-cut  
+\
+- Breusch-Pagan/Godfrey/Koenker test
+    - Variant of White's test (you'll see this)
+    - Get squared residuals
+    - Regress on one or more predictors
+    - Results fail $\chi^2$ test of heteroskedastic
+    
+## BP Test
+```{r bp_test, echo=TRUE, warning=FALSE, messages=FALSE}
+library(lmtest)
+
+squid_lm <- lm(Testisweight ~ DML, data=squid)
+
+bptest(squid_lm)
+```
+
+## Can use BP to Look at Multiple Predictors
+```{r bp_test_palooza, echo=TRUE}
+squid_lm2 <- lm(Testisweight ~ DML + MONTH, data=squid)
+
+bptest(squid_lm2)
+```
+
+## Can Look at Contribution of Individual Predictors
+```{r bp_test_palooza_2, echo=TRUE}
+bptest(squid_lm2, varformula = ~ DML, data=squid)
+
+bptest(squid_lm2, varformula = ~ MONTH, data=squid)
+```
+
+## So How do we Weight This?
+```{r squid_plot}
+squid_plot
+```
+
+## Weighting by a Predictor
+- Need to  determine the direction variance increases  
+  - Weight by X or 1/X  
+\
+- Is it a linear or nonlinear relationship between variance and X?  
+\
+- Is more than one predictor influencing variance (from BP Test/Graphs)
+
+## WLS with LM
+\
+```{r squid_wls, echo=TRUE}
+squid_wls <- lm(Testisweight ~ DML, data=squid,
+                weights = 1/squid$DML)
+```
+
+\
+Variance increases with DML, so weight decreases
+
+## LM is LiMiting
+- Need to hand-code the weights  
+\
+- Diagnostic plots will still look odd
+\
+- Cannot easily combine weights from multiple predictors
+
+## Enter NLME
+- NonLinear Mixed Effects Model package  
+\
+- Mixed effects?! Come to BIOL609  
+\
+- BUT - also has likelihood-based methods to fit WLS and GLS  
+\
+- Flexible weighting specification  
+
+## WLS via GLS in NLME
+\
+```{r squid_nlme, echo=TRUE}
+squid_gls <- gls(Testisweight ~ DML, 
+                 
+                 data=squid,
+                 
+                 weights = varFixed(~ DML))
+```
+
+Note: higher value = higher variance - opposite of `lm`
+
+## Compare WLS and GLS
+WLS with `lm`
+```{r c1}
+coeftest(squid_wls)
+```
+
+GLS with `gls`
+```{r c2}
+coeftest(squid_gls)
+```
+
+
+## Different Variance Structures
+- `VarFixed` - Linear continuous variance
+- `VarPower` - Variance increases by a power
+- `VarExp`  - Variance exponentiated
+- `VarConstPower` - Variance is constant + power
+- `VarIdent` - Variance differs by groups
+- `VarComb` - Combines different variance functions
+
+## Multiple Sources of Heteroskedasticity
+Let's add month! If it was another driver...
+
+```{r squid_gls_2, echo=TRUE}
+squid_gls_month <- gls(Testisweight ~ DML, data=squid,
+
+                       weights = varComb(varFixed(~DML),
+                                         
+                                         varFixed(~MONTH)))
+```
+
+## Weighted v. Naieve Fit
+```{r plot_fits}
+squid_plot +
+  stat_smooth(method="lm")
+```
+
+## Weighted v. Naieve Fit
+```{r plot_fits2}
+squid_plot +
+  stat_smooth(method="lm", fill=NA) +
+  stat_smooth(method="lm", mapping=aes(weight=1/DML), fill=NA, color="red")
+```
+
+## How can we use weighting?
+1. Weighting by variance \
+\
+2. Mean-Variance relationship \
+\
+3. **Unequal variance between groups**
+
+## Testis Weight by Month
+```{r fMonth, echo=TRUE}
+squid <- mutate(squid, fMONTH = factor(MONTH))
+```
+
+```{r plot_month}
+ggplot(squid, aes(x=fMONTH, y=Testisweight)) +
+  geom_boxplot() +
+  theme_bw(base_size=17)
+```
+
+## A Classic ANOVA problem
+```{r aov_squid}
+squid_month <- lm(Testisweight ~ fMONTH, data=squid)
+plot(squid_month, which=1)
+```
+
+## Wowsers - Unequal Variances
+```{r ueq}
+squid %>%
+  group_by(MONTH) %>%
+  dplyr::summarise(var_weight = var(Testisweight)) %>%
+  ungroup() %>%
+  knitr::kable()
+```
+
+## Is this a probem?
+```{r bp_aov, echo=TRUE}
+bptest(squid_month)
+```
+
+## Solution: Weight by Month
+```{r vident, echo=TRUE}
+
+vMonth <- varIdent(form = ~ 1 | fMONTH)
+
+```
+
+- Note `1 | x` form, different variance for different strata
+
+##  Fit and Estimate SD
+
+```{r varident_fit, echo=TRUE}
+squid_month_gls <- gls(Testisweight ~ fMONTH, 
+                       
+                       data=squid, 
+                       
+                       weights=vMonth)
+```
+
+## Summary of results
+```{r gls_summary}
+summary(squid_month_gls)
+```
+
+##  Compare with Unweighted Fit
+```{r comp_fit, echo=TRUE}
+squid_lm <- gls(Testisweight ~ fMONTH, data=squid)
+
+anova(squid_lm, squid_month_gls)
+```
+
+## A Clammy Example: Remember your workflow!
+<div style="text-align: left">
+1. Clams.txt has data on the length-AFDM relationship of Wedge clames in Argentina each month.  
+        - Use `read_delim` to read it in  
+\
+2. Evaluate the length-biomass relationship  
+        - Test for Heteroskedasticity  
+        - Correct for it  
+\
+3. Do the same for just month  
+        - You'll have to make it a factor  
+\
+4. Combine them into one model!  
+        - use `varComb`
+</div>

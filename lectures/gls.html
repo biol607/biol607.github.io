@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>gls.utf8.md</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h2></h2>
+<h3>
+Taking Least Squares From the Ordinary to the General(ized)
+</h3>
+<p><img data-src="./images/gls/hamilton_weight.jpg" style="width:80.0%" /><br />
+</p>
+</section>
+<section id="this-is-what-you-all-fear" class="slide level2">
+<h2>This is What you All Fear…</h2>
+<p><img src="gls_files/figure-revealjs/qqbad-1.jpeg" width="672" /></p>
+<div class="fragment">
+What do we do here?
+</div>
+</section>
+<section id="or-oh-no" class="slide level2">
+<h2>Or, oh no!…</h2>
+<p><img src="gls_files/figure-revealjs/groupbad-1.jpeg" width="672" /></p>
+<div class="fragment">
+What do we do here?
+</div>
+</section>
+<section id="basic-princples-of-ordinary-least-squares" class="slide level2">
+<h2>Basic Princples of Ordinary Least Squares</h2>
+<br>
+<div style="font-size:32pt">
+<ul>
+<li class="fragment">Y is determined by X: p(Y <span class="math inline">\(|\)</span> X=x) <br />
+<br />
+</li>
+<li class="fragment">The relationship between X and Y is Linear <br />
+<br />
+</li>
+<li class="fragment">The residuals of <span class="math inline">\(\widehat{Y_i} = \beta_0 + \beta_1 X_i + \epsilon\)</span> are normally distributed with constant variance <br />
+(i.e., <span class="math inline">\(\epsilon_i \sim\)</span> N(0,<span class="math inline">\(\sigma\)</span>))</li>
+</ul>
+</div>
+</section>
+<section id="basic-principles-of-ordinary-least-squares" class="slide level2">
+<h2>Basic Principles of Ordinary Least Squares</h2>
+<p><span class="math inline">\(\widehat{Y} = \beta_0 + \beta_1 X + \epsilon\)</span> where <span class="math inline">\(\beta_0\)</span> = intercept, <span class="math inline">\(\beta_1\)</span> = slope</p>
+<p><img src="gls_files/figure-revealjs/linefit-1.jpeg" width="384" /></p>
+<p>Minimize Residuals defined as <span class="math inline">\(SS_{residuals} = \sum(Y_{i} - \widehat{Y})^2\)</span></p>
+</section>
+<section id="butwhat-about-this" class="slide level2">
+<h2>But…what about this?</h2>
+<p><img src="gls_files/figure-revealjs/gls_linefit-1.jpeg" width="576" /></p>
+<p>Variance-Mean Relationship</p>
+</section>
+<section id="orwhat-about-this" class="slide level2">
+<h2>Or…what about this?</h2>
+<p><img src="gls_files/figure-revealjs/gls_linefit_2-1.jpeg" width="576" /></p>
+<p>Different precision for different data points</p>
+</section>
+<section id="weighted-least-squares" class="slide level2">
+<h2>Weighted Least Squares</h2>
+<br />
+<br />
+<br />
+
+<center>
+Minimize Weighted <span class="math inline">\(SS_{residuals} = W_i\sum(Y_{i} - \widehat{Y})^2\)</span>
+</center>
+<p><br />
+</p>
+</section>
+<section id="why-weight" class="slide level2">
+<h2>Why weight?</h2>
+<ul>
+<li>Minimized influence of heteroskedasticity<br />
+<br />
+</li>
+<li>Increases precision of estimates<br />
+<br />
+</li>
+<li>Decreases influence of imprecision in measurements<br />
+ </li>
+<li>Minimize sampling bias<br />
+<br />
+</li>
+<li>Other reasons to count some measurements more than others</li>
+</ul>
+</section>
+<section id="weighted-least-squares-1" class="slide level2">
+<h2>Weighted Least Squares</h2>
+<span class="math display">\[Y_i = \beta X_i + \epsilon_i\]</span> <span class="math display">\[\epsilon_i \sim \mathcal{N}(0, \sigma_i)\]</span><br />
+
+<center>
+OLS: <span class="math inline">\(\sigma_1 = \sigma_2 = ...\)</span> is constant<br />
+WLS: <span class="math inline">\(\sigma_i\)</span> is variable
+</center>
+<span class="math display">\[Y_i = \beta X_i + \epsilon_i\]</span> <span class="math display">\[\epsilon_i \sim \mathcal{N}(0, \sigma_i)\]</span><br />
+
+<center>
+In OLS, this implies <span class="math inline">\(\sigma_i = \sigma I_n\)</span><br />
+(<span class="math inline">\(I_n\)</span> is an identity matrix with n x n dimensions)
+</center>
+<br />
+
+<div class="fragment">
+In WLS, the diagonal of the <span class="math inline">\(\sigma\)</span> matrix can be anything
+</div>
+<div class="fragment">
+In <strong>Generalized Least Squares</strong>, the off diagonals can be non-zero, too
+</div>
+</section>
+<section id="how-can-we-use-weighting" class="slide level2">
+<h2>How can we use weighting?</h2>
+<ol type="1">
+<li>Weighting by variance<br />
+<br />
+</li>
+<li>Mean-Variance relationship<br />
+<br />
+</li>
+<li>Unequal variance between groups</li>
+</ol>
+</section>
+<section id="squid" class="slide level2">
+<h2>SQUID!</h2>
+<p><img data-src="./images/gls/loligo_orig.jpeg" /></p>
+</section>
+<section id="somatic-v.-reproductive-tissues-variance" class="slide level2">
+<h2>Somatic v. Reproductive Tissues: Variance</h2>
+<p><img src="gls_files/figure-revealjs/squid_sum_plot-1.jpeg" width="672" /></p>
+</section>
+<section id="somatic-v.-reproductive-tissues-n" class="slide level2">
+<h2>Somatic v. Reproductive Tissues: N</h2>
+<p><img src="gls_files/figure-revealjs/squid_sum_plot_N-1.jpeg" width="672" /></p>
+</section>
+<section id="weighting-by-data-quality" class="slide level2">
+<h2>Weighting by Data Quality</h2>
+<ul>
+<li>We typically weight by 1/variance (precision)<br />
+- Or N, or other estimate of sample precision<br />
+<br />
+</li>
+<li>This is different than variance weighted meta-analysis
+<ul>
+<li>We are still estimating a residual error for fits</li>
+</ul></li>
+</ul>
+</section>
+<section id="implementation" class="slide level2">
+<h2>Implementation</h2>
+<p><br />
+<br />
+</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">sq_sum &lt;-<span class="st"> </span><span class="kw">lm</span>(MEAN_Testisweight <span class="op">~</span><span class="st"> </span>MEAN_DML, </a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">             <span class="dt">data=</span>squid_summary,</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">             <span class="dt">weights=</span><span class="dv">1</span><span class="op">/</span>VAR_DML)</a></code></pre></div>
+</section>
+<section id="did-it-do-anything" class="slide level2">
+<h2>Did it do anything?</h2>
+<p>No weights</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-4.5177727</td>
+<td style="text-align: right;">2.1081505</td>
+<td style="text-align: right;">-2.143003</td>
+<td style="text-align: right;">0.0445948</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MEAN_DML</td>
+<td style="text-align: right;">0.0376229</td>
+<td style="text-align: right;">0.0077701</td>
+<td style="text-align: right;">4.842035</td>
+<td style="text-align: right;">0.0000989</td>
+</tr>
+</tbody>
+</table>
+<p>Precision Weighted</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-4.518775</td>
+<td style="text-align: right;">2.2041869</td>
+<td style="text-align: right;">-2.050087</td>
+<td style="text-align: right;">0.0544130</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MEAN_DML</td>
+<td style="text-align: right;">0.037140</td>
+<td style="text-align: right;">0.0074578</td>
+<td style="text-align: right;">4.980010</td>
+<td style="text-align: right;">0.0000831</td>
+</tr>
+</tbody>
+</table>
+<p>Sample Size Weighted</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-5.2808150</td>
+<td style="text-align: right;">2.8213670</td>
+<td style="text-align: right;">-1.871722</td>
+<td style="text-align: right;">0.0759446</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MEAN_DML</td>
+<td style="text-align: right;">0.0417104</td>
+<td style="text-align: right;">0.0110373</td>
+<td style="text-align: right;">3.779050</td>
+<td style="text-align: right;">0.0011787</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-can-we-use-weighting-1" class="slide level2">
+<h2>How can we use weighting?</h2>
+<ol type="1">
+<li>Weighting by variance<br />
+<br />
+</li>
+<li><strong>Mean-Variance relationship</strong><br />
+<br />
+</li>
+<li>Unequal variance between groups</li>
+</ol>
+</section>
+<section id="looking-at-individual-squid" class="slide level2">
+<h2>Looking at Individual Squid</h2>
+<p><img src="gls_files/figure-revealjs/read_squid-1.jpeg" width="672" /></p>
+</section>
+<section id="oh-yeah-thats-heteroskedasticity" class="slide level2">
+<h2>Oh, Yeah, That’s Heteroskedasticity</h2>
+<p><img src="gls_files/figure-revealjs/squid_hetero_plot-1.jpeg" width="672" /></p>
+</section>
+<section id="oh-yeah-thats-heteroskedasticity-1" class="slide level2">
+<h2>Oh, Yeah, That’s Heteroskedasticity</h2>
+<p><img src="gls_files/figure-revealjs/squid_hetero_plot_dml-1.jpeg" width="672" /></p>
+</section>
+<section id="ok-but-we-need-a-test" class="slide level2">
+<h2>OK, But, We Need a test</h2>
+<ul>
+<li>Not every case is clear-cut<br />
+<br />
+</li>
+<li>Breusch-Pagan/Godfrey/Koenker test
+<ul>
+<li>Variant of White’s test (you’ll see this)</li>
+<li>Get squared residuals</li>
+<li>Regress on one or more predictors</li>
+<li>Results fail <span class="math inline">\(\chi^2\)</span> test of heteroskedastic</li>
+</ul></li>
+</ul>
+</section>
+<section id="bp-test" class="slide level2">
+<h2>BP Test</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(lmtest)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">squid_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(Testisweight <span class="op">~</span><span class="st"> </span>DML, <span class="dt">data=</span>squid)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">bptest</span>(squid_lm)</a></code></pre></div>
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  squid_lm
+BP = 155.31, df = 1, p-value &lt; 2.2e-16</code></pre>
+</section>
+<section id="can-use-bp-to-look-at-multiple-predictors" class="slide level2">
+<h2>Can use BP to Look at Multiple Predictors</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">squid_lm2 &lt;-<span class="st"> </span><span class="kw">lm</span>(Testisweight <span class="op">~</span><span class="st"> </span>DML <span class="op">+</span><span class="st"> </span>MONTH, <span class="dt">data=</span>squid)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">bptest</span>(squid_lm2)</a></code></pre></div>
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  squid_lm2
+BP = 144.22, df = 2, p-value &lt; 2.2e-16</code></pre>
+</section>
+<section id="can-look-at-contribution-of-individual-predictors" class="slide level2">
+<h2>Can Look at Contribution of Individual Predictors</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">bptest</span>(squid_lm2, <span class="dt">varformula =</span> <span class="op">~</span><span class="st"> </span>DML, <span class="dt">data=</span>squid)</a></code></pre></div>
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  squid_lm2
+BP = 140.74, df = 1, p-value &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">bptest</span>(squid_lm2, <span class="dt">varformula =</span> <span class="op">~</span><span class="st"> </span>MONTH, <span class="dt">data=</span>squid)</a></code></pre></div>
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  squid_lm2
+BP = 0.086946, df = 1, p-value = 0.7681</code></pre>
+</section>
+<section id="so-how-do-we-weight-this" class="slide level2">
+<h2>So How do we Weight This?</h2>
+<p><img src="gls_files/figure-revealjs/squid_plot-1.jpeg" width="672" /></p>
+</section>
+<section id="weighting-by-a-predictor" class="slide level2">
+<h2>Weighting by a Predictor</h2>
+<ul>
+<li>Need to determine the direction variance increases
+<ul>
+<li>Weight by X or 1/X<br />
+<br />
+</li>
+</ul></li>
+<li>Is it a linear or nonlinear relationship between variance and X?<br />
+<br />
+</li>
+<li>Is more than one predictor influencing variance (from BP Test/Graphs)</li>
+</ul>
+</section>
+<section id="wls-with-lm" class="slide level2">
+<h2>WLS with LM</h2>
+<p><br />
+</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">squid_wls &lt;-<span class="st"> </span><span class="kw">lm</span>(Testisweight <span class="op">~</span><span class="st"> </span>DML, <span class="dt">data=</span>squid,</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">                <span class="dt">weights =</span> <span class="dv">1</span><span class="op">/</span>squid<span class="op">$</span>DML)</a></code></pre></div>
+<p><br />
+Variance increases with DML, so weight decreases</p>
+</section>
+<section id="lm-is-limiting" class="slide level2">
+<h2>LM is LiMiting</h2>
+<ul>
+<li>Need to hand-code the weights<br />
+<br />
+</li>
+<li>Diagnostic plots will still look odd<br />
+</li>
+<li>Cannot easily combine weights from multiple predictors</li>
+</ul>
+</section>
+<section id="enter-nlme" class="slide level2">
+<h2>Enter NLME</h2>
+<ul>
+<li>NonLinear Mixed Effects Model package<br />
+<br />
+</li>
+<li>Mixed effects?! Come to BIOL609<br />
+<br />
+</li>
+<li>BUT - also has likelihood-based methods to fit WLS and GLS<br />
+<br />
+</li>
+<li>Flexible weighting specification</li>
+</ul>
+</section>
+<section id="wls-via-gls-in-nlme" class="slide level2">
+<h2>WLS via GLS in NLME</h2>
+<p><br />
+</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">squid_gls &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight <span class="op">~</span><span class="st"> </span>DML, </a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">                 </a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">                 <span class="dt">data=</span>squid,</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">                 </a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">                 <span class="dt">weights =</span> <span class="kw">varFixed</span>(<span class="op">~</span><span class="st"> </span>DML))</a></code></pre></div>
+<p>Note: higher value = higher variance - opposite of <code>lm</code></p>
+</section>
+<section id="compare-wls-and-gls" class="slide level2">
+<h2>Compare WLS and GLS</h2>
+<p>WLS with <code>lm</code></p>
+<pre><code>
+t test of coefficients:
+
+              Estimate Std. Error t value  Pr(&gt;|t|)    
+(Intercept) -5.6239370  0.3382932 -16.624 &lt; 2.2e-16 ***
+DML          0.0430654  0.0014061  30.627 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>GLS with <code>gls</code></p>
+<pre><code>
+z test of coefficients:
+
+              Estimate Std. Error z value  Pr(&gt;|z|)    
+(Intercept) -5.6239370  0.3382932 -16.624 &lt; 2.2e-16 ***
+DML          0.0430654  0.0014061  30.627 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</section>
+<section id="different-variance-structures" class="slide level2">
+<h2>Different Variance Structures</h2>
+<ul>
+<li><code>VarFixed</code> - Linear continuous variance</li>
+<li><code>VarPower</code> - Variance increases by a power</li>
+<li><code>VarExp</code> - Variance exponentiated</li>
+<li><code>VarConstPower</code> - Variance is constant + power</li>
+<li><code>VarIdent</code> - Variance differs by groups</li>
+<li><code>VarComb</code> - Combines different variance functions</li>
+</ul>
+</section>
+<section id="multiple-sources-of-heteroskedasticity" class="slide level2">
+<h2>Multiple Sources of Heteroskedasticity</h2>
+<p>Let’s add month! If it was another driver…</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">squid_gls_month &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight <span class="op">~</span><span class="st"> </span>DML, <span class="dt">data=</span>squid,</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">                       <span class="dt">weights =</span> <span class="kw">varComb</span>(<span class="kw">varFixed</span>(<span class="op">~</span>DML),</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">                                         </a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">                                         <span class="kw">varFixed</span>(<span class="op">~</span>MONTH)))</a></code></pre></div>
+</section>
+<section id="weighted-v.-naieve-fit" class="slide level2">
+<h2>Weighted v. Naieve Fit</h2>
+<p><img src="gls_files/figure-revealjs/plot_fits-1.jpeg" width="672" /></p>
+</section>
+<section id="weighted-v.-naieve-fit-1" class="slide level2">
+<h2>Weighted v. Naieve Fit</h2>
+<p><img src="gls_files/figure-revealjs/plot_fits2-1.jpeg" width="672" /></p>
+</section>
+<section id="how-can-we-use-weighting-2" class="slide level2">
+<h2>How can we use weighting?</h2>
+<ol type="1">
+<li>Weighting by variance<br />
+<br />
+</li>
+<li>Mean-Variance relationship<br />
+<br />
+</li>
+<li><strong>Unequal variance between groups</strong></li>
+</ol>
+</section>
+<section id="testis-weight-by-month" class="slide level2">
+<h2>Testis Weight by Month</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">squid &lt;-<span class="st"> </span><span class="kw">mutate</span>(squid, <span class="dt">fMONTH =</span> <span class="kw">factor</span>(MONTH))</a></code></pre></div>
+<p><img src="gls_files/figure-revealjs/plot_month-1.jpeg" width="672" /></p>
+</section>
+<section id="a-classic-anova-problem" class="slide level2">
+<h2>A Classic ANOVA problem</h2>
+<p><img src="gls_files/figure-revealjs/aov_squid-1.jpeg" width="672" /></p>
+</section>
+<section id="wowsers---unequal-variances" class="slide level2">
+<h2>Wowsers - Unequal Variances</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">MONTH</th>
+<th style="text-align: right;">var_weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8.216093</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">9.491376</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">9.456260</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6.663934</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5.513464</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">10.884092</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6.635753</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2.274724</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">41.502657</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">46.016877</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">17.488115</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">17.734229</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="is-this-a-probem" class="slide level2">
+<h2>Is this a probem?</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">bptest</span>(squid_month)</a></code></pre></div>
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  squid_month
+BP = 68.375, df = 11, p-value = 2.485e-10</code></pre>
+</section>
+<section id="solution-weight-by-month" class="slide level2">
+<h2>Solution: Weight by Month</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">vMonth &lt;-<span class="st"> </span><span class="kw">varIdent</span>(<span class="dt">form =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>fMONTH)</a></code></pre></div>
+<ul>
+<li>Note <code>1 | x</code> form, different variance for different strata</li>
+</ul>
+</section>
+<section id="fit-and-estimate-sd" class="slide level2">
+<h2>Fit and Estimate SD</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">squid_month_gls &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight <span class="op">~</span><span class="st"> </span>fMONTH, </a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">                       </a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">                       <span class="dt">data=</span>squid, </a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">                       </a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">                       <span class="dt">weights=</span>vMonth)</a></code></pre></div>
+</section>
+<section id="summary-of-results" class="slide level2">
+<h2>Summary of results</h2>
+<pre><code>Generalized least squares fit by REML
+  Model: Testisweight ~ fMONTH 
+  Data: squid 
+       AIC      BIC   logLik
+  4307.961 4419.034 -2129.98
+
+Variance function:
+ Structure: Different standard deviations per stratum
+ Formula: ~1 | fMONTH 
+ Parameter estimates:
+        2         9        12        11         8        10         5 
+1.0000000 2.0910019 1.3669004 1.3573651 0.4895508 2.2018389 0.7621603 
+        7         6         4         1         3 
+0.8361283 1.0708261 0.8379142 0.9303729 0.9981331 
+
+Coefficients:
+                Value Std.Error    t-value p-value
+(Intercept) 10.200311 0.4272915  23.872021       0
+fMONTH2     -5.391282 0.6795200  -7.933956       0
+fMONTH3     -4.094684 0.5555742  -7.370184       0
+fMONTH4     -5.609615 0.5722335  -9.803018       0
+fMONTH5     -6.514285 0.5724283 -11.380089       0
+fMONTH6     -7.577601 0.6848332 -11.064885       0
+fMONTH7     -8.847744 0.6016010 -14.706997       0
+fMONTH8     -9.093561 0.4757353 -19.114750       0
+fMONTH9     -3.975147 0.7016302  -5.665587       0
+fMONTH10    -4.109998 0.7252504  -5.667005       0
+fMONTH11    -4.596277 0.6174992  -7.443373       0
+fMONTH12    -4.373843 0.7482708  -5.845268       0
+
+ Correlation: 
+         (Intr) fMONTH2 fMONTH3 fMONTH4 fMONTH5 fMONTH6 fMONTH7 fMONTH8
+fMONTH2  -0.629                                                        
+fMONTH3  -0.769  0.484                                                 
+fMONTH4  -0.747  0.470   0.574                                         
+fMONTH5  -0.746  0.469   0.574   0.557                                 
+fMONTH6  -0.624  0.392   0.480   0.466   0.466                         
+fMONTH7  -0.710  0.447   0.546   0.530   0.530   0.443                 
+fMONTH8  -0.898  0.565   0.691   0.671   0.670   0.560   0.638         
+fMONTH9  -0.609  0.383   0.468   0.455   0.455   0.380   0.433   0.547 
+fMONTH10 -0.589  0.370   0.453   0.440   0.440   0.368   0.418   0.529 
+fMONTH11 -0.692  0.435   0.532   0.517   0.517   0.432   0.491   0.622 
+fMONTH12 -0.571  0.359   0.439   0.426   0.426   0.356   0.406   0.513 
+         fMONTH9 fMONTH10 fMONTH11
+fMONTH2                           
+fMONTH3                           
+fMONTH4                           
+fMONTH5                           
+fMONTH6                           
+fMONTH7                           
+fMONTH8                           
+fMONTH9                           
+fMONTH10  0.359                   
+fMONTH11  0.421   0.408           
+fMONTH12  0.348   0.336    0.395  
+
+Standardized residuals:
+       Min         Q1        Med         Q3        Max 
+-3.5056018 -0.6728255 -0.3252821  0.4762647  4.9030298 
+
+Residual standard error: 3.08087 
+Degrees of freedom: 768 total; 756 residual</code></pre>
+</section>
+<section id="compare-with-unweighted-fit" class="slide level2">
+<h2>Compare with Unweighted Fit</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">squid_lm &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight <span class="op">~</span><span class="st"> </span>fMONTH, <span class="dt">data=</span>squid)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw">anova</span>(squid_lm, squid_month_gls)</a></code></pre></div>
+<pre><code>                Model df      AIC      BIC    logLik   Test L.Ratio
+squid_lm            1 13 4555.853 4616.017 -2264.926               
+squid_month_gls     2 24 4307.961 4419.034 -2129.980 1 vs 2 269.892
+                p-value
+squid_lm               
+squid_month_gls  &lt;.0001</code></pre>
+</section>
+<section id="a-clammy-example-remember-your-workflow" class="slide level2">
+<h2>A Clammy Example: Remember your workflow!</h2>
+<div style="text-align: left">
+<ol type="1">
+<li>Clams.txt has data on the length-AFDM relationship of Wedge clames in Argentina each month.<br />
+- Use <code>read_delim</code> to read it in<br />
+<br />
+</li>
+<li>Evaluate the length-biomass relationship<br />
+- Test for Heteroskedasticity<br />
+- Correct for it<br />
+<br />
+</li>
+<li>Do the same for just month<br />
+- You’ll have to make it a factor<br />
+<br />
+</li>
+<li>Combine them into one model!<br />
+- use <code>varComb</code></li>
+</ol>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
