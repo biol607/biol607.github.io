@@ -512,7 +512,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
     <div class="slides">
 
 
-<section id="section" class="slide level2" data-background="./Images/iteration/maxresdefault.jpg">
+<section id="section" class="slide level2" data-background="./images/iteration/maxresdefault.jpg">
 <h2></h2>
 <br><br><br>
 <h1 style="background-color:white; font-size: 300%;">
@@ -578,15 +578,15 @@ So many files…
 </section>
 <section id="isnt-this-what-computersrobots-are-all-about" class="slide level2">
 <h2>Isn’t this what computers/robots are all about?</h2>
-<p><Br><br> <img data-src="./Images/iteration/assembly_line.gif" /></p>
+<p><Br><br> <img data-src="./images/iteration/assembly_line.gif" /></p>
 </section>
 <section id="the-map-paradigm" class="slide level2">
 <h2>The Map Paradigm</h2>
-<p><img data-src="./Images/iteration/map.png" /></p>
+<p><img data-src="./images/iteration/map.png" /></p>
 </section>
 <section id="section-1" class="slide level2">
 <h2></h2>
-<p><img data-src="./Images/iteration/purrr.png" style="width:60.0%" /></p>
+<p><img data-src="./images/iteration/purrr.png" style="width:60.0%" /></p>
 </section>
 <section id="map-functions" class="slide level2">
 <h2>Map functions</h2>
@@ -619,24 +619,24 @@ So many files…
 <a class="sourceLine" id="cb2-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">map</span>(df, median)</a></code></pre></div>
 <pre><code>$a
-[1] -0.009649784
+[1] -0.008132079
 
 $b
-[1] 0.1999248
+[1] -0.4114584
 
 $c
-[1] 0.676125
+[1] 0.1897872
 
 $d
-[1] -0.5562476</code></pre>
+[1] -0.4339227</code></pre>
 </section>
 <section id="the-map-paradigm-1" class="slide level2">
 <h2>The Map Paradigm</h2>
-<p><img data-src="./Images/iteration/map.png" /></p>
+<p><img data-src="./images/iteration/map.png" /></p>
 </section>
 <section id="what-if-i-dont-want-a-list" class="slide level2">
 <h2>What if I don’t want a list</h2>
-<p><img data-src="./Images/iteration/meowtini.jpg" /></p>
+<p><img data-src="./images/iteration/meowtini.jpg" /></p>
 </section>
 <section id="the-world-of-maps" class="slide level2">
 <h2>The world of maps</h2>
@@ -653,22 +653,22 @@ $d
 <h2>More medians</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">map_dbl</span>(df, median)</a></code></pre></div>
 <pre><code>           a            b            c            d 
--0.009649784  0.199924771  0.676124958 -0.556247552 </code></pre>
+-0.008132079 -0.411458445  0.189787164 -0.433922735 </code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">map_chr</span>(df, median)</a></code></pre></div>
 <pre><code>          a           b           c           d 
-&quot;-0.009650&quot;  &quot;0.199925&quot;  &quot;0.676125&quot; &quot;-0.556248&quot; </code></pre>
+&quot;-0.008132&quot; &quot;-0.411458&quot;  &quot;0.189787&quot; &quot;-0.433923&quot; </code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">map_df</span>(df, median)</a></code></pre></div>
 <pre><code># A tibble: 1 x 4
-         a     b     c      d
-     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-1 -0.00965 0.200 0.676 -0.556</code></pre>
+         a      b     c      d
+     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1 -0.00813 -0.411 0.190 -0.434</code></pre>
 </section>
 <section id="what-if-i-have-more-than-one-argument" class="slide level2">
 <h2>What if I have more than one argument?</h2>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#add extra arguments at the end</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">map_dbl</span>(df, median, <span class="dt">na.rm=</span>T)</a></code></pre></div>
 <pre><code>           a            b            c            d 
--0.009649784  0.199924771  0.676124958 -0.556247552 </code></pre>
+-0.008132079 -0.411458445  0.189787164 -0.433922735 </code></pre>
 </section>
 <section id="what-if-i-have-more-than-one-argument-1" class="slide level2">
 <h2>What if I have more than one argument?</h2>
@@ -679,7 +679,7 @@ $d
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#using ~ and . (or .x)</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">map_dbl</span>(df, <span class="op">~</span><span class="kw">median</span>(.x, <span class="dt">na.rm=</span>T))</a></code></pre></div>
 <pre><code>           a            b            c            d 
--0.009649784  0.199924771  0.676124958 -0.556247552 </code></pre>
+-0.008132079 -0.411458445  0.189787164 -0.433922735 </code></pre>
 </section>
 <section id="you-try" class="slide level2">
 <h2>You try!</h2>
@@ -734,7 +734,7 @@ $d
 </section>
 <section id="section-2" class="slide level2">
 <h2></h2>
-<p><img data-src="./Images/iteration/to_purr_or_not.jpg" /></p>
+<p><img data-src="./images/iteration/to_purr_or_not.jpg" /></p>
 </section>
 <section id="is-there-more" class="slide level2">
 <h2>Is there More?</h2>
@@ -758,8 +758,8 @@ $d
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb17-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">imap_dbl</span>(x, <span class="op">~</span><span class="st"> </span>.x <span class="op">+</span><span class="st"> </span>.y)</a></code></pre></div>
-<pre><code> [1]  1.476911  2.430700  3.047691  4.859135  5.913922  6.308767  7.248104
- [8]  8.411745  9.703914 10.020662</code></pre>
+<pre><code> [1]  1.047554  2.113172  3.127363  4.622543  5.212873  6.944407  7.563184
+ [8]  8.402763  9.872780 10.497505</code></pre>
 </section>
 <section id="and-more" class="slide level2">
 <h2>And more…</h2>

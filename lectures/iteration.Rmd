@@ -12,7 +12,7 @@ output:
     self_contained: false
     lib_dir: libs
 ---
-## {data-background="./Images/iteration/maxresdefault.jpg"}
+## {data-background="./images/iteration/maxresdefault.jpg"}
 
 <br><br><br>
 <h1 style="background-color:white; font-size: 300%;"><center>Iteration</center></h2>
@@ -67,14 +67,14 @@ opts_chunk$set(fig.height=5, fig.width=7, comment=NA,
 
 ## Isn't this what computers/robots are all about?
 <Br><br>
-![](./Images/iteration/assembly_line.gif)
+![](./images/iteration/assembly_line.gif)
 
 
 ## The Map Paradigm
-![](./Images/iteration/map.png)
+![](./images/iteration/map.png)
 
 ## 
-![](./Images/iteration/purrr.png){width=60%}
+![](./images/iteration/purrr.png){width=60%}
 
 ## Map functions
 - Take a list or vector as input  
@@ -106,10 +106,10 @@ map(df, median)
 ```
 
 ## The Map Paradigm
-![](./Images/iteration/map.png)
+![](./images/iteration/map.png)
 
 ## What if I don't want a list
-![](./Images/iteration/meowtini.jpg)
+![](./images/iteration/meowtini.jpg)
 
 ## The world of maps
 - `map()` makes a list.
@@ -183,7 +183,7 @@ gapminder_list <- map(files, read_csv)
 The nice thing about a list is that we can just use `map()` on it in the future!
 
 ##
-![](./Images/iteration/to_purr_or_not.jpg)
+![](./images/iteration/to_purr_or_not.jpg)
 
 ## Is there More?
 <br><br>
