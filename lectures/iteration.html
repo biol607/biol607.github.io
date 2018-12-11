@@ -582,7 +582,10 @@ So many files…
 </section>
 <section id="the-map-paradigm" class="slide level2">
 <h2>The Map Paradigm</h2>
-<p><img data-src="./images/iteration/map.png" /></p>
+<img data-src="./images/iteration/map.png" />
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0">
+<A href="https://swiftunboxed.com/open-source/map/">SwiftUnboxed</a>
+</div>
 </section>
 <section id="section-1" class="slide level2">
 <h2></h2>
@@ -602,6 +605,9 @@ So many files…
 <section id="map-in-visual-terms" class="slide level2">
 <h2>Map in visual terms</h2>
 <p><img data-src="./images/iteration/map-1.png" alt="map" /></p>
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0">
+<A href="http://adv-r.had.co.nz/Functionals.html">Advanced R</a>
+</div>
 </section>
 <section id="median-example" class="slide level2">
 <h2>Median Example</h2>
@@ -619,16 +625,16 @@ So many files…
 <a class="sourceLine" id="cb2-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">map</span>(df, median)</a></code></pre></div>
 <pre><code>$a
-[1] -0.008132079
+[1] 0.5656634
 
 $b
-[1] -0.4114584
+[1] 0.1513132
 
 $c
-[1] 0.1897872
+[1] 0.085427
 
 $d
-[1] -0.4339227</code></pre>
+[1] 0.4215443</code></pre>
 </section>
 <section id="the-map-paradigm-1" class="slide level2">
 <h2>The Map Paradigm</h2>
@@ -652,23 +658,23 @@ $d
 <section id="more-medians" class="slide level2">
 <h2>More medians</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">map_dbl</span>(df, median)</a></code></pre></div>
-<pre><code>           a            b            c            d 
--0.008132079 -0.411458445  0.189787164 -0.433922735 </code></pre>
+<pre><code>        a         b         c         d 
+0.5656634 0.1513132 0.0854270 0.4215443 </code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">map_chr</span>(df, median)</a></code></pre></div>
-<pre><code>          a           b           c           d 
-&quot;-0.008132&quot; &quot;-0.411458&quot;  &quot;0.189787&quot; &quot;-0.433923&quot; </code></pre>
+<pre><code>         a          b          c          d 
+&quot;0.565663&quot; &quot;0.151313&quot; &quot;0.085427&quot; &quot;0.421544&quot; </code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">map_df</span>(df, median)</a></code></pre></div>
 <pre><code># A tibble: 1 x 4
-         a      b     c      d
-     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-1 -0.00813 -0.411 0.190 -0.434</code></pre>
+      a     b      c     d
+  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 0.566 0.151 0.0854 0.422</code></pre>
 </section>
 <section id="what-if-i-have-more-than-one-argument" class="slide level2">
 <h2>What if I have more than one argument?</h2>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">#add extra arguments at the end</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">map_dbl</span>(df, median, <span class="dt">na.rm=</span>T)</a></code></pre></div>
-<pre><code>           a            b            c            d 
--0.008132079 -0.411458445  0.189787164 -0.433922735 </code></pre>
+<pre><code>        a         b         c         d 
+0.5656634 0.1513132 0.0854270 0.4215443 </code></pre>
 </section>
 <section id="what-if-i-have-more-than-one-argument-1" class="slide level2">
 <h2>What if I have more than one argument?</h2>
@@ -678,8 +684,8 @@ $d
 <h2>What if I want a more flexible syntax?</h2>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#using ~ and . (or .x)</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">map_dbl</span>(df, <span class="op">~</span><span class="kw">median</span>(.x, <span class="dt">na.rm=</span>T))</a></code></pre></div>
-<pre><code>           a            b            c            d 
--0.008132079 -0.411458445  0.189787164 -0.433922735 </code></pre>
+<pre><code>        a         b         c         d 
+0.5656634 0.1513132 0.0854270 0.4215443 </code></pre>
 </section>
 <section id="you-try" class="slide level2">
 <h2>You try!</h2>
@@ -743,14 +749,23 @@ $d
 <section id="map-with-two-lists" class="slide level2">
 <h2>Map with Two Lists</h2>
 <p><img data-src="./images/iteration/map2.png" alt="map2" /> Or use <code>~</code> with <code>.x</code> and <code>.y</code></p>
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0">
+<A href="http://adv-r.had.co.nz/Functionals.html">Advanced R</a>
+</div>
 </section>
 <section id="map-with-an-arbitrary-number-of-lists" class="slide level2">
 <h2>Map with an arbitrary number of lists</h2>
 <p><img data-src="./images/iteration/pmap.png" alt="pmap" /></p>
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0">
+<A href="http://adv-r.had.co.nz/Functionals.html">Advanced R</a>
+</div>
 </section>
 <section id="invisible-outputs-e.g.for-plotting" class="slide level2">
 <h2>Invisible Outputs (e.g. for plotting)</h2>
-<p><img data-src="./images/iteration/walk.png" alt="walk" /></p>
+<img data-src="./images/iteration/walk.png" alt="walk" style="width:60.0%" />
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0">
+<A href="http://adv-r.had.co.nz/Functionals.html">Advanced R</a>
+</div>
 </section>
 <section id="use-list-values-and-indices" class="slide level2">
 <h2>Use list values AND indices</h2>
@@ -758,8 +773,8 @@ $d
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb17-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">imap_dbl</span>(x, <span class="op">~</span><span class="st"> </span>.x <span class="op">+</span><span class="st"> </span>.y)</a></code></pre></div>
-<pre><code> [1]  1.047554  2.113172  3.127363  4.622543  5.212873  6.944407  7.563184
- [8]  8.402763  9.872780 10.497505</code></pre>
+<pre><code> [1]  1.479186  2.015898  3.012937  4.204430  5.676565  6.903000  7.310521
+ [8]  8.670990  9.039871 10.572125</code></pre>
 </section>
 <section id="and-more" class="slide level2">
 <h2>And more…</h2>
@@ -767,7 +782,7 @@ $d
 <a class="sourceLine" id="cb19-2" data-line-number="2">k &lt;-<span class="st"> </span><span class="dv">100</span></a>
 <a class="sourceLine" id="cb19-3" data-line-number="3">pop &lt;-<span class="st"> </span><span class="kw">accumulate</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="op">~</span>r<span class="op">*</span>.x<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>.x<span class="op">/</span>k), <span class="dt">init =</span> <span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb19-4" data-line-number="4"><span class="kw">plot</span>(pop, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;N&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;time&quot;</span>)</a></code></pre></div>
-<p><img src="iteration_files/figure-revealjs/reduce-1.jpeg" width="672" /></p>
+<p><img src="iteration_files/figure-revealjs/accumulate-1.jpeg" width="672" /></p>
 </section>
 <section id="back-to-our-problem" class="slide level2">
 <h2>Back to our problem</h2>

@@ -72,6 +72,7 @@ opts_chunk$set(fig.height=5, fig.width=7, comment=NA,
 
 ## The Map Paradigm
 ![](./images/iteration/map.png)
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0"><A href="https://swiftunboxed.com/open-source/map/">SwiftUnboxed</a></div>
 
 ## 
 ![](./images/iteration/purrr.png){width=60%}
@@ -86,6 +87,8 @@ opts_chunk$set(fig.height=5, fig.width=7, comment=NA,
 
 ## Map in visual terms
 ![map](./images/iteration/map-1.png)
+
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0"><A href="http://adv-r.had.co.nz/Functionals.html">Advanced R</a></div>
 
 ## Median Example
 ```{r purrr}
@@ -137,6 +140,7 @@ map_dbl(df, median, na.rm=T)
 
 ## What if I have more than one argument?
 ![](./images/iteration/map-arg.png)
+
 
 ## What if I want a more flexible syntax?
 ```{r map_dbl}
@@ -193,12 +197,17 @@ Oh, so much more - see<br> https://adv-r.hadley.nz/functionals.html
 ![map2](./images/iteration/map2.png)
 Or use `~` with `.x` and `.y`
 
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0"><A href="http://adv-r.had.co.nz/Functionals.html">Advanced R</a></div>
+
 ## Map with an arbitrary number of lists
 
 ![pmap](./images/iteration/pmap.png)
 
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0"><A href="http://adv-r.had.co.nz/Functionals.html">Advanced R</a></div>
+
 ## Invisible Outputs (e.g. for plotting)
-![walk](./images/iteration/walk.png)
+![walk](./images/iteration/walk.png){width=60%}
+<div style="font-size:8pt; text-align:left; position:fixed; bottom:0; left:0"><A href="http://adv-r.had.co.nz/Functionals.html">Advanced R</a></div>
 
 ## Use list values AND indices
 (SUPER useful for time series, etc.)
@@ -209,7 +218,7 @@ imap_dbl(x, ~ .x + .y)
 ```
 
 ## And more...
-```{r reduce}
+```{r accumulate}
 r <- 1.5
 k <- 100
 pop <- accumulate(1:30, ~r*.x*(1-.x/k), init = 2)
