@@ -135,7 +135,7 @@ __Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)
 __Reading:__  [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
 __Packages:__ `install.packages(c("reprex", "datapasta", "lubridate", "tidyr"))`  
 __Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2018  
-__In Class Code:__ [Tidy](in_class_code_2016/09_tidy.R), [markdown options](in_class_code_2016/00_rmarkdown_options.Rmd)  
+__In Class Code:__ [Tidy](./in_class_code_2018/scripts/tidyr.R), [markdown options](in_class_code_2016/00_rmarkdown_options.Rmd)  
   
 ### Week 10.   
 ```{r next_date, echo=FALSE}
@@ -148,7 +148,7 @@ __Reading:__ W&S Chapter 14-15,  [Cottingham et al. 2005](http://byrneslab.net/c
 __Optional Reading:__ [Ecological applications of multilevel analysis of variance](./readings/Qian_et_al-2007-Ecology.pdf) with [appendices](./readings/Qian_Shen.zip)  
 __Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-anova-2018
-__In Class Code:__ [lots of anova](./in_class_code_2018/scripts/10_anova.R)  
+__In Class Code:__ [lots of anova](./in_class_code_2018/scripts/anova.R)  
   
   
 ### Week 11.   
@@ -160,7 +160,7 @@ __Lab Topic:__  Discussion of Hurlbert, Cottingham, [Factorial ANOVA](lab/11_ano
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf)  
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
-__In Class Code:__ [lots of anova](./in_class_code_2016/10_anova.R)  
+__In Class Code:__ [lots of anova](./in_class_code_2018/scripts/anova_two.R)  
 
   
   
@@ -174,7 +174,7 @@ __Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/
 __Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf), [Model selection for ecologists: the worldviews of AIC and BIC](./readings/Aho_2014_ecolog_bic.pdf), The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr-2018  
 __Packages for the Week:__ `install.packages(c("AICcmodavg", "MuMIn", "modelr"))`  
-__In Class Code:__ [ancova, mlr, and aic](./in_class_code_2016/11_linear_model_aic.R)  
+__In Class Code:__ [ancova, mlr, and aic](./in_class_code_2018/scripts/mlr_int_aic.R)  
    
 ### Week 13.   
 ```{r next_date, echo=FALSE}
@@ -191,9 +191,10 @@ __Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Iteration with purrr, Class's Choice 
-__Reading:__ [Murtaugh 2007](./readings/Murtaugh_2007_Ecology.pdf)  
+__Lecture:__ [Iteration with purrr](./lectures/iteration.html), Class's Choice   
+__Reading:__ [Murtaugh 2007](./readings/Murtaugh_2007_Ecology.pdf), [iteration in R4DS](https://r4ds.had.co.nz/iteration.html), [functionals in adv-r](https://adv-r.hadley.nz/functionals.html)  
 __Lab Topic:__ Class's Choice, Final Presentation Open Lab  
+__In Class Code__: [spread and gather](./in_class_code_2018/scripts/tidyr.R)  
   
   
 ### Week 15.  
