@@ -194,6 +194,7 @@ __Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_
 ```
 `r datestring`   
 __Lecture:__ [Iteration with purrr](./lectures/iteration.html), Class's Choice   
+__Data:__ [gapminder](./lectures/data/gapminder.zip)  
 __Reading:__ [Murtaugh 2007](./readings/Murtaugh_2007_Ecology.pdf), [iteration in R4DS](https://r4ds.had.co.nz/iteration.html), [functionals in adv-r](https://adv-r.hadley.nz/functionals.html)  
 __Cheat Sheets:__ [Apply Functions with purrr Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf)  
 __Lab Topic:__ Class's Choice, Final Presentation Open Lab  
