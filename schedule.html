@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -69,9 +69,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -85,7 +83,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -95,6 +92,9 @@ img {
 }
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -110,7 +110,6 @@ body {
   padding-top: 59px;
   margin-top: -59px;
 }
-
 .section h2 {
   padding-top: 59px;
   margin-top: -59px;
@@ -130,6 +129,43 @@ body {
 .section h6 {
   padding-top: 59px;
   margin-top: -59px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -151,19 +187,74 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -234,162 +325,169 @@ $(document).ready(function () {
 <p>homework/<br />
   |— markdown<br />
   |— data</p>
-<p>directory structure, so that all data is in <code>../data/</code> relative to where your homework markdown and outputs are. Please standardize filenames as follows: <code>number_lastName_firstName_2018.Rmd</code> where number is the homework number (you’ll see it in the homework assignment’s filename - and make sure to include the 0s for numbers like 01), and your last and first names - well, you should know them!</p>
+<p>directory structure, so that all data is in <code>../data/</code> relative to where your homework markdown and outputs are. Please standardize filenames as follows: <code>number_lastName_firstName_2020.Rmd</code> where number is the homework number (you’ll see it in the homework assignment’s filename - and make sure to include the 0s for numbers like 01), and your last and first names - well, you should know them!</p>
 <p>To submit homework, go to <a href="https://www.dropbox.com/request/MgLy0OxePC4QN8ZDgQ0X" class="uri">https://www.dropbox.com/request/MgLy0OxePC4QN8ZDgQ0X</a> and upload the files.</p>
+<div id="block-1-introduction-to-programming-and-reproducibility" class="section level2">
+<h2>Block 1: Introduction to Programming and Reproducibility</h2>
 <div id="week-1." class="section level3">
 <h3>Week 1.</h3>
-<p>9/3/2018<br />
+<p>9/7/2020<br />
 <strong>Lecture:</strong> <a href="lectures/01_intro.html">How do we use data to understand how the world works?</a><br />
 <strong>Lab:</strong> <a href="lectures/02_r_intro.html">Intro to R</a>. <a href="lectures/02a_r_intro_list_matrix_df.html">Matrices, Lists and Data Frames</a>. <a href="lab/01_markdown_intro.html">Introduction to Markdown</a><br />
-<strong>Reading:</strong> W&amp;G <a href="http://r4ds.had.co.nz/introduction.html">Preface</a>, <a href="http://r4ds.had.co.nz/explore-intro.html">Intro</a>, <a href="http://r4ds.had.co.nz/workflow-basics.html">Workflow basics</a>, <a href="http://r4ds.had.co.nz/vectors.html">Vectors</a>, and <a href="http://r4ds.had.co.nz/r-markdown.html">Markdown</a> Chapters <strong>Cheat Sheets:</strong> <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">RMarkdown Cheat Sheet</a>, <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">RMarkdown Options Guide</a><br />
-<strong>In Class Code:</strong> <a href="in_class_code_2018/scripts/01_my_first_r_file.R">Code from Lab</a><br />
+<strong>Reading:</strong> W&amp;G <a href="http://r4ds.had.co.nz/introduction.html">Preface</a>, <a href="http://r4ds.had.co.nz/explore-intro.html">Intro</a>, <a href="http://r4ds.had.co.nz/workflow-basics.html">Workflow basics</a>, <a href="http://r4ds.had.co.nz/vectors.html">Vectors</a>, and <a href="http://r4ds.had.co.nz/r-markdown.html">Markdown</a> Chapters<br />
+<strong>Cheat Sheets:</strong> <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">RMarkdown Cheat Sheet</a>, <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">RMarkdown Options Guide</a><br />
+<strong>In Class Code:</strong> <a href="in_class_code_2020/scripts/01_my_first_r_file.R">Code from Lab</a><br />
 <strong>Install R:</strong> Go to <a href="https://cloud.r-project.org/" class="uri">https://cloud.r-project.org/</a> and get the right version of R for you. Then, go to <a href="https://www.rstudio.com/products/rstudio/download/#download" class="uri">https://www.rstudio.com/products/rstudio/download/#download</a> and install Rstudio.<br />
-<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-intro-2018" class="uri">https://etherpad.wikimedia.org/p/607-intro-2018</a></p>
+<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-intro-2020" class="uri">https://etherpad.wikimedia.org/p/607-intro-2020</a></p>
 </div>
 <div id="week-2." class="section level3">
 <h3>Week 2.</h3>
-<p>9/10/2018<br />
+<p>9/14/2020<br />
 <strong>Lecture:</strong> <a href="lectures/03_sampling_lecture.html">Sampling</a> and <a href="lectures/04_simulation_estimation.html">Simulation for Estimation</a>. Descriptive statistics, and the creation of good observational sampling designs.<br />
 <strong>Lab Topic:</strong> <a href="lab/02_sim_samp.html">Sampling and simulation</a>. Libraries in R. Dplyr.<br />
 <strong>Reading:</strong> W&amp;S 1,3-4, W&amp;G Chapters on <a href="http://r4ds.had.co.nz/transform.html">data transformation</a> and <a href="http://r4ds.had.co.nz/pipes.html">pipes</a>, <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdfPaperpile">Dplyr cheat sheet</a><br />
 <strong>Optional Reading:</strong> <a href="http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf">Cumming et al. 2007 on SDs, SEs, and CIs</a>, <a href="https://www.r-statistics.com/2014/08/simpler-r-coding-with-pipes-the-present-and-future-of-the-magrittr-package/">Simpler Coding with Pipes</a>, <a href="https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html">Managing Data Frames with the Dplyr package</a><br />
-<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/sampling-2018" class="uri">https://etherpad.wikimedia.org/p/sampling-2018</a><br />
-<strong>Packages for the Week:</strong> <a href="https://dplyr.tidyverse.org/">dplyr</a> - <code>install.packages(&quot;dplyr&quot;)</code><br />
-<strong>In Class Code:</strong> <a href="in_class_code_2018/scripts/02_sampling_sim.R">Code from Lab</a><br />
-<strong>Homework:</strong> <a href="./homework_2018/02_sampling.html">R, Dplyr, and Sampling</a></p>
+<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/sampling-2020" class="uri">https://etherpad.wikimedia.org/p/sampling-2020</a><br />
+<strong>Packages for the Week:</strong> <a href="https://dplyr.tidyverse.org/">dplyr</a> - <code>install.packages("dplyr")</code><br />
+<strong>In Class Code:</strong> <a href="in_class_code_2020/scripts/02_sampling_sim.R">Code from Lab</a><br />
+<strong>Homework:</strong> <a href="./homework_2020/02_sampling.html">R, Dplyr, and Sampling</a></p>
 </div>
 <div id="week-3." class="section level3">
 <h3>Week 3.</h3>
-<p>9/17/2018<br />
+<p>9/21/2020<br />
 <strong>Lecture:</strong> <a href="lectures/05_data_viz_principles.pptx">Data visualization</a>, <a href="https://datacarpentry.org/spreadsheet-ecology-lesson/">Data Creation</a><br />
 <strong>Lab Topic:</strong> <a href="lectures/06_read_data_libraries.html">Data import, libraries, factors and forcats</a> and <a href="lab/04_ggplot_intro.html">Introduction to ggplot2</a>. Data for lab <a href="lab/data_03_04.zip">here</a>.<br />
 <strong>Reading:</strong> W&amp;S Chapter 2, <a href="http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf">Unwin 2008</a>, W&amp;G Chapters on <a href="http://r4ds.had.co.nz/data-visualisation.html">Data Vizualization</a> and <a href="http://r4ds.had.co.nz/graphics-for-communication.html">Graphics for Communication</a>, <a href="http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html">DC Starting with Data</a>, <a href="./readings/Browman_and_Woo_Spreadsheets.pdf">Data organization in spreadsheets</a><br />
 <strong>Optional Reading:</strong> <a href="http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf">Friendly 2008 on History of Data Viz</a>, <a href="https://serialmentor.com/dataviz/">Fundamentals of Data Visualization</a> - note, this is a whole book, but scan it - it’s amazing<br />
-<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/dataviz-2018" class="uri">https://etherpad.wikimedia.org/p/dataviz-2018</a><br />
-<strong>Packages used this Week:</strong> <a href="https://ggplot2.tidyverse.org/">ggplot2</a>, <a href="https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html">ggridges</a>, <a href="https://forcats.tidyverse.org/">forcats</a>, <a href="https://readr.tidyverse.org/">readr</a>, <a href="https://readxl.tidyverse.org/">readxl</a>, <a href="https://tibble.tidyverse.org/">tibble</a>, <a href="https://lubridate.tidyverse.org/">lubridate</a> - <code>install.packages(c(&quot;ggplot2&quot;, &quot;ggridges&quot;, &quot;forcats&quot;, &quot;readr&quot;, &quot;readxl&quot;, &quot;tibble&quot;, &quot;lubridate&quot;))</code><br />
+<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/dataviz-2020" class="uri">https://etherpad.wikimedia.org/p/dataviz-2020</a><br />
+<strong>Packages used this Week:</strong> <a href="https://ggplot2.tidyverse.org/">ggplot2</a>, <a href="https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html">ggridges</a>, <a href="https://forcats.tidyverse.org/">forcats</a>, <a href="https://readr.tidyverse.org/">readr</a>, <a href="https://readxl.tidyverse.org/">readxl</a>, <a href="https://tibble.tidyverse.org/">tibble</a>, <a href="https://lubridate.tidyverse.org/">lubridate</a> - <code>install.packages(c("ggplot2", "ggridges", "forcats", "readr", "readxl", "tibble", "lubridate"))</code><br />
 <strong>Cheat Sheets:</strong> <a href="https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf">Reading data into R</a>. <a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">Ggplot2 cheat sheet</a>, <a href="https://biol355.github.io/Readings/choosing-a-good-chart-09.pdf">Choosing a good chart cheat sheet</a><br />
-<strong>In Class Code:</strong> <a href="in_class_code_2018/scripts/03_files_ggplot2.R">Intro to data and ggplot2</a><br />
-<strong>Homework:</strong> <a href="./homework_2018/03_ggplot.html">ggplot2 homework</a></p>
+<strong>In Class Code:</strong> <a href="in_class_code_2020/scripts/03_files_ggplot2.R">Intro to data and ggplot2</a><br />
+<strong>Homework:</strong> <a href="./homework_2020/03_ggplot.html">ggplot2 homework</a></p>
 </div>
 <div id="week-4." class="section level3">
 <h3>Week 4.</h3>
-<p>9/24/2018<br />
-<strong>Lecture:</strong> <a href="lectures/07_probability_hypotheses.html">Frequentist Hypothesis Testing</a>, <a href="lectures/08_testing_nhst_power.html">NHST, Z-Tests, and Power</a><br />
-<strong>Lab Topic:</strong> <a href="lab/05_hypothesis_power.html">Distributions in R, Frequentist Hypothesis testing via simulation</a><br />
-<strong>Reading:</strong> W&amp;S 5-7, W&amp;G Chapter 7, 16, <a href="http://andrewgelman.com/2016/11/23/abraham-lincoln-confidence-intervals/">Abraham Lincoln and Confidence Intervals</a> and links therein<br />
-<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-hypotheses-2018" class="uri">https://etherpad.wikimedia.org/p/607-hypotheses-2018</a><br />
-<strong>Quiz:</strong> <a href="http://tinyurl.com/hyp-pre-quiz" class="uri">http://tinyurl.com/hyp-pre-quiz</a><br />
-<strong>In Class Code:</strong> <a href="in_class_code_2018/scripts/power_analysis_lab_in_class_code.R">Distributions and Power</a><br />
-<strong>Homework:</strong> <a href="./homework_2018/04_hypothesis_power.html">hypothesis testing and power</a></p>
-</div>
-<div id="week-5." class="section level3">
-<h3>Week 5.</h3>
-<p>10/1/2018<br />
-<strong>Lecture:</strong> <a href="lectures/09_the_t_test.html">T tests</a>, <a href="lectures/10_chisq.html">χ2 tests</a>, and p<br />
-<strong>Lab Topic:</strong> <a href="lab/05_chisq_t.html">Statistical analysis functions for t and <span class="math inline">\(\chi^2\)</span> in R</a>, <a href="lab/data_05.zip">data</a><br />
-<strong>Reading:</strong> W&amp;S 8-12, W&amp;G Chapter 10, 20<br />
-<strong>Discussion Reading:</strong> <a href="http://byrneslab.net/classes/biol607/readings/Wasserstein_Lazar_2016_The_American_Statistician.pdf">ASA Statement on P-Values</a>, And choose one of the accompanying <a href="http://byrneslab.net/classes/biol607/readings/p_value_statements.zip">rejoinders</a> (sign up in <a href="https://etherpad.wikimedia.org/p/607-t_tests-2018">here</a>) (also feel free to read them all)<br />
-<strong>Additional Readings on P-Values</strong>: <a href="https://errorstatistics.com/2016/10/01/a-new-front-in-the-statistics-wars-peaceful-negotiation-in-the-face-of-so-called-methodological-terrorism/">Peaceful negotiation in the face of so-called ‘methodological terrorism’</a>, <a href="https://errorstatistics.com/2015/10/10/p-value-madness-a-puzzle-about-the-latest-test-ban-or-dont-ask-dont-tell/">P-value madness: A puzzle about the latest test ban (or ‘don’t ask, don’t tell’)</a>, <a href="https://errorstatistics.com/2015/08/31/the-paradox-of-replication-and-the-vindication-of-the-p-value-but-she-can-go-deeper-i/">The Paradox of Replication, and the vindication of the P-value (but she can go deeper)</a><br />
-<strong>Etherpad</strong>: <a href="https://etherpad.wikimedia.org/p/607-t_tests-2018" class="uri">https://etherpad.wikimedia.org/p/607-t_tests-2018</a><br />
-<strong>In Class Code:</strong> <a href="in_class_code_2018/scripts/chisq_t.R">t and chi square</a><br />
-<strong>Homework:</strong> <a href="./homework_2018/05_t_chisq_power.html">Chi Square and T Tests</a></p>
-</div>
-<div id="week-6." class="section level3">
-<h3>Week 6.</h3>
-<p>10/8/2018<br />
-<strong>Lecture:</strong> Least Squares Linear Regression: <a href="lectures/11_cor_linear_model.html">Correlation and Regression</a>, <a href="lectures/12_linear_model_fit.html">Fit and Power</a><br />
-<strong>Lab Topic:</strong> <a href="lab/06_lm.html">Linear regression, diagnostics, visualization</a>, and <a href="lab/data_06.zip">data</a><br />
-<strong>Reading:</strong> W&amp;S 16-17, W&amp;G on <a href="http://r4ds.had.co.nz/model-basics.html">model basics</a>, <a href="http://r4ds.had.co.nz/model-building.html">model building</a><br />
-<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-lm-2018" class="uri">https://etherpad.wikimedia.org/p/607-lm-2018</a><br />
-<strong>In Class Code:</strong> <a href="in_class_code_2018/scripts/lm_code.R">lm</a><br />
-<strong>Homework:</strong> <a href="homework_2018/06_correlation_regression.html">Correlation and Linear Models</a></p>
-</div>
-<div id="week-7." class="section level3">
-<h3>Week 7.</h3>
-<p>10/15/2018<br />
-<strong>Lecture:</strong> <a href="lectures/13_likelihood.html">Likelihood</a>, <a href="lectures/14_likelihood_2.html">Fitting a line with Likelihood</a><br />
-<strong>Lab Topic:</strong> <a href="lab/07_likelihood.html">Likelihood and linear models</a>, <a href="./lab/data/17e8ShrinkingSeals%20Trites%201996.csv">data</a><br />
-<strong>Reading:</strong> W&amp;S 20, W&amp;G Chapter <a href="http://r4ds.had.co.nz/iteration.html">Iteration</a><br />
-<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-likelihood-2018" class="uri">https://etherpad.wikimedia.org/p/607-likelihood-2018</a><br />
-<strong>In Class Code:</strong> <a href="in_class_code_2018/scripts/likelihood.R">linear models with likelihood</a><br />
-<strong>Packages for The Week:</strong> <code>install.packages(c(&quot;MASS&quot;, &quot;profileModel&quot;, &quot;bbmle&quot;))</code><br />
-<strong>Homework:</strong><a href="./homework_2018/07_likelihood.html">pufferfish and likelihood</a></p>
-</div>
-<div id="week-8." class="section level3">
-<h3>Week 8.</h3>
-<p>10/22/2018<br />
-<strong>Lecture:</strong> <a href="lectures/15_bayesian_basics.html">Bayesian Inference</a>, <a href="lectures/16_bayesian_lm.html">Fitting a line with Bayesian techniques</a><br />
-<strong>Lab Topic:</strong> Bayesian computation in R, <a href="lab/08_bayes.html">Fitting a line with Bayesian techniques</a><br />
-<strong>Reading:</strong> <a href="http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf">Ellison 1996</a>, Statistical Rethinking <a href="http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf">Chapter 1</a> and <a href="http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf">Chapter 2</a>, <a href="https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/">R Users will Now Inevitably Become Bayesians</a>, <a href="https://github.com/roualdes/stan_cheatsheets/blob/master/bayesplot/main.pdf">bayesplot cheat sheet</a><br />
-<strong>Additional Reading</strong>: <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">how to choose a prior</a>, <a href="https://vuorre.netlify.com/post/2017/how-to-compare-two-groups-with-robust-bayesian-estimation-using-r-stan-and-brms/">bayesian t-tests</a>, <a href="https://magesblog.com/post/2015-09-01-bayesian-regression-models-using-stan/">regression models with brms</a>, <a href="https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/">rethinking with brms</a> (many very cool examples), <a href="https://www.rensvandeschoot.com/tutorials/brms/">brms tutorials</a>, <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html">How to use rstanarm</a>, <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html">Linear Models in rstanarm</a>, <a href="https://m-clark.github.io/bayesian-basics/">Bayesian basics with R</a><br />
-<strong>Packages for The Week:</strong> <code>install.packages(c(&quot;brms&quot;, &quot;rstanarm&quot;, &quot;arm&quot;, &quot;rethinking&quot;))</code> and <code>devtools::install_github(&quot;mjskay/tidybayes&quot;)</code><br />
-<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-bayes-2018" class="uri">https://etherpad.wikimedia.org/p/607-bayes-2018</a><br />
-<strong>In Class Code:</strong> <a href="in_class_code_2018/scripts/bayes.R">Bayesian Data Analysis</a></p>
-</div>
-<div id="week-9." class="section level3">
-<h3>Week 9.</h3>
-<p>10/29/2018<br />
+<p>9/28/2020<br />
 <strong>Lecture:</strong> <a href="lectures/18_join.html">Joins</a>, <a href="lectures/17_tidy.html">Tidy data</a><br />
 <strong>Data:</strong> <a href="lectures/data/18/hemlock.xlsx">Hemlock</a><br />
 <strong>Reading:</strong> <a href="https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/">10 Commandments for Good Data Managament</a>, W&amp;G Chapters on <a href="http://r4ds.had.co.nz/tidy-data.html">tidy data</a>, <a href="http://r4ds.had.co.nz/strings.html">Strings</a>, and <a href="http://r4ds.had.co.nz/dates-and-times.html">Dates</a><br />
-<strong>Packages:</strong> <code>install.packages(c(&quot;reprex&quot;, &quot;datapasta&quot;, &quot;lubridate&quot;, &quot;tidyr&quot;))</code><br />
-<strong>Etherpad:</strong> <a href="http://etherpad.wikimedia.org/p/607-tidy-2018" class="uri">http://etherpad.wikimedia.org/p/607-tidy-2018</a><br />
-<strong>In Class Code:</strong> <a href="./in_class_code_2018/scripts/tidyr.R">Tidy</a>, <a href="in_class_code_2016/00_rmarkdown_options.Rmd">markdown options</a></p>
+<strong>Packages:</strong> <code>install.packages(c("reprex", "datapasta", "lubridate", "tidyr"))</code><br />
+<strong>Etherpad:</strong> <a href="http://etherpad.wikimedia.org/p/607-tidy-2020" class="uri">http://etherpad.wikimedia.org/p/607-tidy-2020</a><br />
+<strong>In Class Code:</strong> <a href="./in_class_code_2020/scripts/tidyr.R">Tidy</a>, <a href="in_class_code_2016/00_rmarkdown_options.Rmd">markdown options</a></p>
 </div>
-<div id="week-10." class="section level3">
-<h3>Week 10.</h3>
-<p>11/5/2018<br />
+</div>
+<div id="block-2-regression-and-inference" class="section level2">
+<h2>Block 2: Regression and Inference</h2>
+<div id="week-5." class="section level3">
+<h3>Week 5.</h3>
+<p>10/5/2020<br />
+<strong>Lecture:</strong> Introduction to Regression: <a href="lectures/11_cor_linear_model.html">Correlation and Regression</a>, <a href="lectures/12_linear_model_fit.html">Fit and Precision</a><br />
+<strong>Lab Topic:</strong> <a href="lab/06_lm.html">Linear regression, diagnostics, visualization</a>, and <a href="lab/data_06.zip">data</a><br />
+<strong>Reading:</strong> W&amp;S 16-17, W&amp;G on <a href="http://r4ds.had.co.nz/model-basics.html">model basics</a>, <a href="http://r4ds.had.co.nz/model-building.html">model building</a><br />
+<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-lm-2020" class="uri">https://etherpad.wikimedia.org/p/607-lm-2020</a><br />
+<strong>In Class Code:</strong> <a href="in_class_code_2020/scripts/lm_code.R">lm</a><br />
+<strong>Homework:</strong> <a href="homework_2020/06_correlation_regression.html">Correlation and Linear Models</a></p>
+</div>
+<div id="week-6." class="section level3">
+<h3>Week 6.</h3>
+<p>10/12/2020<br />
+<strong>Lecture:</strong> Ways of Knowing: NHST and <a href="lectures/13_likelihood.html">Likelihood</a>, <a href="lectures/14_likelihood_2.html">Fitting a line with Likelihood</a><br />
+<strong>Lab Topic:</strong> <a href="lab/07_likelihood.html">Likelihood and linear models</a>, <a href="./lab/data/17e8ShrinkingSeals%20Trites%201996.csv">data</a><br />
+<strong>Reading:</strong> W&amp;S 20, W&amp;G Chapter <a href="http://r4ds.had.co.nz/iteration.html">Iteration</a><br />
+<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-likelihood-2020" class="uri">https://etherpad.wikimedia.org/p/607-likelihood-2020</a><br />
+<strong>In Class Code:</strong> <a href="in_class_code_2020/scripts/likelihood.R">linear models with likelihood</a><br />
+<strong>Packages for The Week:</strong> <code>install.packages(c("MASS", "profileModel", "bbmle"))</code><br />
+<strong>Homework:</strong><a href="./homework_2020/07_likelihood.html">pufferfish and likelihood</a></p>
+</div>
+<div id="week-7." class="section level3">
+<h3>Week 7.</h3>
+<p>10/19/2020<br />
+<strong>Lecture:</strong> Ways of Knowing: <a href="lectures/15_bayesian_basics.html">Bayesian Inference</a>, <a href="lectures/16_bayesian_lm.html">Fitting a line with Bayesian techniques</a><br />
+<strong>Lab Topic:</strong> Bayesian computation in R, <a href="lab/08_bayes.html">Fitting a line with Bayesian techniques</a><br />
+<strong>Reading:</strong> <a href="http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf">Ellison 1996</a>, Statistical Rethinking <a href="http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf">Chapter 1</a> and <a href="http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf">Chapter 2</a>, <a href="https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/">R Users will Now Inevitably Become Bayesians</a>, <a href="https://github.com/roualdes/stan_cheatsheets/blob/master/bayesplot/main.pdf">bayesplot cheat sheet</a><br />
+<strong>Additional Reading</strong>: <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">how to choose a prior</a>, <a href="https://vuorre.netlify.com/post/2017/how-to-compare-two-groups-with-robust-bayesian-estimation-using-r-stan-and-brms/">bayesian t-tests</a>, <a href="https://magesblog.com/post/2015-09-01-bayesian-regression-models-using-stan/">regression models with brms</a>, <a href="https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/">rethinking with brms</a> (many very cool examples), <a href="https://www.rensvandeschoot.com/tutorials/brms/">brms tutorials</a>, <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html">How to use rstanarm</a>, <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html">Linear Models in rstanarm</a>, <a href="https://m-clark.github.io/bayesian-basics/">Bayesian basics with R</a><br />
+<strong>Packages for The Week:</strong> <code>install.packages(c("brms", "rstanarm", "arm", "rethinking"))</code> and <code>devtools::install_github("mjskay/tidybayes")</code><br />
+<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-bayes-2020" class="uri">https://etherpad.wikimedia.org/p/607-bayes-2020</a><br />
+<strong>In Class Code:</strong> <a href="in_class_code_2020/scripts/bayes.R">Bayesian Data Analysis</a></p>
+</div>
+<div id="week-8" class="section level3">
+<h3>Week 8</h3>
+<p>10/26/2020<br />
+<strong>Lecture:</strong> Many Predictors <a href="./lectures/23_general_linear_model.html">Multiple Regression and the General Linear Model</a>, <a href="./lectures/24_mmi.html">Information Theoretic Approaches</a><br />
+<strong>Lab Topic:</strong> <a href="lab/11_glm_aic.html">Multiple Regression, Multimodel Inference</a> - <a href="lab/data_11.zip">data files</a><br />
+<strong>Readings:</strong> <a href="http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf">Symonds and Moussalli 2010</a>, <a href="./readings/Schielzeth_2010_MEE.pdf">Simple means to improve the interpretability of regression coefficients</a>, <a href="./readings/Boyd_2020_Glob_Change_Biol.pdf">Experimental strategies to assess the biological ramifications of multiple drivers of global ocean change</a><br />
+<strong>Optional Readings:</strong> <a href="./readings/kramer_blasey_centering.pdf">Centring in regression analyses: a strategy to prevent errors in statistical inference</a>, <a href="./readings/Aho_2014_ecolog_bic.pdf">Model selection for ecologists: the worldviews of AIC and BIC</a>, The whole <a href="http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf">Ecology Special Section on P Values</a> is incredible reading.<br />
+<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-mlr-2020" class="uri">https://etherpad.wikimedia.org/p/607-mlr-2020</a><br />
+<strong>Packages for the Week:</strong> <code>install.packages(c("AICcmodavg", "MuMIn", "modelr"))</code><br />
+<strong>In Class Code:</strong> <a href="./in_class_code_2020/scripts/mlr_int_aic.R">ancova, mlr, and aic</a></p>
+</div>
+</div>
+<div id="block-3-teasing-apart-cause-and-effect-with-regression-models-and-well-designed-studies" class="section level2">
+<h2>Block 3: Teasing Apart Cause and Effect with Regression Models and Well Designed Studies</h2>
+<div id="week-8-1" class="section level3">
+<h3>Week 8</h3>
+<p>11/2/2020<br />
+<strong>Lecture:</strong> Causal Inference and Asking a Good Question</p>
+</div>
+<div id="week-9." class="section level3">
+<h3>Week 9.</h3>
+<p>11/9/2020<br />
 <strong>Lecture:</strong> Experimental design and ANOVA <a href="lectures/19_expts_anova.html">part 1</a>, <a href="lectures/20_anova_2.html">part 2</a>, Cottingham discussion<br />
 <strong>Lab Topic:</strong> <a href="lab/10_anova.html">One-Way ANOVA</a>, Midterm work session<br />
 <strong>Lab Data:</strong> <a href="lab/data_10.zip">Multiple Files</a><br />
 <strong>Reading:</strong> W&amp;S Chapter 14-15, <a href="http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf">Cottingham et al. 2005</a><br />
 <strong>Optional Reading:</strong> <a href="./readings/Qian_et_al-2007-Ecology.pdf">Ecological applications of multilevel analysis of variance</a> with <a href="./readings/Qian_Shen.zip">appendices</a><br />
-<strong>Packages for The Week:</strong> <code>install.packages(c(&quot;car&quot;, &quot;emmeans&quot;, &quot;multcompView&quot;, &quot;contrast&quot;))</code> <strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-anova-2018" class="uri">https://etherpad.wikimedia.org/p/607-anova-2018</a> <strong>In Class Code:</strong> <a href="./in_class_code_2018/scripts/anova.R">lots of anova</a></p>
+<strong>Packages for The Week:</strong> <code>install.packages(c("car", "emmeans", "multcompView", "contrast"))</code> <strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-anova-2020" class="uri">https://etherpad.wikimedia.org/p/607-anova-2020</a> <strong>In Class Code:</strong> <a href="./in_class_code_2020/scripts/anova.R">lots of anova</a></p>
 </div>
-<div id="week-11." class="section level3">
-<h3>Week 11.</h3>
-<p>11/12/2018<br />
+<div id="week-10." class="section level3">
+<h3>Week 10.</h3>
+<p>11/16/2020<br />
 <strong>Lectures:</strong> Experimental Design in a Multicausal World - <a href="lectures/21_multiway_anova.html">Multiway ANOVA</a>, <a href="lectures/22_factorial_anova.html">Factorial ANOVA</a><br />
 <strong>Lab Topic:</strong> Discussion of Hurlbert, Cottingham, <a href="lab/11_anova.html">Factorial ANOVA</a><br />
 <strong>Lab Data:</strong> <a href="lab/data_10.zip">Multiple Files</a><br />
 <strong>Reading:</strong> W&amp;S 18, <a href="http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf">Hurlbert 1984</a><br />
 <strong>Optional Reading:</strong> <a href="./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf">Analysis of variance with unbalanced data: an update for ecology &amp; evolution</a><br />
-<strong>In Class Code:</strong> <a href="./in_class_code_2018/scripts/anova_two.R">lots of anova</a></p>
+<strong>In Class Code:</strong> <a href="./in_class_code_2020/scripts/anova_two.R">lots of anova</a></p>
+</div>
+</div>
+<div id="block-4-modeling-error-and-further-adventures-in-regression-models" class="section level2">
+<h2>Block 4: Modeling Error and Further Adventures in Regression Models</h2>
+<div id="week-11." class="section level3">
+<h3>Week 11.</h3>
+<p>11/23/2020<br />
+<strong>Lecture:</strong> Modeling Error: <a href="./lectures/gls.html">Generalized Least Squares and Heteroscedasticity</a>, <a href="lectures/25_generalized_linear_models.html">Entering a non-normal world</a> - Modeling count data with Genearlized linear models.<br />
+<strong>Data:</strong> <a href="./lectures/data/gls/gls_data.zip">GLS Data</a>, <a href="./lab/gzlm_data.zip">GLM Data</a><br />
+<strong>Lab Topic:</strong> <a href="./lab/12_gzlm.html">Generalized Linear Models</a><br />
+<strong>Packages for the Week:</strong> <code>install.packages(c("MASS", "readxl", "betareg", "DHARMa"))</code><br />
+<strong>Reading:</strong> <a href="http://byrneslab.net/classes/biol607/readings/O&#39;Hara_2009_glmm.pdf">O’Hara 2009</a> through section on GLMs, <a href="http://byrneslab.net/classes/biol607/readings/o&#39;hara_and_kotze_do_not_log_transform.pdf">O’Hara and Kotze 2010</a>, <a href="http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf">Wharton and Hui 2011</a>, <a href="https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html">Hartig DHARMa vignette</a></p>
 </div>
 <div id="week-12." class="section level3">
 <h3>Week 12.</h3>
-<p>11/19/2018<br />
-<strong>Lecture:</strong> <a href="./lectures/23_general_linear_model.html">The General Linear Model: ANCOVA, Multiple Regression, and Interaction Effects</a>, <a href="./lectures/24_mmi.html">Information Theoretic Approaches</a><br />
-<strong>Lab Topic:</strong> <a href="lab/11_glm_aic.html">Multiple Regression, Multimodel Inference</a> - <a href="lab/data_11.zip">data files</a><br />
-<strong>Readings:</strong> <a href="http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf">Symonds and Moussalli 2010</a>, <a href="./readings/Schielzeth_2010_MEE.pdf">Simple means to improve the interpretability of regression coefficients</a>, <a href="./readings/Boyd_2018_Glob_Change_Biol.pdf">Experimental strategies to assess the biological ramifications of multiple drivers of global ocean change</a><br />
-<strong>Optional Readings:</strong> <a href="./readings/kramer_blasey_centering.pdf">Centring in regression analyses: a strategy to prevent errors in statistical inference</a>, <a href="./readings/Aho_2014_ecolog_bic.pdf">Model selection for ecologists: the worldviews of AIC and BIC</a>, The whole <a href="http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf">Ecology Special Section on P Values</a> is incredible reading.<br />
-<strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-mlr-2018" class="uri">https://etherpad.wikimedia.org/p/607-mlr-2018</a><br />
-<strong>Packages for the Week:</strong> <code>install.packages(c(&quot;AICcmodavg&quot;, &quot;MuMIn&quot;, &quot;modelr&quot;))</code><br />
-<strong>In Class Code:</strong> <a href="./in_class_code_2018/scripts/mlr_int_aic.R">ancova, mlr, and aic</a></p>
+<p><strong>Lecture:</strong> Old Wine in a New Bottle: It’s all a line, Classical tests in a Regression Framework</p>
 </div>
-<div id="week-13." class="section level3">
-<h3>Week 13.</h3>
-<p>11/26/2018<br />
-<strong>Lecture:</strong> <a href="./lectures/gls.html">Generalized Least Squares and Heteroscedasticity</a>, <a href="lectures/25_generalized_linear_models.html">Entering a non-normal world</a> - Modeling count data with Genearlized linear models.<br />
-<strong>Data:</strong> <a href="./lectures/data/gls/gls_data.zip">GLS Data</a>, <a href="./lab/gzlm_data.zip">GLM Data</a><br />
-<strong>Lab Topic:</strong> <a href="./lab/12_gzlm.html">Generalized Linear Models</a><br />
-<strong>Packages for the Week:</strong> <code>install.packages(c(&quot;MASS&quot;, &quot;readxl&quot;, &quot;betareg&quot;, &quot;DHARMa&quot;))</code><br />
-<strong>Reading:</strong> <a href="http://byrneslab.net/classes/biol607/readings/O&#39;Hara_2009_glmm.pdf">O’Hara 2009</a> through section on GLMs, <a href="http://byrneslab.net/classes/biol607/readings/o&#39;hara_and_kotze_do_not_log_transform.pdf">O’Hara and Kotze 2010</a>, <a href="http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf">Wharton and Hui 2011</a>, <a href="https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html">Hartig DHARMa vignette</a></p>
 </div>
+<div id="block-5-tying-it-together-further-adventures-in-computation-and-presentation" class="section level2">
+<h2>Block 5: Tying it Together Further Adventures in Computation and Presentation</h2>
 <div id="week-14." class="section level3">
 <h3>Week 14.</h3>
-<p>12/3/2018<br />
+<p>11/30/2020<br />
 <strong>Lecture:</strong> <a href="./lectures/iteration.html">Iteration with purrr</a>, Class’s Choice<br />
 <strong>Data:</strong> <a href="./lectures/data/gapminder.zip">gapminder</a><br />
 <strong>Reading:</strong> <a href="./readings/Murtaugh_2007_Ecology.pdf">Murtaugh 2007</a>, <a href="https://r4ds.had.co.nz/iteration.html">iteration in R4DS</a>, <a href="https://adv-r.hadley.nz/functionals.html">functionals in adv-r</a><br />
 <strong>Cheat Sheets:</strong> <a href="https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf">Apply Functions with purrr Cheat Sheet</a><br />
 <strong>Lab Topic:</strong> Class’s Choice, Final Presentation Open Lab<br />
-<strong>In Class Code</strong>: <a href="./in_class_code_2018/scripts/tidyr.R">spread and gather</a></p>
+<strong>In Class Code</strong>: <a href="./in_class_code_2020/scripts/tidyr.R">spread and gather</a></p>
+</div>
+<div id="week-14.-1" class="section level3">
+<h3>Week 14.</h3>
+<p>12/7/2020<br />
+<strong>Lecture:</strong> Shiny!</p>
 </div>
 <div id="week-15." class="section level3">
 <h3>Week 15.</h3>
-<p>12/10/2018<br />
+<p>12/14/2020<br />
 <strong>Lecture:</strong> Final Presentations</p>
+</div>
 </div>
 
 
@@ -409,6 +507,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
