@@ -2,6 +2,21 @@
   font-size: 1em;
 }
 
+.red {
+  color:red;
+}
+
+.large{
+  font-size: 130%;
+}
+
+.small{
+  font-size: 50%;
+}
+
+.tiny{
+  font-size:10%;
+}
 
 .reveal h1  {
     font-size: 1.5em;

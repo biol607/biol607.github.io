@@ -1,0 +1,343 @@
+---
+title: "Introduction  to An  Introduction  to  Computational  Data  Analysis  for  Biology"
+subtitle: "https://biol607.github.io/"
+author: "Jarrett Byrnes"
+institute: "UMass Boston"
+date: "2020 Edition"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, metropolis, metropolis-fonts, style.css]
+    nature:
+      beforeInit: "my_macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+--- 
+
+class: center, middle
+
+background-image: url(images/01/Sonoma_coast.jpg)
+background-position: center
+background-size: cover
+
+# .large[Introduction to  Computational  Data  Analysis  for  Biology]
+## .center[2020 Edition]
+
+  
+### .center[Jarrett Byrnes]  
+UMass Boston  
+https://biol607.github.io/
+
+```{r setup, include=FALSE}
+library(flair)
+```
+
+---
+class: center
+
+# Why are we here?
+![:scale 50%](images/01/data_says_no.jpg)
+---
+
+# Who are You?
+1. Name  
+
+2. Lab  
+
+3. Brief research description  
+
+4. Why are you here?  
+
+---
+
+# Course Goals
+
+1. Learn how to think about your research in a systematic way to design efficient observational & experimental studies.  <br><br> 
+
+--
+
+2. Understand how to get the most bang for your buck from your data.  <br><br> 
+
+--
+
+3. Make you effective collaborators with statisticians.  <br><br> 
+
+--
+
+4. Make you comfortable enough to learn and grow beyond this class.  
+
+---
+# What are we doing here?
+## Course divided into blocks
+
+--
+
+1. Introduction to computation and reproducibility
+
+--
+
+2. Regression and Inference
+
+--
+
+3. Causal Inference
+
+--
+
+4. Further Adventures in Regression
+
+--
+
+5. ???
+
+---
+
+# Block 1: Computation 
+
+```{r plot_eelgrass, echo=TRUE, eval = FALSE}
+# Load the library ####
+library(ggplot2)
+
+# Load the data ####
+eelgrass <- read.csv("./data/15q05EelgrassGenotypes.csv")
+
+# Plot ####
+ggplot(eelgrass,
+       aes(y = shoots, x = treatment.genotypes)) +
+  geom_point() +
+  stat_smooth(method = "lm") +
+  theme_classic(base_size = 17) +
+  labs(x = "No. of Genotypes", y = "No. of Shoots per sq. m.")
+``` 
+
+--
+.center[.large[.red[Coding is power!]]]
+
+--
+
+.center[.large[.red[Code Forces You to Be Explicit About Biology]]]
+
+---
+class:center
+
+# Block 1: Reproducibility
+
+![](images/01/rmarkdown.png)
+
+---
+class:center
+
+# Avoiding The Replication Crisis
+![http://simplystatistics.org/2016/08/24/replication-crisis/](images/01/replication_2x2.png)
+
+---
+
+# Block 2: Regression
+
+```{r plot_eelgrass, fig.align='center', message=FALSE, echo=FALSE}
+``` 
+
+
+---
+
+# Block 2: Inference
+
+.center[![:scale 50%](images/01/bayes_popper.png)]
+
+- What is the probability of a hypothesis?
+- Is variation explained by a driver of interest?
+- Do drivers of interest differ from a null or other expectation?
+- How can we generalize from our models to the world?
+
+---
+class:center
+
+# Block 3: Causal Inference
+
+![](images/01/grass2.jpg)
+
+---
+
+# Block 3: Causal Inference & Experiments
+
+![](./images/19/urchin_diet_expt.jpg)
+
+---
+
+# Block 4: Further Adventures
+
+![](images/25/logit_conversion.jpg)
+--
+.large[.center[Don't worry! It's all just a line!]]
+
+---
+class:center
+
+# Block 5: ???
+
+![](images/01/shiny.jpg)
+
+---
+
+# Lecture and Lab
+- T/Th Lecture on Concepts  
+   
+- Occasional Paper Discussion, Shiny Apps, etc.  
+   
+- F Lab (which will cover some homework problems!)  
+ 
+ ---
+ 
+ # Yes, Lectures are Coded
+R Markdown sometimes with Reveal.js or Xarnigan
+&nbsp;  
+.center[<img src="images/01/lecture_code.jpg">]
+http://github.com/biol607/biol607.github.io
+
+---
+class: center
+
+# Readings for Class: W&S
+
+<img src="images/01/whitlockSchluter.jpeg">
+  
+.left[Whitlock, W.C. and Schluter, D. (2020) The Analysis of Biological Data, 3rd Edition.] 
+
+https://whitlockschluter3e.zoology.ubc.ca/
+
+---
+class: center
+
+# Readings for Class:<br>Wickham & Grolemund
+![:scale 25%](images/01/r4ds_cover.png)
+
+.left[Grolemund, G., and Wickham, W. 2016. R for Data Science.]  
+http://r4ds.had.co.nz
+
+---
+
+class:center
+
+# There will be memes
+
+![](images/21/gosling_bonferroni.png)
+
+--
+
+.large[Extra credit for feeding my #statsmeme addiction]
+
+---
+
+# Quizes
+
+- Before and/or After Class
+
+- Measures understanding - and attendance!
+
+- Will drop lowest two
+
+- 10% of your grade
+
+---
+
+# Problem Sets
+- THE MOST IMPORTANT THING YOU DO  
+  
+- 40% of your grade  
+  
+- "Adapted"" from Whitlock and Schluter  
+  
+- Will often require R  
+  
+- Complete them using Rmarkdown   
+  
+- Submit via Dropbox or Github
+
+---
+
+# Midterm
+- Advanced problem set
+
+- 20% of your grade
+
+- After Regression
+
+---
+
+# Final Project
+
+- Topic of your choosing
+    - Your data, public data, any data!
+    - Make it dissertation relevant!
+    - If part of submitted manuscript, I will retroactively raise your grade
+ &nbsp;  
+ 
+- Dates
+  - Proposal Due Oct 9th
+  - Presentations on Dec 11th
+  - Paper due Dec 18th (but earlier fine!)
+ &nbsp;  
+ 
+- 30% of your grade
+
+---
+
+# Extra Credit 1: Use Github
+.center[![:scale 50%](images/01/github.png)]
+
+
+- This whole class is a github repo  
+- Having a github presence is becoming a real advantage  
+- So.... create a class repository!
+    - folder for homework, folder for exams, folder for labs
+- If you submit a link to your homework in a repo, +1 per homework!  
+- There will be a github tutorial outside of class hours?
+
+---
+
+# Extra Credit 2: Be Nate Silver (before the general election)
+.center[![:scale 50%](images/01/silver_congress.jpg)]
+
+- Submit your forecast with code!  
+      - 5 points for getting the correct answer  
+      - 5 extra points for explicitly stating the confidence of your estimates  
+      - 5 points for a clear explanation of the methodology  
+      - 1 point for each thing you do beyond a weighted average of polls
+- Applied to exam
+
+---
+
+Extra Credit 3: Livin' La Vida Data Science
+- Check out http://www.r-bloggers.com/  
+- Listen to podcasts like https://itunes.apple.com/us/podcast/not-so-standard-deviations/  
+- Follow data science greats on Twitter (see https://twitter.com/jebyrnes/lists/stats-r-on-twitter)  
+- +1 point per cool thing you bring up in the beginning of each class or on the UMBRug slack
+
+---
+
+# Extra Credit 4: Help your fellow students
+![](images/01/umbrug.jpg)
+
+- Having a problem during homework/exam/etc?
+- First, try and solve it yourself (google, stackoverflow, etc.)
+- Post a REPRODUCIBLE EXAMPLE to our slack channel
+- +1 for answering before I do!
+- Will constitute a separate pool of EC at end of semester
+
+---
+
+# Extra Credit 5: Master of the Tidyverse
+.center[![](images/01/package.jpg)]
+
+- Write an R package, get a full grade bump
+- Yeah, I said it
+- See the [http://github.com/covid19R](covid19R project), perhaps?
+
+---
+
+# Welcome!
+<br><br>
+
+.center[.middle[![](images/01/one_of_us.jpg)]]
