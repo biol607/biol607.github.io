@@ -8,7 +8,7 @@ output:
   xaringan::moon_reader:
     seal: false
     lib_dir: libs
-    css: [default, metropolis, metropolis-fonts, style.css]
+    css: [default, shinobi, default-fonts, style.css]
     nature:
       beforeInit: "my_macros.js"
       highlightStyle: github
@@ -49,6 +49,11 @@ class: center
 3. Brief research description  
 
 4. Why are you here?  
+
+--
+  
+    
+.center[Write it here: https://etherpad.wikimedia.org/p/607-intro-2020]
 
 ---
 
@@ -239,6 +244,12 @@ class:center
 - Will drop lowest two
 
 - 10% of your grade
+
+---
+# And Now, A Pop Quiz!
+<br><br><center>
+<div style="font-size: 2em;font-weight: bold;">http://tinyurl.com/firstPopQuiz</div>
+</center><br><br>
 
 ---
 
