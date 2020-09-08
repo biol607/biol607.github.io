@@ -2,27 +2,37 @@
 title: "Biol 607: Intro to Computational Data Analysis for Biology"
 ---
 
-```{r demoplot, fig.align='center', echo=FALSE, fig.height=4, fig.width=6}
+```{r demoplot, fig.align='center', echo=FALSE, fig.height=4, fig.width=6, message=FALSE, warning=FALSE}
+library(palmerpenguins)
 library(ggplot2)
-ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
+
+ggplot(data=penguins, 
+       aes(x=body_mass_g, y=flipper_length_mm, color=species)) +
   geom_point() +
   theme_bw(base_size=14) +
-  stat_smooth(method="lm")
+  stat_smooth(method="lm") +
+  scale_color_manual(values = c("darkorange","purple","cyan4")) +
+  labs(y = "Penguin Flipper Length (mm)", x = "Penguin Body Mass (g)",
+       color = "Species") +
+  theme(legend.position = c(0.85, 0.25),
+        legend.background = element_rect(fill = "white", color = NA),
+        plot.title.position = "plot",
+        plot.caption = element_text(hjust = 0, face= "italic"),
+        plot.caption.position = "plot")
+
 ```
 
 **Instructor:** Jarrett Byrnes, PhD.
 
 **Email:** jarrett.byrnes@umb.edu
 
-**Weekly Schedule:** Monday & Wednesday 2:30-4:00, Lab Friday 10-12:30pm in the Wheatley Biology Conference Room
+**Weekly Schedule:** Tuesday & Thursday 11 - 12:30, and Lab Friday 9 - 12:00pm on Zoom. The URL will be provided in the course Slack. All will be recorded for those who cannot make it, and URLS posted in the weeks' etherpads.
 
-**Office Hours:** Prof. Byrnes will hold office hours Thursday from 2-4:30 or by appointment. 3130 in the ISC.
+**Office Hours:** Prof. Byrnes will hold office hours TBD. Michael Roy will also hold office hours TBD.
 
-**Source for this Website:** https://github.com/biol607/biol607.github.io/
+**Source for this Website:** https://github.com/biol607/biol607.github.io/  
+  
+**Source for this Data:** [Palmer Penguins](https://github.com/allisonhorst/palmerpenguins) from Allison Horst
 &nbsp;  
 &nbsp;  
 &nbsp;  
-
-## Course News:  
-
-2018-10-26: The midterm exam [has been posted!](./exam_2018/exam_2018.html)
