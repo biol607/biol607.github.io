@@ -29,7 +29,7 @@ datestring <- paste(month(current_date), day(current_date), year(current_date), 
 ### Week 1. 
 `r datestring`   
 __Lecture:__ [Class intro](lectures/01_intro_x.html), [Intro to R](lectures/02_r_intro.html). \
-__Lab:__ [Matrices, Lists and Data Frames](lectures/02a_r_intro_list_matrix_df.html). [Introduction to Markdown](lab/01_markdown_intro.html)    
+__Lab:__ [Matrices, Lists and Data Frames](lectures/02a_r_intro_list_matrix_df.html). [Introduction to Markdown](https://rmarkdown.rstudio.com/lesson-1.html)    
 __Reading:__ W&G  [Preface](http://r4ds.had.co.nz/introduction.html), [Intro](http://r4ds.had.co.nz/explore-intro.html), [Workflow basics](http://r4ds.had.co.nz/workflow-basics.html), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Markdown](http://r4ds.had.co.nz/r-markdown.html) Chapters  
 __Cheat Sheets:__ [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf), [RMarkdown Options Guide](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)    
 __In Class Code:__ [Code from Lab](in_class_code_2020/scripts/01_my_first_r_file.R)\
