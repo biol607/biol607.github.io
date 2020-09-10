@@ -10,7 +10,7 @@ output:
 
 Hello!  So, today we're going to begin to code in R. We're going to cover the basics of using R with a focus on data frame objects.
 
-But let's begin. To talk about what's going on and take notes offline, use this week's etherpad at https://etherpad.wikimedia.org/p/607-r-intro-2020
+But let's begin. To talk about what's going on and take notes offline, use this week's etherpad at https://etherpad.wikimedia.org/p/607-intro-2020
 
 ## Let's start at the very beginning - directory structure!
 

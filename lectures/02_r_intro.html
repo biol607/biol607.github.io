@@ -1516,7 +1516,7 @@ div.tocify {
 
 
 <p>Hello! So, today we’re going to begin to code in R. We’re going to cover the basics of using R with a focus on data frame objects.</p>
-<p>But let’s begin. To talk about what’s going on and take notes offline, use this week’s etherpad at <a href="https://etherpad.wikimedia.org/p/607-r-intro-2020" class="uri">https://etherpad.wikimedia.org/p/607-r-intro-2020</a></p>
+<p>But let’s begin. To talk about what’s going on and take notes offline, use this week’s etherpad at <a href="https://etherpad.wikimedia.org/p/607-intro-2020" class="uri">https://etherpad.wikimedia.org/p/607-intro-2020</a></p>
 <div id="lets-start-at-the-very-beginning---directory-structure" class="section level2">
 <h2>Let’s start at the very beginning - directory structure!</h2>
 <p>Everything we do this semester is going to be scripted. There will be scripts. There will be data. There will be figures. If you’re working on a project, you’ll also have a manuscript, tables, raw data, derived, data, and more. Ai ya! That’s a lot of stuff. Putting it all in one directory is a <strong>terrible</strong> idea, as you will inevitably get lost.</p>
@@ -1704,15 +1704,15 @@ my_vector[4] + my_vector[50]</code></pre>
 <pre><code>##  [1] 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0</code></pre>
 <p>Second, 10 random numbers between 0 and 100</p>
 <pre class="r"><code>runif(10, min = 0, max = 100)</code></pre>
-<pre><code>##  [1] 80.5215166 72.3655995 22.1670252 64.3577743 99.0682981 87.8096879
-##  [7]  0.6709387 83.7260379 11.1156256 49.7273510</code></pre>
+<pre><code>##  [1] 89.18258 23.42808 97.21304 73.41101 95.43178 54.03394 62.91280 84.20774
+##  [9] 24.04156 40.77182</code></pre>
 <p>Now, vectors are neat, as they allow us to introduce two more concepts. First, some functions take vectors as input, and return other types of objects. For example, let’s say we wanted to sum everything in <code>my_vector</code> above. And then get the average of a bunch of random numbers between 0 and 100</p>
 <pre class="r"><code>sum(my_vector)</code></pre>
 <pre><code>## [1] 5050</code></pre>
 <pre class="r"><code>#a function in a function!
 #oh my!
 mean(runif(10, min = 0, max = 100))</code></pre>
-<pre><code>## [1] 66.83689</code></pre>
+<pre><code>## [1] 55.20371</code></pre>
 <p>OH! Notice I nested a function inside of a function. YES! You can do that. But only when you <strong>really</strong> need to. To keep track of things, it’s often better practice to create an object with a variable name that has meaning to you, and <em>then</em> feed that as an argument to another function.</p>
 </div>
 <div id="digging-into-your-variables" class="section level2">
