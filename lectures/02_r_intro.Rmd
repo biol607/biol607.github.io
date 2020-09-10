@@ -1,17 +1,22 @@
 ---
 title: "First Intro to R"
 author: "Intro to Computational Data Analysis for Biology"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
 ---
 
 Hello!  So, today we're going to begin to code in R. We're going to cover the basics of using R with a focus on data frame objects.
 
-But let's begin. To talk about what's going on and take notes offline, use this week's etherpad at https://etherpad.wikimedia.org/p/607-intro-2018
+But let's begin. To talk about what's going on and take notes offline, use this week's etherpad at https://etherpad.wikimedia.org/p/607-r-intro-2020
 
-### Let's start at the very beginning - directory structure!
+## Let's start at the very beginning - directory structure!
+
 Everything we do this semester is going to be scripted. There will be scripts. There will be data. There will be figures. If you're working on a project, you'll also have a manuscript, tables, raw data, derived, data, and more.  Ai ya! That's a lot of stuff. Putting it all in one directory is a **terrible** idea, as you will inevitably get lost.
 
-Instead, every project you have should have
+Instead, from now through time immemorial, every project should have
 
 #### 1) It's own directory
 #### 2) A standardized directory structure
@@ -51,11 +56,12 @@ My Project
 
 And/or I will prepend `01_`, `02_`, `03_` etc. to my code files so I remember what order to run them in. But, hey, we're not there yet.
 
+What's great, is that R allows you to keep things a bit more organized by using something called 'projects' Projects. If you go to the file menu and select 'create a new project' you can create a directory with an .Rproj file in it. Instead of just opening Rstudio in the future, you can open the .Rproj file. This has the advantage of letting R know where everything is located.
 
-**EXERCISE**: Set up a folder for this class. In that folder, create a project for homeworks, the midterm, your final project, and the lab.
+**EXERCISE**: Set up a folder for this class using an R Project. In that folder, create a folder for data, homework, lab, and exam.
 
-### R Scripts and Comments
-For this and all in class code exercises, I want you to save what you do in a file.   
+## R Scripts and Comments
+For this and all in class code exercises, I want you to save what you do in a file in your lab folder.   
   
 What are the benefits of a script file? Well, 
 1. You won't forget what you just did. It will still be there.
@@ -104,7 +110,7 @@ Commenting in your scripts is particularly helpful, as it will enable you to kno
 
 OK, that's comments - now, on to the code!
 
-###I have this cursor sitting here. What can I do with it?
+## I have this cursor sitting here. What can I do with it?
 
 Peering into your console, often the first source of fear and confusion is, what the heck do I do with this giant blank space.  The easiest way to start thinking about R is as th world's most advanced calculator.  Seriously, try it out!
 
@@ -129,7 +135,7 @@ Yes, basic arithmetic is right there at your fingertips.
 **EXERCISE:** Try some other basic arithmetic operators. Anything not work the way you think it should?
 
 
-###Arithmatic is great. But I want more
+### Arithmatic is great. But I want more
 
 While arithmetic is cool (and necessary) we often want R to do more for us. Perhaps calculating more compelling mathematical functions. One that we commonly use is logarithms. Let's say you want the natural log of 10.
 
@@ -146,7 +152,7 @@ log(10, base = 10)
 Now we've supplied two arguments.
 
 
-###Help! I don't know what arguments to give to a function!
+### Help! I don't know what arguments to give to a function!
 
 We're going to run into many different functions as we go forward. To get help on how to use them, and what arguments to supply, there are two ways to get help. Let's look at the help file for log:
 
@@ -156,10 +162,10 @@ We're going to run into many different functions as we go forward. To get help o
 help("log")
 ```
 
-Both of those do the same thing. Note that there is an order to arguments in the help file. If you put arguments in order in a function, you don't need to worry about naming them. This is bad practice (future you will be unhappy), as you may forget what they mean. Whevenever possible, use named arguments.
+Both of those do the same thing. Note that there is an order to arguments in the help file. If you put arguments in order in a function, you don't need to worry about naming them. This is bad practice (future you will be unhappy), as you may forget what they mean. Whenever possible, use named arguments.
 
 
-###But I don't know what the name of a function I need is!
+## But I don't know what the name of a function I need is!
 
 Sometimes, we don't know the name of a function we're looking for. For example, in R, the function for arcsin is `asin`. But you have no way of knowing that. For that, we use the ?? with quotes.
 
@@ -172,7 +178,7 @@ Notice this brings up a list of helpfiles that have the word arcsine in them. Bu
 **EXERCISE:** Think of a simple mathematical function. Find its helpfile and then implement it in R.
 
 
-###Variables and You
+## Variables and You
 
 One of the great things about R is that you can save things as variables and use them later on. Some of them are there already.  For example:
 
@@ -208,11 +214,11 @@ foo^2
 
 Some notes on variable names - 
 1. Make your variable name descriptive. If it needs to be long, so be it, although economy is helpful.
-2. Do not use `.` in your variable name. Such as `my.var` It has a special meaning. Use `_` instead. So, `my_var`.
+2. Do not use `.` in your variable name. Such as `my.var` It has a special meaning. Use `_` instead. So, `my_var`. This is called snake case. You could also use camel case - it's pretty standard as well. In that case, you'd have `myVar`
 
 For more, see http://adv-r.had.co.nz/Style.html
 
-###More than a number
+## More than a number
 
 OK, numbers are great, but there are other types of objects we'll be dealing with in R. Primarily, we're going to work with data frames, but let's build up to a data frame, as it's big and hairy. 
 
@@ -223,6 +229,7 @@ First, are there other object types that have a single element to them beyond nu
 ```
 
 Also, Booleans, which denote true and false
+
 ```{r}
 TRUE
 
@@ -253,7 +260,9 @@ NA + 1
 
 No one likes an NA, and often we have to find ways around them!
 
-###Combining values into larger objects
+**EXERCISE:** Make a variable. Now make a variable out of some math equation. Try adding variables of different classes together - what happens?
+
+## Combining values into larger objects
 
 Now that we have a few object types down, what is we have a bunch of them we want to work with together?  Let's start with what we call a vector.
 
@@ -265,9 +274,9 @@ my_numbers <- c(5, 6, 7, 8, 9, 10)
 my_numbers[2]
 ```
 
-Notice a few things. First, we created our vector wth the function `c`.  This function takes a sequence of values and puts them into a vector. These values can be anything - numbers, strings, booleans, etc.  Second, notice that to reference the second value of the vector we used [] Specificially, we put `[2]` in. This means give me the second value in this object.
+Notice a few things. First, we created our vector wth the function `c`.  This function takes a sequence of values and puts them into a vector. These values can be anything - numbers, strings, booleans, etc.  Second, notice that to reference the second value of the vector we used [] Specifically, we put `[2]` in. This means give me the second value in this object.
 
-Now you try it. Create a vector - any vector - and try pulling out single values. Do some math with them. Log transform them. Use your vector with an index as you would any other variable.  For example
+**EXERCISE:** Now you try it. Create a vector - any vector - and try pulling out single values. Do some math with them. Log transform them. Use your vector with an index as you would any other variable.  For example
 
 ```{r}
 my_vector <- 1:100
@@ -275,7 +284,12 @@ my_vector <- 1:100
 my_vector[4] + my_vector[50]
 ```
 
-Oh! Notice the use of `:` there to get a long vector? Neat trick, no?  There are other ways to generate vectors. Here are two:
+Oh! Notice the use of `:` there to get a long vector? Neat trick, no?  There are other ways to generate vectors.
+
+
+**EXERCISE:** Make two vectors and add them together. First try it with numbers. Then try vectors of different object types. What happens?
+
+## Functions to generate vectors for fun and profit
 
 First, a function to get a sequence with non-integer steps between numbers
 
@@ -303,10 +317,44 @@ mean(runif(10, min = 0, max = 100))
 
 OH!  Notice I nested a function inside of a function. YES! You can do that. But only when you **really** need to. To keep track of things, it's often better practice to create an object with a variable name that has meaning to you, and *then* feed that as an argument to another function.
 
-Last, often you just want some summary information about your vector. You'll want to do this for many more complex objects in the future as well. Fortunately, there's a function for that. Summary!
+## Digging into your variables
+
+Last, often you just want some  information about your vector. You'll want to do this for many more complex objects in the future as well. Fortunately, there's a number of functions for that. 
+
+To know what class something is, there a `class()` for that!
+
+```{r}
+class("A")
+
+class(c(1,2,3))
+
+class(c(TRUE, FALSE))
+```
+
+Note, this doesn't tell you information about object length or values. The lowest level function that gives you more detailed info is `str()`.
+
+`str()` is terribly useful - it reveals what is inside of your object. Often, if you come to someone with a problem about a variable misbehaving, the first thing they will ask you to do is to "str your object!". Heck, this should be one of the first things **you** do when you have a bug. 90% of the time when I do this, I find a typo, or a misclassed object, or something. And then I fix it, and can move on with my life.
+
+For example, 
+
+```{r}
+str(my_numbers)
+```
+
+shows you that `my_numbers` is a numeric vector of length 6 and shows you the first few values.
+
+You can also get summarized information about your objects. This is aggregated a bit more, but can be useful.
 
 ```{r}
 summary(my_numbers)
 ```
 
-**EXERCISE:** Make two vectors and add them together. First try it with numbers. Then try vectors of different object types. What happens?
+Whoah! Summary statistics! One of the great things about summary as well is it gives you information about `NA`s which can really be tricky.
+
+```{r}
+summary(c(1, 2, NA, 3))
+```
+
+ah HA! Often, NAs are the bane of our existence. We'll talk about them more as we dig deeper, but for now, `summary()` is a great way of seeing if they are there.
+
+**EXERCISE:** Create a vector of any class. `str()` and `summarize()` it. Now, create two vectors of different object types. Combine them. What do these two useful functions tell you what happened?
