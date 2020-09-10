@@ -1,11 +1,15 @@
 ---
 title: "Matrices, Lists, and Data Frames, Oh My!"
 author: "Intro to Computational Data Analysis for Biology"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
 ---
 
 
-### A Vector is like a column... So what are rows?
+## A Vector is like a column... So what are rows?
 
 Right now, we've worked with a single vector, and I've made the analogy that a vector is like a column in a spreadsheet. Each index references a different row. But, we know that spreadsheets have many columns.  What would that be like in R? Introducing, the matrix.
 
@@ -60,7 +64,7 @@ ncol(my_matrix)
 
 Try creating a 10 x 10 matrix of random uniform numbers between 5 and 50, and get the row and column means. What's the output of str?
 
-###But columns should have names!
+## But columns should have names!
 
 Matrices are somewhat unsatisfying, as we're going to want to reference our columns by name. R has a catchall object type called a `list` where objects are stored in key-value pairs. If you know the key - think column name - you can access the value. Let's see how this works.
 
@@ -112,7 +116,7 @@ my_list[c("First", "Second")]
 These both yield lists with multiple elements in them. We couldn't have used `[[]]` as it does not return a list, and hence you can't access multiple elements. This will become important as we get into *data frames*.
 
 
-###What if a matrix and a list had a baby?
+## What if a matrix and a list had a baby?
 
 We've talked before about how vectors are like the columns in a spreadsheet. Those 'sheets' themselves within R care called data frames. And they are a useful combination of a matrix and a list. Let's look at a sample data frame.
 
@@ -137,7 +141,7 @@ str(mtcars)
 
 Summary gives you some nice information about each column of `mtcars`. But `str` is the real star of the show. Any time your code borks on you and you think it's because of one of the objects you are passing to it, use `str` as it will give you a rich set of information about object types, values, etc. Often your object is not doing what you think it's doing.
 
-###So, I've got data. How do I use it?
+## So, I've got data. How do I use it?
 
 First off, how do we work with individual columns?  We have a few ways to access them.
 
