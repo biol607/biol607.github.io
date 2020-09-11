@@ -62,11 +62,18 @@ nrow(my_matrix)
 ncol(my_matrix)
 ```
 
-Try creating a 10 x 10 matrix of random uniform numbers between 5 and 50, and get the row and column means. What's the output of str?
+**EXERCISES:** 
+1. Try creating a 10 x 10 matrix of random uniform numbers between 5 and 50, and get the row and column means. What's the output of `str()`?
+
+2. What happens if you create a matrix by combining a numeric vector of length 10 and a character vector of length 10? What is the output of `str()`?
+
+3. What is the difference in creating a matrix with `byrow = TRUE` versus `byrow = FALSE`? Which is the default behavior? Test this out by making a 5 x 5 matrix with the numbers 1:25.
 
 ## But columns should have names!
 
-Matrices are somewhat unsatisfying, as we're going to want to reference our columns by name. R has a catchall object type called a `list` where objects are stored in key-value pairs. If you know the key - think column name - you can access the value. Let's see how this works.
+Matrices are somewhat unsatisfying, as we're going to want to reference our columns by name. Also, we want to mix different types of classes in a single object. One cannot have data that is numbers alone! 
+
+R has a catchall object type called a `list` where objects are stored in key-value pairs. If you know the key - think column name - you can access the value. Let's see how this works.
 
 ```{r}
 my_list <- list(First = 1:10,
@@ -75,7 +82,7 @@ my_list <- list(First = 1:10,
 my_list
 ```
 
-So now we have a list with two elements, a vector of ten numbers and a vector of five letters.  Note the funny `$` notation next to the names of the keys. Much like we've noticed indiced before when we look at object suggesting how we can access the pieces they hold, so, too, is this a clue.  To look at just the object stored with the key (again, think column name!) "First", we have three options
+So now we have a list with two elements, a vector of ten numbers and a vector of five letters.  Note the funny `$` notation next to the names of the keys. Much like we've noticed indices before when we look at object suggesting how we can access the pieces they hold, so, too, is this a clue.  To look at just the object stored with the key (again, think column name!) "First", we have three options
 
 ```{r}
 my_list$First
@@ -87,15 +94,19 @@ my_list["First"]
 my_list[1]
 ```
 
+**EXERCISE:** What is the class of each of the above?
+
 Note the first way (ha!) uses the `$` followed by another new way to index - `[[]]`. The third uses our old friend `[]`, but in a new way. The fourth assumes we want the first key-value pair from the list, and its name is unimportant. What is the different between these methods?  Try `str` out on all of them. Notice anything? The first two return vectors. The second return lists. Yeah, sneaky. It's important to know which method of accessing a list you are using so that you can then use the output in the proper way. More on that in a moment.
 
-Back to `[1]` -  what *is* first? How do you know?  To get the keys in a list (think column names!) we use `names`
+Back to `[1]` -  what *is* first? How do you know?  To get the keys in a list (think column names!) we use `names()` - a function you will use *all the time* in the future.
 
 ```{r}
 names(my_list)
 ```
 
-Try this out. Create a list consisting of a vector of numbers, an `NA`, and a list which contains two vectors. Take a look at their second elements. Also, check out our old friends `str` and `summary` Yes, lists can be nested in lists.  And yes, you'd use something like `my_list$sublist$First` or anything analogous to access it.
+**EXERCISE:** Try this out. Create a list consisting of a vector of numbers, an `NA`, and a list which contains two vectors. Take a look at their second elements. What is there? Also, check out our old friends `str` and `summary` 
+
+Yes, lists can be nested in lists.  And yes, you'd use something like `my_list$sublist$First` or anything analogous to access it.
 
 Last, how do you access multiple parts of a list? With matrices we could use the `[,]` notation, but not so with lists.  Let's first look at the second element of the first entry in `my_list`.
 
@@ -139,7 +150,9 @@ summary(mtcars)
 str(mtcars)
 ```
 
-Summary gives you some nice information about each column of `mtcars`. But `str` is the real star of the show. Any time your code borks on you and you think it's because of one of the objects you are passing to it, use `str` as it will give you a rich set of information about object types, values, etc. Often your object is not doing what you think it's doing.
+Summary gives you some nice information about each column of `mtcars`. But `str()` is the real star of the show. Any time your code borks on you and you think it's because of one of the objects you are passing to it, use `str()` as it will give you a rich set of information about object types, values, etc. Often your object is not doing what you think it's doing.
+
+**EXERCISE:** Let's look at Michelson's collection of experiments measuring the speed of light. It's called `morley`.  What are the properties of the data? Explore it.
 
 ## So, I've got data. How do I use it?
 
@@ -149,7 +162,7 @@ First off, how do we work with individual columns?  We have a few ways to access
 mtcars[["mpg"]]
 ```
 
-Oh hey! It's the `[[]]` notation from before! Quick, before you `str`, what class of object will the output be?
+Oh hey! It's the `[[]]` notation from before! Quick, before you `str()`, what class of object will the output be?
 
 ...
 
@@ -191,4 +204,16 @@ mtcars[1:5, c("disp", "hp")]
 
 Or we could have had both numbers and column names in the columns vector. And this is just the beginning.
 
-Great! Now that you've got those basics, futz around with the rows and columns of mtcars. Get information about each of them, try applying arithmatic and functions, such as those we used on matrices, and see what shakes out!
+Great! Now that you've got those basics, futz around with the rows and columns of mtcars. Get information about each of them, try applying arithmetic and functions, such as those we used on matrices, and see what shakes out!
+
+**EXERCISE:** Explore the dataset `quakes` looking at earthquakes off of Fiji. 
+
+1. Let's see what's there first with `str()` and `summary()`.
+
+2. Show the entirity of the column `long()`.
+
+3. Hey, another useful function - `unique()`! Apply it to a vector, and you can see what are all of the unique values. It's great for really digging into a problematic vector. What unique stations are there? Use `length()` to determine how many stations there are.
+
+4. Using `range()`, what is the range of depths where quakes occur?
+
+5. Where was the earthquake of largest magnitude found? You'll need to use come comparisons and the `max()` function for this in your indices!
