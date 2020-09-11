@@ -1,0 +1,50 @@
+---
+title: "My First Markdown"
+author: "Jarrett Byrnes"
+date: "9/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+You can type text.
+
+# Toplevel header
+## Smaller header
+### Even smaller header
+#### EVEN SMALLER SMALLER HEADER
+
+*italic*  
+**bold**
+
+- list item 1  
+      - subitem
+- list item 2
+- list item 3
+
+1. item 1
+2. item 2
+3. item 3
+
+```{r a_chunk}
+data("mtcars")
+
+head(mtcars)
+```
+
+The column means of mtcars are as follows:
+```{r second_chunk, echo = FALSE}
+colMeans(mtcars)
+```
+
+Give me no warnings or messages
+```{r chunk_with_options, warning=FALSE, message=FALSE}
+#stuff
+rowMeans(mtcars)
+```
+
+
