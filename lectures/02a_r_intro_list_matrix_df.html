@@ -1559,11 +1559,16 @@ nrow(my_matrix)</code></pre>
 <pre class="r"><code>#just columns
 ncol(my_matrix)</code></pre>
 <pre><code>## [1] 5</code></pre>
-<p>Try creating a 10 x 10 matrix of random uniform numbers between 5 and 50, and get the row and column means. What’s the output of str?</p>
+<p><strong>EXERCISES:</strong> 1. Try creating a 10 x 10 matrix of random uniform numbers between 5 and 50, and get the row and column means. What’s the output of <code>str()</code>?</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>What happens if you create a matrix by combining a numeric vector of length 10 and a character vector of length 10? What is the output of <code>str()</code>?</p></li>
+<li><p>What is the difference in creating a matrix with <code>byrow = TRUE</code> versus <code>byrow = FALSE</code>? Which is the default behavior? Test this out by making a 5 x 5 matrix with the numbers 1:25.</p></li>
+</ol>
 </div>
 <div id="but-columns-should-have-names" class="section level2">
 <h2>But columns should have names!</h2>
-<p>Matrices are somewhat unsatisfying, as we’re going to want to reference our columns by name. R has a catchall object type called a <code>list</code> where objects are stored in key-value pairs. If you know the key - think column name - you can access the value. Let’s see how this works.</p>
+<p>Matrices are somewhat unsatisfying, as we’re going to want to reference our columns by name. Also, we want to mix different types of classes in a single object. One cannot have data that is numbers alone!</p>
+<p>R has a catchall object type called a <code>list</code> where objects are stored in key-value pairs. If you know the key - think column name - you can access the value. Let’s see how this works.</p>
 <pre class="r"><code>my_list &lt;- list(First = 1:10,
                 Second = letters[1:5])
 
@@ -1573,7 +1578,7 @@ my_list</code></pre>
 ## 
 ## $Second
 ## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;</code></pre>
-<p>So now we have a list with two elements, a vector of ten numbers and a vector of five letters. Note the funny <code>$</code> notation next to the names of the keys. Much like we’ve noticed indiced before when we look at object suggesting how we can access the pieces they hold, so, too, is this a clue. To look at just the object stored with the key (again, think column name!) “First”, we have three options</p>
+<p>So now we have a list with two elements, a vector of ten numbers and a vector of five letters. Note the funny <code>$</code> notation next to the names of the keys. Much like we’ve noticed indices before when we look at object suggesting how we can access the pieces they hold, so, too, is this a clue. To look at just the object stored with the key (again, think column name!) “First”, we have three options</p>
 <pre class="r"><code>my_list$First</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code>my_list[[&quot;First&quot;]]</code></pre>
@@ -1584,11 +1589,13 @@ my_list</code></pre>
 <pre class="r"><code>my_list[1]</code></pre>
 <pre><code>## $First
 ##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p><strong>EXERCISE:</strong> What is the class of each of the above?</p>
 <p>Note the first way (ha!) uses the <code>$</code> followed by another new way to index - <code>[[]]</code>. The third uses our old friend <code>[]</code>, but in a new way. The fourth assumes we want the first key-value pair from the list, and its name is unimportant. What is the different between these methods? Try <code>str</code> out on all of them. Notice anything? The first two return vectors. The second return lists. Yeah, sneaky. It’s important to know which method of accessing a list you are using so that you can then use the output in the proper way. More on that in a moment.</p>
-<p>Back to <code>[1]</code> - what <em>is</em> first? How do you know? To get the keys in a list (think column names!) we use <code>names</code></p>
+<p>Back to <code>[1]</code> - what <em>is</em> first? How do you know? To get the keys in a list (think column names!) we use <code>names()</code> - a function you will use <em>all the time</em> in the future.</p>
 <pre class="r"><code>names(my_list)</code></pre>
 <pre><code>## [1] &quot;First&quot;  &quot;Second&quot;</code></pre>
-<p>Try this out. Create a list consisting of a vector of numbers, an <code>NA</code>, and a list which contains two vectors. Take a look at their second elements. Also, check out our old friends <code>str</code> and <code>summary</code> Yes, lists can be nested in lists. And yes, you’d use something like <code>my_list$sublist$First</code> or anything analogous to access it.</p>
+<p><strong>EXERCISE:</strong> Try this out. Create a list consisting of a vector of numbers, an <code>NA</code>, and a list which contains two vectors. Take a look at their second elements. What is there? Also, check out our old friends <code>str</code> and <code>summary</code></p>
+<p>Yes, lists can be nested in lists. And yes, you’d use something like <code>my_list$sublist$First</code> or anything analogous to access it.</p>
 <p>Last, how do you access multiple parts of a list? With matrices we could use the <code>[,]</code> notation, but not so with lists. Let’s first look at the second element of the first entry in <code>my_list</code>.</p>
 <pre class="r"><code>my_list$First[2]</code></pre>
 <pre><code>## [1] 2</code></pre>
@@ -1661,7 +1668,8 @@ str(mtcars)</code></pre>
 ##  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
 ##  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
 ##  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
-<p>Summary gives you some nice information about each column of <code>mtcars</code>. But <code>str</code> is the real star of the show. Any time your code borks on you and you think it’s because of one of the objects you are passing to it, use <code>str</code> as it will give you a rich set of information about object types, values, etc. Often your object is not doing what you think it’s doing.</p>
+<p>Summary gives you some nice information about each column of <code>mtcars</code>. But <code>str()</code> is the real star of the show. Any time your code borks on you and you think it’s because of one of the objects you are passing to it, use <code>str()</code> as it will give you a rich set of information about object types, values, etc. Often your object is not doing what you think it’s doing.</p>
+<p><strong>EXERCISE:</strong> Let’s look at Michelson’s collection of experiments measuring the speed of light. It’s called <code>morley</code>. What are the properties of the data? Explore it.</p>
 </div>
 <div id="so-ive-got-data.-how-do-i-use-it" class="section level2">
 <h2>So, I’ve got data. How do I use it?</h2>
@@ -1670,7 +1678,7 @@ str(mtcars)</code></pre>
 <pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4
 ## [16] 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7
 ## [31] 15.0 21.4</code></pre>
-<p>Oh hey! It’s the <code>[[]]</code> notation from before! Quick, before you <code>str</code>, what class of object will the output be?</p>
+<p>Oh hey! It’s the <code>[[]]</code> notation from before! Quick, before you <code>str()</code>, what class of object will the output be?</p>
 <p>…</p>
 <p>If you guessed a numeric vector, you’d be right! We can also use <code>[&quot;mpg&quot;]</code> as well to return a data frame. Now, we of course have other list-like ways of accessing columns.</p>
 <pre class="r"><code>mtcars$mpg</code></pre>
@@ -1701,7 +1709,15 @@ mtcars[2,]</code></pre>
 ## Hornet 4 Drive     258 110
 ## Hornet Sportabout  360 175</code></pre>
 <p>Or we could have had both numbers and column names in the columns vector. And this is just the beginning.</p>
-<p>Great! Now that you’ve got those basics, futz around with the rows and columns of mtcars. Get information about each of them, try applying arithmatic and functions, such as those we used on matrices, and see what shakes out!</p>
+<p>Great! Now that you’ve got those basics, futz around with the rows and columns of mtcars. Get information about each of them, try applying arithmetic and functions, such as those we used on matrices, and see what shakes out!</p>
+<p><strong>EXERCISE:</strong> Explore the dataset <code>quakes</code> looking at earthquakes off of Fiji.</p>
+<ol style="list-style-type: decimal">
+<li><p>Let’s see what’s there first with <code>str()</code> and <code>summary()</code>.</p></li>
+<li><p>Show the entirity of the column <code>long()</code>.</p></li>
+<li><p>Hey, another useful function - <code>unique()</code>! Apply it to a vector, and you can see what are all of the unique values. It’s great for really digging into a problematic vector. What unique stations are there? Use <code>length()</code> to determine how many stations there are.</p></li>
+<li><p>Using <code>range()</code>, what is the range of depths where quakes occur?</p></li>
+<li><p>Where was the earthquake of largest magnitude found? You’ll need to use come comparisons and the <code>max()</code> function for this in your indices!</p></li>
+</ol>
 </div>
 
 
