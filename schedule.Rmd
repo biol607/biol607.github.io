@@ -35,6 +35,7 @@ __Cheat Sheets:__ [RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/upl
 __In Class Code:__ [Code from Lab](./in_class_code/2020/scripts/my_first_r_script.R), [matrices and lists](./in_class_code/2020/scripts/matrices_lists.R), [markdown intro](./in_class_code/2020/markdown/my_first_markdown.R)\
 __Install R:__ Go to https://cloud.r-project.org/ and get the right version of R for you. Then, go to https://www.rstudio.com/products/rstudio/download/#download and install Rstudio.  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-intro-2020  
+__Homework:__ [Intro to R and Data Frames](./homework/intro_to_r.html)  
 
   
 ### Week 2.   

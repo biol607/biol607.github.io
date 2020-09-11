@@ -1,0 +1,25 @@
+---
+title: 'Homework 1: Intro to R!'
+author: "Biol 607"
+output: html_document
+---
+
+Please submit to your given dropbox. Submit both the markdown and html. Extra credit for using github. See the Rmarkdown Cheat Sheet [here](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##  Let's explore the dataset quakes looking at earthquakes off of Fiji.
+
+1. Load quakes with `data(quakes)`. SHow what’s there  with str() and summary().
+
+2. Show the entirity of the column `long`.
+
+3. Hey, another useful function - unique()! Apply it to a vector, and you can see what are all of the unique values. It’s great for really digging into a problematic vector. 
+
+What unique stations are there? Use `length()` with `unique()` to determine how many stations there are.
+
+4. Using `range()`, what is the range of depths where quakes occur?
+
+E.C. Where was the earthquake of largest magnitude found? You’ll need to use come comparisons and the `max()` function for this in your indices instead of a number!
