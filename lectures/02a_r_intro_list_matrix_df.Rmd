@@ -217,3 +217,4 @@ Great! Now that you've got those basics, futz around with the rows and columns o
 4. Using `range()`, what is the range of depths where quakes occur?
 
 5. Where was the earthquake of largest magnitude found? You'll need to use come comparisons and the `max()` function for this in your indices!
+<br><br>
