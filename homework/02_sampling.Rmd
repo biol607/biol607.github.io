@@ -1,0 +1,120 @@
+---
+title: 'Homework 2: Sampling and Simulation'
+author: "Intro to Data Science for Biology"
+date: "Last updated `r format(Sys.time(), ' %B %d, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## 1. R Warmup
+&nbsp; &nbsp; **1a.** Create a vector of 100 randomly distributed numbers between 0 and 100 using `runif` and save the vector into the variable `my_vec`. If you cannot figure out runif, try `?runif`. What information does `str` and `summary` tell you about `my_vec`?  How do they differ?  
+
+```{r echo=FALSE, eval=FALSE}
+my_vec <- runif(100, 0, 100)
+
+str(my_vec)
+summary(my_vec)
+
+#str shows what information is in the vector and its length. summary 
+#gives information about the distribution of the data
+```
+
+&nbsp; &nbsp; **1b**. Try out a little plot. What does `hist(my_vec)` show you? What information does the helpfile for `hist` tell you about what you just did?  
+```{r echo=FALSE, eval=FALSE}
+hist(my_vec)
+
+#This is a histogram of my_vec
+#showing frequently data occurs in a set of bins
+```
+
+&nbsp; &nbsp; **1c.** Load up the `mtcars` data set using `data(mtcars)`.  Apply the following functions to mtcars: `class`, `str`, `summary`.  What do these three functions tell you about mtcars?  
+
+```{r echo=FALSE, eval=FALSE}
+data(mtcars)
+class(mtcars)
+str(mtcars)
+summary(mtcars)
+
+
+#mtcars is a data frame with 32 values in 11 columns. The values
+#are numeric, and summary shows me how they are distributed
+```
+
+&nbsp; &nbsp; **1d** Look at the help file for the class `data.frame`.  What does it tell you about these objects?  
+
+```{r echo=FALSE, eval=FALSE}
+#data.frames are both lists and matrices, and are fundamental to most of the modeling
+#in R
+```
+
+## 2. Sample Properties
+Consider the following vasopressin levels in voles.
+
+```{r voles, echo=TRUE}
+vole_vaso <- c(98,96,94,88,86,82,77,74,70,60,
+           59,52,50,47,40,35,29,13,6,5)
+```
+
+&nbsp; &nbsp; **2a.** Say "Vole vasopressin" 10 times as fast as you can. How many times did you trip up?
+
+&nbsp; &nbsp; **2b.** What is the mean, median, sd, and interquartile range of the sample?
+
+&nbsp; &nbsp; **2c**. What is the standard error of the mean (do this with a formula!)?
+
+&nbsp; &nbsp; **2d.** What does the standard error of the mean tell you about our estimate of the mean values of the population of vole vassopressin?
+
+## 3. Sample Size for upper quartiles.
+
+We can get the upper quartile value of vole vassopressin with
+
+```{r upper_quart, echo=TRUE}
+quantile(vole_vaso, probs = 0.75)
+```
+
+Let's assume the sample is representative of the popultion.
+
+&nbsp; &nbsp; **3a**. Use `sample()` to get just one resample with a sample size of 10. What is its upper quartile?
+
+&nbsp; &nbsp; **3b.** Build an initial data frame for simulations with the sample sizes 5 through 20. Have 100 simulations per sample size.
+
+```{r vole_sim}
+vole_sim <- data.frame(samp_size = rep(5:20, 100)) %>%
+  mutate(sims = 1:n())
+```
+
+&nbsp; &nbsp; **3c.** Use this data frame to get simulated upper quartiles for each sample size.
+```{r vole_uq_sim}
+vole_sim <- vole_sim %>%
+ # group_by(1:n()) %>%
+ # group_by(1:sims) %>%
+  rowwise() %>%
+  mutate(uq = quantile(sample(vole_vaso, samp_size, replace=T), probs=0.75)) %>%
+  ungroup()
+```
+
+&nbsp; &nbsp; **3d.** With a plot, make a guesstimate as to the best sample size for estimating the upper quartile of the population.
+
+```{r uq_plot}
+plot(uq ~ samp_size, data=vole_sim)
+```
+
+## 4. SE and CI
+
+&nbsp; &nbsp; **4a.** With the upper quartile simulations, calculate the SD  for each sample size using `dplyr`
+
+```{r uq_dplyr}
+vole_sim_summarize <- vole_sim %>%
+  group_by(samp_size) %>%
+  summarize(uq_se = sd(uq)) %>%
+  ungroup()
+```
+
+&nbsp; &nbsp; **4b.** What does this value, the standard error of the upper quartile, mean?
+
+&nbsp; &nbsp; **4c.** What is the CI of the upper quartile with a sample size of 10. What does this mean?
+
+&nbsp; &nbsp; **4d.** Extra Credit: Instead of having each sim calculate a upper quartile, and then sifting down to the SE of that upper quartile (or the CI), have each simulation calculate a CI. Then, for just a sample size of 10, how many CI's contain the true value of 83?

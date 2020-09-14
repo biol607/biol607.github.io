@@ -1,0 +1,124 @@
+---
+title: "Hypothesis Testing"
+author: "Biol 607"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+<!-- fix heart bpm problem next year - confusing which SD to use -->
+
+### 1) W&S Chapter 6 questions 15, 21, and 29
+
+<!--
+15. 
+a. There is no difference between pygmy and continental mammoth femur lenghts.
+b. There is no difference between drug versus control weight loss rates.
+c. There is no difference in the porportion of babies born with cleft palattes between conditions
+d. Christmas versus usual music does not alter how much candy shoppers purchase.
+e. Male white collared manakins dance equally when females are absent or present.
+
+21.
+a. The 60 participant study.
+b. The 100 participant study.
+c. The 100 participant study.
+d. Two-tailed. We do not have an explicit prediction of upregulation versus downregulation.
+
+29.
+a. 95
+b. 5
+
+-->
+
+### 2) W&S Chapter 7 question 22 - use R to calculate a p-value
+
+<!--
+a. 
+```{r p}
+p <-  6101/9821
+
+sep <- sqrt((p * (1/p))/9821)
+```
+
+
+The 95% CI is `r p - 1.96*sep` $\le$ `r p` $\le$ `r p + 1.96*sep`
+
+b. No. It is below the 95% CI.
+
+-->
+
+### 3) From the Lab: Many SDs and Alphas
+Here's the exercise we started in lab. Feel free to look back copiously at the lab handout if you're getting stuck. Remember, for each step, write-out in comments what you want to do, and then follow behing with code.
+
+Now, let's assume an average population-wide resting heart rate of 80 beats per minute with a standard deviation of 6 BPM.
+
+A given drug speeds people's heart rates up on average by 5 BPM. What sample size do we need to achieve a power of 0.8?
+
+#### 3.1) Start up your simulation
+Make a simulated data frame to look at the effects of multiple sample sizes: from 1-20, with 500 simulations per sample size, and also multiple SD values, from 3 through 10 (just 3:10, no need for non-integer values). You're going to want `crossing` with your intitial data frame of just sample sizes and a vector of sd values to start. Then generate samples from the appropriate random normal distribution.
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
+#make that df!
+heart_sims <- crossing(sims = 1:500, n = 1:20, sd = 3:10)
+```  
+
+#### 3.2) Z!
+OK, now that you've done that, calculate the results from z-tests. Plot p by sample size, using `facet_wrap` for different SD values.
+
+```{r z_tests}
+heart_sims <- heart_sims %>%
+  rowwise() %>%
+  mutate(samp_mean = mean(rnorm(n, mean = 85, sd = sd)),
+         z = (samp_mean-80)/(sd/sqrt(n)),
+         p = 2*pnorm(abs(z), 0, 1, lower.tail=FALSE)) %>%
+  ungroup()
+
+qplot(n,p, data = heart_sims, alpha = I(0.1)) + facet_wrap(~sd)
+```
+
+#### 3.3) P and Power
+Now plot power for an alpha of 0.05, but use color for different SD values. Include our threshold power of 0.8.
+
+```{r power}
+heart_power <- heart_sims %>%
+  group_by(n, sd) %>%
+  summarize(power = 1-sum(p>0.05)/n()) %>%
+  ungroup()
+
+ggplot(heart_power, 
+       aes(x = n, y = power, color = factor(sd))) +
+  geom_point() + geom_line() +
+  geom_hline(yintercept = 0.8)
+```
+
+#### 3.4) Many alphas
+Last, use `crossing` again to explore changing alphas from 0.01 to 0.1. Plot power curves with different alphas as different colors, and use faceting to look at different SDs. 
+
+```{r heart_power_alpha}
+
+heart_power_alpha <- crossing(heart_sims, alpha = seq(0.01, 0.1, 0.01)) %>%
+  group_by(n, sd, alpha) %>%
+  summarize(power = 1-sum(p>alpha)/n()) %>%
+  ungroup()
+
+ggplot(heart_power_alpha, 
+       aes(x = n, y = power, color = factor(alpha))) +
+  geom_point() + geom_line() +
+  geom_hline(yintercept = 0.8) +
+  facet_wrap(~sd)
+
+```
+
+#### 3.5) What does it all mean? What do you learn about how alpha and SD affect power? 
+<!-- These analyses show that, while higher sample size = higher power, it decreases as the SD increases. Similarly, with higher alphas, we also lower our alpha, as it becomes harder to reject the null. -->
+
+
+#### 3.6) How do you think that changing the effect size would affect power? 
+You can just answer this without coding out anything. Based on what we've learned so far - what do you think?
+
+<!-- We should increase our power, a the larger effect sizes should overcome the larger SD. It should be easier to see a difference from the null -->

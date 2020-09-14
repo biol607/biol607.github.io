@@ -1,0 +1,51 @@
+---
+title: "T-Test and Chisq Homework"
+author: "Biol 607"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Note: Datasets are available at http://whitlockschluter.zoology.ubc.ca/data so you don't have to type anything in (and have to load it!)  
+\
+
+## 1. W&S $\chi^2$ questions
+Please answer W&S Chapter 8 Questions 12 and 24, and Chapter 9 Questions 16 and 27. User R where possible.
+  
+## 2. W&S t-test questions  
+Please Answer W&S Chapter 11 Question 21 and Chapter 12 Questions 20,  26, and 30
+  
+## 3. Power and T
+
+In class, we worked through an example of power via simulation for a two-sample t-test with equal variance and sample size. Let's go through a similar exercise, but this time, assuming we have a situation with both different sample sizes and variances.
+
+### 3.1 Data Generating Process
+
+Write a function that takes two means, two standard deviations, and two sample sizes as arguments. Have it return a data frame or tibble based on the inputs ready to go for a t-test!
+
+### 3.2 P From T
+
+Write a function that takes a data frame and runs a two-tailed t-test with the variances assumed to be unequal. Show it works by comparing it's p-value to that returned by `t-test` for the same simulated data set. Note, if you gave particular column names in the function from 3.1, you should use those here! If you are stumped on how to get a p-value, look at the help file for `t.test`, remembering that the output from `t.test` is a list! **+2 Extra credit, look at `?ifelse` or `?"if"` and use one of them to have your function choose to use unequal variances if your variances differ by 20%.** 
+
+
+### 3.3 So many Ps!
+
+Write a function that takes takes some number of simulations, two means, two standard deviations, and two sample sizes as arguments and returns a vector of p values equal in length to that number of simulations. It should call your functions from 3.1 and 3.2 using `replicate()` or `purrr::rerun()` or some other strategy to do something many times. Your call! **Extra credit - try it different ways and show using a large number of simulations and `system.time()` or the `profileR` package which way is faster.
+
+### 3.4 I have the power
+
+Write a function that takes an alpha value, some number of simulations, two means, two standard deviations, and two sample sizes as argument, and returns the power. It should call the function you wrote in 3.3. Now, make sure this works by comparing your results to the appropriate call to `power.t.test()`. Do they agree? Why or why not?
+
+
+### 3.5 Show it works
+
+Using your functions from above, explore how changing the difference between the the means of two groups interacts with the difference between two standard deviations of groups to affect the power of a t-test. Explain the results you produce. **+1 Extra credit for using a color scheme from the `wesanderson` or `beyonce` package that is illuminating.** 
+
+### 3.6 Extra Credit
+
++2 Extra credit if you include a comparison between running the test with versus without equal variances - this might require you to re-write your function from 3.2 to include an argument where you specify if you want equal or unequal variance tests to be used. **+1 additional extra credit for folding this into your auto-detect unequal variance function from above, but have this argument override the automatic detection of equal or unequal variances. Lots of ways to do this, some more efficient than others.**
+
+## 4. Extra Credit on Contingency Tables (3 points)
+Write a function that takes a count data frame in with 2 columns of categorical predictors (characters) and 1 of counts, and returns a $\chi^2$ test for the appropriate contingency table. +1 more if it also outputs the contingency table. +3 more if it works for an n x n x n x n x .... contingency table. Show it works by comparing the results to using `xtabs()` and `chisq.test()`. You should look at the formulae in W&S here to help you.

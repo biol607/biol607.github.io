@@ -1,0 +1,146 @@
+---
+title: 'Homework 3: Data Visualization'
+author: "Biol 607"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+**1)** Complete problems 10 and 17-18 on pg. 109-111. Use R where possible. Data sets (so you don’t have to type things in) are available at http://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets.html.
+
+**2)** A little while back, [Dave Curran](https://twitter.com/iamreddave) using some of the code from our lab made a wonderful animation of change in arctic sea ice.
+
+![](https://i.redd.it/9r9ook3d5xlx.gif)
+
+He used data from   
+
+ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final_v2.csv
+ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt_v2.csv
+
+I'm providing you with a cleaned form of his data (his code is [here](https://gist.github.com/cavedave/c5c2224c8c38661236c1c1ce894fd28f)) for you to work with in a few plots. The data file is called [NH_seaice_extent_monthly_1978_2016.csv](http://biol607.github.io/homework_2018/data/NH_seaice_extent_monthly_1978_2016.csv)
+
+**2.1)** Load the data using `readr` and make the `Month_Names` column into a factor whose levels are in order of month using `forcats::fct_inorder`. Use `levels()` - a function that takes a factor vector and returns the unique levels - on the column. Are they in the right order?
+
+```{r load}
+#libraries
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(forcats)
+
+theme_set(theme_bw(base_size=12))
+
+ice <- read_csv("./data/NH_seaice_extent_monthly_1978_2016.csv") %>%
+  mutate(Month_Name = factor(Month_Name)) %>%
+  mutate(Month_Name = fct_inorder(Month_Name))
+```
+
+**2.2)**  Try `fct_rev()` on `ice$Month_Name` (I called my data frame `ice` when I made this). What is the order of factor levels that results? Try out `fct_relevel()`, and last, `fct_recode()` as well. Look at the help files to learn more, and in particular try out the examples. Use these to guide how you try each functino out. After trying each of these, `mutate` month name to get the months in the right order, from January to December. Show that it worked with `levels()`  
+
+Note, if you don't want a lot of output to be spit out, you can do something like `levels(fct_rev(ice$Month_Name))`.
+
+
+```{r futz}
+levels(fct_rev(ice$Month_Name))
+levels(fct_relevel(ice$Month_Name, "Dec", "Jan"))
+levels(fct_recode(ice$Month_Name, Month = "Jan"))
+
+ice <- ice %>%
+  mutate(Month_Name = fct_relevel(Month_Name, 
+                                  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+
+levels(ice$Month_Name)
+
+```
+
+**2.3)** Now, using what you have just learned about `forcats`, make a column called `Season` that is a copy of `Month_Name`. Use the function  `fct_recode` to turn it into a factor vector with the levels Winter, Spring, Summer, Fall in that order. Use `levels()` on `ice$Season` to show that it worked.
+
+```{r}
+ice <- ice %>%
+  mutate(Season = fct_recode(Month_Name,
+                             Winter = "Jan", Winter = "Feb", Spring = "Mar", Spring = "Apr", 
+                             Spring = "May", Summer = "Jun",
+                                 Summer = "Jul", Summer ="Aug", 
+                             Fall = "Sep",Fall =  "Oct", Fall = "Nov", Winter = "Dec"))
+
+levels(ice$Season)
+
+```
+
+**2.4)** Make a boxplot showing the variability in sea ice extent every month.
+
+```{r boxplot}
+ggplot(data = ice,
+       mapping = aes(x = Month_Name, y = Extent)) +
+  geom_boxplot()
+```
+
+**2.4)** Use `dplyr` to get the annual minimum sea ice extent. Plot minimum ice by year, and add a trendline (either a smooth spline or a straight line).
+
+```{r trend}
+ice_summary <- ice %>%
+  group_by(Year) %>%
+  summarize(min_extent = min(Extent))
+
+ggplot(ice_summary,
+       aes(x = Year, y = min_extent)) +
+  geom_point() +
+  stat_smooth(method = "lm")
+```
+
+
+**2.5)** With the original data, plot sea ice by year, with different lines for different months. Then, use `facet_wrap` and `cut_interval(Month, n=4)` to split the plot into seasons.
+
+```{r byyear}
+year_plot <- ggplot(data = ice,
+       mapping = aes(x = Year, y = Extent, group = Month)) +
+  geom_line()
+
+year_plot
+
+year_plot + facet_wrap(~cut_interval(Month, n = 4))
+```
+
+
+**2.6)** Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab.
+
+```{r fun}
+library(viridis)
+
+fancy <- ggplot(data = ice,
+       mapping = aes(x = Month_Name, y = Extent, color = Year,
+                     group = Year)) +
+  geom_line() +
+  scale_color_viridis(option = "A") +
+  geom_hline(yintercept = 4, color = "darkgray", lty = 2) +
+  geom_hline(yintercept = 6, color = "darkgray", lty = 2) +
+  scale_x_discrete(expand=c(0,0)) +
+  annotate("text", x = 2, y = 6.5, label = "6º")+
+  annotate("text", x = 2.5, y = 4.5, label = "4º")
+
+fancy
+
+```
+
+**2.7 Extra Credit)** Make it animated with `gganimate`. Just like above. See the lab for more.  
+  
+```{r anim}
+library(gganimate)
+
+fancy +
+  transition_time(Year)
+
+fancy +
+   transition_reveal(Year, along = Year) 
+  
+```
+
+**2.8 Extra Credit)** Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
+  
+**3 Extra Credit)** Go to the internet, and find a package with some cool theme you want to use in ggplot2. Use it with one of the above plots. The cooler the theme, the more points we'll give!
+Note - this guy - http://byrneslab.net/project/hensel/ - is in charge of deciding how cool it is.  

@@ -1,0 +1,132 @@
+---
+title: "Correlation And Regression Homework"
+author: "Biol 607"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+```
+
+Note: Datasets are available at http://whitlockschluter.zoology.ubc.ca/data so you don't have to type anything in (and have to load it!)  
+
+
+## 1. Correlation - W&S Chapter 16
+
+Questions 15, 19
+
+## 2. Correlation SE
+
+Consider the following dataset:
+
+```{r make_data}
+set.seed(20181011)
+library(mnormt)
+
+mat <- rmnorm(10, varcov = matrix(c(1,0.3, 0.3, 1), ncol=2)) %>%
+  round(2) %>%
+  as.data.frame %>%
+  rename(cats = "V1", happiness_score = "V2")
+
+knitr::kable(mat, "html") %>% kableExtra::kable_styling("striped")
+
+```
+
+### 2a.
+Are these two variables correlated? What is the output of `cor()` here. What does a test show you?
+
+```{r, eval=FALSE}
+cor.test(mat$cats, mat$happiness_score)
+```
+
+### 2b.
+What is the SE of the correlation based on the info from `cor.test()`
+```{r, eval=FALSE}
+(0.7877084 - 0.3136313 )/2
+```
+
+### 2c.
+Now, what is the SE via simulation? To do this, you'll need to use `cor()` and get the relevant parameter from the output (remember - you get a matrix back, so, what's the right index!), `replicate()`, and `sample()` or `dplyr::sample_n()` with `replace=TRUE` to get, let's say, 1000 correlations. How does this compare to your value above?
+
+```{r}
+ses <- replicate(1000, cor(sample_n(mat, nrow(mat), replace=TRUE))[1,2])
+
+sd(ses)
+
+#Similar - a hair larger.
+
+```
+
+
+## 3. W&S Chapter 17
+
+Questions 19, 30, 31
+
+## 4. Intervals and simulation
+
+Fit the deet and bites model from lab.
+
+```{r}
+deet <- read.csv("./data/17q24DEETMosquiteBites.csv")
+
+ggplot(deet, aes(dose, bites)) +
+  geom_point() +
+  stat_smooth(method=lm)
+
+
+```
+
+Now, look at `vcov()` applied to your fit. For example:
+
+```{r, echo = TRUE}
+deet_mod <- lm(bites ~ dose, data = deet)
+
+vcov(deet_mod)
+```
+
+What you have here is the variance-covariance matrix of the parameters of the model. In essence, every time you larger slopes in this case will have smaller intercepts, and vice-verse. This maintains the best fit possible, despite deviations in the slope and intercept.  BUT - what's cool about this is that it also allows us to produce simulations (posterior simulations for anyone interested) of the fit. We can use a package like `mnormt` that let's us draw from a multivariate normal distribution when provided with a vcov matrix.  For example...
+
+
+```{r mnorm, echo=TRUE}
+library(mnormt)
+
+rmnorm(4, mean = coef(deet_mod), varcov = vcov(deet_mod))
+```
+
+produces a number of draws of the variance and the covariance!
+
+### 4a. Fit simulations!
+Using `geom_abline()` make a plot that has the following layers and shows that these simulated lines match up well with the fit CI. 1) the data, 2) the lm fit with a CI, and 3) simulated lines. You might have to much around to make it look as good as possible.
+
+
+```{r, eval=FALSE}
+coef_sims <- rmnorm(500, mean = coef(deet_mod), varcov = vcov(deet_mod)) %>%
+  as.data.frame
+
+ggplot(deet, aes(dose, bites)) +
+  geom_point() +
+  geom_abline(data = coef_sims, aes(slope = dose, intercept = `(Intercept)`), alpha = 0.5) +
+  stat_smooth(data = deet, method=lm, fill = "red")
+```
+
+### 4b. Prediction simulations!
+
+That's all well and good, but what about the prediction intervals? To each line, we can add some error drawn from the residual standard deviation. That residual can either be extracted from `summary()` or you can get the `sd` of `residuals`.
+
+Now, visualize the simulated prediction interval around the fit versus the calculated prediction interval around the fit via `predict`. **+1 extra credit for a clever visualization of all elements on one figure - however you would like**
+
+```{r, warning = FALSE, eval=FALSE}
+coef_sims <- coef_sims %>%
+  mutate(error = rnorm(n(), 0, sd(deet_mod$residuals)))
+
+pred_frame <- predict(deet_mod, interval="prediction") %>% cbind(deet)
+
+ggplot(deet, aes(dose, bites)) +
+  geom_point() +
+  geom_abline(data = coef_sims, aes(slope = dose, intercept = error+`(Intercept)`), alpha = 0.5, color = "orange") +
+  geom_ribbon(data = pred_frame, aes(ymin = lwr, ymax = upr), fill = "purple", alpha = 0.5) +
+  geom_abline(data = coef_sims, aes(slope = dose, intercept = `(Intercept)`), alpha = 0.5) +
+  stat_smooth(data = deet, method=lm, fill = "red")
+
+```
