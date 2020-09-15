@@ -1,0 +1,582 @@
+---
+title: "Sampling and Simulation"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, shinobi, default-fonts, style.css]
+    nature:
+      beforeInit: "my_macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+class: middle, center
+background-image: url(images/03/mice_men.jpg)
+background-position: center
+background-size: cover
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+opts_chunk$set(fig.height=7, 
+               fig.width = 10,
+               fig.align = "center",
+               comment=NA, 
+               warning=FALSE, 
+               echo = FALSE,
+               message = FALSE)
+
+options(htmltools.dir.version = FALSE)
+read_chunk("./03_sampling_lecture.R")
+theme_set(theme_bw(base_size=16))
+```
+<br><br>
+<div style="align:center; background:black; color:white; font-size: 3em;font-weight: bold;">Sampling</div>
+
+---
+# Outline
+
+1. Sampling Nature
+
+2. Describing a Sample
+
+3. Using a Sample to Describe a Population
+
+---
+# Today's quiz:
+
+<br><br><br>
+.center[.large[http://tinyurl.com/sampling-pre]]
+
+---
+
+# Today's Etherpad
+<br><br><br>.center[.large[https://etherpad.wikimedia.org/p/sampling-2020]]
+
+---
+class:center
+
+# What is a population?
+
+```{r population,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+
+-- 
+
+**Population** = All Individuals
+
+---
+class: center, middle
+# Population
+.pull-left[
+```{r population,  echo=FALSE, fig.align='center',fig.width=6, fig.height=6}
+```
+]
+
+.pull-right[
+```{r normplot, echo = FALSE, fig.width=6, fig.height=6}
+normdat <- tibble(
+  x = seq(-3, 3, length.out = 200),
+  y = dnorm(x),
+  ymin = 0)
+
+normplot <- ggplot(normdat) +
+  geom_ribbon(aes(x = x, ymax = y, ymin = 0),
+              color = "black", fill = "red", alpha = 0.2) +
+  labs(x = "size", y = "")
+
+normplot
+```
+]
+---
+class: center
+
+# What is a sample?
+
+```{r sample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+
+--
+A **sample** of individuals in a randomly distributed population.
+
+---
+class: center, middle
+# Population
+.pull-left[
+```{r sample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=6}
+```
+]
+
+.pull-right[
+```{r normplotsamp, echo = FALSE, fig.width=6, fig.height=6}
+set.seed(2020)
+normsamp <- tibble(
+  x = rnorm(50))
+
+
+normplot + 
+  geom_histogram(data = normsamp, 
+                 aes(x = x,  
+                 y = after_stat(0.4*count/max(count))), 
+                 fill = "blue", bins = 30)
+```
+]
+
+
+---
+# Properties of a good sample
+
+1. Validity  
+    - Yes, this is a measure of what I am interested in
+
+2. Reliability  
+      - If I sample again, I'll get something similar
+
+3. Representative
+      - Sample reflects the population
+      - Unbiased
+
+
+---
+
+# Validity: Is it measuring what I think it's measuring?
+
+.center[![:scale 75%](./images/03/23andme_health_ancestry_kit.jpg)]
+
+---
+
+# Reliability: Is my sample/measure repeatable?
+
+.center[![](./images/03/painscale.jpg)]
+
+---
+
+# Bias from Unequal Representation
+```{r colorSize,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+If you only chose one color, you would only get one range of sizes.
+
+---
+
+# Unrepresentative Bias from Unequal Change of Sampling
+```{r spatialBias,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+--
+
+Spatial gradient in size
+
+---
+
+# Unrepresentative bias from Unequal Choice of Sampling
+```{r spatialSample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+Oh, I'll just grab those individuals closest to me...
+
+---
+
+# Solutions
+
+1. Validity: Can you connect your measurement and question?
+
+2. Reliability: Sample a standard or known population  
+
+3. Representative: Sampling design!
+
+---
+
+# A more representative sample from Random Sampling
+```{r spatialSample2,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+--
+
+Two sampling schemes
+
+--
+
+- Random - samples chosen using random numbers  
+
+-- 
+
+- Haphazard - samples chosen without any system (careful!)
+
+---
+
+# A more representative sample from **Stratified** Sampling
+```{r stratified,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+Sample over a known gradient, aka **cluster sampling**
+
+Can incorporate multiple gradients
+
+---
+
+# Stratified or Random?
+
+- How is your population defined?  
+
+
+- What is the scale of your inference?  
+
+
+- What might influence the inclusion of a replicate?  
+
+
+- How important are external factors you know about?  
+
+
+- How important are external factors you cannot assess?  
+
+---
+
+# Stratified Random Sampling
+  
+.center[.middle[![](./images/03/stratified_random_sampling_meme.jpg)]]
+
+---
+class: 
+
+# Exercise:
+
+### 1. What is a population you sample?  
+  
+### 2. How do you ensure validity, reliability, and representativeness of a sample?
+
+---
+# Outline
+
+1. Sampling Nature
+
+2. .red[Describing a Sample]
+
+3. Using a Sample to Describe a Population
+
+---
+# Taking a Descriptive
+```{r sample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```
+
+<center>How big are individuals in this population?  
+
+---
+# Our 'Sample'
+
+```{r samp, echo=FALSE}
+set.seed(2012)
+samp <- rnorm(25, 45,5)
+knitr::kable(matrix(samp, nrow = 5), "html") %>%
+  kableExtra::kable_styling()
+samp_data <- data.frame(size = samp)
+```
+
+---
+
+# Visualizing Our Sample as Counts with 20 Bins
+
+```{r sampPlot, echo=FALSE}
+sample_count_plot <- ggplot(samp_data, aes(x = size)) +
+  geom_histogram(bins = 20) 
+
+sample_count_plot
+```
+
+---
+
+# Visualizing Our Sample as Frequencies
+
+```{r sampPlotFreq, echo=FALSE}
+sample_freq_plot <- ggplot(samp_data, aes(x = size, y = after_stat(density))) +
+  geom_histogram(bins = 20) + 
+  labs(y = "frequency")
+
+sample_freq_plot
+```
+
+--
+Frequency = % of Sample with that Value
+
+---
+
+# Visualizing Our Sample as Frequencies
+
+```{r sampPlotFreq, echo=FALSE}
+```
+
+Frequency = Probability of Drawing that Value from a Sample
+
+
+---
+
+# Visualizing Our Sample as Frequencies
+
+```{r sampPlotFreq, echo=FALSE}
+```
+
+Frequency = Probability Density, Sums to One.
+
+---
+
+# Ways to Describe Our Sample
+
+- Describing it as a unique thing
+     - What is the value smack in the middle?
+     - What are large and small values like?
+     - Is our sample clustered, or waaaay spread out?
+     
+- Describing it with reference to a population
+      - If I were to draw from this sample, or it's like, what value would I most likely get?
+      - If I assume a normal distribution, what's the range of 66% or 95% of the variability?
+      - Is this sample peaked, flat, shifted one way or another?
+
+---
+
+# The Empirical Cummulative Distribution Plot of our Sample
+
+```{r make_exploratory_plots, echo = FALSE}
+ecdf_plot <- ggplot(data = samp_data,
+       aes(x = size)) +
+  stat_ecdf(geom = "point") +
+  stat_ecdf(geom = "step") +
+  labs(y = "Cummulative Frequency")
+
+box_plot <- ggplot(data = samp_data,
+       aes(y = size)) +
+  geom_boxplot(width = 0.2) +
+  xlim(c(-0.5, 0.5))
+
+quants <- quantile(samp)
+samp_iqs <- c(quants[2] - 1.5*IQR(samp),
+              quants[4] + 1.5*IQR(samp))
+samp_iqs <- c(sort(samp[samp>samp_iqs[1]], decreasing=FALSE)[1],
+              sort(samp[samp<samp_iqs[2]], decreasing=TRUE)[1])
+              
+```
+
+
+
+
+```{r}
+ecdf_plot
+```
+
+---
+
+# The Box Plot (or Box-and-Whisker Plot)
+
+```{r}
+box_plot + 
+  geom_point(position = position_nudge(x = 1), x = 0.25) +
+  xlim(c(-0.3, 0.3))
+```
+
+---
+
+# Two ways of seeing the same data
+
+```{r}
+
+ecdf_plot + box_plot
+```
+
+---
+
+# Median: Middle of the Sample
+```{r}
+(ecdf_plot+
+  geom_hline(color = "red", yintercept = 0.5)) + 
+(box_plot +
+  geom_hline(color = "red", yintercept = median(samp)))
+```
+---
+
+# Quartiles: Upper and Lower Quarter
+
+```{r}
+(ecdf_plot+
+  geom_hline(color = "red", yintercept = c(0.25, 0.75))) +
+(box_plot +
+  geom_hline(color = "red", yintercept = quants[c(2,4)]))
+```
+
+
+1<sup>st</sup> and 3<sup>rd</sup> **Quartile** = 25<sup>th</sup> and 75<sup>th</sup> **Percentile**
+
+---
+
+# Reasonable Range of Data (Beyond which are Outliers)
+```{r}
+
+#make an ecdf function
+efun <- ecdf(samp)
+
+
+(ecdf_plot+
+  geom_hline(color = "red", yintercept = efun(samp_iqs)))+
+(box_plot +
+  geom_hline(color = "red", yintercept = samp_iqs))
+```
+
+
+---
+
+# Where's the action in R?
+
+```{r quantile_demo, echo = TRUE}
+# Quantiles
+quantile(samp)
+
+# Interquartile range
+IQR(samp)
+```
+
+---
+# Outline
+
+1. Sampling Nature
+
+2. Describing a Sample
+
+3. .red[Using a Sample to Describe a Population]
+
+---
+
+# This is just a sample
+
+```{r}
+sample_count_plot + 
+  ggtitle("Sample")
+```
+
+--
+class: center, middle
+
+# We chose it to be representative of the population.
+
+---
+
+# But - how does my sample compare to a population?
+
+```{r samp_pop_plot}
+samp_pop <- tibble(x = seq(45-15, 45+15, length.out = 200),
+                   y = dnorm(x, 45, 5),
+                   ymin = 0,
+                   sd_size = "66%") %>%
+  mutate(sd_size = case_when(
+    x <= 45-10 ~ "5%",
+    x >= 45+10 ~ "5%",
+    x <= 45-5 ~ "95%",
+    x >= 45+5 ~ "95%",
+    TRUE ~ "66%"
+
+  ))
+
+sample_demo_plot <- sample_freq_plot +
+  xlim(c(25,65)) +
+  ggtitle("Sample")
+
+pop_demo_plot <- ggplot()+ 
+   geom_ribbon(data = samp_pop, 
+              aes(x = x, ymax = y, ymin = ymin),
+              fill = "red", alpha = 0.2) +  
+   labs(title = "Population", x = "size")
+
+sample_demo_plot + pop_demo_plot
+```
+
+---
+
+# Expected Value: the Mean
+
+```{r, fig.width = 10}
+(sample_demo_plot +
+   geom_vline(xintercept = mean(samp), col = "blue", lty=2) +
+   labs(subtitle = bquote(bar("x") == .(round(mean(samp),2))))) + 
+(pop_demo_plot +
+   geom_vline(xintercept = 45, col = "blue", lty=2) +
+      labs(subtitle = bquote(mu == 45)))
+```
+
+---
+
+# Sample Properties: **Mean**
+
+$$\bar{x} = \frac{ \displaystyle \sum_{i=1}^{n}{x_{i}} }{n}$$
+
+$\large \bar{x}$ - The average value of a sample  
+$x_{i}$ - The value of a measurement for a single individual   
+n - The number of individuals in a sample  
+&nbsp;  
+$\mu$ - The average value of a population  
+(Greek = population, Latin = Sample)
+
+---
+
+# Sample versus Population
+
+- Latin characters (e.g., $\bar{x}$) for **sample **
+  
+- Greek chracters (e.g., $\mu$) for **population**
+
+
+.center[https://istats.shinyapps.io/sampdist_cont/]
+
+---
+
+# Mean versus Median
+
+.center[https://istats.shinyapps.io/MeanvsMedian/]
+
+---
+
+# How Variable is the Population
+
+```{r, fig.width = 10}
+
+pop_demo_plot_sd <- ggplot()+ 
+    geom_ribbon(data = samp_pop[samp_pop$x>=45,], 
+                aes(x = x, ymax = y, ymin = ymin, 
+                    fill = sd_size), alpha = 0.2) +  
+    geom_ribbon(data = samp_pop[samp_pop$x<=45,], 
+                aes(x = x, ymax = y, ymin = ymin, 
+                    fill = sd_size), alpha = 0.2) +  
+    labs(title = "Population", x = "size", fill = "Fraction\nof Pop.") +
+  scale_fill_manual(values = c("red", "blue", "orange"))
+
+(sample_demo_plot +
+   geom_vline(xintercept = mean(samp)-2*sd(samp), col = "orange", lty=2) +
+   geom_vline(xintercept = mean(samp)-1*sd(samp), col = "blue", lty=2) +
+   geom_vline(xintercept = mean(samp)+1*sd(samp), col = "blue", lty=2) +
+   geom_vline(xintercept = mean(samp)+2*sd(samp), col = "orange", lty=2) +
+   labs(subtitle = bquote(s == .(round(sd(samp),2))))) + 
+(pop_demo_plot_sd +
+      labs(subtitle = bquote(sigma == 5)))
+```
+
+---
+# Sample Properties: **Variance**
+How variable was that population?
+$$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^2}} {n-1}$$
+
+* Sums of Squares over n-1  
+* n-1 corrects for both sample size and sample bias  
+* $\sigma^2$ if describing the population
+* Units in square of measurement...
+
+---
+# Sample Properties: Standard Deviation
+$$ \large s = \sqrt{s^2}$$  
+
+* Units the same as the measurement
+* If distribution is normal, 67% of data within 1 SD
+* 95% within 2 SD
+* $\sigma$ if describing the population
+
+---
+class: middle, center
+
+# Post-Quiz
+http://tinyurl.com/sampling-post
+ 

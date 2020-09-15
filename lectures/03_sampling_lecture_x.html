@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Sampling and Simulation</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: middle, center
+background-image: url(images/03/mice_men.jpg)
+background-position: center
+background-size: cover
+
+
+&lt;br&gt;&lt;br&gt;
+&lt;div style="align:center; background:black; color:white; font-size: 3em;font-weight: bold;"&gt;Sampling&lt;/div&gt;
+
+---
+# Outline
+
+1. Sampling Nature
+
+2. Describing a Sample
+
+3. Using a Sample to Describe a Population
+
+---
+# Today's quiz:
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+.center[.large[http://tinyurl.com/sampling-pre]]
+
+---
+
+# Today's Etherpad
+&lt;br&gt;&lt;br&gt;&lt;br&gt;.center[.large[https://etherpad.wikimedia.org/p/sampling-2020]]
+
+---
+class:center
+
+# What is a population?
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/population-1.png" style="display: block; margin: auto;" /&gt;
+
+-- 
+
+**Population** = All Individuals
+
+---
+class: center, middle
+# Population
+.pull-left[
+&lt;img src="03_sampling_lecture_x_files/figure-html/population-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="03_sampling_lecture_x_files/figure-html/normplot-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+class: center
+
+# What is a sample?
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/sample-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+A **sample** of individuals in a randomly distributed population.
+
+---
+class: center, middle
+# Population
+.pull-left[
+&lt;img src="03_sampling_lecture_x_files/figure-html/sample-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="03_sampling_lecture_x_files/figure-html/normplotsamp-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# Properties of a good sample
+
+1. Validity  
+    - Yes, this is a measure of what I am interested in
+
+2. Reliability  
+      - If I sample again, I'll get something similar
+
+3. Representative
+      - Sample reflects the population
+      - Unbiased
+
+
+---
+
+# Validity: Is it measuring what I think it's measuring?
+
+.center[![:scale 75%](./images/03/23andme_health_ancestry_kit.jpg)]
+
+---
+
+# Reliability: Is my sample/measure repeatable?
+
+.center[![](./images/03/painscale.jpg)]
+
+---
+
+# Bias from Unequal Representation
+&lt;img src="03_sampling_lecture_x_files/figure-html/colorSize-1.png" style="display: block; margin: auto;" /&gt;
+If you only chose one color, you would only get one range of sizes.
+
+---
+
+# Unrepresentative Bias from Unequal Change of Sampling
+&lt;img src="03_sampling_lecture_x_files/figure-html/spatialBias-1.png" style="display: block; margin: auto;" /&gt;
+--
+
+Spatial gradient in size
+
+---
+
+# Unrepresentative bias from Unequal Choice of Sampling
+&lt;img src="03_sampling_lecture_x_files/figure-html/spatialSample-1.png" style="display: block; margin: auto;" /&gt;
+Oh, I'll just grab those individuals closest to me...
+
+---
+
+# Solutions
+
+1. Validity: Can you connect your measurement and question?
+
+2. Reliability: Sample a standard or known population  
+
+3. Representative: Sampling design!
+
+---
+
+# A more representative sample from Random Sampling
+&lt;img src="03_sampling_lecture_x_files/figure-html/spatialSample2-1.png" style="display: block; margin: auto;" /&gt;
+--
+
+Two sampling schemes
+
+--
+
+- Random - samples chosen using random numbers  
+
+-- 
+
+- Haphazard - samples chosen without any system (careful!)
+
+---
+
+# A more representative sample from **Stratified** Sampling
+&lt;img src="03_sampling_lecture_x_files/figure-html/stratified-1.png" style="display: block; margin: auto;" /&gt;
+Sample over a known gradient, aka **cluster sampling**
+
+Can incorporate multiple gradients
+
+---
+
+# Stratified or Random?
+
+- How is your population defined?  
+
+
+- What is the scale of your inference?  
+
+
+- What might influence the inclusion of a replicate?  
+
+
+- How important are external factors you know about?  
+
+
+- How important are external factors you cannot assess?  
+
+---
+
+# Stratified Random Sampling
+  
+.center[.middle[![](./images/03/stratified_random_sampling_meme.jpg)]]
+
+---
+class: 
+
+# Exercise:
+
+### 1. What is a population you sample?  
+  
+### 2. How do you ensure validity, reliability, and representativeness of a sample?
+
+---
+# Outline
+
+1. Sampling Nature
+
+2. .red[Describing a Sample]
+
+3. Using a Sample to Describe a Population
+
+---
+# Taking a Descriptive
+&lt;img src="03_sampling_lecture_x_files/figure-html/sample-1.png" style="display: block; margin: auto;" /&gt;
+
+&lt;center&gt;How big are individuals in this population?  
+
+---
+# Our 'Sample'
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 41.11041 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 41.85113 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.56152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60.69390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 47.13263 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 42.11062 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 43.02022 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 51.24369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40.91309 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 47.22189 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 48.31628 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.86495 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40.79575 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 34.11458 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 48.15706 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 45.44011 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 47.03553 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.86209 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 55.74212 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 44.90765 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 51.28539 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38.87441 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 31.41510 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49.46008 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 34.67087 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# Visualizing Our Sample as Counts with 20 Bins
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/sampPlot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Visualizing Our Sample as Frequencies
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/sampPlotFreq-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+Frequency = % of Sample with that Value
+
+---
+
+# Visualizing Our Sample as Frequencies
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/sampPlotFreq-1.png" style="display: block; margin: auto;" /&gt;
+
+Frequency = Probability of Drawing that Value from a Sample
+
+
+---
+
+# Visualizing Our Sample as Frequencies
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/sampPlotFreq-1.png" style="display: block; margin: auto;" /&gt;
+
+Frequency = Probability Density, Sums to One.
+
+---
+
+# Ways to Describe Our Sample
+
+- Describing it as a unique thing
+     - What is the value smack in the middle?
+     - What are large and small values like?
+     - Is our sample clustered, or waaaay spread out?
+     
+- Describing it with reference to a population
+      - If I were to draw from this sample, or it's like, what value would I most likely get?
+      - If I assume a normal distribution, what's the range of 66% or 95% of the variability?
+      - Is this sample peaked, flat, shifted one way or another?
+
+---
+
+# The Empirical Cummulative Distribution Plot of our Sample
+
+
+
+
+
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Box Plot (or Box-and-Whisker Plot)
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Two ways of seeing the same data
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Median: Middle of the Sample
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+# Quartiles: Upper and Lower Quarter
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+
+1&lt;sup&gt;st&lt;/sup&gt; and 3&lt;sup&gt;rd&lt;/sup&gt; **Quartile** = 25&lt;sup&gt;th&lt;/sup&gt; and 75&lt;sup&gt;th&lt;/sup&gt; **Percentile**
+
+---
+
+# Reasonable Range of Data (Beyond which are Outliers)
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Where's the action in R?
+
+
+```r
+# Quantiles
+quantile(samp)
+```
+
+```
+      0%      25%      50%      75%     100% 
+31.41510 41.11041 46.56152 48.15706 60.69390 
+```
+
+```r
+# Interquartile range
+IQR(samp)
+```
+
+```
+[1] 7.046652
+```
+
+---
+# Outline
+
+1. Sampling Nature
+
+2. Describing a Sample
+
+3. .red[Using a Sample to Describe a Population]
+
+---
+
+# This is just a sample
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+class: center, middle
+
+# We chose it to be representative of the population.
+
+---
+
+# But - how does my sample compare to a population?
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/samp_pop_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Expected Value: the Mean
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Sample Properties: **Mean**
+
+`$$\bar{x} = \frac{ \displaystyle \sum_{i=1}^{n}{x_{i}} }{n}$$`
+
+`\(\large \bar{x}\)` - The average value of a sample  
+`\(x_{i}\)` - The value of a measurement for a single individual   
+n - The number of individuals in a sample  
+&amp;nbsp;  
+`\(\mu\)` - The average value of a population  
+(Greek = population, Latin = Sample)
+
+---
+
+# Sample versus Population
+
+- Latin characters (e.g., `\(\bar{x}\)`) for **sample **
+  
+- Greek chracters (e.g., `\(\mu\)`) for **population**
+
+
+.center[https://istats.shinyapps.io/sampdist_cont/]
+
+---
+
+# Mean versus Median
+
+.center[https://istats.shinyapps.io/MeanvsMedian/]
+
+---
+
+# How Variable is the Population
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Sample Properties: **Variance**
+How variable was that population?
+`$$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^2}} {n-1}$$`
+
+* Sums of Squares over n-1  
+* n-1 corrects for both sample size and sample bias  
+* `\(\sigma^2\)` if describing the population
+* Units in square of measurement...
+
+---
+# Sample Properties: Standard Deviation
+$$ \large s = \sqrt{s^2}$$  
+
+* Units the same as the measurement
+* If distribution is normal, 67% of data within 1 SD
+* 95% within 2 SD
+* `\(\sigma\)` if describing the population
+
+---
+class: middle, center
+
+# Post-Quiz
+http://tinyurl.com/sampling-post
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
