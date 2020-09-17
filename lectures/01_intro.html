@@ -11,9 +11,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -23,16 +23,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -41,9 +41,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -517,8 +517,9 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <section id="section" class="slide level2" data-background="images/01/Sonoma_coast.jpg">
 <h2></h2>
 <!-- comments for next year 
-  - futz with philosophy example
-  - eliminate last part of class
+  - Maybe give the what is this class first before technology, etc.
+  - It gets janky at the beginning
+  - Make first pop quiz ticky box only
 -->
 <br><br>
 <center>
@@ -581,20 +582,20 @@ UMass Boston<br />
 <section id="computational" class="slide level2">
 <h2>Computational</h2>
 <p><small style="font-size:.7em"></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># Split Data into Train/Test</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">keeley_train &lt;-<span class="st"> </span>keeley[<span class="dv">1</span><span class="op">:</span><span class="dv">80</span>,] </a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">keeley_test &lt;-<span class="st"> </span>keeley[<span class="dv">81</span><span class="op">:</span><span class="dv">90</span>,] </a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co"># Random Forest Models</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">rf1 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(rich <span class="op">~</span><span class="st"> </span>cover <span class="op">+</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">                      </span>hetero, <span class="dt">data =</span> keeley_train)</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">rf2 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="st">                      </span>abiotic <span class="op">+</span><span class="st"> </span>elev, <span class="dt">data =</span> keeley_train)           </a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#------------</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># Split Data into Train/Test</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#------------</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>keeley_train &lt;-<span class="st"> </span>keeley[<span class="dv">1</span><span class="op">:</span><span class="dv">80</span>,] </span>
+<span id="cb1-5"><a href="#cb1-5"></a>keeley_test &lt;-<span class="st"> </span>keeley[<span class="dv">81</span><span class="op">:</span><span class="dv">90</span>,] </span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#------------</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># Random Forest Models</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#------------</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>rf1 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(rich <span class="op">~</span><span class="st"> </span>cover <span class="op">+</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="st">                      </span>hetero, <span class="dt">data =</span> keeley_train)</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a>rf2 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="st">                      </span>abiotic <span class="op">+</span><span class="st"> </span>elev, <span class="dt">data =</span> keeley_train)           </span></code></pre></div>
 </small>
 <p class="fragment" align="center">
 <big style="color:red; font-size:2em;">Code Forces You to Be Explicit About Theory</big>
@@ -603,20 +604,20 @@ UMass Boston<br />
 <section id="computational-1" class="slide level2">
 <h2>Computational</h2>
 <p><small style="font-size:.7em"></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># Split Data into Train/Test</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">keeley_train &lt;-<span class="st"> </span>keeley[<span class="dv">1</span><span class="op">:</span><span class="dv">80</span>,] </a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">keeley_test &lt;-<span class="st"> </span>keeley[<span class="dv">81</span><span class="op">:</span><span class="dv">90</span>,] </a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co"># Random Forest Models</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">rf1 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(rich <span class="op">~</span><span class="st"> </span>cover <span class="op">+</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="st">                      </span>hetero, <span class="dt">data =</span> keeley_train)</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">rf2 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="st">                      </span>abiotic <span class="op">+</span><span class="st"> </span>elev, <span class="dt">data =</span> keeley_train)           </a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#------------</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co"># Split Data into Train/Test</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#------------</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>keeley_train &lt;-<span class="st"> </span>keeley[<span class="dv">1</span><span class="op">:</span><span class="dv">80</span>,] </span>
+<span id="cb2-5"><a href="#cb2-5"></a>keeley_test &lt;-<span class="st"> </span>keeley[<span class="dv">81</span><span class="op">:</span><span class="dv">90</span>,] </span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#------------</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co"># Random Forest Models</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#------------</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>rf1 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(rich <span class="op">~</span><span class="st"> </span>cover <span class="op">+</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="st">                      </span>hetero, <span class="dt">data =</span> keeley_train)</span>
+<span id="cb2-12"><a href="#cb2-12"></a></span>
+<span id="cb2-13"><a href="#cb2-13"></a>rf2 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="st">                      </span>abiotic <span class="op">+</span><span class="st"> </span>elev, <span class="dt">data =</span> keeley_train)           </span></code></pre></div>
 </small>
 <p class="fragment" align="center">
 <big style="color:red; font-size:2em;">Coding is power</big>
@@ -625,20 +626,20 @@ UMass Boston<br />
 <section id="computational-2" class="slide level2">
 <h2>Computational</h2>
 <p><small style="font-size:.7em"></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># Split Data into Train/Test</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">keeley_train &lt;-<span class="st"> </span>keeley[<span class="dv">1</span><span class="op">:</span><span class="dv">80</span>,] </a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">keeley_test &lt;-<span class="st"> </span>keeley[<span class="dv">81</span><span class="op">:</span><span class="dv">90</span>,] </a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co"># Random Forest Models</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#------------</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">rf1 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(rich <span class="op">~</span><span class="st"> </span>cover <span class="op">+</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="st">                      </span>hetero, <span class="dt">data =</span> keeley_train)</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13">rf2 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="st">                      </span>abiotic <span class="op">+</span><span class="st"> </span>elev, <span class="dt">data =</span> keeley_train)           </a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#------------</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># Split Data into Train/Test</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#------------</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>keeley_train &lt;-<span class="st"> </span>keeley[<span class="dv">1</span><span class="op">:</span><span class="dv">80</span>,] </span>
+<span id="cb3-5"><a href="#cb3-5"></a>keeley_test &lt;-<span class="st"> </span>keeley[<span class="dv">81</span><span class="op">:</span><span class="dv">90</span>,] </span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#------------</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co"># Random Forest Models</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#------------</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>rf1 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(rich <span class="op">~</span><span class="st"> </span>cover <span class="op">+</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="st">                      </span>hetero, <span class="dt">data =</span> keeley_train)</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a>rf2 &lt;-<span class="st"> </span><span class="kw">randomForest</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="st">                      </span>abiotic <span class="op">+</span><span class="st"> </span>elev, <span class="dt">data =</span> keeley_train)           </span></code></pre></div>
 </small>
 <p align="center">
 <span style="color:red; font-size:2em;">Repeatable Research</span>
@@ -653,7 +654,7 @@ UMass Boston<br />
 <section id="data-maintaince" class="slide level2">
 <h2>Data (maintaince)</h2>
 <center>
-<img data-src="./images/01/Life%20Cycle%20DiagramA.png" alt="http://libguides.wits.ac.za/content.php?pid=220705&amp;sid=3862732" />
+<img data-src="images/01/Life%20Cycle%20DiagramA.png" alt="http://libguides.wits.ac.za/content.php?pid=220705&amp;sid=3862732" />
 </center>
 </section>
 <section id="analysis-philosophy" class="slide level2">
@@ -786,7 +787,7 @@ Grolemund, G., and Wickham, W. 2016. R for Data Science.<br />
 <h2>Problem Sets</h2>
 <ul>
 <li>40% of your grade</li>
-<li>“Adapted”&quot; from Whitlock and Schluter</li>
+<li>“Adapted”" from Whitlock and Schluter</li>
 <li>Will often require R</li>
 <li>Complete them using Rmarkdown</li>
 </ul>
@@ -898,7 +899,7 @@ Grolemund, G., and Wickham, W. 2016. R for Data Science.<br />
 </section>
 <section id="how-biostats-is-often-thought-of" class="slide level2">
 <h2>How Biostats is Often Thought of</h2>
-<p><img data-src="./images/01/many_paths.jpg" /></p>
+<p><img data-src="images/01/many_paths.jpg" /></p>
 </section>
 <section id="our-philosophy" class="slide level2">
 <h2>Our Philosophy</h2>
@@ -915,8 +916,11 @@ Grolemund, G., and Wickham, W. 2016. R for Data Science.<br />
 </li>
 <li class="fragment">What breadth of observations do you need?</li>
 </ul></li>
-<li class="fragment">Fit your model of the world<br />
+<li class="fragment">Fit your model of the world
+<ul>
+<li class="fragment">Make sure you didn’t burn down Prague<br />
 </li>
+</ul></li>
 <li class="fragment">Query your model to answer your question</li>
 </ol>
 </section>
@@ -929,26 +933,26 @@ What is your question?
 </section>
 <section id="conceive-of-a-model-of-your-system" class="slide level2">
 <h2>Conceive of a model of your system</h2>
-<p><img data-src="./images/01/ocean_toy.jpg" /></p>
+<p><img data-src="images/01/ocean_toy.jpg" /></p>
 </section>
 <section id="how-much-do-you-need-to-know-to-answer-your-question" class="slide level2">
 <h2>How much do you need to know to answer your question?</h2>
-<p><img data-src="./images/01/sealife_toys.jpg" /></p>
+<p><img data-src="images/01/sealife_toys.jpg" /></p>
 </section>
 <section id="what-data-do-you-need-to-parameterize-your-model-of-the-world" class="slide level2">
 <h2>What data do you need to parameterize your model of the world?</h2>
-<p><img data-src="./images/01/human_subjects.png" /></p>
+<p><img data-src="images/01/human_subjects.png" /></p>
 <p align="left">
 <a href="http://xkcd.com" class="uri">http://xkcd.com</a>
 </p>
 </section>
 <section id="fit-your-model-of-the-world" class="slide level2">
 <h2>Fit your model of the world</h2>
-<p><img data-src="./images/09/golem.png" style="width:50.0%" /></p>
+<p><img data-src="images/09/golem.png" style="width:50.0%" /></p>
 </section>
 <section id="query-your-model-to-answer-your-question" class="slide level2">
 <h2>Query your model to answer your question</h2>
-<p><img data-src="./images/01/justask.jpg" /></p>
+<p><img data-src="images/01/justask.jpg" /></p>
 </section>
 <section id="our-approach-to-data-analysis" class="slide level2">
 <h2>Our Approach to Data Analysis</h2>
@@ -1027,6 +1031,7 @@ Fit a model(s), chosen to suit data &amp; error generating process!
 </section>
 <section id="fit-your-model-of-the-world-query-it" class="slide level2">
 <h2>Fit your model of the world &amp; Query It</h2>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="01_intro_files/figure-revealjs/genotypes3-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section>
 <section id="build-open-reproducible-research" class="slide level2">
