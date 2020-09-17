@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Sampling Estimate, Precision, and Simulation</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: middle, center
+background-color: #a95c68
+
+
+
+# Sampling Estimates, Precision, and Simulation
+
+![](images/04/target.png)
+
+### Biol 607
+---
+
+# Today's Etherpad
+&lt;br&gt;&lt;br&gt;&lt;br&gt;.center[.large[https://etherpad.wikimedia.org/p/sampling-2020]]
+
+---
+
+# Estimation and Precision
+
+.large[
+1. Probability Distributions and Population Parameter Estimates
+
+2. Simulation, Precision, and Sample Size Estimation  
+
+3. Bootstrapping our Way to Confidence
+
+]
+---
+# Last Time: Sample Versus Population
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/samp_pop_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Sample Properties: **Mean**
+
+`$$\bar{x} = \frac{ \displaystyle \sum_{i=1}^{n}{x_{i}} }{n}$$`
+
+`\(\large \bar{x}\)` - The average value of a sample  
+`\(x_{i}\)` - The value of a measurement for a single individual   
+n - The number of individuals in a sample  
+&amp;nbsp;  
+`\(\mu\)` - The average value of a population  
+(Greek = population, Latin = Sample)
+
+---
+class: center, middle
+
+# Our goal is to get samples representative of a population, and estimate population parameters. We assume a **distribution** of values to the population.
+
+---
+# Probability Distributions
+&lt;img src="04_simulation_estimation_x_files/figure-html/normplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Probability Distributions Come in Many Shapes
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/dists-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Normal (Gaussian) Distribution
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/normplot-1.png" style="display: block; margin: auto;" /&gt;
+
+- Arises from some deterministic value and many small additive deviations
+- VERY common
+---
+class: center
+
+# Understanding Gaussian Distributions with a Galton Board (Quinqunx)
+
+&lt;video controls loop&gt;&lt;source src="04_simulation_estimation_x_files/figure-html/quincunx.webm" /&gt;&lt;/video&gt;
+
+---
+
+# We see this pattern everywhere - the Random or Drunkard's Walk
+
+
+```r
+one_path &lt;- function(steps){
+  
+  each_step &lt;- c(0, runif(steps, min = -1, max = 1))
+
+  path &lt;- cumsum(each_step)
+  
+  return(path)
+}
+```
+
+--
+
+1. Input some number of steps to take 
+
+2. Make a vector of 0 and a bunch of random numbers from -1 to 1  
+
+3. Take the cummulative sum across the vector to represent the path  
+
+4. Return the path vector
+
+
+---
+
+# 1000 Simulated Random Walks to Normal Homes
+&lt;img src="04_simulation_estimation_x_files/figure-html/all_walks-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# A Normal Result for Final Position
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/final_walk-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Normal distributions
+&lt;img src="04_simulation_estimation_x_files/figure-html/normplot-1.png" style="display: block; margin: auto;" /&gt;
+
+- Results from additive accumulation of many small errors
+- Defined by a mean and standard deviation: `\(N(\mu, \sigma)\)`
+- 2/3 of data is within 1 SD of the mean
+- Values are peaked without **skew** (skewness = 0)
+- Tails are neither too thin nor too fat (**kurtosis** = 0)
+---
+
+# Estimation and Precision
+
+.large[
+1. Probability Distributions and Population Parameter Estimates
+
+2. .red[Simulation, Precision, and Sample Size Estimation]  
+
+3. Bootstrapping our Way to Confidence
+
+]
+
+---
+class: middle, center
+
+# The Eternal Question: What should my sample size be?
+
+---
+
+# Let's find out
+.large[
+1. Get in groups of 3 &lt;br&gt;&lt;br&gt;
+2. Ask each other your age. Report the mean to me.&lt;br&gt;&lt;br&gt;
+3. Now get into another group of five, and do the same.&lt;br&gt;&lt;br&gt;
+4. Now get into another group of ten, and do the same.&lt;br&gt;&lt;br&gt;
+]
+---
+
+class: center, middle
+
+# We simulated sampling from our class population!
+
+---
+# What if We Could Pretend to Sample?
+.large[
+- Assume the distribution of a population  
+
+- Draw simulated 'samples' from the population at different sample sizes
+
+- Examine when an estimated property levels off or precision is sufficient
+      - Here we define Precision as 1/variance at a sample size
+]
+---
+background-image: url(images/04/is-this-a-simulation.jpg)
+background-position: center
+background-size: cover
+
+---
+
+background-image: url(images/04/firefly-ship.jpg)
+background-position: center
+background-size: cover
+class: center
+
+# .inverse[Let's talk Firefly]
+
+---
+background-image: url(images/04/fireflies-1500x1000.jpg)
+background-position: center
+background-size: cover
+
+
+---
+# Start With a Population...
+
+Mean of Firefly flashing times: 95.9428571  
+SD of Firefly flasing times: 10.9944982  
+
+--
+
+So assuming a normal distribution...
+
+--
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/fireflydist-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Choose a Random Sample - n=5?
+
+Mean of Firefly flashing times: 95.9428571  
+SD of Firefly flasing times: 10.9944982  
+So assuming a normal distribution...
+
+
+
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/fireflydistPoints-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+
+```r
+rnorm(n = 5,
+      mean = mean(firefly$flash.ms),
+      sd = sd(firefly$flash.ms)
+```
+---
+
+# Calculate Sample Mean
+
+Mean of Firefly flashing times: 95.9428571  
+SD of Firefly flasing times: 10.9944982  
+So assuming a normal distribution...
+
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/fireflydistMean-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+Rinse and repeat...
+
+---
+# How Good is our Sample Size for Estimating a Mean?
+
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/plot_dist_sim-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Where does the variability level off?
+&lt;img src="04_simulation_estimation_x_files/figure-html/dist_sim_stop-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Many Ways to Visualize
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/bin2d-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Where does the variability level off?
+
+```
+# A tibble: 99 x 2
+   sampSize mean_sim_sd
+      &lt;int&gt;       &lt;dbl&gt;
+ 1       96        1.10
+ 2      100        1.11
+ 3       92        1.12
+ 4       95        1.12
+ 5       97        1.13
+ 6       89        1.13
+ 7       93        1.13
+ 8       98        1.13
+ 9       99        1.14
+10       91        1.17
+# … with 89 more rows
+```
+
+---
+
+# Visualize Variability in Estimate of Mean
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/sim_prec-1.png" style="display: block; margin: auto;" /&gt;
+
+
+--
+.large[What is acceptable to you? And/or relative to the Mean?]
+
+---
+class: center, middle
+# **Central Limit Theorem** The distribution of means of a sufficiently large sample size will be approximately normal
+
+https://istats.shinyapps.io/sampdist_cont/
+
+
+---
+class: center, middle
+# The Standard Error
+&lt;br&gt;&lt;br&gt;
+.large[
+A standard error is the standard deviation of an estimated parameter if we were able to sample it repeatedly. 
+]
+
+---
+
+# But, I only Have One Sample? How can I know my SE for my mean or any other parameter?
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/firehist-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Estimation and Precision
+
+.large[
+1. Probability Distributions and Population Parameter Estimates
+
+2. Simulation, Precision, and Sample Size Estimation  
+
+3. .red[Bootstrapping our Way to Confidence]
+
+]
+---
+
+# The Bootstrap
+.large[
+
+- We can resample our sample some number of times with replacement
+
+- This resampling with replacement is called **bootstrapping**
+
+- One replicate simulation is one **bootstrap**
+]
+
+---
+# One Bootstrap Sample in R
+
+
+```r
+# One bootstrap
+sample(firefly$flash.ms, size = nrow(firefly), replace = TRUE)
+```
+
+```
+ [1]  95  95  85  87  86  95  80 109  86  95 106  96 109  88  86  87 112  92  79
+[20] 116  89  92  98 112 113 118  94  94  95  86  87  94 118 109  98
+```
+
+---
+
+# Boostrapped Estimate of a SE
+- We can calculate the Standard Deviation of a sample statistic from replicate bootstraped samples
+
+- This is called the botstrapped **Standard Error** of the estimate
+
+
+```r
+one_boot &lt;- function(){
+  sample(firefly$flash.ms, size = nrow(firefly), replace = TRUE)
+}
+
+boot_means &lt;- replicate(1000, mean(one_boot()))
+
+sd(boot_means)
+```
+
+```
+[1] 1.816216
+```
+
+---
+class: large
+
+# So I always have to boostrap Standard Errors?
+
+--
+
+## .center[**No**]
+
+--
+
+Many common estimates have formulae, e.g.:  
+
+`$$SE_{mean} = \frac{s}{\sqrt(n)}$$`
+
+--
+
+Boot SEM: Boot SEM: 1.816, Est. SEM: 2
+
+--
+
+.center[(but for medians, etc., yes )]
+
+---
+
+# Bootstrapping to Estimate Precision of a Non-Standard Metric
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+SE of the SD = 1.101
+
+---
+class: large
+
+# Standard Error as a Measure of Confidence
+--
+
+.center[.red[**Warning: this gets weird**]]
+
+--
+
+
+- We have drawn our SE from a **sample** - not the **population**
+
+--
+
+- Our estimate ± 1 SE tells us 2/3 of the **estimates** we could get by resampling this sample  
+
+--
+
+- This is **not** 2/3 of the possible **true parameter values**  
+
+--
+
+- Rather, if we were to sample the population many many times, 2/3 of the time, this interval will contain the true value
+
+
+---
+
+# Confidence Intervals
+
+.large[
+- So, 1 SE = the 66% Confidence Interval  
+
+- ~2 SE = 95% Confidence Interval  
+
+- Best to view these as a measure of precision of your estimate
+
+- And remember, if you were able to do the sampling again and again and again, some fraction of your intervals would contain a true value
+]
+---
+
+class: large, middle
+
+# Let's see this in action
+
+### .center[.middle[https://istats.shinyapps.io/ExploreCoverage/]]
+
+---
+
+# Frequentist Philosophy
+
+.large[The ideal of drawing conclusions from data based on properties derived from theoretical resampling is fundamentally **frequentist** - i.e., assumes that we can derive truth by observing a result with some frequency in the long run.]
+
+&lt;img src="04_simulation_estimation_x_files/figure-html/CI_sim-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Final Note: SE, SD, CIs....
+![:scale 55%](images/04/cumming_comparison_2007.jpg)
+.bottom[.small[.left[[Cumming et al. 2007 Figure 4](http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf)]]]
+---
+# SE, SD, CIs....
+![:scale 75%](images/04/cumming_table_2007.jpg)
+
+.bottom[.small[.left[[Cumming et al. 2007 Table 1](http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf)]]]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -44,14 +44,14 @@ current_date <- current_date+ days(7)
 datestring <- paste(month(current_date), day(current_date), year(current_date), sep="/")
 ```
 `r datestring`   
-__Lecture:__ [Sampling](lectures/03_sampling_lecture_x.html) and [Simulation for Estimation](lectures/04_simulation_estimation.html). Descriptive statistics, and the creation of good observational sampling designs.   
+__Lecture:__ Descriptive statistics, and the creation of good observational sampling designs.    - [Sampling](lectures/03_sampling_lecture_x.html) and [Simulation for Estimation](lectures/04_simulation_estimation_x.html).   
 __Lab Topic:__ [Sampling and simulation](lab/02_sim_samp.html). Libraries in R. Dplyr.   
 __Reading:__ W&S 1,3-4, W&G Chapters on [data transformation](http://r4ds.had.co.nz/transform.html) and [pipes](http://r4ds.had.co.nz/pipes.html),  [Dplyr cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdfPaperpile)  
 __Optional Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf), [Simpler Coding with Pipes](https://www.r-statistics.com/2014/08/simpler-r-coding-with-pipes-the-present-and-future-of-the-magrittr-package/), [Managing Data Frames with the Dplyr package](https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2020  
-__Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages("dplyr")`  
+__Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages(c("dplyr", "purrr"))`  
 __In Class Code:__ [Code from Lab](in_class_code_2020/scripts/02_sampling_sim.R)\
-__Homework:__ [R, Dplyr, and Sampling](./homework_2020/02_sampling.html)
+<!-- __Homework:__ [R, Dplyr, and Sampling](./homework_2020/02_sampling.html) -->
 
 
 ### Week 3.   
