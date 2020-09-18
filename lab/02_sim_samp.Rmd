@@ -8,7 +8,9 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
 ```
 
 ## 1. Setting the stage
@@ -92,7 +94,7 @@ plot(y ~ x, data=my_df)
 
 Now, you can supply all sorts of arguments on plot - look at the help file. We're not really going to worry about those today.
 
-Let's try some example **exercises**.
+Let's try some example **exercises**. And, uh, then this is the last you will ever see of baseplot again in this class.
 
 a) Using `mtcars`, plot mpg by cyl. What happens if you set pch to 19 or 5?
 
@@ -204,12 +206,66 @@ mtcars %>%
   
 3. Make a data fame for only 6 cylinder engines with only the `disp` and `carb` columns. Create a boxplot. of how carb influences `disp`.
 
+## 3. A purrr-fect simulation
 
-## 3. Simulation and Sample Size
+### 3.1 Replicators Abound
 
+To simulate things, we want to repeat an action again and again. There are a few ways to do this in R. The first is the function `replicate()`
 
+```{r replicate}
+replicate(n = 5, sum(1:10))
+```
 
-### 3.1 Random Numbers and `sample()`
+Well, that's a hair boring, but, you can see it summed something 5 times. We can of course create fancier things to do, but, in general, `replicate()` is a solid workhorse.
+
+### 3.2 But I like cats...
+
+There is also a beautiful library in R called [purrr](https://purrr.tidyverse.org/). This library takes the dplyr logic of mapping a function to many inputs and puts it on a different level. We'll talk more about purrr at another time, but, for now, there are a few functions worth knowing.
+
+The core purrr functions are the `map_*()` functions. Basically, a whole family of functions where you can change what is in the * to specify the output type. For example, if we want to replicate the `replicate()` action of above, we'd be returning a *double* and would use `map_dbl()`.
+
+```{r map_dbl}
+library(purrr)
+map_dbl(1:5, ~sum(1:10))
+```
+
+Note our use of `~` to say "Hey, we're about to call some stuff." There are other ways to use map, but they involve writing your own functions, and, we'll leave that for another time.
+
+Other useful versions of map include `map_chr()` for character returns, `map_df()` for a data frame, `map_lgl` for true/false, and just plain olde `map()` which returns a list of whatever you want.
+
+Let's see `map_df()` in action, as we're going to use it today. Let's say we want to take some input, and return a data frame with the input and the sum of all numbers up to that input. To do so, you need to know that after the `~`, map functions call the individual argument being sent to the function `.x`.
+
+```{r map_df}
+map_df(1:10, ~data.frame(x = .x, y = sum(1:.x)))
+```
+
+Nifty! What if we wanted to return not only the final sum, but all numbers up until that point?
+
+```{r map_df_2}
+map_df(1:10, ~data.frame(x = .x, y = cumsum(1:.x)))
+```
+
+**Exercises**  
+
+1. Use `replicate()` to repeatedly average the numbers 1:10 seven times.
+  
+2. Do the same thing with `map_dbl()` - also what happens if you use other map functions?
+
+3. Start with a vector:
+
+```{r}
+my_vec <- c(11, 10, 10, 9, 10, 11, 10, 9, 10, 
+            12, 9, 11, 8, 11, 11, 10, 11, 10, 
+            11, 9)
+```
+
+Use `map_df()` to make a data frame that, for the numbers 3 through 15, returns two columns. One is the the average of the element of the vector 1 through the chosen number, the second is the standard deviation.
+
+e.g. `r mean(my_vec[1:10])` for a mean - but the 10 will be `.x` for you!
+
+## 4. Simulation and Sample Size
+
+### 4.1 Random Number Generation
 
 There are a number of ways to get random numbers in R from a variety of distributions.  For our simulations, let's start with a sample of 40 individuals that's from a population with a mean value of 10, a SD of 3.
 
@@ -222,131 +278,160 @@ Note the `set.seed()` function. Random number generators on computers aren't REA
 
 Unsettling, no?
 
-So, we can pull a random sample from a perfect population anytime we'd like. How do we get a bootstrap sample from a population?
+There are a wide variety of different random number generators in R. `rnorm()` is exceedingly comming, but, we also have the following. Let's flip a coin 30 times and see how many heads we get if there's a 50:50 change of getting heads. And let's do it 10 times!
 
-Why, with the sample function. Let's sample the sample we've greated above, and draw five different elements.
-
-```{r sample1}
-sample(samp, size = 5)
+```{r rbinom}
+rbinom(10, size = 30, prob = 0.5)
 ```
 
-This is *incredibly* useful in a wide variety of context. For example, let's say we wanted five rows of mtcars.
+We can also draw random numbers from a uniform distribution (all numbers are equally likely to be drawn) with a minimum and maximum bound.
 
-```{r sample_mtcars}
-mtcars[sample(1:nrow(mtcars), size = 5), ]
+```{r runif}
+runif(10, min = -1, max = 1)
 ```
 
-Of course, for that kind of thing, `dplyr` has you covered with 
+So from this, we can draw a random sample from a population with a distribution of our choice!
 
-```{r sample_dplyr}
-sample_n(mtcars, size = 5)
-```
+### 4.2 Using `rowwise()` and `map_dbl()` for simulation
 
-Or, you can even use a porportions - so, here's a random sampling of 10% of mtcars
-
-```{r sample_dplyr_frac}
-sample_frac(mtcars, 0.1)
-```
-
-But that is neither here nor there. 
-
-One thing that all of these sample functions let you do is sample with or without replacement. If we're assuming a sample is representative of a population and we want to bootstrap resample it, we're going to need to sample **with replacement**. Fortunately, that's just one more argument.
-
-```{r sample_replace}
-sample(1:3, size = 15, replace = TRUE)
-```
-
-This will come in handy shortly!
-
-### 3.2 Using `rowwise()` for simulation
-
-The other tool we'll need to simulate sampling a population is some output. Let's go through this step by step. First, let's say we are going to have 10 samples per sample size, and try sample sizes from 3 to 50. We begin by creating a data frame with this information, as we're going to want to plot this information later.
+OK, let's begin our journey towards figuring out what sample size we want. We now know how to generate random measurements from an assumed population.  The other tool we'll need to simulate sampling a population is some output. Let's go through this step by step. First, let's say we are going to try out sample sizes from 3 through 50 for a population with a mean of 45 and a standard deviation of 20. To start, we'll need to setup a data frame with the different sample sizes we want and some parameters we can use.
 
 ```{r start_n}
-#use rep to repeat the sample sizes 3 through 50 10 times
-sampSim <- data.frame(samp_size = rep(3:50, times = 10))
+# our assumptions
+mean_pop <- 45
+sd_pop <- 20
+
+# use rep to repeat the sample sizes 3 through 50
+samp_sim <- data.frame(samp_size = 3:50)
 ```
 
-We can view each row as one simulated replicate. Now, we're ready to go! What we want to do is, for each simulation, generate a sample population and take a mean. So, something like
+So, how do we create those replicate populations? Let's say we wanted to just make one simulated draw for each sample size. For that, we need to 1) look at each sample size, and then 2) draw a random sample. For the latter, we already have a function. For the former, we need a function to go row by row. `dplyr::rowwise()`. We feed it `samp_size` as an argument so that the variable is preserved in the resulting data frame. We could also have done `dplyr::group_by(samp_size)` as well. But I often find `rowwise()` more intuitive in this case.  For the later, we actually use `summarize()`, as it lets us create resulting outputs that are not the same size as the input. Note, this is new in dplyr 1.0, and I could not be more excited. 
 
-```{r take_mean, eval=FALSE}
-mean(rnorm(n = 10, mean = 10, sd = 3))
+Let's do this and visualize the results.
+
+```{r}
+samp_sim_1 <- samp_sim %>%
+  rowwise(samp_size) %>%
+  summarize(samp = rnorm(samp_size, mean_pop, sd_pop))
+
+plot(samp ~ samp_size, data = samp_sim_1)
 ```
 
-Or replace that rnorm bit with the `sample` function and vector of interest. We'll do it both ways.
+OK, that's nice. I have a lot of samples at each sample size. You can see as our sample size increases, there are, indeed, more points. However, we want to simulate a lot of sampling evens and calculate sample statistics. This is where `map_dbl()` or `replicate()` becomes very useful. Let's say, instead of just drawing from a normal population, we want to modify the above to calculate a mean. And do it, oh, let's say twice.
 
-So, we want to work this into a `dplyr` workflow.  Now, what I often do it write out, in comments, what I want to do. Then implement that in `dplyr`. For example.
+```{r}
+samp_sim_means_2 <- samp_sim %>%
+  rowwise(samp_size) %>%
+  summarize(samp_mean = 
+              replicate(2, rnorm(samp_size, mean_pop, sd_pop) %>% mean()))
+
+samp_sim_means_2
+```
+
+Oh! Now we're getting somewhere. Before we fully sally forth, let's outline what we're doing. You'll see it's a common structure for simulations.
+
 
 ```{r comment_dplyr}
-# Take the data frame
+# Take a data frame with a bunch of sample sizes
 # For each row
-# Use samp_size to get the mean of a random normal population with mean 10 and sd 3
-# Also draw a mean from the samp vector with n = samp_size, with replacement
+# Replicate calculating the mean from a random draw some number of times
 ```
 
-Reasonable, no? You could have written this out. Now, let's operationalize this. We'll group by `sim_number`, as we're doing to do the same thing for each replicate simulation.
-```{r comment_dplyr_nsim}
-# Take the data frame
-sampSim <- sampSim %>%
-# For each individual simulation
-  rowwise() %>%
-# Use samp_size to get the mean of a random normal population with mean 10 and sd 3
-  mutate(mean_pop = mean(rnorm(samp_size, mean = 10, sd = 3)),
-         
-# Also draw a mean from the samp vector with n = samp_size, with replacement
-         mean_sample = mean(sample(samp, size = samp_size, replace=T))) %>%
-# Cleanup
-    ungroup()
+Reasonable, no? You could have written this out. Now, let's operationalize this for 1000 simulations.
+
+```{r comment_dplyr_nsim, cache=TRUE}
+# Take a data frame with a bunch of sample sizes
+sim_results <- samp_sim %>%
+
+  # For each row
+  rowwise(samp_size) %>%
+  
+  # Replicate calculating the mean from a random draw some number of times
+  summarize(samp_mean = map_dbl(1:1000, 
+                                ~ rnorm(samp_size, mean_pop, sd_pop) %>%
+                                  mean()))
 ```
 
-#### 3.3.1 Faded Examples.
+What's great about this (and using a map function) is that we can also add additional information - say, the sd - using `map_df()` Note how we don't even use = in `summarize()`
+
+```{r sim_df_map, cache=TRUE}
+# Take a data frame with a bunch of sample sizes
+sim_results <- samp_sim %>%
+
+  # For each row
+  rowwise(samp_size) %>%
+  
+  # Replicate calculating the mean 
+  # and Sdfrom a random draw some number of times
+  summarize(map_df(1:1000, 
+                   ~data.frame(sim = .x,
+                               samp_mean = rnorm(samp_size,
+                                                 mean_pop, 
+                                                 sd_pop) %>%
+                                 mean(),
+                               samp_sd = rnorm(samp_size,
+                                               mean_pop, 
+                                               sd_pop) %>%
+                                 sd())))
+
+sim_results
+```
+
+
+### 4.3 Faded Examples.
 Let's try this out, and have you fill in what's missing in these faded examples.
 ```{r faded_sim, eval=FALSE}
 #Some preperatory material
 set.seed(42)
-samp <- rnorm(100, 10, 3)
-sampSim <- data.frame(samp_size = rep(3:50, times = 10))
+mean_pop <- 10
+sd_pop <- 3
+nsim <- 100
+sampSim <- data.frame(samp_size = 3:50)
 
 #Mean simulations
 sampSim %>%
-  rowwise() %>%
-  mutate(mean_pop = mean(rnorm(samp_size, mean = 10, sd = 3)),
-         mean_sample = mean(sample(samp, size = samp_size, replace=T))) %>%
-  ungroup()
+  rowwise(samp_size) %>%
+  summarize(samp_mean = 
+              replicate(nsim, 
+                        rnorm(samp_size, mean_pop, sd_pop) %>% mean()))
+
 
 #Now the faded examples! Fill in the ___
 
 #Median simulations
-sampSim %>%
-  rowwise() %>%
-  mutate(median_pop = ____(rnorm(samp_size, mean = 10, sd = 3)),
-         median_sample = ____(sample(samp, size = samp_size, replace=T))) %>%
-  ungroup()
+samp_sim %>%
+  rowwise(samp_size) %>%
+  summarize(samp_median = 
+              ____(nsim, 
+                        rnorm(samp_size, mean_pop, sd_pop) %>% median()))
 
 #SD simulations
-sampSim %>%
-  ____() %>%
-  ____(sd_pop = ____(rnorm(____, mean = 10, sd = 3)),
-         sd_sample = ____(sample(samp, size = ____, ____)) %>%
-  ungroup()
+samp_sim %>%
+  rowwise(samp_size) %>%
+  ____(samp_sd = 
+              ____(nsim, 
+                        ____(samp_size, mean_pop, ____) %>% sd()))
+
   
   
   
 #IQR simulations
 #function for interquartile range is IQR
-sampSim %>%
-  ____() %>%
-  ____(IQE_pop = ____(____(____, mean = 10, sd = 3)),
-         IQR_sample = ____(____(samp, size = ____, ____)) %>%
-  ungroup()
+samp_sim %>%
+  ____(____) %>%
+  ____(samp_iqr = 
+              ____(nsim, 
+                        ____(____, mean_pop, ____) %>% IQR()))
+
+  
 ```
 
-### 3.3 Determining Optimal Sample Size with `plot` and `summarize`
+### 4.4 Determining Optimal Sample Size with `plot` and `summarize`
 
 Great, so we've done the simulation! How do we determine sample size?  The first way is a plot.
 
 ```{r plot_n}
-plot(mean_pop ~ samp_size, data=sampSim)
+plot(samp_mean ~ samp_size, data=sim_results)
 ```
 
 We can eyeball this result and see a leveling out > 20 or so. OK, that's great, but...totally imprecise.
@@ -366,19 +451,17 @@ A few new things here. First, we're grouping by sample size, not sim number. Sec
 
 ```{r comment pseudo_sam_do}
 # Take our sampSim data
-sampSim_summary <- sampSim %>%
+sampSim_summary <- sim_results %>%
   # Group it by sample size
   group_by(samp_size) %>%
   # Take the SD of the sample size
-  summarize(pop_mean_sd = sd(mean_pop))
+  summarize(pop_mean_sd = sd(samp_mean))
 
 ```
 
 Neat - this gives us a much reduced piece of data to work with. But - what about the arranging?
 ```{r psuedo_sam_do_2}
 sampSim_summary <- sampSim_summary %>%
-  # ungroup the resulting data
-  ungroup() %>%
   # Sort it by SD
   arrange(pop_mean_sd)
 
@@ -387,17 +470,24 @@ sampSim_summary
 
 Now, notice that I don't have to use `head` or chop of the top few rows (there's a dplyr function for that - `slice()`).  That's because dplyr creates a data frame-like object called a `tibble`.  We'll talk about this in more detail later. For now, tibbles work just like data frames, but they print out a little differently. If we REALLY wanted a data frame, we could just use `as.data.frame()`.
 
-As for the result, we can see that, eh, 46 has the lowest SD, but things bounce around, with even some of the mid 20s sample sizes having nice properties. Now, to be sure, we should probably repeat this with 100 or even 1000 simulations per 
+As for the result, we can see that, eh, something in the 40s has the lowest SD, but things bounce around. We could also plot this.
 
-### 3.4 Exercises.
+```{r sd_sim_plot}
+plot(pop_mean_sd ~ samp_size, data = sampSim_summary)
+```
+
+So, what is acceptable? At what point does adding another sample begin to have diminishing returns.
+
+### 4.5 Exercises.
 
 a) Look at the resulting simulations using the sample. Would you chose a different optimal sample size?
 
 b) Repeat this whole process, but for the sample median. What is the optimal sample size? Feel free to reuse code or modify code in place (for the simulations).
 
 
-## 4. Standard Errors
-### 4.1 Basic Sample Properties
+## 5. Bootstrapped Standard Errors
+
+### 5.1 Basic Sample Properties
 
 So, as we launch into things like standard errors, I wanted to pause and hit a few key functions we need to describe a sample. Let's use the `samp` vector from above as adata source.  First, mean, sd, and median.
 
@@ -427,89 +517,42 @@ quantile(samp, probs = c(0.05, 0.1, 0.5, 0.9, 0.95))
 
 You can get individual values by specifying the percentile you want with probs.
 
-### 4.2 Standard Error of a Median via Simulation
-Let's look at the standard error of a median from our samp vector. And let's do it via simulation. One way we can do this is to use the 'replicate()` function. This lets us replicate some statement over and over again. So, let's replicate taking the median of a sample with replacement of the samp vector. Then we can get the standard deviation of that.
+### 5.2 The Bootstrap
+OK, but what about bootstrapped standard errors? Or, you know, bootstrapping in general. Let's start by generating a 'sample' with a sample size of 40.
+
+```{r samp_gen}
+set.seed(2020)
+samp <- rnorm(n = 40, mean = 10, sd = 3)
+```
+
+OK, how do we get one bootstrap sample from this? Why, with `sample()` of course. We give `sample()` a few arguments about how big of a sample we want as well as if we want to sample with or without replacement.
+
+```{r one_boot}
+one_boot <- sample(samp, size = length(samp), replace = TRUE)
+```
+
+
+### 5.3 Bootstrapped SEs
+
+Let's look at the bootstrapped standard error of a median from our samp vector. We're going to do it using the same techniques of simulation - and in particular with `replicate()`.  So, let's replicate taking the median of a sample with replacement of the samp vector. Then we can get the standard deviation of that.
 
 ```{r se_sim}
-median_sims <- replicate(n = 100, median(sample(samp, size=10, replace=TRUE)))
+median_sims <- replicate(n = 100, 
+                         median(sample(samp,length(samp), replace=TRUE)))
 
 sd(median_sims)
 ```
 
-This is nice, but, man, that's a lot of nested statements. The other way we could do this is with `dplyr`. Again, we can start with a blank data frame with 100 simulations, waiting to take flight.
+Simple, no? Now.... can you think about how you might use this in the context of trying different sample sizes? 
 
-```{r se_dplyr_start}
-median_sims <- data.frame(sims=1:100)
-```
+### 5.4 Exercise! How does sample size change bootstrapped SE?
 
-Now, we can take these, and for each simulation, draw a median from a sample of our `samp` vector.
+OK, you've done simulations from populations. Now, let's mesh those bootstraps with our concepts of simulation at different sample sizes and.... plot out how to look at change in bootstrapped SE for the IQR at different sample sizes.
 
-```{r se_dplyr}
-median_sims <- median_sims %>%
-  rowwise() %>%
-  mutate(median_sim = median(sample(samp, size=10, replace = TRUE))) %>%
-  ungroup()
+1. First, make sure you feel comfortable calculating the bootstrapped SE of the IQR from samp. Repeat what we did above with IQR instead of median.
 
-median_sims
-```
+2. Now, write out in comments what you will do to end up with a data frame that has a column of sample sizes and a column of IQRs calculated from sampling our `samp` vector.  
 
-Perfect! From this, we can get the standard error of our median quite simply.
+3. Code it!
 
-```{r se_median}
-sd(median_sims$median_sim)
-```
-
-Done!
-
-#### 4.2.1 Faded Examples
-
-To take this for a spin, let's try some faded examples.
-
-```{r se_faded, eval=FALSE}
-#some preperatory material
-se_sims <- data.frame(sample_size=rep(5:50, 100))
-
-median_se_sims <- se_sims %>%
-  rowwise() %>%
-  mutate(median_sim = median(sample(samp, size = sample_size, replace=TRUE))) %>%
-  ungroup() %>%
-  group_by(sample_size) %>%
-  summarize(median_se = sd(median_sim))
-
-plot(median_se ~ sample_size, data=median_se_sims, type="l")
-
-#mean se sims
-mean_se_sims <- se_sims %>%
-  ___() %>%
-  mutate(mean_sim = mean(___(samp, size = sample_size, replace=TRUE))) %>%
-  ungroup() %>%
-  group_by(___) %>%
-  summarize(mean_se = sd(___))
-
-plot(mean_se ~ sample_size, data=___, type="l")
-
-
-#iqr se sims
-iqr_se_sims <- se_sims %>%
-  ___() %>%
-  ___(iqr_sim = IQR(___(samp, size = sample_size, replace=TRUE))) %>%
-  ungroup() %>%
-  group_by(___) %>%
-  summarize(iqr_se = sd(___))
-
-plot(___ ~ ___, data=___, type="l")
-
-
-
-#sd se sims
-sd_se_sims <- se_sims %>%
-  ___() %>%
-  ___(sd_sim = sd(___(samp, size = ___, ___=___))) %>%
-  ungroup() %>%
-  ___(___) %>%
-  ___(sd_se = sd(___))
-
-plot(___ ~ ___, data=___, type="l")
-
-
-```
+4. Now, write out in comments how you would go from that data frame to one that has the SE for the IQR at each sample size.
