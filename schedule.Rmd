@@ -51,7 +51,7 @@ __Optional Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrnesla
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2020  
 __Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages(c("dplyr", "purrr"))`  
 __In Class Code:__ [Code from Lab](in_class_code_2020/scripts/02_sampling_sim.R)\
-<!-- __Homework:__ [R, Dplyr, and Sampling](./homework_2020/02_sampling.html) -->
+__Homework:__ [R, Dplyr, and Iteration](./homework/02_iteration.html)  
 
 
 ### Week 3.   
