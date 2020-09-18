@@ -58,13 +58,13 @@ __Homework:__ [R, Dplyr, and Iteration](./homework/02_iteration.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [Data visualization](lectures/05_data_viz_principles.pptx), [Data Creation](https://datacarpentry.org/spreadsheet-ecology-lesson/)\
-__Lab Topic:__  [Data import, libraries, factors and forcats](lectures/06_read_data_libraries.html) and [Introduction to ggplot2](lab/04_ggplot_intro.html).  Data for lab [here](lab/data_03_04.zip).  
-__Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html), [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf)  
+__Lecture:__ More on simulation of sample properties, [Data visualization](lectures/05_data_viz_principles.pptx)  
+__Lab Topic:__ [Introduction to ggplot2](lab/04_ggplot_intro.html).  Data for lab [here](lab/data_03_04.zip).  
+__Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html)  
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf), [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/) - note, this is a whole book, but scan it - it's amazing\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2020  
-__Packages used this Week:__ [ggplot2](https://ggplot2.tidyverse.org/), [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), [forcats](https://forcats.tidyverse.org/), [readr](https://readr.tidyverse.org/), [readxl](https://readxl.tidyverse.org/), [tibble](https://tibble.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/) - `install.packages(c("ggplot2", "ggridges", "forcats", "readr", "readxl", "tibble", "lubridate"))`  
-__Cheat Sheets:__ [Reading data into R](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf). [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf), [Choosing a good chart cheat sheet](https://biol355.github.io/Readings/choosing-a-good-chart-09.pdf)  
+__Packages used this Week:__ [ggplot2](https://ggplot2.tidyverse.org/), [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), [ggdist](https://mjskay.github.io/ggdist/) - `install.packages(c("ggplot2", "ggridges", "palmerpenguins", "ggdist"))`  
+__Cheat Sheets:__  [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf), [Choosing a good chart cheat sheet](https://biol355.github.io/Readings/choosing-a-good-chart-09.pdf)  
 __In Class Code:__  [Intro to data and  ggplot2](in_class_code_2020/scripts/03_files_ggplot2.R)\
 __Homework:__ [ggplot2 homework](./homework_2020/03_ggplot.html)  
   
@@ -72,12 +72,13 @@ __Homework:__ [ggplot2 homework](./homework_2020/03_ggplot.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [Joins](lectures/18_join.html), [Tidy data](lectures/17_tidy.html)  
+__Lecture:__ [Data import, libraries, factors and forcats](lectures/06_read_data_libraries.html), [Joins](lectures/18_join.html), [Tidy data](lectures/17_tidy.html)  
 __Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  
-__Reading:__  [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
-__Packages:__ `install.packages(c("reprex", "datapasta", "lubridate", "tidyr"))`  
+__Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
+__Cheat Sheets:__ [Reading data into R](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).  
+__Packages:__ `install.packages(c("reprex", "datapasta", "lubridate", "tidyr", "readr", "readxl", "tibble"))` - [readr](https://readr.tidyverse.org/), [readxl](https://readxl.tidyverse.org/), [tibble](https://tibble.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/)    
 __Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2020  
-__In Class Code:__ [Tidy](./in_class_code_2020/scripts/tidyr.R), [markdown options](in_class_code_2016/00_rmarkdown_options.Rmd)  
+__In Class Code:__ [Tidy](./in_class_code_2020/scripts/tidyr.R)  
 
 ## Block 2: Regression and Inference
 
