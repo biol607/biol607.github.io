@@ -1,0 +1,53 @@
+---
+title: "Test Document"
+author: "Jarrett Byrnes"
+date: "9/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      error = FALSE,
+                      message = FALSE)
+```
+
+Just write text.
+
+# Biggest header
+## Big header
+### Slightly less big header
+
+
+*italics*  
+**bold**
+
+- write a bullet point  
+
+1. Or an 
+2. Ordered list
+
+
+Inline code: `r mean(rnorm(100))`  
+
+
+```{r summary_chunk}
+
+summary(quakes)
+```
+
+
+```{r summary_chunk}
+```
+
+Let's see the head of the quakes data frame
+
+```{r head_quakes, echo = FALSE}
+head(quakes)
+```
+
+```{r show_dont_tell, eval = FALSE, warning = FALSE, message=FALSE}
+str(quakes)
+```
+
+
