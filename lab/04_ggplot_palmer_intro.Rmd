@@ -1,0 +1,368 @@
+---
+title: "Introduction to Graphics and Temperature Change"
+author: "Biol607"
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE,
+                      error = FALSE)
+```
+
+## 1. Data viz with ggplot2!
+
+Good data visualizations can have a strong impact on how you think about a phenomena. The faster you are able to make a plot that looks good and communicates what you are interested in, the better for you! And your collaborators! We're going to explore this today with the `ggplot2` library - truly a masterful piece of work that breaks figures down into a **grammar of graphics**
+
+![](./images/horst/ggplot2_masterpiece.png)
+.small[image from Allison Horst https://github.com/allisonhorst/stats-illustrations]
+
+## 2. The Palmer Penguins
+
+As our dataset to explore, we're going to look at the [Palmer Penguins dataset](https://allisonhorst.github.io/palmerpenguins/), recently released to CRAN. Data were collected and made available by [Dr. Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) and the [Palmer Station, Antarctica LTER](https://pal.lternet.edu/), a member of the [Long Term Ecological Research Network](https://lternet.edu/). The data describe the morphometrics (and more) of several species of Antarctic Penguins on a few different islands. Awww!  Penguins! For way more, see [here](https://education.rstudio.com/blog/2020/07/palmerpenguins-cran/)!
+
+.center[![](./images/palmer/lter_penguins.png)]
+
+So, let's load it up (and if you haven't, install it).
+
+```{r load_palmer}
+#install.packages("palmerpenguins")
+
+library(palmerpenguins)
+library(dplyr)
+
+head(penguins)
+```
+
+## 3. Your first ggplot
+
+### 3.1 Visualizing distributions 
+
+All right! Let's try out `ggplot2`. `ggplot2` works simply by you specifying things in roughly the following order:  
+1. A `ggplot2` object which links to a data set and has information about aesthetics.  
+2. A `geom` or geometry which specifies how the data is to be seen.  
+3. Other bells and whistles which we will get to.  
+  
+We add these pieces together with a `+` sign. So let's start with something simple, just visualizing a distribution of bill lengths. First, we have to create a ggplot. We'll link it to the `penguins` data, and map x to anomaly using the `aes` function, as we're going to look at the distribution of `bill_length_mm`
+
+```{r first_ggplot}
+library(ggplot2)
+
+bill_dens <- ggplot(data = penguins,
+       mapping = aes(x = bill_length_mm))
+
+bill_dens
+```
+
+Wait, what? Nothing happened! That actually makes sense, as we haven't told `ggplot2` anything about plotting! There's no `geom`. For starters, let's try the simple `geom_histogram()`
+
+```{r hist}
+bill_dens +
+  geom_histogram()
+``` 
+
+Nice! Aside from R yelling at us and giving telling us to use a different bin size, it's not bad!  
+  
+**Exercise:** Now you try `geom_density`. How's it look? If you want, try adding arguments like `fill`, `color`, and `alpha` to `geom_density()` if you want to get fancy.
+
+
+
+### 3.2 Visualizing multiple distributions 
+
+To view multiple distributions, we'll need aesthetics that specify groupings. We'll look in a minute at how we put those on an axis themselves, but for now, let's introduce `group`.
+
+```{r dens_group}
+bill_dens_group <- ggplot(data = penguins,
+       mapping = aes(x = bill_length_mm, group=species))
+```
+
+There's a lot we can try here. Let's revisit one old friend.
+
+```{r hist_stack}
+bill_dens_group + 
+  geom_density()
+```
+
+Well that shows something interesting, doesn't it! But - which is which? This figure is somewhat meaningless.
+
+This is where other **aesthetics** come in - fill, color, alpha, shape, etc. We *can* add them in to the initial call to `ggplot()`, but, sometimes, we realize only later we want to add them in. Let's try this with fill.
+
+```{r dens_fill}
+bill_dens_group +
+  geom_density(mapping = aes(fill = species))
+```
+
+Nice! Hrm. Hard to see what's going on with those Chinstraps, though? Sometimes, we want some transparency - the **alpha** argument. Now, we want everything to have the *same* transparency, and not base it on a property of the data. Note that to do this how we place the transparency **outside** of the `aes()` aesthetic mapping. This is tricky, and I often see people messing up what goes where. Remember - if it's related to the data, inside of the aesthetic mapping. If it is not - and/or if it is constant - outside of the aesthetic mapping!
+
+```{r, dens_alpha}
+bill_dens_group +
+  geom_density(mapping = aes(fill = species),
+               alpha = 0.3)
+```
+
+
+Sometimes, we want to move things around a bit instead of using transparency, using the `position` argument. For example, if we wanted a stacked density plot, we'd do the following
+
+```{r dens_stack}
+bill_dens_group + 
+  geom_density(mapping = aes(fill = species),
+               position="stack")
+```
+
+There are other things useful for other kinds of plots - `position_dodge()` where elements of the plot try and avoid each other, `position_jitter()` where random noise is added, and more.
+
+**Exercise:** Now you try `geom_histogram`. How's it look? Bad, right? Try different colors, alphas, and fills to see if you can improve. Maybe a different position? What works best?
+
+
+## 4. Two dimensions.
+
+### 3.1 Starting a plot
+`ggplot2` contains a number of different types of geometries for displaying information in two dimensions However, all of them begin by giving ggplot2 some information, just as before. What data is going to be used? What elements of that data will map onto different aesthetic values and scales in the plot? We'll start by creating the base of our plot with the x-axis being penguin mass and the y-axis beingspecies. We'll also color by species, for fun.
+
+```{r ggplot_base}
+pen_plot_base <- ggplot(data = penguins,
+                        mapping = aes(x = body_mass_g, y = species,
+                                      color = species))
+```
+
+Great! We have the basics of our plot saved as an object. 
+
+### 4.2 Scatterplots
+
+To take a basic plot and add a geometry choice to it, we use one of the family of `geom_`s in `ggplot2`. One of the most basic plot types we ever encounter is the scatterplot. y versus x. That's all. For that, we have `geom_point()`
+
+```{r ggplot_point}
+pen_plot_base +
+  geom_point()
+```
+
+This is great! But, well, a few things.  First, man, lots of points overlap. If only they were kinda transparent. Second, maybe they're too small? Each `geom` has a number of options for different visual elements - color, size, alpha, etc. So, for example, we can modify this plot a bit.
+
+```{r ggplot_point_mod}
+pen_plot_base +
+  geom_point(alpha = 0.5, size=3)
+```
+
+Note - all of these are relative to 1. Well, now we can see the distribution of points a bit better, given overlap. But....
+
+
+### 4.3 Jitter
+Maybe we want to add a bit of random noise to the points, to better visualize what's going on here. For that, there's `geom_jitter`.
+
+```{r jitter}
+pen_plot_base +
+  geom_jitter()
+```
+
+
+### 4.4 Exercise: Boxplot, Violins, and stacking.
+This is all well and good, but, eyeballing is not the same as some solid information on the distribution of the data. Let's try some of the 2D ways of visualizing data.   
+
+1. Try out the following geoms - `geom_boxplot()`, `geom_violin()`, `stat_summary()`. Which do you prefer?  
+2. Try adding multiple geoms together. Does order matter?  
+3. If you want to get saucy, install `ggridges` and try out `geom_density_ridges()`  
+
+```{r ridges, echo=FALSE, message=FALSE}
+library(ggridges)
+ggplot(data = penguins,
+       aes(x = body_mass_g, y = species, fill = species)) +
+ geom_density_ridges(alpha = 0.5)
+```
+
+### 4.5 Continuous Scatterplots
+
+And last, you **can** also plot two continuous variables against each other. Let's see an example here.
+
+```{r scatter_continue}
+pen_mass_depth <- ggplot(data = penguins,
+                         mapping = aes(x  = body_mass_g, 
+                                       y = bill_depth_mm, 
+                                       color = species)) +
+  geom_point()
+
+pen_mass_depth
+```
+
+What does this teach you? And, for fun, what happens if you use `geom_line()`?
+
+
+
+## 5. Facets to see grouped information and multi-panel plots
+
+Color can be one way to show information about different groups. But there are more.  Figures often have multiple panels, each of which shows a different slice of the data. In `ggplot`, these are called facets. If we take the plot of bill depth versus body mass above, we used color to show different groups. But, what if instead of separating by color - as two of these species overlap - we really wanted to see each line on its own in a panel.  There are two functions that can help us here. The first is `facet_wrap()`
+
+```{r facet}
+pen_mass_depth +
+  facet_wrap(~species)
+```
+
+The second is a function that allows us to facet with two variables - one with rows and one with columns.  We can't do that with this example, but, in essence, you would use a similar tilda notation as above - `facet_grid(rows ~ cols)` 
+
+**Exercise:** 
+
+1. Given that we have the same species of penguin on different islands, what do you see if you use `facet_grid()` with both island and species?
+
+2. Incorporate other faceting variables - sex, year, etc. Or mix up what is a facet and what is a color. What do you learn?
+
+## 6. Making your plot sing!
+
+### 6.1 Labels
+
+Up to here, while things might look good, the text all over our plot is... ugly. Yes, we may have variable names done well for a reason. If we want to add labels - nay, even titles, there is one function that lets us get it all under control - `labs()`.
+
+```{r add_labs}
+pen_mass_depth <- pen_mass_depth +
+  labs(title = "Penguin Bill Depth versus Size",
+       subtitle = "Data from the Palmer LTER",
+       x = "Body Mass (g)",
+       y = "Bill Depth (mm)",
+       color = "Species of\n Penguin")
+```
+
+So much nicer! Note, for every aesthetic that is mapped to the data, there is then a comparable `labs()` argument that can be supplied.
+
+#### 6.2 Changing Plot Looks - Themes
+
+What if you don't like the basic grey background. Sure, it's easy to read, but, ick. ggplot2 has a number of builtin themes that allow you to specify a few options. See `?ggtheme` For example
+
+```{r theme}
+pen_mass_depth +
+  theme_bw(base_size = 12,
+           base_family = "Times")
+```
+
+Or, if these are too restrictive, in addition to there being a ton of one-of themes in different packages, the excellent [ggthemes](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)  package includes a number of options ready to go. Or try [ggthemr](https://github.com/cttobin/ggthemr).
+
+```{r}
+# Look at me and my 538-ness!
+library(ggthemes)
+pen_mass_depth +
+  theme_fivethirtyeight()
+  
+```
+
+If this is not flexible enough for you, and/or you want to make your own theme, see `?theme`. Ggplot2 is infinitely customizable. And, remember, all of these themes are functions, so, look at their help files to see what is available.
+
+**Exercise** Make a plot you'd like. Make it look as professional! Or, not so professional!
+
+#### 6.3 Changing Color Scales for Better Aesthetics 
+
+#### 6.3.1 Discrete Color Scales
+
+Themes are all well and good, but the pink-blue-green color scale. We can change it to what we'd like precisely with `scale_color_manual()`. But there are other options.
+
+
+```{r manual_colors}
+pen_mass_depth +
+  scale_color_manual(values = c("orange", "purple", "green"))
+```
+
+Many R functions will return palettes. Some of them, such as `scale_color_brewer()` or `scale_color_viridis_d()` where the d stands for discrete are built in. Both have many palettes and options worth playing with
+
+```{r}
+pen_mass_depth +
+  scale_color_brewer(palette = "Dark2")
+
+
+pen_mass_depth +
+  scale_color_viridis_d(option = "C")
+```
+
+
+Or others, you call the palette directly.
+
+```{r}
+pen_mass_depth +
+  scale_color_manual(values = rainbow(5))
+```
+
+I'm personally fond of the colors in the [wesanderson](https://github.com/karthik/wesanderson) package.
+
+```{r wes}
+#devtools::install_github("karthik/wesanderson")
+library(wesanderson)
+
+pen_mass_depth +
+  scale_color_manual(values = wes_palette("BottleRocket2"))
+```
+
+Other packages, like [ggsci](https://github.com/nanxstats/ggsci) or [ggpomological](https://github.com/gadenbuie/ggpomological) can provide additional palettes, if you so desire. The former even matches the house styles of many scientific journals.
+
+#### 6.3.2 Continuous Color Scales
+
+This discrete example is nice, but.... what if we wanted something where mass was actually a color.
+
+```{r}
+pen_mass_col <- ggplot(data = penguins,
+       mapping = aes(x = bill_depth_mm,
+                     y = bill_length_mm,
+                     color = body_mass_g)) +
+  geom_point() +
+  facet_wrap(~species)
+
+pen_mass_col
+```
+
+Well that's terrible. I have no idea what is going on. There are many solutions. Many of the palettes we just used can also be used continuously, such as my fav - viridis
+
+```{r vir_cont}
+pen_mass_col +
+  scale_color_viridis_c()
+```
+
+Or we can take more direct approaches. `scale_color_continuous()` takes a `low` and `high` argument. `scale_color_gradient2` adds a `mid` argument. And `scale_color_gradientn()` allows you to supply several colors in a vector, and then R will interpolate for you. Highly useful! 
+
+```{r vir_gradient}
+pen_mass_col +
+  scale_color_gradientn(colors = c("red", "orange", 
+                                   "yellow", "white", "blue", 
+                                   "purple"))
+```
+
+Note, there are similar functions for `scale_fill_*()`, `scale_size_*()`, `scale_linetype_*()`  `scale_alpha_*()`, and `scale_shape_*()` that are worth looking into.
+
+**Exercise:** OK - let's look at how flipper length relates to bill length and depth. Feel free to choose what gets to be a color and what gets to be a coordinate. Combine other aspects - sex, year, etc., to find something more interesting. But above all, make this plot have a great color scale with matching theme to make it pop.
+
+## 7. Stats and summaries
+
+We started with visualizing distributions. Let's go back to that. The density plot was actually calculated by a stat - a function for summarizing information. It used `stat_density()`. Ggplot2 has a wide variety of stats. For example, the simplest shows means and standard errors (although it can be adapted for other things) via `stat_summary()` Note also the use of `position_dodge()` below to make things not fall on top of each other.
+
+```{r}
+ggplot(data = penguins,
+       mapping = aes(x = species, y = flipper_length_mm,
+                     color = sex)) +
+  stat_summary(position = position_dodge(width = 0.3))
+```
+
+See `stat_summary()` for more summary functions.
+
+There are also a wide variety of 2d stats. For example, for aggregating data, as I did in class for simulations:
+
+```{r}
+ggplot(data = penguins,
+       mapping = aes(x = body_mass_g,
+                     y = bill_depth_mm)) +
+  stat_bin2d() +
+  scale_fill_viridis_c()
+```
+
+Or try
+
+```{r dens_fill_2d}
+ggplot(data = penguins,
+       mapping = aes(x = body_mass_g,
+                     y = bill_depth_mm)) +
+  stat_density_2d_filled() 
+```
+
+You can even add `geom_point()` on top.
+
+**Exercise:**  As a final exercise, look at how morphometric properties of penguins by species, sex, island, or whatever you would like, using stats to provide summary, rather than raw, visualizations.

@@ -59,7 +59,7 @@ __Homework:__ [R, Dplyr, and Iteration](./homework/02_iteration.html)
 ```
 `r datestring`   
 __Lecture:__ More on simulation of sample properties, [Data visualization](lectures/05_data_viz_principles.pptx)  
-__Lab Topic:__ [Introduction to ggplot2](lab/04_ggplot_intro.html).  Data for lab [here](lab/data_03_04.zip).  
+__Lab Topic:__ [Introduction to ggplot2](lab/04_ggplot_palmer_intro.html).  
 __Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html)  
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf), [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/) - note, this is a whole book, but scan it - it's amazing\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2020  
