@@ -38,6 +38,8 @@ This idea of doing one thing, then the next, then the next is often how we treat
 
 So, is there a better way? Yes!  What if we could take the output of one function, and pass it to the next? This is known as piping. And it is implemented in R by the `magrittr` library.  (Pause. Get the joke. Laugh at it. Move on.) `magrittr` introduces a funny new operator `%>%` which says, take the output of the thing on the right hand side, and pass it to the next function as its first argument. 
 
+![](./images/pipe-logo.png)
+
 As a simple example, let's sum one through ten using pipes.
 
 ```{r pipesum}
@@ -106,6 +108,9 @@ b) `boxplot()` works like plot. Use it for `mpg ~ vs`. Now try the `col` argumen
 
 ### 2.1 `mutate()`
 
+![](./images/horst/dplyr_mutate.png)
+.small[image from Allison Horst https://github.com/allisonhorst/]
+
 Often, we want to make a column that uses information from other columns. For this, we have mutate. For example, what if we wanted to make a log transformed column of `mpg`? Note, I'm going to wrap the whole thing in head, so we only get the first 6 lines of the result
 
 ```{r mutate_mpg, message=FALSE}
@@ -158,6 +163,7 @@ Whoah!  Cool!
 You try it, but group by gear and vs, and look at how that alters weight. Yes, you can group by multiple things in the same `group_by` statement - just separate them with a comma!
 
 ### 2.4 `select()`
+
 Often when working with a data frame, you end up with some column you no longer want. Maybe it was intermediate to some calculation. Or maybe you just want only a few columns to save memory. Either way, select is a way to include or exclude columns. 
 
 ```{r select}
@@ -183,6 +189,9 @@ head(select(mtcars2, contains("mpg")))
 
 
 ### 2.5 `filter()`
+
+![](./images/horst/dplyr_filter.jpg)
+.small[image from Allison Horst https://github.com/allisonhorst/]
 
 We can also exclude by row values using filter. This function takes all manner of comparisons, and returns only those rows for which the comparison is true. For example, to get rid of 3 cylinder cars:
 
@@ -221,6 +230,10 @@ Well, that's a hair boring, but, you can see it summed something 5 times. We can
 ### 3.2 But I like cats...
 
 There is also a beautiful library in R called [purrr](https://purrr.tidyverse.org/). This library takes the dplyr logic of mapping a function to many inputs and puts it on a different level. We'll talk more about purrr at another time, but, for now, there are a few functions worth knowing.
+
+![](./images/horst/map_frosting.png)
+.small[image from Allison Horst https://github.com/allisonhorst/]
+
 
 The core purrr functions are the `map_*()` functions. Basically, a whole family of functions where you can change what is in the * to specify the output type. For example, if we want to replicate the `replicate()` action of above, we'd be returning a *double* and would use `map_dbl()`.
 
