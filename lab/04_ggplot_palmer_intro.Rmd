@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE,
 Good data visualizations can have a strong impact on how you think about a phenomena. The faster you are able to make a plot that looks good and communicates what you are interested in, the better for you! And your collaborators! We're going to explore this today with the `ggplot2` library - truly a masterful piece of work that breaks figures down into a **grammar of graphics**
 
 ![](./images/horst/ggplot2_masterpiece.png)
-<span style="font-size:10px">image from Allison Horst https://github.com/allisonhorst/stats-illustrations]</span>
+<span style="font-size:10px">image from Allison Horst https://github.com/allisonhorst/stats-illustrations</span>
 
 ## 2. The Palmer Penguins
 

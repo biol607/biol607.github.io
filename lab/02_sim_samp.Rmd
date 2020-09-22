@@ -109,7 +109,7 @@ b) `boxplot()` works like plot. Use it for `mpg ~ vs`. Now try the `col` argumen
 ### 2.1 `mutate()`
 
 ![](./images/horst/dplyr_mutate.png)
-.small[image from Allison Horst https://github.com/allisonhorst/]
+<span style="font-size:10px">image from Allison Horst https://github.com/allisonhorst/</span>  
 
 Often, we want to make a column that uses information from other columns. For this, we have mutate. For example, what if we wanted to make a log transformed column of `mpg`? Note, I'm going to wrap the whole thing in head, so we only get the first 6 lines of the result
 
@@ -191,7 +191,7 @@ head(select(mtcars2, contains("mpg")))
 ### 2.5 `filter()`
 
 ![](./images/horst/dplyr_filter.jpg)
-.small[image from Allison Horst https://github.com/allisonhorst/]
+<span style="font-size:10px">image from Allison Horst https://github.com/allisonhorst/</span>  
 
 We can also exclude by row values using filter. This function takes all manner of comparisons, and returns only those rows for which the comparison is true. For example, to get rid of 3 cylinder cars:
 
@@ -232,7 +232,7 @@ Well, that's a hair boring, but, you can see it summed something 5 times. We can
 There is also a beautiful library in R called [purrr](https://purrr.tidyverse.org/). This library takes the dplyr logic of mapping a function to many inputs and puts it on a different level. We'll talk more about purrr at another time, but, for now, there are a few functions worth knowing.
 
 ![](./images/horst/map_frosting.png)
-.small[image from Allison Horst https://github.com/allisonhorst/]
+<span style="font-size:10px">image from Allison Horst https://github.com/allisonhorst/</span>  
 
 
 The core purrr functions are the `map_*()` functions. Basically, a whole family of functions where you can change what is in the * to specify the output type. For example, if we want to replicate the `replicate()` action of above, we'd be returning a *double* and would use `map_dbl()`.
