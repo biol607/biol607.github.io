@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Graphics and Temperature Change"
+title: "Data Visualization with Penguin Morphometrics"
 author: "Biol607"
 output:
   html_document:
@@ -23,13 +23,13 @@ knitr::opts_chunk$set(echo = TRUE,
 Good data visualizations can have a strong impact on how you think about a phenomena. The faster you are able to make a plot that looks good and communicates what you are interested in, the better for you! And your collaborators! We're going to explore this today with the `ggplot2` library - truly a masterful piece of work that breaks figures down into a **grammar of graphics**
 
 ![](./images/horst/ggplot2_masterpiece.png)
-.small[image from Allison Horst https://github.com/allisonhorst/stats-illustrations]
+<span style="font-size:10px">image from Allison Horst https://github.com/allisonhorst/stats-illustrations]</span>
 
 ## 2. The Palmer Penguins
 
 As our dataset to explore, we're going to look at the [Palmer Penguins dataset](https://allisonhorst.github.io/palmerpenguins/), recently released to CRAN. Data were collected and made available by [Dr. Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) and the [Palmer Station, Antarctica LTER](https://pal.lternet.edu/), a member of the [Long Term Ecological Research Network](https://lternet.edu/). The data describe the morphometrics (and more) of several species of Antarctic Penguins on a few different islands. Awww!  Penguins! For way more, see [here](https://education.rstudio.com/blog/2020/07/palmerpenguins-cran/)!
 
-.center[![](./images/palmer/lter_penguins.png)]
+![](./images/palmer/lter_penguins.png)
 
 So, let's load it up (and if you haven't, install it).
 
