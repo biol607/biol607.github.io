@@ -115,7 +115,7 @@ plot(flipper_length_mm ~ body_mass_g, data = penguins)
 
 ## 4. Let's get ready to simulate
 
-**4a.** Grab the values for `bill_length_mm` for Gentoo penguins in Biscoe Island and put it into an object. Note, the dplyr function `pull()` is kinda cool, as if you apply it to a data frame, it will pull out a vector from a column of interest. Try `r mtcars %>% pull(mpg)`. Kinda cool. Might help you here.
+**4a.** Grab the values for `bill_length_mm` for Gentoo penguins in Biscoe Island and put it into an object. Note, the dplyr function `pull()` is kinda cool, as if you apply it to a data frame, it will pull out a vector from a column of interest. Try `mtcars %>% pull(mpg)`. Kinda cool. Might help you here.
 ```{r}
 gb_bills <- penguins %>%
   filter(island == "Biscoe",

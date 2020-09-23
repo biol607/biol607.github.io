@@ -392,7 +392,7 @@ summary {
 </div>
 <div id="lets-get-ready-to-simulate" class="section level2">
 <h2>4. Let’s get ready to simulate</h2>
-<p><strong>4a.</strong> Grab the values for <code>bill_length_mm</code> for Gentoo penguins in Biscoe Island and put it into an object. Note, the dplyr function <code>pull()</code> is kinda cool, as if you apply it to a data frame, it will pull out a vector from a column of interest. Try 21, 21, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, 17.8, 16.4, 17.3, 15.2, 10.4, 10.4, 14.7, 32.4, 30.4, 33.9, 21.5, 15.5, 15.2, 13.3, 19.2, 27.3, 26, 30.4, 15.8, 19.7, 15, 21.4. Kinda cool. Might help you here.</p>
+<p><strong>4a.</strong> Grab the values for <code>bill_length_mm</code> for Gentoo penguins in Biscoe Island and put it into an object. Note, the dplyr function <code>pull()</code> is kinda cool, as if you apply it to a data frame, it will pull out a vector from a column of interest. Try <code>mtcars %&gt;% pull(mpg)</code>. Kinda cool. Might help you here.</p>
 <p><strong>4b.</strong> Use <code>replicate()</code> to calculate the standard error of the mean 10 times. Use a formula! Don’t forget that NA values shouldn’t be included!</p>
 <p><strong>4c.</strong> Use <code>map_df()</code> to create a data frame with the mean and sd of different sample sizes using the first 5 through 100 values (so, n = 5:100 - smallest sample size will have the values 1-5). Make sure the sample size is included in the final data frame.</p>
 <p><strong>4d.</strong> Plot the relationship between sample size and SD and sample size versus SE of the mean. What difference do you see and why? Note, you’ll need to create a column for SE here!</p>
