@@ -181,4 +181,4 @@ fancy +
 
 &nbsp; &nbsp; **4g. Extra Credit.** Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
   
-&nbsp; &nbsp; **5. Extra Credit x 3** Participate in this week or last week's tidy tuesday. See [here](https://github.com/rfordatascience/tidytuesday) for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code.
+&nbsp; &nbsp; **5. Extra Credit x 3** Participate in this week or last week's [tidy tuesday](https://thomasmock.netlify.app/post/tidytuesday-a-weekly-social-data-project-in-r/) (and see that link to learn waht it is). See [here](https://github.com/rfordatascience/tidytuesday) for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the `#tidytuesday` hashtag.
