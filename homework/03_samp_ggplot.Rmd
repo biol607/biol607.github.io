@@ -46,7 +46,7 @@ Let's assume the sample is representative of the popultion.
 vole_sim <- data.frame(samp_size = 5:20) 
 ```
 
-&nbsp; &nbsp; **3c.** Use this data frame to get simulated upper quartiles for each sample size. using 1,000 simulations
+&nbsp; &nbsp; **2c.** Use this data frame to get simulated upper quartiles at each sample size 1,000 times (i.e., for 1,000 simulations).
 ```{r vole_uq_sim}
 library(dplyr)
 vole_sim <- vole_sim %>%
@@ -56,7 +56,7 @@ vole_sim <- vole_sim %>%
                            quantile(sample(vole_vaso, samp_size, replace=T), probs=0.75)))
 ```
 
-&nbsp; &nbsp; **3d.** With a ggplot, make a guesstimate as to the best sample size for estimating the upper quartile of the population. Use whatever geom you feel makes things most easy to see. E.C. Add a red dashed line using `geom_vline()` or `geom_hline()` to show where that should be, perhaps. 
+&nbsp; &nbsp; **2d.** With a ggplot, make a guesstimate as to the best sample size for estimating the upper quartile of the population. Use whatever geom you feel makes things most easy to see. E.C. Add a red dashed line using `geom_vline()` or `geom_hline()` to show where that should be, perhaps. 
 
 ```{r uq_plot}
 library(ggplot2)
@@ -67,7 +67,7 @@ ggplot(vole_sim,
   geom_vline(xintercept = 15, color = "red", lty = 2)
 ```
 
-&nbsp; &nbsp; **3e.** Plot the SE of the estimate of the upper quantile by sample size.  Again, what it the best way to see this?  Does it level off? Is there a level you feel acceptable? Justify your answer. Does this match with what you put in 3d? 
+&nbsp; &nbsp; **2e.** Plot the SE of the estimate of the upper quantile by sample size.  Again, what it the best way to see this?  Does it level off? Is there a level you feel acceptable? Justify your answer. Does this match with what you put in 3d? 
 
 ```{r uq_se}
 vole_se <- vole_sim %>%
@@ -80,7 +80,7 @@ ggplot(vole_se,
   geom_line()
 ```
 
-## 4. Ggplot
+## 3. Ggplot
 
 A little while back, [Dave Curran](https://twitter.com/iamreddave) using some of the code I'd posted from a previous 607 lab made a wonderful animation of change in arctic sea ice.
 
@@ -93,7 +93,7 @@ ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent
 
 I'm providing you with a cleaned form of his data (his code is [here](https://gist.github.com/cavedave/c5c2224c8c38661236c1c1ce894fd28f)) for you to work with in a few plots. The data file is called [NH_seaice_extent_monthly_1978_2016.csv](https://biol607.github.io/homework/data/NH_seaice_extent_monthly_1978_2016.csv)
 
-&nbsp; &nbsp; **4a.** Some setup. Run the code below. For extra credit, look up the packages and functions used and explain what is going on here. But, that's EC.
+&nbsp; &nbsp; **3a.** Some setup. Run the code below. For extra credit, look up the packages and functions used and explain what is going on here. But, that's EC.
 
 ```{r load, echo = TRUE}
 #libraries
@@ -110,7 +110,7 @@ ice <- read_csv("http://biol607.github.io/homework/data/NH_seaice_extent_monthly
 ```
 
 
-&nbsp; &nbsp; **4b.** Make a boxplot showing the variability in sea ice extent every month.
+&nbsp; &nbsp; **3b.** Make a boxplot showing the variability in sea ice extent every month.
 
 ```{r boxplot}
 ggplot(data = ice,
@@ -118,7 +118,7 @@ ggplot(data = ice,
   geom_boxplot()
 ```
 
-&nbsp; &nbsp; ***4c.** Use `dplyr` to get the annual minimum sea ice extent. Plot minimum ice by year. What do you observe?
+&nbsp; &nbsp; ***3c.** Use `dplyr` to get the annual minimum sea ice extent. Plot minimum ice by year. What do you observe?
 
 ```{r trend}
 ice_summary <- ice %>%
@@ -130,7 +130,7 @@ ggplot(ice_summary,
   geom_point()
 ```
 
-&nbsp; &nbsp; **4d.** One thing that's really cool about faceting is that you can use `cut_*()` functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try `cut_interval(1:10, n = 5)` See how it makes five bins of even width? We use `cut_interval()` or other cut functions with faceting like so `facet_wrap(~cut_interval(some_variable))`.
+&nbsp; &nbsp; **3d.** One thing that's really cool about faceting is that you can use `cut_*()` functions on continuos variables to make facets by groups of continuous variables. To see what I mean, try `cut_interval(1:10, n = 5)` See how it makes five bins of even width? We use `cut_interval()` or other cut functions with faceting like so `facet_wrap(~cut_interval(some_variable))`.
 
 With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use `facet_wrap` and `cut_interval(Month, n=4)` to split the plot into seasons.
 
@@ -145,7 +145,7 @@ year_plot + facet_wrap(~cut_interval(Month, n = 4))
 ```
 
 
-&nbsp; &nbsp; **4e.** Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme,  critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using [colorfindr](https://github.com/zumbov2/colorfindr) to make a palette.
+&nbsp; &nbsp; **3e.** Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme,  critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using [colorfindr](https://github.com/zumbov2/colorfindr) to make a palette.
 
 ```{r fun}
 
@@ -165,7 +165,7 @@ fancy
 
 ```
 
-&nbsp; &nbsp; **4f. Extra Credit.** Make it animated with [gganimate](https://gganimate.com/index.html). Just like above. 
+&nbsp; &nbsp; **3f. Extra Credit.** Make it animated with [gganimate](https://gganimate.com/index.html). Just like above. 
 
 
 ```{r anim}
@@ -179,6 +179,6 @@ fancy +
   
 ```
 
-&nbsp; &nbsp; **4g. Extra Credit.** Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
+&nbsp; &nbsp; **3g. Extra Credit.** Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
   
-&nbsp; &nbsp; **5. Extra Credit x 3** Participate in this week or last week's [tidy tuesday](https://thomasmock.netlify.app/post/tidytuesday-a-weekly-social-data-project-in-r/) (and see that link to learn waht it is). See [here](https://github.com/rfordatascience/tidytuesday) for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the `#tidytuesday` hashtag.
+&nbsp; &nbsp; **4. Extra Credit x 3** Participate in this week or last week's [tidy tuesday](https://thomasmock.netlify.app/post/tidytuesday-a-weekly-social-data-project-in-r/) (and see that link to learn waht it is). See [here](https://github.com/rfordatascience/tidytuesday) for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the `#tidytuesday` hashtag.

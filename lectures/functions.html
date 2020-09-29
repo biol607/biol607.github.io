@@ -796,7 +796,7 @@ Super short!
 <span id="cb20-11"><a href="#cb20-11"></a></span>
 <span id="cb20-12"><a href="#cb20-12"></a><span class="kw">mean_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>      mean  se_mean
-1 9.884468 1.391941</code></pre>
+1 10.00506 1.227011</code></pre>
 </section>
 <section id="how-did-i-build-that-function" class="slide level2">
 <h2>How did I build that function?</h2>
@@ -858,7 +858,7 @@ Super short!
 <span id="cb24-11"><a href="#cb24-11"></a></span>
 <span id="cb24-12"><a href="#cb24-12"></a><span class="kw">mean_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>      mean  se_mean
-1 9.924087 1.373996</code></pre>
+1 10.10823 1.270329</code></pre>
 </section>
 <section id="a-funcitonal-outline-1" class="slide level2">
 <h2>A Funcitonal Outline</h2>
@@ -970,22 +970,22 @@ Super short!
 <h2>Does it blend?</h2>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">mean_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>      mean se_mean
-1 10.03021  1.1841</code></pre>
+1 10.03388 1.35743</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>      stat  se_stat
-1 10.14992 1.287423</code></pre>
+1 9.976402 1.302295</code></pre>
 </section>
 <section id="does-it-blend-1" class="slide level2">
 <h2>Does it blend?</h2>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>      stat  se_stat
-1 10.05644 1.456395</code></pre>
+1 9.971158 1.507131</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>, <span class="dt">fun =</span> median)</span></code></pre></div>
 <pre><code>      stat  se_stat
-1 10.14996 1.774954</code></pre>
+1 9.750696 1.665079</code></pre>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>, <span class="dt">fun =</span> sd)</span></code></pre></div>
 <pre><code>      stat  se_stat
-1 2.850716 1.049165</code></pre>
+1 2.820404 1.023062</code></pre>
 </section>
 <section id="putting-it-all-together-with-dplyr" class="slide level2">
 <h2>Putting it All Together with Dplyr</h2>
@@ -999,12 +999,12 @@ Super short!
 # Groups:   samp_size [6]
   samp_size     s  se_s
       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
-1         5  2.75 1.10 
-2         6  3.03 1.21 
-3         7  2.70 0.988
-4         8  2.90 0.972
-5         9  2.91 1.03 
-6        10  2.85 1.14 </code></pre>
+1         5  2.89 0.980
+2         6  2.71 0.929
+3         7  2.78 1.02 
+4         8  2.81 0.952
+5         9  2.75 1.10 
+6        10  2.72 0.993</code></pre>
 </section>
 <section id="final-exercises" class="slide level2">
 <h2>Final Exercises</h2>
