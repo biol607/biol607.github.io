@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>functions.utf8</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h2></h2>
+<br>
+<h2>
+<center>
+Writing Reusable Code with Functions
+</center>
+</h2>
+<p><img data-src="images/functions/function.png" /></p>
+</section>
+<section id="lets-say-you-want-to-do-this" class="slide level2">
+<h2>Let’s say you want to do this…</h2>
+<ol type="1">
+<li><p>Start with sample sizes 3 through 5, and a population mean, and SD.</p></li>
+<li><p>Run 1000 simulations.</p></li>
+<li><p>For each simulation, calculate a mean, and then get the SE of the mean.</p></li>
+<li><p>Have it all appear in a data frame with sample size and SE.</p></li>
+</ol>
+</section>
+<section id="you-could." class="slide level2">
+<h2>You could….</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>m &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>s &lt;-<span class="st"> </span><span class="dv">2</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>my_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">samp_size =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>                    <span class="dt">se =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, <span class="dv">3</span>))</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>my_df<span class="op">$</span>se[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">sd</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, </span>
+<span id="cb1-8"><a href="#cb1-8"></a>                            <span class="kw">mean</span>(<span class="kw">rnorm</span>(my_df<span class="op">$</span>samp_size[<span class="dv">1</span>], m, s))))</span>
+<span id="cb1-9"><a href="#cb1-9"></a>my_df<span class="op">$</span>se[<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">sd</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, </span>
+<span id="cb1-10"><a href="#cb1-10"></a>                            <span class="kw">mean</span>(<span class="kw">rnorm</span>(my_df<span class="op">$</span>samp_size[<span class="dv">2</span>], m, s))))</span>
+<span id="cb1-11"><a href="#cb1-11"></a>my_df<span class="op">$</span>se[<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="kw">sd</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, </span>
+<span id="cb1-12"><a href="#cb1-12"></a>                            <span class="kw">mean</span>(<span class="kw">rnorm</span>(my_df<span class="op">$</span>samp_size[<span class="dv">3</span>], m, s))))</span></code></pre></div>
+<blockquote>
+<p>(yes, this is pre-dplyr)</p>
+</blockquote>
+</section>
+<section id="so.what-is-wrong-here" class="slide level2">
+<h2>So….What is wrong here?</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>m &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>s &lt;-<span class="st"> </span><span class="dv">2</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>my_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">samp_size =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">5</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>                    <span class="dt">se =</span> <span class="kw">rep</span>(<span class="ot">NA</span>, <span class="dv">3</span>))</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a>my_df<span class="op">$</span>se[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">sd</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, </span>
+<span id="cb2-8"><a href="#cb2-8"></a>                            <span class="kw">mean</span>(<span class="kw">rnorm</span>(my_df<span class="op">$</span>samp_size[<span class="dv">1</span>], m, s))))</span>
+<span id="cb2-9"><a href="#cb2-9"></a>my_df<span class="op">$</span>se[<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">sd</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, </span>
+<span id="cb2-10"><a href="#cb2-10"></a>                            <span class="kw">mean</span>(<span class="kw">rnorm</span>(my_df<span class="op">$</span>samp_size[<span class="dv">2</span>], m, s))))</span>
+<span id="cb2-11"><a href="#cb2-11"></a>my_df<span class="op">$</span>se[<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="kw">sd</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, </span>
+<span id="cb2-12"><a href="#cb2-12"></a>                            <span class="kw">mean</span>(<span class="kw">rnorm</span>(my_df<span class="op">$</span>samp_size[<span class="dv">3</span>], m, s))))</span></code></pre></div>
+</section>
+<section id="some-wrong-things" class="slide level2">
+<h2>Some wrong things</h2>
+<ol type="1">
+<li><p>Copy-pasting is error prone</p></li>
+<li><p>Repeated code can get long</p></li>
+<li><p>Not scalable</p></li>
+<li><p>You were doing 4 things in each line of code! Unreadable?</p></li>
+</ol>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<br><br><br>
+<h2>
+Solutions?
+</h2>
+</section>
+<section id="solutions" class="slide level2">
+<h2>Solutions</h2>
+<ol type="1">
+<li>Write code for each individual sample size
+<ul>
+<li>Lots of copy-paste<br />
+</li>
+<li>What about if you have a different mean and SD?</li>
+</ul></li>
+<li>Iterate over indices somhow?
+<ul>
+<li>Only good for this one case - fragile code</li>
+</ul></li>
+<li>FUNCTIONS!</li>
+</ol>
+</section>
+<section id="a-funcitonal-outline" class="slide level2">
+<h2>A Funcitonal Outline</h2>
+<ol type="1">
+<li><p>Intro to Functions</p></li>
+<li><p>Modular Programming</p></li>
+</ol>
+</section>
+<section id="when-to-write-a-function" class="slide level2">
+<h2>When to write a function</h2>
+<p align="left">
+<br><br> “You should consider writing a function whenever you’ve copied and pasted a block of code more than twice” <Br> <br>- H. Wickham
+</p>
+</section>
+<section id="ugh" class="slide level2">
+<h2>Ugh…</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">tibble</span>(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="dt">a =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="dt">b =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="dt">c =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="dt">d =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a>df<span class="op">$</span>a &lt;-<span class="st"> </span>(df<span class="op">$</span>a <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(df<span class="op">$</span>a, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">/</span><span class="st"> </span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="st">  </span>(<span class="kw">max</span>(df<span class="op">$</span>a, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(df<span class="op">$</span>a, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb3-10"><a href="#cb3-10"></a>df<span class="op">$</span>b &lt;-<span class="st"> </span>(df<span class="op">$</span>b <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(df<span class="op">$</span>b, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">/</span><span class="st"> </span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="st">  </span>(<span class="kw">max</span>(df<span class="op">$</span>b, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(df<span class="op">$</span>a, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb3-12"><a href="#cb3-12"></a>df<span class="op">$</span>c &lt;-<span class="st"> </span>(df<span class="op">$</span>c <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(df<span class="op">$</span>c, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">/</span><span class="st"> </span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="st">  </span>(<span class="kw">max</span>(df<span class="op">$</span>c, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(df<span class="op">$</span>c, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb3-14"><a href="#cb3-14"></a>df<span class="op">$</span>d &lt;-<span class="st"> </span>(df<span class="op">$</span>d <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(df<span class="op">$</span>d, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">/</span><span class="st"> </span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="st">  </span>(<span class="kw">max</span>(df<span class="op">$</span>d, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(df<span class="op">$</span>d, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+</section>
+<section id="what-is-a-function" class="slide level2">
+<h2>What is a function?</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>my_cool_function &lt;-<span class="st"> </span><span class="cf">function</span>(arguments){</span>
+<span id="cb4-2"><a href="#cb4-2"></a>  </span>
+<span id="cb4-3"><a href="#cb4-3"></a>  something_to_give_back &lt;-<span class="st"> </span><span class="kw">do_things</span>(arguments)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  </span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="kw">return</span>(something_to_give_back)</span>
+<span id="cb4-6"><a href="#cb4-6"></a>}</span></code></pre></div>
+</section>
+<section id="what-is-a-function-1" class="slide level2">
+<h2>What is a function?</h2>
+<ol type="1">
+<li>A new object<br />
+</li>
+<li>A call identifying this as a function<br />
+</li>
+<li>One or more arguments<br />
+</li>
+<li>The body of the function<br />
+</li>
+<li>A return statement that gives something back to the user (if needed)</li>
+</ol>
+</section>
+<section id="what-is-a-function-2" class="slide level2">
+<h2>What is a function?</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>add_one &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  </span>
+<span id="cb5-3"><a href="#cb5-3"></a>  ret_value &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  </span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="kw">return</span>(ret_value)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>  </span>
+<span id="cb5-7"><a href="#cb5-7"></a>}</span></code></pre></div>
+</section>
+<section id="what-is-a-function-3" class="slide level2">
+<h2>What is a function?</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>add_one &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  </span>
+<span id="cb6-3"><a href="#cb6-3"></a>  ret_value &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>  </span>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="kw">return</span>(ret_value)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  </span>
+<span id="cb6-7"><a href="#cb6-7"></a>}</span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="kw">add_one</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>[1] 4</code></pre>
+</section>
+<section id="simpler-ways-of-writing-functions" class="slide level2">
+<h2>Simpler ways of writing functions</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>add_one &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="kw">return</span>(x<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>}</span></code></pre></div>
+<div class="fragment">
+<p align="left">
+Super short!
+</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>add_one &lt;-<span class="st"> </span><span class="cf">function</span>(x) x<span class="op">+</span><span class="dv">1</span></span></code></pre></div>
+</div>
+</section>
+<section id="lets-write-some-functions" class="slide level2">
+<h2>Let’s write some functions</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>add_one &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  </span>
+<span id="cb10-3"><a href="#cb10-3"></a>  ret_value &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>  </span>
+<span id="cb10-5"><a href="#cb10-5"></a>  <span class="kw">return</span>(ret_value)</span>
+<span id="cb10-6"><a href="#cb10-6"></a>  </span>
+<span id="cb10-7"><a href="#cb10-7"></a>}</span>
+<span id="cb10-8"><a href="#cb10-8"></a></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="kw">add_one</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>[1] 4</code></pre>
+</section>
+<section id="lets-write-some-functions-1" class="slide level2">
+<h2>Let’s write some functions</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>square_root &lt;-<span class="st"> </span><span class="cf">function</span>(___){</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  </span>
+<span id="cb12-3"><a href="#cb12-3"></a>  ret_value &lt;-<span class="st"> </span><span class="kw">sqrt</span>(___)</span>
+<span id="cb12-4"><a href="#cb12-4"></a>  </span>
+<span id="cb12-5"><a href="#cb12-5"></a>  <span class="kw">return</span>(___)</span>
+<span id="cb12-6"><a href="#cb12-6"></a>  </span>
+<span id="cb12-7"><a href="#cb12-7"></a>}</span>
+<span id="cb12-8"><a href="#cb12-8"></a></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="kw">square_root</span>(<span class="dv">16</span>)</span></code></pre></div>
+<p>Should return 4</p>
+</section>
+<section id="lets-write-some-functions-2" class="slide level2">
+<h2>Let’s write some functions</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>max_minus_min &lt;-<span class="st"> </span><span class="kw">_______</span>(___){</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  </span>
+<span id="cb13-3"><a href="#cb13-3"></a>  ret_value &lt;-<span class="st"> </span><span class="kw">___</span>(___) <span class="op">-</span><span class="st"> </span><span class="kw">___</span>(___)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>  </span>
+<span id="cb13-5"><a href="#cb13-5"></a>  <span class="kw">___</span>(___)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>  </span>
+<span id="cb13-7"><a href="#cb13-7"></a>}</span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="kw">max_minus_min</span>(<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">1</span>,<span class="dv">6</span>,<span class="dv">8</span>))</span></code></pre></div>
+<pre><code>[1] 7</code></pre>
+</section>
+<section id="on-arguments" class="slide level2">
+<h2>On arguments</h2>
+<p>Functions can take many arguments:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>my_function &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, z, q)</span></code></pre></div>
+<p>These can be of any object type</p>
+</section>
+<section id="arguments-can-have-default-values" class="slide level2">
+<h2>Arguments can have default values</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>add_values &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">y=</span><span class="dv">0</span>){</span>
+<span id="cb16-2"><a href="#cb16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="kw">return</span>(x<span class="op">+</span>y)</span>
+<span id="cb16-4"><a href="#cb16-4"></a></span>
+<span id="cb16-5"><a href="#cb16-5"></a>}</span>
+<span id="cb16-6"><a href="#cb16-6"></a></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="kw">add_values</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>[1] 3</code></pre>
+</section>
+<section id="you-can-have-to-pass-many-arguments" class="slide level2">
+<h2>You can have … to pass many arguments</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>make_mean &lt;-<span class="st"> </span><span class="cf">function</span>(a_vector, ...){</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  </span>
+<span id="cb18-3"><a href="#cb18-3"></a>  sum_vector &lt;-<span class="st"> </span><span class="kw">sum</span>(a_vector, ...)</span>
+<span id="cb18-4"><a href="#cb18-4"></a>  </span>
+<span id="cb18-5"><a href="#cb18-5"></a>  n &lt;-<span class="st"> </span><span class="kw">length</span>(a_vector)</span>
+<span id="cb18-6"><a href="#cb18-6"></a>  </span>
+<span id="cb18-7"><a href="#cb18-7"></a>  <span class="kw">return</span>(sum_vector<span class="op">/</span>n)</span>
+<span id="cb18-8"><a href="#cb18-8"></a>  </span>
+<span id="cb18-9"><a href="#cb18-9"></a>  }</span>
+<span id="cb18-10"><a href="#cb18-10"></a></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="kw">make_mean</span>(<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>), <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>[1] 5</code></pre>
+</section>
+<section id="exercises" class="slide level2">
+<h2>Exercises</h2>
+<p>Write a function and paste it into the etherpad that</p>
+<ol type="1">
+<li>Takes a vector and sums it up after it squares it
+<ul>
+<li>use <code>c(4,5,6)</code> to test (= 77)</li>
+</ul></li>
+<li>Takes a number and combine it into a string with the word “elephants” using <code>paste()</code>.
+<ul>
+<li>1 elephants, 2 elephants, 15 elephants</li>
+</ul></li>
+<li>Takes a number, a string, and a separator and combines them
+<ul>
+<li>my_function(3, “hello”, “-”) makes “3 - hello”</li>
+</ul></li>
+</ol>
+<p>EC. Write a function that takes a sample size, mean, SD, and number of sims, and returns a data frame with a mean and SE of said mean. Have it default to 100 sims.</p>
+</section>
+<section id="why-are-we-doing-this-to-ourselves" class="slide level2">
+<h2>Why are we doing this to ourselves?</h2>
+<p><img data-src="images/functions/automation-win.png" /></p>
+</section>
+<section id="a-function-for-sampling" class="slide level2">
+<h2>A Function For Sampling</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>mean_and_se_sim &lt;-<span class="st"> </span><span class="cf">function</span>(n, m, s, <span class="dt">sims =</span> <span class="dv">100</span>){</span>
+<span id="cb20-2"><a href="#cb20-2"></a>  samps &lt;-<span class="st"> </span><span class="kw">replicate</span>(sims, <span class="kw">rnorm</span>(n, m, s))</span>
+<span id="cb20-3"><a href="#cb20-3"></a>  </span>
+<span id="cb20-4"><a href="#cb20-4"></a>  means &lt;-<span class="st"> </span><span class="kw">colMeans</span> (samps)</span>
+<span id="cb20-5"><a href="#cb20-5"></a>  </span>
+<span id="cb20-6"><a href="#cb20-6"></a>  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(means),</span>
+<span id="cb20-7"><a href="#cb20-7"></a>                    <span class="dt">se_mean =</span> <span class="kw">sd</span>(means))</span>
+<span id="cb20-8"><a href="#cb20-8"></a>  </span>
+<span id="cb20-9"><a href="#cb20-9"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb20-10"><a href="#cb20-10"></a>}</span>
+<span id="cb20-11"><a href="#cb20-11"></a></span>
+<span id="cb20-12"><a href="#cb20-12"></a><span class="kw">mean_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>      mean  se_mean
+1 9.884468 1.391941</code></pre>
+</section>
+<section id="how-did-i-build-that-function" class="slide level2">
+<h2>How did I build that function?</h2>
+<ol type="1">
+<li>OK, what’s <em>normally</em> going to change
+<ul>
+<li>Sample size, mean, and SD</li>
+</ul></li>
+<li>BUT - what could change under some circumstances?
+<ul>
+<li>number of simulations</li>
+</ul></li>
+<li>Write some test code</li>
+</ol>
+</section>
+<section id="test-code" class="slide level2">
+<h2>Test Code</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># define a sample size, mean, and SD</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="co"># draw samples</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="co"># calculate means from samples</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="co"># create a data frame with mean and se of the mean</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a></span>
+<span id="cb22-9"><a href="#cb22-9"></a><span class="co"># return</span></span></code></pre></div>
+</section>
+<section id="test-code-1" class="slide level2">
+<h2>Test Code</h2>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># define a sample size, mean, and SD</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>n &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>m &lt;-<span class="dv">10</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>s &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>sims &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a></span>
+<span id="cb23-7"><a href="#cb23-7"></a><span class="co"># draw samples</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a>samps &lt;-<span class="st"> </span><span class="kw">replicate</span>(sims, <span class="kw">rnorm</span>(n, m, s))</span>
+<span id="cb23-9"><a href="#cb23-9"></a></span>
+<span id="cb23-10"><a href="#cb23-10"></a><span class="co"># calculate means from samples</span></span>
+<span id="cb23-11"><a href="#cb23-11"></a>means &lt;-<span class="st"> </span><span class="kw">colMeans</span> (samps)</span>
+<span id="cb23-12"><a href="#cb23-12"></a></span>
+<span id="cb23-13"><a href="#cb23-13"></a><span class="co"># create a data frame with mean and se of the mean</span></span>
+<span id="cb23-14"><a href="#cb23-14"></a>out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(means),</span>
+<span id="cb23-15"><a href="#cb23-15"></a>                    <span class="dt">se_mean =</span> <span class="kw">sd</span>(means))</span>
+<span id="cb23-16"><a href="#cb23-16"></a><span class="co"># return</span></span></code></pre></div>
+</section>
+<section id="one-function" class="slide level2">
+<h2>One Function</h2>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>mean_and_se_sim &lt;-<span class="st"> </span><span class="cf">function</span>(n, m, s, <span class="dt">sims =</span> <span class="dv">100</span>){</span>
+<span id="cb24-2"><a href="#cb24-2"></a>  samps &lt;-<span class="st"> </span><span class="kw">replicate</span>(sims, <span class="kw">rnorm</span>(n, m, s))</span>
+<span id="cb24-3"><a href="#cb24-3"></a>  </span>
+<span id="cb24-4"><a href="#cb24-4"></a>  means &lt;-<span class="st"> </span><span class="kw">colMeans</span> (samps)</span>
+<span id="cb24-5"><a href="#cb24-5"></a>  </span>
+<span id="cb24-6"><a href="#cb24-6"></a>  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(means),</span>
+<span id="cb24-7"><a href="#cb24-7"></a>                    <span class="dt">se_mean =</span> <span class="kw">sd</span>(means))</span>
+<span id="cb24-8"><a href="#cb24-8"></a>  </span>
+<span id="cb24-9"><a href="#cb24-9"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb24-10"><a href="#cb24-10"></a>}</span>
+<span id="cb24-11"><a href="#cb24-11"></a></span>
+<span id="cb24-12"><a href="#cb24-12"></a><span class="kw">mean_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>      mean  se_mean
+1 9.924087 1.373996</code></pre>
+</section>
+<section id="a-funcitonal-outline-1" class="slide level2">
+<h2>A Funcitonal Outline</h2>
+<ol type="1">
+<li><p>Intro to Functions</p></li>
+<li><p><font color="red">Modular Programming</font></p></li>
+</ol>
+</section>
+<section id="problems-with-our-function" class="slide level2">
+<h2>Problems with Our Function</h2>
+<ol type="1">
+<li><p>Two lines to get a bootstrapped mean?</p></li>
+<li><p>Why only mean? Can we generalize?</p></li>
+</ol>
+</section>
+<section id="what-to-do-modularize" class="slide level2">
+<h2>What to do? Modularize!</h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>mean_and_se_sim &lt;-<span class="st"> </span><span class="cf">function</span>(n, m, s, <span class="dt">sims =</span> <span class="dv">100</span>){</span>
+<span id="cb26-2"><a href="#cb26-2"></a>  samps &lt;-<span class="st"> </span><span class="kw">replicate</span>(sims, <span class="kw">rnorm</span>(n, m, s))</span>
+<span id="cb26-3"><a href="#cb26-3"></a>  </span>
+<span id="cb26-4"><a href="#cb26-4"></a>  means &lt;-<span class="st"> </span><span class="kw">colMeans</span> (samps)</span>
+<span id="cb26-5"><a href="#cb26-5"></a>  </span>
+<span id="cb26-6"><a href="#cb26-6"></a>  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(means),</span>
+<span id="cb26-7"><a href="#cb26-7"></a>                    <span class="dt">se_mean =</span> <span class="kw">sd</span>(means))</span>
+<span id="cb26-8"><a href="#cb26-8"></a>  </span>
+<span id="cb26-9"><a href="#cb26-9"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb26-10"><a href="#cb26-10"></a>}</span>
+<span id="cb26-11"><a href="#cb26-11"></a></span>
+<span id="cb26-12"><a href="#cb26-12"></a><span class="kw">mean_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
+</section>
+<section id="what-to-do-modularize-1" class="slide level2">
+<h2>What to do? Modularize!</h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>get_samp_rep &lt;-<span class="st"> </span><span class="cf">function</span>(n, m, s){</span>
+<span id="cb27-2"><a href="#cb27-2"></a>  samp &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, m, s)</span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="kw">mean</span>(samp)</span>
+<span id="cb27-4"><a href="#cb27-4"></a>}</span>
+<span id="cb27-5"><a href="#cb27-5"></a></span>
+<span id="cb27-6"><a href="#cb27-6"></a>mean_and_se_sim &lt;-<span class="st"> </span><span class="cf">function</span>(n, m, s, <span class="dt">sims =</span> <span class="dv">100</span>){</span>
+<span id="cb27-7"><a href="#cb27-7"></a></span>
+<span id="cb27-8"><a href="#cb27-8"></a>  means &lt;-<span class="st"> </span><span class="kw">replicate</span>(sims, <span class="kw">get_samp_rep</span>(n, m, s))</span>
+<span id="cb27-9"><a href="#cb27-9"></a>    </span>
+<span id="cb27-10"><a href="#cb27-10"></a>  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(means),</span>
+<span id="cb27-11"><a href="#cb27-11"></a>                    <span class="dt">se_mean =</span> <span class="kw">sd</span>(means))</span>
+<span id="cb27-12"><a href="#cb27-12"></a>  </span>
+<span id="cb27-13"><a href="#cb27-13"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb27-14"><a href="#cb27-14"></a>}</span></code></pre></div>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<p><img data-src="images/functions/functions_meme.jpg" /></p>
+</section>
+<section id="wait-what-is-this-modular-madness" class="slide level2">
+<h2>Wait, what is this modular madness?</h2>
+<ul>
+<li><p>Our code is now composed of modular pieces</p></li>
+<li><p>This means each modular function can be used in other contexts</p>
+<ul>
+<li>Enhances code flexibility and future reuse</li>
+</ul></li>
+<li><p>It also means it is easier to find where our code has gone wrong</p>
+<ul>
+<li>Easier to test and debug</li>
+</ul></li>
+<li><p>AND - we don’t get lost writing one honking single function</p></li>
+</ul>
+</section>
+<section id="how-to-write-complex-functionspiplines" class="slide level2">
+<h2>How to write complex functions/piplines</h2>
+<ol type="1">
+<li><p>Start with a wrapper</p>
+<ul>
+<li>Write out the steps of what you want to do in comments<br />
+</li>
+<li>Pair those with functions using “snake case” <code>clean_data</code><br />
+</li>
+<li>Use <code>%&gt;%</code> for efficiency/readability!</li>
+</ul></li>
+<li><p>Write the subfunctions</p>
+<ul>
+<li>Repeat the toplevel comments anf functions</li>
+</ul></li>
+<li><p>Continue until you have the lowest level atomized functions</p></li>
+<li><p>Test THOSE functions. Then test up the chain….</p></li>
+</ol>
+</section>
+<section id="reality-check" class="slide level2">
+<h2>Reality Check</h2>
+<p><br><br><br> Yes, sometimes you will write long functions - as long as they are simple and readable, meh</p>
+</section>
+<section id="what-to-do-generalize" class="slide level2">
+<h2>What to do? Generalize!</h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>get_samp_rep &lt;-<span class="st"> </span><span class="cf">function</span>(n, m, s, <span class="dt">fun =</span> mean){</span>
+<span id="cb28-2"><a href="#cb28-2"></a>  samp &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, m, s)</span>
+<span id="cb28-3"><a href="#cb28-3"></a>  <span class="kw">fun</span>(samp)</span>
+<span id="cb28-4"><a href="#cb28-4"></a>}</span>
+<span id="cb28-5"><a href="#cb28-5"></a></span>
+<span id="cb28-6"><a href="#cb28-6"></a>stat_and_se_sim &lt;-<span class="st"> </span><span class="cf">function</span>(n, m, s, </span>
+<span id="cb28-7"><a href="#cb28-7"></a>                            <span class="dt">fun =</span> mean, <span class="dt">sims =</span> <span class="dv">100</span>){</span>
+<span id="cb28-8"><a href="#cb28-8"></a></span>
+<span id="cb28-9"><a href="#cb28-9"></a>  vals &lt;-<span class="st"> </span><span class="kw">replicate</span>(sims, <span class="kw">get_samp_rep</span>(n, m, s, fun))</span>
+<span id="cb28-10"><a href="#cb28-10"></a>    </span>
+<span id="cb28-11"><a href="#cb28-11"></a>  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">stat =</span> <span class="kw">mean</span>(vals),</span>
+<span id="cb28-12"><a href="#cb28-12"></a>                    <span class="dt">se_stat =</span> <span class="kw">sd</span>(vals))</span>
+<span id="cb28-13"><a href="#cb28-13"></a>  </span>
+<span id="cb28-14"><a href="#cb28-14"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb28-15"><a href="#cb28-15"></a>}</span></code></pre></div>
+</section>
+<section id="does-it-blend" class="slide level2">
+<h2>Does it blend?</h2>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">mean_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>      mean se_mean
+1 10.03021  1.1841</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>      stat  se_stat
+1 10.14992 1.287423</code></pre>
+</section>
+<section id="does-it-blend-1" class="slide level2">
+<h2>Does it blend?</h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>      stat  se_stat
+1 10.05644 1.456395</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>, <span class="dt">fun =</span> median)</span></code></pre></div>
+<pre><code>      stat  se_stat
+1 10.14996 1.774954</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>, <span class="dt">fun =</span> sd)</span></code></pre></div>
+<pre><code>      stat  se_stat
+1 2.850716 1.049165</code></pre>
+</section>
+<section id="putting-it-all-together-with-dplyr" class="slide level2">
+<h2>Putting it All Together with Dplyr</h2>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb39-2"><a href="#cb39-2"></a></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="kw">data.frame</span>(<span class="dt">samp_size =</span> <span class="dv">5</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="st">  </span><span class="kw">rowwise</span>(samp_size) <span class="op">%&gt;%</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="kw">stat_and_se_sim</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">m =</span> <span class="dv">10</span>, <span class="dt">s =</span> <span class="dv">3</span>, <span class="dt">fun =</span> sd)) <span class="op">%&gt;%</span></span>
+<span id="cb39-6"><a href="#cb39-6"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">s =</span> stat, <span class="dt">se_s =</span> se_stat)</span></code></pre></div>
+<pre><code># A tibble: 6 x 3
+# Groups:   samp_size [6]
+  samp_size     s  se_s
+      &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+1         5  2.75 1.10 
+2         6  3.03 1.21 
+3         7  2.70 0.988
+4         8  2.90 0.972
+5         9  2.91 1.03 
+6        10  2.85 1.14 </code></pre>
+</section>
+<section id="final-exercises" class="slide level2">
+<h2>Final Exercises</h2>
+<ol type="1">
+<li><p>Write a function that will get the mean, sd, median, and IQR of a sample of a population.</p></li>
+<li><p>Write a function that uses this to get 1K resampled values to get the statistic and its SE.</p></li>
+<li><p>Wrap it all in dplyr magick to get these statistics for sample sizes 3:5, means 2:5, and sd 1:3. Use tidyr::crossing to make the initial data frame.</p></li>
+</ol>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
