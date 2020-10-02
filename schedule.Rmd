@@ -86,9 +86,11 @@ __Lecture:__ [Functions](lectures/functions.html), [Data import, libraries, fact
 __Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  
 __Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [functions](https://r4ds.had.co.nz/functions.html), [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
 __Cheat Sheets:__ [Reading data into R](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).  
-__Packages:__ `install.packages(c("reprex", "datapasta", "lubridate", "tidyr", "readr", "readxl", "tibble"))` - [readr](https://readr.tidyverse.org/), [readxl](https://readxl.tidyverse.org/), [tibble](https://tibble.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/)    
+__Packages:__ `install.packages(c("janitor", "skimr", "lubridate", "tidyr", "readr", "readxl", "tibble"))` - [readr](https://readr.tidyverse.org/),  [readxl](https://readxl.tidyverse.org/),  [tibble](https://tibble.tidyverse.org/),  [skimr](https://docs.ropensci.org/skimr/), 
+[janitor](https://garthtarr.github.io/meatR/janitor.html),
+[visdat](https://docs.ropensci.org/visdat/)
 __Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2020  
-__In Class Code:__    
+__In Class Code:__ [functions](in_class_code/2020/scripts/functions.R), [loading data](in_class_code/2020/scripts/loading_data.R), [data reshaping](in_class_code/2020/scripts/tidyr.R), [created data](in_class_code/2020/data/test_data.xlsx)    
 
 ## Block 2: Regression and Inference
 

@@ -1,0 +1,6 @@
+﻿group_id,Variable 1,Variable 2,SomeReallyLongCamelCaseVariable,Year,Month,Day
+1,1,a,Pizza,2020.00,10.00,2.00
+1,2,b,Pie,2020.00,10.00,2.00
+1,3,c,is,2020.00,10.00,2.00
+2,4,d,Delicious,2020.00,10.00,2.00
+2,5,e,Yes!,2020.00,10.00,3.00
