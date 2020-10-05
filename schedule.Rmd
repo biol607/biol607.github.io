@@ -91,6 +91,7 @@ __Packages:__ `install.packages(c("janitor", "skimr", "lubridate", "tidyr", "rea
 [visdat](https://docs.ropensci.org/visdat/)
 __Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2020  
 __In Class Code:__ [functions](in_class_code/2020/scripts/functions.R), [loading data](in_class_code/2020/scripts/loading_data.R), [data reshaping](in_class_code/2020/scripts/tidyr.R), [created data](in_class_code/2020/data/test_data.xlsx)    
+__Homework:__ [Functions and Pivot homework](./homework/04_fun_pivot.html)  
 
 ## Block 2: Regression and Inference
 
