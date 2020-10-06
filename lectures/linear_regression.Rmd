@@ -1,0 +1,780 @@
+---
+title: "Sampling and Simulation"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, shinobi, default-fonts, style.css]
+    nature:
+      beforeInit: "my_macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class: center, middle
+
+# Linear Regression
+
+
+![image](./images/11/correlation_xkcd.jpg)
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(modelr)
+library(tidyr)
+library(mvtnorm)
+library(broom)
+library(arm)
+
+opts_chunk$set(fig.height=7, 
+               fig.width = 10,
+               fig.align = "center",
+               comment=NA, 
+               warning=FALSE, 
+               echo = FALSE,
+               message = FALSE)
+
+options(htmltools.dir.version = FALSE)
+theme_set(theme_bw(base_size=16))
+```
+
+---
+class: center, middle
+
+# Etherpad
+<br><br>
+<center><h3>https://etherpad.wikimedia.org/p/607-lm-2020</h3></center>
+
+---
+
+# The Steps of Statistical Modeling
+
+1. What is your question?
+2. What model of the world matches your question?
+3. Is your model valid?
+4. Query your model to answer your question.
+
+---
+
+# The Steps of Statistical Modeling
+
+1. What is your question?.red[
+2. What model of the world matches your question?
+3. Is your model valid?
+4. Query your model to answer your question.]
+
+---
+
+# Our question of the day: What is the relationship between inbreeding coefficient and litter size in wolves?
+
+.pull-left[
+
+```{r wolf_scatterplot, fig.height=5, fig.width=5}
+wolves <- read.csv("./data/11/16e2InbreedingWolves.csv")
+
+wolfplot <- ggplot(data=wolves, mapping=aes(x=inbreeding.coefficient, y=pups)) +
+xlab("Inbreeding Coefficient") + ylab("# of Pups") +
+geom_point(size=3) +
+theme_bw(base_size=24)
+
+wolfplot
+```
+
+]
+
+.pull-right[
+
+<br><br>
+![](./images/11/CUTE_WOLF_PUPS_by_horsesrock44.jpeg)
+]
+
+---
+
+# Roll that beautiful linear regression with 95% CI footage
+
+```{r fit}
+wolfplot +
+  stat_smooth(method = "lm")
+```
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. What do regression coefficients mean?
+
+3. What do the error coefficients of a regression mean?
+
+4. Correlation and Regression
+
+5. Transformation and Model Structure for More Sensible Coefficients
+
+---
+
+# What is a regression?
+
+.center[.Large[y = a + bx + error]]
+
+--
+
+This is 90% of the modeling you will ever do because...
+
+--
+
+Everything is a linear model!
+
+- multiple parameters (x1, x2, etc...)
+
+- nonlinear transformations of y or x
+
+- multiplicative terms (b * x1 * x2) are still additive
+
+- generalized linear models with non-normal error
+
+- and so much more....
+
+---
+class:center, middle
+
+# EVERYTHING IS A LINEAR MODEL
+
+---
+
+# Linear Regression
+<br>
+$\Large y_i = \beta_0 + \beta_1 x_i + \epsilon_i$  
+$\Large \epsilon_i \sim^{i.i.d.} N(0, \sigma)$  
+<Br><br><br>
+.large[
+Then it’s code in the data, give the keyboard a punch  
+Then cross-correlate and break for some lunch  
+Correlate, tabulate, process and screen  
+Program, printout, regress to the mean  
+  
+-White Coller Holler by Nigel Russell
+]
+
+---
+
+# Regressions You Have Seen
+.large[
+Classic style:
+
+$$y_i = \beta_0 + \beta_1  x_i + \epsilon_i$$
+$$\epsilon_i \sim N(0, \sigma)$$
+]
+
+
+--
+-----
+
+.large[
+
+Prediction as Part of Error: 
+
+$$\hat{y_i} = \beta_0 + \beta_1  x_i$$
+$$y_i \sim N(\hat{y_i}, \sigma)$$
+]
+
+
+--
+
+-----
+
+.large[
+Matrix Style: 
+$$Y = X \beta + \epsilon$$
+]
+
+---
+
+# These All Are Equation-Forms of This Relationship
+
+```{r fit}
+```
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. .red[What do regression coefficients mean?]
+
+3. What do the error coefficients of a regression mean?
+
+4. Correlation and Regression
+
+5. Transformation and Model Structure for More Sensible Coefficients
+
+---
+
+# What are we doing with regression?
+
+### Goals:  
+
+--
+1. Association
+
+  - What is the strength of a relationship between two quantities
+  - Not causal
+  
+--
+
+2. Prediction
+  - If we have two groups that differ in their X value by 1 unit, what is the average difference in their Y unit?
+  - Not causal
+
+--
+
+3. Counterfactual
+  - What would happen to an individual if their value of X increased by one unit?
+  - Causal reasoning!
+  
+---
+
+# What Can We Say About This?
+
+```{r fit}
+```
+
+---
+
+# Model Coefficients: Slope
+
+```{r coefs}
+wolf_mod <- lm(pups ~ inbreeding.coefficient,
+               data = wolves)
+
+tidy(wolf_mod)[,1:3] %>%
+  kable(digits = 3, "html") %>%
+  kableExtra::kable_styling("striped")
+```
+
+--
+1. **Association:** A one unit increase in inbreeding coefficient is associated with ~11 fewer pups, on average.
+
+2. **Prediction:** A new wolf with an inbreeding coefficient 1 unit greater than a second new wolf will have ~11 fewer pups, on average.
+
+3. **Counterfactual:** If an individual wolf had had its inbreeding coefficient 1 unit higher, it would have ~11 fewer pups.
+
+---
+# Which of these is the correct thing to say? When?
+
+1. **Association:** A one unit increase in inbreeding coefficient is associated with ~11 fewer pups, on average.
+
+2. **Prediction:** A new wolf with an inbreeding coefficient 1 unit greater than a second new wolf will have ~11 fewer pups, on average.
+
+3. **Counterfactual:** If an individual wolf had had its inbreeding coefficient 1 unit higher, it would have ~11 fewer pups.
+
+---
+
+# 11 Fewer Pups? What would be, then, a Better Way to Talk About this Slope?
+
+```{r fit}
+```
+
+---
+# Model Coefficients: Intercept
+
+```{r coefs}
+```
+
+<br><br>
+
+--
+
+When the inbreeding coefficient is 0, a wolves will have ~6.6 pups, on average.
+
+
+---
+
+# Intercept Has Direct Interpretation on the Visualization
+
+```{r fit}
+```
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. What do regression coefficients mean?
+
+3. .red[What do the error coefficients of a regression mean?]
+
+4. Correlation and Regression
+
+5. Transformation and Model Structure for More Sensible Coefficients
+
+---
+
+# Two kinds of error
+
+1. Fit error - error due to lack of precision in estimates  
+      - Coefficient SE
+      - Precision of estimates
+  
+2. Residual error - error due to variability not explained by X.
+      - Residual SD (from $\epsilon_i$)
+      
+---
+
+# Precision: coefficient SEs
+
+```{r coefs}
+```
+
+--
+<br><br>
+
+- Shows precision of ability to estimate coefficients  
+
+- Gets smaller with bigger sample size!  
+
+- Remember, ~ 2 SE covered 95% CI  
+
+- Comes from likelihood surface...but we'll get there
+
+---
+# Visualizing Precision: 95% CI (~2 SE)
+```{r fit}
+```
+
+---
+# Visualizing Precision with Simulation from your Model
+
+```{r}
+coef_sim <- sim(wolf_mod)
+
+wolfplot +
+  geom_abline(slope = coef(coef_sim)[,2],
+              intercept = coef(coef_sim)[,1],
+              alpha = 0.2) +
+  stat_smooth(method = "lm", fill = NA, color = 'red', lwd = 2)
+```
+
+---
+
+# Residual Error
+
+```{r error}
+glance(wolf_mod)[c(1,3)] %>%
+  knitr::kable(digits = 3, "html") %>%
+  kableExtra::kable_styling("striped")
+```
+
+- Sigma  is the SD of the residual 
+
+$$\Large \epsilon_i \sim N(0,\sigma)$$
+
+- How much does does # of pups vary beyond the relationship with inbreeding coefficient?
+
+- For any number of pups estimated on average, ~68% of the # of pups observed will fall within ~1.5 of that number 
+
+---
+
+# Visualizing Residual Error's Implications
+
+
+```{r}
+
+coef_sim_1k <- sim(wolf_mod, n.sims = 1e3)
+
+res <- rnorm(length(sigma.hat(coef_sim_1k)), 0, sigma.hat(coef_sim_1k))
+
+wolfplot +
+  geom_abline(slope = mean(coef(coef_sim_1k)[,2]),
+              intercept = mean(coef(coef_sim_1k)[,1])+res,
+              alpha = 0.07) +
+  stat_smooth(method = "lm", fill = NA, color = 'red', lwd = 2)
+```
+---
+
+# Residual Error -> Variance Explained
+
+```{r error}
+```
+
+
+- $\large{R^2 = 1 - \frac{\sigma^2_{residual}}{\sigma^2_y}}$
+  - Fraction of the variation in Y related to X.
+  - Here, 36.9% of the variation in pups is related to variation in Inbreeding Coefficient
+  - Relates to r, the Pearson correlation coefficient
+
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. What do regression coefficients mean?
+
+3. What do the error coefficients of a regression mean?
+
+4. .red[Correlation and Regression]
+
+5. Transformation and Model Structure for More Sensible Coefficients
+
+---
+# What is Correlation?
+
+* The change in standard deviations of variable x per change in 1 SD of variable y  
+     * Clear, right?  
+
+  
+  
+ * Assesses the degree of association between two variables
+  
+  
+ * But, unitless (sort of)
+     * Between -1 and 1
+
+---
+# Calculating Correlation: Start with Covariance
+
+Describes the relationship between two variables. Not scaled.
+
+
+--
+
+$\sigma_{xy}$ = population level covariance  
+$s_{xy}$ = covariance in your sample
+--
+
+.pull-left[
+<br><br><br>
+$$\sigma_{XY} = \frac{\sum (X-\bar{X})(y-\bar{Y})}{n-1}$$
+]
+
+--
+
+.pull-right[
+```{r rnormPlot_cov, echo=FALSE, fig.height=4, fig.width=5}
+#create a data frame to show a multivariate normal distribution
+sigma <- matrix(c(3,2,2,4), ncol=2)
+vals <- rmvnorm(n=500, mean=c(1,2), sigma=sigma)
+
+nums<-seq(-5,5,.2)
+data_mvnorm<-expand.grid(x1=nums, x2=nums)
+data_mvnorm$freq<-dmvnorm(data_mvnorm, sigma=sigma)
+
+#make up some fake data
+set.seed(697)
+data_rmnorm<-as.data.frame(rmvnorm(400, sigma=sigma))
+names(data_rmnorm)=c("x", "y")
+data_rmnorm$y<-data_rmnorm$y + 3
+
+plot(y~x, pch=19, data=data_rmnorm, cex.lab=1.4)
+text(-4,8, paste("cov(x,y) = ",round(cov(data_rmnorm)[1,2],3), sep=""))
+
+```
+]
+
+---
+
+# Pearson Correlation
+
+Describes the relationship between two variables.  
+Scaled between -1 and 1.  
+<br>  
+$\large \rho_{xy}$ = population level correlation, $\large r_{xy}$ = correlation in
+your sample
+<div id="left" class="fragment">
+<br><br><br>
+$$\Large\rho_{xy} = \frac{\sigma_{xy}}{\sigma_{x}\sigma_{y}}$$
+</div>
+
+<div id="right" class="fragment">
+```{r rnormPlot_cor, echo=FALSE, fig.height=4, fig.width=5}
+
+plot((y-mean(y))/sd(y)~I(x/sd(x)), pch=19, data=data_rmnorm, 
+     xlab="\nZ transformed x", ylab = "Z transformed y", cex.lab=1.4)
+text(-2,2, paste("cor(x,y) = ",round(cor(data_rmnorm)[1,2],3), sep=""))
+
+```
+</div>
+
+---
+# Assumptions of Pearson Correlation
+
+.pull-left[
+-   Observations are from a **random sample**  
+  
+  
+-   Each observation is **independent**  
+  
+  
+-   X and Y are from a **Normal Distribution**
+     - Weaker assumption
+]
+
+.pull-right[
+```{r mvnorm_persp, echo=FALSE, fig.height=7, fig.width=7}
+
+facetCols<-heat.colors(length(unique(data_mvnorm$freq)))
+data_mvnorm$fCols<-as.numeric(as.factor(data_mvnorm$freq))
+with(data_mvnorm, 
+     persp(nums, nums, matrix(freq, nrow=length(nums)),
+           xlab="x", ylab="y", zlab="Frequency",
+           theta = -90, phi = 25,  ltheta=145, border=gray(0.2),
+           col="lightblue", cex.axis=2
+           ))
+```
+
+]
+
+---
+# The meaning of r
+
+Y is perfectly predicted by X if r = -1 or 1.  
+<br><br>
+$R^2$ = the porportion of variation in y explained by x
+
+```{r corLevels, echo=FALSE, fig.height=6, fig.width=8}
+
+set.seed(1001)
+par(mfrow=c(2,2))
+for(i in c(0.2, 0.4, 0.6, 0.8)){
+  xy<-as.data.frame(rmvnorm(200, sigma=matrix(c(1, i, i, 1), byrow=T, nrow=2)))
+  names(xy)<-c("x", "y")
+  plot(y~x, data=xy, mar=c(3,1,1,2), main=paste("r = ", round(cor(xy)[1,2],2), sep=""))
+  
+}
+par(mfrow=c(1,1))
+```
+
+---
+# Get r in your bones...
+<br><br><br>
+<center>.large[.middle[http://guessthecorrelation.com/]]</center>
+
+---
+# Example: Wolf Breeding and Litter Size
+
+.pull-left[
+
+```{r wolf_scatterplot, fig.height=5, fig.width=5}
+```
+
+]
+
+.pull-right[
+
+<br><br>
+![](./images/11/CUTE_WOLF_PUPS_by_horsesrock44.jpeg)
+]
+
+---
+# Example: Wolf Inbreeding and Litter Size
+
+Covariance Matrix:
+```{r wolf_cov}
+round(cov(wolves),2)
+```
+
+--
+
+Correlation Matrix:
+```{r wolf_cor}
+round(cor(wolves),2)
+```
+
+--
+
+Yes, you can estimate a SE (`cor.test()` or bootstrapping)
+
+---
+
+# Wait, so, how does Correlation relate to Regression? Slope versus r...
+
+
+$\LARGE b=\frac{s_{xy}}{s_{x}^2}$ $= \frac{cov(x,y)}{var(x)}$
+  
+--
+<br><br>
+$\LARGE = r_{xy}\frac{s_{y}}{s_{x}}$
+
+---
+# Correlation v. Regression Coefficients
+
+```{r cor_and_reg}
+
+set.seed(1001)
+sampdf <- data.frame(x=1:50)
+sampdf <- within(sampdf, {
+       y1 <- rnorm(50, 3*x, 10)
+       y2 <- rnorm(50, 3*x, 40)
+       y3 <- y2/3
+})
+
+#cor(sampdf)
+#lines and slopes
+par(mfrow=c(1,3))
+par(cex.lab=3, cex.axis=2.1, cex.main=3)
+plot(y1 ~ x, data=sampdf, main="Slope = 3, r = 0.98", ylim=c(-60, 180))
+abline(lm(y1~x, data=sampdf), lwd=2, col="red")
+plot(y2 ~ x, data=sampdf, main="Slope = 3, r = 0.72", ylim=c(-60, 180))
+abline(lm(y2~x, data=sampdf), lwd=2, col="red")
+plot(y3 ~ x, data=sampdf, main="Slope = 1, r = 0.72", ylim=c(-60, 180))
+abline(lm(y3~x, data=sampdf), lwd=2, col="red")
+par(mfrow=c(1,1))
+
+```
+
+---
+# Or really, r is just the coefficient of a fit lm with a z-transform of our predictors
+
+$$\Large z_i = \frac{x_i - \bar{x}}{\sigma_x}$$
+.large[
+- When we z-transform variables, we put them on *the same scale*
+
+- The covariance between two z-transformed variables is their correlation!
+]
+
+---
+# Correlation versus Standardized Regression: It's the Same Picture
+
+$$z(y_i) = \beta_0 + \beta_1 z(x_i) + \epsilon_i$$
+
+```{r coefs_cor}
+wolves <- wolves %>%
+  mutate(pups_std = (pups - mean(pups))/sd(pups),
+         inbreeding_std = (inbreeding.coefficient - mean(inbreeding.coefficient))/sd(inbreeding.coefficient),
+         )
+
+cor_mod <- lm(pups_std ~inbreeding_std, data = wolves )
+
+tidy(cor_mod)[,1:3] %>%
+  kable(digits = 3, "html") %>%
+  kableExtra::kable_styling("striped")
+```
+
+versus correlation: `r with(wolves, cor(cbind(pups, inbreeding.coefficient)))[1,2] %>% round(3)`
+
+---
+class:center, middle
+
+# EVERYTHING IS A LINEAR MODEL
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. What do regression coefficients mean?
+
+3. What do the error coefficients of a regression mean?
+
+4. Correlation and Regression
+
+5. .red[Transformation and Model Structure for More Sensible Coefficients]
+
+
+---
+# Two Common Modifications (transformations) to Regression
+1. Centering your X variable  
+
+     - Many times X = 0 is silly
+     
+     - E.g., if you use year, are you going to regress back to 0?
+     
+     - Centering X allows you to evaluate a meaningful intercept 
+           - what is Y at the mean of X  
+            
+--
+
+2. Log Transforming Y
+
+     - Often, Y cannot be negative  
+     
+     - And/or the process generating Y is *multiplicative*  
+     
+     - Log(Y) can fix this and other sins. 
+     
+     - **VERY** common, but, what do the coefficients mean? 
+---
+
+# Centering X to generate a meaningful intercept
+
+$$x_{i  \space centered} = x_i - mean(x)$$
+
+```{r coefs_cent}
+wolves <- wolves %>%
+  mutate(inbreeding.centered = inbreeding.coefficient -
+           mean(inbreeding.coefficient))
+
+cent_mod <- lm(pups ~inbreeding.centered, data = wolves )
+
+tidy(cent_mod)[,1:3] %>%
+  kable(digits = 3, "html") %>%
+  kableExtra::kable_styling("striped")
+```
+
+Intercept implies wolves with the average level of inbreeding in this study have ~4 pups. Wolves with higher inbreeding have fewer pups, wolves with lower inbreeding have more.
+
+---
+
+# Centering X to generate a meaningful intercept
+
+```{r centplot}
+ggplot(data=wolves, mapping=aes(x=inbreeding.centered, y=pups)) +
+  xlab("Inbreeding Coefficient") + 
+  ylab("# of Pups") +
+  geom_point(size=3) +
+  theme_bw(base_size=24) +
+  stat_smooth(method = "lm") +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+---
+
+# Other Ways of Looking at This Relationship: Log Transformation of Y
+
+$$log(y_i) = \beta_0 + \beta_1 x_i + \epsilon_i$$
+  - relationship is now curved
+  - cannot have negative pups (yay!)
+
+```{r logplot, fig.height=5, fig.width = 8}
+wolfplot +
+  stat_smooth(method = "glm", 
+              method.args = list(family=gaussian(link = "log")))
+```
+
+---
+
+# Model Coefficients: Log Slope
+
+```{r logcoefs}
+wolf_mod_log <- lm(log(pups) ~ inbreeding.coefficient,
+               data = wolves)
+
+tidy(wolf_mod_log)[,1:3] %>%
+  kable(digits = 3, "html") %>%
+  kableExtra::kable_styling("striped")
+```
+
+--
+To understand the coefficient, remember
+$$y_i = e^{\beta_0 + \beta_1 x_i + \epsilon_i}$$
+
+exp(-2.994) = 0.05, so, a 1 unit increase in x causes y to change to 5% of its original value (a 95% loss) so...
+
+--
+
+**Association:** A one unit increase in inbreeding coefficient is associated with having 95% fewer pups, on average.
+
+---
+
+# You are now a Statistical Wizard. Be Careful. Your Model is a Golem.
+(sensu Richard McElreath)
+
+
+.center[.middle[![:scale 45%](images/09/golem.png)]]

@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Sampling and Simulation</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Linear Regression
+
+
+![image](./images/11/correlation_xkcd.jpg)
+
+
+
+---
+class: center, middle
+
+# Etherpad
+&lt;br&gt;&lt;br&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-lm-2020&lt;/h3&gt;&lt;/center&gt;
+
+---
+
+# The Steps of Statistical Modeling
+
+1. What is your question?
+2. What model of the world matches your question?
+3. Is your model valid?
+4. Query your model to answer your question.
+
+---
+
+# The Steps of Statistical Modeling
+
+1. What is your question?.red[
+2. What model of the world matches your question?
+3. Is your model valid?
+4. Query your model to answer your question.]
+
+---
+
+# Our question of the day: What is the relationship between inbreeding coefficient and litter size in wolves?
+
+.pull-left[
+
+&lt;img src="linear_regression_files/figure-html/wolf_scatterplot-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+
+&lt;br&gt;&lt;br&gt;
+![](./images/11/CUTE_WOLF_PUPS_by_horsesrock44.jpeg)
+]
+
+---
+
+# Roll that beautiful linear regression with 95% CI footage
+
+&lt;img src="linear_regression_files/figure-html/fit-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. What do regression coefficients mean?
+
+3. What do the error coefficients of a regression mean?
+
+4. Correlation and Regression
+
+5. Transformation and Model Structure for More Sensible Coefficients
+
+---
+
+# What is a regression?
+
+.center[.Large[y = a + bx + error]]
+
+--
+
+This is 90% of the modeling you will ever do because...
+
+--
+
+Everything is a linear model!
+
+- multiple parameters (x1, x2, etc...)
+
+- nonlinear transformations of y or x
+
+- multiplicative terms (b * x1 * x2) are still additive
+
+- generalized linear models with non-normal error
+
+- and so much more....
+
+---
+class:center, middle
+
+# EVERYTHING IS A LINEAR MODEL
+
+---
+
+# Linear Regression
+&lt;br&gt;
+`\(\Large y_i = \beta_0 + \beta_1 x_i + \epsilon_i\)`  
+`\(\Large \epsilon_i \sim^{i.i.d.} N(0, \sigma)\)`  
+&lt;Br&gt;&lt;br&gt;&lt;br&gt;
+.large[
+Then it’s code in the data, give the keyboard a punch  
+Then cross-correlate and break for some lunch  
+Correlate, tabulate, process and screen  
+Program, printout, regress to the mean  
+  
+-White Coller Holler by Nigel Russell
+]
+
+---
+
+# Regressions You Have Seen
+.large[
+Classic style:
+
+`$$y_i = \beta_0 + \beta_1  x_i + \epsilon_i$$`
+`$$\epsilon_i \sim N(0, \sigma)$$`
+]
+
+
+--
+-----
+
+.large[
+
+Prediction as Part of Error: 
+
+`$$\hat{y_i} = \beta_0 + \beta_1  x_i$$`
+`$$y_i \sim N(\hat{y_i}, \sigma)$$`
+]
+
+
+--
+
+-----
+
+.large[
+Matrix Style: 
+`$$Y = X \beta + \epsilon$$`
+]
+
+---
+
+# These All Are Equation-Forms of This Relationship
+
+&lt;img src="linear_regression_files/figure-html/fit-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. .red[What do regression coefficients mean?]
+
+3. What do the error coefficients of a regression mean?
+
+4. Correlation and Regression
+
+5. Transformation and Model Structure for More Sensible Coefficients
+
+---
+
+# What are we doing with regression?
+
+### Goals:  
+
+--
+1. Association
+
+  - What is the strength of a relationship between two quantities
+  - Not causal
+  
+--
+
+2. Prediction
+  - If we have two groups that differ in their X value by 1 unit, what is the average difference in their Y unit?
+  - Not causal
+
+--
+
+3. Counterfactual
+  - What would happen to an individual if their value of X increased by one unit?
+  - Causal reasoning!
+  
+---
+
+# What Can We Say About This?
+
+&lt;img src="linear_regression_files/figure-html/fit-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Model Coefficients: Slope
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.567 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.791 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; inbreeding.coefficient &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.447 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.189 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+1. **Association:** A one unit increase in inbreeding coefficient is associated with ~11 fewer pups, on average.
+
+2. **Prediction:** A new wolf with an inbreeding coefficient 1 unit greater than a second new wolf will have ~11 fewer pups, on average.
+
+3. **Counterfactual:** If an individual wolf had had its inbreeding coefficient 1 unit higher, it would have ~11 fewer pups.
+
+---
+# Which of these is the correct thing to say? When?
+
+1. **Association:** A one unit increase in inbreeding coefficient is associated with ~11 fewer pups, on average.
+
+2. **Prediction:** A new wolf with an inbreeding coefficient 1 unit greater than a second new wolf will have ~11 fewer pups, on average.
+
+3. **Counterfactual:** If an individual wolf had had its inbreeding coefficient 1 unit higher, it would have ~11 fewer pups.
+
+---
+
+# 11 Fewer Pups? What would be, then, a Better Way to Talk About this Slope?
+
+&lt;img src="linear_regression_files/figure-html/fit-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Model Coefficients: Intercept
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.567 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.791 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; inbreeding.coefficient &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.447 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.189 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;&lt;br&gt;
+
+--
+
+When the inbreeding coefficient is 0, a wolves will have ~6.6 pups, on average.
+
+
+---
+
+# Intercept Has Direct Interpretation on the Visualization
+
+&lt;img src="linear_regression_files/figure-html/fit-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. What do regression coefficients mean?
+
+3. .red[What do the error coefficients of a regression mean?]
+
+4. Correlation and Regression
+
+5. Transformation and Model Structure for More Sensible Coefficients
+
+---
+
+# Two kinds of error
+
+1. Fit error - error due to lack of precision in estimates  
+      - Coefficient SE
+      - Precision of estimates
+  
+2. Residual error - error due to variability not explained by X.
+      - Residual SD (from `\(\epsilon_i\)`)
+      
+---
+
+# Precision: coefficient SEs
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.567 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.791 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; inbreeding.coefficient &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.447 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.189 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+&lt;br&gt;&lt;br&gt;
+
+- Shows precision of ability to estimate coefficients  
+
+- Gets smaller with bigger sample size!  
+
+- Remember, ~ 2 SE covered 95% CI  
+
+- Comes from likelihood surface...but we'll get there
+
+---
+# Visualizing Precision: 95% CI (~2 SE)
+&lt;img src="linear_regression_files/figure-html/fit-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Visualizing Precision with Simulation from your Model
+
+&lt;img src="linear_regression_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Residual Error
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.523 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Sigma  is the SD of the residual 
+
+`$$\Large \epsilon_i \sim N(0,\sigma)$$`
+
+- How much does does # of pups vary beyond the relationship with inbreeding coefficient?
+
+- For any number of pups estimated on average, ~68% of the # of pups observed will fall within ~1.5 of that number 
+
+---
+
+# Visualizing Residual Error's Implications
+
+
+&lt;img src="linear_regression_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+# Residual Error -&gt; Variance Explained
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.523 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+- `\(\large{R^2 = 1 - \frac{\sigma^2_{residual}}{\sigma^2_y}}\)`
+  - Fraction of the variation in Y related to X.
+  - Here, 36.9% of the variation in pups is related to variation in Inbreeding Coefficient
+  - Relates to r, the Pearson correlation coefficient
+
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. What do regression coefficients mean?
+
+3. What do the error coefficients of a regression mean?
+
+4. .red[Correlation and Regression]
+
+5. Transformation and Model Structure for More Sensible Coefficients
+
+---
+# What is Correlation?
+
+* The change in standard deviations of variable x per change in 1 SD of variable y  
+     * Clear, right?  
+
+  
+  
+ * Assesses the degree of association between two variables
+  
+  
+ * But, unitless (sort of)
+     * Between -1 and 1
+
+---
+# Calculating Correlation: Start with Covariance
+
+Describes the relationship between two variables. Not scaled.
+
+
+--
+
+`\(\sigma_{xy}\)` = population level covariance  
+`\(s_{xy}\)` = covariance in your sample
+--
+
+.pull-left[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+`$$\sigma_{XY} = \frac{\sum (X-\bar{X})(y-\bar{Y})}{n-1}$$`
+]
+
+--
+
+.pull-right[
+&lt;img src="linear_regression_files/figure-html/rnormPlot_cov-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Pearson Correlation
+
+Describes the relationship between two variables.  
+Scaled between -1 and 1.  
+&lt;br&gt;  
+`\(\large \rho_{xy}\)` = population level correlation, `\(\large r_{xy}\)` = correlation in
+your sample
+&lt;div id="left" class="fragment"&gt;
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+`$$\Large\rho_{xy} = \frac{\sigma_{xy}}{\sigma_{x}\sigma_{y}}$$`
+&lt;/div&gt;
+
+&lt;div id="right" class="fragment"&gt;
+&lt;img src="linear_regression_files/figure-html/rnormPlot_cor-1.png" style="display: block; margin: auto;" /&gt;
+&lt;/div&gt;
+
+---
+# Assumptions of Pearson Correlation
+
+.pull-left[
+-   Observations are from a **random sample**  
+  
+  
+-   Each observation is **independent**  
+  
+  
+-   X and Y are from a **Normal Distribution**
+     - Weaker assumption
+]
+
+.pull-right[
+&lt;img src="linear_regression_files/figure-html/mvnorm_persp-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+# The meaning of r
+
+Y is perfectly predicted by X if r = -1 or 1.  
+&lt;br&gt;&lt;br&gt;
+`\(R^2\)` = the porportion of variation in y explained by x
+
+&lt;img src="linear_regression_files/figure-html/corLevels-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Get r in your bones...
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;center&gt;.large[.middle[http://guessthecorrelation.com/]]&lt;/center&gt;
+
+---
+# Example: Wolf Breeding and Litter Size
+
+.pull-left[
+
+&lt;img src="linear_regression_files/figure-html/wolf_scatterplot-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+
+&lt;br&gt;&lt;br&gt;
+![](./images/11/CUTE_WOLF_PUPS_by_horsesrock44.jpeg)
+]
+
+---
+# Example: Wolf Inbreeding and Litter Size
+
+Covariance Matrix:
+
+```
+                       inbreeding.coefficient  pups
+inbreeding.coefficient                   0.01 -0.11
+pups                                    -0.11  3.52
+```
+
+--
+
+Correlation Matrix:
+
+```
+                       inbreeding.coefficient  pups
+inbreeding.coefficient                   1.00 -0.61
+pups                                    -0.61  1.00
+```
+
+--
+
+Yes, you can estimate a SE (`cor.test()` or bootstrapping)
+
+---
+
+# Wait, so, how does Correlation relate to Regression? Slope versus r...
+
+
+`\(\LARGE b=\frac{s_{xy}}{s_{x}^2}\)` `\(= \frac{cov(x,y)}{var(x)}\)`
+  
+--
+&lt;br&gt;&lt;br&gt;
+`\(\LARGE = r_{xy}\frac{s_{y}}{s_{x}}\)`
+
+---
+# Correlation v. Regression Coefficients
+
+&lt;img src="linear_regression_files/figure-html/cor_and_reg-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Or really, r is just the coefficient of a fit lm with a z-transform of our predictors
+
+`$$\Large z_i = \frac{x_i - \bar{x}}{\sigma_x}$$`
+.large[
+- When we z-transform variables, we put them on *the same scale*
+
+- The covariance between two z-transformed variables is their correlation!
+]
+
+---
+# Correlation versus Standardized Regression: It's the Same Picture
+
+`$$z(y_i) = \beta_0 + \beta_1 z(x_i) + \epsilon_i$$`
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.166 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; inbreeding_std &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.608 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.169 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+versus correlation: -0.608
+
+---
+class:center, middle
+
+# EVERYTHING IS A LINEAR MODEL
+
+---
+
+# Regressiong to Be Mean
+
+1. What is regression?  
+
+2. What do regression coefficients mean?
+
+3. What do the error coefficients of a regression mean?
+
+4. Correlation and Regression
+
+5. .red[Transformation and Model Structure for More Sensible Coefficients]
+
+
+---
+# Two Common Modifications (transformations) to Regression
+1. Centering your X variable  
+
+     - Many times X = 0 is silly
+     
+     - E.g., if you use year, are you going to regress back to 0?
+     
+     - Centering X allows you to evaluate a meaningful intercept 
+           - what is Y at the mean of X  
+            
+--
+
+2. Log Transforming Y
+
+     - Often, Y cannot be negative  
+     
+     - And/or the process generating Y is *multiplicative*  
+     
+     - Log(Y) can fix this and other sins. 
+     
+     - **VERY** common, but, what do the coefficients mean? 
+---
+
+# Centering X to generate a meaningful intercept
+
+`$$x_{i  \space centered} = x_i - mean(x)$$`
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.958 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.311 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; inbreeding.centered &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.447 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.189 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Intercept implies wolves with the average level of inbreeding in this study have ~4 pups. Wolves with higher inbreeding have fewer pups, wolves with lower inbreeding have more.
+
+---
+
+# Centering X to generate a meaningful intercept
+
+&lt;img src="linear_regression_files/figure-html/centplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Other Ways of Looking at This Relationship: Log Transformation of Y
+
+`$$log(y_i) = \beta_0 + \beta_1 x_i + \epsilon_i$$`
+  - relationship is now curved
+  - cannot have negative pups (yay!)
+
+&lt;img src="linear_regression_files/figure-html/logplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Model Coefficients: Log Slope
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.944 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.215 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; inbreeding.coefficient &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.994 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.869 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+To understand the coefficient, remember
+`$$y_i = e^{\beta_0 + \beta_1 x_i + \epsilon_i}$$`
+
+exp(-2.994) = 0.05, so, a 1 unit increase in x causes y to change to 5% of its original value (a 95% loss) so...
+
+--
+
+**Association:** A one unit increase in inbreeding coefficient is associated with having 95% fewer pups, on average.
+
+---
+
+# You are now a Statistical Wizard. Be Careful. Your Model is a Golem.
+(sensu Richard McElreath)
+
+
+.center[.middle[![:scale 45%](images/09/golem.png)]]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
