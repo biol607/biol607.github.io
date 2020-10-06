@@ -1,0 +1,58 @@
+---
+title: '%in%'
+author: "Biol 607"
+date: "10/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Boolean Comparisons of Strings
+
+So, we're used to boolean comparisons of strings. Is something equal to something else?
+
+```{r}
+a <- "hello"
+
+a == "goodbye"
+```
+
+But what about a vector?
+
+
+```{r}
+a == c("hello", "goodbye")
+```
+
+That works, as it does element by element comparison. 
+
+But what about two vector?
+
+```{r}
+b <- c("hello", "goodbye")
+
+b == c("hello", "goodbye", "ciao")
+```
+
+That.... kind of works. Odd with the false at the end. It's looking at the second, not the first vector. As happened above.
+
+What if we want to know which elements of vector x are in vector y?
+
+The `%in%` operator is great as it asks if elements of one vector are IN the other. `x %in% y`
+
+```{r}
+b %in% c("hello", "goodbye", "ciao")
+```
+
+Excellent.
+
+```{r}
+x <- letters[1:7]
+y <- letters[5:15]
+
+x %in% y
+```
+
+This works great in a filter, as you can as if a column matches a vector of interest.
