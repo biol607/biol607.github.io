@@ -39,10 +39,9 @@ ui <- fluidPage(
         
         column(4,
                h4("Properties of Objective Function"),
-               "Bias",
-               "SE")
+               tableOutput('property_tab')
+        )
     ),
-    
 )
 
 # Define server logic required to draw a histogram
@@ -76,7 +75,7 @@ server <- function(input, output) {
         }
         
         #the fit
-        fit <- optim(c(0,0), obj_fn)
+        fit <- optim(c(0,0), obj_fn, hessian = TRUE)
         
         fit$par
     })
@@ -91,6 +90,40 @@ server <- function(input, output) {
             theme_classic() +
             geom_abline(intercept = pars[1],
                         slope = pars[2])
+        
+    })
+    
+    bias <- reactive({
+        pars <- obj()
+        
+        round(input$b - pars[2], 3)
+    })
+    
+   se <- reactive({
+        x <- dat()$x
+        ssx <- sum((x - mean(x))^2)
+        round(s()/sqrt(ssx), 3)
+    })
+    
+    s <- reactive({
+        pred <- obj()[1] + obj()[2]*dat()$x
+        res <- dat()$y - pred
+        ss <- sum((dat()$y - pred)^2)
+        
+        sqrt(ss/(nrow(dat())-2)) #residual var
+    })
+        
+    sigma <- reactive({
+        round(s(),3 )
+    })
+    
+    output$property_tab <- renderTable({
+        data.frame(
+            Bias = bias(),
+            `Slope SE` = se(),
+            `Residual SD` = sigma()
+        )
+        
         
     })
 }
