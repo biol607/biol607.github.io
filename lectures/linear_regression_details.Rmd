@@ -439,6 +439,7 @@ autoplot(wolf_mod, ncol = 1, which = 4)
 
 - If from a nonlinearity, consider transformation
 
+---
 
 # Assumptions (in rough descending order of importance)
 
@@ -450,7 +451,7 @@ autoplot(wolf_mod, ncol = 1, which = 4)
 
 4. Additivity and Linearity: compare model v. data!
 
-5. Independence of Errors: conisder sampling design
+5. Independence of Errors: consider sampling design
 
 6. Equal Variance of Errors: evaluate res-fit 
 
