@@ -100,7 +100,7 @@ __Homework:__ [Functions and Pivot homework](./homework/04_fun_pivot.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Introduction to Regression: [Correlation and Regression](lectures/linear_regression.html), [Fit and Precision](lectures/12_linear_model_fit.html)  
+__Lecture:__ Introduction to Regression: [Correlation and Regression](lectures/linear_regression.html), [Fit and Precision](lectures/linear_regression_details.html)  
 __Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), and [data](lab/data_06.zip) \
 __Reading:__ W&S 16-17, W&G on [model basics](http://r4ds.had.co.nz/model-basics.html), [model building](http://r4ds.had.co.nz/model-building.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-2020  
