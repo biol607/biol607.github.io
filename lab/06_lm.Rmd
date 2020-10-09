@@ -18,7 +18,6 @@ opts_chunk$set(fig.height=6,
                warning=FALSE, 
                echo = FALSE,
                message = FALSE)
-
 ```
 
 Believe it or not, despite all of the complexity under the hood, fitting a linear model in R with least squares is quite simple with a straightfoward workflow.
