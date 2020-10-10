@@ -5,18 +5,26 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
 library(tidyverse)
 ```
 
 Note: Datasets are available at http://whitlockschluter.zoology.ubc.ca/data so you don't have to type anything in (and have to load it!)  
 
+Many of the questions below can be addressed using functions in some places. Feel free to do so, but they can also be done without. Your call!
+
 
 ## 1. Correlation - W&S Chapter 16
+Data at https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter16/chap16q15LanguageGreyMatter.csv
+![](images/16_15.png)
 
-Questions 15, 19
+## 2. Correlation - W&S Chapter 16
 
-## 2. Correlation SE
+Data at https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter16/chap16q19LiverPreparation.csv
+
+![](./images/16_19.png)
+
+## 3. Correlation SE
 
 Consider the following dataset:
 
@@ -33,20 +41,20 @@ knitr::kable(mat, "html") %>% kableExtra::kable_styling("striped")
 
 ```
 
-### 2a.
+### 3a.
 Are these two variables correlated? What is the output of `cor()` here. What does a test show you?
 
 ```{r, eval=FALSE}
 cor.test(mat$cats, mat$happiness_score)
 ```
 
-### 2b.
+### 3b.
 What is the SE of the correlation based on the info from `cor.test()`
 ```{r, eval=FALSE}
-(0.7877084 - 0.3136313 )/2
+(0.91578829 - 0.6758738 )/2
 ```
 
-### 2c.
+### 3c.
 Now, what is the SE via simulation? To do this, you'll need to use `cor()` and get the relevant parameter from the output (remember - you get a matrix back, so, what's the right index!), `replicate()`, and `sample()` or `dplyr::sample_n()` with `replace=TRUE` to get, let's say, 1000 correlations. How does this compare to your value above?
 
 ```{r}
@@ -59,11 +67,13 @@ sd(ses)
 ```
 
 
-## 3. W&S Chapter 17
+## 4. W&S Chapter 17
+Data at https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter17/chap17q19GrasslandNutrientsPlantSpecies.csv
 
-Questions 19, 30, 31
+![](./images/17_19.png)
 
-## 4. Intervals and simulation
+
+## 5. Intervals and simulation
 
 Fit the deet and bites model from lab.
 
@@ -96,7 +106,7 @@ rmnorm(4, mean = coef(deet_mod), varcov = vcov(deet_mod))
 
 produces a number of draws of the variance and the covariance!
 
-### 4a. Fit simulations!
+### 5a. Fit simulations!
 Using `geom_abline()` make a plot that has the following layers and shows that these simulated lines match up well with the fit CI. 1) the data, 2) the lm fit with a CI, and 3) simulated lines. You might have to much around to make it look as good as possible.
 
 
@@ -110,7 +120,7 @@ ggplot(deet, aes(dose, bites)) +
   stat_smooth(data = deet, method=lm, fill = "red")
 ```
 
-### 4b. Prediction simulations!
+### 5b. Prediction simulations!
 
 That's all well and good, but what about the prediction intervals? To each line, we can add some error drawn from the residual standard deviation. That residual can either be extracted from `summary()` or you can get the `sd` of `residuals`.
 
