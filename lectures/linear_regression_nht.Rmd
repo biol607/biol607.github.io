@@ -116,7 +116,7 @@ wolfplot + stat_smooth(method = "lm")
 ---
 class: center, middle
 
-# So.... how do you know if you draw conclusions from an experiment or observation?
+# So.... how do you draw conclusions from an experiment or observation?
 
 
 ---
