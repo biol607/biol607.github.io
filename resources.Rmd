@@ -16,6 +16,9 @@ title: "Resources, Blogs, and More"
 [ModernDive: An Introduction to Statistical and Data Sciences via R](https://ismayc.github.io/moderndiver-book/index.html). 2017. Chester Ismay and Albert Y. Kim  Nice intro stats book (for undergrads) using all R examples  
 [Fundamentals of Data Visualization](http://serialmentor.com/dataviz/). 2018. Claus Wilke. A wonderful online collection of best principles and practices for data viz.  
 [Forecasting: Principles and Practice](http://otexts.org/fpp2/). 2018. Rob Hyndman and George Athanasaopoules. A great intro to timeseries and forecasting in R.  
+[Meta-Analysis in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/) 2019. Harrer, M., Cuijpers, P., Furukawa, T.A, & Ebert, D. D.  
+
+
 
 ### Github
 [Using Git and Github with Rstudio](http://www.molecularecologist.com/2013/11/using-github-with-r-and-rstudio/)\
