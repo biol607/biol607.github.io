@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Likelihood and Cross-Validation</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Likelihood and Cross-Validation&lt;br&gt;
+
+![:scale 64%](images/13/hey_gurl_liklihood.jpeg)
+
+
+
+
+
+
+---
+class: center, middle
+
+# Etherpad
+&lt;br&gt;&lt;br&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-mle-cv-2020&lt;/h3&gt;&lt;/center&gt;
+
+---
+
+# Applying Different Styles of Inference
+
+- **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
+      - Deductive
+
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+
+- **Model Comparison**: Comparison of alternate hypotheses
+      - Deductive or Inductive
+
+- **Probabilistic Inference**: What's our degree of belief in a data?
+      - Inductive
+      
+---
+
+
+# Applying Different Styles of Inference
+
+.grey[
+- **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
+      - Deductive
+]
+
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+
+- **Model Comparison**: Comparison of alternate hypotheses
+      - Deductive or Inductive
+      
+.grey[
+- **Probabilistic Inference**: What's our degree of belief in a data?
+      - Inductive
+]
+
+---
+# To Get There, We Need To Understand Likelihood and Deviance
+
+.center[
+![](./images/mmi/bjork-on-phone-yes-i-am-all-about-the-deviance-let-us-make-it-shrink-our-parameters.jpg)
+]
+
+---
+
+class: middle
+
+# Likelihood: how well data support a given hypothesis.
+
+--
+
+
+### Note: Each and every parameter choice IS a hypothesis
+
+---
+
+# Likelihood Defined
+&lt;br&gt;&lt;br&gt;
+`$$\Large L(H | D) = p(D | H)$$`
+
+
+
+Where the D is the data and H is the hypothesis (model) including a both a data generating process with some choice of parameters (often called `\(\theta\)`). The error generating process is inherent in the choice of probability distribution used for calculation.
+
+---
+# Thinking in Terms of Models and Likelihood
+
+- First we have a **Data Generating Process**
+
+     - This is our hypothesis about how the world works
+     
+     - `\(\hat{y}_i = \beta_0 + \beta_1 x_i\)` 
+     
+--
+
+- Then we have a likelihood of the data given this hypothesis
+     - This allows us to calculate the likelihood of observing our data given the hypothesis
+     
+     - Called the **Likelihood Function**
+     
+     - `\(y_{i} = N(\hat{y}_i, \sigma)\)`
+
+---
+# All Kinds of Likelihood functions
+- Probability density functions are the most common  
+
+--
+
+- But, hey, `\(\sum(y_{i} - \hat{y}_i)^2\)` is one as well
+
+--
+
+- Extremely flexible
+
+--
+
+- The key is a function that can find a minimum or maximum value, depending on your parameters
+
+---
+# Likelihood of a Single Value
+What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1?
+
+&lt;img src="mle_cv_files/figure-html/norm_lik-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Likelihood of a Single Value
+What is the likelihood of a value of 1.5 given a hypothesized Normal distribution where the mean is 0 and the SD is 1. 
+
+&lt;img src="mle_cv_files/figure-html/norm_lik_2-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+`$$\mathcal{L}(\mu = 0, \sigma = 1 | Data = 1.5) = dnorm(1.5,  \mu = 0, \sigma = 1)$$`
+
+---
+class: middle
+
+## The Maximum Likelihood Estimate is the value at which `\(p(D | \theta)\)` - our likelihood function -  is highest.
+
+--
+
+#### To find it, we search across various values of `\(\theta\)`
+
+---
+# MLE for Multiple Data Points
+
+Let's say this is our data:
+
+```
+ [1]  3.37697212  3.30154837  1.90197683  1.86959410  0.20346568  3.72057350
+ [7]  3.93912102  2.77062225  4.75913135  3.11736679  2.14687718  3.90925918
+[13]  4.19637296  2.62841610  2.87673977  4.80004312  4.70399588 -0.03876461
+[19]  0.71102505  3.05830349
+```
+
+--
+
+We know that the data comes from a normal population with a `\(\sigma\)` of 1.... but we want to get the MLE of the mean.
+
+--
+
+`\(p(D|\theta) = \prod p(D_i|\theta)\)`  
+
+--
+     = `\(\prod dnorm(D_i, \mu, \sigma = 1)\)`
+     
+---
+
+# Likelihood At Different Choices of Mean, Visually
+
+&lt;img src="mle_cv_files/figure-html/ml_search-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# The Likelihood Surface
+
+&lt;img src="mle_cv_files/figure-html/lik_mean_surf-1.png" style="display: block; margin: auto;" /&gt;
+
+MLE = 2.896
+
+---
+
+# The Log-Likelihood Surface
+
+We use Log-Likelihood as it is not subject to rounding error, and approximately `\(\chi^2\)` distributed.
+
+&lt;img src="mle_cv_files/figure-html/loglik_surf-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Hey, Look, it's the Standard Error!
+
+The 68% CI of  a `\(\chi^2\)` distribution is 0.49, so....
+
+&lt;img src="mle_cv_files/figure-html/loglik_zoom-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Hey, Look, it's the 95% CI!
+
+The 95% CI of  a `\(\chi^2\)` distribution is 1.92, so....
+
+&lt;img src="mle_cv_files/figure-html/ll_ci-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# The Deviance: -2 * Log-Likelihood
+
+- Measure of fit. Smaller deviance = closer to perfect fit  
+- We are minimizing now, just like minimizing sums of squares 
+- Point deviance residuals have meaning  
+- Point deviance of linear regression = mean square error!
+
+&lt;img src="mle_cv_files/figure-html/show_dev-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+
+# Putting MLE Into Practice with Pufferfish
+
+
+
+.pull-left[
+- Pufferfish are toxic/harmful to predators  
+&lt;br&gt;
+- Batesian mimics gain protection from predation - why?
+&lt;br&gt;&lt;br&gt;
+- Evolved response to appearance?
+&lt;br&gt;&lt;br&gt;
+- Researchers tested with mimics varying in toxic pufferfish resemblance
+]
+
+.pull-right[
+![:scale 80%](./images/11/puffer_mimics.jpg)
+]
+---
+# This is our fit relationship
+&lt;img src="mle_cv_files/figure-html/puffershow-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Likelihood Function for Linear Regression
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;center&gt;Will often see:&lt;br&gt;&lt;br&gt;
+`\(\large L(\theta | D) = \prod_{i=1}^n p(y_i\; | \; x_i;\ \beta_0, \beta_1, \sigma)\)` &lt;/center&gt;
+
+---
+# Likelihood Function for Linear Regression: What it Means
+&lt;br&gt;&lt;br&gt;
+`$$L(\theta | Data) = \prod_{i=1}^n \mathcal{N}(Visits_i\; |\; \beta_{0} + \beta_{1} Resemblance_i, \sigma)$$`
+&lt;br&gt;&lt;br&gt;
+where `\(\beta_{0}, \beta_{1}, \sigma\)` are elements of `\(\theta\)`
+
+---
+
+# The Log-Likelihood Surface from Grid Sampling
+
+&lt;img src="mle_cv_files/figure-html/reg_lik_surf-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Searching Likelihood Space: Algorithms
+
+- Grid sampling tooooo slow
+---
+
+-   Newtown-Raphson (algorithmicly implemented in &lt;span&gt;nlm&lt;/span&gt; and
+    &lt;span&gt;BFGS&lt;/span&gt; method) uses derivatives
+     - good for smooth surfaces &amp; good start values  
+--
+
+-   Nelder-Mead Simplex (&lt;span&gt;optim&lt;/span&gt;’s default)
+     - good for rougher surfaces, but slower  
+
+-- 
+-   Maaaaaany more....
+     
+---
+# Quantiative Model of Process Using Likelihood
+
+&lt;br&gt;&lt;br&gt;
+**Likelihood:**  
+`\(Visits_i \sim \mathcal{N}(\hat{Visits_i}, \sigma)\)`  
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+**Data Generating Process:**  
+`\(\hat{Visits_i} = \beta_{0}  +  \beta_{1} Resemblance_i\)`
+
+---
+# Fit Your Model!
+
+
+```r
+puffer_glm &lt;- glm(predators ~ resemblance, 
+                  data = puffer,
+                  family = gaussian(link = "identity"))
+```
+
+---
+# The *Same* Diagnostics
+.pull-left[
+&lt;img src="mle_cv_files/figure-html/diag1-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="mle_cv_files/figure-html/diag2-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Well Behaved Likelihood Profiles
+
+- To get a profile for a single paramter, we calculate the MLE of all other parameters at different estimates of our parameter of interest
+
+- This *should* produce a nice quadratic curve, as we saw before
+
+- This is how we get our CI and SE (although we usually assume a quadratic distribution for speed)
+
+- BUT - with more complex models, we can get weird valleys, multiple optima, etc.
+
+- Common sign of a poorly fitting model - other diagnostics likely to fail as well
+
+---
+# But - What do the Likelihood Profiles Look Like?
+&lt;img src="mle_cv_files/figure-html/profileR-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+Are these nice symmetric slices?
+
+## Sometimes Easier to See with a Straight Line
+tau = signed sqrt of difference from deviance
+
+&lt;img src="mle_cv_files/figure-html/profile-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+# Evaluate Coefficients
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.925 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.506 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.278 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.218 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; resemblance &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.989 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.571 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.232 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Interval
+
+---
+
+
+# Applying Different Styles of Inference
+
+.grey[
+- **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
+      - Deductive
+
+
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+]
+
+- **Model Comparison**: Comparison of alternate hypotheses
+      - Deductive .grey[or Inductive]
+      
+.grey[
+- **Probabilistic Inference**: What's our degree of belief in a data?
+      - Inductive
+]
+
+---
+# Can Compare p(data | H) for alternate Parameter Values
+
+&lt;img src="mle_cv_files/figure-html/likelihoodDemo3-1.png" style="display: block; margin: auto;" /&gt;
+
+
+Compare `\(p(D|\theta_{1})\)` versus `\(p(D|\theta_{2})\)`
+
+## Likelihood Ratios
+&lt;br&gt;
+`$$\LARGE G = \frac{L(H_1 | D)}{L(H_2 | D)}$$`
+
+- G is the ratio of *Maximum Likelihoods* from each model  
+--
+
+- Used to compare goodness of fit of different models/hypotheses  
+--
+
+- Most often, `\(\theta\)` = MLE versus `\(\theta\)` = 0  
+
+--
+
+- `\(-2 log(G)\)` is `\(\chi^2\)` distributed  
+
+---
+# Likelihood Ratio Test
+
+- A new test statistic: `\(D = -2 log(G)\)`  
+
+--
+
+- `\(= 2 [Log(L(H_2 | D)) - Log(L(H_1 | D))]\)`  
+
+--
+
+- It's `\(\chi^2\)` distributed!   
+     - DF = Difference in # of Parameters  
+
+--
+
+- If `\(H_1\)` is the Null Model, we have support for our alternate model
+
+---
+# Likelihood Ratio Test for Regression
+
+- We compare our slope + intercept to a model fit with only an intercept!
+
+
+```r
+int_only &lt;- glm(predators ~ 1, data = puffer)
+```
+
+--
+
+- We then use *Analysis of Deviance* (ANODEV)
+
+---
+# Our First ANODEV
+
+
+```
+Analysis of Deviance Table
+
+Model 1: predators ~ 1
+Model 2: predators ~ resemblance
+  Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    
+1        19     422.95                          
+2        18     167.80  1   255.15 1.679e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
