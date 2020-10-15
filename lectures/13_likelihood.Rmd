@@ -553,7 +553,7 @@ Estimates: mean = `r round(m_seals, 2)`, SD = `r round(s_seals, 2)`
 
 ## Profile CIs
 
-1. For each value of the parameter of interest, get the MLE of the other paramter  
+1. For each value of the parameter of interest, get the MLE of the other parameter  
 \
 2. Use this as your **profile** likelihood for your parameter  
 \ 
