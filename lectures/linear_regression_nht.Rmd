@@ -75,7 +75,7 @@ puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
 ![:scale 80%](./images/11/puffer_mimics.jpg)
 ]
 ---
-## Question of the day: Does Resembling a Pufferfish Reduce Predator Visits?
+# Question of the day: Does Resembling a Pufferfish Reduce Predator Visits?
 ```{r puffershow}
 pufferplot <- ggplot(puffer, mapping=aes(x=resemblance, y=predators)) +
   ylab("Predator Approaches per Trial") + 
