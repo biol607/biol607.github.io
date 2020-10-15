@@ -6,6 +6,10 @@
   color:red;
 }
 
+.grey {
+  color:lightgrey;
+}
+
 .large{
   font-size: 130%;
 }
