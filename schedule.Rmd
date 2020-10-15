@@ -111,12 +111,12 @@ __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Ways of Knowing: [NHST](./lectures/linear_regression_nht) and [Likelihood with Cross-Validation](lectures/13_likelihood.html), [Fitting a line with Likelihood](lectures/14_likelihood_2.html)  
+__Lecture:__ Ways of Knowing: [NHST](./lectures/linear_regression_nht) and [Likelihood with LRT](lectures/mle_cv.html)    
 __Lab Topic:__ [Likelihood and linear models](lab/07_likelihood.html), [data](./lab/data/17e8ShrinkingSeals Trites 1996.csv)\
 __Reading:__ W&S 20, W&G Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-eval-2020  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-eval-2020, https://etherpad.wikimedia.org/p/607-mle-2020  
 __In Class Code:__  [linear models with likelihood](in_class_code_2020/scripts/likelihood.R)  
-__Packages for The Week:__ `install.packages(c("MASS", "profileModel", "bbmle"))`  
+__Packages for The Week:__ `install.packages(c("MASS", "profileModel", "bbmle", "rsample"))`  
 __Homework:__[pufferfish and likelihood](./homework_2020/07_likelihood.html)  
 
 ### Week 7.   

@@ -1,5 +1,5 @@
 ---
-title: "Likelihood and Cross-Validation"
+title: "Maximum Likelihood Estimation and Likelihood Ratio Testing"
 output:
   xaringan::moon_reader:
     seal: false
@@ -48,7 +48,7 @@ class: center, middle
 
 # Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-mle-cv-2020</h3></center>
+<center><h3>https://etherpad.wikimedia.org/p/607-mle-2020</h3></center>
 
 ---
 
@@ -57,11 +57,11 @@ class: center, middle
 - **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
       - Deductive
 
-- **Cross-Validation**: How good are you at predicting new data?
-      - Deductive
-
 - **Model Comparison**: Comparison of alternate hypotheses
       - Deductive or Inductive
+      
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
 
 - **Probabilistic Inference**: What's our degree of belief in a data?
       - Inductive
@@ -76,12 +76,12 @@ class: center, middle
       - Deductive
 ]
 
-- **Cross-Validation**: How good are you at predicting new data?
-      - Deductive
-
 - **Model Comparison**: Comparison of alternate hypotheses
       - Deductive or Inductive
       
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+
 .grey[
 - **Probabilistic Inference**: What's our degree of belief in a data?
       - Inductive
@@ -93,6 +93,17 @@ class: center, middle
 .center[
 ![](./images/mmi/bjork-on-phone-yes-i-am-all-about-the-deviance-let-us-make-it-shrink-our-parameters.jpg)
 ]
+
+---
+# A Likely Lecture
+
+1. Introduction to Likelihood
+
+2. Maximum Likelihood Estimation
+
+3. Maximum Likelihood and Linear Regression
+
+4. Comparing Hypotheses with Likelihood
 
 ---
 
@@ -178,6 +189,17 @@ normline
 $$\mathcal{L}(\mu = 0, \sigma = 1 | Data = 1.5) = dnorm(1.5,  \mu = 0, \sigma = 1)$$
 
 ---
+# A Likely Lecture
+
+1. Introduction to Likelihood
+
+2. .red[Maximum Likelihood Estimation]
+
+3. Maximum Likelihood and Linear Regression
+
+4. Comparing Hypotheses with Likelihood
+
+---
 class: middle
 
 ## The Maximum Likelihood Estimate is the value at which $p(D | \theta)$ - our likelihood function -  is highest.
@@ -204,8 +226,10 @@ We know that the data comes from a normal population with a $\sigma$ of 1.... bu
 
 $p(D|\theta) = \prod p(D_i|\theta)$  
 
+
 --
-     = $\prod dnorm(D_i, \mu, \sigma = 1)$
+
+&nbsp; &nbsp;     = $\prod dnorm(D_i, \mu, \sigma = 1)$
      
 ---
 
@@ -277,6 +301,32 @@ ggplot(ml_search_ll,
   geom_point() + 
   labs(y = "Log-Likelihood")
 ```
+---
+
+# The $\chi^2$ Distribution
+
+- Distribution of sums of squares of k data points drawn from N(0,1)
+
+- k = Degrees of Freedom
+
+- Measures goodness of fit
+
+- A large probability density indicates a match between the squared difference of an observation and expectation
+
+---
+
+# The $\chi^2$ Distribution, Visually
+```{r chisq_dist}
+cdat <- crossing(k = seq(1,9,2),
+                 x = seq(0.25,8, length.out = 200)) %>%
+  mutate(density = dchisq(x, k))
+
+ggplot(cdat,
+       aes(x = x, y = density, color = factor(k))) +
+  geom_line(size = 1.2) +
+  scale_color_brewer(palette = "Set1")
+
+```
 
 ---
 
@@ -340,9 +390,19 @@ ggplot(ml_search_ll,
        aes(x = mu, y = deviance)) + 
   geom_point() 
 ```
+
 ---
+# A Likely Lecture
 
+1. Introduction to Likelihood
 
+2. Maximum Likelihood Estimation
+
+3. .red[Maximum Likelihood and Linear Regression]
+
+4. Comparing Hypotheses with Likelihood
+
+---
 # Putting MLE Into Practice with Pufferfish
 
 ```{r pufferload}
@@ -420,20 +480,30 @@ ll_plot_reg
 ---
 # Searching Likelihood Space: Algorithms
 
+
+.pull-left[
+
 - Grid sampling tooooo slow
----
 
--   Newtown-Raphson (algorithmicly implemented in <span>nlm</span> and
-    <span>BFGS</span> method) uses derivatives
+
+-   Newtown-Raphson (algorithmicly implemented in `nlm` and
+    `optim` with the `BFGS` method) uses derivatives
      - good for smooth surfaces & good start values  
---
 
--   Nelder-Mead Simplex (<span>optim</span>’s default)
+
+-   Nelder-Mead Simplex (`optim`’s default)
      - good for rougher surfaces, but slower  
 
--- 
+
 -   Maaaaaany more....
-     
+]
+
+--
+
+.pull-right[
+![](images/mle/likelihood_boromir.jpg)
+]
+
 ---
 # Quantiative Model of Process Using Likelihood
 
@@ -454,6 +524,17 @@ puffer_glm <- glm(predators ~ resemblance,
                   family = gaussian(link = "identity"))
 ```
 
+--
+
+- GLM stands for **Generalized Linear Model**
+
+--
+
+- We specify the error distribution and a 1:1 link between our data generating process and the value plugged into the error generating process
+
+--
+
+- If we had specified "log" would be akin to a log transformation.... sort of
 ---
 # The *Same* Diagnostics
 .pull-left[
@@ -517,9 +598,9 @@ qplot(x = Value, y = Differences, data = prof_data, geom = "line") +
 
 ---
 
-Are these nice symmetric slices?
+# Are these nice symmetric slices?
 
-## Sometimes Easier to See with a Straight Line
+### Sometimes Easier to See with a Straight Line
 tau = signed sqrt of difference from deviance
 
 ```{r profile, fig.height = 12}
@@ -538,6 +619,18 @@ knitr::kable(tidy(puffer_glm), digits = 3, "html") %>% kableExtra::kable_styling
 <br>
 Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Interval
 
+
+---
+# A Likely Lecture
+
+1. Introduction to Likelihood
+
+2. Maximum Likelihood Estimation
+
+3. Maximum Likelihood and Linear Regression
+
+4. .red[Comparing Hypotheses with Likelihood]
+
 ---
 
 
@@ -546,16 +639,15 @@ Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Int
 .grey[
 - **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
       - Deductive
-
-
-- **Cross-Validation**: How good are you at predicting new data?
-      - Deductive
 ]
 
 - **Model Comparison**: Comparison of alternate hypotheses
-      - Deductive .grey[or Inductive]
+      - Deductive or Inductive
       
 .grey[
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+
 - **Probabilistic Inference**: What's our degree of belief in a data?
       - Inductive
 ]
@@ -620,6 +712,8 @@ $$\LARGE G = \frac{L(H_1 | D)}{L(H_2 | D)}$$
 
 - We compare our slope + intercept to a model fit with only an intercept!
 
+- Note, models must have the SAME response variable
+
 ```{r intmod, echo = TRUE}
 int_only <- glm(predators ~ 1, data = puffer)
 ```
@@ -634,3 +728,23 @@ int_only <- glm(predators ~ 1, data = puffer)
 ```{r}
 anova(int_only, puffer_glm, test = "LRT")
 ```
+
+---
+# When to Use Likelihood?
+
+
+.pull-left[
+- Great for **complex models** (beyond lm)
+
+- Great for anything with an **objective function** you can minimize
+
+- AND, even lm has a likelihood!
+
+- Ideal for **model comparison**
+
+- As we will see, Deviance has many uses...
+]
+
+.pull-right[
+![](./images/mle/spell_likelihood.jpg)
+]

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Likelihood and Cross-Validation</title>
+    <title>Maximum Likelihood Estimation and Likelihood Ratio Testing</title>
     <meta charset="utf-8" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
@@ -28,7 +28,7 @@ class: center, middle
 
 # Etherpad
 &lt;br&gt;&lt;br&gt;
-&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-mle-cv-2020&lt;/h3&gt;&lt;/center&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-mle-2020&lt;/h3&gt;&lt;/center&gt;
 
 ---
 
@@ -37,11 +37,11 @@ class: center, middle
 - **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
       - Deductive
 
-- **Cross-Validation**: How good are you at predicting new data?
-      - Deductive
-
 - **Model Comparison**: Comparison of alternate hypotheses
       - Deductive or Inductive
+      
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
 
 - **Probabilistic Inference**: What's our degree of belief in a data?
       - Inductive
@@ -56,12 +56,12 @@ class: center, middle
       - Deductive
 ]
 
-- **Cross-Validation**: How good are you at predicting new data?
-      - Deductive
-
 - **Model Comparison**: Comparison of alternate hypotheses
       - Deductive or Inductive
       
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+
 .grey[
 - **Probabilistic Inference**: What's our degree of belief in a data?
       - Inductive
@@ -73,6 +73,17 @@ class: center, middle
 .center[
 ![](./images/mmi/bjork-on-phone-yes-i-am-all-about-the-deviance-let-us-make-it-shrink-our-parameters.jpg)
 ]
+
+---
+# A Likely Lecture
+
+1. Introduction to Likelihood
+
+2. Maximum Likelihood Estimation
+
+3. Maximum Likelihood and Linear Regression
+
+4. Comparing Hypotheses with Likelihood
 
 ---
 
@@ -146,6 +157,17 @@ What is the likelihood of a value of 1.5 given a hypothesized Normal distributio
 `$$\mathcal{L}(\mu = 0, \sigma = 1 | Data = 1.5) = dnorm(1.5,  \mu = 0, \sigma = 1)$$`
 
 ---
+# A Likely Lecture
+
+1. Introduction to Likelihood
+
+2. .red[Maximum Likelihood Estimation]
+
+3. Maximum Likelihood and Linear Regression
+
+4. Comparing Hypotheses with Likelihood
+
+---
 class: middle
 
 ## The Maximum Likelihood Estimate is the value at which `\(p(D | \theta)\)` - our likelihood function -  is highest.
@@ -174,8 +196,10 @@ We know that the data comes from a normal population with a `\(\sigma\)` of 1...
 
 `\(p(D|\theta) = \prod p(D_i|\theta)\)`  
 
+
 --
-     = `\(\prod dnorm(D_i, \mu, \sigma = 1)\)`
+
+&amp;nbsp; &amp;nbsp;     = `\(\prod dnorm(D_i, \mu, \sigma = 1)\)`
      
 ---
 
@@ -198,6 +222,22 @@ MLE = 2.896
 We use Log-Likelihood as it is not subject to rounding error, and approximately `\(\chi^2\)` distributed.
 
 &lt;img src="mle_cv_files/figure-html/loglik_surf-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+# The `\(\chi^2\)` Distribution
+
+- Distribution of sums of squares of k data points drawn from N(0,1)
+
+- k = Degrees of Freedom
+
+- Measures goodness of fit
+
+- A large probability density indicates a match between the squared difference of an observation and expectation
+
+---
+
+# The `\(\chi^2\)` Distribution, Visually
+&lt;img src="mle_cv_files/figure-html/chisq_dist-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -225,9 +265,19 @@ The 95% CI of  a `\(\chi^2\)` distribution is 1.92, so....
 - Point deviance of linear regression = mean square error!
 
 &lt;img src="mle_cv_files/figure-html/show_dev-1.png" style="display: block; margin: auto;" /&gt;
+
 ---
+# A Likely Lecture
 
+1. Introduction to Likelihood
 
+2. Maximum Likelihood Estimation
+
+3. .red[Maximum Likelihood and Linear Regression]
+
+4. Comparing Hypotheses with Likelihood
+
+---
 # Putting MLE Into Practice with Pufferfish
 
 
@@ -271,20 +321,30 @@ where `\(\beta_{0}, \beta_{1}, \sigma\)` are elements of `\(\theta\)`
 ---
 # Searching Likelihood Space: Algorithms
 
+
+.pull-left[
+
 - Grid sampling tooooo slow
----
 
--   Newtown-Raphson (algorithmicly implemented in &lt;span&gt;nlm&lt;/span&gt; and
-    &lt;span&gt;BFGS&lt;/span&gt; method) uses derivatives
+
+-   Newtown-Raphson (algorithmicly implemented in `nlm` and
+    `optim` with the `BFGS` method) uses derivatives
      - good for smooth surfaces &amp; good start values  
---
 
--   Nelder-Mead Simplex (&lt;span&gt;optim&lt;/span&gt;’s default)
+
+-   Nelder-Mead Simplex (`optim`’s default)
      - good for rougher surfaces, but slower  
 
--- 
+
 -   Maaaaaany more....
-     
+]
+
+--
+
+.pull-right[
+![](images/mle/likelihood_boromir.jpg)
+]
+
 ---
 # Quantiative Model of Process Using Likelihood
 
@@ -306,6 +366,17 @@ puffer_glm &lt;- glm(predators ~ resemblance,
                   family = gaussian(link = "identity"))
 ```
 
+--
+
+- GLM stands for **Generalized Linear Model**
+
+--
+
+- We specify the error distribution and a 1:1 link between our data generating process and the value plugged into the error generating process
+
+--
+
+- If we had specified "log" would be akin to a log transformation.... sort of
 ---
 # The *Same* Diagnostics
 .pull-left[
@@ -335,9 +406,9 @@ puffer_glm &lt;- glm(predators ~ resemblance,
 
 ---
 
-Are these nice symmetric slices?
+# Are these nice symmetric slices?
 
-## Sometimes Easier to See with a Straight Line
+### Sometimes Easier to See with a Straight Line
 tau = signed sqrt of difference from deviance
 
 &lt;img src="mle_cv_files/figure-html/profile-1.png" style="display: block; margin: auto;" /&gt;
@@ -377,6 +448,18 @@ tau = signed sqrt of difference from deviance
 &lt;br&gt;
 Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Interval
 
+
+---
+# A Likely Lecture
+
+1. Introduction to Likelihood
+
+2. Maximum Likelihood Estimation
+
+3. Maximum Likelihood and Linear Regression
+
+4. .red[Comparing Hypotheses with Likelihood]
+
 ---
 
 
@@ -385,16 +468,15 @@ Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Int
 .grey[
 - **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
       - Deductive
-
-
-- **Cross-Validation**: How good are you at predicting new data?
-      - Deductive
 ]
 
 - **Model Comparison**: Comparison of alternate hypotheses
-      - Deductive .grey[or Inductive]
+      - Deductive or Inductive
       
 .grey[
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+
 - **Probabilistic Inference**: What's our degree of belief in a data?
       - Inductive
 ]
@@ -446,6 +528,8 @@ Compare `\(p(D|\theta_{1})\)` versus `\(p(D|\theta_{2})\)`
 
 - We compare our slope + intercept to a model fit with only an intercept!
 
+- Note, models must have the SAME response variable
+
 
 ```r
 int_only &lt;- glm(predators ~ 1, data = puffer)
@@ -470,6 +554,26 @@ Model 2: predators ~ resemblance
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
+
+---
+# When to Use Likelihood?
+
+
+.pull-left[
+- Great for **complex models** (beyond lm)
+
+- Great for anything with an **objective function** you can minimize
+
+- AND, even lm has a likelihood!
+
+- Ideal for **model comparison**
+
+- As we will see, Deviance has many uses...
+]
+
+.pull-right[
+![](./images/mle/spell_likelihood.jpg)
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
