@@ -13,9 +13,9 @@ output:
 ---
 class: center, middle
 
-# Likelihood and Cross-Validation<br>
+# Maximum Likelihood Estimation and Likelihood Ratio Testing<br>
 
-![:scale 64%](images/13/hey_gurl_liklihood.jpeg)
+![:scale 55%](images/13/hey_gurl_liklihood.jpeg)
 ```{r setup, include=FALSE}
 library(knitr)
 library(ggplot2)
