@@ -117,7 +117,7 @@ __Reading:__ W&S 20, W&G Chapter [Iteration](http://r4ds.had.co.nz/iteration.htm
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-eval-2020, https://etherpad.wikimedia.org/p/607-mle-2020  
 __In Class Code:__  [linear models with likelihood](in_class_code/2020/scripts/likelihood.R)  
 __Packages for The Week:__ `install.packages(c("MASS", "profileModel", "bbmle", "rsample"))`  
-__Homework:__[pufferfish and likelihood](./homework_2020/07_likelihood.html)  
+__Homework:__[inference and likelihood](./homework/07_likelihood.html)  
 
 ### Week 7.   
 ```{r next_date, echo=FALSE}
