@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = FALSE, eval=FALSE)
 
 ## Puffers!
 
-Let's look at the [pufferfish data](http://biol607.github.io/homework_2018/data/16q11PufferfishMimicry Caley & Schluter 2003.csv) with likelihood!  
+Let's look at the [pufferfish data](http://biol607.github.io/homework/data/16q11PufferfishMimicry Caley & Schluter 2003.csv) with likelihood!  
 
 **3. Grid Sampling!** Based on Friday's lab, load up the pufferfish data and use grid sampling to find the MLE of the slope, intercept and residual SD of this model. Feel free to eyeball results from an `lm()` fit to get reasonable values. Try not to do this for a grid of more than ~100K points (more if you want!). It's ok to be coarse. Compare to lm.
 
@@ -123,7 +123,7 @@ plot(profile(puffer_mle2))
 #This produces a convergence error - the algorithm never converges.
 #other possibilities are that the whole thing fails because of bad sd values 
 #or we get convergence and they don't notice anything
-#Start values are very important and can alter the outcome of your models. Try either "good" start values, or try multiple ones and make sure your results conferge.
+#Start values are very important and can alter the outcome of your models. Try either "good" start values, or try multiple ones and make sure your results converge.
 ```
 
 **EC 5b Algorithms!** By default, `mle2` uses the Nelder-Mead algorithm via the `optim` function. What happens if you add an `method` argument to "SANN" or "L-BFGS-B" (and for the later, which is bounded sampling, give it a `lower` argument for your residual value, so it's always positive). See `?optim` for some more guidance. Do these both converge to the same value? Based on their profiles, do you trust them? (Note, Simulated annealing takes a looooong time. Go have a cuppa while the profile for that one runs).
