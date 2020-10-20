@@ -185,13 +185,13 @@ class: center, middle
 RMSE Temperature Model:
 
 ```
-[1] 22.23124
+[1] 27.14688
 ```
 
 RMSE Intercept Only Model:
 
 ```
-[1] 27.15437
+[1] 30.39648
 ```
 
 This is the estimate of the SD of the training set - which is acceptable for your predictions?
@@ -239,13 +239,13 @@ class: center, middle
 
 |id    |      mse|     rmse|
 |:-----|--------:|--------:|
-|Fold1 | 555.5479| 23.57006|
-|Fold2 | 551.2158| 23.47798|
-|Fold3 | 515.6355| 22.70761|
-|Fold4 | 530.8764| 23.04076|
-|Fold5 | 512.1248| 22.63018|
+|Fold1 | 556.4524| 23.58924|
+|Fold2 | 546.9447| 23.38685|
+|Fold3 | 465.6191| 21.57821|
+|Fold4 | 520.2648| 22.80931|
+|Fold5 | 578.0592| 24.04286|
 
-Temperature Model Score: 533.0800816  
+Temperature Model Score: 533.4680436  
 
 Intercept Only Score: 788.2974 &lt;!-- eh, I was lazy, and just reran the above with a different model --&gt;
 
@@ -568,6 +568,20 @@ Model weights summed together = 1
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+
+.center[So... how much better are the top models? What about Parsimody? What would you say?]
+
+---
+# Inferential Frameworks of Today
+
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+      - Chose model with best predictive ability!
+      
+- **Model Comparison**: Comparison of alternate hypotheses
+      - Deductive or Inductive
+      - Either compare models to elminiate poor fits
+      - Or... compare multiple models to determine how a system works
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

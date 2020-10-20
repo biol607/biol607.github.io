@@ -660,3 +660,17 @@ aictab(mods, modnames = paste("Order", 1:10),
   knitr::kable("html", digits = 2)
 
 ```
+
+.center[So... how much better are the top models? What about Parsimody? What would you say?]
+
+---
+# Inferential Frameworks of Today
+
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+      - Chose model with best predictive ability!
+      
+- **Model Comparison**: Comparison of alternate hypotheses
+      - Deductive or Inductive
+      - Either compare models to elminiate poor fits
+      - Or... compare multiple models to determine how a system works
