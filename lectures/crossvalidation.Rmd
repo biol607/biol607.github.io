@@ -13,7 +13,10 @@ output:
 ---
 class: center, middle
 
-# Maximum Likelihood Estimation and Likelihood Ratio Testing<br>
+# Cross-Validation and AIC<br>
+
+<!-- next year, more on overfitting and generality
+versus specificity -->
 
 ![:scale 55%](images/cv/princess_bride_cv.jpg)
 ```{r setup, include=FALSE}

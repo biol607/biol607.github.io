@@ -13,7 +13,7 @@
 
 class: center, middle
 
-# Maximum Likelihood Estimation and Likelihood Ratio Testing&lt;br&gt;
+# Cross-Validation and AIC&lt;br&gt;
 
 ![:scale 55%](images/cv/princess_bride_cv.jpg)
 
@@ -185,13 +185,13 @@ class: center, middle
 RMSE Temperature Model:
 
 ```
-[1] 27.14688
+[1] 24.25059
 ```
 
 RMSE Intercept Only Model:
 
 ```
-[1] 30.39648
+[1] 28.88506
 ```
 
 This is the estimate of the SD of the training set - which is acceptable for your predictions?
@@ -239,13 +239,13 @@ class: center, middle
 
 |id    |      mse|     rmse|
 |:-----|--------:|--------:|
-|Fold1 | 556.4524| 23.58924|
-|Fold2 | 546.9447| 23.38685|
-|Fold3 | 465.6191| 21.57821|
-|Fold4 | 520.2648| 22.80931|
-|Fold5 | 578.0592| 24.04286|
+|Fold1 | 572.3166| 23.92314|
+|Fold2 | 500.1096| 22.36313|
+|Fold3 | 536.9860| 23.17296|
+|Fold4 | 505.1393| 22.47530|
+|Fold5 | 557.2699| 23.60657|
 
-Temperature Model Score: 533.4680436  
+Temperature Model Score: 534.3642903  
 
 Intercept Only Score: 788.2974 &lt;!-- eh, I was lazy, and just reran the above with a different model --&gt;
 
