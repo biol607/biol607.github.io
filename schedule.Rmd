@@ -123,12 +123,12 @@ __Homework:__[inference and likelihood](./homework/07_likelihood.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Ways of Knowing: [Bayesian Inference](lectures/15_bayesian_basics.html), [Fitting a line with Bayesian techniques](lectures/16_bayesian_lm.html)  
+__Lecture:__ Ways of Knowing: [Cross-Validation and AIC](./lectures/crossvalidation.html), [Bayesian Inference](lectures/15_bayesian_basics.html), [Fitting a line with Bayesian techniques](lectures/16_bayesian_lm.html)  
 __Lab Topic:__ Bayesian computation in R, [Fitting a line with Bayesian techniques](lab/08_bayes.html)   
 __Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1](http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and [Chapter 2](http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf), [R Users will Now Inevitably Become Bayesians](https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/), [bayesplot cheat sheet](https://github.com/roualdes/stan_cheatsheets/blob/master/bayesplot/main.pdf)  
 __Additional Reading__: [how to choose a prior](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations), [bayesian t-tests](https://vuorre.netlify.com/post/2017/how-to-compare-two-groups-with-robust-bayesian-estimation-using-r-stan-and-brms/), [regression models with brms](https://magesblog.com/post/2015-09-01-bayesian-regression-models-using-stan/), [rethinking with brms](https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/) (many very cool examples), [brms tutorials](https://www.rensvandeschoot.com/tutorials/brms/), [How to use rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html), [Linear Models in rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html), [Bayesian basics with R](https://m-clark.github.io/bayesian-basics/)  
 __Packages for The Week:__ `install.packages(c("brms", "rstanarm", "arm", "rethinking"))` and `devtools::install_github("mjskay/tidybayes")`  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-bayes-2020  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-bayes-2020  
 __In Class Code:__ [Bayesian Data Analysis](in_class_code_2020/scripts/bayes.R)  
 
 
