@@ -64,7 +64,7 @@ grid_samp %>% filter(logLik == max(logLik))
 puffer_lm
 ```
 
-**2. Surfaces!** Filter the dataset to the MLE of the SD. Plot the surface for the slope and intercept in whatever way you find most compelling. You might want to play around with zooming in to different regions, etc. Have fun!
+**4. Surfaces!** Filter the dataset to the MLE of the SD. Plot the surface for the slope and intercept in whatever way you find most compelling. You might want to play around with zooming in to different regions, etc. Have fun!
 
 ```{r ggplot}
 library(ggplot2)
@@ -78,7 +78,7 @@ ggplot(grid_samp %>% filter(resid_sd == 2.9)
 
 ```
 
-**4. GLM!** Now, compare those results to results from glm. Show the profiles and confidence intervals from `glm()` for the slope and intercept. Also show how you validate assumptions.
+**5. GLM!** Now, compare those results to results from glm. Show the profiles and confidence intervals from `glm()` for the slope and intercept. Also show how you validate assumptions.
 
 ```{r puffer_glm}
 puffer_glm <- glm(predators ~ resemblance, data = puffer,
@@ -97,7 +97,7 @@ confint(puffer_glm)
 ```
 
 
-**EC 5. Get Outside of GLM!** So, often, we have more complex models than the above. There are a variety of optimizers out there, and packages for accessing them. One of the best is `bbmle` by Ecologist Ben Bolker (whose dad is emeritus at UMB in computer science! Go visit him! He's fantastic!)  
+**EC 6. Get Outside of GLM!** So, often, we have more complex models than the above. There are a variety of optimizers out there, and packages for accessing them. One of the best is `bbmle` by Ecologist Ben Bolker (whose dad is emeritus at UMB in computer science! Go visit him! He's fantastic!)  
   
 Load up `'bbmle` and try out `mle2`. It's a bit different, in that the first argument is a function that *minimizes* the log likelihood (not maximizes). The second argument is a list of start values - e.g. `list(slope = 2, intercept = 5, resid_sd = 2)`. Try and fit your model with `mle2` using start values close to the actual estimates. Look at the summary and plot the profile. Note, you might get a lot of errors because it will try impossible values of your residual SD. Also, note thatyou'll have to rewrite your likelihood function to return the negative log likelihood (or write a wrapper that does so). A small thing
 
@@ -114,7 +114,7 @@ plot(profile(puffer_mle2))
 
 ```
 
-**EC 5a. Start values!** What happens if you start with start values *very* far away from the initial values. Failing here is fine. But what do you think is happening, and what does this say about the value of start values?
+**EC 6a. Start values!** What happens if you start with start values *very* far away from the initial values. Failing here is fine. But what do you think is happening, and what does this say about the value of start values?
 
 ```{r mle2_fail}
  mle2(min_lik_fun, 
@@ -126,7 +126,7 @@ plot(profile(puffer_mle2))
 #Start values are very important and can alter the outcome of your models. Try either "good" start values, or try multiple ones and make sure your results converge.
 ```
 
-**EC 5b Algorithms!** By default, `mle2` uses the Nelder-Mead algorithm via the `optim` function. What happens if you add an `method` argument to "SANN" or "L-BFGS-B" (and for the later, which is bounded sampling, give it a `lower` argument for your residual value, so it's always positive). See `?optim` for some more guidance. Do these both converge to the same value? Based on their profiles, do you trust them? (Note, Simulated annealing takes a looooong time. Go have a cuppa while the profile for that one runs).
+**EC 6b Algorithms!** By default, `mle2` uses the Nelder-Mead algorithm via the `optim` function. What happens if you add an `method` argument to "SANN" or "L-BFGS-B" (and for the later, which is bounded sampling, give it a `lower` argument for your residual value, so it's always positive). See `?optim` for some more guidance. Do these both converge to the same value? Based on their profiles, do you trust them? (Note, Simulated annealing takes a looooong time. Go have a cuppa while the profile for that one runs).
  
 ```{r}
 
