@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Bayes</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Bayesian Data Analysis
+&lt;br&gt;
+![image](./images/15/bayes-and-hus-theory.png)
+
+&lt;!-- Objectives
+1) Understand Bayes theorem
+  - Contrast to likelihood and frequentist approaches
+2) Understand what it means in context
+  - Credible Intervals v Confidence Intervals
+3) Understand how we use it to estimate
+  - Posterior Distributions
+  - How to use a Credible Interval
+--&gt;
+
+
+
+
+
+
+---
+
+# I'm a Basic Bayesian
+
+1. Where have we been and where are we going?
+
+2. Bayes theorem
+
+3. The Posterior and Credible Intervals
+
+4. Priors
+
+---
+
+
+# Consider the Pufferfish
+
+
+
+.pull-left[
+- Pufferfish are toxic/harmful to predators  
+&lt;br&gt;
+- Batesian mimics gain protection from predation - why?
+&lt;br&gt;&lt;br&gt;
+- Evolved response to appearance?
+&lt;br&gt;&lt;br&gt;
+- Researchers tested with mimics varying in toxic pufferfish resemblance
+]
+
+.pull-right[
+![:scale 80%](./images/11/puffer_mimics.jpg)
+]
+---
+
+# We have Spent a Lot of Time Here
+
+&lt;img src="bayes_files/figure-html/puffershow-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# We have shown that our data or more extreme data explains more variation than a null expectation
+
+
+|            | Df| Sum Sq| Mean Sq| F value| Pr(&gt;F)|
+|:-----------|--:|------:|-------:|-------:|------:|
+|resemblance |  1| 255.15|  255.15|   27.37|      0|
+|Residuals   | 18| 167.80|    9.32|      NA|     NA|
+
+---
+# We have shown that our data or more extreme data produces a coefficient that is almost certainly not 0
+
+
+|term        | estimate| std.error| statistic| p.value|
+|:-----------|--------:|---------:|---------:|-------:|
+|(Intercept) |     1.92|      1.51|      1.28|    0.22|
+|resemblance |     2.99|      0.57|      5.23|    0.00|
+
+---
+# We have shown that our model with pufferfish resemblance has a greater likelihood to that of one without - our probability of observing the data given estimated parameters was higher!
+
+
+| Resid. Df| Resid. Dev| Df| Deviance| Pr(&gt;Chi)|
+|---------:|----------:|--:|--------:|--------:|
+|        19|     422.95| NA|       NA|       NA|
+|        18|     167.80|  1|   255.15|        0|
+
+---
+# We have shown that our model with pufferfish resemblance is better at prediction than one without
+
+
+|   |Modnames    |  K|     AICc| Delta_AICc|
+|:--|:-----------|--:|--------:|----------:|
+|2  |Resemblance |  3| 106.7980|    0.00000|
+|1  |Int Only    |  2| 122.4939|   15.69588|
+
+
+---
+
+class: center, middle
+
+# But.... what is the probability of any given value or range of values of that slope estimate? What is the probability of our model given the data - and not vice-verse?
+
+---
+
+class: middle
+
+# What we've done:
+`$$\LARGE P(D | H)$$`
+`$$\LARGE P(x \lt D | H)$$`
+
+--
+
+# What we want - and how we reason and think
+
+`$$\LARGE P(H | D)$$`
+
+---
+
+
+# Applying Different Styles of Inference
+
+.grey[
+- **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
+      - Deductive
+
+
+- **Cross-Validation**: How good are you at predicting new data?
+      - Deductive
+      
+- **Model Comparison**: Comparison of alternate hypotheses
+      - Deductive or Inductive
+]
+
+- **Probabilistic Inference**: What's our degree of belief in a data?
+      - Inductive
+
+---
+
+# I'm a Basic Bayesian
+
+1. Where have we been and where are we going?
+
+2. .red[Bayes theorem]
+
+3. The Posterior and Credible Intervals
+
+4. Priors
+
+---
+
+class:middle, center
+
+![](images/15/tree1.jpg)
+--
+
+`$$\huge p(a\ and\ b) = p(a)p(b|a)$$`
+
+---
+class: middle, center
+
+![](images/15/tree2.jpg)
+
+--
+
+`$$\huge p(b) = p(b|a)+p(b|!a)$$`
+
+---
+class: middle, center
+
+![](images/15/tree2.jpg)
+
+
+`$$\huge p(a\ and\ b) = p(b)p(a|b)$$`
+
+---
+
+class: middle, center
+
+![](images/15/tree2.jpg)
+
+## So....
+
+$$\huge  p(a)p(b|a) =   p(b)p(a|b) $$
+
+---
+
+# Bayes Theorem
+#### And thus... 
+
+.center[.middle[
+`$$\huge  p(a|b) =   \frac{p(b|a)p(a)}{p(b)}$$`
+
+![:scale 50%](images/15/bayes.png)
+]]
+
+---
+
+# Bayes Theorem in Context
+
+
+
+$$\huge  p(H|D)  =   \frac{p(D|H)p(H)}{p(D)} $$
+
+--
+
+
+
+Begin Playing "O Fortuna!" from Carmina Burana
+
+---
+
+# Bayes Theorem in Context
+
+![](images/bayes/data-science-bayes-theorem-2.jpg)
+
+---
+
+# What does Bayes Mean?
+
+.center[
+![](data-science-bayes-theorem-2.jpg)
+]
+
+---
+
+# What does Bayes Mean?
+
+### You start with a Prior
+
+&lt;img src="bayes_files/figure-html/bayesplot_1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# What does Bayes Mean?
+
+### Obtain the Likelihood of the Data
+
+&lt;img src="bayes_files/figure-html/bayesplot__2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# What does Bayes Mean?
+
+### Multiply and Standardize by all possible P(D|H)*P(H)
+
+&lt;img src="bayes_files/figure-html/bayesplot_3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Note - here it is on the probability scale
+
+&lt;img src="bayes_files/figure-html/bayesplot_4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class:center, middle
+# Let's Draw Some Stones!
+
+---
+
+# I'm a Basic Bayesian
+
+1. Where have we been and where are we going?
+
+2. Bayes theorem
+
+3. .red[The Posterior and Credible Intervals]
+
+4. Priors
+
+---
+# What is a posterior distribution?
+&lt;img src="bayes_files/figure-html/post_1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What is a posterior distribution?
+&lt;img src="bayes_files/figure-html/post_2-1.png" style="display: block; margin: auto;" /&gt;
+
+The probability that the parameter is 13 is 0.4
+
+---
+# What is a posterior distribution?
+&lt;img src="bayes_files/figure-html/post_3-1.png" style="display: block; margin: auto;" /&gt;
+
+The probability that the parameter is 13 is 0.4  
+The probability that the parameter is 10 is 0.044
+
+---
+# What is a posterior distribution?
+&lt;img src="bayes_files/figure-html/post2-1.png" style="display: block; margin: auto;" /&gt;
+
+Probability that parameter is between 12 and 13 = 0.3445473
+
+---
+# Bayesian Credible Interval
+&lt;img src="bayes_files/figure-html/post3-1.png" style="display: block; margin: auto;" /&gt;
+
+Area that contains 95% of the probability mass of the posterior distribution
+
+---
+# Evaluation of a Posterior: Bayesian Credible Intervals
+
+In Bayesian analyses, the **95% Credible Interval** is the region in which we find 95% of the possible parameter values. The observed parameter is drawn from this distribution. For normally distributed parameters:  
+
+`$$\hat{\beta} - 2*\hat{SD} \le \hat{\beta} \le \hat{\beta} +2*\hat{SD}$$` 
+
+where `\(\hat{SD}\)` is the SD of the posterior distribution of the parameter `\(\beta\)`. Note, for non-normal posteriors, the distribution may be different.
+---
+
+# Evaluation of a Posterior: Frequentist Confidence Intervals
+
+In Frequentist analyses, the **95% Confidence Interval** of a parameter is the region in which, were we to repeat the experiment an infinite number of times, the *true value* would occur 95% of the time.
+For normal distributions of parameters: 
+
+
+
+`$$\hat{\beta} - t(\alpha, df)SE_{\beta} \le \beta \le \hat{\beta} +t(\alpha, df)SE_{\beta}$$`
+
+---
+
+# Credible Intervals versus Confidence Intervals
+
+- Frequentist Confidence Intervals tell you the region you have confidence a **true value** of a parameter may occur 
+
+--
+
+- If you have an estimate of 5 with a Frequentist CI of 2, you cannot say how likely it is that the parameter is 3, 4, 5, 6, or 7  
+
+--
+
+- Bayesian Credible Intervals tell you the region that you have some probability of a parameter value 
+
+--
+
+- With an estimate of 5 and a CI of 2, you can make statements about degree of belief in whether a parmeter is 3, 4,5, 6 or 7 - or even the probability that it falls outside of those bounds
+
+---
+# Degree of beliefe in a result
+
+&lt;img src="bayes_files/figure-html/p-1.png" style="display: block; margin: auto;" /&gt;
+
+You can discuss the probability that your parameter is opposite in sign to its posterior modal estimate. This yields a degree of belief that you at least have the sign correct (i.e., belief in observing a non-zero value)
+
+---
+# Talking about Uncertainty the IPCC Way
+![](images/15/ipcc_uncertainty_ar5.jpg)
+
+---
+# An Example in Context: Where are Kelp Forests Changing?
+
+![](images/bayes/krumhansl_2016_map.png)
+
+---
+
+# I'm a Basic Bayesian
+
+1. Where have we been and where are we going?
+
+2. Bayes theorem
+
+3. The Posterior and Credible Intervals
+
+4. .red[Priors]
+
+---
+# Priors
+.center[
+![:width 55%](images/15/frequentists_vs_bayesians.png)
+]
+---
+# The Influence of Priors
+![](images/15/priors_and_lik.jpg)
+
+---
+# The Influence of Priors
+![](images/15/posteriors.jpg)
+
+---
+# Your Data Can Overwhelm Your Prior with a Large Enough N
+&lt;img src="bayes_files/figure-html/priorStrong-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# How Do We Choose a Prior?
+
+[The Prior Choice Wiki!](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations)
+
+[Lemoine 2019 Oikos](https://onlinelibrary.wiley.com/doi/full/10.1111/oik.05985)
+
+
+--
+
+1. Determine if there are limits to what is possible for a parameter. Use them!
+
+2. Do you have real prior information? Use it! But perhaps increase uncertainty to be conservative.
+
+3. Do you have no information? Center around 0, but choose how much of a **regularization penalty** you want to impose.
+
+4. Scaling your inputs (z-transform, etc) can often help, as you can then use a normal distribution to set priors.
+
+5. Certain parameter types have favored prior distributions - we'll discuss!
+
+---
+# Types of Priors
+
+- Flat prior (not usually recommended);
+
+- Super-vague but proper prior: normal(0, 1e6) (not usually recommended)
+
+- Weakly informative prior, very weak: normal(0, 10)
+
+- Generic weakly informative prior: normal(0, 1);
+
+- Specific informative prior: normal(0.4, 0.2) or whatever matches previous literature or what you know of the natural history of the system 
+
+
+---
+
+# How Will We Use Bayesian Inference for Linear Regression?
+
+`$$\Large p(\theta | D) = \frac{p(D | \theta)P(\theta)}{\int p(D | \theta)p(\theta)d\theta}$$`
+
+Remember, `\(P(D|\theta)\)` is just a likelihood - we've done this before for linear models! We can even grid sample this!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
