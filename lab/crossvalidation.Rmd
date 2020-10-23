@@ -1,0 +1,203 @@
+---
+title: "Cross-Validation"
+author: "Biol 607"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+## The data
+
+Let's start with the roach data looking at activity of prothoracic ganglia under different temperature regimes. Here's the data and a plot of a linear model fit.
+
+```{r}
+library(ggplot2)
+
+roaches <- read.csv("data/chap17f5_4CockroachNeurons.csv")
+
+roach_lm <- lm(rate ~ temperature, data = roaches)
+
+roach_lm_plot <- ggplot(roaches,
+       aes(x = temperature, y = rate)) +
+  geom_point() +
+  stat_smooth(method = "lm", color = "blue") 
+
+roach_lm_plot
+```
+
+## Basic Cross-validation with One Point
+
+We can easily pluck out any random point and see how out of sample error works. For that, we use the {modelr} library and the `mse()` to get mean square error.
+
+```{r}
+out_of_sample <- roaches[5,]
+
+roaches_no_5 <- roaches[-5]
+```
+
+Now, let's refit the model and use `mse()` to see the out of sample mean square error.
+
+```{r}
+library(modelr)
+
+roach_lm_no_5 <- lm(rate ~ temperature, 
+                    data = roaches_no_5)
+
+mse(model = roach_lm_no_5,
+    data = out_of_sample)
+
+```
+
+We can fit an intercept only model and compare the MSE
+
+```{r}
+roach_int_no_5 <-  lm(rate ~ 1, 
+                    data = roaches_no_5)
+
+mse(model = roach_int_no_5,
+    data = out_of_sample)
+```
+
+Much higher.
+
+## K-Fold Cross-Validation
+
+OK, let's look at a more general solution here. One problem in doing cross-validation is that making folds in the data can add up to ballooning the size of data in memory. For that, there's the library {rsample} which plays beautifully with {dplyr} and {purrr}. It uses some underlying tricks to not ballon data. Let's look at an `rsample` object for 5-folk cross-validation. Note, the function for this is `vfold_cv()` not kfold - no, I'm not sure why.
+
+```{r}
+library(rsample)
+
+roach_five_fold <- vfold_cv(roaches, v = 5)
+
+roach_five_fold
+```
+
+OK, neat - we have a tibble with a column of splits. We can use the functions `analysis()` to get the train set and `assessment()`.
+
+We can use `purrr::map()` to generate a new column of models fit on each fold.
+
+```{r}
+library(dplyr)
+library(purrr)
+
+roach_five_fold <- roach_five_fold %>%
+  mutate(mod = map(splits,
+                   ~lm(rate ~ temperature,
+                       data = analysis(.))))
+
+roach_five_fold
+```
+
+Cool! We have a list of fit linear models! Now, how do we get the MSE? purrr has a nice function called `map2()` which works just like `map()` where, instead of iterating over one list or vector, we iterate over two, and use `.x` and `.y` instead of just a `.` in the function.
+
+Let's see how this works.
+
+```{r}
+roach_five_fold <- roach_five_fold %>%
+  mutate(mse = map2_dbl(mod, splits,
+         ~mse(model = .x, data = assessment(.y))))
+
+roach_five_fold
+```
+
+We can then get the average MSE by summing up that last column. We could do the same for an intercept only model and compare.
+
+## LOO Cross-Validation
+
+We can do the same for leave-one-out using `rsample::loo_cv()` with pretty much the same workflow.
+
+```{r}
+roach_loo <- roaches %>%
+  loo_cv()%>%
+  mutate(tempmod = map(splits,
+                   ~lm(rate ~ temperature,
+                       data = analysis(.))),
+         intmod = map(splits,
+                   ~lm(rate ~ 1,
+                       data = analysis(.))),
+         )
+```
+
+What's cool here is that we can use `tidyr::pivot_longer()` and then get the mean square for all of it.
+
+```{r}
+roach_loo <- roach_loo %>%
+  tidyr::pivot_longer(cols = c(tempmod, intmod),
+                      names_to = "mod_name",
+                      values_to = "mod")  %>%
+  mutate(mse = map2_dbl(mod, splits,
+         ~mse(model = .x, data = assessment(.y))))
+
+```
+
+Now we can look at the LOO MSE for each point.
+
+```{r}
+ggplot(roach_loo,
+       aes(x = id, y = sqrt(mse), color = mod_name)) + 
+  geom_point() +
+  scale_x_discrete(labels = NULL) 
+```
+
+OK, can't see a pattern there, but...
+
+```{r}
+roach_loo %>%
+  group_by(mod_name) %>%
+  summarise(mse = mean(mse))
+```
+
+## Using boot::cv.glm() for Cross-Validation
+
+This is great. But, kind of annoying as we have to do all of this work. It's wonderful for arbitrary out of sample error functions. But.... WOuldn't it be nice if we could do a lot of this in one line?
+
+Enter the {boot} package - which also has some nice functions for bootstrapping. It works with `glm()` fits to extract deviances and calculate an out of sample deviance for either a k-fold CV or LOO CV. It has a piece called `delta` whose first index is the average out of sample deviance.
+
+Let's see it in action for a LOO analysis.
+
+```{r}
+library(boot)
+
+roach_glm <- glm(rate ~ temperature, data = roaches)
+
+loo_roach <- cv.glm(roaches, roach_glm, K = nrow(roaches))
+
+loo_roach$delta[1]
+
+```
+
+Hey, it's the same as above.... but less work! Note the K argument. We can lower it to be a more traditional k-fold analysis. Now, granted, it's a bit ungainly to use, but we can wrap it up in a function and make it easier to use.
+
+## AIC
+
+Last, AIC! Any fit model can give us an AIC score.
+
+```{r}
+AIC(roach_lm)
+```
+
+Fantastic! This uses all of the data. And, hey, it's not TOO far off of the LOOCV. Let's compare it to the int only model.
+
+```{r}
+roach_int <- lm(rate ~ 1, data = roaches)
+
+AIC(roach_int)
+```
+
+Nice - we can see the difference. But, wouldn't it be nice if we got an easy to use table?
+
+Enter {AICcmodavg}! It's function `aictab()` takes a list of models and a vector of model names, and gives you an easy to read output.
+
+```{r}
+library(AICcmodavg)
+
+aictab(list(roach_lm, roach_int),
+       c("Temperature Model", "Intercept Only"))
+
+```
+
+Note that by default it gives the AICd. You can, however, use `second.ord = TRUE` to get the AIC.
