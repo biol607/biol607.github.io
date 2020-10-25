@@ -130,6 +130,7 @@ __Additional Reading__: [how to choose a prior](https://github.com/stan-dev/stan
 __Packages for The Week:__ `install.packages(c("brms", "rstanarm", "arm", "rethinking"))` and `devtools::install_github("mjskay/tidybayes")`  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-bayes-2020  
 __In Class Code:__ [Cross-Validation](in_class_code/2020/scripts/crossvalidation.R), [Bayesian Demo](in_class_code/2020/excel_exercises/bayes_xls.xlsx)   
+__Homework:__ [CV and some Bayesian Grid sampling](homework/cv_homework.html)  
 
 
 ### Week 8   
