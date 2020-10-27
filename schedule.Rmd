@@ -119,45 +119,31 @@ __In Class Code:__  [linear models with likelihood](in_class_code/2020/scripts/l
 __Packages for The Week:__ `install.packages(c("MASS", "profileModel", "bbmle", "rsample"))`  
 __Homework:__[inference and likelihood](./homework/07_likelihood.html)  
 
-### Week 7.   
+### Week 7 & 8.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
+
+```{r next_date, echo=FALSE}
+```
+`r datestring`   
+
 __Lecture:__ Ways of Knowing: [Cross-Validation and AIC](./lectures/crossvalidation.html), [Bayesian Inference](lectures/bayes.html), [Fitting a line with Bayesian techniques](lectures/16_bayesian_lm.html)  
 __Lab Topic:__  [Cross-Validation](lab/crossvalidation.html)  
 __Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1](http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and [Chapter 2](http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf), [R Users will Now Inevitably Become Bayesians](https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/), [bayesplot cheat sheet](https://github.com/roualdes/stan_cheatsheets/blob/master/bayesplot/main.pdf)  
 __Additional Reading__: [how to choose a prior](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations), [bayesian t-tests](https://vuorre.netlify.com/post/2017/how-to-compare-two-groups-with-robust-bayesian-estimation-using-r-stan-and-brms/), [regression models with brms](https://magesblog.com/post/2015-09-01-bayesian-regression-models-using-stan/), [rethinking with brms](https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/) (many very cool examples), [brms tutorials](https://www.rensvandeschoot.com/tutorials/brms/), [How to use rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html), [Linear Models in rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html), [Bayesian basics with R](https://m-clark.github.io/bayesian-basics/)  
 __Packages for The Week:__ `install.packages(c("brms", "rstanarm", "arm", "rethinking"))` and `devtools::install_github("mjskay/tidybayes")`  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-bayes-2020  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-bayes-2020, https://etherpad.wikimedia.org/p/607-bayes-lm-2020    
 __In Class Code:__ [Cross-Validation](in_class_code/2020/scripts/crossvalidation.R), [Bayesian Demo](in_class_code/2020/excel_exercises/bayes_xls.xlsx)   
 __Homework:__ [CV and some Bayesian Grid sampling](homework/cv_homework.html)  
 
+## Block 3. Further Adventures in Regression
 
-### Week 8   
-```{r next_date, echo=FALSE}
-```
-`r datestring`   
-__Lecture:__ Many Predictors [Multiple Regression and the General Linear Model](./lectures/23_general_linear_model.html), [Information Theoretic Approaches](./lectures/24_mmi.html)  
-__Lab Topic:__ [Multiple Regression, Multimodel Inference](lab/11_glm_aic.html) - [data files](lab/data_11.zip)  
-__Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf), [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Experimental strategies to assess the biological ramifications of multiple drivers of global ocean change](./readings/Boyd_2020_Glob_Change_Biol.pdf)  
-__Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf), [Model selection for ecologists: the worldviews of AIC and BIC](./readings/Aho_2014_ecolog_bic.pdf), The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr-2020  
-__Packages for the Week:__ `install.packages(c("AICcmodavg", "MuMIn", "modelr"))`  
-__In Class Code:__  [Fitting a line with Bayesian techniques](lab/08_bayes.html), [ancova, mlr, and aic](./in_class_code_2020/scripts/mlr_int_aic.R)  
-
-## Block 3: Teasing Apart Cause and Effect with Regression Models and Well Designed Studies
-
-### Week 8   
-```{r next_date, echo=FALSE}
-```
-`r datestring`   
-__Lecture:__  Causal Inference and Asking a Good Question
-  
 ### Week 9.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Experimental design and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html), Cottingham discussion    
+__Lecture:__ Categorical Predictors Experimental design and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html), Cottingham discussion    
 __Lab Topic:__ [One-Way ANOVA](lab/10_anova.html), Midterm work session	  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S Chapter 14-15,  [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
@@ -177,10 +163,38 @@ __Lab Data:__  [Multiple Files](lab/data_10.zip)
 __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf)  
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
 __In Class Code:__ [lots of anova](./in_class_code_2020/scripts/anova_two.R)  
+
+### Week 11   
+```{r next_date, echo=FALSE}
+```
+`r datestring`   
+__Lecture:__ Many Predictors [Multiple Regression and the General Linear Model](./lectures/23_general_linear_model.html), [Information Theoretic Approaches](./lectures/24_mmi.html)  
+__Lab Topic:__ [Multiple Regression, Multimodel Inference](lab/11_glm_aic.html) - [data files](lab/data_11.zip)  
+__Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf), [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Experimental strategies to assess the biological ramifications of multiple drivers of global ocean change](./readings/Boyd_2020_Glob_Change_Biol.pdf)  
+__Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf), [Model selection for ecologists: the worldviews of AIC and BIC](./readings/Aho_2014_ecolog_bic.pdf), The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr-2020  
+__Packages for the Week:__ `install.packages(c("AICcmodavg", "MuMIn", "modelr"))`  
+__In Class Code:__  [Fitting a line with Bayesian techniques](lab/08_bayes.html), [ancova, mlr, and aic](./in_class_code_2020/scripts/mlr_int_aic.R)  
+
+
+## Block 4. Asking Questions of the World
+
+### Week 12.   
+```{r next_date, echo=FALSE}
+```
+`r datestring`   
+__Lecture:__  Causal Inference and Asking a Good Question
+  
+  
+### Week 13.   
+```{r next_date, echo=FALSE}
+```
+`r datestring`   
+__Lecture:__  Strategies for Deriving Causal Inference by Building Useful Models
+  
+## Block 5: Modeling Error and Further Adventures in Regression Models
    
-## Block 4: Modeling Error and Further Adventures in Regression Models
-   
-### Week 11.   
+### Week 14.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
@@ -191,31 +205,20 @@ __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHA
 __Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_2009_glmm.pdf) through section on GLMs, [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html)  
   
   
-### Week 12.   
+### Week 15.   
 __Lecture:__ Old Wine in a New Bottle: It's all a line, Classical tests in a Regression Framework
 
 
 ## Block 5: Tying it Together Further Adventures in Computation and Presentation
 
 
-### Week 14.   
-```{r next_date, echo=FALSE}
-```
-`r datestring`   
-__Lecture:__ [Iteration with purrr](./lectures/iteration.html), Class's Choice   
-__Data:__ [gapminder](./lectures/data/gapminder.zip)  
-__Reading:__ [Murtaugh 2007](./readings/Murtaugh_2007_Ecology.pdf), [iteration in R4DS](https://r4ds.had.co.nz/iteration.html), [functionals in adv-r](https://adv-r.hadley.nz/functionals.html)  
-__Cheat Sheets:__ [Apply Functions with purrr Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf)  
-__Lab Topic:__ Class's Choice, Final Presentation Open Lab  
-__In Class Code__: [spread and gather](./in_class_code_2020/scripts/tidyr.R)  
-
-### Week 14.   
+### Week 16.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
 __Lecture:__ Shiny!
   
-### Week 15.  
+### Week 17.  
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
