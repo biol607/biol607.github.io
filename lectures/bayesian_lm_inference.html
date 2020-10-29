@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Bayesian Inference with Linear Models</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Bayesian Inference with Linear Models
+
+![:scale 55%](images/15/bayes_in_the_head.jpg)
+
+
+
+
+
+
+---
+class: center, middle
+
+# Etherpad
+&lt;br&gt;&lt;br&gt;
+.center[
+### https://etherpad.wikimedia.org/p/607-bayes-lm-2020
+]
+
+
+
+---
+# Puffers!
+
+
+
+.pull-left[
+- Pufferfish are toxic/harmful to predators  
+&lt;br&gt;
+- Batesian mimics gain protection from predation - why?
+&lt;br&gt;&lt;br&gt;
+- Evolved response to appearance?
+&lt;br&gt;&lt;br&gt;
+- Researchers tested with mimics varying in toxic pufferfish resemblance
+]
+
+.pull-right[
+![:scale 80%](./images/11/puffer_mimics.jpg)
+]
+
+---
+# This is our fit relationship
+&lt;img src="bayesian_lm_inference_files/figure-html/puffershow-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Implementing the Puffer Model in brms
+&lt;br&gt;&lt;br&gt;
+
+
+
+```r
+puffer_brms &lt;- brm(predators ~ resemblance, 
+                   family = gaussian(link = "identity"),
+                   data = puffer)
+```
+
+---
+# We converge
+
+  &lt;img src="bayesian_lm_inference_files/figure-html/converge-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Our distribution of simulations matches observations
+
+&lt;img src="bayesian_lm_inference_files/figure-html/pp_check-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# This is what we have.... so, what can we say?
+
+&lt;img src="bayesian_lm_inference_files/figure-html/mcmc_params-1.png" style="display: block; margin: auto;" /&gt;
+---
+# Inference with a Fit Bayesian Linear Model
+
+1. Well, what do the coefficients say?
+
+2. What are the implications of the coefficients?
+
+3. How well does our model fit?
+
+4. How predictive is our model?
+     - Even relative to others
+
+---
+# The Information About our Fit at 80% CI
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Est.Error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; l-80% CI &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; u-80% CI &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Rhat &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.96 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.65 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.05 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; resemblance &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.98 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.63 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.21 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.77 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+Note Rhat values - must = 1!!!
+
+
+---
+
+# You can think just about the Credible Intervals
+
+.center[.middle[
+
+|              |    10%|    90%|
+|:-------------|------:|------:|
+|b_Intercept   |  -0.11|   4.05|
+|b_resemblance |   2.21|   3.77|
+|sigma         |   2.58|   4.00|
+|lp__          | -56.87| -53.92|
+]]
+
+---
+
+# A Visual Understanding of your Coefs Can Be Helpful
+
+&lt;img src="bayesian_lm_inference_files/figure-html/mcmc_params-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Inference with a Fit Bayesian Linear Model
+
+1. Well, what do the coefficients say?
+
+2. .red[What are the implications of the coefficients?]
+
+3. How well does our model fit?
+
+4. How predictive is our model?
+     - Even relative to others
+---
+
+# How do you use your posterior?
+
+1. What is the weight of the tail on the other side of 0?
+     - Hey....is that.... cheating?
+     - Maybe, but...
+     - you can talk in terms of degree of belief in the direction of your trend
+
+2. What is the weight of the posterior over a range of values?
+
+3. What is the weight of a posterior &amp;gte; a certain value?
+
+---
+# What is the weight of the tail less that 0?
+
+&lt;img src="bayesian_lm_inference_files/figure-html/pred-1.png" style="display: block; margin: auto;" /&gt;
+
+Weight of Intercept &amp;le; 0? 0.1165  
+
+Weight of Slope &amp;le; 0? 0.00125
+
+
+---
+
+# What is the probability that the slope is between 2 and 4?
+
+&lt;img src="bayesian_lm_inference_files/figure-html/slopeprob-1.png" style="display: block; margin: auto;" /&gt;
+
+Weight of Slope between 2 and 4: 0.894
+
+---
+
+# Talking about Uncertainty the IPCC Way
+
+.center[
+![:scale 80%](images/15/ipcc_uncertainty_ar5.jpg)
+]
+
+---
+
+# Visualize the mean fit...
+&lt;img src="bayesian_lm_inference_files/figure-html/fit_fig-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# And the distributions of fits
+&lt;img src="bayesian_lm_inference_files/figure-html/dist_fit-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# And the distributions of fits
+&lt;img src="bayesian_lm_inference_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Add the distribution of predictions
+&lt;img src="bayesian_lm_inference_files/figure-html/puffer_pred_brms-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# What does visualization do for you?
+
+1. Shows trends
+
+2. Shows variability in precision or in prediction
+
+3. Shows you where you can frame your degree of belief
+
+
+---
+# Inference with a Fit Bayesian Linear Model
+
+1. Well, what do the coefficients say?
+
+2. What are the implications of the coefficients?
+
+3. .red[How well does our model fit?]
+
+4. How predictive is our model?
+     - Even relative to others
+     
+---
+
+# Bayesian `\(R^2\)`
+
+Classically, we use 
+
+`$$1 - \frac{\sigma^2}{s^2_{data}}$$`
+
+$$ = \frac{variance \, explained}{total \, variance}$$
+But....
+
+- `\(R^2\)` under some draws can be negative 
+     - Consider a draw where the slope is *VERY* steep relative to a flat relationship
+     - Consider a very very strong prior
+     
+- `\(R^2\)` depends on the data, and thus isn't a good absolute measure of model goodness of fit
+
+---
+
+# Bayesian `\(R^2\)`
+
+`$$\large R^2_{bayes} = \frac{variance \, explained}{variance \, explained + residual \, variance}$$`
+
+- Cannot be negative
+
+- Based on model fit and draws from posterior relative to data
+
+---
+
+# Bayesian `\(R^2\)` Visualized 
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Est.Error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Q10 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Q90 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; R2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.574884 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1104888 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4292734 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.6868686 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;img src="bayesian_lm_inference_files/figure-html/r2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Inference with a Fit Bayesian Linear Model
+
+1. Well, what do the coefficients say?
+
+2. What are the implications of the coefficients?
+
+3. How well does our model fit?
+
+4. .red[How predictive is our model?
+  - Even relative to others
+]
+     
+
+---
+
+# The Return of Cross-Validation!
+
+- We can calculate MSE of refit models.... but we need something more general
+
+--
+
+- Enter the Pointwise Predictive Density (ELPD)
+
+--
+
+&lt;img src="bayesian_lm_inference_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Log Pointwise Predictive Density
+
+`$$\large lppd = \sum_i log \sum_s {p(y_i | \theta_s)}$$`
+
+- We take the log of the sum of the pointwise predictive density for all paramater values drawn from a chain
+
+- We then sum this over *all* data points
+
+- Kinda nice, no?
+
+- It will have the same problem as MSE, etc., for overfitting
+     - More parameters = better fit = lower llpd!
+     
+---
+
+# Solutions to Overfitting
+
+- An AIC-like score
+
+- LOO Cross Validation
+
+- K-fold Cross validation
+
+---
+# Penalty for Too Many Parameters
+
+- As # of parameters goes up, llpd goes down
+
+- BUT - as # of parameters goes up, variance in llpd for each point goes up
+     - More parameters, higher SE per parameter, more variance in llpd
+
+--
+
+`$$\large penalty = \sum_ivar(lppd_i)$$`
+--
+
+- akin to # of parameters pentalty
+
+---
+# The Widely Applicable Information Criterion
+
+`$$\LARGE WAIC = -2(lppd - penalty)$$`
+
+- Akin to AIC
+
+- Can be calculated point by point
+
+--
+
+- But.... sensitive to extreme lppds
+
+---
+# WAIC from our Puffers
+
+
+```r
+waic(puffer_brms)
+```
+
+```
+Warning: 
+1 (5.0%) p_waic estimates greater than 0.4. We recommend trying loo instead.
+```
+
+```
+
+Computed from 4000 by 20 log-likelihood matrix
+
+          Estimate  SE
+elpd_waic    -52.7 2.7
+p_waic         2.5 0.7
+waic         105.5 5.3
+
+1 (5.0%) p_waic estimates greater than 0.4. We recommend trying loo instead. 
+```
+
+---
+# WAIC Problems from our Puffers
+&lt;img src="bayesian_lm_inference_files/figure-html/waicplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# WAIC Problems from our Puffers
+&lt;img src="bayesian_lm_inference_files/figure-html/waicplot_2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# LOO Cross-validation!
+
+- OMG! We have to refit out model for every point? Didn't one take enough?
+
+--
+
+- Fear not, there is a solution!
+
+--
+
+- The posterior, p(H|D), is the *product* of the posterior for all data points
+
+`$$p(\theta|y) = \prod p(\theta|y_i)$$`
+--
+
+- So, We can get our PPD for leaving out one data point by dividing the posterior by `\(p(\theta | y_i)\)` - so deliciously simple!
+
+--
+
+- But, what if the importance of a given point is anomolusly large?
+
+--
+
+- Introducing, pareto smoothing
+
+---
+
+# The Pareto Distribution for Importance
+
+- Vilfredo Pareto introduced the Pareto distribution to describe the distribution of wealth in a society
+     - Leads to 80:20 rule, 80% of outcomes due to 20% of causes
+
+- More commonly, a curve to describe relative importance
+
+- We use it to smooth the relative importance values of each `\(lpd_i\)`
+
+
+---
+
+# The Pareto Distribution for Importance
+
+&lt;img src="bayesian_lm_inference_files/figure-html/pareto-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# LOO!
+
+
+```r
+loo(puffer_brms)
+```
+
+```
+
+Computed from 4000 by 20 log-likelihood matrix
+
+         Estimate  SE
+elpd_loo    -52.8 2.7
+p_loo         2.6 0.7
+looic       105.6 5.4
+------
+Monte Carlo SE of elpd_loo is 0.0.
+
+All Pareto k estimates are good (k &lt; 0.5).
+See help('pareto-k-diagnostic') for details.
+```
+
+- k is an estimate of our shape parameter for the Pareto distribution
+
+- if k &gt; 0.5, we use K-Fold Cross validationt
+
+---
+
+# K-fold CV!
+
+
+```r
+kfold(puffer_brms, K = 5)
+```
+
+```
+
+Based on 5-fold cross-validation
+
+           Estimate  SE
+elpd_kfold    -52.8 2.6
+p_kfold          NA  NA
+kfoldic       105.5 5.2
+```
+
+Expensive, though, as you actually have to refit for each fold
+
+---
+
+# Can then use LOO, WAIC, etc. to compare models
+
+
+
+
+```r
+puffer_cubic &lt;- brm(predators ~ poly(resemblance, 3),
+                     family = gaussian(link = "identity"),
+                     data = puffer)
+```
+
+
+```r
+puffer_loo &lt;- loo(puffer_brms)
+puffer_cubic_loo &lt;- loo(puffer_cubic)
+
+loo_compare(puffer_loo, puffer_cubic_loo)
+```
+
+```
+             elpd_diff se_diff
+puffer_brms   0.0       0.0   
+puffer_cubic -1.4       1.3   
+```
+---
+
+# Wrapping up...
+
+- We can use many of the same inferential frameworks as before, but...
+
+--
+
+- The difference is that now we can begin to talk about our inferences in degree of certainty
+
+--
+
+- To adopt a Bayesian viewpoint on the world is to abandon the idea of a "True" parameter value
+
+--
+
+- We now see parameters as having a distribution
+
+--
+
+- The null is no longer of interest, but rather the probability of possibility is what drives us
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
