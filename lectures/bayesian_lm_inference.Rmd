@@ -406,7 +406,7 @@ $$\large lppd = \sum_i log \sum_s {p(y_i | \theta_s)}$$
 - Kinda nice, no?
 
 - It will have the same problem as MSE, etc., for overfitting
-     - More parameters = better fit = lower llpd!
+     - More parameters = better fit = higher lppd!
      
 ---
 
@@ -421,17 +421,17 @@ $$\large lppd = \sum_i log \sum_s {p(y_i | \theta_s)}$$
 ---
 # Penalty for Too Many Parameters
 
-- As # of parameters goes up, llpd goes down
+- As # of parameters goes up, lppd goes up
 
-- BUT - as # of parameters goes up, variance in llpd for each point goes up
-     - More parameters, higher SE per parameter, more variance in llpd
+- BUT - as # of parameters goes up, variance in lppd for each point goes up
+     - More parameters, higher SE per parameter, more variance in lppd
 
 --
 
 $$\large penalty = \sum_ivar(lppd_i)$$
 --
 
-- akin to # of parameters pentalty
+- akin to # of parameters penalty
 
 ---
 # The Widely Applicable Information Criterion
