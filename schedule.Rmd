@@ -137,6 +137,8 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-bayes-2020, https://etherp
 __In Class Code:__ [Cross-Validation](in_class_code/2020/scripts/crossvalidation.R), [Bayesian Demo](in_class_code/2020/excel_exercises/bayes_xls.xlsx), [Bayesian Linear Model](in_class_code/2020/bayes_lm.R)   
 __Homework:__ [CV and some Bayesian Grid sampling](homework/cv_homework.html)  
 
+**MIDTERM**: [here](exams/exam2020.html)  
+
 ## Block 3. Further Adventures in Regression
 
 ### Week 9.   
