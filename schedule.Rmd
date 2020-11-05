@@ -141,32 +141,43 @@ __Homework:__ [CV and some Bayesian Grid sampling](homework/cv_homework.html)
 
 ## Block 3. Further Adventures in Regression
 
-### Week 9.   
+### Week 9   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Categorical Predictors Experimental design and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html), Cottingham discussion    
+__Lecture:__ Tidy Tuesday for Election Day, [It
+s All Linear Models; t-test edition](lectures/t_as_lm.html)      
+__Lab Topic:__ Comparing Means, Final Proposal Meetings	  
+__Reading:__ [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), W&S Chapters 11-12    
+__Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-linear_everywhere-2020
+  
+
+### Week 10.   
+```{r next_date, echo=FALSE}
+```
+`r datestring`   
+__Lecture:__ Categorical Predictors and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html), Cottingham discussion    
 __Lab Topic:__ [One-Way ANOVA](lab/10_anova.html), Midterm work session	  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S Chapter 14-15,  [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
-__Optional Reading:__ [Ecological applications of multilevel analysis of variance](./readings/Qian_et_al-2007-Ecology.pdf) with [appendices](./readings/Qian_Shen.zip)  
 __Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-anova-2020
 __In Class Code:__ [lots of anova](./in_class_code_2020/scripts/anova.R)  
   
   
-### Week 10.   
+### Week 11.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lectures:__ Experimental Design in a Multicausal World - [Multiway ANOVA](lectures/21_multiway_anova.html), [Factorial ANOVA](lectures/22_factorial_anova.html)    
+__Lectures:__ Analyzing a Multicausal World - [Multiway ANOVA](lectures/21_multiway_anova.html), [Factorial ANOVA](lectures/22_factorial_anova.html)    
 __Lab Topic:__  Discussion of Hurlbert, Cottingham, [Factorial ANOVA](lab/11_anova.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf)  
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
 __In Class Code:__ [lots of anova](./in_class_code_2020/scripts/anova_two.R)  
 
-### Week 11   
+### Week 12   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
@@ -181,14 +192,14 @@ __In Class Code:__  [Fitting a line with Bayesian techniques](lab/08_bayes.html)
 
 ## Block 4. Asking Questions of the World
 
-### Week 12.   
+### Week 13.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
 __Lecture:__  Causal Inference and Asking a Good Question
   
   
-### Week 13.   
+### Week 14.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
@@ -196,7 +207,7 @@ __Lecture:__  Strategies for Deriving Causal Inference by Building Useful Models
   
 ## Block 5: Modeling Error and Further Adventures in Regression Models
    
-### Week 14.   
+### Week 15.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
@@ -205,11 +216,6 @@ __Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_da
 __Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)  
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa"))`  
 __Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_2009_glmm.pdf) through section on GLMs, [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html)  
-  
-  
-### Week 15.   
-__Lecture:__ Old Wine in a New Bottle: It's all a line, Classical tests in a Regression Framework
-
 
 ## Block 5: Tying it Together Further Adventures in Computation and Presentation
 
@@ -218,8 +224,10 @@ __Lecture:__ Old Wine in a New Bottle: It's all a line, Classical tests in a Reg
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Shiny!
+__Lecture:__ [GIS in R](https://biol355.github.io/Lectures/17_gis_in_r.html), 
   
+__Lab__:[Lessons 1,2, 6-8 from Data Carpentry Geospatial Lab](https://datacarpentry.org/r-raster-vector-geospatial/), [mapping Covid-19](https://biol355.github.io/Labs/coronavirus_spatial.html)  
+
 ### Week 17.  
 ```{r next_date, echo=FALSE}
 ```
