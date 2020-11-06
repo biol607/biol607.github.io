@@ -27,6 +27,11 @@ theme_set(theme_bw(base_size=17))
 ```
 ### 1. Comparing Means
 
+<!--
+rearrange to lump simple things to reinforce simple model
+for those students who won't get anything else out of it
+-->
+
 Comparing means are among the most frequently used tests in data analysis. Traditionally, they were done as a T-test, but, really, t-tests are just subsets of linear models. So, why not fit the appropriate linear model, and go from there! They're delightfully simple, and provide a robust example of how to examine the entire workflow of a data analysis. These are steps you'll take with any analysis you do in the future, no matter how complex the model! 
 
 ### 2 One Sample T-Test

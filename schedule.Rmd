@@ -149,9 +149,10 @@ __Lecture:__ Tidy Tuesday for Election Day, [It
 s All Linear Models; t-test edition](lectures/t_as_lm.html)      
 __Lab Topic:__ [Comparing Means](lab/comparing_two_means.html), Final Proposal Meetings	  
 __Reading:__ [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), W&S Chapters 11-12    
-__Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`
+__Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-linear_everywhere-2020
-  
+ __In Class Code:__ [lots of anova](./in_class_code/2020/scripts/comparing_means.R)  
+   
 
 ### Week 10.   
 ```{r next_date, echo=FALSE}
