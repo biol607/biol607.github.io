@@ -1,0 +1,225 @@
+---
+title: "Comparing Means with Linear Models"
+author: "Biol 607"
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(emmeans)
+library(car)
+library(brms)
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+show_table <- . %>%
+  kable("html") %>%
+  kable_styling("striped")
+
+theme_set(theme_bw(base_size=17))
+
+```
+### 1. Comparing Means
+
+Comparing means are among the most frequently used tests in data analysis. Traditionally, they were done as a T-test, but, really, t-tests are just subsets of linear models. So, why not fit the appropriate linear model, and go from there! They're delightfully simple, and provide a robust example of how to examine the entire workflow of a data analysis. These are steps you'll take with any analysis you do in the future, no matter how complex the model! 
+
+### 2 One Sample T-Test
+
+When we have one set of values we want to estimate the mean for and look at whether it is equivalent to a pre-specified hypothesis, we're talking about fitting an intercept only model. We might be interested in a single variable - like range shifts. Or we might be interested in a difference between pairs of values. These would traditionally all fall under the rubric of one-sample t-tests or paired t-tests (e.g., a one sample t-test where the one-sample is the difference between pairs). 
+
+As a linear model, we want to look at
+
+$$y_i = \beta_0  + N(0, \sigma)$$
+and see if $\beta_0$ is different from a hypothesized value (NHST), if this model predicts out of sample variability (CV), or establish the probability distribution of $\beta_0$ (Bayes).
+
+Let's look at the W&S data on blackbird immunoresponse before and after testosterone implants. So, first, load the data and visualize the change in immunoresponse.
+
+```{r blackbird, message=FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+blackbird <- read_csv("data/05/12e2BlackbirdTestosterone.csv") %>%
+  mutate(Bird = 1:n())
+
+b_tidy <- blackbird %>%
+  pivot_longer(-Bird,
+               names_to = "When",
+               values_to = "Antibody") %>%
+  filter((When %in% c("Before", "After"))) %>%
+  mutate(When = forcats::fct_rev(When))
+
+
+ggplot(data=b_tidy, aes(x=When, y=Antibody, group=Bird)) +
+  geom_point(color="red") +
+  geom_line() +
+  theme_bw(base_size=18)
+
+```
+
+The distribution of differences
+
+```{r}
+ggplot(data = blackbird, mapping=aes(x=dif)) + 
+  geom_histogram(binwidth = 10) +
+  geom_vline(xintercept=0, lty=2)
+```
+
+So, right away we can see the problem with the distribution of the data.
+
+Let's proceed and ignore it for the moment. Or see if it shows up after fitting a model. We fit this with an intercept only model, so we estimate a mean, SE of the mean, and can then look at the coefficients to see if the intercept (estimated mean) is different from zero. Let's also fit this using a Bayesian model, just to see the difference in inference.
+
+```{r diff_mod, message = FALSE, cache = TRUE, results = "hide"}
+diff_mod <- lm(dif ~ 1, data = blackbird)
+
+library(brms)
+diff_brm <- brm(dif ~ 1, data = blackbird, chains = 1)
+
+```
+
+Great! Let's look at the coefficient output
+
+```{r}
+summary(diff_mod)
+```
+
+From this, we can see that there is a fiarly low chance that the average difference is not null. We can look at the Bayesian fit to see the probability distribution of the fit value.
+
+```{r}
+fixef(diff_brm, probs = c(0.025, 0.1, 0.9, 0.975))
+
+plot(diff_brm)
+```
+
+We can see that while a lot of the weight is less than 0, a good bit of the distribution is >0.
+
+#### 2.1 Assumptions
+
+This is all well and good, but, what about model assumptions? We're still assuming a single mean, and a normal error distribution. Here are two classic diagnostics - 
+
+```{r diag_1}
+plot(diff_mod, which = 1)
+```
+
+Right! Everything is on the same fitted value. It looks ok - doesn't look like things are biased towards one side or the other. What about the residual distribution.
+
+```{r diagnostic}
+hist(residuals(diff_mod), breaks = 10)
+```
+
+Oof! That is not good looking.
+
+```{r}
+shapiro.test(residuals(diff_mod))
+```
+
+Eh. Our sample size is low enough that this looks a-ok. If we were worried about it, we could log transform the difference, or look at difference in logs.
+
+### 3. Comparing Two Means
+
+
+For two means, we want to fit a model where our categorical variable is translated into 0s and 1s. That corresponds to the following model:
+
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
+Here, $\beta_0$ corresponds to the mean for the group that is coded as 0 and $\beta_1$ is the difference between the two groups. If $\beta_1$ is different than 0, then the two groups are different, under a frequentist framework. 
+
+To see this, let's look at a data set examining the survival of juvenile chinook salmon (yum) in rivers with versus without brook trout.
+
+First, we'll load and plot the data.
+
+```{r chinook, message=FALSE}
+chinook <- read_csv("data/05/12e4BrookTrout.csv")
+
+ggplot(data=chinook, mapping=aes(x=`brook trout?`, y=`Mean chinook survival`)) +
+  geom_boxplot() 
+```
+
+OK, let' fit the corresponding model and look at the coefficients.
+
+```{r}
+surv_mod <- lm(`Mean chinook survival` ~ `brook trout?`, 
+               data = chinook)
+
+broom::tidy(surv_mod)
+```
+
+Great! There is a 9% chance of obtaining this or a more extreme difference under a null hypothesis.
+
+#### 3.1 A New Assumption and Solution
+
+So, here is our one new twist. Let's look at our residuals by group. We assume in our model that the residual variance is the same for each group.
+
+```{r}
+plot(surv_mod, which = 1)
+```
+
+Oof. This is not good. We can evaluate that a bit more formally with a Levene Test.
+
+```{r}
+library(car)
+leveneTest(surv_mod)
+```
+
+Yes. They are different. Now, we have options here. We can move to a non-parametric test using ranks. Or, we can fit model where variance is allowed to vary by group. We can do this with the `gls()` - generalized least squares -  function in {nlme}. It doesn't like spaces, so, we have to make a few changes
+
+```{r}
+library(nlme)
+
+chinook <- chinook %>%
+  mutate(trout = `brook trout?`,
+         survival = `Mean chinook survival`)
+
+surv_gls <- gls(survival ~ trout, 
+               data = chinook,
+               weights = varIdent(form = ~ 1|trout),
+               method = "ML")
+
+broom.mixed::tidy(surv_gls)
+```
+
+Note how similar the results are? This shows the robustness, in many ways, of the linear model. Granted, with the difference in variances, if we used the model without the different variances, our prediction intervals would be inaccurate. But, NHST tests are fairly robust here.
+
+#### 3.2 Comparing Means with Different Variances with Bayes
+
+We need to expand the formula a bit to fit this using Bayes. What I like is that {brms} lets us easily model the `sigma` term as a function of predictors.
+
+```{r, cache = TRUE, results = "hide"}
+surv_brm_mod <- brmsformula(survival ~ trout,
+                             sigma ~ trout)
+
+surv_brm <- brm(surv_brm_mod,
+                 data = chinook)
+
+summary(surv_brm)
+```
+
+Note that we use a similar formula here.
+
+$$y_i = \beta_0 + \beta_1 x_i + N(0, \sigma_i)$$
+$$\sigma_i = \gamma_0 + \gamma_1 x_i$$
+
+#### 3.3 Looking at Means
+
+Our coefficients so far have shown us the mean of only one group. While we can add them together, to get the SE right, we can use extra formulae, but, doing all of this by hand is tedious. Fortunatelu, the {emmeans} package, which stands for expected means, can take a fit model and get run the calculations for you.
+
+```{r emmeans}
+library(emmeans)
+
+emmeans(surv_gls, ~trout)
+
+#or if we want to go bayesian
+emmeans(surv_brm, ~trout)
+```
+
+We can use the emmeans object as a data frame for plotting, or, it even has a plot method itself that uses ggplot2.
+
+```{r}
+plot(emmeans(surv_gls, ~trout))
+```
