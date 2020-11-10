@@ -10,7 +10,7 @@ NEXT TIME I TEACH 607
 3. Functions, tidy data, dplyr
 4. Sampling and Simulation
 5. Cut modular programming. Introduce it via questions.
-
+6. Simplify comparing means lab - emphasize main point not exceptions
 -->
   While the topics covered are broad, each week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
   
@@ -151,15 +151,15 @@ __Lab Topic:__ [Comparing Means](lab/comparing_two_means.html), Final Proposal M
 __Reading:__ [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), W&S Chapters 11-12    
 __Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-linear_everywhere-2020
- __In Class Code:__ [lots of anova](./in_class_code/2020/scripts/comparing_means.R)  
+ __In Class Code:__ [comparing two means](./in_class_code/2020/scripts/comparing_means.R)  
    
 
 ### Week 10.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Categorical Predictors and ANOVA [part 1](lectures/19_expts_anova.html), [part 2](lectures/20_anova_2.html), Cottingham discussion    
-__Lab Topic:__ [One-Way ANOVA](lab/10_anova.html), Midterm work session	  
+__Lecture:__ Categorical Predictors and ANOVA [part 1](lectures/anova_1.html), [part 2](lectures/20_anova_2.html)    
+__Lab Topic:__ [One-Way ANOVA](lab/10_anova.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S Chapter 14-15,  [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
 __Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`

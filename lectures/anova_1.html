@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Comparing Many Means: ANOVA</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Comparing Many Means: ANOVA and the Linear Model
+
+![:scale 75%](./images/19/comparison-of-means-anova-you-must-do.jpg)
+
+
+
+
+---
+class: center, middle
+
+# Etherpad
+&lt;br&gt;&lt;br&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-anova-2020&lt;/h3&gt;&lt;/center&gt;
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. Asumptions of models with categorical predictors
+
+3. Evaluating fit models
+
+4. How predictive is a model?
+
+5. How different are groups?
+
+---
+# Categorical Predictors: Gene Expression and Mental Disorders
+
+.pull-left[
+![](./images/19/neuron_label.jpeg)
+]
+
+.pull-right[
+![](./images/19/myelin.jpeg)
+]
+
+
+
+---
+# The data
+&lt;img src="anova_1_files/figure-html/boxplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Traditional Way to Think About Categories
+&lt;img src="anova_1_files/figure-html/meansplot-1.png" style="display: block; margin: auto;" /&gt;
+
+What is the variance between groups v. within groups?
+
+---
+# But What is the Underlying Model  ?
+
+&lt;img src="anova_1_files/figure-html/brainGene_points-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# But What is the Underlying Model?
+
+&lt;img src="anova_1_files/figure-html/brainGene_points_fit-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+Underlying linear model with control = intercept, dummy variable for bipolar
+
+---
+
+# But What is the Underlying Model?
+
+&lt;img src="anova_1_files/figure-html/brainGene_points_fit1-1.png" style="display: block; margin: auto;" /&gt;
+
+Underlying linear model with control = intercept, dummy variable for bipolar
+
+
+
+---
+# But What is the Underlying Model  ?
+
+&lt;img src="anova_1_files/figure-html/brainGene_points_fit_2-1.png" style="display: block; margin: auto;" /&gt;
+
+Underlying linear model with control = intercept, dummy variable for schizo
+
+---
+
+# But What is the Underlying Model?
+&lt;img src="anova_1_files/figure-html/ctl_schizo-1.png" style="display: block; margin: auto;" /&gt;
+
+Underlying linear model with control = intercept, dummy variable for schizo
+
+
+---
+
+# Different Ways to Write a Categorical Model Express Different Questions (but are the same)
+
+1) `\(y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})\)`
+
+&lt;Br&gt;&lt;br&gt;
+
+--
+
+
+2) `\(y_{ij} = \alpha_{i} + \epsilon_{ij}\)`  
+`\(\epsilon_{ij} \sim N(0, \sigma^{2} )\)`
+
+
+&lt;Br&gt;&lt;br&gt;
+
+--
+
+
+
+
+3) `\(y_{j} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{j}\)`  
+`\(x_{i} = 0,1\)`  
+
+
+---
+# Partioning Model: ANOVA Reified
+
+`$$\large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$`
+
+- i = replicate, j = group  
+
+
+- Shows partitioning of variation  
+     - Corresponds to F test  
+     - Between group v. within group variation  
+
+
+- Consider `\(\bar{y}\)` an intercept, deviations from intercept by treatment, and residuals
+
+---
+# Means Model
+`$$\large y_{ij} = \alpha_{j} + \epsilon_{ij}$$`  
+`$$\epsilon_{ij} \sim N(0, \sigma^{2} )$$`
+
+
+- i = replicate, j = group  
+
+
+- Different mean for each group  
+
+
+- Focus is on specificity of a categorical predictor
+
+---
+# Linear Dummy Variable Model
+`$$\large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1$$`  
+`$$\epsilon_{ij} \sim N(0, \sigma^{2})$$`
+
+- i = replicate, j = group  
+
+
+- `\(x_{i}\)` inidicates presence/abscence (1/0) of a category  
+     - This coding is called a **Dummy variable**  
+
+- Note similarities to a linear regression  
+
+- One category set to `\(\beta_{0}\)` for ease of fitting, and other `\(\beta\)`s are different from it  
+
+- Or `\(\beta_{0}\)` = 0  
+
+
+---
+# Let's Fit that Model
+
+**Least Squares**
+
+```r
+brain_lm &lt;- lm(PLP1.expression ~ group, data=brainGene)
+```
+
+**Likelihood**
+
+```r
+brain_glm &lt;- glm(PLP1.expression ~ group, 
+                 data=brainGene,
+                 family = gaussian(link = "identity"))
+```
+
+**Bayes**
+
+```r
+library(brms)
+
+brain_brm &lt;- brm(PLP1.expression ~ group, 
+                 data=brainGene,
+                 family = gaussian(link = "identity"),
+                 chains = 2)
+```
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. .red[Assumptions of models with categorical predictors]
+
+3. Evaluating fit models
+
+4. How predictive is a model?
+
+5. How different are groups?
+
+---
+# Assumptions of Linear Models with Categorical Variables - Same as Linear Regression!
+
+-   Independence of data points
+
+-   No relationship between fitted and residual values
+
+-   Homoscedasticity (homogeneity of variance) of groups  
+       - This is just an extension of `\(\epsilon_i \sim N(0, \sigma)\)` where `\(\sigma\)` is constant across all groups
+  
+     - Can be tested with Levene Test
+
+-   Normality within groups (of residuals)
+
+- No excess leverage, etc....
+
+---
+# Fitted v. Residuals
+&lt;img src="anova_1_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+Are **residual** variances consistent across groups?
+
+---
+# Levene’s Test of Homogeneity of Variance
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;F) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; group &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.374 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+We are all good!
+
+---
+# Residuals!
+&lt;img src="anova_1_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  residuals(brain_lm)
+W = 0.94026, p-value = 0.02199
+```
+
+Huh. Perhaps.Remember, this is a sensitive test, and our results are pretty robust.
+
+---
+# Leverage
+&lt;img src="anova_1_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What do I do if I Violate Assumptions?
+
+-   Nonparametric Kruskal-Wallace (uses ranks)
+
+-   log(x+1) or otherwise transform
+
+-   GLM with non-gaussian error (two weeks!)
+
+-   Model the variance
+
+---
+# Questions to Ask of your Fit Model
+
+1.  Does your model explain variation in the data?
+
+2.  Which groups are different from one another?
+
+3.  How predictive is your model?
+
+4.  What are the distributions of group means?
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. Assumptions of models with categorical predictors
+
+3. .red[Evaluating fit models]
+
+4. How predictive is a model?
+
+5. How different are groups?
+
+---
+# ANOVA: Comparing Between Group Error and Within Group Error with NHST
+
+
+Ho = The model predicts no variation in the data.  
+
+
+
+
+Ha = The model predicts variation in the data.
+
+---
+# ANOVA: Comparing Between Group Error and Within Group Error with NHST
+&lt;br&gt;&lt;br&gt;
+.center[
+Central Question: **Is the variation in the data explained by the data generating process greater than that explained by the error generating process?**
+]
+
+--
+
+Test: Is a ratio of variability from data generating process v. error generating process large?
+
+--
+
+Ratio of two normal distributions = F Distribution
+
+--
+
+Yes, this is exactly what we did with regression! Because this IS regression.
+
+---
+# Linking your Model to Your Question
+
+Data Generating Process:
+`$$\beta_{0} + \sum \beta_{i}x_{i}$$`
+
+
+VERSUS
+
+
+Error Generating Process 
+`$$\epsilon_i \sim N(0,\sigma)$$` 
+
+
+---
+# Variability due to DGP (Between) versus EGP (Within)
+&lt;img src="anova_1_files/figure-html/brain_anova_viz_1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Variability due to DGP (Between Groups)
+&lt;img src="anova_1_files/figure-html/brain_anova_viz_2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Variability due to Error (Within Groups)
+&lt;img src="anova_1_files/figure-html/brain_anova_viz_3-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# F-Test to Compare
+&lt;br&gt;&lt;br&gt;
+`\(SS_{Total} = SS_{Between} + SS_{Within}\)` 
+
+--
+
+(Regression: `\(SS_{Total} = SS_{Model} + SS_{Error}\)`)
+
+--
+
+Yes, these are the same!
+
+---
+# F-Test to Compare
+
+`\(SS_{Between} = \sum_{i}\sum_{j}(\bar{Y_{i}} - \bar{Y})^{2}\)`, df=k-1  
+
+`\(SS_{Within} = \sum_{i}\sum_{j}(Y_{ij} - \bar{Y_{i}})^2\)`, df=n-k  
+
+
+To compare them, we need to correct for different DF. This is the Mean Square.  
+
+MS = SS/DF, e.g, `\(MS_{W} = \frac{SS_{W}}{n-k}\)`   
+
+
+---
+# ANOVA
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum Sq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Mean Sq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;F) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; group &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5402533 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2701267 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.823136 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0012943 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Residuals &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.4502267 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0345292 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# ANODEV: Is our model different from one without groups?
+
+- Uses Likelihood fit
+
+- Compares to a model with no groups included
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; group &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.64627 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0004004 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# BANOVA: Compare SD due to Groups versus SD due to Residual
+
+&lt;img src="anova_1_files/figure-html/banova-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. Assumptions of models with categorical predictors
+
+3. Evaluating fit models
+
+4. .red[How predictive is a model?]
+
+5. How different are groups?
+
+---
+# How Well Do Groups Explain Variation in Response Data?
+
+We can look at fit to data - even in categorical data!
+
+
+```
+[1] 0.2714186
+```
+
+```
+    Estimate Est.Error       Q2.5     Q97.5
+R2 0.2767985 0.0923906 0.09023014 0.4414747
+```
+
+--
+
+But, remember, this is based on the sample at hand.
+
+
+---
+# ANOVA Cross-Validation
+
+
+```r
+library(loo)
+
+nobrain_brm &lt;- brm(PLP1.expression ~ 1,
+                   data = brainGene,
+                   family = gaussian(link = "identity"),
+                   chains = 2)
+
+lc &lt;- loo_compare(loo(brain_brm),
+        loo(nobrain_brm)) %&gt;%
+  as.data.frame()
+
+lc[,1:2] %&gt;%  table_out
+```
+
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. Assumptions of models with categorical predictors
+
+3. Evaluating fit models
+
+4. How predictive is a model?
+
+5. .red[How different are groups?]
+
+
+---
+# R Fits with Treatment Contrasts
+`$$y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}$$`
+
+
+```
+# A tibble: 3 x 5
+  term         estimate std.error statistic  p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)  -0.00400    0.0480   -0.0834 0.934   
+2 groupschizo  -0.191      0.0679   -2.82   0.00730 
+3 groupbipolar -0.259      0.0679   -3.81   0.000444
+```
+
+--
+
+What does this mean?
+
+--
+
+- Intercept = the average value associated with being in the control group
+
+- Others = the average difference between control and each other group
+
+- Note: Order is alphabetical
+
+---
+# Actual Group Means
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control effect &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1500000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0391744 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.829034 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0012669 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo effect &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0413333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0391744 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.055112 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2974062 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bipolar effect &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1086667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0391744 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.773922 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0123422 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+What does this mean?
+
+--
+
+Being in group j is associated with an average outcome of y.
+
+---
+# But which groups are different from each other?
+&lt;img src="anova_1_files/figure-html/meansplot-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+Many T-tests....multiple comparisons!
+
+
+---
+# Post-Hoc Means Comparisons: Which groups are different from one another?
+
+- Each group has a mean and SE
+
+- We can calculate a comparison for each 
+
+- For NHST, we can compare with a T-test
+     - BUT - in NHST, with an alpha of 0.05, 1 in 20 will likely be wrong
+     - This is called Family-wise Error Rate
+     -Many down-adjustments of alpha, e.g., Tukey, etc.
+     
+- Or, we can look at credible intervals, posteriors of differences, etc.
+
+---
+# The Problem of Multiple Comparisons
+
+&lt;img src="./multcomp.gif"&gt;
+
+---
+# Solutions to Multiple Comparisons and Family-wise Error Rate?
+
+1. Ignore it - a test is a test
+     + *a priori contrasts*
+     + Least Squares Difference test  
+
+--
+
+2. Lower your `\(\alpha\)` given m = # of comparisons
+     + Bonferroni `\(\alpha/m\)`
+     + False Discovery Rate `\(k\alpha/m\)` where k is rank of test  
+
+--
+
+3. Other multiple comparinson correction
+    + Tukey's Honestly Significant Difference
+    + Dunnett's Test to Compare to Control
+
+---
+
+# No Correction: Least Square Differences
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.8198628 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0073015 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.8122186 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0004442 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9923559 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3267070 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Bonferroni Corrections
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.8198628 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0219044 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.8122186 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0013326 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9923559 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9801209 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+p = m * p
+
+---
+# FDR
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.8198628 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0109522 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.8122186 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0013326 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9923559 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3267070 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+p = `\(\frac{m}{k}\)` * p
+
+
+---
+# Tukey's Honestly Significant Difference
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.8198628 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0195775 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.8122186 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0012670 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9923559 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5857148 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Visualizing Comparisons (Tukey)
+&lt;img src="anova_1_files/figure-html/tukey-viz-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Dunnett's Comparison to Controls
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo - control &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1913333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.819863 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0141195 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bipolar - control &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.2586667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.812219 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0008756 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;img src="anova_1_files/figure-html/dunnett-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Likelihood and Posthocs
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; group &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; emmean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; asymp.LCL &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; asymp.UCL &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0040000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0479786 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; Inf &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0980363 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0900363 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1953333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0479786 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; Inf &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.2893697 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1012970 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.2626667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0479786 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; Inf &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.3567030 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1686303 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Posthocs Use Z-tests
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; z.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; Inf &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.8198628 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0133286 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; Inf &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.8122186 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0004048 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; Inf &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9923559 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5816908 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Bayes-Style!
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; group &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; emmean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower.HPD &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper.HPD &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; control &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0036712 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1094673 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0940614 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; schizo &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1975024 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.3016901 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1037627 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bipolar &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.2641988 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.3588393 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1650330 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Or, Just Look at the Full Implications of the Posterior
+&lt;img src="anova_1_files/figure-html/bayes_tukey-1.png" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

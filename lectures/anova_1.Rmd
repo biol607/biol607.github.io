@@ -1,0 +1,754 @@
+---
+title: "Comparing Many Means: ANOVA"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, shinobi, default-fonts, style.css]
+    nature:
+      beforeInit: "my_macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class: center, middle
+
+# Comparing Many Means: ANOVA and the Linear Model
+
+![:scale 75%](./images/19/comparison-of-means-anova-you-must-do.jpg)
+
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(readr)
+library(brms)
+library(ggdist)
+library(tidybayes)
+
+opts_chunk$set(fig.height=6, 
+               fig.width = 8,
+               fig.align = "center",
+               comment=NA, 
+               warning=FALSE, 
+               echo = FALSE,
+               message = FALSE)
+
+options(htmltools.dir.version = FALSE,
+        knitr.kable.NA = '')
+theme_set(theme_bw(base_size=28))
+
+table_out <- . %>%
+  knitr::kable("html") %>%
+  kableExtra::kable_styling("striped")
+```
+
+---
+class: center, middle
+
+# Etherpad
+<br><br>
+<center><h3>https://etherpad.wikimedia.org/p/607-anova-2020</h3></center>
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. Asumptions of models with categorical predictors
+
+3. Evaluating fit models
+
+4. How predictive is a model?
+
+5. How different are groups?
+
+---
+# Categorical Predictors: Gene Expression and Mental Disorders
+
+.pull-left[
+![](./images/19/neuron_label.jpeg)
+]
+
+.pull-right[
+![](./images/19/myelin.jpeg)
+]
+
+```{r load_brains}
+brainGene <- read.csv("./data/19/15q06DisordersAndGeneExpression.csv") %>%
+  mutate(group = forcats::fct_relevel(group, c("control", "schizo", "bipolar")))
+```
+
+---
+# The data
+```{r boxplot}
+ggplot(brainGene, aes(x=group, y=PLP1.expression, fill = group)) +
+  geom_boxplot() +
+  scale_fill_discrete(guide=FALSE)+
+  theme_bw(base_size=17)
+```
+
+---
+# Traditional Way to Think About Categories
+```{r meansplot}
+ggplot(brainGene, aes(x=group, y=PLP1.expression, color = group)) +
+#  geom_boxplot() +
+  stat_summary() +
+  scale_color_discrete(guide=FALSE) +
+  theme_bw(base_size=17)
+```
+
+What is the variance between groups v. within groups?
+
+---
+# But What is the Underlying Model  ?
+
+```{r brainGene_points}
+
+bgsub1 <- subset(brainGene, brainGene$group != "schizo")
+bgPoints <- ggplot(bgsub1, aes(x=group, y=PLP1.expression)) +
+                 geom_point(size=1.5) +
+  theme_bw(base_size=24)
+                   
+bgPoints
+```
+
+
+---
+# But What is the Underlying Model?
+
+```{r brainGene_points_fit}
+bgPoints + stat_smooth(method="lm", mapping=aes(group=1), color="red", lwd=2)
+
+```
+
+--
+
+Underlying linear model with control = intercept, dummy variable for bipolar
+
+---
+
+# But What is the Underlying Model?
+
+```{r brainGene_points_fit1}
+bgPoints + stat_smooth(method="lm", mapping = aes(group=1), color="red", lwd=2) +
+scale_x_discrete(labels=c("0", "1"))
+
+```
+
+Underlying linear model with control = intercept, dummy variable for bipolar
+
+
+
+---
+# But What is the Underlying Model  ?
+
+```{r brainGene_points_fit_2}
+bgsub2 <- subset(brainGene, brainGene$group != "bipolar")
+bgPoints2 <- ggplot(bgsub2, aes(x=group, y=PLP1.expression)) +
+  geom_point(size=1.5) +
+  theme_bw() + 
+  stat_smooth(method="lm", mapping = aes(group=1), color="red", lwd=2)+
+  theme_bw(base_size=24)
+
+bgPoints2
+```
+
+Underlying linear model with control = intercept, dummy variable for schizo
+
+---
+
+# But What is the Underlying Model?
+```{r ctl_schizo}
+bgPoints2 +
+  scale_x_discrete(labels = c(0,1))
+```
+
+Underlying linear model with control = intercept, dummy variable for schizo
+
+
+---
+
+# Different Ways to Write a Categorical Model Express Different Questions (but are the same)
+
+1) $y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$
+
+<Br><br>
+
+--
+
+
+2) $y_{ij} = \alpha_{i} + \epsilon_{ij}$  
+$\epsilon_{ij} \sim N(0, \sigma^{2} )$
+
+
+<Br><br>
+
+--
+
+
+
+
+3) $y_{j} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{j}$  
+$x_{i} = 0,1$  
+
+
+---
+# Partioning Model: ANOVA Reified
+
+$$\large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$
+
+- i = replicate, j = group  
+
+
+- Shows partitioning of variation  
+     - Corresponds to F test  
+     - Between group v. within group variation  
+
+
+- Consider $\bar{y}$ an intercept, deviations from intercept by treatment, and residuals
+
+---
+# Means Model
+$$\large y_{ij} = \alpha_{j} + \epsilon_{ij}$$  
+$$\epsilon_{ij} \sim N(0, \sigma^{2} )$$
+
+
+- i = replicate, j = group  
+
+
+- Different mean for each group  
+
+
+- Focus is on specificity of a categorical predictor
+
+---
+# Linear Dummy Variable Model
+$$\large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1$$  
+$$\epsilon_{ij} \sim N(0, \sigma^{2})$$
+
+- i = replicate, j = group  
+
+
+- $x_{i}$ inidicates presence/abscence (1/0) of a category  
+     - This coding is called a **Dummy variable**  
+
+- Note similarities to a linear regression  
+
+- One category set to $\beta_{0}$ for ease of fitting, and other $\beta$s are different from it  
+
+- Or $\beta_{0}$ = 0  
+
+
+---
+# Let's Fit that Model
+
+**Least Squares**
+```{r, echo = TRUE}
+brain_lm <- lm(PLP1.expression ~ group, data=brainGene)
+```
+
+**Likelihood**
+```{r, echo = TRUE}
+brain_glm <- glm(PLP1.expression ~ group, 
+                 data=brainGene,
+                 family = gaussian(link = "identity"))
+```
+
+**Bayes**
+```{r, cache = TRUE, results = "hide", echo = TRUE}
+library(brms)
+
+brain_brm <- brm(PLP1.expression ~ group, 
+                 data=brainGene,
+                 family = gaussian(link = "identity"),
+                 chains = 2)
+```
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. .red[Assumptions of models with categorical predictors]
+
+3. Evaluating fit models
+
+4. How predictive is a model?
+
+5. How different are groups?
+
+---
+# Assumptions of Linear Models with Categorical Variables - Same as Linear Regression!
+
+-   Independence of data points
+
+-   No relationship between fitted and residual values
+
+-   Homoscedasticity (homogeneity of variance) of groups  
+       - This is just an extension of $\epsilon_i \sim N(0, \sigma)$ where $\sigma$ is constant across all groups
+  
+     - Can be tested with Levene Test
+
+-   Normality within groups (of residuals)
+
+- No excess leverage, etc....
+
+---
+# Fitted v. Residuals
+```{r}
+plot(brain_lm, which=1)
+```
+
+Are **residual** variances consistent across groups?
+
+---
+# Levene’s Test of Homogeneity of Variance
+
+```{r brainGene_levene}
+library(car)
+knitr::kable(leveneTest(PLP1.expression ~ group, data=brainGene), "html", digits = 3) %>%
+  kableExtra::kable_styling()
+```
+
+We are all good!
+
+---
+# Residuals!
+```{r}
+plot(brain_lm, which=2)
+
+shapiro.test(residuals(brain_lm))
+```
+
+Huh. Perhaps.Remember, this is a sensitive test, and our results are pretty robust.
+
+---
+# Leverage
+```{r}
+plot(brain_lm, which=5)
+```
+
+---
+# What do I do if I Violate Assumptions?
+
+-   Nonparametric Kruskal-Wallace (uses ranks)
+
+-   log(x+1) or otherwise transform
+
+-   GLM with non-gaussian error (two weeks!)
+
+-   Model the variance
+
+---
+# Questions to Ask of your Fit Model
+
+1.  Does your model explain variation in the data?
+
+2.  Which groups are different from one another?
+
+3.  How predictive is your model?
+
+4.  What are the distributions of group means?
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. Assumptions of models with categorical predictors
+
+3. .red[Evaluating fit models]
+
+4. How predictive is a model?
+
+5. How different are groups?
+
+---
+# ANOVA: Comparing Between Group Error and Within Group Error with NHST
+
+
+Ho = The model predicts no variation in the data.  
+
+
+
+
+Ha = The model predicts variation in the data.
+
+---
+# ANOVA: Comparing Between Group Error and Within Group Error with NHST
+<br><br>
+.center[
+Central Question: **Is the variation in the data explained by the data generating process greater than that explained by the error generating process?**
+]
+
+--
+
+Test: Is a ratio of variability from data generating process v. error generating process large?
+
+--
+
+Ratio of two normal distributions = F Distribution
+
+--
+
+Yes, this is exactly what we did with regression! Because this IS regression.
+
+---
+# Linking your Model to Your Question
+
+Data Generating Process:
+$$\beta_{0} + \sum \beta_{i}x_{i}$$
+
+
+VERSUS
+
+
+Error Generating Process 
+$$\epsilon_i \sim N(0,\sigma)$$ 
+
+
+---
+# Variability due to DGP (Between) versus EGP (Within)
+```{r brain_anova_viz_1}
+brainGene$subj <- 1:nrow(brainGene)
+jls <- brainGene %>%
+  group_by(group) %>%
+  summarise(mean_expression = mean(PLP1.expression)) %>%
+  ungroup()
+
+data_plot <- ggplot(data=brainGene, mapping=aes(x=group, y=PLP1.expression, color=group)) +
+  geom_point(mapping=aes(group=subj), position=position_dodge(width=0.5)) +
+  theme_bw(base_size=14)
+
+data_plot
+```
+
+---
+# Variability due to DGP (Between Groups)
+```{r brain_anova_viz_2}
+model_plot <- data_plot +
+    geom_boxplot(data=jls, mapping=aes(x=group, y=mean_expression))
+
+model_plot
+```
+
+---
+# Variability due to Error (Within Groups)
+```{r brain_anova_viz_3}
+brainGene <- brainGene %>%
+  group_by(group) %>%
+  mutate(mean_expression = mean(PLP1.expression)) %>%
+  ungroup()
+
+model_plot + 
+  geom_linerange(data = brainGene, mapping=aes(x=group, ymin = mean_expression, ymax = PLP1.expression, group=subj), position=position_dodge(width=0.5))
+```
+
+
+---
+# F-Test to Compare
+<br><br>
+$SS_{Total} = SS_{Between} + SS_{Within}$ 
+
+--
+
+(Regression: $SS_{Total} = SS_{Model} + SS_{Error}$)
+
+--
+
+Yes, these are the same!
+
+---
+# F-Test to Compare
+
+$SS_{Between} = \sum_{i}\sum_{j}(\bar{Y_{i}} - \bar{Y})^{2}$, df=k-1  
+
+$SS_{Within} = \sum_{i}\sum_{j}(Y_{ij} - \bar{Y_{i}})^2$, df=n-k  
+
+
+To compare them, we need to correct for different DF. This is the Mean Square.  
+
+MS = SS/DF, e.g, $MS_{W} = \frac{SS_{W}}{n-k}$   
+
+
+---
+# ANOVA
+
+```{r brainGene_anova}
+brain_lm <- lm(PLP1.expression ~ group, data=brainGene)
+knitr::kable(anova(lm(PLP1.expression ~ group, data=brainGene)))
+```
+
+---
+# ANODEV: Is our model different from one without groups?
+
+- Uses Likelihood fit
+
+- Compares to a model with no groups included
+
+```{r}
+car::Anova(brain_glm) %>% tidy %>%
+  knitr::kable("html") %>%
+  kableExtra::kable_styling()
+```
+
+---
+# BANOVA: Compare SD due to Groups versus SD due to Residual
+
+```{r banova}
+chains <- brainGene %>%
+  add_fitted_draws(brain_brm) %>%
+  mutate(.residual = PLP1.expression - .value) %>%
+  group_by(.draw) %>%
+  summarize(residual_sd = .residual[1],
+            group_sd = sd(.value))
+
+
+chains %>%
+  pivot_longer(cols = c(group_sd, residual_sd),
+               names_to = "type",
+               values_to = "value") %>%
+  
+  ggplot(aes(x = value, y = type)) +
+  stat_halfeye() + 
+  labs(y = "", x = "")
+```
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. Assumptions of models with categorical predictors
+
+3. Evaluating fit models
+
+4. .red[How predictive is a model?]
+
+5. How different are groups?
+
+---
+# How Well Do Groups Explain Variation in Response Data?
+
+We can look at fit to data - even in categorical data!
+
+```{r}
+summary(brain_lm)$r.squared
+
+bayes_R2(brain_brm)
+```
+
+--
+
+But, remember, this is based on the sample at hand.
+
+
+---
+# ANOVA Cross-Validation
+
+```{r, cache = TRUE, echo = TRUE, results =  "hide"}
+library(loo)
+
+nobrain_brm <- brm(PLP1.expression ~ 1,
+                   data = brainGene,
+                   family = gaussian(link = "identity"),
+                   chains = 2)
+
+lc <- loo_compare(loo(brain_brm),
+        loo(nobrain_brm)) %>%
+  as.data.frame()
+
+lc[,1:2] %>%  table_out
+```
+
+
+---
+# ANOVA Adventure!
+
+1. What are models with categorical predictors?
+
+2. Assumptions of models with categorical predictors
+
+3. Evaluating fit models
+
+4. How predictive is a model?
+
+5. .red[How different are groups?]
+
+
+---
+# R Fits with Treatment Contrasts
+$$y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}$$
+
+```{r trt_means}
+tidy(brain_glm)
+```
+
+--
+
+What does this mean?
+
+--
+
+- Intercept = the average value associated with being in the control group
+
+- Others = the average difference between control and each other group
+
+- Note: Order is alphabetical
+
+---
+# Actual Group Means
+
+```{r brainGene_noint}
+library(emmeans)
+brain_em <- emmeans(brain_lm, ~group)
+knitr::kable(contrast(brain_em), "html") %>%
+  kableExtra::kable_styling()
+```
+
+--
+
+What does this mean?
+
+--
+
+Being in group j is associated with an average outcome of y.
+
+---
+# But which groups are different from each other?
+```{r meansplot}
+```
+
+--
+
+Many T-tests....multiple comparisons!
+
+
+---
+# Post-Hoc Means Comparisons: Which groups are different from one another?
+
+- Each group has a mean and SE
+
+- We can calculate a comparison for each 
+
+- For NHST, we can compare with a T-test
+     - BUT - in NHST, with an alpha of 0.05, 1 in 20 will likely be wrong
+     - This is called Family-wise Error Rate
+     -Many down-adjustments of alpha, e.g., Tukey, etc.
+     
+- Or, we can look at credible intervals, posteriors of differences, etc.
+
+---
+# The Problem of Multiple Comparisons
+
+<img src="./multcomp.gif">
+
+---
+# Solutions to Multiple Comparisons and Family-wise Error Rate?
+
+1. Ignore it - a test is a test
+     + *a priori contrasts*
+     + Least Squares Difference test  
+
+--
+
+2. Lower your $\alpha$ given m = # of comparisons
+     + Bonferroni $\alpha/m$
+     + False Discovery Rate $k\alpha/m$ where k is rank of test  
+
+--
+
+3. Other multiple comparinson correction
+    + Tukey's Honestly Significant Difference
+    + Dunnett's Test to Compare to Control
+
+---
+
+# No Correction: Least Square Differences
+```{r pairs, echo=FALSE}
+contrast(brain_em, method = "tukey", adjust="none") %>%
+  knitr::kable("html") %>% kableExtra::kable_styling("striped")
+```
+
+---
+# Bonferroni Corrections
+```{r bonf, echo=FALSE}
+contrast(brain_em, method = "tukey", adjust="bonferroni") %>%
+  table_out
+```
+p = m * p
+
+---
+# FDR
+```{r fdr, echo=FALSE}
+contrast(brain_em, method = "tukey", adjust="fdr") %>%
+  table_out
+```
+p = $\frac{m}{k}$ * p
+
+
+---
+# Tukey's Honestly Significant Difference
+```{r tukey, echo=FALSE}
+contrast(brain_em, method = "tukey", adjust="tukey") %>%
+  table_out
+```
+
+---
+# Visualizing Comparisons (Tukey)
+```{r tukey-viz, echo=FALSE}
+plot(contrast(brain_em, method = "tukey", adjust="tukey")) +
+  theme_bw(base_size=17) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+---
+# Dunnett's Comparison to Controls
+```{r dunnett, echo=FALSE}
+contrast(brain_em, method = "dunnett", adjust="dunnett") %>%
+  table_out
+
+plot(contrast(brain_em, method = "dunnett", adjust="dunnett")) +
+  theme_bw(base_size=17) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+---
+# Likelihood and Posthocs
+```{r tukey_em}
+em_lik <- emmeans(brain_glm, ~group)
+em_lik %>%
+  knitr::kable("html") %>% kableExtra::kable_styling() 
+```
+
+---
+# Posthocs Use Z-tests
+```{r tukey_lik}
+contrast(em_lik, "tukey") %>%
+  knitr::kable("html") %>% kableExtra::kable_styling() 
+```
+
+---
+# Bayes-Style!
+
+```{r bayes_em, echo=FALSE}
+brain_bayes_em <- emmeans(brain_brm, ~group)
+brain_bayes_em %>%
+  table_out 
+```
+
+---
+# Or, Just Look at the Full Implications of the Posterior
+```{r bayes_tukey, echo=FALSE}
+
+library(tidybayes)
+gather_emmeans_draws(contrast(brain_bayes_em, "tukey")) %>%
+  ggplot(aes(x = .value, y = contrast, fill = contrast)) +
+  stat_halfeye() +
+  geom_vline(xintercept = 0, color = 'red', lty = 2)
+
+```
