@@ -500,20 +500,19 @@ car::Anova(brain_glm) %>% tidy %>%
 # BANOVA: Compare SD due to Groups versus SD due to Residual
 
 ```{r banova}
-chains <- brainGene %>%
+
+
+sd_chains <- modelr::data_grid(brainGene,
+                             group = unique(group)) %>%
   add_fitted_draws(brain_brm) %>%
-  mutate(.residual = PLP1.expression - .value) %>%
   group_by(.draw) %>%
-  summarize(residual_sd = .residual[1],
-            group_sd = sd(.value))
-
-
-chains %>%
+  summarize(group_sd = sd(.value)) %>%
+  mutate(residual_sd = as.data.frame(brain_brm)$sigma) %>%
   pivot_longer(cols = c(group_sd, residual_sd),
                names_to = "type",
-               values_to = "value") %>%
-  
-  ggplot(aes(x = value, y = type)) +
+               values_to = "value") 
+
+ggplot(sd_chains, aes(x = value, y = type)) +
   stat_halfeye() + 
   labs(y = "", x = "")
 ```
