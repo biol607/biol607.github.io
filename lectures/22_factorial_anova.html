@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <title>22_factorial_anova.utf8.md</title>
+  <title>22_factorial_anova.utf8</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -11,9 +11,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -23,14 +23,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -39,9 +41,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -546,12 +548,12 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 <section id="intertidal-grazing" class="slide level2">
 <h2>Intertidal Grazing!</h2>
-<p><img data-src="./images/22/grazing-expt.jpeg" alt="image" style="width:70.0%" /><br />
+<p><img data-src="images/22/grazing-expt.jpeg" style="width:70.0%" alt="image" /><br />
 Do grazers reduce algal cover in the intertidal?</p>
 </section>
 <section id="experiment-replicated-on-two-ends-of-a-gradient" class="slide level2">
 <h2>Experiment Replicated on Two Ends of a gradient</h2>
-<p><img data-src="./images/22/zonation.jpg" alt="image" style="width:70.0%" /><br />
+<p><img data-src="images/22/zonation.jpg" style="width:70.0%" alt="image" /><br />
 What happens if you fit this data using * instead of + in the linear model?</p>
 </section>
 <section id="the-data" class="slide level2">
@@ -566,7 +568,7 @@ sqrtarea ~ height + herbivores
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">Sum Sq</th>
 <th style="text-align: right;">Df</th>
 <th style="text-align: right;">F value</th>
@@ -575,21 +577,21 @@ sqrtarea ~ height + herbivores
 </thead>
 <tbody>
 <tr class="odd">
-<td>height</td>
+<td style="text-align: left;">height</td>
 <td style="text-align: right;">88.97334</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">0.3213845</td>
 <td style="text-align: right;">0.5728570</td>
 </tr>
 <tr class="even">
-<td>herbivores</td>
+<td style="text-align: left;">herbivores</td>
 <td style="text-align: right;">1512.18349</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">5.4622243</td>
 <td style="text-align: right;">0.0227309</td>
 </tr>
 <tr class="odd">
-<td>Residuals</td>
+<td style="text-align: left;">Residuals</td>
 <td style="text-align: right;">16887.47793</td>
 <td style="text-align: right;">61</td>
 <td style="text-align: right;">NA</td>
@@ -613,32 +615,20 @@ sqrtarea ~ height + herbivores
 <section id="nonlinearity-seen-in-the-tukey-test" class="slide level2">
 <h2>Nonlinearity seen in the Tukey Test!</h2>
 <pre><code>           Test stat Pr(&gt;|Test stat|)    
-height                                   
-herbivores                               
 Tukey test   -3.3171        0.0009097 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">Test stat</th>
 <th style="text-align: right;">Pr(&gt;|Test stat|)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>height</td>
-<td style="text-align: right;">NA</td>
-<td style="text-align: right;">NA</td>
-</tr>
-<tr class="even">
-<td>herbivores</td>
-<td style="text-align: right;">NA</td>
-<td style="text-align: right;">NA</td>
-</tr>
-<tr class="odd">
-<td>Tukey test</td>
+<td style="text-align: left;">Tukey test</td>
 <td style="text-align: right;">-3.317064</td>
 <td style="text-align: right;">0.0009097</td>
 </tr>
@@ -648,12 +638,12 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </section>
 <section id="factorial-blocked-experiment" class="slide level2">
 <h2>Factorial Blocked Experiment</h2>
-<p><img data-src="./images/22/factorial_blocks.jpg" alt="image" style="width:80.0%" /><br />
+<p><img data-src="images/22/factorial_blocks.jpg" style="width:80.0%" alt="image" /><br />
 </p>
 </section>
 <section id="factorial-design" class="slide level2">
 <h2>Factorial Design</h2>
-<p><img data-src="./images/22/factorial_layout.jpg" alt="image" style="width:80.0%" /><br />
+<p><img data-src="images/22/factorial_layout.jpg" style="width:80.0%" alt="image" /><br />
 Note: You can have as many treatment types as you want (and then 3-way, 4-way, etc. interactions)</p>
 </section>
 <section id="problem-categorical-predictors-are-not-additive" class="slide level2">
@@ -687,14 +677,14 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 </section>
 <section id="how-do-you-fit-an-interaction-effect" class="slide level2">
 <h2>How do you Fit an Interaction Effect?</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">+</span><span class="st"> </span>herbivores <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">                  </span>herbivores<span class="op">:</span>height, </a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">                <span class="dt">data=</span>algae)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">+</span><span class="st"> </span>herbivores <span class="op">+</span><span class="st"> </span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="st">                  </span>herbivores<span class="op">:</span>height, </span>
+<span id="cb2-3"><a href="#cb2-3"></a>                <span class="dt">data=</span>algae)</span></code></pre></div>
 <br />
 <br />
 
 <div class="fragment">
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height<span class="op">*</span>herbivores, <span class="dt">data=</span>algae)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>graze_int &lt;-<span class="st"> </span><span class="kw">lm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height<span class="op">*</span>herbivores, <span class="dt">data=</span>algae)</span></code></pre></div>
 </div>
 </section>
 <section id="no-more-pattern-in-fitted-v.-residuals" class="slide level2">
@@ -726,7 +716,7 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">Sum Sq</th>
 <th style="text-align: right;">Df</th>
 <th style="text-align: right;">F value</th>
@@ -735,28 +725,28 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 </thead>
 <tbody>
 <tr class="odd">
-<td>height</td>
+<td style="text-align: left;">height</td>
 <td style="text-align: right;">88.97334</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">0.3740858</td>
 <td style="text-align: right;">0.5430962</td>
 </tr>
 <tr class="even">
-<td>herbivores</td>
+<td style="text-align: left;">herbivores</td>
 <td style="text-align: right;">1512.18349</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">6.3579319</td>
 <td style="text-align: right;">0.0143595</td>
 </tr>
 <tr class="odd">
-<td>height:herbivores</td>
+<td style="text-align: left;">height:herbivores</td>
 <td style="text-align: right;">2616.95555</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">11.0029142</td>
 <td style="text-align: right;">0.0015486</td>
 </tr>
 <tr class="even">
-<td>Residuals</td>
+<td style="text-align: left;">Residuals</td>
 <td style="text-align: right;">14270.52238</td>
 <td style="text-align: right;">60</td>
 <td style="text-align: right;">NA</td>
@@ -773,7 +763,7 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">Estimate</th>
 <th style="text-align: right;">Std. Error</th>
 <th style="text-align: right;">t value</th>
@@ -782,28 +772,28 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 </thead>
 <tbody>
 <tr class="odd">
-<td>heightlow</td>
+<td style="text-align: left;">heightlow</td>
 <td style="text-align: right;">32.91450</td>
 <td style="text-align: right;">3.855532</td>
 <td style="text-align: right;">8.536955</td>
 <td style="text-align: right;">0.0000000</td>
 </tr>
 <tr class="even">
-<td>heightmid</td>
+<td style="text-align: left;">heightmid</td>
 <td style="text-align: right;">22.48360</td>
 <td style="text-align: right;">3.855532</td>
 <td style="text-align: right;">5.831516</td>
 <td style="text-align: right;">0.0000002</td>
 </tr>
 <tr class="odd">
-<td>herbivoresplus</td>
+<td style="text-align: left;">herbivoresplus</td>
 <td style="text-align: right;">-22.51075</td>
 <td style="text-align: right;">5.452546</td>
 <td style="text-align: right;">-4.128484</td>
 <td style="text-align: right;">0.0001146</td>
 </tr>
 <tr class="even">
-<td>heightmid:herbivoresplus</td>
+<td style="text-align: left;">heightmid:herbivoresplus</td>
 <td style="text-align: right;">25.57809</td>
 <td style="text-align: right;">7.711064</td>
 <td style="text-align: right;">3.317064</td>
@@ -826,7 +816,7 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 </section>
 <section id="post-hoc-tests" class="slide level2">
 <h2>Post-hoc Tests!</h2>
-<p><img data-src="./images/22/gosling_p_value.jpg" alt="image" style="width:70.0%" /></p>
+<p><img data-src="images/22/gosling_p_value.jpg" style="width:70.0%" alt="image" /></p>
 </section>
 <section id="posthocs-and-factorial-designs" class="slide level2">
 <h2>Posthocs and Factorial Designs</h2>
@@ -846,27 +836,27 @@ Note: You can have as many treatment types as you want (and then 3-way, 4-way, e
 </section>
 <section id="posthoc-comparisons-within-blocks" class="slide level2">
 <h2>Posthoc Comparisons Within Blocks</h2>
-<pre><code> contrast     estimate       SE df t.ratio p.value
- minus - plus 9.721701 3.855532 60   2.521  0.0144
+<pre><code> contrast     estimate   SE df t.ratio p.value
+ minus - plus     9.72 3.86 60 2.521   0.0144 
 
 Results are averaged over the levels of: height </code></pre>
 </section>
 <section id="posthoc-comparisons-of-blocks" class="slide level2">
 <h2>Posthoc Comparisons of Blocks</h2>
-<pre><code> contrast   estimate       SE df t.ratio p.value
- low - mid -2.358142 3.855532 60  -0.612  0.5431
+<pre><code> contrast  estimate   SE df t.ratio p.value
+ low - mid    -2.36 3.86 60 -0.612  0.5431 
 
 Results are averaged over the levels of: herbivores </code></pre>
 </section>
 <section id="posthoc-with-simple-effects-model" class="slide level2">
 <h2>Posthoc with Simple Effects Model</h2>
-<pre><code> contrast                estimate       SE df t.ratio p.value
- low,minus - mid,minus  10.430905 5.452546 60   1.913  0.0605
- low,minus - low,plus   22.510748 5.452546 60   4.128  0.0001
- low,minus - mid,plus    7.363559 5.452546 60   1.350  0.1819
- mid,minus - low,plus   12.079843 5.452546 60   2.215  0.0305
- mid,minus - mid,plus   -3.067346 5.452546 60  -0.563  0.5758
- low,plus - mid,plus   -15.147189 5.452546 60  -2.778  0.0073</code></pre>
+<pre><code> contrast              estimate   SE df t.ratio p.value
+ low minus - mid minus    10.43 5.45 60  1.913  0.0605 
+ low minus - low plus     22.51 5.45 60  4.128  0.0001 
+ low minus - mid plus      7.36 5.45 60  1.350  0.1819 
+ mid minus - low plus     12.08 5.45 60  2.215  0.0305 
+ mid minus - mid plus     -3.07 5.45 60 -0.563  0.5758 
+ low plus - mid plus     -15.15 5.45 60 -2.778  0.0073 </code></pre>
 </section>
 <section id="posthoc-with-simple-effects-model-1" class="slide level2">
 <h2>Posthoc with Simple Effects Model</h2>
@@ -898,7 +888,7 @@ Results are averaged over the levels of: herbivores </code></pre>
 <br />
 <br />
 </p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">algae_unbalanced &lt;-<span class="st"> </span>algae[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), ]</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>algae_unbalanced &lt;-<span class="st"> </span>algae[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), ]</span></code></pre></div>
 </section>
 <section id="type-of-sums-of-squares-matters" class="slide level2">
 <h2>Type of Sums of Squares Matters</h2>
@@ -906,7 +896,7 @@ Results are averaged over the levels of: herbivores </code></pre>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">Df</th>
 <th style="text-align: right;">Sum Sq</th>
 <th style="text-align: right;">Mean Sq</th>
@@ -916,7 +906,7 @@ Results are averaged over the levels of: herbivores </code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td>height</td>
+<td style="text-align: left;">height</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">151.8377</td>
 <td style="text-align: right;">151.8377</td>
@@ -924,7 +914,7 @@ Results are averaged over the levels of: herbivores </code></pre>
 <td style="text-align: right;">0.4278712</td>
 </tr>
 <tr class="even">
-<td>herbivores</td>
+<td style="text-align: left;">herbivores</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">1384.0999</td>
 <td style="text-align: right;">1384.0999</td>
@@ -932,7 +922,7 @@ Results are averaged over the levels of: herbivores </code></pre>
 <td style="text-align: right;">0.0192485</td>
 </tr>
 <tr class="odd">
-<td>height:herbivores</td>
+<td style="text-align: left;">height:herbivores</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">2933.5934</td>
 <td style="text-align: right;">2933.5934</td>
@@ -940,7 +930,7 @@ Results are averaged over the levels of: herbivores </code></pre>
 <td style="text-align: right;">0.0008998</td>
 </tr>
 <tr class="even">
-<td>Residuals</td>
+<td style="text-align: left;">Residuals</td>
 <td style="text-align: right;">55</td>
 <td style="text-align: right;">13089.4237</td>
 <td style="text-align: right;">237.9895</td>
@@ -954,7 +944,7 @@ Type II</p>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">Sum Sq</th>
 <th style="text-align: right;">Df</th>
 <th style="text-align: right;">F value</th>
@@ -963,28 +953,28 @@ Type II</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td>height</td>
+<td style="text-align: left;">height</td>
 <td style="text-align: right;">77.87253</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">0.3272099</td>
 <td style="text-align: right;">0.5696373</td>
 </tr>
 <tr class="even">
-<td>herbivores</td>
+<td style="text-align: left;">herbivores</td>
 <td style="text-align: right;">1384.09995</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">5.8158020</td>
 <td style="text-align: right;">0.0192485</td>
 </tr>
 <tr class="odd">
-<td>height:herbivores</td>
+<td style="text-align: left;">height:herbivores</td>
 <td style="text-align: right;">2933.59337</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">12.3265653</td>
 <td style="text-align: right;">0.0008998</td>
 </tr>
 <tr class="even">
-<td>Residuals</td>
+<td style="text-align: left;">Residuals</td>
 <td style="text-align: right;">13089.42369</td>
 <td style="text-align: right;">55</td>
 <td style="text-align: right;">NA</td>
@@ -998,7 +988,7 @@ Type II</p>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">Sum Sq</th>
 <th style="text-align: right;">Df</th>
 <th style="text-align: right;">F value</th>
@@ -1007,35 +997,35 @@ Type II</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td>(Intercept)</td>
+<td style="text-align: left;">(Intercept)</td>
 <td style="text-align: right;">14188.804</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">59.619447</td>
 <td style="text-align: right;">0.0000000</td>
 </tr>
 <tr class="even">
-<td>height</td>
+<td style="text-align: left;">height</td>
 <td style="text-align: right;">1175.967</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">4.941256</td>
 <td style="text-align: right;">0.0303521</td>
 </tr>
 <tr class="odd">
-<td>herbivores</td>
+<td style="text-align: left;">herbivores</td>
 <td style="text-align: right;">4242.424</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">17.826097</td>
 <td style="text-align: right;">0.0000915</td>
 </tr>
 <tr class="even">
-<td>height:herbivores</td>
+<td style="text-align: left;">height:herbivores</td>
 <td style="text-align: right;">2933.593</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">12.326565</td>
 <td style="text-align: right;">0.0008998</td>
 </tr>
 <tr class="odd">
-<td>Residuals</td>
+<td style="text-align: left;">Residuals</td>
 <td style="text-align: right;">13089.424</td>
 <td style="text-align: right;">55</td>
 <td style="text-align: right;">NA</td>
@@ -1050,7 +1040,7 @@ Type II</p>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th style="text-align: left;"></th>
 <th style="text-align: right;">Sum Sq</th>
 <th style="text-align: right;">Df</th>
 <th style="text-align: right;">F value</th>
@@ -1059,28 +1049,28 @@ Type II</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td>height</td>
+<td style="text-align: left;">height</td>
 <td style="text-align: right;">77.87253</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">0.3272099</td>
 <td style="text-align: right;">0.5696373</td>
 </tr>
 <tr class="even">
-<td>herbivores</td>
+<td style="text-align: left;">herbivores</td>
 <td style="text-align: right;">1384.09995</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">5.8158020</td>
 <td style="text-align: right;">0.0192485</td>
 </tr>
 <tr class="odd">
-<td>height:herbivores</td>
+<td style="text-align: left;">height:herbivores</td>
 <td style="text-align: right;">2933.59337</td>
 <td style="text-align: right;">1</td>
 <td style="text-align: right;">12.3265653</td>
 <td style="text-align: right;">0.0008998</td>
 </tr>
 <tr class="even">
-<td>Residuals</td>
+<td style="text-align: left;">Residuals</td>
 <td style="text-align: right;">13089.42369</td>
 <td style="text-align: right;">55</td>
 <td style="text-align: right;">NA</td>
@@ -1190,17 +1180,38 @@ Type II</p>
 </section>
 <section id="non-least-squares-approaches" class="slide level2">
 <h2>Non-Least Squares Approaches</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#Likelihood</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">intertidal_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">*</span><span class="st"> </span>herbivores, </a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">                <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">                <span class="dt">data=</span>algae)</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#Bayes</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="kw">library</span>(brms)</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">intertidal_banova &lt;-<span class="st"> </span><span class="kw">brm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">*</span><span class="st"> </span>herbivores, </a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">                 <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">                 <span class="dt">data=</span>algae,</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">                 <span class="dt">file =</span> <span class="st">&quot;intertidal_brms&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">#Likelihood</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>intertidal_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">*</span><span class="st"> </span>herbivores, </span>
+<span id="cb8-3"><a href="#cb8-3"></a>                <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</span>
+<span id="cb8-4"><a href="#cb8-4"></a>                <span class="dt">data=</span>algae)</span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#Bayes</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="kw">library</span>(brms)</span>
+<span id="cb8-8"><a href="#cb8-8"></a>intertidal_banova &lt;-<span class="st"> </span><span class="kw">brm</span>(sqrtarea <span class="op">~</span><span class="st"> </span>height <span class="op">*</span><span class="st"> </span>herbivores, </span>
+<span id="cb8-9"><a href="#cb8-9"></a>                 <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>),</span>
+<span id="cb8-10"><a href="#cb8-10"></a>                 <span class="dt">data=</span>algae,</span>
+<span id="cb8-11"><a href="#cb8-11"></a>                 <span class="dt">file =</span> <span class="st">&quot;intertidal_brms&quot;</span>)</span></code></pre></div>
+<pre><code>Running /Library/Frameworks/R.framework/Resources/bin/R CMD SHLIB foo.c
+clang -mmacosx-version-min=10.13 -I&quot;/Library/Frameworks/R.framework/Resources/include&quot; -DNDEBUG   -I&quot;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppEigen/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppEigen/include/unsupported&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/BH/include&quot; -I&quot;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/StanHeaders/include/src/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/StanHeaders/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppParallel/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/Library/Frameworks/R.framework/Versions/4.0/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1   &quot;-I/usr/local/opt/llvm/include&quot;   -fPIC  -Wall -g -O2  -c foo.c -o foo.o
+In file included from &lt;built-in&gt;:1:
+In file included from /Library/Frameworks/R.framework/Versions/4.0/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13:
+In file included from /Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppEigen/include/Eigen/Dense:1:
+In file included from /Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppEigen/include/Eigen/Core:88:
+/Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppEigen/include/Eigen/src/Core/util/Macros.h:613:1: error: unknown type name &#39;namespace&#39;
+namespace Eigen {
+^
+/Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppEigen/include/Eigen/src/Core/util/Macros.h:613:16: error: expected &#39;;&#39; after top level declarator
+namespace Eigen {
+               ^
+               ;
+In file included from &lt;built-in&gt;:1:
+In file included from /Library/Frameworks/R.framework/Versions/4.0/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13:
+In file included from /Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppEigen/include/Eigen/Dense:1:
+/Library/Frameworks/R.framework/Versions/4.0/Resources/library/RcppEigen/include/Eigen/Core:96:10: fatal error: &#39;complex&#39; file not found
+#include &lt;complex&gt;
+         ^~~~~~~~~
+3 errors generated.
+make: *** [foo.o] Error 1</code></pre>
 </section>
 <section id="variance-paritioning-gets-more-interesting" class="slide level2">
 <h2>Variance Paritioning Gets More Interesting!</h2>
@@ -1208,7 +1219,7 @@ Type II</p>
 </section>
 <section id="many-treatments" class="slide level2">
 <h2>Many Treatments</h2>
-<p><img data-src="./images/22/4_way_interaction.jpg" alt="image" style="width:60.0%" /></p>
+<p><img data-src="images/22/4_way_interaction.jpg" style="width:60.0%" alt="image" /></p>
 </section>
     </div>
   </div>
