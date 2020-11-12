@@ -158,7 +158,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-linear_everywhere-2020
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Categorical Predictors and ANOVA [part 1](lectures/anova_1.html), [part 2](lectures/20_anova_2.html)    
+__Lecture:__ Categorical Predictors and ANOVA [part 1](lectures/anova_1.html), [part 2](lectures/anova_2.html)    
 __Lab Topic:__ [One-Way ANOVA](lab/10_anova.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S Chapter 14-15,  [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  

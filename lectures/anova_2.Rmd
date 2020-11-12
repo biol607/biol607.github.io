@@ -1,0 +1,770 @@
+---
+title: "Many Types of Categories: Multi-way and Factorial ANOVA"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, shinobi, default-fonts, style.css]
+    nature:
+      beforeInit: "my_macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class: center, middle
+background-image: url(images/21/blocked_designs/Slide4.jpg)
+background-size:cover
+
+# Many Types of Categories: Multi-Way and Factorial ANOVA
+
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(readr)
+library(brms)
+library(ggdist)
+library(tidybayes)
+library(car)
+library(AICcmodavg)
+library(emmeans)
+library(visreg)
+
+opts_chunk$set(fig.height=6, 
+               fig.width = 8,
+               fig.align = "center",
+               comment=NA, 
+               warning=FALSE, 
+               echo = FALSE,
+               message = FALSE)
+
+options(htmltools.dir.version = FALSE,
+        knitr.kable.NA = '')
+theme_set(theme_bw(base_size=28))
+
+table_out <- . %>%
+  knitr::kable("html") %>%
+  kableExtra::kable_styling("striped")
+```
+
+---
+class: center, middle
+
+# Etherpad
+<br><br>
+<center><h3>https://etherpad.wikimedia.org/p/607-anova-2020</h3></center>
+
+---
+class: center, middle
+![image](./images/21/anova-3.jpg)
+
+
+---
+# Many Categorical Predictors = Fun!
+
+1. Combining Multiple Categorical Variables
+
+2. Analyzing a Multi-way Model
+
+3. Replicating Categorical Variable Combinations: Factorial Models
+
+4. The Implications of Interaction Effects
+
+---
+
+# Effects of Stickleback Density on Zooplankton
+<br><br>
+.pull-left[
+![image](./images/21/daphnia.jpeg)
+]
+
+.pull-right[
+![image](./images/21/threespine_stickleback.jpeg)
+]
+
+---
+# More Than One Group with a Randomized Controlled Blocked Design
+![image](./images/21/blocked_designs/Slide4.jpg)
+
+---
+
+# Effects of Stickleback Density on Zooplankton
+<br><br>
+.pull-left[
+![image](./images/21/daphnia.jpeg)
+]
+
+.pull-right[
+![image](./images/21/threespine_stickleback.jpeg)
+]
+
+.center[
+Units placed across a lake so that 1 set of each treatment was ’blocked’ together
+]
+
+---
+# Effects of Both Treatment and Block
+
+```{r zooplankton_boxplot}
+zoop <- read.csv("./data/21/18e2ZooplanktonDepredation.csv") %>%
+  mutate(block = factor(block))
+zoop_lm <- lm(zooplankton ~ treatment + block, data=zoop)
+
+
+par(mfrow=c(1,2))
+boxplot(zooplankton ~ treatment, data=zoop, xlab="Treatment", ylab = "Zooplankton Concentration", cex.lab=1.3)
+boxplot(zooplankton ~ block, data=zoop, xlab="Block", cex.lab=1.3, ylab = "Zooplankton Concentration")
+par(mfrow=c(1,1))
+```
+
+---
+# Multiway ANOVA
+- Many different treatment types  
+     - 2-Way ANOVA is for Treatment and block
+     - 3-Way for, e.g., Sticklebacks, Nutrients, and block
+     - 4-way, etc., all possible  
+
+--
+
+
+- Assumes treatments are fully orthogonal  
+    - Each type of treatment type A has all levels of treatment type B
+    - E.g., Each stickleback treatment is present in each block
+
+--
+
+- Experiment is **balanced** for **simple effects**  
+      - Simple effect is the unique combination of two or more treatments  
+      - Balance implies the sample size for each treatment combination is the same  
+
+--
+
+- But, we can model even if unbalanced
+     - Just need to adjust on how we evaluate the model
+
+---
+# Treatment Contrast Model for Multiway ANOVA/ANODEV/BANOVA
+
+$$y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \epsilon_{ijk}$$  
+
+$$\epsilon_{ijk} \sim N(0, \sigma^{2} )$$
+
+$$\qquad x_{i} = 0,1$$
+$$\qquad x_{j} = 0,1$$ 
+
+i = treatment type 1, j = treatment type 2, k = replicate $\beta_0$ = reference treatment combination (i.e, control block 1) 
+
+
+
+
+--
+
+
+
+Or, with matrices, a general linear model...  
+
+$$\boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$
+
+---
+
+# What does a Multiple Category Model Look like in Data?
+
+Data
+```{r}
+head(zoop) %>% table_out()
+```
+
+---
+# What does a Multiple Category Model Look like in Data?
+
+Data Prepped for Model
+```{r}
+model.matrix(zoop_lm) %>%
+  head()%>% table_out()
+```
+
+---
+
+# Fits
+
+**Least Squares**
+```{r anova_lm, echo = TRUE}
+zoop_lm <- lm(zooplankton ~ treatment + block, 
+              data=zoop)
+```
+
+**Likelihood**
+```{r anova_glm, echo = TRUE}
+zoop_glm <- glm(zooplankton ~ treatment + block,
+                data=zoop,
+                family = gaussian(link = "identity"))
+
+```
+
+**Bayesian**
+```{r anova_brm, cache = TRUE, echo = TRUE, results = "hide"}
+zoop_brm <- brm(zooplankton ~ treatment + block,
+                data=zoop,
+                family = gaussian(link = "identity"),
+                chains = 2)
+```
+
+---
+
+# Assumptions of Multiway Anova
+-   Independence of data points  
+  
+-   Normality within groups (of residuals)  
+  
+-   No relationship between fitted and residual values  
+  
+-   Homoscedasticity (homogeneity of variance) of groups  
+  
+-   .red[Additivity of Treatments]
+
+---
+# The Usual Suspects of Assumptions
+```{r zoop_assumptions, fig.height=7}
+par(mfrow=c(2,2))
+plot(zoop_lm, which=c(1,2,4), cex.lab=1.4)
+par(mfrow=c(1,1))
+```
+
+---
+# Group Residuals
+```{r zoop_group_assumptions, fig.height=6}
+residualPlots(zoop_lm, cex.lab=1.4, test=FALSE)
+```
+
+We now want to look at both sets of categories to evaluate HOV
+
+---
+# Group Residuals
+
+Levene Test for Treatment
+```{r levene}
+leveneTest(zooplankton ~ treatment, 
+                data=zoop) %>% 
+  broom::tidy() %>% table_out()
+```
+
+Levene Test for Block
+```{r}
+leveneTest(zooplankton ~ block,
+                data=zoop)%>% 
+   broom::tidy() %>% table_out()
+
+```
+
+---
+# 
+## Tukey's Test of Non-additivity:
+- Our model is $y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}$  
+
+--
+
+- But, if A and B are non-additive, results are incorrect.
+    - Our model doesn't have an A*B term
+
+--
+
+- We don't have the DF with n=1 per treatment combination to calculate an interaction, so...  
+
+--
+
+- Assume a model of $y_{ij} = \mu + \alpha_i + \beta_j + \lambda\alpha_i\beta_j$  
+
+--
+
+- We can then test for $SS_{AB}$ using $\lambda\alpha_i\beta_j$  
+
+---
+# Tukey's Test of Non-additivity
+
+```{r zoop_group_tukey, fig.height=7}
+residualPlots(zoop_lm, cex.lab=1.4, plot=FALSE)
+```
+
+
+
+---
+# Many Categorical Predictors = Fun!
+
+1. Combining Multiple Categorical Variables
+
+2. .red[Analyzing a Multi-way Model]
+
+3. Replicating Categorical Variable Combinations: Factorial Models
+
+4. The Implications of Interaction Effects
+
+---
+# What now?
+
+- Which categories are associated with variability in our response?
+     - ANOVA/ANODEV/BANOVA
+     
+- How much variability are we explaining?
+
+- Do we want to compare to simpler models for predictive ability?
+
+- Comparison of Means
+
+---
+# Hypotheses for Multiway ANOVA/ANODEV
+
+
+TreatmentHo: $\mu_{i1} = \mu{i2} = \mu{i3} = ...$
+
+
+Block Ho: $\mu_{j1} = \mu{j2} = \mu{j3} = ...$
+
+
+i.e., The variane due to each treatment type is no different than noise
+
+---
+# We Decompose Sums of Squares for Multiway ANOVA
+
+$SS_{Total} = SS_{Between A} + SS_{Between B} + SS_{Within}$
+
+- Factors are Orthogonal and Balanced, so, Model SS can be split
+     -   F-Test using Mean Squares as Before
+
+- OR we compare y ~ a versus y ~ b to see if y ~ a + b has a higher likelihood
+     - ANODEV LRT
+     - Can also be done with F tests
+     - Useful if data is unbalanced (called **type II comparison**)
+
+---
+# Put it to the Test
+
+### F-Test
+```{r zanova}
+broom::tidy(anova(zoop_lm))%>%
+    rename(F = statistic) %>%
+  table_out
+```
+
+$R^2$ = `r round(summary(zoop_lm)$r.squared, 3)`
+
+--
+### ANODEV
+
+```{r zanovadev}
+broom::tidy(Anova(zoop_glm)) %>%
+  rename(`LR Chisq` = statistic) %>%
+  table_out
+```
+
+---
+# AIC Analysis of Alternate Models - the models
+
+```{r, echo = TRUE}
+zoop_only_trt <- lm(zooplankton ~ treatment,
+                     data = zoop)
+
+zoop_only_block <- lm(zooplankton ~  block, 
+                     data = zoop)
+
+zoop_nuts_matter <- lm(zooplankton ~ 
+                         I(treatment !="control")+ 
+                         block, 
+                     data = zoop)
+
+zoop_null <- lm(zooplankton ~ 1, 
+                     data = zoop)
+```
+
+---
+# AIC Analysis of Alternate Models - Predictive Ability
+
+```{r}
+library(AICcmodavg)
+
+mod_tab <- aictab(
+  list(zoop_lm, zoop_only_trt, zoop_only_block,
+       zoop_nuts_matter, zoop_null),
+  c("All", "Only trt", "Only Block", "Nuts or Control", "Null")
+)
+
+as.data.frame(mod_tab)[,c(1:4,6)] %>% table_out
+
+```
+
+---
+# How to evaluate effects of each treatment
+1. Examine means estimates  
+
+
+
+2. Evaluate treatment after parcelling out effect of other treatment  
+
+
+
+3. Evaluate treatment at the median or mean level of other treatment
+
+
+---
+# Evaluating Means
+
+```{r coefTab}
+knitr::kable(tidy(update(zoop_lm, .~.- 1))) %>%
+  kableExtra::kable_styling()
+```
+
+---
+# Parcelling Out Second Treatment
+```{r visualize_treatments}
+crPlots(zoop_lm)
+```
+
+Component-Residual Plots take examine unique effect of one treatment after removing influence of the other.
+
+---
+# Median Value of Second Treatment
+```{r visreg}
+library(patchwork)
+visreg(zoop_lm, "treatment", gg=TRUE) + visreg::visreg(zoop_lm, "block", gg=TRUE)
+```
+
+---
+# Comparison of Differences at Average of Other Treatment
+```{r lsmeans}
+contrast( emmeans(zoop_brm, "treatment"), "tukey", adjust="tukey") %>%
+  table_out
+
+```
+
+Can use whatever contrast style you'd like, and can do this for any set of categories
+
+
+---
+# Many Categorical Predictors = Fun!
+
+1. Combining Multiple Categorical Variables
+
+2. Analyzing a Multi-way Model
+
+3. .red[Replicating Categorical Variable Combinations: Factorial Models]
+
+4. The Implications of Interaction Effects
+
+
+---
+# The world isn't additive
+
+-   Until now, we have assumed factors combine additively - the effect of one is not dependent on the effect of the other
+
+--
+
+-   BUT - what if the effect of one factor depends on another?
+
+--
+
+-   This is an **INTERACTION** and is quite common
+
+--
+
+- Biology: The science of "It depends..."  
+
+--
+
+-   This is challenging to think about and visualize, but if you can master it, you will go far!
+
+---
+# Intertidal Grazing!
+.center[
+![image](./images/22/grazing-expt.jpeg)
+
+#### Do grazers reduce algal cover in the intertidal?
+]
+
+---
+# Experiment Replicated on Two Ends of a gradient
+
+![image](./images/22/zonation.jpg)
+
+---
+# Factorial Experiment
+
+![image](./images/22/factorial_blocks.jpg)
+
+---
+# Factorial Design
+
+![image](./images/22/factorial_layout.jpg)
+
+Note: You can have as many treatment types or observed category combinations as you want (and then 3-way, 4-way, etc. interactions)
+
+---
+# The Data: See the dependency of one treatment on another?
+
+```{r plot_algae}
+algae <- read.csv("./data/22/18e3IntertidalAlgae.csv")
+
+algae_plot <- qplot(height, sqrtarea,  data=algae, geom="boxplot", fill=herbivores) + theme_bw(base_size=16)
+algae_plot
+
+
+```
+
+---
+# If we had fit y ~ a + b, residuals look weird
+```{r graze_assumptions, fig.height=7}
+
+graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
+
+par(mfrow=c(2,2))
+plot(graze_linear, which=c(1,2,4), cex.lab=1.4)
+par(mfrow=c(1,1))
+```
+
+A Tukey Non-Additivity Test would Scream at us
+
+---
+# A Factorial Model
+
+$$y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$  
+
+$$\epsilon_{ijk} \sim N(0, \sigma^{2} )$$
+$$x_{i} = 0,1, x_{j} = 0,1, x_{ij} = 0,1$$ 
+
+
+- Note the new last term  
+
+- Deviation due to treatment combination  
+
+
+--
+
+<hr>
+This is still something that can be in the form
+
+$$\boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$
+
+---
+# The Dummy-Coded Data
+
+```{r modmat}
+graze_int <- lm(sqrtarea ~ height + herbivores + 
+                  herbivores:height, 
+                data=algae)
+
+model.matrix(graze_int) %>% 
+  as.data.frame() %>%
+  group_by_all() %>%
+  slice(1L) %>%
+  ungroup() %>% table_out()
+```
+
+---
+# Fitting
+
+**Least Squares**
+```{r lsq_fact, echo = TRUE}
+graze_int <- lm(sqrtarea ~ height + herbivores +
+                  height:herbivores,
+                data=algae)
+## OR
+graze_int <- lm(sqrtarea ~ height*herbivores,
+                data=algae)
+```
+
+--
+
+**Likelihood**
+```{r glm_fact, echo = TRUE}
+graze_int_glm <- glm(sqrtarea ~ height*herbivores,
+                data=algae,
+                family = gaussian(link = "identity"))
+```
+
+
+**Bayes**
+```{r brm_fact, echo = TRUE, cache = TRUE, results = "hide"}
+graze_int_brm <- brm(sqrtarea ~ height*herbivores,
+                data=algae,
+                family = gaussian(link = "identity"),
+                chains = 2)
+```
+
+---
+# Assumptions are Met
+```{r graze_assumptions_int, fig.height=7}
+par(mfrow=c(2,2))
+plot(graze_int, which=c(1,2,4), cex.lab=1.4)
+par(mfrow=c(1,1))
+```
+
+
+---
+# Many Categorical Predictors = Fun!
+
+1. Combining Multiple Categorical Variables
+
+2. Analyzing a Multi-way Model
+
+3. Replicating Categorical Variable Combinations: Factorial Models
+
+4. .red[The Implications of Interaction Effects]
+
+
+---
+# Omnibus Tests for Interactions
+
+- Can do an F-Test
+
+$$SS_{Total} = SS_{A} + SS_{B} + SS_{AB} +SS_{Error}$$
+
+$$SS_{AB} = n\sum_{i}\sum_{j}(\bar{Y_{ij}} - \bar{Y_{i}}- \bar{Y_{j}} - \bar{Y})^{2}$$
+$$df=(i-1)(j-1)$$
+
+--
+
+
+- Can do an ANODEV
+    - Compare A + B versus A + B + A:B
+
+--
+
+- Can do CV as we did before, only now one model has an interaction
+     - Again, think about what models you are comparing
+     
+--
+
+- Can look at finite population variance of interaction
+
+---
+# Example: ANODEV
+
+```{r fact_anodev}
+Anova(graze_int_glm) %>%
+  table_out
+```
+
+---
+# What do the  Coefficients Mean?
+
+```{r graze_interaction_coefs}
+tidy(graze_int_glm) %>%
+  table_out
+```
+
+- Intercept chosen as basal condition (low, herbivores -)
+
+--
+
+- Changing height to high is associated with a loss of 10 units of algae relative to low/-
+
+--
+
+
+- Adding herbivores is associated with a loss of 22 units of algae relative to low/-
+
+--
+
+- BUT - if you add herbivores and mid, that's also associated with an increase of 25 units of algae relative to low/-
+
+--
+
+.center[**NEVER TRY AND INTERPRET ADDITIVE EFFECTS ALONE WHEN AN INTERACTION IS PRESENT**<Br>that way lies madness]
+
+---
+# Let's Look at Means, Figures, and Posthocs
+
+.center[.middle[
+![image](./images/22/gosling_p_value.jpg)
+]]
+
+---
+# This view is intuitive
+
+```{r}
+ggplot(algae,
+       aes(x = herbivores, y = sqrtarea,
+           fill = height)) +
+  geom_boxplot(position = "dodge")
+
+```
+
+---
+# This view is also intuitive
+
+```{r}
+ggplot(algae,
+       aes(x = herbivores, y = sqrtarea,
+           color = height, fill = height)) +
+  stat_summary(fun.data = "mean_se", size = 2)  +
+  stat_summary(fun = mean, geom = "line",
+               aes(group = height), size = 1.5) 
+
+```
+
+---
+# Posthocs and Factorial Designs
+
+-   Must look at simple effects first in the presence of an interaction  
+     - The effects of individual treatment combinations
+     - If you have an interaction, this is what you do!
+
+
+--
+
+-   Main effects describe effects of one variable in the complete absence of the other
+    - Useful only if one treatment CAN be absent
+    - Only have meaning if there is no interaction
+
+---
+# Posthoc Comparisons Averaging Over Blocks - Misleading!
+
+```{r graze_posthoc_trt, warning=TRUE, messages=TRUE}
+contrast( emmeans(graze_int, "herbivores"), "tukey", adjust="none")
+```
+
+---
+# Posthoc with Simple Effects
+
+```{r graze_posthoc}
+contrast( emmeans(graze_int, c("height", "herbivores")), "tukey", adjust="none") %>%
+  table_out()
+```
+
+--
+.center[**That's a Lot to Drink In!**]
+
+---
+# Might be easier visually
+
+```{r graze_posthoc_plot}
+plot(contrast( emmeans(graze_int_brm, ~herbivores + height), "tukey", adjust="none")) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+---
+# We are often interested in something simpler...
+
+```{r graze_posthoc_plot2}
+plot(contrast( emmeans(graze_int, ~herbivores | height), "tukey", adjust="none")) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+---
+# Why think about interactions
+
+- It Depends is a rule in biology
+
+- Context dependent interactions everywhere
+
+- Using categorical predictors in a factorial design is an elegant way to see interactions without worrying about shapes of relationships
+
+- BUT - it all comes down to a general linear model! And the same inferential frameworks we have been dealing with since day 1
+
+---
+# Final Thought - You can have 2, 3, and more-way interactions!
+
+.center[.middle[
+![image](./images/22/4_way_interaction.jpg)
+]]
