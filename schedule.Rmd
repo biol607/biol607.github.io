@@ -164,7 +164,7 @@ __Lab Data:__  [Multiple Files](lab/data_10.zip)
 __Reading:__ W&S Chapter 14-15,  [Cottingham et al. 2005](http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf)  
 __Packages for The Week:__ ` install.packages(c("car", "emmeans", "multcompView", "contrast"))`
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-anova-2020
-__In Class Code:__ [lots of anova](./in_class_code_2020/scripts/anova.R)  
+__In Class Code:__ [lots of anova](./in_class_code/2020/scripts/anova.R)  
   
   
 ### Week 11.   
