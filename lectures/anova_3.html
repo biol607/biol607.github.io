@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Factorial ANOVA-style Models</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+
+# Many Types of Categories: Multi-Way and Factorial ANOVA
+![](images/anova/yoda_factorial.jpg)
+
+
+
+---
+class: center, middle
+
+# Etherpad
+&lt;br&gt;&lt;br&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-many-predictors-2020&lt;/h3&gt;&lt;/center&gt;
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. Evaluating Interaction Effects
+
+3. How to Look at Means with an Interaction Effect
+
+4. Unbalanced Data 
+
+
+
+---
+# The world isn't additive
+
+-   Until now, we have assumed factors combine additively - the effect of one is not dependent on the effect of the other
+
+--
+
+-   BUT - what if the effect of one factor depends on another?
+
+--
+
+-   This is an **INTERACTION** and is quite common
+
+--
+
+- Biology: The science of "It depends..."  
+
+--
+
+-   This is challenging to think about and visualize, but if you can master it, you will go far!
+
+---
+# Intertidal Grazing!
+.center[
+![image](./images/22/grazing-expt.jpeg)
+
+#### Do grazers reduce algal cover in the intertidal?
+]
+
+---
+# Experiment Replicated on Two Ends of a gradient
+
+![image](./images/22/zonation.jpg)
+
+---
+# Factorial Experiment
+
+![image](./images/22/factorial_blocks.jpg)
+
+---
+# Factorial Design
+
+![image](./images/22/factorial_layout.jpg)
+
+Note: You can have as many treatment types or observed category combinations as you want (and then 3-way, 4-way, etc. interactions)
+
+---
+# The Data: See the dependency of one treatment on another?
+
+&lt;img src="anova_3_files/figure-html/plot_algae-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# If we had fit y ~ a + b, residuals look weird
+&lt;img src="anova_3_files/figure-html/graze_assumptions-1.png" style="display: block; margin: auto;" /&gt;
+
+A Tukey Non-Additivity Test would Scream at us
+
+---
+# A Factorial Model
+
+`$$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$`  
+
+`$$\large \epsilon_{ijk} \sim N(0, \sigma^{2} )$$`
+`$$\large x_{i} = 0,1, x_{j} = 0,1, x_{ij} = 0,1$$` 
+
+
+- Note the new last term  
+
+- Deviation due to treatment combination  
+
+
+--
+
+&lt;hr&gt;
+This is still something that can be in the form
+
+`$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$`
+---
+# The Data (Four Rows)
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; height &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; herbivores &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sqrtarea &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; minus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.4055728 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.9767608 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mid &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; minus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7071068 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mid &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7071068 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# The Dummy-Coded Data
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; (Intercept) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; heightmid &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; herbivoresplus &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; heightmid:herbivoresplus &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Fitting
+
+**Least Squares**
+
+```r
+graze_int &lt;- lm(sqrtarea ~ height + herbivores +
+                  height:herbivores,
+                data=algae)
+## OR
+graze_int &lt;- lm(sqrtarea ~ height*herbivores,
+                data=algae)
+```
+
+--
+
+**Likelihood**
+
+```r
+graze_int_glm &lt;- glm(sqrtarea ~ height*herbivores,
+                data=algae,
+                family = gaussian(link = "identity"))
+```
+
+
+**Bayes**
+
+```r
+graze_int_brm &lt;- brm(sqrtarea ~ height*herbivores,
+                data=algae,
+                family = gaussian(link = "identity"),
+                chains = 2,
+                file = "intertidal_brms.rds")
+```
+
+---
+# Assumptions are Met
+&lt;img src="anova_3_files/figure-html/graze_assumptions_int-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. .red[Evaluating Interaction Effects]
+
+3. How to Look at Means with an Interaction Effect
+
+4. Unbalanced Data 
+
+
+---
+# Omnibus Tests for Interactions
+
+- Can do an F-Test
+
+`$$SS_{Total} = SS_{A} + SS_{B} + SS_{AB} +SS_{Error}$$`
+
+`$$SS_{AB} = n\sum_{i}\sum_{j}(\bar{Y_{ij}} - \bar{Y_{i}}- \bar{Y_{j}} - \bar{Y})^{2}$$`
+`$$df=(i-1)(j-1)$$`
+
+--
+
+
+- Can do an ANODEV
+    - Compare A + B versus A + B + A:B
+
+--
+
+- Can do CV as we did before, only now one model has an interaction
+     - Again, think about what models you are comparing
+     
+--
+
+- Can look at finite population variance of interaction
+
+---
+# ANOVA
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum Sq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;F) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 88.97334 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3740858 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5430962 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1512.18349 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.3579319 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0143595 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height:herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2616.95555 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.0029142 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0015486 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Residuals &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14270.52238 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# ANODEV
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; LR Chisq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;Chisq) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3740858 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5407855 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.3579319 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0116858 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height:herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.0029142 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0009097 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# What do the  Coefficients Mean?
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 32.91450 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.855532 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.536955 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; heightmid &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10.43090 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.913034 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0605194 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; herbivoresplus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -22.51075 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -4.128484 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0001146 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; heightmid:herbivoresplus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25.57809 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.711064 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.317064 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0015486 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Intercept chosen as basal condition (low, herbivores -)
+
+--
+
+- Changing height to high is associated with a loss of 10 units of algae relative to low/-
+
+--
+
+
+- Adding herbivores is associated with a loss of 22 units of algae relative to low/-
+
+--
+
+- BUT - if you add herbivores and mid, that's also associated with an increase of 25 units of algae relative to low/-
+
+--
+
+.center[**NEVER TRY AND INTERPRET ADDITIVE EFFECTS ALONE WHEN AN INTERACTION IS PRESENT**&lt;Br&gt;that way lies madness]
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. Evaluating Interaction Effects
+
+3. .red[How to Look at Means with an Interaction Effect]
+
+4. Unbalanced Data 
+
+
+---
+# Let's Look at Means, Figures, and Posthocs
+
+.center[.middle[
+![image](./images/22/gosling_p_value.jpg)
+]]
+
+---
+# This view is intuitive
+
+&lt;img src="anova_3_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# This view is also intuitive
+
+&lt;img src="anova_3_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Posthocs and Factorial Designs
+
+-   Must look at simple effects first in the presence of an interaction  
+     - The effects of individual treatment combinations
+     - If you have an interaction, this is what you do!
+
+
+--
+
+-   Main effects describe effects of one variable in the complete absence of the other
+    - Useful only if one treatment CAN be absent
+    - Only have meaning if there is no interaction
+
+---
+# Posthoc Comparisons Averaging Over Blocks - Misleading!
+
+
+```
+ contrast     estimate   SE df t.ratio p.value
+ minus - plus     9.72 3.86 60 2.521   0.0144 
+
+Results are averaged over the levels of: height 
+```
+
+---
+# Posthoc with Simple Effects
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low minus - mid minus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.430905 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.913034 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0605194 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low minus - low plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.510748 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.128484 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0001146 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low minus - mid plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.363559 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.350481 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1819337 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mid minus - low plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.079843 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.215450 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0305355 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mid minus - mid plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.067346 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.562553 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5758352 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low plus - mid plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -15.147189 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.778003 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0072896 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+.center[**That's a Lot to Drink In!**]
+
+---
+# Might be easier visually
+
+&lt;img src="anova_3_files/figure-html/graze_posthoc_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# We are often interested in something simpler...
+
+&lt;img src="anova_3_files/figure-html/graze_posthoc_plot2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Why think about interactions
+
+- It Depends is a rule in biology
+
+- Context dependent interactions everywhere
+
+- Using categorical predictors in a factorial design is an elegant way to see interactions without worrying about shapes of relationships
+
+- BUT - it all comes down to a general linear model! And the same inferential frameworks we have been dealing with since day 1
+
+---
+# Final Thought - You can have 2, 3, and more-way interactions!
+
+.center[.middle[
+![image](./images/22/4_way_interaction.jpg)
+]]
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. Evaluating Interaction Effects
+
+3. How to Look at Means with an Interaction Effect
+
+4. .red[Unbalanced Data]
+
+---
+# What about unbalanced designs?
+
+![](images/anova/unbalanced_cat.png)
+----
+# Coda: Oh no! I lost a replicate (or two)
+
+
+
+
+```r
+algae_unbalanced &lt;- algae[-c(1:5), ]
+```
+
+
+
+
+
+---
+# Type of Sums of Squares Matters
+
+Type I
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum Sq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Mean Sq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;F) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 151.8377 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 151.8377 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.6380017 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4278712 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1384.0999 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1384.0999 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.8158020 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0192485 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height:herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2933.5934 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2933.5934 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.3265653 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0008998 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Residuals &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 55 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13089.4237 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 237.9895 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+  
+
+Type II
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum Sq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;F) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 77.87253 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3272099 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5696373 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1384.09995 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.8158020 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0192485 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height:herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2933.59337 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.3265653 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0008998 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Residuals &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13089.42369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 55 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Enter Type III
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum Sq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;F) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14188.804 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 59.619447 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1175.967 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.941256 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0303521 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4242.424 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.826097 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000915 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height:herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2933.593 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.326565 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0008998 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Residuals &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13089.424 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 55 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+  
+--
+
+Compare to type II
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum Sq &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;F) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 77.87253 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3272099 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5696373 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1384.09995 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.8158020 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0192485 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; height:herbivores &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2933.59337 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.3265653 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0008998 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Residuals &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13089.42369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 55 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# What’s Going On: Type I, II, and III Sums of Squares
+
+**Type I Sums of Squares:**  
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for A calculated from a model with A + Intercept versus just Intercept
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for B calculated from a model with A + B + Intercept versus A + Intercept
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for A:B calculated from a model with A + B + A:B +Intercept versus A + B + Intercept
+
+--
+
+This is **fine** for a balanced design. Variation evenly partitioned.
+
+---
+# What’s Going On: Type I, II, and III Sums of Squares
+
+**Type II Sums of Squares:**  
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for A calculated from a model with A + B +  Intercept versus B + Intercept
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for B calculated from a model with A + B + Intercept versus A + Intercept
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for A:B calculated from a model with A + B + A:B +Intercept versus A + B + Intercept
+
+--
+
+Interaction not incorporated in assessing main effects
+
+## What’s Going On: Type I, II, and III Sums of Squares
+
+
+**Type III Sums of Squares:**  
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for A calculated from a model with A + B + A:B + Intercept versus B + A:B + Intercept
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for B calculated from a model with A + B + A:B + Intercept versus A + A:B + Intercept
+
+--
+
+&amp;nbsp; &amp;nbsp; SS for A:B calculated from a model with A + B + A:B +Intercept versus A + B + Intercept
+
+--
+
+Each SS is the unique contribution of a treatment
+
+--
+
+**very conservative**
+
+---
+## What’s Going On: Type I and II Sums of Squares
+&lt;h4&gt;  
+
+  ------------ ------------ ------------   ------------
+                  Type I      Type II    
+   Test for A     A v. 1     A + B v. B     A + B + A:B v B + A:B&lt;br&gt;&lt;br&gt;  
+   Test for B   A + B v. A   A + B v. A     A + B + A:B v A + A:B&lt;br&gt;&lt;br&gt; 
+   Test for B   A + B v. A   A + B v. A     A + B + A:B v A + B&lt;br&gt;&lt;br&gt; 
+  ------------ ------------ ------------   ------------  
+&lt;/h4&gt;
+
+
+---
+
+# Which SS to Use?
+-   Traditionally, urged to use Type III  
+
+--
+
+-   What do type III models mean?  
+       -   A + B + A:B v. B + A:B  
+
+--
+-   Interactions the same for all, and if A:B is real, main effects not
+    important  
+
+--
+
+-   Type III has lower power for main effects  
+
+--
+
+-   Type II produces more meaningful results if main effects are a concern - which they are!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

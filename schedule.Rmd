@@ -171,12 +171,13 @@ __In Class Code:__ [lots of anova](./in_class_code/2020/scripts/anova.R)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lectures:__ Analyzing a Multicausal World - [Multiway ANOVA](lectures/21_multiway_anova.html), [Factorial ANOVA](lectures/22_factorial_anova.html)    
+__Lectures:__ [Factorial ANOVA](lectures/anova_3.html), [General Linear Model: ANCOVA and MLR]    
 __Lab Topic:__  Discussion of Hurlbert, Cottingham, [Factorial ANOVA](lab/11_anova.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ W&S 18, [Hurlbert 1984](http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf)  
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
-__In Class Code:__ [lots of anova](./in_class_code_2020/scripts/anova_two.R)  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2020  
+__In Class Code:__ [lots of anova](./in_class_code/2020/scripts/fact_anova.R)  
 
 ### Week 12   
 ```{r next_date, echo=FALSE}
