@@ -1,0 +1,250 @@
+---
+title: "GLM Practice"
+author: "Jarrett Byrnes"
+date: "11/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = FALSE, warning = FALSE)
+```
+
+## 1. Comparing Means
+To start with, let's warm up with a simple one-way ANOVA model. This example, from Whitlock and Schluter chapter 15 question 22 looks at the mass of [lodgepole pinecones from different habitats](https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/15/15q22LodgepolePineCones.csv).
+
+**1.1.** Load and plot the data. Choose a plot that not only shows the raw data, but also the means and SE or CI of those means. +1 EC if Michael thinks it's fancy.
+
+```{r}
+library(ggplot2)
+mass <- read.csv("data/15q22LodgepolePineCones.csv",
+                 stringsAsFactors = TRUE)
+
+ggplot(mass,
+       aes(x = habitat, y = conemass)) +
+  geom_point() +
+  stat_summary(color = "red")
+```
+
+**1.2** Fit a model using least squares and evaluate all relevant assumptions. List them out as you test them. Can we use this model? If not, fix it. But if we can, no fix is needed!
+
+```{r}
+library(ggfortify)
+mass_mod <- lm(conemass ~ habitat, data = mass)
+
+#assumptions via ggfortify
+autoplot(mass_mod, which = 1:6)
+
+car::residualPlots(mass_mod)
+car::leveneTest(mass_mod)
+
+#we are fine
+```
+
+**1.2** How much variation is explained by your model?
+
+```{r}
+summary(mass_mod)$r.squared
+```
+
+**1.3** Show which means are different from each other. Are you correcting p-values? If so, how, and justify your choice.
+
+```{r}
+library(emmeans)
+library(magrittr)
+
+emmeans(mass_mod, ~habitat) %>%
+  contrast(method = "tukey", adjust = "none") %T>%
+  plot() %>%
+  print()
+```
+
+## 2. Comparing Means from Multiple Categories
+
+In a study from Rogers et al. (2020) [link](https://www.int-res.com/abstracts/meps/v545/p161-173/), the authors performed an experiment where they moved panels that had been colonized by invertebrates on a dock to a nearby rocky jetty where predators could access panels. To separate out the effects of changes in abiotic environment versus predation, they performed a factorial experiment, either caging or not caging panels and placing them either on the side of a cinder block or hanging on a piece of PVC attached to the block where predators would have little access (but weren't entirely stopped). They then looked at change in total cover of invertebrates. Using [this old data file dug off of my hard drive](https://www.dropbox.com/s/hb7d18o7x7jlfvx/fouling_transplant_data.csv?dl=0), let's see what they found.
+
+**2.1.** Load and plot the data. We are interested in change in percent cover. Choose a plot that not only shows the raw data, but also the means and SE or CI of those means. +1 EC if Michael thinks it's fancy.
+
+```{r}
+foul <- read.csv("data/fouling_transplant_data.csv") %>%
+  rename(cover_change = Change.in.Cover,
+         caged = Caged,
+         position = Position.On.Block,
+         start_cover = Initial.Cover,
+         end_cover = Final.Cover)
+
+library(ggdist)
+ggplot(foul,
+       aes(y = paste(position, caged, sep = ","),
+           x = cover_change, fill = caged)) +
+  stat_halfeye() + ylab("") +
+  geom_vline(xintercept = 0, color = "black", lty = 2) +
+  theme_classic() +
+  scale_fill_manual(values = c("darkred", "grey")) +
+  labs(fill = "")
+
+
+```
+
+
+**2.2** Fit a model using likelihood and evaluate all relevant assumptions. Do you meet assumptions?
+
+```{r}
+foul_mod <- glm(cover_change ~ caged * position,
+           data = foul,
+           family = gaussian())
+
+autoplot(foul_mod, which = 1:6)
+
+shapiro.test(residuals(foul_mod))
+car::leveneTest(foul_mod)
+
+# this is not great
+
+```
+
+**2.3** If you answered yes to the above.... you are wrong. It doesn't! Percentage data is weird. Difference in percentages can be ever weirder! There are three tried and true solutions here. But they MIGHT not all work. 
+
+1. Incorporate initial cover as a covariate. This takes out that influence, and as such we're looking at residuals of change. This sometimes, but not always, works.
+
+2. Divide change by initial cover to express change as percent change relative to initial cover.
+
+3. Calculate difference in logit cover (so, logist(initial cover) - logit(final cover)). Logit transformations linearize percent cover data, and are often all that is needed to work percent cover into a linear model. You can use `car::logit()` for this.
+
+Try all three methods. Which one works so that you can produce valid inference?
+
+```{r}
+library(car)
+
+foul_mod_cov <- glm(end_cover ~ caged * position + start_cover,
+           data = foul,
+           family = gaussian())
+
+foul_mod_porp <- glm(cover_change/start_cover ~ caged * position,
+           data = foul,
+           family = gaussian())
+
+foul_mod_logit_diff <- glm(logit(start_cover) - 
+                             logit(end_cover) ~ caged * position,
+           data = foul,
+           family = gaussian())
+
+
+shapiro.test(residuals(foul_mod_cov))
+shapiro.test(residuals(foul_mod_porp))
+shapiro.test(residuals(foul_mod_logit_diff))
+
+
+leveneTest(foul_mod_porp)
+
+# The proportion change model works!
+
+```
+
+
+**2.4** Great! So, take us home! Using NHST with an alpha of 0.8 (why not), what does this fit model tell you about whether predation matters given how I have described the system? Feel free to replot the data or fit model results if helpful
+
+```{r}
+#no int?
+Anova(foul_mod_porp)
+
+
+emmeans(foul_mod_porp, ~caged) %>%
+  contrast(method = "tukey")
+
+emmeans(foul_mod_porp, ~position) %>%
+  contrast(method = "tukey")
+
+#Caging reduces reduction in cover
+#hanging reduced reduction in cover
+# if both limit predator access, then it's predation matters
+
+
+emmeans(foul_mod_porp, ~caged) %>%
+  as_tibble %>%
+  ggplot(aes(x = caged, y = emmean, 
+             ymin = emmean-SE, ymax = emmean+SE)) +
+           geom_pointrange() +
+  ylab("Proportional Change in Cover")
+
+
+emmeans(foul_mod_porp, ~position) %>%
+  as_tibble %>%
+  ggplot(aes(x = position, y = emmean, 
+             ymin = emmean-SE, ymax = emmean+SE)) +
+           geom_pointrange() +
+  ylab("Proportional Change in Cover")
+
+```
+
+## 3. Comparing Means with Covariates
+
+We will wrap up with a model mixing continuous and discrete variables. In [this dataset](https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/18/18e4MoleRatLayabouts.csv) from Scantlebury et al, the authors explored how caste and mass affected the energy level of naked mole rats.
+
+**3.1** OK, you know what you are about at this point. Load in the data, plot it, fit it, check assumptions. Use Bayes for this.
+
+
+```{r}
+library(brms)
+mole <- read.csv("data/18e4MoleRatLayabouts.csv")
+
+ggplot(mole,
+       aes(x = lnmass,
+           y = lnenergy,
+           color = caste)) +
+  geom_point()
+
+
+#model
+mole_mod <- brm(lnenergy ~ lnmass + caste,
+                data = mole,
+                file = "molemod.rds")
+
+
+
+library(bayesplot)
+pp_check(mole_mod)
+
+
+```
+
+**3.2**
+
+Examine whether there is an interaction or not using LOO cross-validation. Is a model with an interaction more predictive?
+
+```{r}
+mole_int <- brm(lnenergy ~ lnmass * caste,
+                data = mole,
+                file = "moleind.rds")
+
+loo_compare(loo(mole_mod), loo(mole_int))
+
+# We don't gain anything
+```
+
+**3.3** Compare the two castes energy expendeture at the meanlevel of log mass. Are they different? How would you discuss your conclusions.
+
+```{r}
+emmeans(mole_mod, ~caste) %>%
+  contrast(method = "tukey")
+```
+
+**3.4** Plot the fit model. Use tidybayes and ggdist with your model to show fit and credible intervals with the raw data points on top. `modelr::data.grid()` might help as well.
+
+```{r}
+library(tidybayes)
+library(ggdist)
+
+fit_dat <- mole %>%
+  group_by(caste) %>%
+  modelr::data_grid(lnmass = modelr::seq_range(lnmass, 100))%>%
+  ungroup() %>%
+  add_fitted_draws(mole_mod) %>%
+  rename(lnenergy = .value)
+  
+ggplot(fit_dat,
+       aes(x = lnmass, y = lnenergy, color = caste)) +
+  stat_lineribbon() +
+  scale_fill_manual(values = c("lightgrey", "grey", "darkgrey")) +
+  geom_point(data = mole) +
+  theme_bw()
+```
