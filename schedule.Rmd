@@ -184,13 +184,13 @@ __Homework:__ [GLM Homework](homework/glm.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Many Predictors [Multiple Regression and the General Linear Model](./lectures/23_general_linear_model.html), [Information Theoretic Approaches](./lectures/24_mmi.html)  
+__Lecture:__ Many Predictors [Multiple Regression and the General Linear Model](./lectures/mlr_int.html), [Information Theoretic Approaches](./lectures/24_mmi.html)  
 __Lab Topic:__ [Multiple Regression, Multimodel Inference](lab/11_glm_aic.html) - [data files](lab/data_11.zip)  
 __Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf), [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Experimental strategies to assess the biological ramifications of multiple drivers of global ocean change](./readings/Boyd_2020_Glob_Change_Biol.pdf)  
 __Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf), [Model selection for ecologists: the worldviews of AIC and BIC](./readings/Aho_2014_ecolog_bic.pdf), The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr-2020  
 __Packages for the Week:__ `install.packages(c("AICcmodavg", "MuMIn", "modelr"))`  
-__In Class Code:__  [Fitting a line with Bayesian techniques](lab/08_bayes.html), [ancova, mlr, and aic](./in_class_code_2020/scripts/mlr_int_aic.R)  
+__In Class Code:__  [ancova, mlr, and aic](./in_class_code/2018/scripts/mlr_int_aic.R)  
 
 
 ## Block 4. Asking Questions of the World
@@ -220,19 +220,4 @@ __Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa"))`  
 __Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_2009_glmm.pdf) through section on GLMs, [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html)  
 
-## Block 5: Tying it Together Further Adventures in Computation and Presentation
-
-
-### Week 16.   
-```{r next_date, echo=FALSE}
-```
-`r datestring`   
-__Lecture:__ [GIS in R](https://biol355.github.io/Lectures/17_gis_in_r.html), 
-  
-__Lab__:[Lessons 1,2, 6-8 from Data Carpentry Geospatial Lab](https://datacarpentry.org/r-raster-vector-geospatial/), [mapping Covid-19](https://biol355.github.io/Labs/coronavirus_spatial.html)  
-
-### Week 17.  
-```{r next_date, echo=FALSE}
-```
-`r datestring`   
-__Lecture:__ Final Presentations  
+**FINAL PRESENTATIONS Fri. Dec 18th in Lab Slot**
