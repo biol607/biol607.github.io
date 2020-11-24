@@ -141,7 +141,7 @@ leveneTest(foul_mod_porp)
 ```
 
 
-**2.4** Great! So, take us home! Using NHST with an alpha of 0.8 (why not), what does this fit model tell you about whether predation matters given how I have described the system? Feel free to replot the data or fit model results if helpful
+**2.4** Great! So, take us home! Using NHST with an alpha of 0.08 (why not), what does this fit model tell you about whether predation matters given how I have described the system? Feel free to replot the data or fit model results if helpful
 
 ```{r}
 #no int?
