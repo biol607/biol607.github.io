@@ -199,9 +199,10 @@ __In Class Code:__  [ancova, mlr, and aic](./in_class_code/2018/scripts/mlr_int_
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  Causal Inference and Experimental Design  
+__Lecture:__  [Causal Inference and Experiments](./lectures/causality_experiments.pptx), The Fundamentals of Experimental Design  
 __Reading:__ [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf), [Experimental Design Reading Packet](readings/exp_design_papers.zip)  
 __Optional Readings:__ Non-assigned papers in the packet, The whole [Ecology Special Section on P Values](http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf) is incredible reading.  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-experiments-2020  
 __Lab:__ Discussion of papers (see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments)  
   
   
