@@ -210,9 +210,10 @@ __Lab:__ Discussion of papers (see [here](https://docs.google.com/spreadsheets/d
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  Strategies for Deriving Causal Inference from Observational Studies  
+__Lecture:__  [Using causal models to get valid inference from observational studies](lectures/causal_models_regression.pptx), Design of Observational Studies with Causal Models as a Guide  
 __Reading:__ [Scientist’s guide to developing explanatory statistical models using causal analysis principles](readings/Grace_and_Irvine_2019.pdf), [Simplicity and Complexity in Ecological Data Analysis](./readings/Murtaugh_2007_Ecology.pdf), [The Causal Dag and Haunted Terror](./readings/McElreath_Ch_6.pdf)  
-__Lab:__ Discussion of papers
+__Optional Reading:__ [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
+__Lab:__ Discussion of [papers](readings/obs_sampling.zip)  
 
   
 ## Block 5: Modeling Error and Further Adventures in Regression Models
