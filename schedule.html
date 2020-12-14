@@ -22,6 +22,17 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -465,7 +476,7 @@ NEXT TIME I TEACH 607
 <strong>Optional Readings:</strong> <a href="./readings/kramer_blasey_centering.pdf">Centring in regression analyses: a strategy to prevent errors in statistical inference</a>, <a href="./readings/Aho_2014_ecolog_bic.pdf">Model selection for ecologists: the worldviews of AIC and BIC</a><br />
 <strong>Etherpad:</strong> <a href="https://etherpad.wikimedia.org/p/607-mlr-2020" class="uri">https://etherpad.wikimedia.org/p/607-mlr-2020</a><br />
 <strong>Packages for the Week:</strong> <code>install.packages(c("AICcmodavg", "MuMIn", "modelr"))</code><br />
-<strong>In Class Code:</strong> <a href="./in_class_code/2018/scripts/mlr_int_aic.R">ancova, mlr, and aic</a></p>
+<strong>In Class Code:</strong> <a href="./in_class_code/2020/scripts/mlr.R">ancova, mlr, and aic</a></p>
 </div>
 </div>
 <div id="block-4.-asking-questions-of-the-world" class="section level2">
@@ -512,7 +523,7 @@ NEXT TIME I TEACH 607
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

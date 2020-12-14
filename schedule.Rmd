@@ -190,7 +190,7 @@ __Readings:__ [Symonds and Moussalli 2010](http://byrneslab.net/classes/biol607/
 __Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf), [Model selection for ecologists: the worldviews of AIC and BIC](./readings/Aho_2014_ecolog_bic.pdf)    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-mlr-2020  
 __Packages for the Week:__ `install.packages(c("AICcmodavg", "MuMIn", "modelr"))`  
-__In Class Code:__  [ancova, mlr, and aic](./in_class_code/2018/scripts/mlr_int_aic.R)  
+__In Class Code:__  [ancova, mlr, and aic](./in_class_code/2020/scripts/mlr.R)  
 
 
 ## Block 4. Asking Questions of the World
