@@ -6,6 +6,8 @@
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+    <script src="libs/anchor-sections/anchor-sections.js"></script>
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
   <body>
@@ -14,6 +16,9 @@
 class: center, middle
 
 # Cross-Validation and AIC&lt;br&gt;
+
+&lt;!-- next year, more on overfitting and generality
+versus specificity --&gt;
 
 ![:scale 55%](images/cv/princess_bride_cv.jpg)
 
@@ -185,13 +190,13 @@ class: center, middle
 RMSE Temperature Model:
 
 ```
-[1] 24.25059
+[1] 27.31889
 ```
 
 RMSE Intercept Only Model:
 
 ```
-[1] 28.88506
+[1] 32.00178
 ```
 
 This is the estimate of the SD of the training set - which is acceptable for your predictions?
@@ -239,13 +244,13 @@ class: center, middle
 
 |id    |      mse|     rmse|
 |:-----|--------:|--------:|
-|Fold1 | 572.3166| 23.92314|
-|Fold2 | 500.1096| 22.36313|
-|Fold3 | 536.9860| 23.17296|
-|Fold4 | 505.1393| 22.47530|
-|Fold5 | 557.2699| 23.60657|
+|Fold1 | 566.6716| 23.80487|
+|Fold2 | 482.6707| 21.96977|
+|Fold3 | 493.9591| 22.22519|
+|Fold4 | 586.6068| 24.21997|
+|Fold5 | 515.8802| 22.71300|
 
-Temperature Model Score: 534.3642903  
+Temperature Model Score: 529.1576829  
 
 Intercept Only Score: 788.2974 &lt;!-- eh, I was lazy, and just reran the above with a different model --&gt;
 
