@@ -26,7 +26,7 @@ ggplot(data=penguins,
 
 **Email:** jarrett.byrnes@umb.edu
 
-**Weekly Schedule:** Tuesday & Thursday 11 - 12:30, and Lab Friday 9 - 12:00pm on Zoom. The URL will be provided in the course Slack. All will be recorded for those who cannot make it, and URLS posted in the weeks' etherpads.
+**Weekly Schedule:** Tuesday & Thursday 11 - 12:30, and Lab Friday 9 - 12:00pm in the Healey Green Computer Lab and on Zoom for those that cannot make it. The URL will be provided in the course Slack. All will be recorded for those who cannot make it, and URLS posted in the weeks' etherpads.
 
 **Office Hours:** Prof. Byrnes will hold office hours Thurs. 2-4 in ISC 3130 . Hannah Diebboll will hold office hours Tuesdays: 9-10:30 and Thursdays: 1-2:30.
 
