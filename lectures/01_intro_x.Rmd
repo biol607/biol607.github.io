@@ -3,7 +3,7 @@ title: "Introduction  to An  Introduction  to  Computational  Data  Analysis  fo
 subtitle: "https://biol607.github.io/"
 author: "Jarrett Byrnes"
 institute: "UMass Boston"
-date: "2020 Edition"
+date: "2022 Edition"
 output:
   xaringan::moon_reader:
     seal: false
@@ -39,22 +39,7 @@ class: center
 
 # Why are we here?
 ![:scale 50%](images/01/data_says_no.jpg)
----
 
-# Some zoom ettiquite
-
-- If you *can*, keep your cameras on. I rely on your facial feedback!  
-      - But if you don't want to, are eating, are being bodyslammed by toddlers, are at another job, just got out of the shower, etc. *THAT IS FINE*  
-      
-- As I'm usually full screen, so, to ask questions, chat - it flashes in my screen!  
-  
-- You can also PM Michael at any time.  
-  
-- Extra credit for fluffs  
-
-- We will also use Etherpad for communication (next slide!)  
-  
-- I will record all classes and labs if you cannot make it
 
 ---
 
@@ -71,7 +56,7 @@ class: center
 --
   
     
-.center[Write it here: https://etherpad.wikimedia.org/p/607-intro-2020]
+.center[Write it here: https://etherpad.wikimedia.org/p/607-intro-2022]
 
 ---
 
@@ -89,7 +74,11 @@ class: center
 
 --
 
-4. Make you comfortable enough to learn and grow beyond this class.  
+4. Learn how to program to expand your scientific toolkit. <br><br>
+
+--
+
+5. Make you comfortable enough to learn and grow beyond this class.  
 
 ---
 
@@ -106,15 +95,13 @@ class: center
 
 --
 
-3. Causal Inference
+3. Further Adventures in Statistical Modeling
 
 --
 
-4. Further Adventures in Regression
+3. Causal Inference and Study Design
 
---
 
-5. ???
 
 ---
 
@@ -153,14 +140,25 @@ class:center
 ---
 class:center
 
-# Avoiding The Replication Crisis
-![http://simplystatistics.org/2016/08/24/replication-crisis/](images/01/replication_2x2.png)
+# Furthering Open Science
+![https://www.4open-sciences.org/component/content/article/11-news/276-four-pillars-of-open-science-open-code](images/01/opensciencegraphic-e1588009184991.png)
 
 ---
 
 # Block 2: Regression
 
-```{r plot_eelgrass, fig.align='center', message=FALSE, echo=FALSE}
+```{r echo=FALSE, message = FALSE}
+library(ggplot2)
+
+# Load the data ####
+eelgrass <- read.csv("lectures/data/15q05EelgrassGenotypes.csv")
+
+ggplot(eelgrass,
+       aes(y = shoots, x = treatment.genotypes)) +
+  geom_point() +
+  stat_smooth(method = "lm") +
+  theme_classic(base_size = 17) +
+  labs(x = "No. of Genotypes", y = "No. of Shoots per sq. m.")
 ``` 
 
 
@@ -170,27 +168,36 @@ class:center
 
 .center[![:scale 50%](images/01/bayes_popper.png)]
 
-- What is the probability of a hypothesis?
-- Is variation explained by a driver of interest?
-- Do drivers of interest differ from a null or other expectation?
-- How can we generalize from our models to the world?
-
----
-class:center
-
-# Block 3: Causal Inference
-
-![](images/01/grass2.jpg)
+- What is the probability of a hypothesis? Or data given a hypothesis?  
+- Is variation explained by a driver of interest?  
+- How confident are you in your conclusions?  
+- How can we generalize from our models to the world?  
 
 ---
 
-# Block 3: Causal Inference & Experiments
+# Block 3: Further Adventures
 
-![](./images/19/urchin_diet_expt.jpg)
+```{r, echo = FALSE}
+library(palmerpenguins)
+library(ggplot2)
+
+ggplot(penguins |> dplyr::filter(!is.na(flipper_length_mm)),
+       mapping = aes(x = species,
+                     color = species,
+           y = body_mass_g)) +
+  stat_summary(fun.data = "mean_sdl", size = 1, show.legend = FALSE) +
+  annotate(geom = "text", x=3, y = 6500, label = "*", size = 15) +
+  theme_classic(base_size = 16) +
+  labs(y = "Body Mass (g)", x = "")
+
+```
+
+--
+.large[.center[Don't worry! It's all just a line!]]
 
 ---
 
-# Block 4: Further Adventures
+# Block 3: Further Adventures
 
 ![](images/25/logit_conversion.jpg)
 --
@@ -199,17 +206,25 @@ class:center
 ---
 class:center
 
-# Block 5: ???
+# Block 4: Causal Inference
 
-![](images/01/shiny.jpg)
+![](images/01/grass2.jpg)
+
+---
+
+# Block 4: Study Design
+
+![](./images/19/urchin_diet_expt.jpg)
+
+
 
 ---
 
 # Lecture and Lab
 - T/Th Lecture on Concepts  
-      - Paper Discussion, Shiny Apps, etc.  
+      - Also Paper Discussion, Shiny Apps, etc.  
       - Please bring your most interactive self!  
-      - I have a tablet, so, I can sketch concepts, etc!
+      - I will try and make it easy for folk on Zoom
    
 - F Lab
       - Live coding!
@@ -224,6 +239,19 @@ R Markdown sometimes with Reveal.js or Xarnigan
 &nbsp;  
 .center[<img src="images/01/lecture_code.jpg">]
 http://github.com/biol607/biol607.github.io
+
+
+---
+
+# Some Old Technology
+.center[ ![](images/01/sticky-note-color-clipart.jpeg) ]  
+
+- Green: Party on, Wayne 
+--
+- Red: I fell off the understanding wagon  
+--
+- Blue: Write a question/Other
+
 
 ---
 class: center
@@ -242,8 +270,8 @@ class: center
 # Readings for Class:<br>Wickham & Grolemund
 ![:scale 25%](images/01/r4ds_cover.png)
 
-.left[Grolemund, G., and Wickham, W. 2016. R for Data Science.]  
-http://r4ds.had.co.nz
+.left[Wickham, H. and Grolemund, G., 2016/2022. R for Data Science.]  
+http://r4ds.had.co.nz and https://r4ds.hadley.nz/
 
 ---
 
@@ -251,23 +279,12 @@ class:center
 
 # There will be memes
 
-![](images/21/gosling_bonferroni.png)
+![:scale 50%](images/21/gosling_bonferroni.png)
 
 --
 
-.large[Extra credit for feeding my #statsmeme addiction]
+.large[please feed my #statsmeme addiction]
 
----
-
-# Quizes
-
-- Before and/or After Class
-
-- Measures understanding - and attendance!
-
-- Will drop lowest two
-
-- 10% of your grade
 
 ---
 # And Now, A Pop Quiz!
@@ -275,12 +292,16 @@ class:center
 <div style="font-size: 2em;font-weight: bold;">http://tinyurl.com/firstPopQuiz</div>
 </center><br><br>
 
+
+---
+# My Actual Policy on Grading
+
+.center[ ![](images/01/ungrading.jpg) ]
+
 ---
 
 # Problem Sets
 - THE MOST IMPORTANT THING YOU DO  
-  
-- 40% of your grade  
   
 - "Adapted"" from Whitlock and Schluter  
   
@@ -295,9 +316,7 @@ class:center
 # Midterm
 - Advanced problem set
 
-- 20% of your grade
-
-- After Regression
+- After Regression. Probably.
 
 ---
 
@@ -315,11 +334,10 @@ class:center
   - Paper due Dec 18th (but earlier fine!)
  &nbsp;  
  
-- 30% of your grade
 
 ---
 
-# Extra Credit 1: Use Github
+# Impress Yourself: Use Github
 .center[![:scale 50%](images/01/github.png)]
 
 
@@ -332,19 +350,7 @@ class:center
 
 ---
 
-# Extra Credit 2: Be Nate Silver (before the general election)
-.center[![:scale 50%](images/01/silver_congress.jpg)]
-
-- Submit your forecast with code!  
-      - 5 points for getting the correct answer  
-      - 5 extra points for explicitly stating the confidence of your estimates  
-      - 5 points for a clear explanation of the methodology  
-      - 1 point for each thing you do beyond a weighted average of polls
-- Applied to exam
-
----
-
-Extra Credit 3: Livin' La Vida Data Science
+# Life La Vida Data Science
 
 - Check out http://www.r-bloggers.com/ and https://rweekly.org/  
 
@@ -358,7 +364,7 @@ Extra Credit 3: Livin' La Vida Data Science
 
 ---
 
-# Extra Credit 4: Help your fellow students
+# Help your fellow students
 ![](images/01/umbrug.jpg)
 
 - Having a problem during homework/exam/etc?
@@ -368,15 +374,13 @@ Extra Credit 3: Livin' La Vida Data Science
 - Will constitute a separate pool of EC at end of semester
 
 ---
+# Become Part of the Conversation
+Stats and R on Twitter: https://bit.ly/stats_r_twitter
 
-# Extra Credit 5: Master of the Tidyverse
-.center[![](images/01/package.jpg)]
-
-- Write an R package, get a full grade bump
-- Yeah, I said it
-- See the [http://github.com/covid19R](covid19R project), perhaps?
+.center[![:scale 50%](images/01/tidytuesday.png)]
 
 ---
+
 
 # Welcome!
 <br><br>
