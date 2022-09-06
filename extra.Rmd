@@ -1,8 +1,8 @@
 ---
-  title: "Extra Credit"
+  title: "Going Beyond"
 ---
 
-Throughout the course, there will be multiple opportunities for extra credit. I’ll add more as we go along, but here are the first few. Each extra credit opportunity below can be worth 5% of your total grade.
+Throughout the course, I hope you expand your horizons. Here are some ways to do that!
 
 **Be Your Own Nate Silver** It’s an election year. Given that you’re in this class, I’m sure you are following along at http://fivethirtyeight.com/ and their model with great interest. You’re also, of course, listening to their elections podcast – and definitely the Friday special edition on how they build their model. I want you to forecast one or more elections.  You can find poll data using the pollstR package (https://cran.r-project.org/web/packages/pollstR/vignettes/introduction.html) or other sources (http://is-r.tumblr.com/post/36059986744/gathering-realclearpolitics-polling-trends-with) and there are plenty of other data sources out there (http://guides.library.harvard.edu/c.php?g=310717&p=2072692 as just a start – Google around). For this extra credit, 5 points for getting the correct answer, 5 extra points for explicitly stating the confidence of your estimates, and 5 points for a clear explanation of the methodology. 1 point for each thing you do beyond a weighted average of polls. Because, come on, that’s easy. Scored out of 16. So, theoretically, you could get extra credit on your extra credit.  
 
