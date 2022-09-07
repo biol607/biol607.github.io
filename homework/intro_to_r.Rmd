@@ -12,9 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##  Let's explore the dataset quakes looking at earthquakes off of Fiji.
 
-1. Load quakes with `data(quakes)`. SHow what’s there  with str() and summary().
+1. Load quakes with `data(quakes)`. Show what’s there  with str() and summary(). What do you see?
 
-2. Show the entirity of the column `long`.
+2. Show the entirety of the column `long`.
 
 3. Hey, another useful function - unique()! Apply it to a vector, and you can see what are all of the unique values. It’s great for really digging into a problematic vector. 
 
@@ -22,4 +22,12 @@ What unique stations are there? Use `length()` with `unique()` to determine how 
 
 4. Using `range()`, what is the range of depths where quakes occur?
 
-E.C. Where was the earthquake of largest magnitude found? You’ll need to use come comparisons and the `max()` function for this in your indices instead of a number!
+Impress Yourself. Where was the earthquake of largest magnitude found? You’ll need to use come comparisons and the `max()` function for this in your indices instead of a number!
+
+----
+
+Meta 1. For some of you, this week was your first experience with R (or even programming at all) - how did it feel to connect concepts to a novel set of problems. For those who have experience with R, was this a cakewalk or challenging? How did it feel to shake off the cobwebs?
+
+Meta 2. How much time did this take you, roughly?  
+
+Meta 3. Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.
