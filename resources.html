@@ -13,22 +13,36 @@
 
 <title>Resources, Blogs, and More</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -41,32 +55,8 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 
 
@@ -76,10 +66,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -96,40 +82,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 54px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 59px;
-  margin-top: -59px;
-}
-.section h2 {
-  padding-top: 59px;
-  margin-top: -59px;
-}
-.section h3 {
-  padding-top: 59px;
-  margin-top: -59px;
-}
-.section h4 {
-  padding-top: 59px;
-  margin-top: -59px;
-}
-.section h5 {
-  padding-top: 59px;
-  margin-top: -59px;
-}
-.section h6 {
-  padding-top: 59px;
-  margin-top: -59px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -157,7 +119,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -169,7 +131,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -179,11 +141,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -195,7 +174,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -262,7 +240,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -287,10 +265,10 @@ $(document).ready(function () {
   <a href="final.html">Final Project</a>
 </li>
 <li>
-  <a href="extra.html">Extra Credit</a>
+  <a href="extra.html">Going Beyond</a>
 </li>
 <li>
-  <a href="biol607_syllabus_2016.doc">Syllabus</a>
+  <a href="https://docs.google.com/document/d/1fyRqpWrM8dS1y1VxVVhs0cLlpHQCGbRR48Lzy9OI-r8/edit?usp=sharing">Syllabus</a>
 </li>
 <li>
   <a href="resources.html">Resources</a>
@@ -306,7 +284,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -317,51 +295,112 @@ $(document).ready(function () {
 
 <div id="r" class="section level3">
 <h3>R</h3>
-<p><a href="https://ismayc.github.io/rbasics-book/index.html">Getting used to R, RStudio, and R Markdown</a> 2017. Chester Ismay. The basics.<br />
-<a href="https://bookdown.org/rdpeng/rprogdatascience/">R Programming for Data Science</a>. 2016. Roger D. Peng. Provides a more detailed intro to basic R programming.<br />
-<a href="https://bookdown.org/rdpeng/exdata/">Exploratory Data Analysis with R</a>. 2016. Roger D. Peng. Uses the tidyverse and ggplot2 for data exploration. Great introduction to these packages and how they can be made to sing together.<br />
-<a href="https://bookdown.org/csgillespie/efficientR/">Efficient R Programming</a>. 2016. Colin Gillespe and Robin Lovelace<br />
-<a href="https://leanpub.com/LittleInferenceBook/read">Statistical Inference for Data Science</a>. 2018. Brian Caffo. A wonderful book that is a companion to his Coursera course, but is open, and full of gret concepts and R examples.<br />
-<a href="https://leanpub.com/regmods/read">Regression Models for Data Science in R</a>. 2018. Brian Caffo. A wonderful primer on regression models. Incredibly thorough.<br />
-<a href="http://adv-r.had.co.nz/">Advanced R</a>. 2014. Great walkthrough of the details and guts of R. From novices to R wizards, you will learn things you never thought possible (or the actual reasoning behind that hacky stuff you’ve been doing for years).<br />
-<a href="https://bookdown.org/ccolonescu/RPoE4/">Principles of Econometrics with R</a> 2016. Constantin Colonescu. Yes, it’s econometrics, but there’s a lot here that’s very generalizable to biological data analysis in R as well.<br />
-<a href="http://stat545.com/">STAT545</a> UBC Course by Jenny Bryan that covers many similar topics to us - probably better - and more!<br />
-<a href="http://tts.smac-group.com/">A Tour of Time Series Analysis with R</a><br />
-<a href="https://ismayc.github.io/moderndiver-book/index.html">ModernDive: An Introduction to Statistical and Data Sciences via R</a>. 2017. Chester Ismay and Albert Y. Kim Nice intro stats book (for undergrads) using all R examples<br />
-<a href="http://serialmentor.com/dataviz/">Fundamentals of Data Visualization</a>. 2018. Claus Wilke. A wonderful online collection of best principles and practices for data viz.<br />
-<a href="http://otexts.org/fpp2/">Forecasting: Principles and Practice</a>. 2018. Rob Hyndman and George Athanasaopoules. A great intro to timeseries and forecasting in R.<br />
-<a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/">Meta-Analysis in R</a> 2019. Harrer, M., Cuijpers, P., Furukawa, T.A, &amp; Ebert, D. D.</p>
+<p><a href="https://fw8051statistics4ecologists.netlify.app/">Statistics
+for Ecologists</a> 2022. John Fieberg. An excellent R based overview of
+most of what you’ll need for stats and analysis.<br />
+<a href="https://ismayc.github.io/rbasics-book/index.html">Getting used
+to R, RStudio, and R Markdown</a> 2017. Chester Ismay. The basics.<br />
+<a href="https://bookdown.org/rdpeng/rprogdatascience/">R Programming
+for Data Science</a>. 2016. Roger D. Peng. Provides a more detailed
+intro to basic R programming.<br />
+<a href="https://bookdown.org/rdpeng/exdata/">Exploratory Data Analysis
+with R</a>. 2016. Roger D. Peng. Uses the tidyverse and ggplot2 for data
+exploration. Great introduction to these packages and how they can be
+made to sing together.<br />
+<a href="https://bookdown.org/csgillespie/efficientR/">Efficient R
+Programming</a>. 2016. Colin Gillespe and Robin Lovelace<br />
+<a href="https://leanpub.com/LittleInferenceBook/read">Statistical
+Inference for Data Science</a>. 2018. Brian Caffo. A wonderful book that
+is a companion to his Coursera course, but is open, and full of gret
+concepts and R examples.<br />
+<a href="https://leanpub.com/regmods/read">Regression Models for Data
+Science in R</a>. 2018. Brian Caffo. A wonderful primer on regression
+models. Incredibly thorough.<br />
+<a href="http://adv-r.had.co.nz/">Advanced R</a>. 2014. Great
+walkthrough of the details and guts of R. From novices to R wizards, you
+will learn things you never thought possible (or the actual reasoning
+behind that hacky stuff you’ve been doing for years).<br />
+<a href="https://bookdown.org/ccolonescu/RPoE4/">Principles of
+Econometrics with R</a> 2016. Constantin Colonescu. Yes, it’s
+econometrics, but there’s a lot here that’s very generalizable to
+biological data analysis in R as well.<br />
+<a href="http://stat545.com/">STAT545</a> UBC Course by Jenny Bryan that
+covers many similar topics to us - probably better - and more!<br />
+<a href="http://tts.smac-group.com/">A Tour of Time Series Analysis with
+R</a><br />
+<a
+href="https://ismayc.github.io/moderndiver-book/index.html">ModernDive:
+An Introduction to Statistical and Data Sciences via R</a>. 2017.
+Chester Ismay and Albert Y. Kim Nice intro stats book (for undergrads)
+using all R examples<br />
+<a href="http://serialmentor.com/dataviz/">Fundamentals of Data
+Visualization</a>. 2018. Claus Wilke. A wonderful online collection of
+best principles and practices for data viz.<br />
+<a href="http://otexts.org/fpp2/">Forecasting: Principles and
+Practice</a>. 2018. Rob Hyndman and George Athanasaopoules. A great
+intro to timeseries and forecasting in R.<br />
+<a
+href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/">Meta-Analysis
+in R</a> 2019. Harrer, M., Cuijpers, P., Furukawa, T.A, &amp; Ebert, D.
+D.</p>
 </div>
 <div id="github" class="section level3">
 <h3>Github</h3>
-<p><a href="http://www.molecularecologist.com/2013/11/using-github-with-r-and-rstudio/">Using Git and Github with Rstudio</a><br />
-<a href="http://www.datasurg.net/2015/07/13/rstudio-and-github/">Git and Github in Rstudio</a><br />
-<a href="http://happygitwithr.com/index.html">Happy with Git</a>. 2006. Jenny Bryan. Introduction to Git and Github for her class. Very detailed and walks you through each step.</p>
+<p><a
+href="http://www.molecularecologist.com/2013/11/using-github-with-r-and-rstudio/">Using
+Git and Github with Rstudio</a><br />
+<a href="http://www.datasurg.net/2015/07/13/rstudio-and-github/">Git and
+Github in Rstudio</a><br />
+<a href="http://happygitwithr.com/index.html">Happy with Git</a>. 2006.
+Jenny Bryan. Introduction to Git and Github for her class. Very detailed
+and walks you through each step.</p>
 </div>
 <div id="offline-books" class="section level3">
 <h3>Offline Books</h3>
-<p>Adler, J. (2009) <strong>R in a Nutshell: A Desktop Quick Reference.</strong> O’Reilly Media. <a href="http://shop.oreilly.com/product/9780596801717.do">http://shop.oreilly.com/product/9780596801717.do</a></p>
-<p>Silver, N. (2012) <strong>The Signal and the Noise. </strong>The Penguin Press.<a href="http://www.amazon.com/dp/B007V65R54/">http://www.amazon.com/dp/B007V65R54/</a></p>
-<p>Bolker, B. (2009) <strong>Ecological Models and Data in R.</strong> Princeton University Press. <a href="http://www.amazon.com/Ecological-Models-Data-Benjamin-Bolker/dp/0691125228">http://www.amazon.com/Ecological-Models-Data-Benjamin-Bolker/dp/0691125228</a></p>
-<p>Matloff, N. (2011) <strong>The Art of R Programming: A Tour of Statistical Software Design.</strong> No Starch Press. <a href="http://nostarch.com/artofr.htm" class="uri">http://nostarch.com/artofr.htm</a></p>
-<p>Song, S. Qian (2009) <strong>Environmental and Ecological Statistics with R</strong>. Chapman and Hall/CRC Press, London. <a href="http://www.amazon.com/Environmental-Ecological-Statistics-Chapman-Applied-ebook/dp/B005H6YDPU">http://www.amazon.com/Environmental-Ecological-Statistics-Chapman-Applied-ebook/dp/B005H6YDPU</a></p>
+<p>Adler, J. (2009) <strong>R in a Nutshell: A Desktop Quick
+Reference.</strong> O’Reilly Media.
+<a href="http://shop.oreilly.com/product/9780596801717.do">http://shop.oreilly.com/product/9780596801717.do</a></p>
+<p>Silver, N. (2012) <strong>The Signal and the Noise. </strong>The
+Penguin
+Press.<a href="http://www.amazon.com/dp/B007V65R54/">http://www.amazon.com/dp/B007V65R54/</a></p>
+<p>Bolker, B. (2009) <strong>Ecological Models and Data in R.</strong>
+Princeton University Press.
+<a href="http://www.amazon.com/Ecological-Models-Data-Benjamin-Bolker/dp/0691125228">http://www.amazon.com/Ecological-Models-Data-Benjamin-Bolker/dp/0691125228</a></p>
+<p>Matloff, N. (2011) <strong>The Art of R Programming: A Tour of
+Statistical Software Design.</strong> No Starch Press. <a
+href="http://nostarch.com/artofr.htm"
+class="uri">http://nostarch.com/artofr.htm</a></p>
+<p>Song, S. Qian (2009) <strong>Environmental and Ecological Statistics
+with R</strong>. Chapman and Hall/CRC Press, London.
+<a href="http://www.amazon.com/Environmental-Ecological-Statistics-Chapman-Applied-ebook/dp/B005H6YDPU">http://www.amazon.com/Environmental-Ecological-Statistics-Chapman-Applied-ebook/dp/B005H6YDPU</a></p>
 </div>
 <div id="blogs" class="section level3">
 <h3>Blogs</h3>
 <p><a href="https://rweekly.org/">R Weekly</a> A weekly newsletter<br />
-<a href="http://www.r-bloggers.com/">R bloggers</a> R Blogger aggregator<br />
+<a href="http://www.r-bloggers.com/">R bloggers</a> R Blogger
+aggregator<br />
 <a href="https://blog.rstudio.org/">RStudio Blog</a><br />
 <a href="http://simplystatistics.org/">Simply Statistics</a><br />
-<a href="http://www.stat.columbia.edu/~gelman/blog/">Statistical modeling, causal inference, and social science</a>: Andrew Gelman’s research group<br />
+<a href="http://www.stat.columbia.edu/~gelman/blog/">Statistical
+modeling, causal inference, and social science</a>: Andrew Gelman’s
+research group<br />
 <a href="http://www.r-statistics.com/">R-statistics blog</a><br />
-<a href="http://errorstatistics.com/">Error Statistics Philosophy</a> Great source of information on philosophy of statistics and data analysis<br />
-<a href="https://dynamicecology.wordpress.com/">Dynamic Ecology</a> Covers many topics in analysis and philosophy of data in addition to ecology<br />
-<a href="http://www.quantumforest.com/">Quantum Forest</a> A shoebox for scribbles on data analysis by Luis Apiolaza<br />
-<a href="http://inundata.org/">Inundata</a> from Karthik Ram of ROpenSci<br />
+<a href="http://errorstatistics.com/">Error Statistics
+Philosophy</a> Great source of information on philosophy of statistics
+and data analysis<br />
+<a href="https://dynamicecology.wordpress.com/">Dynamic Ecology</a>
+Covers many topics in analysis and philosophy of data in addition to
+ecology<br />
+<a href="http://www.quantumforest.com/">Quantum Forest</a> A shoebox for
+scribbles on data analysis by Luis Apiolaza<br />
+<a href="http://inundata.org/">Inundata</a> from Karthik Ram of
+ROpenSci<br />
 <a href="https://ropensci.org/blog/">ROpenSci</a><br />
 <a href="http://xianblog.wordpress.com/">Xi’an’s Og</a><br />
-<a href="http://civilstat.com/">Civil Statistician</a> Former census statistician<br />
-<a href="http://citizen-statistician.org/">Citizen Statistician</a> Various stats faculty</p>
+<a href="http://civilstat.com/">Civil Statistician</a> Former census
+statistician<br />
+<a href="http://citizen-statistician.org/">Citizen Statistician</a>
+Various stats faculty</p>
 </div>
 <div id="visualization-blogs" class="section level3">
 <h3>Visualization Blogs</h3>
@@ -369,9 +408,15 @@ $(document).ready(function () {
 </div>
 <div id="podcasts" class="section level3">
 <h3>Podcasts</h3>
-<p><a href="https://soundcloud.com/nssd-podcast">Not So Standard Deviations</a> Listen to this! #Rcatladies<br />
-<a href="http://fivethirtyeight.com/tag/fivethirtyeight-podcasts/">FiveThirtyEight Elections Podcast</a>: How we use data analysis to forecast elections.<br />
-<a href="http://fivethirtyeight.com/tag/fivethirtyeight-podcasts/">What’s the Point</a>: Data in society. From FiveThirtyEight.</p>
+<p><a href="https://soundcloud.com/nssd-podcast">Not So Standard
+Deviations</a> Listen to this! #Rcatladies<br />
+<a
+href="http://fivethirtyeight.com/tag/fivethirtyeight-podcasts/">FiveThirtyEight
+Elections Podcast</a>: How we use data analysis to forecast
+elections.<br />
+<a
+href="http://fivethirtyeight.com/tag/fivethirtyeight-podcasts/">What’s
+the Point</a>: Data in society. From FiveThirtyEight.</p>
 </div>
 <div id="twitter-feeds" class="section level3">
 <h3>Twitter Feeds</h3>
@@ -390,14 +435,33 @@ $(document).ready(function () {
 </div>
 <div id="philosophy" class="section level3">
 <h3>Philosophy</h3>
-<p><a href="https://www.amazon.com/Logic-Scientific-Discovery-Routledge-Classics/dp/0415278449/ref=sr_1_2?ie=UTF8&amp;qid=1474044878&amp;sr=8-2&amp;keywords=karl+popper">The Logic of Scientific Discovery</a>. 1934. Karl Popper.<br />
-<a href="https://www.amazon.com/Methodology-Scientific-Research-Programmes-Philosophical/dp/0521280311/ref=sr_1_5?ie=UTF8&amp;qid=1474044943&amp;sr=8-5&amp;keywords=lakatos">The Methodology of Scientific Research Programs</a> Collected works of Irme Lakatos<br />
-<a href="https://www.amazon.com/Against-Method-Paul-Feyerabend/dp/1844674428/ref=sr_1_1?ie=UTF8&amp;qid=1474045065&amp;sr=8-1&amp;keywords=Against+Method">Against Method</a> Paul Feyerabend’s provocative take on sciene in context.<br />
-<a href="https://www.amazon.com/Against-Method-Scientific-Lakatos-Feyerabend-Correspondence/dp/0226467759/ref=sr_1_2?ie=UTF8&amp;qid=1474044943&amp;sr=8-2&amp;keywords=lakatos">For and Against Method</a> Collected correspondence/dialogue of Imre Lakatos and Paul Feyerabend  <a href="https://www.amazon.com/Causality-Reasoning-Inference-Judea-Pearl/dp/052189560X/ref=sr_1_1?ie=UTF8&amp;qid=1474045137&amp;sr=8-1&amp;keywords=causality">Causality</a> Judea Pearl’s plea and proof of how to assess causal logic in data analysis.</p>
+<p><a
+href="https://www.amazon.com/Logic-Scientific-Discovery-Routledge-Classics/dp/0415278449/ref=sr_1_2?ie=UTF8&amp;qid=1474044878&amp;sr=8-2&amp;keywords=karl+popper">The
+Logic of Scientific Discovery</a>. 1934. Karl Popper.<br />
+<a
+href="https://www.amazon.com/Methodology-Scientific-Research-Programmes-Philosophical/dp/0521280311/ref=sr_1_5?ie=UTF8&amp;qid=1474044943&amp;sr=8-5&amp;keywords=lakatos">The
+Methodology of Scientific Research Programs</a> Collected works of Irme
+Lakatos<br />
+<a
+href="https://www.amazon.com/Against-Method-Paul-Feyerabend/dp/1844674428/ref=sr_1_1?ie=UTF8&amp;qid=1474045065&amp;sr=8-1&amp;keywords=Against+Method">Against
+Method</a> Paul Feyerabend’s provocative take on sciene in
+context.<br />
+<a
+href="https://www.amazon.com/Against-Method-Scientific-Lakatos-Feyerabend-Correspondence/dp/0226467759/ref=sr_1_2?ie=UTF8&amp;qid=1474044943&amp;sr=8-2&amp;keywords=lakatos">For
+and Against Method</a> Collected correspondence/dialogue of Imre Lakatos
+and Paul Feyerabend  <a
+href="https://www.amazon.com/Causality-Reasoning-Inference-Judea-Pearl/dp/052189560X/ref=sr_1_1?ie=UTF8&amp;qid=1474045137&amp;sr=8-1&amp;keywords=causality">Causality</a>
+Judea Pearl’s plea and proof of how to assess causal logic in data
+analysis.</p>
 </div>
 <div id="data-science" class="section level3">
 <h3>Data Science</h3>
-<p><a href="https://dynamicecology.wordpress.com/2012/11/28/why-and-how-to-do-statistics-its-probably-not-why-and-how-you-think/">Why, and how, to do statistics (it’s probably not why and how you think)</a> <a href="https://decisionstats.com/2016/08/23/how-do-i-shift-to-a-data-science-career/">How do I shift to a career in Data Science?</a></p>
+<p><a
+href="https://dynamicecology.wordpress.com/2012/11/28/why-and-how-to-do-statistics-its-probably-not-why-and-how-you-think/">Why,
+and how, to do statistics (it’s probably not why and how you think)</a>
+<a
+href="https://decisionstats.com/2016/08/23/how-do-i-shift-to-a-data-science-career/">How
+do I shift to a career in Data Science?</a></p>
 </div>
 
 
@@ -409,7 +473,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -427,7 +491,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>

@@ -3,6 +3,8 @@ title: "Resources, Blogs, and More"
 ---
 
 ### R
+
+[Statistics for Ecologists](https://fw8051statistics4ecologists.netlify.app/) 2022. John Fieberg. An excellent R based overview of most of what you'll need for stats and analysis.  
 [Getting used to R, RStudio, and R Markdown](https://ismayc.github.io/rbasics-book/index.html) 2017. Chester Ismay. The basics.  
 [R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/). 2016. Roger D. Peng. Provides a more detailed intro to basic R programming.  
 [Exploratory Data Analysis with R](https://bookdown.org/rdpeng/exdata/). 2016. Roger D. Peng. Uses the tidyverse and ggplot2 for data exploration. Great introduction to these packages and how they can be made to sing together.  
