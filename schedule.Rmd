@@ -17,7 +17,9 @@ NEXT TIME I TEACH 607
   W&S = Whitlock and Schluter, W&G = [Wickham and Grolemund](http://r4ds.had.co.nz), U/P for linked pdfs = biol607  
   
   Change .html to .Rmd in your browser to get the markdown
-  
+
+**Recorded Lecture**: All lectures and labs will be recorded and are available at https://www.youtube.com/playlist?list=PLZRMqMK8aRmJeuW9n5QMXLYUMRm1zmJcD  
+    
 **Turning in Homework**: All homework should be completed using RMarkdown or Quarto. You'll freely mix answers in text and code there. Please submit both the .rmd (or .qmd) and .html output of your homework. If there are data files associated with your homework, when working on it, please make sure you are using the   
   
 homework/  
@@ -26,7 +28,7 @@ homework/
 
 directory structure, so that all data is in `../data/` relative to where your homework markdown and outputs are. Please zip up the archive for the homework and standardize filenames as follows: `number_lastName_firstName_2022.zip` where number is the week number the homework is due (from weeks below) and make sure to include the 0s for numbers like 01), and your last and first names - well, you should know them!  
   
-To submit homework, go to https://www.dropbox.com/request/MgLy0OxePC4QN8ZDgQ0X and upload the files. 
+To submit homework, use the dropbox link you were sent by the TA.  
 
 
 ```{r dates, echo=FALSE, message=FALSE, warning=FALSE}
@@ -56,12 +58,12 @@ datestring <- paste(month(current_date), day(current_date), year(current_date), 
 `r datestring`   
 __Lecture:__  [Data visualization](lectures/05_data_viz_principles.pptx)  
 __Lab Topic:__ [Introduction to ggplot2](lab/04_ggplot_palmer_intro.html).  
-__Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html)  
+__Reading:__ W&S Chapter 2, [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html), [Introducing Palmer Penguins](https://journal.r-project.org/articles/RJ-2022-020/)    
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf), [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/) - note, this is a whole book, but scan it - it's amazing\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2022  
 __Packages used this Week:__ [ggplot2](https://ggplot2.tidyverse.org/), [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), [ggdist](https://mjskay.github.io/ggdist/) - `install.packages(c("ggplot2", "ggridges", "palmerpenguins", "ggdist"))`  
 __Cheat Sheets:__  [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf), [Choosing a good chart cheat sheet](https://biol355.github.io/Readings/choosing-a-good-chart-09.pdf)  
-__In Class Code:__  [Intro to data and  ggplot2](in_class_code/2020/scripts/ggplot2_intro.R)\
+<!-- __In Class Code:__  [Intro to data and  ggplot2](in_class_code/2020/scripts/ggplot2_intro.R)\ -->
 __Homework:__ [ggplot2 homework](./homework/03_samp_ggplot.html)  
   
 ### Week 3.   
