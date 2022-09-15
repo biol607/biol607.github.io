@@ -64,7 +64,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2022
 __Packages used this Week:__ [ggplot2](https://ggplot2.tidyverse.org/), [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), [ggdist](https://mjskay.github.io/ggdist/) - `install.packages(c("ggplot2", "ggridges", "palmerpenguins", "ggdist"))`  
 __Cheat Sheets:__  [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf), [Choosing a good chart cheat sheet](https://biol355.github.io/Readings/choosing-a-good-chart-09.pdf)  
 <!-- __In Class Code:__  [Intro to data and  ggplot2](in_class_code/2020/scripts/ggplot2_intro.R)\ -->
-__Homework:__ [ggplot2 homework](./homework/03_samp_ggplot.html)  
+__Homework:__ [ggplot2 homework](./homework/ggplot.html)  
   
 ### Week 3.   
 ```{r next_date, echo=FALSE}
