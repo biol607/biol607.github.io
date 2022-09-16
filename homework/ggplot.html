@@ -105,14 +105,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">1.</a></li>
-  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">2.</a></li>
-  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2">3.</a></li>
-  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3">4.</a></li>
-  <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4">5.</a></li>
-  <li><a href="#impress-yourself-with-knowledge-you-conquered-1." id="toc-impress-yourself-with-knowledge-you-conquered-1." class="nav-link" data-scroll-target="#impress-yourself-with-knowledge-you-conquered-1.">Impress Yourself with Knowledge You Conquered 1.</a></li>
-  <li><a href="#impress-yourself-with-knowledge-you-conquered-2." id="toc-impress-yourself-with-knowledge-you-conquered-2." class="nav-link" data-scroll-target="#impress-yourself-with-knowledge-you-conquered-2.">Impress Yourself with Knowledge You Conquered 2.</a></li>
-  <li><a href="#impress-yourself-with-knowledge-you-conquered-3." id="toc-impress-yourself-with-knowledge-you-conquered-3." class="nav-link" data-scroll-target="#impress-yourself-with-knowledge-you-conquered-3.">Impress Yourself with Knowledge You Conquered 3.</a></li>
+  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start">1. Start</a></li>
+  <li><a href="#boxplots" id="toc-boxplots" class="nav-link" data-scroll-target="#boxplots">2. Boxplots</a></li>
+  <li><a href="#ridgelines" id="toc-ridgelines" class="nav-link" data-scroll-target="#ridgelines">3. Ridgelines</a></li>
+  <li><a href="#making-groups-from-the-continuous" id="toc-making-groups-from-the-continuous" class="nav-link" data-scroll-target="#making-groups-from-the-continuous">4. Making Groups from the Continuous</a></li>
+  <li><a href="#use-that-color" id="toc-use-that-color" class="nav-link" data-scroll-target="#use-that-color">5. Use That Color!</a></li>
+  <li><a href="#impress-yourself-with-knowledge-you-conquered-1.-gganimate" id="toc-impress-yourself-with-knowledge-you-conquered-1.-gganimate" class="nav-link" data-scroll-target="#impress-yourself-with-knowledge-you-conquered-1.-gganimate">Impress Yourself with Knowledge You Conquered 1. gganimate</a></li>
+  <li><a href="#impress-yourself-with-knowledge-you-conquered-2.-something-new" id="toc-impress-yourself-with-knowledge-you-conquered-2.-something-new" class="nav-link" data-scroll-target="#impress-yourself-with-knowledge-you-conquered-2.-something-new">Impress Yourself with Knowledge You Conquered 2. Something new</a></li>
+  <li><a href="#impress-yourself-with-knowledge-you-conquered-3.-tidytuesday" id="toc-impress-yourself-with-knowledge-you-conquered-3.-tidytuesday" class="nav-link" data-scroll-target="#impress-yourself-with-knowledge-you-conquered-3.-tidytuesday">Impress Yourself with Knowledge You Conquered 3. #TidyTuesday</a></li>
   <li><a href="#meta-1." id="toc-meta-1." class="nav-link" data-scroll-target="#meta-1.">Meta 1.</a></li>
   <li><a href="#meta-2." id="toc-meta-2." class="nav-link" data-scroll-target="#meta-2.">Meta 2.</a></li>
   <li><a href="#meta-3." id="toc-meta-3." class="nav-link" data-scroll-target="#meta-3.">Meta 3.</a></li>
@@ -152,8 +152,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final_v2.csv ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt_v2.csv</p>
 <p>I’m providing you with a cleaned form of his data (his code is <a href="https://gist.github.com/cavedave/c5c2224c8c38661236c1c1ce894fd28f">here</a>) for you to work with in a few plots. The data file is called <a href="https://biol607.github.io/homework/data/NH_seaice_extent_monthly_1978_2016.csv">NH_seaice_extent_monthly_1978_2016.csv</a> - but don’t worry, I’m giving you code to load it.</p>
 </section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section">1.</h2>
+<section id="start" class="level2">
+<h2 class="anchored" data-anchor-id="start">1. Start</h2>
 <p>Some setup. Run the code below. Show that it worked by showing the basic properties of the data. To impress yourself, look up the packages and functions used and explain what is going on here. But, that’s an IYKYK - not needed!</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># libraries - if they don't load</span></span>
@@ -170,50 +170,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">Month_Name =</span> <span class="fu">fct_reorder</span>(Month_Name, Month))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-1" class="level2">
-<h2 class="anchored" data-anchor-id="section-1">2.</h2>
+<section id="boxplots" class="level2">
+<h2 class="anchored" data-anchor-id="boxplots">2. Boxplots</h2>
 <p>Make a boxplot showing the variability in sea ice extent every month. IYKYK make it fancy.</p>
 <div class="cell">
 
 </div>
 </section>
-<section id="section-2" class="level2">
-<h2 class="anchored" data-anchor-id="section-2">3.</h2>
+<section id="ridgelines" class="level2">
+<h2 class="anchored" data-anchor-id="ridgelines">3. Ridgelines</h2>
 <p>Use <code>ggridges</code> to do the same thing. What do you learn that is different than the boxplot?</p>
 <div class="cell">
 
 </div>
 </section>
-<section id="section-3" class="level2">
-<h2 class="anchored" data-anchor-id="section-3">4.</h2>
+<section id="making-groups-from-the-continuous" class="level2">
+<h2 class="anchored" data-anchor-id="making-groups-from-the-continuous">4. Making Groups from the Continuous</h2>
 <p>One thing that’s really cool about faceting is that you can use <code>cut_*()</code> functions on continuous variables to make facets by groups of continuous variables. To see what I mean, try <code>cut_interval(1:10, n = 5)</code> See how it makes five bins of even width? We use <code>cut_interval()</code> or other cut functions with faceting like so <code>facet_wrap(vars(cut_interval(some_variable)))</code>.</p>
 <p>With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use <code>facet_wrap</code> and <code>cut_interval(Month, n=4)</code> to split the plot into seasons.</p>
 <div class="cell">
 
 </div>
 </section>
-<section id="section-4" class="level2">
-<h2 class="anchored" data-anchor-id="section-4">5.</h2>
+<section id="use-that-color" class="level2">
+<h2 class="anchored" data-anchor-id="use-that-color">5. Use That Color!</h2>
 <p>Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme, critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using <a href="https://github.com/zumbov2/colorfindr">colorfindr</a> to make a palette.</p>
 <div class="cell">
 
 </div>
 <hr>
 </section>
-<section id="impress-yourself-with-knowledge-you-conquered-1." class="level2">
-<h2 class="anchored" data-anchor-id="impress-yourself-with-knowledge-you-conquered-1.">Impress Yourself with Knowledge You Conquered 1.</h2>
+<section id="impress-yourself-with-knowledge-you-conquered-1.-gganimate" class="level2">
+<h2 class="anchored" data-anchor-id="impress-yourself-with-knowledge-you-conquered-1.-gganimate">Impress Yourself with Knowledge You Conquered 1. gganimate</h2>
 <p>Make it animated with <a href="https://gganimate.com/index.html">gganimate</a>. Just like above. See https://gganimate.com/ to learn the package!</p>
 <div class="cell">
 
 </div>
 </section>
-<section id="impress-yourself-with-knowledge-you-conquered-2." class="level2">
-<h2 class="anchored" data-anchor-id="impress-yourself-with-knowledge-you-conquered-2.">Impress Yourself with Knowledge You Conquered 2.</h2>
+<section id="impress-yourself-with-knowledge-you-conquered-2.-something-new" class="level2">
+<h2 class="anchored" data-anchor-id="impress-yourself-with-knowledge-you-conquered-2.-something-new">Impress Yourself with Knowledge You Conquered 2. Something new</h2>
 <p>Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.</p>
 </section>
-<section id="impress-yourself-with-knowledge-you-conquered-3." class="level2">
-<h2 class="anchored" data-anchor-id="impress-yourself-with-knowledge-you-conquered-3.">Impress Yourself with Knowledge You Conquered 3.</h2>
-<p>Participate in this week or last week’s <a href="https://thomasmock.netlify.app/post/tidytuesday-a-weekly-social-data-project-in-r/">tidy tuesday</a> (and see that link to learn waht it is). See <a href="https://github.com/rfordatascience/tidytuesday">here</a> for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the <code>#tidytuesday</code> hashtag.</p>
+<section id="impress-yourself-with-knowledge-you-conquered-3.-tidytuesday" class="level2">
+<h2 class="anchored" data-anchor-id="impress-yourself-with-knowledge-you-conquered-3.-tidytuesday">Impress Yourself with Knowledge You Conquered 3. #TidyTuesday</h2>
+<p>Participate in this week or last week’s (or this week’s) <a href="https://thomasmock.netlify.app/post/tidytuesday-a-weekly-social-data-project-in-r/">tidy tuesday</a> (and see that link to learn waht it is). See <a href="https://github.com/rfordatascience/tidytuesday">here</a> for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the <code>#tidytuesday</code> hashtag.</p>
 <hr>
 </section>
 <section id="meta-1." class="level2">

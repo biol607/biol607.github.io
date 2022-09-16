@@ -26,7 +26,7 @@ ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent
 
 I'm providing you with a cleaned form of his data (his code is [here](https://gist.github.com/cavedave/c5c2224c8c38661236c1c1ce894fd28f)) for you to work with in a few plots. The data file is called [NH_seaice_extent_monthly_1978_2016.csv](https://biol607.github.io/homework/data/NH_seaice_extent_monthly_1978_2016.csv) - but don't worry, I'm giving you code to load it.
 
-## 1. 
+## 1. Start
 Some setup. Run the code below. Show that it worked by showing the basic properties of the data. To impress yourself, look up the packages and functions used and explain what is going on here. But, that's an IYKYK - not needed!
 
 ```{r load, echo = TRUE}
@@ -45,7 +45,7 @@ ice <- read_csv("http://biol607.github.io/homework/data/NH_seaice_extent_monthly
 ```
 
 
-## 2. 
+## 2. Boxplots
 Make a boxplot showing the variability in sea ice extent every month. IYKYK make it fancy.
 
 ```{r boxplot}
@@ -54,7 +54,7 @@ ggplot(data = ice,
   geom_boxplot()
 ```
 
-## 3. 
+## 3. Ridgelines
 Use `ggridges` to do the same thing. What do you learn that is different than the boxplot?
 
 ```{r trend}
@@ -67,7 +67,7 @@ ggplot(ice,
 #discussion should focus on variability in Nov-Jul or other interesting points
 ```
 
-## 4. 
+## 4. Making Groups from the Continuous
 One thing that's really cool about faceting is that you can use `cut_*()` functions on continuous variables to make facets by groups of continuous variables. To see what I mean, try `cut_interval(1:10, n = 5)` See how it makes five bins of even width? We use `cut_interval()` or other cut functions with faceting like so `facet_wrap(vars(cut_interval(some_variable)))`.
 
 With the original data, plot sea ice by year, with different lines (oh! What geom will you need for that?) for different months. Then, use `facet_wrap` and `cut_interval(Month, n=4)` to split the plot into seasons.
@@ -83,7 +83,7 @@ year_plot + facet_wrap(vars(cut_interval(Month, n = 4)))
 ```
 
 
-## 5. 
+## 5. Use That Color!
 Last, make a line plot of sea ice by month with different lines as different years. Gussy it up with colors by year, a different theme,  critical values, and whatever other annotations, changes to axes, etc., you think best show the story of this data. For ideas, see the lab, and look at various palettes around. Extra credit for using [colorfindr](https://github.com/zumbov2/colorfindr) to make a palette.
 
 ```{r fun}
@@ -106,7 +106,7 @@ fancy
 
 ---
 
-## Impress Yourself with Knowledge You Conquered 1. 
+## Impress Yourself with Knowledge You Conquered 1. gganimate
 Make it animated with [gganimate](https://gganimate.com/index.html). Just like above. See https://gganimate.com/ to learn the package!
 
 
@@ -121,11 +121,11 @@ fancy +
   
 ```
 
-## Impress Yourself with Knowledge You Conquered 2.  
+## Impress Yourself with Knowledge You Conquered 2.  Something new
 Use the data and make something wholly new and awesome. Even extra extra credit for something amazing animated.
   
-## Impress Yourself with Knowledge You Conquered 3.  
-Participate in this week or last week's [tidy tuesday](https://thomasmock.netlify.app/post/tidytuesday-a-weekly-social-data-project-in-r/) (and see that link to learn waht it is). See [here](https://github.com/rfordatascience/tidytuesday) for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the `#tidytuesday` hashtag.
+## Impress Yourself with Knowledge You Conquered 3.  #TidyTuesday
+Participate in this week or last week's (or this week's) [tidy tuesday](https://thomasmock.netlify.app/post/tidytuesday-a-weekly-social-data-project-in-r/) (and see that link to learn waht it is). See [here](https://github.com/rfordatascience/tidytuesday) for data and schedule. Not only include what you do and your code here, but also include a link to where you tweet our your entry with a link to the code and the `#tidytuesday` hashtag.
 
 ----
 
