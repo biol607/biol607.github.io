@@ -70,15 +70,17 @@ __Homework:__ [ggplot2 homework](./homework/ggplot.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [Functions](lectures/functions.html), [Data import, libraries, factors and forcats](lectures/06_read_data_libraries.html),  [Tidy data](lectures/17_tidy.html), [Joins](lectures/18_join.html)  
-__Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  
-__Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [functions](https://r4ds.had.co.nz/functions.html), [tidy data](http://r4ds.had.co.nz/tidy-data.html), [Strings](http://r4ds.had.co.nz/strings.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
+__Lecture:__  [Data import, libraries, factors and forcats](lectures/06_read_data_libraries.html),  [Data Manipulation](https://swcarpentry.github.io/r-novice-gapminder/13-dplyr/), [Tidy data](lectures/17_tidy.html), [Functions](lectures/functions.html)  
+<!--, [Joins](lectures/18_join.html)  
+__Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  -->
+__Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [data import](https://r4ds.hadley.nz/data-import.html),  [pipes](https://r4ds.hadley.nz/workflow-pipes.html), [data transformation](https://r4ds.hadley.nz/data-transform.html), [functions](https://r4ds.had.co.nz/functions.html), [tidy data](https://r4ds.hadley.nz/data-tidy.html)    
+__Optional Reading:__ [Strings](http://r4ds.had.co.nz/strings.html), [factors](https://r4ds.hadley.nz/factors.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
 __Cheat Sheets:__ [Reading data into R](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).  
-__Packages:__ `install.packages(c("janitor", "skimr", "lubridate", "tidyr", "readr", "readxl", "tibble"))` - [readr](https://readr.tidyverse.org/),  [readxl](https://readxl.tidyverse.org/),  [tibble](https://tibble.tidyverse.org/),  [skimr](https://docs.ropensci.org/skimr/), 
+__Packages:__ `install.packages(c("dplyr", "janitor", "skimr", "lubridate", "tidyr", "readr", "readxl", "tibble"))` - [readr](https://readr.tidyverse.org/),  [readxl](https://readxl.tidyverse.org/),  [tibble](https://tibble.tidyverse.org/),  [skimr](https://docs.ropensci.org/skimr/), 
 [janitor](https://garthtarr.github.io/meatR/janitor.html),
 [visdat](https://docs.ropensci.org/visdat/)
 __Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2022  
-<!-- __In Class Code:__ [functions](in_class_code/2020/scripts/functions.R), [loading data](in_class_code/2020/scripts/loading_data.R), [data reshaping](in_class_code/2020/scripts/tidyr.R), [created data](in_class_code/2020/data/test_data.xlsx) -->    
+<!-- __In Class Code:__ [functions](in_class_code/2020/scripts/functions.R), [loading data](in_class_code/2020/scripts/loading_data.R), [data reshaping](in_class_code/2020/scripts/tidyr.R), [created data](in_class_code/2020/data/test_data.xlsx) -->
 __Homework:__ [Functions and Pivot homework](./homework/04_fun_pivot.html)  
 
 
@@ -88,7 +90,7 @@ __Homework:__ [Functions and Pivot homework](./homework/04_fun_pivot.html)
 `r datestring`   
 __Lecture:__ Descriptive statistics, and the creation of good observational sampling designs.    - [Sampling](lectures/03_sampling_lecture_x.html) and [Simulation for Estimation](lectures/04_simulation_estimation_x.html).   
 __Lab Topic:__ [Sampling and simulation](lab/02_sim_samp.html). Libraries in R. Dplyr.   
-__Reading:__ W&S 1,3-4, W&G Chapters on [data transformation](http://r4ds.had.co.nz/transform.html) and [pipes](http://r4ds.had.co.nz/pipes.html),  [Dplyr cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdfPaperpile)  
+__Reading:__ W&S 1,3-4,  [Dplyr cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdfPaperpile)  
 __Optional Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf), [Simpler Coding with Pipes](https://www.r-statistics.com/2014/08/simpler-r-coding-with-pipes-the-present-and-future-of-the-magrittr-package/), [Managing Data Frames with the Dplyr package](https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2022  
 __Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages(c("dplyr", "purrr"))`  
