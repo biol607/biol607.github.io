@@ -70,9 +70,9 @@ __Homework:__ [ggplot2 homework](./homework/ggplot.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  [Data import, libraries, factors and forcats](lectures/06_read_data_libraries.html),  [Data Manipulation](https://swcarpentry.github.io/r-novice-gapminder/13-dplyr/), [Tidy data](lectures/17_tidy.html), [Functions](lectures/functions.html)  
-<!--, [Joins](lectures/18_join.html)  
-__Data:__ [Hemlock](lectures/data/18/hemlock.xlsx)  -->
+__Lecture:__  [Data import, libraries, factors and forcats](lectures/06_read_data_libraries.html),  [Data manipulation, summarization, and making it tidy](https://datacarpentry.org/R-ecology-lesson/03-dplyr.html),  [Functions](lectures/functions.html)  
+<!--, [Joins](lectures/18_join.html)  -->
+__Data:__ [Portal Data](https://ndownloader.figshare.com/files/2292169) - and learn more [here](https://portal.weecology.org/)  
 __Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [data import](https://r4ds.hadley.nz/data-import.html),  [pipes](https://r4ds.hadley.nz/workflow-pipes.html), [data transformation](https://r4ds.hadley.nz/data-transform.html), [functions](https://r4ds.had.co.nz/functions.html), [tidy data](https://r4ds.hadley.nz/data-tidy.html)    
 __Optional Reading:__ [Strings](http://r4ds.had.co.nz/strings.html), [factors](https://r4ds.hadley.nz/factors.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
 __Cheat Sheets:__ [Reading data into R](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).  
