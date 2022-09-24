@@ -81,7 +81,7 @@ __Packages:__ `install.packages(c("dplyr", "janitor", "skimr", "lubridate", "tid
 [visdat](https://docs.ropensci.org/visdat/)  
 __Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2022  
 <!-- __In Class Code:__ [functions](in_class_code/2020/scripts/functions.R), [loading data](in_class_code/2020/scripts/loading_data.R), [data reshaping](in_class_code/2020/scripts/tidyr.R), [created data](in_class_code/2020/data/test_data.xlsx) -->
-__Homework:__ [Functions and Pivot homework](./homework/04_fun_pivot.html)  
+__Homework:__ [Data Manipulation and Pivot homework](./homework/dplyr_tidyr.html)  
 
 
 ### Week 4.   

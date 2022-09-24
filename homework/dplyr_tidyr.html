@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Biol607">
+
+<title>Tidy Data Homework</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="dplyr_tidyr_files/libs/clipboard/clipboard.min.js"></script>
+<script src="dplyr_tidyr_files/libs/quarto-html/quarto.js"></script>
+<script src="dplyr_tidyr_files/libs/quarto-html/popper.min.js"></script>
+<script src="dplyr_tidyr_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="dplyr_tidyr_files/libs/quarto-html/anchor.min.js"></script>
+<link href="dplyr_tidyr_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="dplyr_tidyr_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="dplyr_tidyr_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="dplyr_tidyr_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="dplyr_tidyr_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="dplyr_tidyr_files/libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="dplyr_tidyr_files/libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="dplyr_tidyr_files/libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="dplyr_tidyr_files/libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="dplyr_tidyr_files/libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="dplyr_tidyr_files/libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="dplyr_tidyr_files/libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="dplyr_tidyr_files/libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="dplyr_tidyr_files/libs/leaflet-binding-2.1.1/leaflet.js"></script>
+<script src="dplyr_tidyr_files/libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="dplyr_tidyr_files/libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#load-me." id="toc-load-me." class="nav-link active" data-scroll-target="#load-me.">1. Load me.</a></li>
+  <li><a href="#format" id="toc-format" class="nav-link" data-scroll-target="#format">2. Format</a></li>
+  <li><a href="#check-it-out." id="toc-check-it-out." class="nav-link" data-scroll-target="#check-it-out.">3. Check it out.</a></li>
+  <li><a href="#lets-look-at-some-kelp" id="toc-lets-look-at-some-kelp" class="nav-link" data-scroll-target="#lets-look-at-some-kelp">4. Let’s look at some kelp!</a></li>
+  <li><a href="#wide-relationships" id="toc-wide-relationships" class="nav-link" data-scroll-target="#wide-relationships">5. Wide relationships</a></li>
+  <li><a href="#meta-1." id="toc-meta-1." class="nav-link" data-scroll-target="#meta-1.">Meta 1.</a></li>
+  <li><a href="#meta-2." id="toc-meta-2." class="nav-link" data-scroll-target="#meta-2.">Meta 2.</a></li>
+  <li><a href="#meta-3." id="toc-meta-3." class="nav-link" data-scroll-target="#meta-3.">Meta 3.</a></li>
+  <li><a href="#meta-3.-1" id="toc-meta-3.-1" class="nav-link" data-scroll-target="#meta-3.-1">Meta 3.</a></li>
+  <li><a href="#meta-4." id="toc-meta-4." class="nav-link" data-scroll-target="#meta-4.">Meta 4.</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tidy Data Homework</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Biol607 </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Since 2014, a group of us in New England have been surveying kelp forests from Rhode Island to Maine. There’s a LOT of data from several protocols. Let’s muck about with the percent cover data to learn about the sampling program and a bit about kelp forests here in New England.</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<div id="htmlwidget-c52be45b82ad48f077ec" style="width:100%;height:464px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c52be45b82ad48f077ec">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"createMapPane","args":["tmap402",402]},{"method":"addProviderTiles","args":["Stamen.Watercolor",null,"Stamen.Watercolor",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addCircleMarkers","args":[[42.5047224260525,42.4892251433332,42.3431343558649,41.4776679666283,44.0398117857939,41.4504976409745,42.3274277823446,42.4187496202492,42.9668199493122,43.1659838344772,42.9914475379509,43.8357300000088,44.3681600002745,42.9851660668186],[-70.7369635575402,-70.7210374219017,-70.8928213427956,-71.3621234463603,-68.8927720756737,-71.3349550657216,-70.8898258745116,-70.906488913597,-70.6116745268839,-70.5919699950105,-70.6175188365986,-69.5078850001131,-68.0781849997362,-70.6191354820997],[8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916],["Baker.North","Baker.South","Calf.Island","Fort.Weatherill","Hurricane.Island","King.s.Beach","Little.Brewster","Nahant","NE.Appledore","Nubble.Lighthouse","NW.Appledore","Pemaquid","Schoodic","SW.Appledore"],"sites",{"interactive":true,"className":"","pane":"tmap401","stroke":true,"color":"#666666","weight":1,"opacity":0.5,"fill":true,"fillColor":["#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000"],"fillOpacity":[1,1,1,1,1,1,1,1,1,1,1,1,1,1]},null,null,["<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Baker North<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Baker North<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Baker South<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Baker South<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Calf Island<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Calf Island<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Fort Weatherill<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Fort Weatherill<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Hurricane Island<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Hurricane Island<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>King's Beach<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>King's Beach<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Little Brewster<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Little Brewster<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Nahant<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Nahant<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>NE Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>NE Appledore<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Nubble Lighthouse<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Nubble Lighthouse<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>NW Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>NW Appledore<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Pemaquid<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Pemaquid<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Schoodic<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Schoodic<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>SW Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>SW Appledore<\/nobr><\/td><\/tr><\/table><\/div>"],null,["Baker North","Baker South","Calf Island","Fort Weatherill","Hurricane Island","King's Beach","Little Brewster","Nahant","NE Appledore","Nubble Lighthouse","NW Appledore","Pemaquid","Schoodic","SW Appledore"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addTiles","args":["http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}",null,"Labels",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tmap402"}]},{"method":"addLayersControl","args":[[],["sites","Labels"],{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[41.4504976409745,44.3681600002745],"lng":[-71.3621234463603,-68.0781849997362]},"fitBounds":[41.4504976409745,-71.3621234463603,44.3681600002745,-68.0781849997362,[]]},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<section id="load-me." class="level2">
+<h2 class="anchored" data-anchor-id="load-me.">1. Load me.</h2>
+<p>The URL of the data is https://github.com/kelpecosystems/observational_data/blob/master/cleaned_data/keen_cover.csv?raw=true - use the <code>readr</code> library to load it in. Show me that you can do it both without downloading it and if you download it.</p>
+</section>
+<section id="format" class="level2">
+<h2 class="anchored" data-anchor-id="format">2. Format</h2>
+<p>Take a look at the data in any way you see fit to be able to tell me if the data is in a wide or long format. Justify your answer.</p>
+<!-- They should look at the data and note that there are multiple samples taken per transect of species with a cover measure for each species. This is long data - one measurement per species per transect, just like the Portal data -->
+</section>
+<section id="check-it-out." class="level2">
+<h2 class="anchored" data-anchor-id="check-it-out.">3. Check it out.</h2>
+<p>Let’s learn a bit about who is doing what using <code>group_by()</code>, <code>summarize()</code>, and <code>n_distinct()</code>. &nbsp; &nbsp; 3a. How many sites has each PI done?</p>
+<p>&nbsp; &nbsp; 3b. How many years of data does each site have? Show it in descending order.</p>
+<p>&nbsp; &nbsp; 3c. Impress yourself - can you make a figure showing which site was sampled when? There are a lot of ways to do this. Sometimes I use <code>slice()</code>, but I’m sure there are more elegant solutions. For data viz, you can use geoms you’ve used before, or new ones, like <code>geom_tile()</code> or whatever you think would be interesting!</p>
+</section>
+<section id="lets-look-at-some-kelp" class="level2">
+<h2 class="anchored" data-anchor-id="lets-look-at-some-kelp">4. Let’s look at some kelp!</h2>
+<p>&nbsp; &nbsp; 4a. This is a big unwieldy dataset. Let’s trim it down to the columns, YEAR, SITE, TRANSECT, PERCENT_COVER, and FAMILY, and SPECIES.</p>
+<p>&nbsp; &nbsp; 4b. Let’s make it even simpler. Trim the data down so the only species we are looking at are in the family “Laminariaceae”. After that, you can ditch the FAMILY column.</p>
+<p>&nbsp; &nbsp; 4c. For each species is there only one measurement per species transect each year? Or do we need to worry…… Note, this is a common data check you should be doing if you have a large complex data set!</p>
+<p>&nbsp; &nbsp; 4d. HAHA that was a trick. I knew there sometimes was more than one. That’s because some of these are measurements of juveniles and some are adults. OK - sum up the cover for each species on each transect so that we only have one measurement per species (adults and juveniles together!)</p>
+<p>&nbsp; &nbsp; 4e. Neat! Make a plot showing the timeseries of kelps at each site. You’ll want <code>stat_summary()</code> here. You might even need it twice because - note - <code>stat_summary()</code> has a <code>geom</code> argument where you can do things like “line”. What might that do? Check it out! Facet this plot by species, so we can see the trajectory of each. Feel free to gussy this plot up however you would like (or not). Do you notice anything? Comment!</p>
+</section>
+<section id="wide-relationships" class="level2">
+<h2 class="anchored" data-anchor-id="wide-relationships">5. Wide relationships</h2>
+<p>Let’s look at the relationship between two of the species here. Lexi made me do this, I swear. She made me think about tradeoffs in our weekly meeting last week, so now you all have this problem.</p>
+<p>&nbsp; &nbsp; 5a. If we want to look at the relationships between species, we need a wide data set. Use <code>pivot_wider()</code> to make species into columns with percent cover as your values. Note - be careful to fill in NAs as 0s.</p>
+<p>&nbsp; &nbsp; 5b. Neat! Is there a relationship between Saccharina latissima and Laminaria digitata? Plot it. As a preview for 2 weeks from now, add a line to your ggplot <code>stat_smooth(method = "lm")</code>. Also, remember that you will need backticks ` around variables with spaces in them. What do you think? Feel free to use any other geoms or explore however you like here.</p>
+<p>&nbsp; &nbsp; 5c. Hey, so, remember how we filled in a lot of 0s? Yeah, those weren’t in the original long data we plotted….. which means many of those lines might be wrong! So let’s pivot this correct long data back wide and then remake the figure from 4e. Does it look different? Does it tell a different story?</p>
+<hr>
+</section>
+<section id="meta-1." class="level2">
+<h2 class="anchored" data-anchor-id="meta-1.">Meta 1.</h2>
+<p>So, this was your first time playing with a novel only mostly clean data set found in the wild. How did you feel working with it? What did you notice as you examined it for the very first time knowing nothing about it?</p>
+</section>
+<section id="meta-2." class="level2">
+<h2 class="anchored" data-anchor-id="meta-2.">Meta 2.</h2>
+<p>Split-Apply-Combine is…. a way of life, really. Is this something you have dealt with previously in your life or work? How comfortable are you with this concept?</p>
+</section>
+<section id="meta-3." class="level2">
+<h2 class="anchored" data-anchor-id="meta-3.">Meta 3.</h2>
+<p>When you’ve made datasets in the past, have they been wide, long, or something else? After this week and the Browman and Woo paper, what advice would you give to future you when making data?</p>
+</section>
+<section id="meta-3.-1" class="level2">
+<h2 class="anchored" data-anchor-id="meta-3.-1">Meta 3.</h2>
+<p>How much time did this take you, roughly? Again, I’m trying to keep track that these assignments aren’t killer, more than anything.</p>
+</section>
+<section id="meta-4." class="level2">
+<h2 class="anchored" data-anchor-id="meta-4.">Meta 4.</h2>
+<p>Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

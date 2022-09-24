@@ -1,0 +1,198 @@
+---
+title: "Tidy Data Homework"
+author: "Biol607"
+format: 
+  html:
+    toc: true
+
+execute:
+  echo: false
+  include: false
+  warning: false
+  message: false
+---
+
+Since 2014, a group of us in New England have been surveying kelp forests from Rhode Island to Maine. There's a LOT of data from several protocols. Let's muck about with the percent cover data to learn about the sampling program and a bit about kelp forests here in New England.
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| include: true
+library(dplyr)
+library(sf)
+library(readr)
+library(tmap)
+
+sites <- read_csv("https://github.com/kelpecosystems/observational_data/raw/master/cleaned_data/keen_sites.csv") %>%
+  filter(!is.na(START_LONGITUDE)) %>%
+  mutate(START_LONGITUDE = ifelse(START_LONGITUDE>-45, END_LONGITUDE, START_LONGITUDE)) |>
+  st_as_sf(crs = 4326, 
+           coords = c("START_LONGITUDE", "START_LATITUDE")) %>%
+  group_by(SITE) %>%
+  summarise(st_union(geometry)) %>%
+                st_centroid() 
+
+#make a map
+tmap_mode("view")
+tm_basemap(leaflet::providers$Stamen.Watercolor) +
+tm_shape(sites) +
+  tm_dots(col = "red", size = 0.2) +
+  tm_tiles(paste0("http://services.arcgisonline.com/arcgis/rest/services/Canvas/",
+    "World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}"), group = "Labels")
+```
+
+## 1. Load me.
+The URL of the data is https://github.com/kelpecosystems/observational_data/blob/master/cleaned_data/keen_cover.csv?raw=true - use the `readr` library to load it in. Show me that you can do it both without downloading it and if you download it.
+
+```{r}
+#| echo: false
+#| message: false
+library(readr)
+dat <- read_csv("https://github.com/kelpecosystems/observational_data/blob/master/cleaned_data/keen_cover.csv?raw=true")
+
+#they should also read it from a directory
+```
+
+## 2. Format
+Take a look at the data in any way you see fit to be able to tell me if the data is in a wide or long format. Justify your answer.
+
+<!-- They should look at the data and note that there are multiple samples taken per transect of species with a cover measure for each species. This is long data - one measurement per species per transect, just like the Portal data -->
+
+## 3. Check it out.
+
+Let's learn a bit about who is doing what using `group_by()`, `summarize()`, and `n_distinct()`.
+&nbsp; &nbsp; 3a. How many sites has each PI done?
+```{r}
+library(dplyr)
+dat |>
+  group_by(PI) |>
+  summarize(n_sites = n_distinct(SITE))
+```
+
+&nbsp; &nbsp; 3b. How many years of data does each site have? Show it in descending order.
+
+```{r}
+dat |>
+  group_by(SITE) |>
+  summarize(n_years = n_distinct(YEAR)) |>
+  arrange(desc(n_years))
+```
+
+&nbsp; &nbsp; 3c. Impress yourself - can you make a figure showing which site was sampled when? There are a lot of ways to do this. Sometimes I use `slice()`, but I'm sure there are more elegant solutions. For data viz, you can use geoms you've used before, or new ones, like `geom_tile()` or whatever you think would be interesting!
+
+```{r}
+library(ggplot2)
+
+dat |>
+  group_by(SITE, YEAR) |>
+  slice(1L) |>
+  ungroup() |>
+  ggplot(aes(x = YEAR, y = SITE)) +
+  geom_tile() +
+  theme_bw()
+```
+
+## 4. Let's look at some kelp!
+
+&nbsp; &nbsp; 4a. This is a big unwieldy dataset. Let's trim it down to the columns, YEAR, SITE, TRANSECT, PERCENT_COVER, and FAMILY, and SPECIES.
+
+```{r}
+dat_smol <- dat %>%
+  select(YEAR, SITE, TRANSECT,
+         PERCENT_COVER, FAMILY, SPECIES)
+  
+```
+
+&nbsp; &nbsp; 4b. Let's make it even simpler. Trim the data down so the only species we are looking at are in the family "Laminariaceae". After that, you can ditch the FAMILY column.
+
+```{r}
+kelp_smol <- dat_smol |>
+  filter(FAMILY=="Laminariaceae") |>
+  select(-FAMILY)
+```
+
+&nbsp; &nbsp; 4c. For each species is there only one measurement per species  transect each year? Or do we need to worry...... Note, this is a common data check you should be doing if you have a large complex data set!
+
+```{r}
+kelp_smol %>%
+  count(YEAR, SITE, TRANSECT, SPECIES) %>%
+  arrange(desc(n))
+```
+
+&nbsp; &nbsp; 4d. HAHA that was a trick. I knew there sometimes was more than one. That's because some of these are measurements of juveniles and some are adults. OK - sum up the cover for each species on each transect so that we only have one measurement per species (adults and juveniles together!)
+
+```{r}
+kelp_smol <- kelp_smol |>
+  group_by(YEAR, SITE, TRANSECT, SPECIES) |>
+  summarize(PERCENT_COVER = sum(PERCENT_COVER, na.rm=TRUE)) |>
+  ungroup()
+```
+
+&nbsp; &nbsp; 4e. Neat! Make a plot showing the timeseries of kelps at each site. You'll want `stat_summary()` here. You might even need it twice because - note - `stat_summary()` has a `geom` argument where you can do things like "line". What might that do? Check it out! Facet this plot by species, so we can see the trajectory of each. Feel free to gussy this plot up however you would like (or not). Do you notice anything? Comment!
+
+```{r}
+ggplot(data = kelp_smol,
+       aes(x = YEAR, y = PERCENT_COVER, color = SITE)) +
+  stat_summary() +
+  stat_summary(geom = "line") +
+  facet_wrap(vars(SPECIES))
+```
+
+## 5. Wide relationships
+Let's look at the relationship between two of the species here. Lexi made me do this, I swear. She made me think about tradeoffs in our weekly meeting last week, so now you all have this problem.
+
+&nbsp; &nbsp; 5a. If we want to look at the relationships between species, we need a wide data set. Use `pivot_wider()` to make species into columns with percent cover as your values. Note - be careful to fill in NAs as 0s.
+
+```{r}
+library(tidyr)
+kelp_wide <- kelp_smol |>
+  pivot_wider(names_from = SPECIES,
+              values_from = PERCENT_COVER,
+              values_fill = 0)
+```
+
+&nbsp; &nbsp; 5b. Neat! Is there a relationship between Saccharina latissima and Laminaria digitata? Plot it. As a preview for 2 weeks from now, add a line to your ggplot `stat_smooth(method = "lm")`. Also, remember that you will need backticks \` around variables with spaces in them. What do you think? Feel free to use any other geoms or explore however you like here.
+
+```{r}
+ggplot(kelp_wide,
+       mapping = aes(x = `Saccharina latissima`,
+                     y = `Laminaria digitata`)) +
+  geom_jitter(alpha = 0.9)+
+  stat_smooth(method = "lm")
+```
+
+&nbsp; &nbsp; 5c. Hey, so, remember how we filled in a lot of 0s? Yeah, those weren't in the original long data we plotted..... which means many of those lines might be wrong! So let's pivot this correct long data back wide and then remake the figure from 4e. Does it look different? Does it tell a different story?
+
+```{r}
+kelp_long <- kelp_wide |>
+  pivot_longer(cols = -c(YEAR, SITE, TRANSECT),
+               names_to = "SPECIES",
+               values_to = "PERCENT_COVER")
+
+
+ggplot(data = kelp_long,
+       aes(x = YEAR, y = PERCENT_COVER, color = SITE)) +
+  stat_summary() +
+  stat_summary(geom = "line") +
+  facet_wrap(vars(SPECIES))
+```
+
+
+----
+
+
+## Meta 1. 
+So, this was your first time playing with a novel only mostly clean data set found in the wild. How did you feel working with it? What did you notice as you examined it for the very first time knowing nothing about it?
+
+## Meta 2. 
+Split-Apply-Combine is.... a way of life, really. Is this something you have dealt with previously in your life or work? How comfortable are you with this concept?
+
+## Meta 3.
+When you've made datasets in the past, have they been wide, long, or something else? After this week and the Browman and Woo paper, what advice would you give to future you when making data?
+
+## Meta 3. 
+How much time did this take you, roughly? Again, I'm trying to keep track that these assignments aren't killer, more than anything.  
+
+## Meta 4. 
+Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.
+
