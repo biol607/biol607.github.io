@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Sampling and Simulation</title>
+    <title>Samples and Populations</title>
     <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
   <body>
@@ -19,28 +21,17 @@ background-position: center
 background-size: cover
 
 
-&lt;br&gt;&lt;br&gt;
-&lt;div style="align:center; background:black; color:white; font-size: 3em;font-weight: bold;"&gt;Sampling&lt;/div&gt;
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;div style="align:center; background:black; color:white; font-size: 3em;font-weight: bold;"&gt;Samples and Populations&lt;/div&gt;
 
 ---
 # Outline
 
-1. Sampling Nature
+1. Taking a Sample
 
 2. Describing a Sample
 
 3. Using a Sample to Describe a Population
-
----
-# Today's quiz:
-
-&lt;br&gt;&lt;br&gt;&lt;br&gt;
-.center[.large[http://tinyurl.com/sampling-pre]]
-
----
-
-# Today's Etherpad
-&lt;br&gt;&lt;br&gt;&lt;br&gt;.center[.large[https://etherpad.wikimedia.org/p/sampling-2020]]
 
 ---
 class:center
@@ -117,6 +108,7 @@ class: center, middle
 &lt;img src="03_sampling_lecture_x_files/figure-html/colorSize-1.png" style="display: block; margin: auto;" /&gt;
 If you only chose one color, you would only get one range of sizes.
 
+&lt;!--
 ---
 
 # Unrepresentative Bias from Unequal Change of Sampling
@@ -197,6 +189,8 @@ class:
 ### 1. What is a population you sample?  
   
 ### 2. How do you ensure validity, reliability, and representativeness of a sample?
+
+--&gt;
 
 ---
 # Outline
@@ -383,7 +377,7 @@ IQR(samp)
 
 &lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
---
+---
 class: center, middle
 
 # We chose it to be representative of the population.
@@ -454,12 +448,6 @@ $$ \large s = \sqrt{s^2}$$
 * If distribution is normal, 67% of data within 1 SD
 * 95% within 2 SD
 * `\(\sigma\)` if describing the population
-
----
-class: middle, center
-
-# Post-Quiz
-http://tinyurl.com/sampling-post
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -508,6 +496,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

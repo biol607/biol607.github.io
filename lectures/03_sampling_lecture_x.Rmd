@@ -1,5 +1,5 @@
 ---
-title: "Sampling and Simulation"
+title: "Samples and Populations"
 output:
   xaringan::moon_reader:
     seal: false
@@ -31,31 +31,20 @@ opts_chunk$set(fig.height=7,
                message = FALSE)
 
 options(htmltools.dir.version = FALSE)
-read_chunk("./03_sampling_lecture.R")
+read_chunk("lectures/03_sampling_lecture.R")
 theme_set(theme_bw(base_size=16))
 ```
-<br><br>
-<div style="align:center; background:black; color:white; font-size: 3em;font-weight: bold;">Sampling</div>
+<br><br><br><br><br>
+<div style="align:center; background:black; color:white; font-size: 3em;font-weight: bold;">Samples and Populations</div>
 
 ---
 # Outline
 
-1. Sampling Nature
+1. Taking a Sample
 
 2. Describing a Sample
 
 3. Using a Sample to Describe a Population
-
----
-# Today's quiz:
-
-<br><br><br>
-.center[.large[http://tinyurl.com/sampling-pre]]
-
----
-
-# Today's Etherpad
-<br><br><br>.center[.large[https://etherpad.wikimedia.org/p/sampling-2020]]
 
 ---
 class:center
@@ -160,6 +149,7 @@ normplot +
 ```
 If you only chose one color, you would only get one range of sizes.
 
+<!--
 ---
 
 # Unrepresentative Bias from Unequal Change of Sampling
@@ -244,6 +234,8 @@ class:
 ### 1. What is a population you sample?  
   
 ### 2. How do you ensure validity, reliability, and representativeness of a sample?
+
+-->
 
 ---
 # Outline
@@ -450,7 +442,7 @@ sample_count_plot +
   ggtitle("Sample")
 ```
 
---
+---
 class: center, middle
 
 # We chose it to be representative of the population.
@@ -573,10 +565,3 @@ $$ \large s = \sqrt{s^2}$$
 * If distribution is normal, 67% of data within 1 SD
 * 95% within 2 SD
 * $\sigma$ if describing the population
-
----
-class: middle, center
-
-# Post-Quiz
-http://tinyurl.com/sampling-post
- 
