@@ -34,37 +34,28 @@ opts_chunk$set(fig.height=5, fig.width=7, comment=NA,
 
 ## Let's say you want to do this...
 
-1. Start with sample sizes 3 through 5, and a population mean, and SD.
-
-2. Run 1000 simulations.
-
-3. For each simulation, calculate a mean, and then get the SE of the mean.
-
-4. Have it all appear in a data frame with sample size and SE.
-
+1. Make a DF with 4 columns of random numbers.  
+  
+2. Standardize EACH variable relative to it's minimum and maximum, after subtracting the minimum. 
 
 ## You could....
 
-```{r, bad_nofun}
-m <- 5
-s <- 2
+```{r eval=FALSE, echo=TRUE}
+df <- tibble::tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
 
-my_df <- data.frame(samp_size = 3:5,
-                    se = rep(NA, 3))
-
-my_df$se[1] <- sd(replicate(1000, 
-                            mean(rnorm(my_df$samp_size[1], m, s))))
-my_df$se[2] <- sd(replicate(1000, 
-                            mean(rnorm(my_df$samp_size[2], m, s))))
-my_df$se[3] <- sd(replicate(1000, 
-                            mean(rnorm(my_df$samp_size[3], m, s))))
-
-```
-
-> (yes, this is pre-dplyr)
-
-## So....What is wrong here?
-```{r bad_nofun, eval = FALSE}
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / 
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / 
+  (max(df$b, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$c <- (df$c - min(df$c, na.rm = TRUE)) / 
+  (max(df$c, na.rm = TRUE) - min(df$c, na.rm = TRUE))
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / 
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 ```
 
 ## Some wrong things
@@ -78,24 +69,14 @@ my_df$se[3] <- sd(replicate(1000,
 4. You were doing 4 things in each line of code! Unreadable?
 
 
-## 
-
-<br><br><br><h2>Solutions?</h2>
-
-## Solutions
-1. Write code for each individual sample size  
-    - Lots of copy-paste  
-    - What about if you have a different mean and SD?
-    
-2. Iterate over indices somhow?   
-     - Only good for this one case - fragile code   
-     
-3. FUNCTIONS!
-
 ## A Funcitonal Outline
 1. Intro to Functions  
      
-2. Modular Programming
+2. Let's Write Some Functions!  
+  
+3. More than One Argument  
+  
+4. How to Build a Function  
 
 ## When to write a function
 <p align="left"><br><br>
@@ -180,6 +161,17 @@ add_one <- function(x) x+1
 
 </div>
 
+
+
+## A Funcitonal Outline
+1. Intro to Functions  
+     
+2. <font color = "red">Let's Write Some Functions!</font>
+
+3. More than One Argument  
+  
+4. How to Build a Function  
+
 ## Let's write some functions
 ```{r fun2, echo=TRUE}
 ```
@@ -225,6 +217,15 @@ max_minus_min <- function(a_vector){
 
 max_minus_min(c(4,7,1,6,8))
 ```
+
+## A Funcitonal Outline
+1. Intro to Functions  
+     
+2. Let's Write Some Functions!  
+
+3. <font color = "red">More than One Argument</font>  
+
+4. How to Build a Function  
 
 ## On arguments
 Functions can take many arguments:
@@ -275,193 +276,143 @@ Write a function and paste it into the etherpad that
 3. Takes a number, a string, and a separator and combines them
      - my_function(3, "hello", "-") makes "3 - hello"  
      
-EC. Write a function that takes a sample size, mean, SD, and number of sims, and returns a data frame with a mean and SE of said mean. Have it default to 100 sims.
-
 ## Why are we doing this to ourselves?
 ![](images/functions/automation-win.png)
-
-## A Function For Sampling
-```{r read, echo=TRUE}
-mean_and_se_sim <- function(n, m, s, sims = 100){
-  samps <- replicate(sims, rnorm(n, m, s))
-  
-  means <- colMeans (samps)
-  
-  out <- data.frame(mean = mean(means),
-                    se_mean = sd(means))
-  
-  return(out)
-}
-
-mean_and_se_sim(n = 5, m = 10, s = 3)
-```
-
-## How did I build that function?
-1. OK, what's *normally* going to change 
-     - Sample size, mean, and SD
-     
-2. BUT - what could change under some circumstances?
-     - number of simulations
-
-3. Write some test code
-
-## Test Code
-
-```{r test, echo=TRUE, eval=TRUE}
-# define a sample size, mean, and SD
-
-# draw samples
-
-# calculate means from samples
-
-# create a data frame with mean and se of the mean
-
-# return
-```
-
-## Test Code
-
-```{r test2, echo=TRUE, eval=TRUE, message=FALSE}
-# define a sample size, mean, and SD
-n <- 5
-m <-10
-s <- 3
-sims <- 100
-
-# draw samples
-samps <- replicate(sims, rnorm(n, m, s))
-
-# calculate means from samples
-means <- colMeans (samps)
-
-# create a data frame with mean and se of the mean
-out <- data.frame(mean = mean(means),
-                    se_mean = sd(means))
-# return
-
-```
-
-## One  Function
-```{r read, echo=TRUE}
-```
-
 
 ## A Funcitonal Outline
 1. Intro to Functions  
      
-2. <font color="red">Modular Programming</font>
+2. Let's Write Some Functions!
 
-## Problems with Our Function
-1. Two lines to get a bootstrapped mean?
+3. More than One Argument
+
+4. <font color = "red">How to Build a Function</font>
+
+## How did I build that function?
+1. OK, what's *normally* going to change 
      
-2. Why only mean? Can we generalize?
+2. AND - what could change under some circumstances?
 
-## What to do? Modularize!
-```{r read, message=FALSE, eval=FALSE}
+3. Write some test code (START WITH COMMENTS!)
+
+## Test Code
+
+```{r test, echo=TRUE, eval=TRUE}
+# start with a vector
+
+# subtract the min
+
+# calculate the max - min
+
+# divide the subracted value by the (max-min)
+
+# return
 ```
 
-## What to do? Modularize! 
-```{r, echo=TRUE}
+## Test Code
 
-get_samp_rep <- function(n, m, s){
-  samp <- rnorm(n, m, s)
-  mean(samp)
-}
+```{r test2, echo=TRUE, eval=FALSE}
+x <- rnorm(10)
 
-mean_and_se_sim <- function(n, m, s, sims = 100){
+# subtract the min
+smol_value <- x - min(x, na.rm = TRUE)
 
-  means <- replicate(sims, get_samp_rep(n, m, s))
-    
-  out <- data.frame(mean = mean(means),
-                    se_mean = sd(means))
-  
-  return(out)
+# calculate the max - min
+
+# divide the subracted value by the (max-min)
+
+# return
+```
+
+## Test Code
+
+```{r test3, echo=TRUE, eval=FALSE}
+x <- rnorm(10)
+
+# subtract the min
+smol_value <- x - min(x, na.rm = TRUE)
+
+# calculate the max - min
+vec_range <- max(x, na.rm = TRUE) - min(x, na.rm = TRUE)
+
+# divide the subracted value by the (max-min)
+
+# return
+```
+
+## Test Code
+
+```{r test4, echo=TRUE, eval=FALSE}
+x <- rnorm(10)
+
+# subtract the min
+smol_value <- x - min(x, na.rm = TRUE)
+
+# calculate the max - min
+vec_range <- max(x, na.rm = TRUE) - min(x, na.rm = TRUE)
+
+# divide the subracted value by the (max-min)
+value <- smol_value / vec_range
+
+# return
+```
+
+## Turn test code into a function
+
+```{r test_fun, echo=TRUE, eval=TRUE}
+std_values <- function(x){
+  # subtract the min
+  smol_value <- x - min(x, na.rm = TRUE)
+
+  # calculate the max - min
+  vec_range <- max(x, na.rm = TRUE) - min(x, na.rm = TRUE)
+
+  # divide the subracted value by the (max-min)
+  value <- smol_value / vec_range
+
+  # return
+  return(value)
 }
 ```
 
-##
-![](./images/functions/functions_meme.jpg)
+## Our Final Workflow - So Readable!
 
-## Wait, what is this modular madness?
-- Our code is now composed of modular pieces  
-  
-- This means each modular function can be used in other contexts
-     - Enhances code flexibility and future reuse  
-  
-- It also means it is easier to find where our code has gone wrong  
-     - Easier to test and debug
-  
-- AND - we don't get lost writing one honking single function
-  
-## How to write complex functions/piplines
-1. Start with a wrapper   
-     - Write out the steps of what you want to do in comments  
-     - Pair those with functions using "snake case" `clean_data`  
-     - Use `%>%` for efficiency/readability!  
-        
-2. Write the subfunctions  
-     - Repeat the toplevel comments anf functions  
-     
-3. Continue until you have the lowest level atomized functions  
-     
-4. Test THOSE functions. Then test up the chain....
+```{r eval=FALSE, echo=TRUE}
+df <- tibble::tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
 
-## Reality Check
-<br><br><br>
-Yes, sometimes you will write long functions - as long as they are simple and readable, meh
+df <- df |>
+  mutate(a = std_values(a),
+         b = std_values(b),
+         c = std_values(c),
+         d = std_values(d))
 
-## What to do? Generalize! 
-```{r, echo=TRUE}
-
-get_samp_rep <- function(n, m, s, fun = mean){
-  samp <- rnorm(n, m, s)
-  fun(samp)
-}
-
-stat_and_se_sim <- function(n, m, s, 
-                            fun = mean, sims = 100){
-
-  vals <- replicate(sims, get_samp_rep(n, m, s, fun))
-    
-  out <- data.frame(stat = mean(vals),
-                    se_stat = sd(vals))
-  
-  return(out)
-}
 ```
 
-## Does it blend?
+## dplyr says No Moar Copy Paste
 
 ```{r}
-mean_and_se_sim(n = 5, m = 10, s = 3)
+df <- tibble::tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
 
-stat_and_se_sim(n = 5, m = 10, s = 3)
+df <- df |>
+  mutate(
+    across(.cols = everything(), 
+           .fn = std_values)
+    )
+
 ```
 
-## Does it blend?
 
-```{r}
-stat_and_se_sim(n = 5, m = 10, s = 3)
-
-stat_and_se_sim(n = 5, m = 10, s = 3, fun = median)
-
-stat_and_se_sim(n = 5, m = 10, s = 3, fun = sd)
-```
-
-## Putting it All Together with Dplyr
-```{r}
-library(dplyr)
-
-data.frame(samp_size = 5:10) %>%
-  rowwise(samp_size) %>%
-  summarize(stat_and_se_sim(n = 5, m = 10, s = 3, fun = sd)) %>%
-  rename(s = stat, se_s = se_stat)
-```
-  
-
-## Final Exercises
-1. Write a function that will get the mean, sd, median, and IQR of a sample of a population.  
-  
-2. Write a function that uses this to get 1K resampled values to get the statistic and its SE.
-  
-3. Wrap it all in dplyr magick to get these statistics for sample sizes 3:5, means 2:5, and sd 1:3. Use tidyr::crossing to make the initial data frame.
+## When to write a function
+<p align="left"><br><br>
+"You should consider writing a function whenever you’ve copied and pasted a block of code more than twice" <Br> <br>- H. Wickham
+</p>
