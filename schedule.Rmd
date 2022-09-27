@@ -70,12 +70,12 @@ __Homework:__ [ggplot2 homework](./homework/ggplot.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  [Data import, libraries, factors and forcats](lectures/06_read_data_libraries.html),  [Data manipulation, summarization, and making it tidy](https://datacarpentry.org/R-ecology-lesson/03-dplyr.html),  [Functions](lectures/functions.html)  
+__Lecture:__  [Data import, libraries, factors and forcats](lectures/06_read_data_libraries.html),  [Data manipulation, summarization, and making it tidy](https://datacarpentry.org/R-ecology-lesson/03-dplyr.html)    
 <!--, [Joins](lectures/18_join.html)  -->
 __Data:__ [Portal Data](https://ndownloader.figshare.com/files/2292169) - and learn more [here](https://portal.weecology.org/)  
-__Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [data import](https://r4ds.hadley.nz/data-import.html),  [pipes](https://r4ds.hadley.nz/workflow-pipes.html), [data transformation](https://r4ds.hadley.nz/data-transform.html), [functions](https://r4ds.had.co.nz/functions.html), [tidy data](https://r4ds.hadley.nz/data-tidy.html)    
-__Optional Reading:__ [Strings](http://r4ds.had.co.nz/strings.html), [factors](https://r4ds.hadley.nz/factors.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
-__Cheat Sheets:__ [Reading data into R](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).  
+__Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [data import](https://r4ds.hadley.nz/data-import.html),  [pipes](https://r4ds.hadley.nz/workflow-pipes.html), [data transformation](https://r4ds.hadley.nz/data-transform.html), [tidy data](https://r4ds.hadley.nz/data-tidy.html)    
+__Optional Reading:__ [Managing Data Frames with the Dplyr package](https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html), [Strings](http://r4ds.had.co.nz/strings.html), [factors](https://r4ds.hadley.nz/factors.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
+__Cheat Sheets:__ [Reading data into R](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf), [Dplyr cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdfPaperpile).  
 __Packages:__ `install.packages(c("dplyr", "janitor", "skimr", "lubridate", "tidyr", "readr", "readxl", "tibble"))` - [readr](https://readr.tidyverse.org/),  [readxl](https://readxl.tidyverse.org/),  [tibble](https://tibble.tidyverse.org/),  [skimr](https://docs.ropensci.org/skimr/), 
 [janitor](https://garthtarr.github.io/meatR/janitor.html),
 [visdat](https://docs.ropensci.org/visdat/)  
@@ -88,10 +88,9 @@ __Homework:__ [Data Manipulation and Pivot homework](./homework/dplyr_tidyr.html
 ```{r next_date, echo=FALSE }
 ```
 `r datestring`   
-__Lecture:__ Descriptive statistics, and the creation of good observational sampling designs.    - [Sampling](lectures/03_sampling_lecture_x.html) and [Simulation for Estimation](lectures/04_simulation_estimation_x.html).   
-__Lab Topic:__ [Sampling and simulation](lab/02_sim_samp.html). Libraries in R. Dplyr.   
-__Reading:__ W&S 1,3-4,  [Dplyr cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdfPaperpile)  
-__Optional Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf), [Simpler Coding with Pipes](https://www.r-statistics.com/2014/08/simpler-r-coding-with-pipes-the-present-and-future-of-the-magrittr-package/), [Managing Data Frames with the Dplyr package](https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html)  
+__Lecture:__ Descriptive statistics, probability distributions, simulation and sample size - [Functions](lectures/functions.html), [Sampling](lectures/03_sampling_lecture_x.html) and [Simulation for Estimation](lectures/04_simulation_estimation_x.html).   
+__Lab Topic:__ [Sampling and simulation](lab/02_sim_samp.html).    
+__Reading:__ W&S 1,3-4,  [functions](https://r4ds.had.co.nz/functions.html), [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf)   
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2022  
 __Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages(c("dplyr", "purrr"))`  
 __In Class Code:__ [Code from Lab for dplyr](in_class_code/2020/scripts/intro_to_tidyverse.R), [Code from Lab for simulation from a population](in_class_code/2020/scripts/simulation.R), [Code from Lab for Bootstrapped SE](in_class_code/2020/scripts/boot_se.R)\
