@@ -161,7 +161,7 @@ ggplot(kelp_wide,
   stat_smooth(method = "lm")
 ```
 
-&nbsp; &nbsp; 5c. Hey, so, remember how we filled in a lot of 0s? Yeah, those weren't in the original long data we plotted..... which means many of those lines might be wrong! So let's pivot this correct long data back wide and then remake the figure from 4e. Does it look different? Does it tell a different story?
+&nbsp; &nbsp; 5c. Hey, so, remember how we filled in a lot of 0s? Yeah, those weren't in the original long data we plotted..... which means many of those lines from question 4e might be wrong! So let's pivot this correct long data back wide and then remake the figure from 4e. Does it look different? Does it tell a different story?
 
 ```{r}
 kelp_long <- kelp_wide |>
