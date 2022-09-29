@@ -39,10 +39,6 @@ puce <- "#a95c68"
 ![](images/04/target.png)
 
 ### Biol 607
----
-
-# Today's Etherpad
-<br><br><br>.center[.large[https://etherpad.wikimedia.org/p/sampling-2020]]
 
 ---
 
@@ -299,7 +295,7 @@ background-position: center
 background-size: cover
 
 ```{r load_firefly}
-firefly <- read.csv("./data/04/04q06FireflyFlash.csv")
+firefly <- read.csv("lectures/data/04/04q06FireflyFlash.csv")
 ```
 ---
 # Start With a Population...
@@ -314,6 +310,7 @@ So assuming a normal distribution...
 --
 
 ```{r fireflydist, fig.height = 5, fig.width = 7, echo=FALSE}
+set.seed(607)
 fireflyDens <- data.frame(x=seq(65,125, .1), 
                   y=dnorm(seq(65,125, .1), mean(firefly$flash.ms),sd(firefly$flash.ms)))
 
@@ -332,7 +329,7 @@ SD of Firefly flasing times: `r sd(firefly$flash.ms)`
 So assuming a normal distribution...
 
 ```{r choose, echo=FALSE}
-set.seed(2002)
+set.seed(607)
 fireflySim5 <- rnorm(5,mean(firefly$flash.ms),sd(firefly$flash.ms))
 ```
 
@@ -343,13 +340,7 @@ ffDensWithSim <- ffDensPlot +
 ffDensWithSim
 ```
 
---
 
-```{r, eval = FALSE, echo = TRUE}
-rnorm(n = 5,
-      mean = mean(firefly$flash.ms),
-      sd = sd(firefly$flash.ms)
-```
 ---
 
 # Calculate Sample Mean
@@ -421,16 +412,36 @@ ggplot(simFrame, mapping=aes(x=sampSize, y=m)) +
 ```
 
 ---
+# Note the Decline in SE with Increasing Sample Size
+
+```{r se_and_n}
+n_labelled <- function(string){
+  return(paste0("n = ", string))
+}
+
+simFrame |>
+  filter(sampSize %in% c(2,25,50,70)) |>
+  ggplot(aes(x = m)) +
+  geom_density() +
+  facet_wrap(vars(sampSize), ncol = 2, labeller = as_labeller(n_labelled)) +
+  labs(x = "estimated mean")
+```
+
+
+---
 # Where does the variability level off?
 ```{r dist_sim_low_sd}
-simFrameSummary
+simFrameSummary %>% 
+  arrange(sampSize) |>
+  knitr::kable("html") %>%
+  kableExtra::kable_minimal()
 ```
 
 ---
 
 # Visualize Variability in Estimate of Mean
 
-```{r sim_prec}
+```{r sim_prec, fig.height = 6}
 simPrec <- simFrame %>%
   group_by(sampSize) %>%
   summarize(precision = 1/var(m),
@@ -440,7 +451,7 @@ ggplot(simPrec,
        aes(x = sampSize, y = sd)) +
   xlab("Sample Size") +
   geom_line() + geom_point() +
-  ylab("SD of Estimate of Mean (SE)")
+  ylab("SD of Estimate of Mean\n(i.e., the SE)")
 ```
 
 
@@ -453,6 +464,8 @@ class: center, middle
 
 https://istats.shinyapps.io/sampdist_cont/
 
+https://istats.shinyapps.io/SampDist_discrete/
+
 
 ---
 class: center, middle
@@ -464,9 +477,9 @@ A standard error is the standard deviation of an estimated parameter if we were 
 
 ---
 
-# But, I only Have One Sample? How can I know my SE for my mean or any other parameter?
+# But, I only Have One Sample? How can I know my SE for my mean other parameters?
 
-```{r firehist}
+```{r firehist, fig.height = 6}
 ggplot(firefly,
        aes(x = flash.ms)) +
   geom_histogram(bins = 10, fill = puce, color = "black") +
@@ -502,7 +515,9 @@ ggplot(firefly,
 
 ```{r, echo = TRUE}
 # One bootstrap
-sample(firefly$flash.ms, size = nrow(firefly), replace = TRUE)
+sample(firefly$flash.ms, 
+       size = nrow(firefly), 
+       replace = TRUE)
 ```
 
 ---
@@ -514,7 +529,9 @@ sample(firefly$flash.ms, size = nrow(firefly), replace = TRUE)
 
 ```{r, echo = TRUE}
 one_boot <- function(){
-  sample(firefly$flash.ms, size = nrow(firefly), replace = TRUE)
+  sample(firefly$flash.ms, 
+         size = nrow(firefly), 
+         replace = TRUE)
 }
 
 boot_means <- replicate(1000, mean(one_boot()))
@@ -543,7 +560,7 @@ Boot SEM: Boot SEM: `r round(sd(boot_means),3)`, Est. SEM: `r round(sd(firefly$f
 
 --
 
-.center[(but for medians, etc., yes )]
+.center[(but for medians, etc., yes )<br><br>https://istats.shinyapps.io/Boot1samp/]
 
 ---
 
@@ -570,11 +587,11 @@ class: large
 --
 
 
-- We have drawn our SE from a **sample** - not the **population**
+- We have calculated our SE from a **sample** - not the **population**
 
 --
 
-- Our estimate ± 1 SE tells us 2/3 of the **estimates** we could get by resampling this sample  
+- Our estimate ± 1 SE tells us 2/3 of the *means* we could get by **resampling this sample**  
 
 --
 
@@ -582,7 +599,7 @@ class: large
 
 --
 
-- Rather, if we were to sample the population many many times, 2/3 of the time, this interval will contain the true value
+- BUT, if we *were* to sample the population many times, 2/3 of the time, the sample-based SE will contain the "true" value
 
 
 ---
@@ -596,7 +613,7 @@ class: large
 
 - Best to view these as a measure of precision of your estimate
 
-- And remember, if you were able to do the sampling again and again and again, some fraction of your intervals would contain a true value
+- And remember, if you were able to do the sampling again and again and again, some fraction of your intervals would *not* contain a true value
 ]
 ---
 
@@ -640,9 +657,14 @@ ggplot(dat,
 ```
 
 ---
-# A Final Note: SE, SD, CIs....
-![:scale 55%](images/04/cumming_comparison_2007.jpg)
-.bottom[.small[.left[[Cumming et al. 2007 Figure 4](http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf)]]]
+# A Final Note: SE (sample), CI (sample), and SD (population)....
+
+ ![:scale 55%](images/04/cumming_comparison_2007.jpg) 
+
+
+.bottom[.small[.left[[Cumming et al. 2007 Table 1](http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf)]]]
+
+
 ---
 # SE, SD, CIs....
 ![:scale 75%](images/04/cumming_table_2007.jpg)
