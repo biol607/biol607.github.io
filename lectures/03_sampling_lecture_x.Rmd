@@ -149,93 +149,15 @@ normplot +
 ```
 If you only chose one color, you would only get one range of sizes.
 
-<!--
----
-
-# Unrepresentative Bias from Unequal Change of Sampling
-```{r spatialBias,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
-```
---
-
-Spatial gradient in size
 
 ---
-
-# Unrepresentative bias from Unequal Choice of Sampling
-```{r spatialSample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
-```
-Oh, I'll just grab those individuals closest to me...
-
----
-
-# Solutions
-
-1. Validity: Can you connect your measurement and question?
-
-2. Reliability: Sample a standard or known population  
-
-3. Representative: Sampling design!
-
----
-
-# A more representative sample from Random Sampling
-```{r spatialSample2,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
-```
---
-
-Two sampling schemes
-
---
-
-- Random - samples chosen using random numbers  
-
--- 
-
-- Haphazard - samples chosen without any system (careful!)
-
----
-
-# A more representative sample from **Stratified** Sampling
-```{r stratified,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
-```
-Sample over a known gradient, aka **cluster sampling**
-
-Can incorporate multiple gradients
-
----
-
-# Stratified or Random?
-
-- How is your population defined?  
-
-
-- What is the scale of your inference?  
-
-
-- What might influence the inclusion of a replicate?  
-
-
-- How important are external factors you know about?  
-
-
-- How important are external factors you cannot assess?  
-
----
-
-# Stratified Random Sampling
-  
-.center[.middle[![](./images/03/stratified_random_sampling_meme.jpg)]]
-
----
-class: 
-
 # Exercise:
-
+<br><br>
 ### 1. What is a population you sample?  
+  <br><br>
   
 ### 2. How do you ensure validity, reliability, and representativeness of a sample?
 
--->
 
 ---
 # Outline
@@ -311,17 +233,19 @@ Frequency = Probability Density, Sums to One.
 
 ---
 
-# Ways to Describe Our Sample
+# Describing Our Sample as a unique thing  
 
-- Describing it as a unique thing
-     - What is the value smack in the middle?
-     - What are large and small values like?
-     - Is our sample clustered, or waaaay spread out?
-     
-- Describing it with reference to a population
-      - If I were to draw from this sample, or it's like, what value would I most likely get?
-      - If I assume a normal distribution, what's the range of 66% or 95% of the variability?
-      - Is this sample peaked, flat, shifted one way or another?
+--
+- What is the value smack in the middle?  
+
+--
+  
+- What are large and small values like?
+
+--
+  
+- Is our sample clustered, or waaaay spread out?
+
 
 ---
 
@@ -480,6 +404,21 @@ sample_demo_plot + pop_demo_plot
 
 ---
 
+# Describing a sample with reference to a population
+  
+    
+--
+
+- If I were to draw from this sample, or it's like, what value would I most likely get?    
+--
+  
+- If I assume a normal distribution, what's the range of 66% or 95% of the variability?    
+--
+  
+- Is this sample peaked, flat, shifted one way or another?
+
+---
+
 # Expected Value: the Mean
 
 ```{r, fig.width = 10}
@@ -493,7 +432,7 @@ sample_demo_plot + pop_demo_plot
 
 ---
 
-# Sample Properties: **Mean**
+# Sample Estimate of Population Properties: **Mean**
 
 $$\bar{x} = \frac{ \displaystyle \sum_{i=1}^{n}{x_{i}} }{n}$$
 
@@ -548,7 +487,7 @@ pop_demo_plot_sd <- ggplot()+
 ```
 
 ---
-# Sample Properties: **Variance**
+# Sample Estimate of Population Properties: **Variance**
 How variable was that population?
 $$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^2}} {n-1}$$
 
@@ -558,10 +497,114 @@ $$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^2}} {n-1}$$
 * Units in square of measurement...
 
 ---
-# Sample Properties: Standard Deviation
+# Sample Estimate of Population Properties: Standard Deviation
 $$ \large s = \sqrt{s^2}$$  
 
 * Units the same as the measurement
 * If distribution is normal, 67% of data within 1 SD
 * 95% within 2 SD
 * $\sigma$ if describing the population
+
+---
+# Sample Estimate of Population Properties: **Skew**
+How centrally distributed is your population?
+$$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^3}} {(n-1)s^3}$$
+
+* Positive, peak is shifted right
+* Negative, peak is shifted left
+* Zero, it's nice and normal
+
+---
+# Sample Estimate of Population Properties: **Kurtosis**
+How much of your population is close to the mode versus way out in the tails?
+$$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^4}} {(n-1)s^4}$$
+* Larger than 3, sharply peaked distribution, narrow tails
+     - leptokurtic
+* Less than 3, flat distribution, wide tails  
+     - platykurtic
+* 3 - normal  
+
+
+
+---
+
+# Always Remember - What is your Sample? What is your Population? Is one representative of the other?
+
+```{r samp_pop_plot}
+```
+
+<!-- --- -->
+
+<!-- # Unrepresentative Bias from Unequal Change of Sampling -->
+<!-- ```{r spatialBias,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} -->
+<!-- ``` -->
+<!-- -- -->
+
+<!-- Spatial gradient in size -->
+
+<!-- --- -->
+
+<!-- # Unrepresentative bias from Unequal Choice of Sampling -->
+<!-- ```{r spatialSample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} -->
+<!-- ``` -->
+<!-- Oh, I'll just grab those individuals closest to me... -->
+
+<!-- --- -->
+
+<!-- # Solutions -->
+
+<!-- 1. Validity: Can you connect your measurement and question? -->
+
+<!-- 2. Reliability: Sample a standard or known population   -->
+
+<!-- 3. Representative: Sampling design! -->
+
+<!-- --- -->
+
+<!-- # A more representative sample from Random Sampling -->
+<!-- ```{r spatialSample2,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} -->
+<!-- ``` -->
+<!-- -- -->
+
+<!-- Two sampling schemes -->
+
+<!-- -- -->
+
+<!-- - Random - samples chosen using random numbers   -->
+
+<!-- --  -->
+
+<!-- - Haphazard - samples chosen without any system (careful!) -->
+
+<!-- --- -->
+
+<!-- # A more representative sample from **Stratified** Sampling -->
+<!-- ```{r stratified,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} -->
+<!-- ``` -->
+<!-- Sample over a known gradient, aka **cluster sampling** -->
+
+<!-- Can incorporate multiple gradients -->
+
+<!-- --- -->
+
+<!-- # Stratified or Random? -->
+
+<!-- - How is your population defined?   -->
+
+
+<!-- - What is the scale of your inference?   -->
+
+
+<!-- - What might influence the inclusion of a replicate?   -->
+
+
+<!-- - How important are external factors you know about?   -->
+
+
+<!-- - How important are external factors you cannot assess?   -->
+
+<!-- --- -->
+
+<!-- # Stratified Random Sampling -->
+
+<!-- .center[.middle[![](./images/03/stratified_random_sampling_meme.jpg)]] -->
