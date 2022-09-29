@@ -18,6 +18,8 @@ knitr::opts_chunk$set(echo = TRUE,
 # libraries
 library(dplyr)
 library(ggplot2)
+
+#set that theme
 theme_set(theme_bw(base_size = 12))
 ```
 ## 1. A purrr-fect simulation
