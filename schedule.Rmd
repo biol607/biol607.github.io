@@ -4,13 +4,19 @@
 <!--
 
 
-NEXT TIME I TEACH 607
+NEXT TIME I TEACH 607 in 2022
 1. Intro to R
 2. Plotting
 3. Functions, tidy data, dplyr
 4. Sampling and Simulation
 5. Cut modular programming. Introduce it via questions.
 6. Simplify comparing means lab - emphasize main point not exceptions
+-->
+
+<!--
+
+
+NEXT TIME I TEACH 607 in 2024
 -->
   While the topics covered are broad, each week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
   
