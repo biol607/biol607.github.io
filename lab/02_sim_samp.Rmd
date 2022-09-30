@@ -34,6 +34,30 @@ replicate(n = 5, sum(1:10))
 
 Well, that's a hair boring, but, you can see it summed something 5 times. We can of course create fancier things to do, but, in general, `replicate()` is a solid workhorse.
 
+R has a lot of other ways to do repetitive work. For example, your classic for loop, where you iterate over an index. Note the use of `{}` like in a function.
+
+```{r for}
+# always start with an object, otherwise you eat memory
+my_vec <- rep(NA, 10)
+
+#iterate over indices
+for(i in 1:10){
+  my_vec[i] <- mean(rnorm(10))
+}
+
+my_vec
+```
+
+Or a series of functions that branch off of one called `apply()` where you apply things to elements of the vector. Common ones include `sapply()` and `lapply()` which work on vectors or lists. These work easily with a predefined function
+
+```{r sapply}
+mean_rnorm_n <- function(n) mean(rnorm(n))
+
+sapply(1:10, mean_rnorm_n)
+```
+
+But - the applies can be tricky. You don't know if you are going to get a list, vector, or other data structure back often. So, useful for simulation, but...... 
+
 ### 1.2 But I like cats...
 
 There is also a beautiful library in R called [purrr](https://purrr.tidyverse.org/). This library takes the dplyr logic of mapping a function to many inputs and puts it on a different level. We'll talk more about purrr at another time, but, for now, there are a few functions worth knowing.
@@ -42,20 +66,32 @@ There is also a beautiful library in R called [purrr](https://purrr.tidyverse.or
 <span style="font-size:10px">image from Allison Horst https://github.com/allisonhorst/</span>  
 
 
-The core purrr functions are the `map_*()` functions. Basically, a whole family of functions where you can change what is in the * to specify the output type. For example, if we want to replicate the `replicate()` action of above, we'd be returning a *double* and would use `map_dbl()`.
+The core purrr functions are the `map_*()` functions. Basically, a whole family of functions where you can change what is in the * to specify the output type. For example, if we want to replicate the `replicate()` action of above, we'd be returning a *double* and would use `map_dbl()`. There are two flavors. One where we specify a function, and the other where we do it more dynamically with a `~`
 
 ```{r map_dbl}
 library(purrr)
+
+f <- function(x) sum(1:10)
+
+map_dbl(1:5, f)
+
 map_dbl(1:5, ~sum(1:10))
 ```
 
-Note our use of `~` to say "Hey, we're about to call some stuff." There are other ways to use map, but they involve writing your own functions, and, we'll leave that for another time.
+Note our use of `~` to say "Hey, we're about to call some stuff." Very useful if you want to skip writing a function (notice the function HAS to have an argument).
 
 Other useful versions of map include `map_chr()` for character returns, `map_df()` for a data frame, `map_lgl` for true/false, and just plain olde `map()` which returns a list of whatever you want.
 
-Let's see `map_df()` in action, as we're going to use it today. Let's say we want to take some input, and return a data frame with the input and the sum of all numbers up to that input. To do so, you need to know that after the `~`, map functions call the individual argument being sent to the function `.x`.
+Let's see `map_df()` in action, as we're going to use it today. Let's say we want to take some input, and return a data frame with the input and the sum of all numbers up to that input. To do so, we can write a function, or, you need to know that after the `~`, map functions call the individual argument being sent to the function `.x`.
 
 ```{r map_df}
+get_new_df <- function(x){
+  return(data.frame(x = x, 
+                    y = sum(1:x)))
+}
+
+map_df(1:10, get_new_df)
+
 map_df(1:10, ~data.frame(x = .x, y = sum(1:.x)))
 ```
 
@@ -69,7 +105,9 @@ map_df(1:10, ~data.frame(x = .x, y = cumsum(1:.x)))
 
 1. Use `replicate()` to repeatedly average the numbers 1:10 seven times.
   
-2. Do the same thing with `map_dbl()` - also what happens if you use other map functions?
+2. Do the same thing with `map_dbl()` - try it both with a function and with a `~`
+
+3. What happens if you use other map functions?
 
 3. Start with a vector:
 
@@ -130,8 +168,8 @@ So, how do we create those replicate populations? Let's say we wanted to just ma
 Let's do this and visualize the results.
 
 ```{r}
-samp_sim_1 <- samp_sim %>%
-  rowwise(samp_size) %>%
+samp_sim_1 <- samp_sim |>
+  rowwise(samp_size) |>
   summarize(samp = rnorm(samp_size, mean_pop, sd_pop))
 
 plot(samp ~ samp_size, data = samp_sim_1)
@@ -139,11 +177,37 @@ plot(samp ~ samp_size, data = samp_sim_1)
 
 OK, that's nice. I have a lot of samples at each sample size. You can see as our sample size increases, there are, indeed, more points. However, we want to simulate a lot of sampling evens and calculate sample statistics. This is where `map_dbl()` or `replicate()` becomes very useful. Let's say, instead of just drawing from a normal population, we want to modify the above to calculate a mean. And do it, oh, let's say twice.
 
+One thing that will make this more redable and easier to debug is to use a function.
+
 ```{r}
+
+# one sim
+get_one_pop_mean <- function(samp_size,
+                             pop_mean,
+                             pop_sd) {
+  rnorm(samp_size,
+        pop_mean,
+        pop_sd) |>
+    mean()
+}
+
+#now a function to repeat the action
+get_sim_means <- function(samp_size,
+                          pop_mean,
+                          pop_sd,
+                          reps) {
+  map_dbl(1:reps,
+          ~ get_one_pop_mean(samp_size,
+                             pop_mean,
+                             pop_sd))
+}
+
 samp_sim_means_2 <- samp_sim %>%
   rowwise(samp_size) %>%
-  summarize(samp_mean = 
-              replicate(2, rnorm(samp_size, mean_pop, sd_pop) %>% mean()))
+  summarize(samp_mean = get_sim_means(samp_size, 
+                                        mean_pop, 
+                                        sd_pop,
+                                        reps = 2))
 
 samp_sim_means_2
 ```
@@ -152,14 +216,19 @@ Oh! Now we're getting somewhere. Before we fully sally forth, let's outline what
 
 
 ```{r comment_dplyr}
+# write a function that does one simulations for one set of parameters
+# write a function that does repeated simulations for parameters
 # Take a data frame with a bunch of sample sizes
 # For each row
-# Replicate calculating the mean from a random draw some number of times
+# Feed the parameters from the row to your function
 ```
 
 Reasonable, no? You could have written this out. Now, let's operationalize this for 1000 simulations.
 
 ```{r comment_dplyr_nsim, cache=TRUE}
+# write a function that does...
+# oh - wait - we already did that!
+
 # Take a data frame with a bunch of sample sizes
 sim_results <- samp_sim %>%
 
@@ -167,33 +236,58 @@ sim_results <- samp_sim %>%
   rowwise(samp_size) %>%
   
   # Replicate calculating the mean from a random draw some number of times
-  summarize(samp_mean = map_dbl(1:1000, 
-                                ~ rnorm(samp_size, mean_pop, sd_pop) %>%
-                                  mean()))
+  summarize(samp_mean = get_sim_means(samp_size, 
+                                        mean_pop, 
+                                        sd_pop, 
+                                        reps = 1e3))
 ```
 
 What's great about this (and using a map function) is that we can also add additional information - say, the sd - using `map_df()` Note how we don't even use = in `summarize()`
 
 ```{r sim_df_map, cache=TRUE}
+
+# write a function that does one simulations for one set of parameters
+get_1_sim_df <- function(sim_num = 1,
+                samp_size,
+                mean_pop,
+                sd_pop){
+  
+  samp <- rnorm(samp_size,
+                mean_pop,
+                sd_pop)
+  
+  data.frame(sim = sim_num,
+             samp_mean = mean(samp),
+             samp_sd = sd(samp))
+}
+
+# write a function that does repeated simulations for parameters
+run_pop_sims <- function(samp_size,
+                mean_pop,
+                sd_pop,
+                n_sims = 5){
+  
+  #run the simulations
+  map_df(1:n_sims,
+          ~get_1_sim_df(sim_num = .x,
+                samp_size,
+                mean_pop,
+                sd_pop))
+}
+
 # Take a data frame with a bunch of sample sizes
 sim_results <- samp_sim %>%
-
+  
   # For each row
   rowwise(samp_size) %>%
   
-  # Replicate calculating the mean 
+  # Replicate calculating the mean
   # and Sdfrom a random draw some number of times
-  summarize(map_df(1:1000, 
-                   ~data.frame(sim = .x,
-                               samp_mean = rnorm(samp_size,
-                                                 mean_pop, 
-                                                 sd_pop) %>%
-                                 mean(),
-                               samp_sd = rnorm(samp_size,
-                                               mean_pop, 
-                                               sd_pop) %>%
-                                 sd())))
-
+  summarize(run_pop_sims(samp_size,
+                         mean_pop,
+                         sd_pop,
+                         n_sims = 1e3))
+            
 sim_results
 ```
 
