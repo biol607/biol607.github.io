@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Biol 607">
+
+<title>Iteration and Functions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="function_iteration_files/libs/clipboard/clipboard.min.js"></script>
+<script src="function_iteration_files/libs/quarto-html/quarto.js"></script>
+<script src="function_iteration_files/libs/quarto-html/popper.min.js"></script>
+<script src="function_iteration_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="function_iteration_files/libs/quarto-html/anchor.min.js"></script>
+<link href="function_iteration_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="function_iteration_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="function_iteration_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="function_iteration_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="function_iteration_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">0. Intro</a></li>
+  <li><a href="#basic-function-and-iteration." id="toc-basic-function-and-iteration." class="nav-link" data-scroll-target="#basic-function-and-iteration.">1. Basic function and iteration.</a></li>
+  <li><a href="#visualizing-the-exponential-distribution" id="toc-visualizing-the-exponential-distribution" class="nav-link" data-scroll-target="#visualizing-the-exponential-distribution">2. Visualizing the Exponential distribution</a></li>
+  <li><a href="#precision-and-sampling-the-exponential" id="toc-precision-and-sampling-the-exponential" class="nav-link" data-scroll-target="#precision-and-sampling-the-exponential">3. Precision and Sampling the Exponential</a></li>
+  <li><a href="#impress-yourself" id="toc-impress-yourself" class="nav-link" data-scroll-target="#impress-yourself">Impress Yourself</a></li>
+  <li><a href="#meta-1." id="toc-meta-1." class="nav-link" data-scroll-target="#meta-1.">Meta 1.</a></li>
+  <li><a href="#meta-2." id="toc-meta-2." class="nav-link" data-scroll-target="#meta-2.">Meta 2.</a></li>
+  <li><a href="#meta-3." id="toc-meta-3." class="nav-link" data-scroll-target="#meta-3.">Meta 3.</a></li>
+  <li><a href="#meta-4." id="toc-meta-4." class="nav-link" data-scroll-target="#meta-4.">Meta 4.</a></li>
+  <li><a href="#meta-5." id="toc-meta-5." class="nav-link" data-scroll-target="#meta-5.">Meta 5.</a></li>
+  <li><a href="#meta-6." id="toc-meta-6." class="nav-link" data-scroll-target="#meta-6.">Meta 6.</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Iteration and Functions</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Biol 607 </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="intro" class="level2">
+<h2 class="anchored" data-anchor-id="intro">0. Intro</h2>
+<p>You’re going to be using tidyr, purrr, dplyr, and more today. Might want to start the head of your script with just <code>library(tidyverse)</code> so you don’t have to worry too much. Set a ggplot theme if you want!</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="basic-function-and-iteration." class="level2">
+<h2 class="anchored" data-anchor-id="basic-function-and-iteration.">1. Basic function and iteration.</h2>
+<p>&nbsp; &nbsp; 1a. You guys have done a LOT this week. It’s been your big week of leveling up, and I have no doubt you’ll be slowly grappling with and incorporating the concepts of the week into your work as we go along. So, write a function that takes no arguments, but tells you (using <code>cat()</code>, <code>paste()</code>, <code>print()</code> or whatever) “You’re doing a great job!”</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; 1b. Have it tell you this 10 times! Use <code>replicate()</code> for the first five and <code>map_chr()</code> for the second 5.</p>
+<p>&nbsp; &nbsp; 1c. Impress Yourself/Learn something new - try <code>purrr:::walk()</code> - how does it differ from <code>map()</code>? Do you need to modify the function to make it work and give you words of affirmation?</p>
+</section>
+<section id="visualizing-the-exponential-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-the-exponential-distribution">2. Visualizing the Exponential distribution</h2>
+<p>The normal distibution is fun, but let’s play with another one! The <a href="https://en.wikipedia.org/wiki/Exponential_distribution">exponential distribution</a> is a continuous distribution that is bounded at 0 and has an infinitely long tail. It’s skewed to 0, and takes a <code>rate</code> as it’s argument to determine its shape.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="function_iteration_files/figure-html/exp-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>&nbsp; &nbsp; 2a. Write a function that will take a rate, a minimum, and maximum as its inputs (let’s make the defaults for min and max be 0 and 4 respectively) and returns a data frame or tibble with three columns. The first is the rate (the input). The second is a <code>seq</code>uence of 100 numbers between the min and max. The third is the probability density of the exponential distribution at that value given the rate. Take a look at <code>dexp()</code> for this. the <code>d*</code> functions for distributions are increibly useful for visualizing distributions when you don’t understand what they look like under different parameter values. Show that your function works by making a <code>ggplot</code> for rate = 3 that should look more or less like what is above.</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; 2b. Use <code>purrr::map_df()</code> and a vector of rates - <code>c(0.2, 0.5, 1, 2, 4)</code> to create a data frame or tibble with the above function that, for each rate, has values of x and the probability density of x.</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; 2c. Plot the result in a way that shows the influence of rate on the shape of the curve. What do higher or lower rates do to the shape of an exponential distribution? Does this make sense if rate = the number of events per interval on average and this is the distribution of time between events from a random process?</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="precision-and-sampling-the-exponential" class="level2">
+<h2 class="anchored" data-anchor-id="precision-and-sampling-the-exponential">3. Precision and Sampling the Exponential</h2>
+<p>&nbsp; &nbsp; 3a. Write a function that, given a vector, will return a data frame or tibble of that vector with a mean and median. Test is with a vector to make sure it’s doing the right thing.</p>
+<p>&nbsp; &nbsp; 3b. Write a function that, given a sample size and a rate, take a sample from an exponential distribution and then use the above function to return the mean and median as a data frame. Show us it works. One way to do this is by setting a seed before drawing a random sample and then getting the mean and median, and then setting the SAME seed before running your function.</p>
+<p>&nbsp; &nbsp; 3c. Write a function that, given a sample size, rate, and number of simulations (which defaults to 1e3), returns a data frame with however many rows of means and medians given your number of simulations. Show it works by plotting the distribution of means and medians for rate = 2 and sample size = 10. IMPRESS YOURSELF by doing this in only one ggplot using <code>pivot_longer()</code> to get the data into shape for plotting.</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; 3d. Let’s bring it all together. Use the function <code>tidyr::crossing()</code> to make a tibble with all possible combinations of sample sizes <code>c(3,5,7,9)</code> and rate <code>c(1, 1.5, 2, 4)</code>. See the helpfile and learn one of your new favorite functions! Take a look at the result!</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; 3e. With this data frame, use <code>group_by()</code> on sample size and rate and <code>summarize</code> on combination with the simulation function above to get simulated means and medians at all different parameter combinations. Show us you have done so by plotting the distributions of your medians using <code>facet_grid()</code> to split up rate/sample size combinations.</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; 3e. With this result, group by rate and sample size again and calculate the sd of each measure. Then plot the resulting curves showing the influnce of sample size on the precision of our estimate for mean and median. What does this tell you? Note, again, you might want to think about <code>pivot_longer()</code> to get everything into a nice format for use with <code>ggplot()</code></p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; 3f. Well. What should your sample size be and why under different rates?</p>
+<hr>
+</section>
+<section id="impress-yourself" class="level2">
+<h2 class="anchored" data-anchor-id="impress-yourself">Impress Yourself</h2>
+<p>So, calculating bootstrapped SEs for estimated quantities is not that different. The big difference is that rather than randomly sampling from a distribution, as in 3b, you’d randomly sample from, well, a sample! We do this with the function <code>sample()</code> like so.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>my_sample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">2</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(my_sample, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">size =</span> <span class="fu">length</span>(my_sample), <span class="co">#same sample size</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="co">#with replacement</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7 2 7 7 2</code></pre>
+</div>
+</div>
+<p>Try this a few times so you know what it’s doing.</p>
+<p>&nbsp; &nbsp; IYa. Now, write a function that takes a sample vector and returns one bootstrapped sample.</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; IYb. Cool! Now, write a function that takes a sample as its input, and gives you the bootstrapped mean and median in a data frame using the function you wrote in number 3.</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; IYc. You are almost there!</p>
+<p>Now…….. write a function that takes a sample and a number of bootstrap replicates (default it to 1e3), and uses the function you just wrote to get a bunch of bootstrapped means and medians, and then uses that result to calculate the bootstrapped SEs.</p>
+<div class="cell">
+
+</div>
+<p>&nbsp; &nbsp; IYd. OK - test it on the following</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">607</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>my_samp <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">20</span>, <span class="fl">1.8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You should get</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  mean_se median_se
+    &lt;dbl&gt;     &lt;dbl&gt;
+1   0.144     0.153</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="meta-1." class="level2">
+<h2 class="anchored" data-anchor-id="meta-1.">Meta 1.</h2>
+<p>Whew. We covered a lot this week. How much of this - functions and iteration - was new to you? How much of it was familiar or at least made sense? How much was totally alien and offputting?</p>
+</section>
+<section id="meta-2." class="level2">
+<h2 class="anchored" data-anchor-id="meta-2.">Meta 2.</h2>
+<p>What are possible uses you could see using functions for? What about iteration?</p>
+</section>
+<section id="meta-3." class="level2">
+<h2 class="anchored" data-anchor-id="meta-3.">Meta 3.</h2>
+<p>How did your pogress through this assignment feel? Did you find yourself speeding up as you went along? Are there things that clicked for you along the way? Lightbulbs going off.</p>
+</section>
+<section id="meta-4." class="level2">
+<h2 class="anchored" data-anchor-id="meta-4.">Meta 4.</h2>
+<p>There are a lot of things that also re-appear this week. ggplot, tidyr and pivoting, dplyr, pipes, and more. Are they becoming old friends? What apsects of them are you still struggling with, if at all?</p>
+</section>
+<section id="meta-5." class="level2">
+<h2 class="anchored" data-anchor-id="meta-5.">Meta 5.</h2>
+<p>How much time did this take you, roughly? Again, I’m trying to keep track that these assignments aren’t killer, more than anything.</p>
+</section>
+<section id="meta-6." class="level2">
+<h2 class="anchored" data-anchor-id="meta-6.">Meta 6.</h2>
+<p>Please give yourself a weak/sufficient/strong assessment on this assignment. Feel free to comment on why.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,273 @@
+---
+title: "Iteration and Functions"
+author: "Biol 607"
+format: 
+  html:
+    toc: true
+
+execute:
+  echo: false
+  message: false
+  warning: false
+  eval: false
+---
+
+## 0. Intro
+You're going to be using tidyr, purrr, dplyr, and more today. Might want to start the head of your script with just `library(tidyverse)` so you don't have to worry too much. Set a ggplot theme if you want!
+```{r}
+#| eval: true
+library(tidyverse)
+```
+
+## 1. Basic function and iteration.
+&nbsp; &nbsp; 1a. You guys have done a LOT this week. It's been your big week of leveling up, and I have no doubt you'll be slowly grappling with and incorporating the concepts of the week into your work as we go along. So, write a function that takes no arguments, but tells you (using `cat()`, `paste()`, `print()` or whatever) "You're doing a great job!"
+
+```{r}
+great_fun <- function() print("You're doing a great job!")
+
+great_fun()
+```
+
+&nbsp; &nbsp; 1b. Have it tell you this 10 times! Use `replicate()` for the first five and `map_chr()` for the second 5.
+
+&nbsp; &nbsp; 1c. Impress Yourself/Learn something new - try `purrr:::walk()` - how does it differ from `map()`? Do you need to modify the function to make it work and give you words of affirmation?
+
+## 2. Visualizing the Exponential distribution
+
+The normal distibution is fun, but let's play with another one! The [exponential distribution](https://en.wikipedia.org/wiki/Exponential_distribution) is a continuous distribution that is bounded at 0 and has an infinitely long tail. It's skewed to 0, and takes a `rate` as it's argument to determine its shape.
+
+```{r exp}
+#| eval = TRUE
+library(dplyr)
+library(ggplot2)
+tibble(x = seq(0,3, length.out = 100),
+           y = dexp(x, 3)) |>
+  ggplot(aes(x=x,y=y)) +
+  geom_line()+
+  theme_classic(base_size = 14) +
+  labs(y = "density", x = "value", subtitle = "rate = 3")
+```
+
+&nbsp; &nbsp; 2a. Write a function that will take a rate, a minimum, and maximum as its inputs (let's make the defaults for min and max be 0 and 4 respectively) and returns a data frame or tibble with three columns. The first is the rate (the input). The second is a `seq`uence of 100 numbers between the min and max. The third is the probability density of the exponential distribution at that value given the rate. Take a look at `dexp()` for this. the `d*` functions for distributions are increibly useful for visualizing distributions when you don't understand what they look like under different parameter values. Show that your function works by making a `ggplot` for rate = 3 that should look more or less like what is above.
+
+```{r}
+exp_fun <- function(rate, min = 0, max = 4){
+  tibble(rate = rate,
+         x = seq(min, max, length.out = 100),
+         dens = dexp(x, rate = rate))
+}
+
+#then ggplot like above using the function
+```
+
+&nbsp; &nbsp; 2b. Use `purrr::map_df()` and a vector of rates - `c(0.2, 0.5, 1, 2, 4)` to create a data frame or tibble with the above function that, for each rate, has values of x and the probability density of x.
+
+```{r}
+library(purrr)
+exp_dat <- map_dfr(c(0.2, 0.5, 1, 2, 4),
+                   exp_fun)
+```
+
+&nbsp; &nbsp; 2c. Plot the result in a way that shows the influence of rate on the shape of the curve. What do higher or lower rates do to the shape of an exponential distribution? Does this make sense if rate = the number of events per interval on average and this is the distribution of time between events from a random process?
+
+```{r}
+ggplot(exp_dat,
+       mapping = aes(x = x, y = dens, color = factor(rate))) +
+  geom_line()
+
+# higher rates are steeper curves more clustered at 0 as there are more events per interval, so lower time between events.
+```
+
+## 3. Precision and Sampling the Exponential
+
+&nbsp; &nbsp; 3a. Write a function that, given a vector, will return a data frame or tibble of that vector with a mean and median. Test is with a vector to make sure it's doing the right thing.
+
+```{r}
+#| eval: true
+#| include: false
+library(tibble)
+samp_mm <- function(vec){
+  tibble(samp_mean = mean(vec), samp_median = median(vec))
+}
+
+samp_mm(c(1,2,3,3))
+```
+
+&nbsp; &nbsp; 3b. Write a function that, given a sample size and a rate, take a sample from an exponential distribution and then use the above function to return the mean and median as a data frame. Show us it works. One way to do this is by setting a seed before drawing a random sample and then getting the mean and median, and then setting the SAME seed before running your function.
+
+```{r}
+#| eval: true
+#| include: false
+
+get_exp_properties <- function(samp_size, rate){
+  samp <- rexp(samp_size, rate)
+  return(samp_mm(samp))
+}
+
+set.seed(607)
+median(rexp(10,3))
+
+set.seed(607)
+mean(rexp(10,3))
+
+set.seed(607)
+get_exp_properties(10, 3) #spooky!
+```
+
+&nbsp; &nbsp; 3c. Write a function that, given a sample size, rate, and number of simulations (which defaults to 1e3), returns a data frame with however many rows of means and medians given your number of simulations. Show it works by plotting the distribution of means and medians for rate = 2 and sample size = 10. IMPRESS YOURSELF by doing this in only one ggplot using `pivot_longer()` to get the data into shape for plotting.
+
+```{r}
+get_exp_sims <- function(samp_size, rate, n_sims = 1e3){
+  map_df(1:n_sims, ~ get_exp_properties(samp_size, rate))
+}
+
+first_sims <- get_exp_sims(10, 2) %>%
+  pivot_longer(everything())
+
+ggplot(first_sims,
+       aes(x = value)) +
+  geom_density() +
+  facet_wrap(vars(name))
+```
+
+&nbsp; &nbsp; 3d. Let's bring it all together. Use the function `tidyr::crossing()` to make a tibble with all possible combinations of sample sizes `c(3,5,7,9)` and rate `c(1, 1.5, 2, 4)`. See the helpfile and learn one of your new favorite functions! Take a look at the result!
+
+```{r}
+sim_frame <- crossing(samp_size = c(3,5,7,9),
+                      rate = c(1, 1.5, 2, 4))
+
+sim_frame
+```
+
+&nbsp; &nbsp; 3e. With this data frame, use `group_by()` on sample size and rate and `summarize` on combination with the simulation function above to get simulated means and medians at all different parameter combinations. Show us you have done so by plotting the distributions of your medians using `facet_grid()` to split up rate/sample size combinations.  
+
+```{r}
+sims <- sim_frame |>
+  group_by(samp_size, rate) |>
+  summarize(get_exp_sims(samp_size, rate))
+
+ggplot(sims,
+       aes(x = samp_median)) +
+  geom_density() +
+  facet_grid(cols = vars(samp_size), rows = vars(rate))
+```
+
+&nbsp; &nbsp; 3e. With this result, group by rate and sample size again and calculate the sd of each measure. Then plot the resulting curves showing the influnce of sample size on the precision of our estimate for mean and median. What does this tell you? Note, again, you might want to think about `pivot_longer()` to get everything into a nice format for use with `ggplot()`
+
+```{r}
+sims_long <- sims |>
+  pivot_longer(cols = c(samp_mean, samp_median),
+               names_to = "stat") 
+
+sims_long_se <- sims_long |>
+  group_by(samp_size, rate, stat) |>
+  summarize(se = sd(value)) |>
+  ungroup()
+
+ggplot(sims_long_se,
+       aes(y = se, x = samp_size,
+           color = factor(rate))) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(vars(stat))
+```
+
+&nbsp; &nbsp; 3f. Well. What should your sample size be and why under different rates?
+
+----------
+
+## Impress Yourself
+So, calculating bootstrapped SEs for estimated quantities is not that different. The big difference is that rather than randomly sampling from a distribution, as in 3b, you'd randomly sample from, well, a sample! We do this with the function `sample()` like so.
+
+```{r}
+#| eval: true
+#| echo: true
+
+my_sample <- c(4,7,2,7,2)
+
+sample(my_sample, 
+       size = length(my_sample), #same sample size
+       replace = TRUE) #with replacement
+
+```
+
+Try this a few times so you know what it's doing.
+
+&nbsp; &nbsp; IYa. Now, write a function that takes a sample vector and returns one bootstrapped sample.
+
+```{r}
+#| eval: true
+
+one_boot <- function(my_sample){
+  sample(my_sample, 
+       size = length(my_sample), #same sample size
+       replace = TRUE) #with replacement
+}
+```
+
+
+&nbsp; &nbsp; IYb. Cool! Now, write a function that takes a sample as its input, and gives you the bootstrapped mean and median in a data frame using the function you wrote in number 3.
+
+```{r}
+#| eval: true
+
+samp_boot_properties <- function(my_sample){
+  one_boot(my_sample)|>
+    samp_mm()
+}
+```
+
+
+&nbsp; &nbsp; IYc. You are almost there!
+
+Now........ write a function that takes a sample and a number of bootstrap replicates (default it to 1e3), and uses the function you just wrote to get a bunch of bootstrapped means and medians, and then uses that result to calculate the bootstrapped SEs. 
+
+```{r}
+#| eval: true
+
+boot_se_mm <- function(my_sample, n_boot = 1e3){
+  map_df(1:n_boot,
+         ~samp_boot_properties(my_samp)) |>
+    summarize(mean_se = sd(samp_mean),
+              median_se = sd(samp_median)) 
+}
+```
+
+
+&nbsp; &nbsp; IYd. OK - test it on the following
+
+```{r}
+#| eval: true
+#| echo: true
+
+set.seed(607)
+my_samp <- rexp(20, 1.8)
+```
+
+You should get
+```{r}
+#| eval: true
+boot_se_mm(my_samp)
+```
+
+--------
+
+
+## Meta 1. 
+Whew. We covered a lot this week. How much of this - functions and iteration - was new to you? How much of it was familiar or at least made sense? How much was totally alien and offputting?
+
+## Meta 2. 
+What are possible uses you could see using functions for? What about iteration?
+
+## Meta 3.
+How did your pogress through this assignment feel? Did you find yourself speeding up as you went along? Are there things that clicked for you along the way? Lightbulbs going off.
+
+## Meta 4. 
+There are a lot of things that also re-appear this week. ggplot, tidyr and pivoting, dplyr, pipes, and more. Are they becoming old friends? What apsects of them are you still struggling with, if at all?
+
+## Meta 5. 
+How much time did this take you, roughly? Again, I'm trying to keep track that these assignments aren't killer, more than anything.  
+
+## Meta 6. 
+Please give yourself a weak/sufficient/strong assessment on this assignment. Feel free to comment on why.
+
