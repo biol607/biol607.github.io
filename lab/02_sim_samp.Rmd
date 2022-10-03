@@ -22,6 +22,11 @@ library(ggplot2)
 #set that theme
 theme_set(theme_bw(base_size = 12))
 ```
+
+<!--
+Cut out oldschool - just go straight to purrr
+-->
+
 ## 1. A purrr-fect simulation
 
 ### 1.1 Replicators Abound
