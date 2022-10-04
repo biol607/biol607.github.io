@@ -1,5 +1,5 @@
 ---
-title: "Sampling and Simulation"
+title: "Linear Regression"
 output:
   xaringan::moon_reader:
     seal: false
@@ -41,29 +41,17 @@ theme_set(theme_bw(base_size=16))
 ```
 
 ---
-class: center, middle
-
-# Etherpad
-<br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-lm-2020</h3></center>
-
----
 
 # The Steps of Statistical Modeling
 
-1. What is your question?
-2. What model of the world matches your question?
-3. Is your model valid?
+1. What is your question?  
+  
+2. What model of the world matches your question?  
+  
+3. Is your model valid?  
+  
 4. Query your model to answer your question.
 
----
-
-# The Steps of Statistical Modeling
-
-1. What is your question?.red[
-2. What model of the world matches your question?
-3. Is your model valid?
-4. Query your model to answer your question.]
 
 ---
 
@@ -72,7 +60,7 @@ class: center, middle
 .pull-left[
 
 ```{r wolf_scatterplot, fig.height=5, fig.width=5}
-wolves <- read.csv("./data/11/16e2InbreedingWolves.csv")
+wolves <- read.csv("lectures/data/11/16e2InbreedingWolves.csv")
 
 wolfplot <- ggplot(data=wolves, mapping=aes(x=inbreeding.coefficient, y=pups)) +
 xlab("Inbreeding Coefficient") + ylab("# of Pups") +
@@ -101,7 +89,7 @@ wolfplot +
 
 ---
 
-# Regressiong to Be Mean
+# Regression to Be Mean
 
 1. What is regression?  
 
@@ -147,8 +135,9 @@ class:center, middle
 # Linear Regression
 <br>
 $\Large y_i = \beta_0 + \beta_1 x_i + \epsilon_i$  
+<br>
 $\Large \epsilon_i \sim^{i.i.d.} N(0, \sigma)$  
-<Br><br><br>
+<Br><br>
 .large[
 Then it’s code in the data, give the keyboard a punch  
 Then cross-correlate and break for some lunch  
@@ -199,7 +188,7 @@ $$Y = X \beta + \epsilon$$
 
 ---
 
-# Regressiong to Be Mean
+# Regression to Be Mean
 
 1. What is regression?  
 
@@ -300,7 +289,7 @@ When the inbreeding coefficient is 0, a wolves will have ~6.6 pups, on average.
 
 ---
 
-# Regressiong to Be Mean
+# Regression to Be Mean
 
 1. What is regression?  
 
@@ -402,15 +391,18 @@ wolfplot +
 ```
 
 
-- $\large{R^2 = 1 - \frac{\sigma^2_{residual}}{\sigma^2_y}}$
-  - Fraction of the variation in Y related to X.
-  - Here, 36.9% of the variation in pups is related to variation in Inbreeding Coefficient
+- $\large{R^2 = 1 - \frac{\sigma^2_{residual}}{\sigma^2_y}}$  
+
+  - Fraction of the variation in Y related to X.  
+  
+  - Here, 36.9% of the variation in pups is related to variation in Inbreeding Coefficient  
+  
   - Relates to r, the Pearson correlation coefficient
 
 
 ---
 
-# Regressiong to Be Mean
+# Regression to Be Mean
 
 1. What is regression?  
 
@@ -665,7 +657,7 @@ class:center, middle
 
 ---
 
-# Regressiong to Be Mean
+# Regression to Be Mean
 
 1. What is regression?  
 
@@ -679,27 +671,14 @@ class:center, middle
 
 
 ---
-# Two Common Modifications (transformations) to Regression
-1. Centering your X variable  
+# Modifying (transformating) Your Regression: Centering you X
+- Many times X = 0 is silly
+     
+- E.g., if you use year, are you going to regress back to 0?
+     
+- Centering X allows you to evaluate a meaningful intercept 
+     - what is Y at the mean of X  
 
-     - Many times X = 0 is silly
-     
-     - E.g., if you use year, are you going to regress back to 0?
-     
-     - Centering X allows you to evaluate a meaningful intercept 
-           - what is Y at the mean of X  
-            
---
-
-2. Log Transforming Y
-
-     - Often, Y cannot be negative  
-     
-     - And/or the process generating Y is *multiplicative*  
-     
-     - Log(Y) can fix this and other sins. 
-     
-     - **VERY** common, but, what do the coefficients mean? 
 ---
 
 # Centering X to generate a meaningful intercept
@@ -735,6 +714,18 @@ ggplot(data=wolves, mapping=aes(x=inbreeding.centered, y=pups)) +
 ```
 
 ---
+# Modifying (transformating) Your Regression: Log Transform of Y
+
+- Often, Y cannot be negative  
+     
+- And/or the process generating Y is *multiplicative*  
+     
+- Log(Y) can fix this and other sins. 
+     
+- **VERY** common, but, what do the coefficients mean? 
+     - $exp(\beta_1) - 1 \approx$ percent change in Y for chance in 1 unit of X
+
+---
 
 # Other Ways of Looking at This Relationship: Log Transformation of Y
 
@@ -765,7 +756,7 @@ tidy(wolf_mod_log)[,1:3] %>%
 To understand the coefficient, remember
 $$y_i = e^{\beta_0 + \beta_1 x_i + \epsilon_i}$$
 
-exp(-2.994) = 0.05, so, a 1 unit increase in x causes y to change to 5% of its original value (a 95% loss) so...
+exp(-2.994)-1 = -0.95, so, a 1 unit increase in x causes y to lose 95% of its value, so...
 
 --
 

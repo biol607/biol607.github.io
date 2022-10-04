@@ -95,3 +95,11 @@ td {
     font-size: 24px;
     padding: 1em 4em 1em 4em;
 }
+
+.remark-code {
+  display: block;
+  overflow-x: auto;
+  padding: .5em;
+  color: #333;
+  background: #f8f8f8;
+}
