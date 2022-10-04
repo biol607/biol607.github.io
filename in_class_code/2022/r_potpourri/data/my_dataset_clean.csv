@@ -1,0 +1,10 @@
+﻿column_1,column_2,column_3,a_really_really_big_column_name,what happens with spaces
+4,32,Fred,tardigrade,1
+4,45,George,tardigrade,1
+4,,Ginger,tardigrade,1
+10,31,Fred,tardigrade,2
+7,76,George,tardigrade,2
+2,12,Ginger,tardigrade,2
+1,43,Fred,tardigrade,3
+8,12,George,tardigrade,3
+9,675,Ginger,tardigrade,3

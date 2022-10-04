@@ -1,0 +1,36 @@
+---
+title: "My Second Rmarkdown File"
+author: "Jarrett Byrnes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# You can write a header
+
+## Second level header
+
+### Third level header
+
+#### Fourth level header
+
+You can write text.\
+*Italics text with asterisk*\
+**Bold with two asterisk**\
+Two space\
+is a line break
+
+```{r first_chunk}
+data(mtcars)
+head(mtcars)
+```
+
+Summary output with no code - use `echo = FALSE`
+```{r second_chunk, echo = FALSE}
+summary(mtcars)
+```
+
+Do something, but leave no trace...
+```{r third_chunk, include = FALSE, warnings = FALSE, message=FALSE}
+str(mtcars)
+```
+
