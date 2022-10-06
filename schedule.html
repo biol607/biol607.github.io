@@ -494,8 +494,9 @@ href="./homework/function_iteration.html">Functions, Iteration, and
 Precision</a></p>
 </div>
 </div>
-<div id="block-2-regression-and-inference" class="section level2">
-<h2>Block 2: Regression and Inference</h2>
+<div id="block-2-linear-models-for-data-analysis"
+class="section level2">
+<h2>Block 2: Linear Models for Data Analysis</h2>
 <div id="week-5." class="section level3">
 <h3>Week 5.</h3>
 <p>10/3/2022<br />
@@ -518,12 +519,177 @@ class="uri">https://etherpad.wikimedia.org/p/607-lm-2022</a><br />
 href="homework/06_correlation_regression.html">Correlation and Linear
 Models</a></p>
 </div>
-<div id="week-6." class="section level3">
-<h3>Week 6.</h3>
+<div id="week-6" class="section level3">
+<h3>Week 6</h3>
 <p>10/10/2022<br />
+<strong>Lecture:</strong> Categorical Predictors <a
+href="lectures/t_as_lm.html">It s All Linear Models; t-test edition</a>,
+<a href="lectures/anova_1.html">Many Levels of a Categorical
+Predictor</a><br />
+<strong>Lab Topic:</strong> <a
+href="lab/comparing_two_means.html">Comparing Means</a>, Final Proposal
+Meetings<br />
+<strong>Reading:</strong> <a
+href="https://lindeloev.github.io/tests-as-linear/">Common statistical
+tests are linear models</a>, <a
+href="https://fw8051statistics4ecologists.netlify.app/matrixreg#categorical-predictors">Feiberg
+3.5</a>, W&amp;S Chapters 11, 12, 14<br />
+<strong>Packages for The Week:</strong>
+<code>install.packages(c("car", "emmeans", "multcompView", "contrast"))</code><br />
+<strong>Etherpad:</strong> <a
+href="https://etherpad.wikimedia.org/p/607-linear_everywhere-2022"
+class="uri">https://etherpad.wikimedia.org/p/607-linear_everywhere-2022</a>
+<strong>In Class Code:</strong> <a
+href="./in_class_code/2020/scripts/comparing_means.R">comparing two
+means</a></p>
+</div>
+<div id="week-7" class="section level3">
+<h3>Week 7</h3>
+<p>10/17/2022<br />
+<strong>Lectures:</strong> May Predictors: <a
+href="./lectures/23_general_linear_model.html">Multiple Linear
+Regression</a>, <a href="lectures/anova_2.html">Multple Categorical
+Predictor Types</a><br />
+<strong>Lab Topic:</strong> Models with many types of predictors<br />
+<strong>Lab Data:</strong> <a href="lab/data_10.zip">Multiple
+Files</a><br />
+<strong>Reading:</strong> <a
+href="https://fw8051statistics4ecologists.netlify.app/matrixreg">Feiberg
+ch 3</a>, W&amp;S 15, 18<br />
+<strong>Optional Reading:</strong> <a
+href="./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf">Analysis
+of variance with unbalanced data: an update for ecology &amp;
+evolution</a><br />
+<strong>Etherpad:</strong> <a
+href="https://etherpad.wikimedia.org/p/607-many-predictors-2022"
+class="uri">https://etherpad.wikimedia.org/p/607-many-predictors-2022</a><br />
+<strong>In Class Code:</strong> <a
+href="./in_class_code/2020/scripts/glm.R">lots of anova</a><br />
+<strong>Homework:</strong> <a href="homework/glm.html">GLM
+Homework</a></p>
+</div>
+<div id="week-8." class="section level3">
+<h3>Week 8.</h3>
+<p>10/24/2022<br />
+<strong>Lectures:</strong> <a href="lectures/anova_3.html">Factorial
+ANOVA</a>, <a href="./lectures/23_general_linear_model.html">Interaction
+Effects and the General Linear Model</a><br />
+<strong>Lab Topic:</strong> <a href="lab/11_glm_aic.html">Multiple
+Regression, Multimodel Inference</a> - <a href="lab/data_11.zip">data
+files</a><br />
+<strong>Readings:</strong> Re-Read <a
+href="https://fw8051statistics4ecologists.netlify.app/matrixreg">Feiberg
+ch 3</a>, <a
+href="https://fw8051statistics4ecologists.netlify.app/multicol.html">Feiberg
+ch 6</a>, <a href="./readings/Schielzeth_2010_MEE.pdf">Simple means to
+improve the interpretability of regression coefficients</a><br />
+<strong>Optional Readings:</strong> <a
+href="./readings/kramer_blasey_centering.pdf">Centring in regression
+analyses: a strategy to prevent errors in statistical
+inference</a><br />
+<strong>Etherpad:</strong> <a
+href="https://etherpad.wikimedia.org/p/607-mlr-2022"
+class="uri">https://etherpad.wikimedia.org/p/607-mlr-2022</a><br />
+<strong>Packages for the Week:</strong>
+<code>install.packages(c("AICcmodavg", "MuMIn", "modelr"))</code><br />
+<strong>In Class Code:</strong> <a
+href="./in_class_code/2020/scripts/mlr.R">ancova, mlr, and aic</a></p>
+</div>
+<div id="week-9" class="section level3">
+<h3>Week 9</h3>
+<p>10/31/2022<br />
+<strong>Lecture:</strong> Beyond Linear Regression, But Still Linear <a
+href="./lectures/gls.html">Generalized Least Squares and Modeling
+Error</a>, <a href="lectures/25_generalized_linear_models.html">Entering
+a non-normal world with Generalized Linear Models</a><br />
+<strong>Data:</strong> <a href="./lectures/data/gls/gls_data.zip">GLS
+Data</a>, <a href="./lab/gzlm_data.zip">GLM Data</a><br />
+<strong>Lab Topic:</strong> <a href="./lab/12_gzlm.html">Generalized
+Linear Models</a><br />
+<strong>Packages for the Week:</strong>
+<code>install.packages(c("MASS", "readxl", "betareg", "DHARMa"))</code><br />
+<strong>Reading:</strong> <a
+href="http://byrneslab.net/classes/biol607/readings/O&#39;Hara_2009_glmm.pdf">O’Hara
+2009</a> through section on GLMs, <a
+href="http://byrneslab.net/classes/biol607/readings/o&#39;hara_and_kotze_do_not_log_transform.pdf">O’Hara
+and Kotze 2010</a>, <a
+href="http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf">Wharton
+and Hui 2011</a>, <a
+href="https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html">Hartig
+DHARMa vignette</a>, <a
+href="https://rpubs.com/nicoleknight/936037">Intro to Beta Regression
+for % Cover Data</a></p>
+</div>
+</div>
+<div
+id="block-3.-experimental-and-observational-study-design-and-causal-inference"
+class="section level2">
+<h2>Block 3. Experimental and Observational Study Design and Causal
+Inference</h2>
+<div id="week-10." class="section level3">
+<h3>Week 10.</h3>
+<p>11/7/2022<br />
+<strong>Lecture:</strong> Structural Causal Models and Sampling Design.
+<a href="./lectures/causality_experiments.pptx">Causal Inference and
+Experiments</a> <strong>Reading:</strong> <a
+href="readings/exp_design_papers.zip">Experimental Design Reading
+Packet</a><br />
+<strong>Etherpad:</strong> <a
+href="https://etherpad.wikimedia.org/p/607-causal-2022"
+class="uri">https://etherpad.wikimedia.org/p/607-causal-2022</a><br />
+<strong>Lab:</strong> Discussion of papers (see <a
+href="https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing">here</a>
+for assignments)</p>
+</div>
+<div id="week-11." class="section level3">
+<h3>Week 11.</h3>
+<p>11/14/2022<br />
+<strong>Lecture:</strong> <a
+href="lectures/expt_designs.pptx">Fundamental Experimental Designs from
+a Causal Perspective</a>, <a
+href="lectures/causal_models_regression.pptx">Using causal models to get
+valid inference from observational and quasi-experimental
+studies</a><br />
+<strong>Reading:</strong> <a
+href="readings/Gotelli&amp;EllisonChapter7.pdf">A Beastiary of
+Experimental Designs</a><br />
+<strong>Etherpad:</strong> <a
+href="https://etherpad.wikimedia.org/p/607-causal-2022"
+class="uri">https://etherpad.wikimedia.org/p/607-causal-2022</a><br />
+<strong>Lab:</strong> Discussion of papers (see <a
+href="https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing">here</a>
+for assignments)</p>
+</div>
+<div id="week-12." class="section level3">
+<h3>Week 12.</h3>
+<p>11/21/2022<br />
+<strong>Lecture:</strong> <a href="readings/obs_sampling.zip">Papers</a>
+Discussion About Observational Studies, Thanksgiving Break!<br />
+<strong>Reading:</strong> <a
+href="readings/Grace_and_Irvine_2019.pdf">Scientist’s guide to
+developing explanatory statistical models using causal analysis
+principles</a>, <a
+href="./readings/Murtaugh_2007_Ecology.pdf">Simplicity and Complexity in
+Ecological Data Analysis</a>, <a
+href="./readings/McElreath_Ch_6.pdf">The Causal Dag and Haunted
+Terror</a><br />
+<strong>Optional Reading:</strong> <a
+href="readings/griffith_collider_bias_covid.pdf">Collider Bias and
+Covid</a><br />
+<strong>Etherpad:</strong> <a
+href="https://etherpad.wikimedia.org/p/607-obs-2022"
+class="uri">https://etherpad.wikimedia.org/p/607-obs-2022</a></p>
+</div>
+</div>
+<div id="block-4.-drawing-inference-from-studies"
+class="section level2">
+<h2>Block 4. Drawing Inference from Studies</h2>
+<div id="week-13." class="section level3">
+<h3>Week 13.</h3>
+<p>11/28/2022<br />
 <strong>Lecture:</strong> Ways of Knowing: <a
 href="./lectures/linear_regression_nht">NHST</a> and <a
-href="lectures/mle_cv.html">Likelihood with LRT</a><br />
+href="lectures/mle_cv.html">NHST with Likelihood</a><br />
 <strong>Lab Topic:</strong> <a href="lab/07_likelihood.html">Likelihood
 and linear models</a>, <a
 href="./lab/data/17e8ShrinkingSeals%20Trites%201996.csv">data</a><br />
@@ -542,10 +708,10 @@ likelihood</a><br />
 <strong>Homework:</strong><a
 href="./homework/07_likelihood.html">inference and likelihood</a></p>
 </div>
-<div id="week-7-8." class="section level3">
-<h3>Week 7 &amp; 8.</h3>
-<p>10/17/2022</p>
-<p>10/24/2022</p>
+<div id="week-14-15." class="section level3">
+<h3>Week 14-15.</h3>
+<p>12/5/2022</p>
+<p>12/12/2022</p>
 <p><strong>Lecture:</strong> Ways of Knowing: <a
 href="./lectures/crossvalidation.html">Cross-Validation and AIC</a>, <a
 href="lectures/bayes.html">Bayesian Data Analaysis</a>, <a
@@ -595,196 +761,7 @@ class="uri">https://etherpad.wikimedia.org/p/607-bayes-lm-2022</a><br />
 href="in_class_code/2020/scripts/crossvalidation.R">Cross-Validation</a>,
 <a href="in_class_code/2020/excel_exercises/bayes_xls.xlsx">Bayesian
 Demo</a>, <a href="in_class_code/2020/scripts/bayes_lm.R">Bayesian
-Linear Model</a><br />
-<strong>Homework:</strong> <a href="homework/cv_homework.html">CV and
-some Bayesian Grid sampling</a></p>
-<!-- **MIDTERM**: [here](exams/exam2020.html) -->
-</div>
-</div>
-<div id="block-3.-further-adventures-in-regression"
-class="section level2">
-<h2>Block 3. Further Adventures in Regression</h2>
-<div id="week-9" class="section level3">
-<h3>Week 9</h3>
-<p>10/31/2022<br />
-<strong>Lecture:</strong> Tidy Tuesday for Election Day, <a
-href="lectures/t_as_lm.html">It s All Linear Models; t-test
-edition</a><br />
-<strong>Lab Topic:</strong> <a
-href="lab/comparing_two_means.html">Comparing Means</a>, Final Proposal
-Meetings<br />
-<strong>Reading:</strong> <a
-href="https://lindeloev.github.io/tests-as-linear/">Common statistical
-tests are linear models</a>, W&amp;S Chapters 11-12<br />
-<strong>Packages for The Week:</strong>
-<code>install.packages(c("car", "emmeans", "multcompView", "contrast"))</code><br />
-<strong>Etherpad:</strong> <a
-href="https://etherpad.wikimedia.org/p/607-linear_everywhere-2022"
-class="uri">https://etherpad.wikimedia.org/p/607-linear_everywhere-2022</a>
-<strong>In Class Code:</strong> <a
-href="./in_class_code/2020/scripts/comparing_means.R">comparing two
-means</a></p>
-</div>
-<div id="week-10." class="section level3">
-<h3>Week 10.</h3>
-<p>11/7/2022<br />
-<strong>Lecture:</strong> Categorical Predictors and ANOVA <a
-href="lectures/anova_1.html">part 1</a>, <a
-href="lectures/anova_2.html">part 2</a><br />
-<strong>Lab Topic:</strong> <a href="lab/10_anova.html">One-Way
-ANOVA</a><br />
-<strong>Lab Data:</strong> <a href="lab/data_10.zip">Multiple
-Files</a><br />
-<strong>Reading:</strong> W&amp;S Chapter 14-15, <a
-href="http://byrneslab.net/classes/biol607/readings/cottingham_et_al_2005_frontiers_all.pdf">Cottingham
-et al. 2005</a><br />
-<strong>Packages for The Week:</strong>
-<code>install.packages(c("car", "emmeans", "multcompView", "contrast"))</code>
-<strong>Etherpad:</strong> <a
-href="https://etherpad.wikimedia.org/p/607-anova-2022"
-class="uri">https://etherpad.wikimedia.org/p/607-anova-2022</a>
-<strong>In Class Code:</strong> <a
-href="./in_class_code/2020/scripts/anova.R">lots of anova</a></p>
-</div>
-<div id="week-11." class="section level3">
-<h3>Week 11.</h3>
-<p>11/14/2022<br />
-<strong>Lectures:</strong> <a href="lectures/anova_3.html">Factorial
-ANOVA</a>, <a href="./lectures/23_general_linear_model.html">General
-Linear Model: ANCOVA and MLR</a><br />
-<strong>Lab Topic:</strong> Discussion of Hurlbert, Cottingham, <a
-href="lab/11_anova.html">Factorial ANOVA</a><br />
-<strong>Lab Data:</strong> <a href="lab/data_10.zip">Multiple
-Files</a><br />
-<strong>Reading:</strong> W&amp;S 18, <a
-href="http://byrneslab.net/classes/biol607/readings/Hurlbert_1984_eco_mono.pdf">Hurlbert
-1984</a><br />
-<strong>Optional Reading:</strong> <a
-href="./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf">Analysis
-of variance with unbalanced data: an update for ecology &amp;
-evolution</a><br />
-<strong>Etherpad:</strong> <a
-href="https://etherpad.wikimedia.org/p/607-many-predictors-2022"
-class="uri">https://etherpad.wikimedia.org/p/607-many-predictors-2022</a><br />
-<strong>In Class Code:</strong> <a
-href="./in_class_code/2020/scripts/glm.R">lots of anova</a><br />
-<strong>Homework:</strong> <a href="homework/glm.html">GLM
-Homework</a></p>
-</div>
-<div id="week-12" class="section level3">
-<h3>Week 12</h3>
-<p>11/21/2022<br />
-<strong>Lecture:</strong> Many Predictors <a
-href="./lectures/mlr_int.html">Multiple Regression and the General
-Linear Model</a>, <a href="./lectures/24_mmi.html">Information Theoretic
-Approaches</a><br />
-<strong>Lab Topic:</strong> <a href="lab/11_glm_aic.html">Multiple
-Regression, Multimodel Inference</a> - <a href="lab/data_11.zip">data
-files</a><br />
-<strong>Readings:</strong> <a
-href="http://byrneslab.net/classes/biol607/readings/Symonds_and_Moussalli_2010_behav_ecol.pdf">Symonds
-and Moussalli 2010</a>, <a
-href="./readings/Schielzeth_2010_MEE.pdf">Simple means to improve the
-interpretability of regression coefficients</a>, <a
-href="./readings/Boyd_2020_Glob_Change_Biol.pdf">Experimental strategies
-to assess the biological ramifications of multiple drivers of global
-ocean change</a><br />
-<strong>Optional Readings:</strong> <a
-href="./readings/kramer_blasey_centering.pdf">Centring in regression
-analyses: a strategy to prevent errors in statistical inference</a>, <a
-href="./readings/Aho_2014_ecolog_bic.pdf">Model selection for
-ecologists: the worldviews of AIC and BIC</a><br />
-<strong>Etherpad:</strong> <a
-href="https://etherpad.wikimedia.org/p/607-mlr-2022"
-class="uri">https://etherpad.wikimedia.org/p/607-mlr-2022</a><br />
-<strong>Packages for the Week:</strong>
-<code>install.packages(c("AICcmodavg", "MuMIn", "modelr"))</code><br />
-<strong>In Class Code:</strong> <a
-href="./in_class_code/2020/scripts/mlr.R">ancova, mlr, and aic</a></p>
-</div>
-</div>
-<div id="block-4.-asking-questions-of-the-world" class="section level2">
-<h2>Block 4. Asking Questions of the World</h2>
-<div id="week-13." class="section level3">
-<h3>Week 13.</h3>
-<p>11/28/2022<br />
-<strong>Lecture:</strong> <a
-href="./lectures/causality_experiments.pptx">Causal Inference and
-Experiments</a>, <a href="lectures/expt_designs.pptx">Fundamental
-Experimental Designs from a Causal Perspective</a><br />
-<strong>Reading:</strong> <a
-href="readings/Gotelli&amp;EllisonChapter7.pdf">A Beastiary of
-Experimental Designs</a>, <a
-href="readings/exp_design_papers.zip">Experimental Design Reading
-Packet</a><br />
-<strong>Optional Readings:</strong> Non-assigned papers in the packet,
-The whole <a
-href="http://byrneslab.net/classes/biol607/readings/ecology_forum_on_p_values.pdf">Ecology
-Special Section on P Values</a> is incredible reading.<br />
-<strong>Etherpad:</strong> <a
-href="https://etherpad.wikimedia.org/p/607-experiments-2022"
-class="uri">https://etherpad.wikimedia.org/p/607-experiments-2022</a><br />
-<strong>Lab:</strong> Discussion of papers (see <a
-href="https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing">here</a>
-for assignments)</p>
-</div>
-<div id="week-14." class="section level3">
-<h3>Week 14.</h3>
-<p>12/5/2022<br />
-<strong>Lecture:</strong> <a
-href="lectures/causal_models_regression.pptx">Using causal models to get
-valid inference from observational studies</a>, Design of Observational
-Studies with Causal Models as a Guide<br />
-<strong>Reading:</strong> <a
-href="readings/Grace_and_Irvine_2019.pdf">Scientist’s guide to
-developing explanatory statistical models using causal analysis
-principles</a>, <a
-href="./readings/Murtaugh_2007_Ecology.pdf">Simplicity and Complexity in
-Ecological Data Analysis</a>, <a
-href="./readings/McElreath_Ch_6.pdf">The Causal Dag and Haunted
-Terror</a><br />
-<strong>Optional Reading:</strong> <a
-href="readings/griffith_collider_bias_covid.pdf">Collider Bias and
-Covid</a><br />
-<strong>Etherpad:</strong> <a
-href="https://etherpad.wikimedia.org/p/607-obs-2022"
-class="uri">https://etherpad.wikimedia.org/p/607-obs-2022</a><br />
-<strong>Lab:</strong> Discussion of <a
-href="readings/obs_sampling.zip">papers</a></p>
-</div>
-</div>
-<div
-id="block-5-modeling-error-and-further-adventures-in-regression-models"
-class="section level2">
-<h2>Block 5: Modeling Error and Further Adventures in Regression
-Models</h2>
-<div id="week-15." class="section level3">
-<h3>Week 15.</h3>
-<p>12/12/2022<br />
-<strong>Lecture:</strong> Modeling Error: <a
-href="./lectures/gls.html">Generalized Least Squares and
-Heteroscedasticity</a>, <a
-href="lectures/25_generalized_linear_models.html">Entering a non-normal
-world</a> - Modeling count data with Genearlized linear models.<br />
-<strong>Data:</strong> <a href="./lectures/data/gls/gls_data.zip">GLS
-Data</a>, <a href="./lab/gzlm_data.zip">GLM Data</a><br />
-<strong>Lab Topic:</strong> <a href="./lab/12_gzlm.html">Generalized
-Linear Models</a><br />
-<strong>Packages for the Week:</strong>
-<code>install.packages(c("MASS", "readxl", "betareg", "DHARMa"))</code><br />
-<strong>Reading:</strong> <a
-href="http://byrneslab.net/classes/biol607/readings/O&#39;Hara_2009_glmm.pdf">O’Hara
-2009</a> through section on GLMs, <a
-href="http://byrneslab.net/classes/biol607/readings/o&#39;hara_and_kotze_do_not_log_transform.pdf">O’Hara
-and Kotze 2010</a>, <a
-href="http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf">Wharton
-and Hui 2011</a>, <a
-href="https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html">Hartig
-DHARMa vignette</a>, <a
-href="https://rpubs.com/nicoleknight/936037">Intro to Beta Regression
-for % Cover Data</a></p>
-<p><strong>FINAL PRESENTATIONS Fri. Dec 16th in Lab Slot</strong>
-<strong>FINAL PAPERS DUE Dec 20th</strong></p>
+Linear Model</a></p>
 </div>
 </div>
 
