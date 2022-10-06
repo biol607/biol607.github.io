@@ -3,6 +3,7 @@
   <head>
     <title>Sampling and Simulation</title>
     <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
@@ -28,7 +29,7 @@ class: center, middle
 
 # Etherpad
 &lt;br&gt;&lt;br&gt;
-&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-lm-2020&lt;/h3&gt;&lt;/center&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-lm-2022&lt;/h3&gt;&lt;/center&gt;
 
 
 ---
@@ -65,8 +66,6 @@ class: center, middle
 1. Assumptions: Is our fit valid? 
 
 2. How did we fit this model?
-
-3. How do we draw inference from this model?
 
 
 ---
@@ -289,26 +288,19 @@ Is anything off?
 
 &lt;img src="linear_regression_details_files/figure-html/wolfqq-1.png" style="display: block; margin: auto;" /&gt;
 
---
-
-
-```
-
-	Shapiro-Wilk normality test
-
-data:  residuals(wolf_mod)
-W = 0.9067, p-value = 0.02992
-```
 
 ---
 # Outliers: Cook's D
 
 &lt;img src="linear_regression_details_files/figure-html/pufferout-1.png" style="display: block; margin: auto;" /&gt;
 
-Want no values &gt; 1
+---
+# Leverage: Cook's D Scaled by Value
+
+&lt;img src="linear_regression_details_files/figure-html/pufferout_leverage-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Outliers: Cook's D - wolves OK
+# Leverage: Cook's D - wolves OK
 
 &lt;img src="linear_regression_details_files/figure-html/pufferout_cook-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -336,7 +328,7 @@ Want no values &gt; 1
 
 4. Additivity and Linearity: compare model v. data!
 
-5. Independence of Errors: conisder sampling design
+5. Independence of Errors: consider sampling design
 
 6. Equal Variance of Errors: evaluate res-fit 
 
@@ -375,9 +367,9 @@ Want no values &gt; 1
   - Approximations of quantities based on frequentist logic
   
 2. Likelihood
-  - Flexible to many error distributions and other problems
-  - Produces likelihood surface of different parameter values
-  - Equivalent to least square for Gaussian likelihood
+  - Flexible to many models
+  - Produces likelihood surface of different parameters 
+  - Equivalent to LS for Gaussian likelihood
   - Approximations of quantities based on frequentist logic
 
 3. Bayesian
@@ -429,330 +421,461 @@ Least squares regression line always goes through the mean of X and Y
 --
 `\(\Large \beta_0 = \bar{Y} - \beta_1  \bar{X}\)`
 
----
-
-# Digging Deeper into Regression
-
-1. Assumptions: Is our fit valid? 
-
-2. How did we fit this model?
-
-3. .red[How do we draw inference from this model?]
-
----
-# Inductive v. Deductive Reasoning
-
-&lt;br&gt;&lt;br&gt;
-**Deductive Inference:** A larger theory is used to devise
-many small tests.
-
-
-**Inductive Inference:** Small pieces of evidence are used
-to shape a larger theory and degree of belief.
----
-
-# Applying Different Styles of Inference
-
-- **Null Hypothesis Testing**: What's the probability that things are not influencing our data?
-      - Deductive
-
-- **Cross-Validation**: How good are you at predicting new data?
-      - Deductive
-
-- **Model Comparison**: Comparison of alternate hypotheses
-      - Deductive or Inductive
-
-- **Probabilistic Inference**: What's our degree of belief in a data?
-      - Inductive
-
----
-# Null Hypothesis Testing is a Form of Deductive Inference
-
-.pull-left[
-![:scale 55%](./images/07/Karl_Popper_wikipedia.jpeg)
-
-Falsification of hypotheses is key! &lt;br&gt;&lt;br&gt;
-
-A theory should be considered scientific if, and only if, it is falsifiable.
-
-]
-
---
-.pull-right[
-![:scale 55%](./images/regression/Professor_Imre_Lakatos,_c1960s.jpg)
-
-Look at a whole research program and falsify auxilliary hypotheses
-]
-
-
----
-# A Bigger View of Dedictive Inference
-
-![](./images/regression/lakatos_structure.png)
-
-.small[https://plato.stanford.edu/entries/lakatos/#ImprPoppScie]
 
 ---
 
-# Reifying Refutation - What is the probability something is false?
+# Least Squares Visualized
 
-What if our hypothesis was that the resemblance-predator relationship was 2:1. We know our SE of our estimate is 0.57, so, we have a distribution of what we **could** observe.
-
-&lt;img src="linear_regression_details_files/figure-html/slopedist-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Reifying Refutation - What is the probability something is false?
-
-BUT - our estimated slope is 3.
-
-&lt;img src="linear_regression_details_files/figure-html/add_obs-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# To falsify the 2:1 hypothesis, we need to know the probability of observing 3, or something GREATER than 3.
-
-We want to know if we did this experiment again and again, what's the probability of observing what we saw or worse (frequentist!)
-
-&lt;img src="linear_regression_details_files/figure-html/add_p-1.png" style="display: block; margin: auto;" /&gt;
---
-
-Probability = 0.04
-
---
-Note: We typically would multiply this by 2 to look at extremes in both tails.
-
----
-class: center, middle
-
-# Null hypothesis testing is asking what is the probability of our observation or more extreme observation given that some null expectation is true.
-
-### (it is .red[**NOT**] the probability of any particular alternate hypothesis being true)
-
----
-# R.A. Fisher and The P-Value For Null Hypotheses
-
-.pull-left[
-![](./images/07/fisher2.jpeg)
-]
-
-.pull-right[
-P-value: The Probability of making an observation or more extreme
-observation given that the null hypothesis is true.
-]
-
----
-# Applying Fisher: Evaluation of a Test Statistic
-
-We  use our data to calculate a **test statistic** that maps to a value
-of the null distribution. 
-
-We can then calculate the probability of observing our data, or of observing data even more extreme, given that the null hypothesis is true.
-
-
-`$$\large P(X \leq Data | H_{0})$$`
+&lt;img src="linear_regression_details_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# Problems with P
-
-- Most people don't understand it.
-     - See American Statistical Society' recent statements
-     
---
-- Like SE, it gets smaller with sample size!
---
-- Neyman-Pearson Null Hypothesis Significance Testing
-     - For Industrial Quality Control, NHST was introduced to establish cutoffs of reasonable p, called an `\(\alpha\)`
-     - This corresponds to Confidence intervals - 1-$\alpha$ = CI of interest
-     - This has become weaponized so that `\(\alpha = 0.05\)` has become a norm.... and often determines if something is worthy of being published?
-     - Chilling effect on science
-     
---
-- We don't know how to talk about it
-
----
-# How do you talk about results from a p-value?
-
-- Based on your experimental design, what is a reasonable range of p-values to expect if the null is false
-
-- Smaller p values indicate stronger support for rejection, larger ones weaker. Use that language.
-
-- Accumulate multiple lines of evidence so that the entire edifice of your research does not rest on a single p-value!!!!
-
----
-# For example, what does p = 0.061 mean?
-
-- There is a 6.1% chance of obtaining the observed data or more extreme data given that the null hypothesis is true.
-
-- If you choose to reject the null, you have a ~ 1 in 16 chance of being wrong
-
-- Are you comfortable with that? 
-
-- OR - What other evidence would you need to make you more or less comfortable?
-
----
-
-# Common Regression Test Statistics
-
-- Does my model explain variability in the data?
-     - **Null Hypothesis**: The ratio of variability from your predictors versus noise is 1
-     - **Test Statistic**: F distribution (describes ratio of two variances)
-     
-- Are my coefficients not 0?
-    - **Null Hypothesis**: Coefficients are 0  
-    - **Test Statistic**: T distribution (normal distribution modified for low sample size)
-    
----
-# Does my model explain variability in the data?
-
-Ho = The model predicts no variation in the data.  
-
-Ha = The model predicts variation in the data.
-
---
-
-To evaluate these hypotheses, we need to have a measure of variation explained by data versus error - the sums of squares!
-
---
-`$$SS_{Total} = SS_{Regression} + SS_{Error}$$`
----
-
-# Sums of Squares of Error, Visually
-&lt;img src="linear_regression_details_files/figure-html/linefit-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Sums of Squares of Regression, Visually
-&lt;img src="linear_regression_details_files/figure-html/grandmean-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Sums of Squares of Regression, Visually
-&lt;img src="linear_regression_details_files/figure-html/ssr-1.png" style="display: block; margin: auto;" /&gt;
-
-Distance from `\(\hat{y}\)` to `\(\bar{y}\)`
-
----
-# Components of the Total Sums of Squares
-
-`\(SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}\)`, df=1
-
-`\(SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2\)`, df=n-2
+# Likelihood
+  - Flexible to many models
+  - Produces likelihood surface of different parameters 
+  - Equivalent to LS for Gaussian likelihood
+  - Approximations of quantities based on frequentist logic
 
 
 --
-To compare them, we need to correct for different DF. This is the Mean
-Square.
-
-MS=SS/DF
-
-e.g, `\(MS_{E} = \frac{SS_{E}}{n-2}\)`
-
----
-
-# The F Distribution and Ratios of Variances
-
-`\(F = \frac{MS_{R}}{MS_{E}}\)` with DF=1,n-2 
-
-&lt;img src="linear_regression_details_files/figure-html/f-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# F-Test and Pufferfish
-
-|            | Df|   Sum Sq|    Mean Sq|  F value|   Pr(&gt;F)|
-|:-----------|--:|--------:|----------:|--------:|--------:|
-|resemblance |  1| 255.1532| 255.153152| 27.37094| 5.64e-05|
-|Residuals   | 18| 167.7968|   9.322047|       NA|       NA|
-
-&lt;br&gt;&lt;br&gt;
+`\(L = \prod p(Data|parmeters)\)`
 --
-We  reject the null hypothesis that resemblance does not explain variability in predator approaches
+`\(L(\theta | D) = \prod dnorm(y_i, \mu = \beta_0 + \beta_1 x_i, \sigma)\)`
+--
+Deviance = -2 * Log Likelihood
 
 ---
-# Testing the Coefficients
 
- -  F-Tests evaluate whether elements of the model contribute to variability in the data
-      - Are modeled predictors just noise?
-      - What's the difference between a model with only an intercept and an intercept and slope?
+# Likelihood: Minimizing Deviance (Maximizing Likelihood) by Search
+
+
+
+---
+
+# Bayesian
+  - Incorporates prior knowledge
+  - Probability for any parameter is likelihood * prior
+  - Superior for quantifying uncertainty
+  - With "flat" priors, equivalent to least squares/likelihood
+  - Analytic or simulated calculation of quantities
+
+
+`$$p(H|D) = \frac{p(D|H)p(H)}{p(D)}$$`
+
+---
+
+# Bayes: Creating a Posterior Probability Distribution
+
+&lt;img src="linear_regression_details_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 
 --
 
-- T-tests evaluate whether coefficients are different from 0
-
---
-
-- Often, F and T agree - but not always
-    - T can be more sensitive with multiple predictors
-
----
-background-color: black
-class: center, middle, inverse
-
-![:scale 90%](images/09/t_distribution.png)
-
-.small[xkcd]
-
----
-background-image: url(images/09/guiness_full.jpg)
-background-position: center
-background-size: contain
-
----
-background-image: url(images/09/gosset.jpg)
-background-position: center
-background-size: contain
-
----
-# T-Distributions are What You'd Expect Sampling a Standard Normal Population with a Small Sample Size
-
-- t = mean/SE, DF = n-1
-- It assumes a normal population with mean of 0 and SD of 1
-
-&lt;img src="linear_regression_details_files/figure-html/dist_shape_t-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Error in the Slope Estimate
-&lt;br&gt;
-
-
-`\(\Large SE_{b} = \sqrt{\frac{MS_{E}}{SS_{X}}}\)`
-
-
-
-#### 95% CI = `\(b \pm t_{\alpha,df}SE_{b}\)`  
-
-(~ 1.96 when N is large)
-
-
----
-# Assessing the Slope with a T-Test
-&lt;br&gt;
-`$$\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}$$` 
-
-##### DF=n-2
-
-`\(H_0: \beta_{0} = 0\)`, but we can test other hypotheses
-
----
-# Slope of Puffer Relationship (DF = 1 for Parameter Tests)
-
-|            | Estimate| Std. Error|  t value| Pr(&gt;&amp;#124;t&amp;#124;)|
-|:-----------|--------:|----------:|--------:|------------------:|
-|(Intercept) | 1.924694|  1.5064163| 1.277664|          0.2176012|
-|resemblance | 2.989492|  0.5714163| 5.231724|          0.0000564|
-
-&lt;Br&gt;
-We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept.
+Searches `\(p(H|D) = \frac{p(D|H)p(H)}{p(D)}\)`
 
 ---
 
-# So, what can we say?
+# Bayes: Creating a Posterior Probability Distribution
+&lt;img src="linear_regression_details_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
-.pull-left[
-- We reject that there is no relationship between resemblance and predator visits in our experiment. 
-- 0.6 of the variability in predator visits is associated with resemblance. 
-]
+---
 
-.pull-right[
-&lt;img src="linear_regression_details_files/figure-html/puffershow-1.png" style="display: block; margin: auto;" /&gt;
-]
+# Linear Regression - the Core of Everything
+
+- Make sure you meet assumptions  
+      - Don't burn down Prague
+
+
+- Many ways to fit   
+      - We will talk inference later
+      - The key is looking at estimated values and their implications
+      - Look at precision - do you feel comfortable with inference?
+
+---
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Digging Deeper into Regression --&gt;
+
+&lt;!-- 1. Assumptions: Is our fit valid?  --&gt;
+
+&lt;!-- 2. How did we fit this model? --&gt;
+
+&lt;!-- 3. .red[How do we draw inference from this model?] --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Inductive v. Deductive Reasoning --&gt;
+
+&lt;!-- &lt;br&gt;&lt;br&gt; --&gt;
+&lt;!-- **Deductive Inference:** A larger theory is used to devise --&gt;
+&lt;!-- many small tests. --&gt;
+
+
+&lt;!-- **Inductive Inference:** Small pieces of evidence are used --&gt;
+&lt;!-- to shape a larger theory and degree of belief. --&gt;
+&lt;!-- --- --&gt;
+
+&lt;!-- # Applying Different Styles of Inference --&gt;
+
+&lt;!-- - **Null Hypothesis Testing**: What's the probability that things are not influencing our data? --&gt;
+&lt;!--       - Deductive --&gt;
+
+&lt;!-- - **Cross-Validation**: How good are you at predicting new data? --&gt;
+&lt;!--       - Deductive --&gt;
+
+&lt;!-- - **Model Comparison**: Comparison of alternate hypotheses --&gt;
+&lt;!--       - Deductive or Inductive --&gt;
+
+&lt;!-- - **Probabilistic Inference**: What's our degree of belief in a data? --&gt;
+&lt;!--       - Inductive --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Null Hypothesis Testing is a Form of Deductive Inference --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- ![:scale 55%](./images/07/Karl_Popper_wikipedia.jpeg) --&gt;
+
+&lt;!-- Falsification of hypotheses is key! &lt;br&gt;&lt;br&gt; --&gt;
+
+&lt;!-- A theory should be considered scientific if, and only if, it is falsifiable. --&gt;
+
+&lt;!-- ] --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- ![:scale 55%](./images/regression/Professor_Imre_Lakatos,_c1960s.jpg) --&gt;
+
+&lt;!-- Look at a whole research program and falsify auxilliary hypotheses --&gt;
+&lt;!-- ] --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- # A Bigger View of Dedictive Inference --&gt;
+
+&lt;!-- ![](./images/regression/lakatos_structure.png) --&gt;
+
+&lt;!-- .small[https://plato.stanford.edu/entries/lakatos/#ImprPoppScie] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Reifying Refutation - What is the probability something is false? --&gt;
+
+&lt;!-- What if our hypothesis was that the resemblance-predator relationship was 2:1. We know our SE of our estimate is 0.57, so, we have a distribution of what we **could** observe. --&gt;
+
+&lt;!-- ```{r slopedist, fig.height = 5} --&gt;
+&lt;!-- dat_slope &lt;- tibble(x = seq(-1,5,length.out = 200), --&gt;
+&lt;!--                     y = dnorm(x, 2, 0.57)) --&gt;
+
+&lt;!-- slopedist &lt;- ggplot(dat_slope, --&gt;
+&lt;!--                     aes(x = x, y = y)) + --&gt;
+&lt;!--   geom_line() + --&gt;
+&lt;!--   labs(x = "Hypothesized Slope", y = "Probability Density") --&gt;
+
+&lt;!-- slopedist --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Reifying Refutation - What is the probability something is false? --&gt;
+
+&lt;!-- BUT - our estimated slope is 3. --&gt;
+
+&lt;!-- ```{r add_obs, fig.height = 5} --&gt;
+&lt;!-- slopedist + --&gt;
+&lt;!--   geom_vline(xintercept = 3, color = "red", lty = 2)  --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # To falsify the 2:1 hypothesis, we need to know the probability of observing 3, or something GREATER than 3. --&gt;
+
+&lt;!-- We want to know if we did this experiment again and again, what's the probability of observing what we saw or worse (frequentist!) --&gt;
+
+&lt;!-- ```{r add_p, fig.height = 5} --&gt;
+&lt;!-- dat_obs &lt;- tibble(x = seq(3,5,length.out = 200), --&gt;
+&lt;!--                     y = dnorm(x, 2, 0.57), --&gt;
+&lt;!--                   ymin = 0) --&gt;
+
+&lt;!-- slopedist + --&gt;
+&lt;!--   geom_vline(xintercept = 3, color = "red", lty = 2) + --&gt;
+&lt;!--   geom_ribbon(aes(ymin = ymin, ymax = y),  --&gt;
+&lt;!--               data = dat_obs, fill = "red", alpha = 0.5) --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- -- --&gt;
+
+&lt;!-- Probability = 0.04 --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- Note: We typically would multiply this by 2 to look at extremes in both tails. --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- class: center, middle --&gt;
+
+&lt;!-- # Null hypothesis testing is asking what is the probability of our observation or more extreme observation given that some null expectation is true. --&gt;
+
+&lt;!-- ### (it is .red[**NOT**] the probability of any particular alternate hypothesis being true) --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # R.A. Fisher and The P-Value For Null Hypotheses --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- ![](./images/07/fisher2.jpeg) --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- P-value: The Probability of making an observation or more extreme --&gt;
+&lt;!-- observation given that the null hypothesis is true. --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Applying Fisher: Evaluation of a Test Statistic --&gt;
+
+&lt;!-- We  use our data to calculate a **test statistic** that maps to a value --&gt;
+&lt;!-- of the null distribution.  --&gt;
+
+&lt;!-- We can then calculate the probability of observing our data, or of observing data even more extreme, given that the null hypothesis is true. --&gt;
+
+
+&lt;!-- `$$\large P(X \leq Data | H_{0})$$` --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- # Problems with P --&gt;
+
+&lt;!-- - Most people don't understand it. --&gt;
+&lt;!--      - See American Statistical Society' recent statements --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- - Like SE, it gets smaller with sample size! --&gt;
+&lt;!-- -- --&gt;
+&lt;!-- - Neyman-Pearson Null Hypothesis Significance Testing --&gt;
+&lt;!--      - For Industrial Quality Control, NHST was introduced to establish cutoffs of reasonable p, called an `\(\alpha\)` --&gt;
+&lt;!--      - This corresponds to Confidence intervals - 1-$\alpha$ = CI of interest --&gt;
+&lt;!--      - This has become weaponized so that `\(\alpha = 0.05\)` has become a norm.... and often determines if something is worthy of being published? --&gt;
+&lt;!--      - Chilling effect on science --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- - We don't know how to talk about it --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # How do you talk about results from a p-value? --&gt;
+
+&lt;!-- - Based on your experimental design, what is a reasonable range of p-values to expect if the null is false --&gt;
+
+&lt;!-- - Smaller p values indicate stronger support for rejection, larger ones weaker. Use that language. --&gt;
+
+&lt;!-- - Accumulate multiple lines of evidence so that the entire edifice of your research does not rest on a single p-value!!!! --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # For example, what does p = 0.061 mean? --&gt;
+
+&lt;!-- - There is a 6.1% chance of obtaining the observed data or more extreme data given that the null hypothesis is true. --&gt;
+
+&lt;!-- - If you choose to reject the null, you have a ~ 1 in 16 chance of being wrong --&gt;
+
+&lt;!-- - Are you comfortable with that?  --&gt;
+
+&lt;!-- - OR - What other evidence would you need to make you more or less comfortable? --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Common Regression Test Statistics --&gt;
+
+&lt;!-- - Does my model explain variability in the data? --&gt;
+&lt;!--      - **Null Hypothesis**: The ratio of variability from your predictors versus noise is 1 --&gt;
+&lt;!--      - **Test Statistic**: F distribution (describes ratio of two variances) --&gt;
+
+&lt;!-- - Are my coefficients not 0? --&gt;
+&lt;!--     - **Null Hypothesis**: Coefficients are 0   --&gt;
+&lt;!--     - **Test Statistic**: T distribution (normal distribution modified for low sample size) --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Does my model explain variability in the data? --&gt;
+
+&lt;!-- Ho = The model predicts no variation in the data.   --&gt;
+
+&lt;!-- Ha = The model predicts variation in the data. --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- To evaluate these hypotheses, we need to have a measure of variation explained by data versus error - the sums of squares! --&gt;
+
+&lt;!-- -- --&gt;
+&lt;!-- `$$SS_{Total} = SS_{Regression} + SS_{Error}$$` --&gt;
+&lt;!-- --- --&gt;
+
+&lt;!-- # Sums of Squares of Error, Visually --&gt;
+&lt;!-- ```{r linefit} --&gt;
+&lt;!-- ```  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Sums of Squares of Regression, Visually --&gt;
+&lt;!-- ```{r grandmean} --&gt;
+&lt;!-- set.seed(697) --&gt;
+
+&lt;!-- plot(x,y,pch=19, cex=0, cex.lab=1.5, cex.axis=1.1) --&gt;
+&lt;!-- abline(a, lwd=2) --&gt;
+&lt;!-- #segments(x,fitted(a),x,y, col="red", lwd=2) --&gt;
+&lt;!-- points(mean(x), mean(y), col="blue", pch=15) --&gt;
+&lt;!-- ```  --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Sums of Squares of Regression, Visually --&gt;
+&lt;!-- ```{r ssr} --&gt;
+&lt;!-- set.seed(697) --&gt;
+
+&lt;!-- plot(x,y,pch=19, cex=0, cex.lab=1.5, cex.axis=1.1) --&gt;
+&lt;!-- abline(a, lwd=2) --&gt;
+&lt;!-- points(mean(x), mean(y), col="blue", pch=15) --&gt;
+&lt;!-- points(x, fitted(a), col="blue", pch=1) --&gt;
+&lt;!-- ```  --&gt;
+
+&lt;!-- Distance from `\(\hat{y}\)` to `\(\bar{y}\)` --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Components of the Total Sums of Squares --&gt;
+
+&lt;!-- `\(SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}\)`, df=1 --&gt;
+
+&lt;!-- `\(SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2\)`, df=n-2 --&gt;
+
+
+&lt;!-- -- --&gt;
+&lt;!-- To compare them, we need to correct for different DF. This is the Mean --&gt;
+&lt;!-- Square. --&gt;
+
+&lt;!-- MS=SS/DF --&gt;
+
+&lt;!-- e.g, `\(MS_{E} = \frac{SS_{E}}{n-2}\)` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # The F Distribution and Ratios of Variances --&gt;
+
+&lt;!-- `\(F = \frac{MS_{R}}{MS_{E}}\)` with DF=1,n-2  --&gt;
+
+&lt;!-- ```{r f} --&gt;
+
+&lt;!-- x&lt;-seq(0,6,.01) --&gt;
+&lt;!-- qplot(x,df(x,1,25), geom="line",  xlab="Y", ylab="df(Y)") +  --&gt;
+&lt;!--   theme_bw(base_size=17) --&gt;
+
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # F-Test and Pufferfish --&gt;
+&lt;!-- ```{r f-puffer} --&gt;
+&lt;!-- knitr::kable(anova(puffer_lm)) --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- &lt;br&gt;&lt;br&gt; --&gt;
+&lt;!-- -- --&gt;
+&lt;!-- We  reject the null hypothesis that resemblance does not explain variability in predator approaches --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Testing the Coefficients --&gt;
+
+&lt;!--  -  F-Tests evaluate whether elements of the model contribute to variability in the data --&gt;
+&lt;!--       - Are modeled predictors just noise? --&gt;
+&lt;!--       - What's the difference between a model with only an intercept and an intercept and slope? --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- - T-tests evaluate whether coefficients are different from 0 --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- - Often, F and T agree - but not always --&gt;
+&lt;!--     - T can be more sensitive with multiple predictors --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- background-color: black --&gt;
+&lt;!-- class: center, middle, inverse --&gt;
+
+&lt;!-- ![:scale 90%](images/09/t_distribution.png) --&gt;
+
+&lt;!-- .small[xkcd] --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- background-image: url(images/09/guiness_full.jpg) --&gt;
+&lt;!-- background-position: center --&gt;
+&lt;!-- background-size: contain --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- background-image: url(images/09/gosset.jpg) --&gt;
+&lt;!-- background-position: center --&gt;
+&lt;!-- background-size: contain --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # T-Distributions are What You'd Expect Sampling a Standard Normal Population with a Small Sample Size --&gt;
+
+&lt;!-- - t = mean/SE, DF = n-1 --&gt;
+&lt;!-- - It assumes a normal population with mean of 0 and SD of 1 --&gt;
+
+&lt;!-- ```{r dist_shape_t, fig.height=5} --&gt;
+&lt;!-- x_dists &lt;- data.frame(x=seq(-2.5, 2.5, 0.01)) %&gt;% --&gt;
+&lt;!--   mutate(dn = dnorm(x), --&gt;
+&lt;!--          dt_1 = dt(x, 1), --&gt;
+&lt;!--          dt_2 = dt(x, 2), --&gt;
+&lt;!--          dt_3 = dt(x, 3) --&gt;
+&lt;!--   ) --&gt;
+
+&lt;!-- x_df &lt;- data.frame(x=rnorm(100), x_unif=runif(100)) --&gt;
+
+&lt;!-- ggplot() + --&gt;
+&lt;!--   geom_line(data=x_dists, mapping=aes(x=x, y=dn)) + --&gt;
+&lt;!--   geom_line(data=x_dists, mapping=aes(x=x, y=dt_1), color="red") + --&gt;
+&lt;!--   geom_line(data=x_dists, mapping=aes(x=x, y=dt_2), color="orange") + --&gt;
+&lt;!--   geom_line(data=x_dists, mapping=aes(x=x, y=dt_3), color="blue") + --&gt;
+&lt;!--   theme_classic(base_size=14) + --&gt;
+&lt;!--   annotate(x=c(0.2,0.7,1.1,1.2), y=c(0.4, 0.3, 0.2, 0.1),  --&gt;
+&lt;!--              label=c("Normal","3DF", "2DF", "1DF"), fill="white", --&gt;
+&lt;!--             fontface = "bold", geom="label") + --&gt;
+&lt;!--   ylab("density") --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Error in the Slope Estimate --&gt;
+&lt;!-- &lt;br&gt; --&gt;
+
+
+&lt;!-- `\(\Large SE_{b} = \sqrt{\frac{MS_{E}}{SS_{X}}}\)` --&gt;
+
+
+
+&lt;!-- #### 95% CI = `\(b \pm t_{\alpha,df}SE_{b}\)`   --&gt;
+
+&lt;!-- (~ 1.96 when N is large) --&gt;
+
+
+&lt;!-- --- --&gt;
+&lt;!-- # Assessing the Slope with a T-Test --&gt;
+&lt;!-- &lt;br&gt; --&gt;
+&lt;!-- `$$\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}$$`  --&gt;
+
+&lt;!-- ##### DF=n-2 --&gt;
+
+&lt;!-- `\(H_0: \beta_{0} = 0\)`, but we can test other hypotheses --&gt;
+
+&lt;!-- --- --&gt;
+&lt;!-- # Slope of Puffer Relationship (DF = 1 for Parameter Tests) --&gt;
+&lt;!-- ```{r puffer_t} --&gt;
+&lt;!-- knitr::kable(coef(summary(puffer_lm))) --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- &lt;Br&gt; --&gt;
+&lt;!-- We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept. --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # So, what can we say? --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- - We reject that there is no relationship between resemblance and predator visits in our experiment.  --&gt;
+&lt;!-- - 0.6 of the variability in predator visits is associated with resemblance.  --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- ```{r puffershow} --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- ] --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -801,6 +924,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
