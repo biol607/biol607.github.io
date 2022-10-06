@@ -621,7 +621,7 @@ Deviance = -2 * Log Likelihood
 
 # Likelihood: Minimizing Deviance (Maximizing Likelihood) by Search
 
-```{r, include=FALSE, message=FALSE, warning=FALSE}
+```{r,  message=FALSE, warning=FALSE}
 library(profileModel)
 puffer_glm <- glm(formula = predators ~ resemblance, data = puffer)
 profileModel(puffer_glm,
