@@ -1,6 +1,7 @@
-base
 dplyr
 ggplot2
 modelr
 broom
 tidyr
+knitr
+performance

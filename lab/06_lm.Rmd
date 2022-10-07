@@ -39,7 +39,7 @@ library(dplyr)
 library(ggplot2)
 theme_set(theme_bw(base_size = 16))
 
-seals <- read.csv("./data/17e8ShrinkingSeals Trites 1996.csv")
+seals <- read.csv("lab/data/17e8ShrinkingSeals Trites 1996.csv")
 
 seal_base <- ggplot(seals, aes(x=age.days, y=length.cm)) +
   geom_point() +
@@ -73,145 +73,125 @@ coef(seal_lm)
 But that's getting ahead of ourselves...
 
 ### 2. Evaluating Assumptions
-First, simulating! R provides a method for pulling the fit from the model and simulating different residuals. Now, granted, we *really* want to also incorporate error in the coefficients - which you can do - but.... gimme time to write a package that does that (haven't found one yet - see [here](http://imachordata.com/2020/09/24/simulating-posterior-predictions-from-non-bayesian-fits/)). But, to simulate from our model with residual error
+There are a number of base R ways to test assumptions. I'll show some to reference them, but, really, the [easystats::performance](https://easystats.github.io/performance/) library is where it is at to check them all. I'll go over pieces one by one, but, the `check_model()` function is your one stop shop. Let's look at it briefly here before digging into details.
 
-```{r}
-seal_sims <- simulate(seal_lm, nsim = 100)
+```{r performance}
+library(performance)
+check_model(seal_lm)
 ```
 
-So, what's in this object?
+There's a corresponding base method, but I like this one better
 
 ```{r}
-dim(seal_sims)
-```
-
-Ah, so, 100 sims as columns. But to plot, we want them as rows. Oh wait - a job for pivot!
-
-```{r}
-library(tidyr)
-
-seal_sims <- seal_sims %>%
-  pivot_longer(
-    cols = everything(),
-    names_to = "sim",
-    values_to = "length.cm"
-  )
-```
-
-We can now use this to plot the distribution of length in our data versus our model.
-
-```{r}
-ggplot() +
-  geom_density(data = seal_sims,
-               aes(x = length.cm, group = sim),
-               lwd = 0.02) +
-  geom_density(data = seals, 
-               aes(x = length.cm),
-               color = "blue", lwd = 2)
-```
-
-NOICE!
-
-R  provides a 1-stop shop for evaluating all other model assumptions Fit model objects can typically be plotted. Now, it uses base plot, so, we'll use the `par` function to setup a 2x2 plotting area.
-
-```{r assumptions}
-par(mfrow = c(2,2)) #2 rows, 2 columns
-
+par(mfrow = c(2,2))
 plot(seal_lm)
-
-par(mfrow=c(1,1)) #reset back to 1 panel
+par(mfrow=c(1,1))
 ```
 
-Whoah - that's a lot! And, there's no figure with Cook's D or a histogram of residuals.
+#### 2a. Does our model match our data?
 
-OK, breathe.
+Yes, we can simulate by hand (maybe on the homework)! but, the `check_predictions()` function will run simulations for us to look at. Let's do it with 100 iterations.
 
-`plot.lm()` actually generates even more plots than shown here. You can specify what plot you want with the `which` argument, but will need to look at `?plot.lm` to know just what to look at.
-
-I have five plots I really like to look at - four of which `plot.lm()` will generate. Those four are the fitted versus residuals:
-
-```{r assumptions_fit_resid}
-plot(seal_lm, which=1)
+```{r predcheck}
+check_predictions(seal_lm,
+                  iterations = 100)
 ```
 
-Note the curvature of the line? Troubling, or a high n?
+Nice! The model and data match very well.
 
-A QQ plot of the residuals
-```{r qq}
-plot(seal_lm, which=2)
+#### 2b. Linearity
+
+There are a lot of ways we might want to look at the fit and residual. Looking at the raw fitted versus residual value is a great check for linearity. There should be no pattern to the result. We do get this in the main `check_model()` - but right now there's not a simple function to get this in `performance` alone. So, we can do it ourselves with the excellent [modelr](https://modelr.tidyverse.org/) package!
+
+```{r}
+library(modelr)
+
+seals <- seals |>
+  add_predictions(seal_lm) |>
+  add_residuals(seal_lm)
 ```
-Not bad!
 
+This is useful, as we can do a LOT of things on our own with predictions and residuals. For the moment, lets plot them with a spline to aid in visualization!
+
+```{r}
+ggplot(seals,
+       mapping = aes(x = pred, y = resid)) +
+  geom_point() +
+  stat_smooth()
+```
+
+Or, you can do this with a part of `check_model()`
+
+```{r}
+check_model(seal_lm, check = "ncv") |> plot()
+```
+
+Note anything odd? It is a little football shaped. This could be a nonlinearity, or not quite fitting into a normal distribution with a constant variance. Let's explore those!
+
+#### 2c. Normality
+
+Time for my favorite set of plots - looking at the density of the residuals and the qq plot. These are both produced by the same function in performance - `check_normality()` and only differ in how we call the plot method.
+
+```{r}
+check_normality(seal_lm) |> plot()
+```
+
+Well that looks PRETTY good. A but flat at the top, but overall, wow.  Let's check out the qq plot
+
+```{r}
+check_normality(seal_lm) |> plot(type = "qq")
+```
+
+Again, no real problems. 
+
+We might suspect heteroskedasticity, and we can dig deeper into that by looking at the fitted v. sart(abs(std. residuals)) relationship. In essence, for a standardized residual (q) of point i
+
+$q_i = r_i/s^2$
+
+This scales the residuals by the std dev, so that they should be closer to a standard normal, and therefore easier to see deviations. Square-rooting also reduces the effects of large swings in residuals.
+
+```{r}
+check_heteroscedasticity(seal_lm) |>
+  plot()
+```
+
+This - looks pretty good. If we are *really* worried about our fit-residual plot, it might therefore be more worth investigating nonlinearity. Still, other things might be afoot, such as
+
+#### 2d. Outliers
+
+We can first look at Cook's D for each individual data point and see if any of those should be flagged.
 The Cook's D values
+
 ```{r cooks}
 plot(seal_lm, which=4)
 ```
 All quite small!
 
-And last, leverage
-```{r leverage}
-plot(seal_lm, which=5)
+```{r cooks2, cache = TRUE}
+check_outliers(seal_lm) |> plot(type = "bar")
 ```
 
-I also like to look at the histogram of residuals.There is a function called `residuals` that will work on nearly any fit model object in R. So we can just...
+These are standardized to 1, but, if anything was bad, `performance` would flag it. Same pattern of no real pattern, though.
 
-```{r resid_hist}
-hist(residuals(seal_lm))
+If we want to combine it with where a variable is located to look at the leverage plot
+
+```{r check_out, cache = TRUE}
+check_outliers(seal_lm) |> plot()
 ```
 
-Note, there's also a library called modelr which can add the appropriate residuals to your data frame using a dplyr-like syntax. 
+Eh, just fine!
 
-```{r modelr_resd}
-library(modelr)
 
-seals <- seals %>%
-  add_residuals(seal_lm)
+### 3. What does our model mean?
+OK, ok, everything looks fine. Now, what are the implications of the model?
 
-head(seals)
-```
-
-Check out that new column. You can now plot your predictor versus residuals, which should show no trend, which you can use a spline with stat_smooth to see.
-
-```{r obs_resid}
-qplot(age.days, resid, data=seals) +
-  stat_smooth()
-```
-
-And you can also add fitted values and look at fitted versus residual.
-
-```{r modelr_fit}
-seals <- seals %>%
-  add_predictions(seal_lm)
-
-qplot(pred, resid, data=seals) +
-  stat_smooth(method="lm")
-```
-
-Finally, if you didn't like this without ggplot2, the package {ggfortify} provides an autoplot method to make these plots. Using the same which argument. 
-
-```{r ggfortify}
-library(ggfortify)
-autoplot(seal_lm, ncol = 1, which = 1)
-```
-
-### 3. Putting it to the test
-OK, ok, everything looks fine. Now, how do we test our model.
-
-First, F-tests! R has a base method called `anova` which - well, it's for looking at analysis of partitioning variance, but really will take on a wide variety of forms as we go forward. For now, it will produce F tables for us
-
-```{r anova}
-anova(seal_lm)
-```
-
-Boom! P values! And they are low. Simple, no?
-
-For more information - t tests, R<sup2>2</sup>, and more, we can use `summary()` - again, a function that is a go-to for nearly any fit model.
+We can get a lot of information from `summary()` - just like looking at any R object. 
 
 ```{r summary}
 summary(seal_lm)
 ```
 
-This is a lot of information to drink in - function call, distribution of residuals, coefficient t-tests, and multiple pieces of information about total fit.
+This is a lot of information to drink in - function call, distribution of residuals, coefficient estimates and error, and multiple pieces of information about total fit.
 
 We may want to get this information in a more condensed form for use in other contexts - particularly to compare against other models.  For that, there's a wonderful packages called `broom` that sweeps up your model into easy digestable pieces.
 
@@ -222,19 +202,24 @@ library(broom)
 tidy(seal_lm)
 ```
 
-Nice.
+Nice. Very tidy, and easy to use. We can also lop off those last two columns if we do not want them.
 
-We can also do this for the F-test.
-
-```{r broom_anova}
-tidy(anova(seal_lm))
-```
 
 If we want to get information about fit, there's `glance()`
 
 ```{r glance}
 glance(seal_lm)
 ```
+
+That's.... a lot. But, it's all sorted well.
+
+Of course, `performance` can give us some of this as well, but not in a tidy format.
+
+```{r mod_perf}
+model_performance(seal_lm)
+```
+
+This goes well in Markdown. But, you can use lots of things to put a table into markdown, so, meh.
 
 ### 4. Visualization
 
@@ -253,33 +238,55 @@ seal_fit_plot
 
 Note - you cannot see the fit interval because our SE is so small with such a large N.
 
-What about prediction intervals? That's a bit harder, and we need to dig into the specific prediction function for `lm`s, `predict()`.  This function is very useful as you can use it to generate new predicted values, and it will also give you error as well. Now, `modelr::add_prediction` will give you values, but no error yet.  YET.
+What about prediction intervals? There are a few different ways to do this. We can kludge something together with `predict()` from our basic stats package in R. We can use `performance::get_predictions`. Or we can use `broom::augment` which gives a wealth of information. I really like `broom::augment()` because it also works to give a lot of raw info on the fit model itself.
 
-So how does predict work? We begin with a new data frame that has columns matching our predictors in the model. Then add a new column. As the data frame is not the first argument, we can't use pipes here. Booo.
-
-We then cbind the predictors and predicted values - along with the interval we've created. We'll also do some renaming, simply to make it easier to use this new data in our ggplot coming up. Note, there are also arguments to get intervals other than the 95%.
-
-```{r predict_ci}
-predFrame <- data.frame(age.days = min(seals$age.days):max(seals$age.days))
-predVals <- predict(seal_lm, newdata=predFrame, interval="prediction")
-
-predFrame <- cbind(predFrame, predVals) %>%
-  rename(length.cm = fit)
-
-head(predFrame)
+```{r augment}
+augment(seal_lm) |> head()
 ```
+
+And it's nice and tidy!
+
+For new data, though, we need to start by making a new data frame, and go from there. You can make it yourself:
+
+```{r new_pred_frame}
+pred_frame <- data.frame(
+  age.days = min(seals$age.days):max(seals$age.days))
+
+```
+
+Or use `modelr::data_grid()` do it for you based on the properties of the data. This function can be REALLY convenient when it comes to generating predictions over lots of different predictors - we'll see those in two weeks!
+
+```{r pred_modelr}
+pred_frame <- seals |>
+  data_grid(age.days = seq_range(age.days, 100))
+```
+
+This is nice as you can have a more tidy workflow. Now, let's see `broom::augment()` in action
+
+```{r pred_ci_new}
+seal_pred <- pred_frame |>
+  augment(x = seal_lm, 
+          data = .,
+          interval = "prediction")
+
+head(seal_pred)
+```
+
+Nice! We have upper and lower CIs for prediction!
 
 We can then add this to our plot using the `geom_ribbon` which takes a `ymin` and `ymax` argument to generate a ribbon - like the fit standard error ribbon.
 
 ```{r predict_plot}
 seal_fit_plot +
-  stat_smooth(method="lm", color="blue") +
-  geom_ribbon(data=predFrame, mapping=aes(x=age.days, ymin=lwr, ymax=upr),
-              fill="grey", alpha=0.6) +
+  geom_ribbon(data=seal_pred, 
+              mapping=aes(y = .fitted, 
+                          ymin=.lower, 
+                          ymax=.upper),
+              fill="grey", alpha=0.4) +
   theme_bw()
 ```
 
-Now we can better see the prediction 95% interval - and that we do have some points that fall outside of it.
+Now we can better see the prediction 95% interval - and that we do have some points that fall outside of it. Note, we can pass an argument `conf.level` to see things other than the 95%
 
 ### 5. Faded Examples.
 
@@ -288,75 +295,56 @@ Fist, the relationship between how lean you are and how quickly you lose fat. Im
 
 ```{r, eval=FALSE}
 library(ggplot2)
-fat <- read.csv("./data/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
+fat <- read.csv("lab/data/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
 
-#initial visualization to determine if lm is appropriate
+# initial visualization to determine if lm is appropriate
 fat_plot <- ggplot(data=fat, aes(x=leanness, y=lossrate)) + 
   geom_point()
 fat_plot
 
+# fit the model
 fat_mod <- lm(lossrate ~ leanness, data=fat)
 
-#assumptions
-simulate(fat_mod, nsim = 100) %>%
-  pivot_longer(cols = everything(), 
-               names_to = "sim", values_to = "lossrate") %>%
-  ggplot(aes(x = lossrate)) +
-  geom_density(aes(group = sim), lwd = 0.2) +
-  geom_density(data = fat, color = "blue", lwd = 2)
+# assumptions
+check_model(fat_mod)
 
-plot(fat_mod, which=1)
-plot(fat_mod, which=2)
+# look at parameters
+tidy(fat_mod)
 
-#f-tests of model
-anova(fat_mod)
-
-#t-tests of parameters
-summary(fat_mod)
-
-#plot with line
+# plot with line and prediction CI
 fat_plot + 
-  stat_smooth(method=lm, formula=y~x)
+  stat_smooth(method = lm, formula = y ~ x)
 ```
 
 #### An Itchy Followup  
 For your first faded example, let's look at the relationship between DEET and mosquito bites.
 
 ```{r eval=FALSE}
-deet <- read.csv("./data/17q24DEETMosquiteBites.csv")
+deet <- read.csv("lab/data/17q24DEETMosquiteBites.csv")
 
-deet_plot <- ggplot(data=___, aes(x=dose, y=bites)) + 
+# initial visualization to determine if lm is appropriate
+deet_plot <- ggplot(data=___, 
+                    mapping = aes(x=dose, y=bites)) + 
   geom_point()
 
 deet_plot
 
-deet_mod <- lm(bites ~ dose, data=deet)
+# fit the model
+deet_mod <- lm(___ ~ ___, data=deet)
 
-#assumptions
-simulate(___, nsim = 100) %>%
-  pivot_longer(cols = everything(), 
-               names_to = "sim", values_to = "___") %>%
-  ggplot(aes(x = ___)) +
-  geom_density(aes(group = sim), lwd = 0.2) +
-  geom_density(data = ___, color = "blue", lwd = 2)
+# assumptions
+check_model(___)
 
-
-plot(___, which=1)
-plot(___, which=2)
-
-#f-tests of model
-anova(___)
-
-#t-tests of parameters
-summary(___)
+#look at parameters
+tidy(___)
 
 #plot with line
 deet_plot + 
-  stat_smooth(method=lm, formula=y~x)
+  stat_smooth(method = lm, formula = y~x)
 ```
-### 6. Log-Transformation for Nonlinearity
+### 6. Transformation for Nonlinearity
 
-One of the most common reasons for a linear model to not fit is a nonlinearity in the data generating process.  Often in nature we encounter exponential processes with a log-normal error structure. This is common in count data. Now, really, it's often a poisson distribted variable, but, to a first approximation, log-transformation can often help fix what ails your model and give you reasonable estimates for our tests. We'll talk later in the course about why this isn't the best idea, and why you should start with a nonlinear/non-normal model to begin with.
+One of the most common reasons for a linear model to not fit is a nonlinearity in the data generating process.  Often in nature we encounter exponential processes with a log-normal error structure. This is common in count data. Now, really, it's often a poisson distributed variable, but, to a first approximation, log-transformation can often help fix what ails your model and give you reasonable estimates for our tests. We'll talk later in the course about why this isn't the best idea, and why you should start with a nonlinear/non-normal model to begin with.
 
 Let's practice the workflow of how we handle this log transformation.
 
@@ -365,63 +353,89 @@ We might suspect that the relationship was nonlinear. Let's see how a simple log
 
 ```{r eval=FALSE}
 
-deet_mod_log <- lm(log(bites) ~ dose, data=deet)
+# fit the model
+deet_mod_log <- lm(log(bites) ~ dose, data = deet)
 
-#assumptions
-simulate(___, nsim = 100) %>%
-  pivot_longer(cols = everything(), 
-               names_to = "sim", values_to = "log_bites") %>%
-  mutate(bites = exp(log_bites)) %>%
-  ggplot(aes(x = ___)) +
-  geom_density(aes(group = sim), lwd = 0.2) +
-  geom_density(data = ___, color = "blue", lwd = 2)
+# assumptions
+check_model(___)
 
-plot(___, which=1)
-plot(___, which=2)
+# look at parameters
+tidy(___)
 
-#f-tests of model
-anova(___)
-
-#t-tests of parameters
-summary(___)
-
-#plot with line
+# plot with line
 deet_plot + 
   scale_y_continuous(trans="log") +
   stat_smooth(method=lm, formula=y~x)
 ```
 
+You might want to plot the nonlinear curve on the original scale. This doesn't work great in ggplot2 for transforms of the y variable. But, we can have `broom::augment()` come to our rescue again and do the work of back-transforming the fitted values and CIs.
+
+```{r, include=FALSE, echo=FALSE}
+deet <- read.csv("lab/data/17q24DEETMosquiteBites.csv")
+deet_mod_log <- lm(log(bites) ~ dose, data = deet)
+deet_plot <- ggplot(data=deet, 
+                    mapping = aes(x=dose, y=bites)) + 
+  geom_point()
+
+```
+
+```{r}
+# make a data frame for the curve, then add y values and CI
+log_curve <- data_grid(deet,
+          dose = seq_range(dose, n = 100)) |>
+  augment(x = deet_mod_log, 
+          data = ., 
+          interval = "confidence") |>
+  mutate(across(c(.fitted:.upper), exp))
+
+# now plot
+deet_plot +
+  geom_line(data = log_curve,
+            mapping = aes(y = .fitted)) +
+  geom_ribbon(data = log_curve,
+              mapping = aes(y = .fitted,
+                  ymin = .lower,
+                  ymax = .upper),
+              alpha = 0.5)
+```
+
+As I mentioned in class, this doesn't always work well if we have 0 values. We might want the inverse hyperbolic sine - see [Bellemare and Wichman](https://onlinelibrary.wiley.com/doi/10.1111/obes.12325). Remember
+
+$asinh(x) = log(x + \sqrt{x^2 + 1}$
+
+Which, hey, if x = 0, asinh(0) = 0. Further, the coefficients have approximately the same meaning - $exp(\beta_1)-1 \approx$ percent change in y for 1 unit change in x (this is called a semi-elasticity). Let's look at the difference between the two transformations.
+
+```{r}
+tidy(deet_mod_log)
+
+lm(asinh(bites) ~ dose, data = deet) |>
+  tidy()
+```
+
+Close-ish, no? Take a look at `check_model()` and let me know what you see.
+
 #### Long-Lived species and Home Ranges
-Do longer lived species also have larger home ranges? Let's test this!
+Do species with larger home ranges have higher mortality rates in zoos? Let's test this! 
+
 ```{r eval=FALSE}
+zoo <- read.csv("lab/data/17q02ZooMortality Clubb and Mason 2003 replica.csv")
 
-zoo <- read.csv("./data/17q02ZooMortality Clubb and Mason 2003 replica.csv")
-
+# initial visualization to determine if lm is appropriate
 zoo_plot <- ggplot(data=___, aes(x=mortality, y=homerange)) + 
   ___()
 
 ___
 
+# fit the model
 zoo_mod <- lm(___, data=___)
 
 #assumptions
-simulate(___, nsim = 100) %>%
-  ___(cols = ___(), 
-               names_to = "___", values_to = "___") %>%
-  ggplot(aes(x = ___)) +
-  ___(aes(group = ___), lwd = 0.2) +
-  ___(data = ___, color = "blue", lwd = 2)
+_____(_______)
 
-plot(___, which=1)
-plot(___, which=2)
+#look at of parameters
+___(___)
 
-#f-tests of model
-anova(___)
-
-#t-tests of parameters
-summary(___)
-
-#plot with line
+#plot with line - is there a transform you want?
 zoo_plot + 
   stat_smooth(method=___, formula=___)
 ```
@@ -432,25 +446,13 @@ zoo_plot +
 That definitely wasn't linear. Look at that outlier! Let's log our y and see how things change.
 
 ```{r eval=FALSE}
+#fit the model
+zoo_mod_log <- lm(___(___) ~ ___, ___=___)
 
-zoo_mod_log <- lm(log(___) ~ ___, ___=___)
+# assumptions
+_____(_______)
 
-#assumptions
-____(___, nsim = 100) %>%
-  ___(cols = ___(), 
-               names_to = "___", values_to = "___") %>%
-  mutate(____ = ___(____))
-  ggplot(aes(x = ___)) +
-  ___(aes(____ = ___), lwd = 0.2) +
-  ___(data = ___, color = "blue", lwd = 2)
-  
-___(___)
-___(___)
-
-#f-tests of model
-___(___)
-
-#t-tests of parameters
+# look at of parameters
 ___(___)
 
 #plot with line
@@ -460,4 +462,4 @@ zoo_plot +
 
 ```
 
-
+Fantastic. As a final exercise, redo the above, but with the `asinh()` transformation (whose inverse is `sinh()`) and then plot the fitted curve and CI on the ORIGINAL scale.
