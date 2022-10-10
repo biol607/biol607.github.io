@@ -3,10 +3,12 @@
   <head>
     <title>It’s All Linear Models</title>
     <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
   <body>
@@ -25,25 +27,20 @@ class: center, middle
 
 # Etherpad
 &lt;br&gt;&lt;br&gt;
-&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-linear_everywhere-2020&lt;/h3&gt;&lt;/center&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-categorical_lm-2022&lt;/h3&gt;&lt;/center&gt;
+
+
 
 ---
-# YES, YOU KNOW EVERYTHING
-
-1. Beastiary of Everything As a Linear Model
-
-2. T-Tests as a Linear Model
-
----
-# Up until now, we've done this
+# So, We've Done this Linear Deliciousness
 `$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$`
-`$$\epsilon_i \sim N(0, \sigma)$$`
+`$$\epsilon_i \sim \mathcal{N}(0, \sigma)$$`
 
 &lt;img src="t_as_lm_files/figure-html/pp-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
-# But we have wider classes of problems...
+# What if our X Variable Is Categorical
 ### Comparing Two Means
 
 &lt;img src="t_as_lm_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
@@ -52,311 +49,43 @@ class: center, middle
 `$$mass_i = \beta_0 + \beta_1 sex_i + \epsilon_i$$`
 ---
 
-# But we have wider classes of problems...
+# What if it Has Many Levels
 ### Comparing Many Means
 
 &lt;img src="t_as_lm_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
 --
 `$$mass_i =  \beta_1 adelie_i + \beta_2 chinstrap_i + \beta_3 gentoo_i + \epsilon_i$$`
+
+
 ---
+class:center
 
-# But we have wider classes of problems...
-### Many Predictors
-
-&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
---
-$$length_i = \beta_0 + \beta_1 flipper_i + \beta_2 depth_i+ \epsilon_i  $$
----
-
-# But we have wider classes of problems...
-### One Predictor Modifies Another
-&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
-
---
-`$$\small flipper_i = \beta_0 mass_i + \beta_1 adelie_i + \beta_2 chinstrap_i + \beta_3 gentoo_i +$$`
-$$\small\beta_4 mass_iadelie_i + \beta_5 mass_ichinstrap_i + \beta_6 mass_igentoo_i + \epsilon_i  $$
----
-class:center, middle
-![:scale 65%](images/all_linear_models/glm_meme.png)
----
-
-# But we have wider classes of problems...
-### Nonlinear Models and Transformation
-
-&lt;img src="t_as_lm_files/figure-html/metabolism-1.png" style="display: block; margin: auto;" /&gt;
-
---
-
-`$$log(bmr_i) = log(\beta_0) + \beta_1 log(mass_i) + \epsilon_i$$`
-`$$bmr_i = \beta_0 mass_i^{\beta_1}  \epsilon_i$$`
----
-
-# But we have wider classes of problems...
-### Non-Normal Nonlinear Models
-&lt;img src="t_as_lm_files/figure-html/crypto_data-1.png" style="display: block; margin: auto;" /&gt;
-
---
-
-`$$infected_i \sim B(prob.\ infected_i, size = trials)$$`
-`$$logit(prob.\ infected_i) = \beta_0 + \beta_1 Dose_i$$`
----
-
-# But we have wider classes of problems...
-### Goodness of Fit
-.pull-left[
-&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; Day of the Week &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Births &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Sunday &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 33 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Monday &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 41 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Tuesday &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 63 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Wednesday &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 63 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Thursday &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 47 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Friday &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Saturday &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 47 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-]
-
-.pull-right[
-&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
-]
---
-
-`$$births_i \sim P(\widehat{births_i})$$`
-`$$log(\widehat{births_i}) = \beta_1Monday_i + \beta_2Tuesday_i+...$$`
+![](images/categorical_lm/corporate_categorical_lm.jpg)
 
 ---
 
-# But we have wider classes of problems...
-### Contingency Tables
+# Dummy Codding for Dummy Models
 
-.pull-left[
-![](./images/10/eizaguirre_lab_fish_parasite.jpg)
+1. The Categorical as Continuous
 
+2. Assumptions of the Categorical
 
-]
+3. Interpretation of Categorical Results
 
-.pull-right[
-&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
-]
-
---
-
-`$$count_i \sim P(\widehat{count_i})$$`
-`$$log(\widehat{count_i}) = \beta_1eaten_i + \beta_2infection_i+ \beta_3 eaten_i *infection_i$$`
+4. Variations on a Theme
 
 ---
-# IT'S ALL VARIANTS OF A (GENERALIZED) LINEAR MODEL
 
-`$$\large f(\widehat{y_i}) = \beta_0 + \beta_1 x1_i + \beta_2 x2_i + \ldots$$`
-
-&lt;br&gt;
+# We Know the Linear Model
+.large[
+`$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$`
   
-`$$\large y_i \sim Dist(mean = \widehat{y_i}, dispersion = s(\widehat{y_i}))$$`
-  
-
-
-  
-
-- X can be continuous OR discrete (turned into 1 and 0)   
-- Y can be continous, ranks, etc.  
-- f(Y) can be an identity, log, logit, or other relationship  
-- Dist can be normal, or really anything  
-- s(Y) can be just a single number, a linear, or nonlinear function  
-
----
-class:center, middle
-
-![](images/all_linear_models/Gump-Linear-Regression-company.jpg)
-
----
-# YES, YOU KNOW EVERYTHING
-
-1. Beastiary of Everything As a Linear Model
-
-2. .red[T-Tests as a Linear Model]
-
----
-# Classical Approach: T-test
-![](images/09/t_distribution.png)
-
----
-# Classical Approach: T-test
-![](images/09/t.png)
-
-
----
-
-# The One-Sample T-Test
-
-- We take some data
-
-- We estimate it's mean and SE
-
-- We calculate whether it is different from some hypothesis (usually 0)
-
---
-
-- But.... isn't this just an intercept only model?
-
-`$$\Large y_i = \beta_0 + \epsilon_i$$`
-
----
-
-# Consider Climate-Change Driven Range Shifts
-
-- Is the distribution of range-shifts 0?
-
-&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
-
-.small[Chen, I-C., J. K. Hill, R. Ohlemüller, D. B. Roy, and C,. D. Thomas. 2011. Science 333:1024-1026.]
-
----
-
-# Testing a Mean with an Intercept Only Model
-
-
-```r
-shift_mod &lt;- lm(elevationalRangeShift ~ 1, data = shift)
-
-shift_t &lt;- t.test(shift$elevationalRangeShift)
-```
-
-LM Coefficients versus T-Test
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 39.32903 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.507258 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 7.141309 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1e-07 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 39.32903 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 7.141309 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1e-07 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
----
-
-# What if we are looking at Change Between Pairs
-
-- Classically, we have the **Paired T-Test**
-
-- We look at differences between pairs
-     - Could be One Individual over time
-     - Could be two plots next to each other
-     - Deliciously simple
-     
-- This is just an intercept only model where the Difference is our response variable
-
-`$$\Large (y1 - y2)_i = \beta_0 + \epsilon_i$$`
----
-# Does bird immunococompetence decrease after a testosterone implant?
-.center[
-![](images/09/blackbird.jpg)
+`$$\epsilon_i \sim N(0, \sigma)$$`
 ]
 
+But, what if `\(\beta_1\)` was just 0,1?
 
-
----
-# Differences in Antibody Performance
-&lt;img src="t_as_lm_files/figure-html/blackbird_plot-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Again, Intercept Only Model v. T-Test
-
-
-LM Coefficients versus T-Test
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.538462 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.336215 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.507873 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.157455 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 6.538462 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.507873 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.157455 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
 
 ---
 # Consider Comparing Two Means
@@ -367,6 +96,35 @@ LM Coefficients versus T-Test
 
 
 Horns prevent these lizards from being eaten by birds. Are horn lengths different between living and dead lizards, indicating selection pressure?
+
+---
+background-image: url("./images/09/guiness_full.jpg")
+
+---
+class: center, middle
+
+![](./images/09/gosset.jpg)
+---
+class: center, middle
+
+# The T-Test
+
+![](./images/09/t_unpaired.png)
+--
+
+- Briefly, data is used to calculate a value  
+
+--
+
+- This value is compared to a reference distribution
+
+--
+
+- Different distributions correspond to different assumptions
+
+--
+
+- But we have a more general solution in the linear model
 
 ---
 # The Data
@@ -389,13 +147,181 @@ What if we think of Dead = 0, Living = 1
 .center[
 ![](images/all_linear_models/graph-me.png)
 ]
+
+
+---
+# First, Recode the Data with Dummy Variables
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Squamosal horn length &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Survive &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Status &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 13.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 17.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 17.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# First, Recode the Data with Dummy Variables
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Squamosal horn length &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Survive &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Status &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; StatusDead &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; StatusLiving &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 13.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 17.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 17.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# But with an Intercept, we don't need Two Dummy Variables
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Squamosal horn length &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Survive &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Status &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; (Intercept) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; StatusLiving &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 13.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 17.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 17.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+.center[This is known as a Treatment Contrast structure]
+
 ---
 # This is Just a Linear Regression
-&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 
 `$$Length_i = \beta_0 + \beta_1 Status_i + \epsilon_i$$`
+
 ---
-# You're Not a Dummy, Even if Your Code Is
+
+# You're Not a Dummy, Even If You Code a Dummy Variable
 
 
 `$$Length_i = \beta_0 + \beta_1 Status_i + \epsilon_i$$`
@@ -406,214 +332,194 @@ What if we think of Dead = 0, Living = 1
 
 - We could even fit a model wit no `\(\beta_0\)` and code Dead = 0 or 1 and Living = 0 or 1
 
-- This approach works for any **nominal variable**
+- This approach works for any **unordered categorical (nominal) variable**
+
 
 ---
-# How Do We Analyze This?
-
-- T-Test of Coefficients tells you difference between dead and live
-
---
-
-- Wait, did you say **T-Test**?
-     - Yes, we're doing *the same thing* in coefficient evaluation
-     
---
-
-- F-tests still useful for looking at variation explained
-    - Also `\(R^2\)`
-    
---
-
-- You can even use likelihood, Bayes, CV, and other tools
-
---
-
-- You get more for your money with linear models!
-
----
-# Fit and Compare!
+# Coding this in R
 
 
 ```r
-t_mod &lt;- lm(`Squamosal horn length` ~ Status, 
-            data = lizards)
+horn_mod &lt;- lm(`Squamosal horn length` ~ Status, 
+               data = lizards)
+
+horn_mod
 ```
 
-Coefficients from Linear Model:
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; StatusLiving &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.294502 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.5275497 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.349358 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.27e-05 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;!--
-F-Test
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; sumsq &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; meansq &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Status &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 132.1908 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 132.190759 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.91691 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.27e-05 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Residuals &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 182 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1271.8101 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.987967 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
---&gt;
+```
 
-T-Test
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate1 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate2 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; -2.294502 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.98667 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 24.28117 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -4.349358 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.27e-05 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+Call:
+lm(formula = `Squamosal horn length` ~ Status, data = lizards)
+
+Coefficients:
+ (Intercept)  StatusLiving  
+      21.987         2.295  
+```
+
 
 ---
-# Variatons on a theme: Non-Parametric Mann-Whitney U
 
-How about those residuals?
+# Dummy Codding for Dummy Models
 
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 0.9602582 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.58e-05 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Shapiro-Wilk normality test &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+1. The Categorical as Continuous
 
-&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+2. .red[Assumptions of the Categorical]
 
---
+3. Interpretation of Categorical Results
 
-Classical approach: Non-Parametric Mann-Whitney-U Test
-
-- But, are you really going to remember that?
-
-- Simpler to remember, we just transform Y values to ranks, and voila, we have a general technique
+4. Variations on a Theme
 
 ---
-# Signed Rank versus Original Values
+
+# Assumptions are the Same as Linear Regression.... Because this is Linear Regression
+
+1. Validity
+
+2. Representativeness
+
+3. Model captures features in the data
+
+4. Additivity and Linearity
+
+5. Independence of Errors
+
+6. Equal Variance of Errors 
+
+7. Normality of Errors
+
+8. Minimal Outlier Influence
+---
+
+# Check Distribution of Predictions
+
+&lt;img src="t_as_lm_files/figure-html/posterior-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Check Normality of Residuals
+
+&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Check Normality of Residuals
+
+&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Homogeneity of Variance Important for CI Estimation
+
+&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Oh No, I can't meet the HOV Assumption!
+
+- You can transform the response variable  
+     - log() or asinh()
+     
+- You can model the RANKS of the outcome variable
+     - This is classically known as a Mann-Whitney U or Wilcoxon Rank Sum test  
+     - Your question is does the variable effect the *ranks* of the outcome  
+     - Need large sample size, not very precise
+     
+- You can model the variance  
+     - Classically, this is known as Welch's T-Test  
+     - relax assumption of HOV
+
+
+---
+
+# Transformed Model  - Did it Work?
+
+
+```r
+horn_mod_log &lt;- lm(log(`Squamosal horn length`) ~ Status, 
+                    data = lizards)
+```
+
+&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# What About Ranks? The Mann Whitney U
+
+.large[$$rank(y_i) = \beta_0 + \beta_1 x_i + \epsilon_i$$]
+
+
+```
+# A tibble: 6 × 5
+  `Rank Horn` `Squamosal horn length` Survive Status Status_numeric
+        &lt;dbl&gt;                   &lt;dbl&gt;   &lt;int&gt; &lt;chr&gt;           &lt;dbl&gt;
+1           1                    13.1       1 Living              1
+2           2                    15.2       0 Dead                0
+3           3                    15.5       0 Dead                0
+4           4                    15.7       1 Living              1
+5           5                    17.2       0 Dead                0
+6           6                    17.7       1 Living              1
+```
+
+---
+# Rank versus Original Values
 
 &lt;img src="t_as_lm_files/figure-html/ranks-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Signed Rank as Data
+# Rank as Data
 
 &lt;img src="t_as_lm_files/figure-html/ranks_data-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Signed Rank as Boxplots
+# Rank as Boxplots
 
 &lt;img src="t_as_lm_files/figure-html/ranks_boxplot-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Variations on a theme: Welch's T-Test
+
+# Ranked Categorical Model aka Mann-Whitney U 
+
+- It's just regression on ranks  
+
+- Why memorize a lot of non-parametrics when they are just transforms?
+
+--
 
 
 ```r
-mwu_mod &lt;- lm(rank(`Squamosal horn length`) ~ Status, 
-            data = lizards)
-
-mwu &lt;- wilcox.test(`Squamosal horn length` ~ Status, 
-            data = lizards,)
+horn_mod_rank &lt;- lm(rank(`Squamosal horn length`) ~ Status, 
+                    data = lizards)
 ```
 
-Linear Model on Ranks
-&lt;table&gt;
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 54.88333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.260496 &lt;/td&gt;
+  &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; StatusLiving &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 44.94459 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10.12238 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.440119 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.56e-05 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-Mann-Whitney-U/Wilcoxon Rank Test
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; MWU_p_value &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 2.37e-05 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.122384 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
 ---
-# Variations on a theme: Welch's T-Test
+# How about those residuals?
+
+
+
+&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# But What if we Just Let Variance.... Vary!
 
 Or.... let variance be different between groups.
 i = data point, j = group
@@ -625,10 +531,9 @@ i = data point, j = group
 
 Fit using **weighted least squares** - we weight LS by inverse of variance  
 
-
 --
 
-Classically, this is known as Welch's T-Test, and is the default for R
+Classically, this is known as Welch's T-Test, and is the default for R's `t.test()`
    - Computes a pooled variance based on unequal variance/sample size
 
 ---
@@ -641,61 +546,277 @@ Classically, this is known as Welch's T-Test, and is the default for R
 library(nlme)
 weighted_mod &lt;- gls(squamosal_horn_length ~ Status,
                   weights = varIdent(form = ~1|Status),
-                  data = lizards,
-                  method = "ML")
+                  data = lizards)
 ```
 
-Weighted Least Squares Results
+--
+
+Weighted Least Squares Results versus Unweighted
 &lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; type &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; StatusLiving &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2.294502 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.5331879 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.303365 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.74e-05 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5381895 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Modeling Variance &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; StatusLiving &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.294502 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5275497 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Constant Variance &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-Welch's T-Test Results
+--
+
+Not the hugest difference - remember, these are robust methods!
+---
+
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous
+
+2. Assumptions of the Categorical
+
+3. .red[Interpretation of Categorical Results]
+
+4. Variations on a Theme
+
+---
+
+# Our Coefficients and Their Meaning: Treatment Contrasts
+`$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$`
+
 &lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate1 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate2 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; -2.294502 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.98667 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 24.28117 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -4.26337 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0001178 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.986667 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4826305 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; StatusLiving &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.294502 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5275497 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+
+--
+- The baseline category is Dead - it's alphabetical 
+
+--
+
+- It has a mean of ~21.98 ± 0.48SE
+     - This is `\(\beta_0\)`
+
+--
+
+- Living lizards have horns that are ~ 2.29 ± 0.52SE bigger
+      - This is `\(\beta_1\)`
+     
+     
+     
 ---
-# Don't forget...
 
+# I Hate Treatment Contrasts - Let's Look at Model Expected Means
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Status &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Dead &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.48 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Living &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.28 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.21 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# We can also see if they are different from each other
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; null.value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Dead - Living &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.53 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+.center[This is the 'treatment contrast' from before!]
+
+---
+
+# We can also see if they are different from each other (with 95% CI)
+
+&lt;img src="t_as_lm_files/figure-html/contrast_plt-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+A One Sample T-Test.
+
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous
+
+2. Assumptions of the Categorical
+
+3. Interpretation of Categorical Results
+
+4. .red[Variations on a Theme]
+
+---
+
+# The One-Sample T-Test
+
+- We take some data
+
+- We estimate it's mean and SE
+
+- The "Test" and T come in in assessing if it's different from zero
+     - We'll be talking about paradigms of inference later
+
+--
+
+- And.... isn't this just an intercept only model?
+
+`$$\Large y_i = \beta_0 + \epsilon_i$$`
+`$$\epsilon_i \sim \mathcal{N}(0, \sigma)$$`
+
+---
+
+# Consider Climate-Change Driven Range Shifts
+
+- Is the distribution of range-shifts 0?
+
+&lt;img src="t_as_lm_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+.small[Chen, I-C., J. K. Hill, R. Ohlemüller, D. B. Roy, and C,. D. Thomas. 2011. Science 333:1024-1026.]
+
+---
+
+# Testing a Mean with an Intercept Only Model
+
+
+```r
+shift_mod &lt;- lm(elevationalRangeShift ~ 1, data = shift)
+```
+
+Coefficient
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 39.32903 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.507258 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# What if we are looking at Change Between Pairs
+
+- Classically, we have the **Paired T-Test**
+
+- We look at differences between pairs
+     - Could be One Individual over time
+     - Could be two plots next to each other
+     - Deliciously simple
+     
+- This is just an intercept only model where the Difference is our response variable
+
+`$$\Large (y1 - y2)_i = \beta_0 + \epsilon_i$$`
+
+---
+# Does bird immunococompetence decrease after a testosterone implant?
 .center[
-
-![:scale 55%](images/all_linear_models/i-dont-always-5acc6f.jpg)
-
+![](images/09/blackbird.jpg)
 ]
+
+
+
+---
+# Differences in Antibody Performance
+&lt;img src="t_as_lm_files/figure-html/blackbird_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Again, Intercept Only Model
+
+
+LM Coefficients versus T-Test
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.538462 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.336215 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+
+
 ---
 # Excess Baggage
 
@@ -722,16 +843,11 @@ Welch's T-Test Results
 `$$\large Y = \beta X + \epsilon$$`
 
 ---
-# Care for Your Golem
+# Remember - Even Under These Scenarios, Care for Your Golem
 .center[
 ![:scale 50%](images/09/golem.png)
 
-Just remember, if you are not careful, even with the simplest data, you can still burn down Prague!]
-
----
-class: center, middle
-
-![:scale 55%](images/all_linear_models/curve-fitting-methods-and-the-messages-they-send-quadratic-logarithmic-linear-63265166.png)
+Even with the simplest data, you can still burn down Prague!]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -780,6 +896,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

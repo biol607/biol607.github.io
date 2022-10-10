@@ -24,6 +24,9 @@ library(dplyr)
 library(tidyr)
 library(broom)
 library(readr)
+library(emmeans)
+library(broom.mixed)
+library(nlme)
 
 opts_chunk$set(fig.height=6, 
                fig.width = 8,
@@ -42,19 +45,14 @@ class: center, middle
 
 # Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-linear_everywhere-2020</h3></center>
+<center><h3>https://etherpad.wikimedia.org/p/607-categorical_lm-2022</h3></center>
+
+
 
 ---
-# YES, YOU KNOW EVERYTHING
-
-1. Beastiary of Everything As a Linear Model
-
-2. T-Tests as a Linear Model
-
----
-# Up until now, we've done this
+# So, We've Done this Linear Deliciousness
 $$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
-$$\epsilon_i \sim N(0, \sigma)$$
+$$\epsilon_i \sim \mathcal{N}(0, \sigma)$$
 
 ```{r pp}
 library(palmerpenguins)
@@ -67,7 +65,7 @@ ggplot(penguins,
 
 ---
 
-# But we have wider classes of problems...
+# What if our X Variable Is Categorical
 ### Comparing Two Means
 
 ```{r}
@@ -82,7 +80,7 @@ ggplot(penguins,
 $$mass_i = \beta_0 + \beta_1 sex_i + \epsilon_i$$
 ---
 
-# But we have wider classes of problems...
+# What if it Has Many Levels
 ### Comparing Many Means
 
 ```{r}
@@ -95,338 +93,36 @@ ggplot(penguins,
 
 --
 $$mass_i =  \beta_1 adelie_i + \beta_2 chinstrap_i + \beta_3 gentoo_i + \epsilon_i$$
+
+
+---
+class:center
+
+![](images/categorical_lm/corporate_categorical_lm.jpg)
+
 ---
 
-# But we have wider classes of problems...
-### Many Predictors
+# Dummy Codding for Dummy Models
 
-```{r}
-library(modelr)
+1. The Categorical as Continuous
 
-bill_mod <- lm(bill_length_mm ~ bill_depth_mm + flipper_length_mm, data = penguins)
+2. Assumptions of the Categorical
 
-pred <- data_grid(penguins,
-                  flipper_length_mm=seq_range(flipper_length_mm,2),
-                  bill_depth_mm = seq_range(bill_depth_mm,4)
-                  )
+3. Interpretation of Categorical Results
 
-pred <- pred %>%
-  add_predictions(bill_mod, var = "bill_length_mm")
+4. Variations on a Theme
 
-ggplot(penguins,
-       aes(x = flipper_length_mm, y = bill_length_mm, color = bill_depth_mm, group = cut_interval(bill_depth_mm, 6))) +
-  geom_point(alpha = 0.3, position = position_jitter(width = 0.2))  +
-  geom_line(data = pred, aes(group = bill_depth_mm),
-            size = 1.3) +
-  labs(subtitle = "How do flipper length and bill depth\ninfluence bill length?",
-        color = "Bill Depth\n(mm)",
-       x = "Flipper Length (mm)", y = "Bill Length (mm)") +
-  scale_color_binned(type = "viridis")
-```
---
-$$length_i = \beta_0 + \beta_1 flipper_i + \beta_2 depth_i+ \epsilon_i  $$
 ---
 
-# But we have wider classes of problems...
-### One Predictor Modifies Another
-```{r, fig.height = 5}
-ggplot(penguins,
-       aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
-  geom_point(alpha = 0.3, position = position_jitter(width = 0.2))  +
-  stat_smooth(method = "lm") +
-  labs(subtitle = "How do body mass and species influence\nflipper length?")
-```
-
---
-$$\small flipper_i = \beta_0 mass_i + \beta_1 adelie_i + \beta_2 chinstrap_i + \beta_3 gentoo_i +$$
-$$\small\beta_4 mass_iadelie_i + \beta_5 mass_ichinstrap_i + \beta_6 mass_igentoo_i + \epsilon_i  $$
----
-class:center, middle
-![:scale 65%](images/all_linear_models/glm_meme.png)
----
-
-# But we have wider classes of problems...
-### Nonlinear Models and Transformation
-
-```{r metabolism, fig.height = 5}
-metabolism <- read.csv("./data/25/17q16PrimateMassMetabolicRate.csv")
-mod <- lm(log(bmr.watts) ~ I(log(mass.g)), data = metabolism)
-
-pred_m <- data.frame(mass.g = seq(0.1,80000, length.out = 200)) 
-
-pred_m <- cbind(pred_m, 
-                    predict(mod, newdata = pred_m,
-                  interval = "confidence") %>%
-  as_tibble() %>%
-  mutate(bmr.watts = exp(fit),
-         lwr = exp(lwr),
-         upr = exp(upr)))
-
+# We Know the Linear Model
+.large[
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
   
-meta_plot <- ggplot(metabolism, mapping=aes(x=mass.g, y=bmr.watts)) +
-  geom_point(size=2) +
-  theme_bw(base_size=17) +
-  geom_line(data = pred_m, color = "red", size = 1.5) +
-  geom_ribbon(data = pred_m, aes(ymin = lwr, ymax = upr), 
-              color = "lightgrey", alpha = 0.3)+
-  labs(subtitle = "How does body mass influence\nmetabolic rate?")
-
-meta_plot
-```
-
---
-
-$$log(bmr_i) = log(\beta_0) + \beta_1 log(mass_i) + \epsilon_i$$
-$$bmr_i = \beta_0 mass_i^{\beta_1}  \epsilon_i$$
----
-
-# But we have wider classes of problems...
-### Non-Normal Nonlinear Models
-```{r crypto_data, fig.height = 5}
-crypto <- read.csv("data/25/cryptoDATA.csv") %>%
-  mutate(success=Y/N)
-
-qplot(Dose, success, data=crypto) +
-  theme_bw(base_size=16) +
-  ylab("Fraction of Mice Infected") +
-  stat_smooth(aes(weight = N),
-              method = "glm",
-              method.args = list(family = binomial),
-              color = "red") +
-  labs(subtitle = "Dose-Infection Curve for Mouse\nDrug Trial")
-```
-
---
-
-$$infected_i \sim B(prob.\ infected_i, size = trials)$$
-$$logit(prob.\ infected_i) = \beta_0 + \beta_1 Dose_i$$
----
-
-# But we have wider classes of problems...
-### Goodness of Fit
-.pull-left[
-```{r}
-library(tibble)
-days <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
-birth_vec <- c(33,	41,	63,	63,	47,	56,	47)
-births <- tibble(`Day of the Week` = days, Births = birth_vec)
-
-kable(births, "html") %>% 
-  kableExtra::kable_styling(bootstrap_options = "striped")
-```
+$$\epsilon_i \sim N(0, \sigma)$$
 ]
 
-.pull-right[
-```{r, fig.height = 8}
-glm_chisq <- glm(Births ~ `Day of the Week`,
-                 family = poisson(),
-                 data = births)
+But, what if $\beta_1$ was just 0,1?
 
-ggplot(births,
-       aes(x = Births, y = `Day of the Week`)) +
-  geom_point(size = 2) +
-  labs(subtitle = "Are births spread evenly\nacross the week?")+
-  theme_bw(base_size = 24)
-```
-]
---
-
-$$births_i \sim P(\widehat{births_i})$$
-$$log(\widehat{births_i}) = \beta_1Monday_i + \beta_2Tuesday_i+...$$
-
----
-
-# But we have wider classes of problems...
-### Contingency Tables
-
-.pull-left[
-![](./images/10/eizaguirre_lab_fish_parasite.jpg)
-```{r ctab, echo=FALSE}
-my_counts <- tribble(
-  ~Is_Eaten, ~Infection, ~Count,
-  "Eaten by Birds", "Uninfected", 1,
-  "Eaten by Birds", "Lightly Infected", 10, 
-  "Eaten by Birds", "Heavily Infected", 37,
-  "Not Eaten by Birds", "Uninfected", 49,
-  "Not Eaten by Birds", "Lightly Infected", 35,
-  "Not Eaten by Birds", "Heavily Infected", 9
-  
-)
-
-ctab <- xtabs(Count ~ Is_Eaten + Infection, data = my_counts)
-
-#kable(ctab, "html") %>% kableExtra::kable_styling("striped")
-
-```
-
-]
-
-.pull-right[
-```{r, fig.height = 8}
-ggplot(my_counts,
-       aes(y = Count, fill = Infection, x = Is_Eaten)) +
-  geom_col(position = "dodge") +
-  xlab("") +
-  theme_bw(base_size = 25)
-```
-]
-
---
-
-$$count_i \sim P(\widehat{count_i})$$
-$$log(\widehat{count_i}) = \beta_1eaten_i + \beta_2infection_i+ \beta_3 eaten_i *infection_i$$
-
----
-# IT'S ALL VARIANTS OF A (GENERALIZED) LINEAR MODEL
-
-$$\large f(\widehat{y_i}) = \beta_0 + \beta_1 x1_i + \beta_2 x2_i + \ldots$$
-
-<br>
-  
-$$\large y_i \sim Dist(mean = \widehat{y_i}, dispersion = s(\widehat{y_i}))$$
-  
-
-
-  
-
-- X can be continuous OR discrete (turned into 1 and 0)   
-- Y can be continous, ranks, etc.  
-- f(Y) can be an identity, log, logit, or other relationship  
-- Dist can be normal, or really anything  
-- s(Y) can be just a single number, a linear, or nonlinear function  
-
----
-class:center, middle
-
-![](images/all_linear_models/Gump-Linear-Regression-company.jpg)
-
----
-# YES, YOU KNOW EVERYTHING
-
-1. Beastiary of Everything As a Linear Model
-
-2. .red[T-Tests as a Linear Model]
-
----
-# Classical Approach: T-test
-![](images/09/t_distribution.png)
-
----
-# Classical Approach: T-test
-![](images/09/t.png)
-
-
----
-
-# The One-Sample T-Test
-
-- We take some data
-
-- We estimate it's mean and SE
-
-- We calculate whether it is different from some hypothesis (usually 0)
-
---
-
-- But.... isn't this just an intercept only model?
-
-$$\Large y_i = \beta_0 + \epsilon_i$$
-
----
-
-# Consider Climate-Change Driven Range Shifts
-
-- Is the distribution of range-shifts 0?
-
-```{r}
-shift <- read_csv("https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter11/chap11q01RangeShiftsWithClimateChange.csv")
-
-library(patchwork)
-(ggplot(shift,
-       aes(x = elevationalRangeShift)) +
-  geom_density()) +
-(ggplot(shift,
-       aes(x = elevationalRangeShift)) +
-  geom_histogram(bins = 10)) 
-
-```
-
-.small[Chen, I-C., J. K. Hill, R. Ohlemüller, D. B. Roy, and C,. D. Thomas. 2011. Science 333:1024-1026.]
-
----
-
-# Testing a Mean with an Intercept Only Model
-
-```{r in_only, echo = TRUE}
-shift_mod <- lm(elevationalRangeShift ~ 1, data = shift)
-
-shift_t <- t.test(shift$elevationalRangeShift)
-```
-
-LM Coefficients versus T-Test
-```{r}
-display_tab <- . %>%
-  kable("html") %>%
-  kableExtra::kable_styling()
-
-tidy(shift_mod) %>% display_tab
-
-tidy(shift_t)[,1:3] %>% display_tab
-```
-
----
-
-# What if we are looking at Change Between Pairs
-
-- Classically, we have the **Paired T-Test**
-
-- We look at differences between pairs
-     - Could be One Individual over time
-     - Could be two plots next to each other
-     - Deliciously simple
-     
-- This is just an intercept only model where the Difference is our response variable
-
-$$\Large (y1 - y2)_i = \beta_0 + \epsilon_i$$
----
-# Does bird immunococompetence decrease after a testosterone implant?
-.center[
-![](images/09/blackbird.jpg)
-]
-
-```{r load_blackbird}
-blackbird <- read.csv("./data/09/12e2BlackbirdTestosterone.csv") %>%
-  mutate(Bird = 1:n())
-
-b_tidy <- gather(blackbird, When, Antibody, -c(Bird)) %>%
-  filter((When %in% c("Before", "After"))) %>%
-  mutate(When = forcats::fct_rev(When))
-```
-
----
-# Differences in Antibody Performance
-```{r blackbird_plot}
-ggplot(data=b_tidy, aes(x=When, y=Antibody, group=Bird)) +
-  geom_point(color="red") +
-  geom_line() +
-  theme_bw(base_size=18)
-```
-
----
-# Again, Intercept Only Model v. T-Test
-```{r diff_mod}
-diff_mod <- lm((After - Before) ~ 1, data = blackbird)
-
-diff_t <- t.test(blackbird$After, blackbird$Before,
-                 paired = TRUE)
-```
-
-LM Coefficients versus T-Test
-```{r}
-tidy(diff_mod) %>% display_tab
-
-tidy(diff_t)[,1:3] %>% display_tab
-```
 
 ---
 # Consider Comparing Two Means
@@ -439,10 +135,40 @@ tidy(diff_t)[,1:3] %>% display_tab
 Horns prevent these lizards from being eaten by birds. Are horn lengths different between living and dead lizards, indicating selection pressure?
 
 ---
+background-image: url("./images/09/guiness_full.jpg")
+
+---
+class: center, middle
+
+![](./images/09/gosset.jpg)
+---
+class: center, middle
+
+# The T-Test
+
+![](./images/09/t_unpaired.png)
+--
+
+- Briefly, data is used to calculate a value  
+
+--
+
+- This value is compared to a reference distribution
+
+--
+
+- Different distributions correspond to different assumptions
+
+--
+
+- But we have a more general solution in the linear model
+
+---
 # The Data
 ```{r lizard_load, warning=FALSE}
 library(readr)
-lizards <- read_csv("./data/09/12e3HornedLizards.csv",
+library(dplyr)
+lizards <- read_csv("lectures/data/09/12e3HornedLizards.csv",
                     col_types = "di") %>%
   mutate(Status = ifelse(Survive==1, "Living", "Dead")) %>%
   filter(!is.na(`Squamosal horn length`))
@@ -478,6 +204,49 @@ What if we think of Dead = 0, Living = 1
 .center[
 ![](images/all_linear_models/graph-me.png)
 ]
+
+
+---
+# First, Recode the Data with Dummy Variables
+```{r design_matrix}
+l_dat <- lizards |> 
+  arrange(`Squamosal horn length`) 
+
+l_dat |> head() |>
+  knitr::kable() |>
+  kableExtra::kable_styling()
+```
+
+---
+# First, Recode the Data with Dummy Variables
+```{r design_matrix_2}
+l_dat_mat <- bind_cols(l_dat, 
+          l_dat |>
+  modelr::model_matrix(`Squamosal horn length` ~ Status-1, data = _)
+)
+
+l_dat_mat |> head()|>
+  knitr::kable() |>
+  kableExtra::kable_styling()
+```
+
+---
+# But with an Intercept, we don't need Two Dummy Variables
+```{r design_matrix_3}
+l_dat_mat_int <- bind_cols(l_dat, 
+          l_dat |>
+  modelr::model_matrix(`Squamosal horn length` ~ Status, data = _)
+)
+
+l_dat_mat_int |> head()|>
+  knitr::kable() |>
+  kableExtra::kable_styling()
+```
+
+--
+
+.center[This is known as a Treatment Contrast structure]
+
 ---
 # This is Just a Linear Regression
 ```{r}
@@ -492,8 +261,10 @@ stat_smooth(method = "lm", color = "red")
 ```
 
 $$Length_i = \beta_0 + \beta_1 Status_i + \epsilon_i$$
+
 ---
-# You're Not a Dummy, Even if Your Code Is
+
+# You're Not a Dummy, Even If You Code a Dummy Variable
 
 
 $$Length_i = \beta_0 + \beta_1 Status_i + \epsilon_i$$
@@ -504,87 +275,130 @@ $$Length_i = \beta_0 + \beta_1 Status_i + \epsilon_i$$
 
 - We could even fit a model wit no $\beta_0$ and code Dead = 0 or 1 and Living = 0 or 1
 
-- This approach works for any **nominal variable**
+- This approach works for any **unordered categorical (nominal) variable**
+
 
 ---
-# How Do We Analyze This?
+# Coding this in R
 
-- T-Test of Coefficients tells you difference between dead and live
+```{r, echo = TRUE}
+horn_mod <- lm(`Squamosal horn length` ~ Status, 
+               data = lizards)
 
---
+horn_mod
+```
 
-- Wait, did you say **T-Test**?
-     - Yes, we're doing *the same thing* in coefficient evaluation
+
+---
+
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous
+
+2. .red[Assumptions of the Categorical]
+
+3. Interpretation of Categorical Results
+
+4. Variations on a Theme
+
+---
+
+# Assumptions are the Same as Linear Regression.... Because this is Linear Regression
+
+1. Validity
+
+2. Representativeness
+
+3. Model captures features in the data
+
+4. Additivity and Linearity
+
+5. Independence of Errors
+
+6. Equal Variance of Errors 
+
+7. Normality of Errors
+
+8. Minimal Outlier Influence
+---
+
+# Check Distribution of Predictions
+
+```{r posterior}
+library(performance)
+check_predictions(horn_mod) |> plot() +
+  theme_bw(base_size = 18)
+```
+
+---
+# Check Normality of Residuals
+
+```{r}
+check_normality(horn_mod) |> plot() +
+  theme_bw(base_size = 18)
+```
+
+---
+# Check Normality of Residuals
+
+```{r}
+check_normality(horn_mod) |> plot("qq") +
+  theme_bw(base_size = 18)
+```
+
+---
+# Homogeneity of Variance Important for CI Estimation
+
+```{r}
+check_heteroscedasticity(horn_mod) |> plot() +
+  theme_bw(base_size = 18)
+```
+
+---
+
+# Oh No, I can't meet the HOV Assumption!
+
+- You can transform the response variable  
+     - log() or asinh()
      
---
+- You can model the RANKS of the outcome variable
+     - This is classically known as a Mann-Whitney U or Wilcoxon Rank Sum test  
+     - Your question is does the variable effect the *ranks* of the outcome  
+     - Need large sample size, not very precise
+     
+- You can model the variance  
+     - Classically, this is known as Welch's T-Test  
+     - relax assumption of HOV
 
-- F-tests still useful for looking at variation explained
-    - Also $R^2$
-    
---
-
-- You can even use likelihood, Bayes, CV, and other tools
-
---
-
-- You get more for your money with linear models!
 
 ---
-# Fit and Compare!
 
-```{r t_mod, echo = TRUE}
-t_mod <- lm(`Squamosal horn length` ~ Status, 
-            data = lizards)
+# Transformed Model  - Did it Work?
+
+```{r, echo = TRUE}
+horn_mod_log <- lm(log(`Squamosal horn length`) ~ Status, 
+                    data = lizards)
 ```
 
-Coefficients from Linear Model:
-```{r t_comp}
-tidy(t_mod)[2,] %>% 
-  kable() %>%
-  kableExtra::kable_styling()
-```
-<!--
-F-Test
 ```{r}
-tidy(anova(t_mod)) %>% 
-  kable() %>%
-  kableExtra::kable_styling()
-```
--->
-
-T-Test
-```{r}
-tidy(t.test(`Squamosal horn length` ~ Status, 
-            data = lizards,
-            var.equal = TRUE))[,c(1:5)]%>% 
-  kable() %>%
-  kableExtra::kable_styling()
-
+check_normality(horn_mod_log) |> plot()
 ```
 
 ---
-# Variatons on a theme: Non-Parametric Mann-Whitney U
 
-How about those residuals?
+# What About Ranks? The Mann Whitney U
+
+.large[$$rank(y_i) = \beta_0 + \beta_1 x_i + \epsilon_i$$]
 
 ```{r}
-tidy(shapiro.test(residuals(t_mod))) %>% 
-  kable() %>%
-  kableExtra::kable_styling()
-
-hist(residuals(t_mod))
+lizards |> arrange(`Squamosal horn length`) |>
+  mutate(`Rank Horn` = rank(`Squamosal horn length`)) |>
+  select(`Rank Horn`, everything()) |>
+  head()
 ```
 
---
-
-Classical approach: Non-Parametric Mann-Whitney-U Test
-
-- But, are you really going to remember that?
-
-- Simpler to remember, we just transform Y values to ranks, and voila, we have a general technique
-
 ---
-# Signed Rank versus Original Values
+# Rank versus Original Values
 
 ```{r ranks}
 lizards <- lizards %>%
@@ -598,7 +412,7 @@ ggplot(lizards,
 ```
 
 ---
-# Signed Rank as Data
+# Rank as Data
 
 ```{r ranks_data}
 lizards <- lizards %>%
@@ -612,7 +426,7 @@ ggplot(lizards,
 ```
 
 ---
-# Signed Rank as Boxplots
+# Rank as Boxplots
 
 ```{r ranks_boxplot}
 lizards <- lizards %>%
@@ -626,28 +440,40 @@ ggplot(lizards,
 ```
 
 ---
-# Variations on a theme: Welch's T-Test
 
-```{r mwrank, echo = TRUE}
-mwu_mod <- lm(rank(`Squamosal horn length`) ~ Status, 
-            data = lizards)
+# Ranked Categorical Model aka Mann-Whitney U 
 
-mwu <- wilcox.test(`Squamosal horn length` ~ Status, 
-            data = lizards,)
+- It's just regression on ranks  
+
+- Why memorize a lot of non-parametrics when they are just transforms?
+
+--
+
+```{r, echo = TRUE}
+horn_mod_rank <- lm(rank(`Squamosal horn length`) ~ Status, 
+                    data = lizards)
 ```
 
-Linear Model on Ranks
 ```{r}
-tidy(mwu_mod)[2,] %>% kable("html")
-```
-
-Mann-Whitney-U/Wilcoxon Rank Test
-```{r}
-tibble(MWU_p_value = mwu$p.value) %>% kable("html")
+horn_mod_rank |> tidy() |>
+  select(-c(4:5)) |>
+  knitr::kable() |>
+  kableExtra::kable_styling()
 ```
 
 ---
-# Variations on a theme: Welch's T-Test
+# How about those residuals?
+
+
+
+```{r}
+check_heteroscedasticity(horn_mod_rank) |> plot() +
+  see::theme_lucid(base_size = 18)
+```
+
+
+---
+# But What if we Just Let Variance.... Vary!
 
 Or.... let variance be different between groups.
 i = data point, j = group
@@ -659,10 +485,9 @@ $$\epsilon_{ij} \sim N(0, \sigma_j)$$
 
 Fit using **weighted least squares** - we weight LS by inverse of variance  
 
-
 --
 
-Classically, this is known as Welch's T-Test, and is the default for R
+Classically, this is known as Welch's T-Test, and is the default for R's `t.test()`
    - Computes a pooled variance based on unequal variance/sample size
 
 ---
@@ -678,35 +503,232 @@ lizards <- lizards %>%
 library(nlme)
 weighted_mod <- gls(squamosal_horn_length ~ Status,
                   weights = varIdent(form = ~1|Status),
-                  data = lizards,
-                  method = "ML")
+                  data = lizards)
 ```
 
-Weighted Least Squares Results
+--
+
+Weighted Least Squares Results versus Unweighted
 ```{r}
-broom.mixed::tidy(weighted_mod)[2,] %>%
+bind_rows(broom.mixed::tidy(weighted_mod)[2,1:3],
+          broom::tidy(horn_mod)[2,1:3]) |>
+  mutate(type = c("Modeling Variance", "Constant Variance")) |>
+  kable( "html") %>%
+  kableExtra::kable_styling()
+
+```
+
+--
+
+Not the hugest difference - remember, these are robust methods!
+---
+
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous
+
+2. Assumptions of the Categorical
+
+3. .red[Interpretation of Categorical Results]
+
+4. Variations on a Theme
+
+---
+
+# Our Coefficients and Their Meaning: Treatment Contrasts
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
+
+```{r trt_cont}
+broom::tidy(horn_mod)[,1:3] |>
   kable( "html") %>%
   kableExtra::kable_styling()
 ```
 
-Welch's T-Test Results
-```{r welch}
-tidy(t.test(squamosal_horn_length ~ Status,
-            data = lizards,
-            var.equal=FALSE)
-     )[,1:5] %>%
-    kable("html") %>%
+--
+- The baseline category is Dead - it's alphabetical 
+
+--
+
+- It has a mean of ~21.98 ± 0.48SE
+     - This is $\beta_0$
+
+--
+
+- Living lizards have horns that are ~ 2.29 ± 0.52SE bigger
+      - This is $\beta_1$
+     
+     
+     
+---
+
+# I Hate Treatment Contrasts - Let's Look at Model Expected Means
+
+```{r}
+emmeans(horn_mod, ~Status) |>
+  tidy() |>
+  select(Status:std.error) |>
+  knitr::kable(digits = 2) |>
   kableExtra::kable_styling()
+  
+liz_mean
+```
+
+---
+
+# We can also see if they are different from each other
+
+```{r contrast}
+emmeans(horn_mod, ~Status) |>
+  contrast("pairwise") |>
+  tidy() |>
+  select(contrast:std.error) |>
+  knitr::kable(digits = 2) |>
+  kableExtra::kable_styling()
+```
+
+--
+
+.center[This is the 'treatment contrast' from before!]
+
+---
+
+# We can also see if they are different from each other (with 95% CI)
+
+```{r contrast_plt}
+emmeans(horn_mod, ~Status) |>
+  contrast("pairwise") |>
+  plot() +
+  geom_vline(xintercept = 0, lty = 2, color = "red")
+```
+
+--
+A One Sample T-Test.
+
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous
+
+2. Assumptions of the Categorical
+
+3. Interpretation of Categorical Results
+
+4. .red[Variations on a Theme]
+
+---
+
+# The One-Sample T-Test
+
+- We take some data
+
+- We estimate it's mean and SE
+
+- The "Test" and T come in in assessing if it's different from zero
+     - We'll be talking about paradigms of inference later
+
+--
+
+- And.... isn't this just an intercept only model?
+
+$$\Large y_i = \beta_0 + \epsilon_i$$
+$$\epsilon_i \sim \mathcal{N}(0, \sigma)$$
+
+---
+
+# Consider Climate-Change Driven Range Shifts
+
+- Is the distribution of range-shifts 0?
+
+```{r}
+shift <- read_csv("https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter11/chap11q01RangeShiftsWithClimateChange.csv")
+
+library(patchwork)
+(ggplot(shift,
+       aes(x = elevationalRangeShift)) +
+  geom_density()) +
+(ggplot(shift,
+       aes(x = elevationalRangeShift)) +
+  geom_histogram(bins = 10)) 
 
 ```
+
+.small[Chen, I-C., J. K. Hill, R. Ohlemüller, D. B. Roy, and C,. D. Thomas. 2011. Science 333:1024-1026.]
+
 ---
-# Don't forget...
 
+# Testing a Mean with an Intercept Only Model
+
+```{r in_only, echo = TRUE}
+shift_mod <- lm(elevationalRangeShift ~ 1, data = shift)
+```
+
+Coefficient
+```{r}
+display_tab <- . %>%
+  select(term:std.error) %>%
+  kable("html") %>%
+  kableExtra::kable_styling()
+
+tidy(shift_mod) %>% display_tab
+
+```
+
+---
+
+# What if we are looking at Change Between Pairs
+
+- Classically, we have the **Paired T-Test**
+
+- We look at differences between pairs
+     - Could be One Individual over time
+     - Could be two plots next to each other
+     - Deliciously simple
+     
+- This is just an intercept only model where the Difference is our response variable
+
+$$\Large (y1 - y2)_i = \beta_0 + \epsilon_i$$
+
+---
+# Does bird immunococompetence decrease after a testosterone implant?
 .center[
-
-![:scale 55%](images/all_linear_models/i-dont-always-5acc6f.jpg)
-
+![](images/09/blackbird.jpg)
 ]
+
+```{r load_blackbird}
+blackbird <- read.csv("lectures/data/09/12e2BlackbirdTestosterone.csv") %>%
+  mutate(Bird = 1:n())
+
+b_tidy <- gather(blackbird, When, Antibody, -c(Bird)) %>%
+  filter((When %in% c("Before", "After"))) %>%
+  mutate(When = forcats::fct_rev(When))
+```
+
+---
+# Differences in Antibody Performance
+```{r blackbird_plot}
+ggplot(data=b_tidy, aes(x=When, y=Antibody, group=Bird)) +
+  geom_point(color="red") +
+  geom_line() +
+  theme_bw(base_size=18)
+```
+
+---
+# Again, Intercept Only Model
+```{r diff_mod}
+diff_mod <- lm((After - Before) ~ 1, data = blackbird)
+
+```
+
+LM Coefficients versus T-Test
+```{r}
+tidy(diff_mod) %>% display_tab
+
+```
+
+
+
+
+
+
 ---
 # Excess Baggage
 
@@ -733,13 +755,8 @@ tidy(t.test(squamosal_horn_length ~ Status,
 $$\large Y = \beta X + \epsilon$$
 
 ---
-# Care for Your Golem
+# Remember - Even Under These Scenarios, Care for Your Golem
 .center[
 ![:scale 50%](images/09/golem.png)
 
-Just remember, if you are not careful, even with the simplest data, you can still burn down Prague!]
-
----
-class: center, middle
-
-![:scale 55%](images/all_linear_models/curve-fitting-methods-and-the-messages-they-send-quadratic-logarithmic-linear-63265166.png)
+Even with the simplest data, you can still burn down Prague!]
