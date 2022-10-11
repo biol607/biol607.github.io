@@ -121,7 +121,7 @@ $$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
 $$\epsilon_i \sim N(0, \sigma)$$
 ]
 
-But, what if $\beta_1$ was just 0,1?
+But, what if $x_i$ was just 0,1?
 
 
 ---
@@ -605,6 +605,17 @@ emmeans(horn_mod, ~Status) |>
 
 --
 A One Sample T-Test.
+
+
+---
+
+# How Much Variation was Explained?
+
+R<sup>2</sup> = `r glance(horn_mod) |> pull(1) |> round(2)`
+
+
+```{r lizard_mean, warning=FALSE}
+```
 
 ---
 
