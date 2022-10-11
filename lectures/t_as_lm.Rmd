@@ -136,24 +136,21 @@ Horns prevent these lizards from being eaten by birds. Are horn lengths differen
 
 ---
 background-image: url("./images/09/guiness_full.jpg")
+background-position: center
+background-size: contain
 
 ---
 class: center, middle
 
 ![](./images/09/gosset.jpg)
 ---
-class: center, middle
 
 # The T-Test
 
-![](./images/09/t_unpaired.png)
+.center[![](./images/09/t_unpaired.png)]
 --
 
-- Briefly, data is used to calculate a value  
-
---
-
-- This value is compared to a reference distribution
+- Briefly, data is used to calculate a value to compare to a reference distribution  
 
 --
 
@@ -361,14 +358,19 @@ check_heteroscedasticity(horn_mod) |> plot() +
 - You can transform the response variable  
      - log() or asinh()
      
+--
+     
 - You can model the RANKS of the outcome variable
      - This is classically known as a Mann-Whitney U or Wilcoxon Rank Sum test  
      - Your question is does the variable effect the *ranks* of the outcome  
      - Need large sample size, not very precise
-     
+
+--
+
+
 - You can model the variance  
      - Classically, this is known as Welch's T-Test  
-     - relax assumption of HOV
+     - Relax assumption of HOV
 
 
 ---
@@ -603,6 +605,8 @@ emmeans(horn_mod, ~Status) |>
 
 --
 A One Sample T-Test.
+
+---
 
 # Dummy Codding for Dummy Models
 
