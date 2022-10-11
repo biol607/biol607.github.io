@@ -125,9 +125,10 @@ __Lecture:__ Categorical Predictors [It
 s All Linear Models; t-test edition](lectures/t_as_lm.html),  [Many Levels of a Categorical Predictor](lectures/anova_1.html)      
 __Lab Topic:__ [Comparing Means](lab/comparing_two_means.html), Final Proposal Meetings	  
 __Reading:__ [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), [Feiberg 3.5](https://fw8051statistics4ecologists.netlify.app/matrixreg#categorical-predictors), W&S Chapters 11, 12, 14      
-__Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast"))`  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-linear_everywhere-2022
- __In Class Code:__ [comparing two means](./in_class_code/2020/scripts/comparing_means.R)  
+__Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast"))`    
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-categorical_lm-2022  
+
+<!-- __In Class Code:__ [comparing two means](./in_class_code/2020/scripts/comparing_means.R)  -->  
 
 
 ### Week 7   
