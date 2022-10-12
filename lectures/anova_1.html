@@ -59,17 +59,15 @@ class:center
 ![](images/categorical_lm/corporate_categorical_lm.jpg)
 
 ---
-# Many Means to Predict
+# Many Means, One Category
 
-1. What are models with categorical predictors?
+1. What are models with categorical predictors?  
 
-2. Assumptions of models with categorical predictors
+2. Assumptions of models with categorical predictors  
 
-3. Evaluating fit models
+3. Evaluating fit models  
 
-4. How predictive is a model?
-
-5. How different are groups?
+4. Query: How different are groups?
 
 ---
 # Categorical Predictors: Gene Expression and Mental Disorders
@@ -228,17 +226,15 @@ tidy(brain_lm) |&gt;
 &lt;/table&gt;
 
 ---
-# Many Means to Predict
+# Many Means, One Category
 
-1. What are models with categorical predictors?
+1. What are models with categorical predictors?  
 
-2. .red[Assumptions of models with categorical predictors]
+2. .red[Assumptions of models with categorical predictors]  
 
-3. Evaluating fit models
+3. Evaluating fit models  
 
-4. How predictive is a model?
-
-5. How different are groups?
+4. Query: How different are groups?
 
 ---
 # Assumptions of Linear Models with Categorical Variables - Same as Linear Regression!
@@ -292,17 +288,15 @@ We are all good!
 
 
 ---
-# Many Means to Predict
+# Many Means, One Category
 
-1. What are models with categorical predictors?
+1. What are models with categorical predictors?  
 
-2. Assumptions of models with categorical predictors
+2. Assumptions of models with categorical predictors  
 
-3. .red[Evaluating fit models]
+3. .red[Evaluating fit models]  
 
-4. How predictive is a model?
-
-5. How different are groups?
+4. Query: How different are groups?
 
 
 ---
@@ -389,6 +383,22 @@ What does this mean?
 
 Being in group j is associated with an average outcome of y.
 
+
+---
+# Many Ways to Visualize
+
+&lt;img src="anova_1_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Many Ways to Visualize
+
+&lt;img src="anova_1_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Many Ways to Visualize
+
+&lt;img src="anova_1_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
 ---
 # How Well Do Groups Explain Variation in Response Data?
 
@@ -412,17 +422,15 @@ Adjusted R&lt;sup&gt;2&lt;/sup&gt;: adjusts for sample size and model complexity
 
 
 ---
-# Many Means to Predict
+# Many Means, One Category
 
-1. What are models with categorical predictors?
+1. What are models with categorical predictors?  
 
-2. Assumptions of models with categorical predictors
+2. Assumptions of models with categorical predictors  
 
-3. Evaluating fit models
+3. Evaluating fit models  
 
-4. How predictive is a model?
-
-5. .red[How different are groups?]
+4. .red[Query: How different are groups?]
 
 
 ---
@@ -619,6 +627,17 @@ Many mini-linear models with two means....multiple comparisons!
 
 &lt;img src="anova_1_files/figure-html/dunnett-1.png" style="display: block; margin: auto;" /&gt;
 
+-----------
+
+# So, Many Levels of a category
+
+- At the end of the dat, it's just another linear model  
+  
+- We can understand a lot about groups, though  
+
+- We can also query the model to compare groups  
+
+- To do more, we need an inferential framework  
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

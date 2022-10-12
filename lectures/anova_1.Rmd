@@ -88,17 +88,15 @@ class:center
 ![](images/categorical_lm/corporate_categorical_lm.jpg)
 
 ---
-# Many Means to Predict
+# Many Means, One Category
 
-1. What are models with categorical predictors?
+1. What are models with categorical predictors?  
 
-2. Assumptions of models with categorical predictors
+2. Assumptions of models with categorical predictors  
 
-3. Evaluating fit models
+3. Evaluating fit models  
 
-4. How predictive is a model?
-
-5. How different are groups?
+4. Query: How different are groups?
 
 ---
 # Categorical Predictors: Gene Expression and Mental Disorders
@@ -270,17 +268,15 @@ tidy(brain_lm) |>
 ```
 
 ---
-# Many Means to Predict
+# Many Means, One Category
 
-1. What are models with categorical predictors?
+1. What are models with categorical predictors?  
 
-2. .red[Assumptions of models with categorical predictors]
+2. .red[Assumptions of models with categorical predictors]  
 
-3. Evaluating fit models
+3. Evaluating fit models  
 
-4. How predictive is a model?
-
-5. How different are groups?
+4. Query: How different are groups?
 
 ---
 # Assumptions of Linear Models with Categorical Variables - Same as Linear Regression!
@@ -343,17 +339,15 @@ check_normality(brain_lm) |> plot("qq")
 
 
 ---
-# Many Means to Predict
+# Many Means, One Category
 
-1. What are models with categorical predictors?
+1. What are models with categorical predictors?  
 
-2. Assumptions of models with categorical predictors
+2. Assumptions of models with categorical predictors  
 
-3. .red[Evaluating fit models]
+3. .red[Evaluating fit models]  
 
-4. How predictive is a model?
-
-5. How different are groups?
+4. Query: How different are groups?
 
 
 ---
@@ -404,6 +398,41 @@ What does this mean?
 
 Being in group j is associated with an average outcome of y.
 
+
+---
+# Many Ways to Visualize
+
+```{r}
+ggplot(brainGene,
+       aes(x = group, y = PLP1.expression)) +
+  geom_jitter(color = "lightgrey") +
+  stat_summary(fun.data = "mean_se", color = "red")
+```
+
+---
+# Many Ways to Visualize
+
+```{r}
+ggplot(brainGene,
+       aes(y = group, x = PLP1.expression,
+           fill = group)) +
+ stat_dotsinterval(dotsize = 0.3, binwidth = 0.1) +
+  labs(y="")
+```
+
+---
+# Many Ways to Visualize
+
+```{r}
+library(ggdist)
+ggplot(brainGene,
+       aes(y = group, x = PLP1.expression,
+           fill = group)) +
+  stat_halfeye() +
+  labs(y="") +
+  stat_dots(side = "bottom", dotsize = .17, binwidth = 0.1, color = NA)
+```
+
 ---
 # How Well Do Groups Explain Variation in Response Data?
 
@@ -424,17 +453,15 @@ $$R^2_{adj} = 1 - \frac{(1-R^2)(n-1)}{n-k-1}$$
 
 
 ---
-# Many Means to Predict
+# Many Means, One Category
 
-1. What are models with categorical predictors?
+1. What are models with categorical predictors?  
 
-2. Assumptions of models with categorical predictors
+2. Assumptions of models with categorical predictors  
 
-3. Evaluating fit models
+3. Evaluating fit models  
 
-4. How predictive is a model?
-
-5. .red[How different are groups?]
+4. .red[Query: How different are groups?]
 
 
 ---
@@ -543,3 +570,14 @@ plot(contrast(brain_em, method = "dunnett", adjust="dunnett")) +
   geom_vline(xintercept = 0, color = "red", lty = 2)
 ```
 
+-----------
+
+# So, Many Levels of a category
+
+- At the end of the dat, it's just another linear model  
+  
+- We can understand a lot about groups, though  
+
+- We can also query the model to compare groups  
+
+- To do more, we need an inferential framework  
