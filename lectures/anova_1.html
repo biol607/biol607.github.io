@@ -134,13 +134,13 @@ Underlying linear model with control = intercept, dummy variable for schizo
 
 ---
 # Linear Dummy Variable (Fixed Effect) Model
-`$$\large y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}, \qquad x_{i} = 0,1$$`  
+`$$\large y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}, \qquad x_{i} = 0,1$$`  
 `$$\epsilon_{ij} \sim N(0, \sigma^{2})$$`
 
 - i = replicate, j = group  
 
 
-- `\(x_{i}\)` inidicates presence/abscence (1/0) of a category  
+- `\(x_{ij}\)` inidicates presence/abscence (1/0) of level j for individual i  
      - This coding is called a **Dummy variable**  
 
 - Note similarities to a linear regression  
@@ -169,7 +169,7 @@ Underlying linear model with control = intercept, dummy variable for schizo
 ---
 # Partioning Model to See What Varies
 
-`$$\large y_{ij} = \bar{y} + (\bar{y}_{i} - \bar{y}) + ({y}_{ij} - \bar{y}_{i})$$`
+`$$\large y_{ij} = \bar{y} + (\bar{y}_{j} - \bar{y}) + ({y}_{ij} - \bar{y}_{j})$$`
 
 - i = replicate, j = group  
 
@@ -301,7 +301,7 @@ We are all good!
 
 ---
 # R Fits with Treatment Contrasts
-`$$y_{ij} = \beta_{0} + \sum \beta_{i}x_{i} + \epsilon_{ij}$$`
+`$$y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}$$`
 
 &lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
