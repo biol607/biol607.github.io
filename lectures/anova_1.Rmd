@@ -73,6 +73,11 @@ class: center, middle
 
 ### We are talking about linear regression with categorical variables
 
+---
+class: center, middle
+
+## What Else Did You Expect?
+![:scale 75%](./images/anova/spiderman_anova_regression.png)
 
 ---
 
