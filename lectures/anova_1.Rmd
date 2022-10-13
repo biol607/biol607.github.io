@@ -494,17 +494,15 @@ Many mini-linear models with two means....multiple comparisons!
 # Solutions to Multiple Comparisons and Family-wise Error Rate?
 
 1. Ignore it - 
-     + Just a bunch of independent linear models 
+     + Just a bunch of independent linear models
 
 --
-
 2. Increase your CI given m = # of comparisons
      + If 1 - CI of interest = $\alpha$  
      + Bonferroni Correction $\alpha/ = \alpha/m$
-     + False Discovery Rate $\alpha/ = k\alpha/m$ where k is rank of test  
+     + False Discovery Rate $\alpha/ = k\alpha/m$ where k is rank of test
 
 --
-
 3. Other multiple comparison corrections
     + Tukey's Honestly Significant Difference  
     + Dunnett's Compare to Control
@@ -514,8 +512,8 @@ Many mini-linear models with two means....multiple comparisons!
 # No Correction: Least Square Differences
 ```{r pairs, echo=FALSE}
 contrast(brain_em, method = "tukey", adjust="none") %>%
-  tidy() |>
-  select(c(2,4,5)) |>
+  tidy(conf.int = TRUE) |>
+  select(c(2,4,7,8)) |>
   knitr::kable("html") %>% kableExtra::kable_styling("striped")
 ```
 
@@ -523,29 +521,18 @@ contrast(brain_em, method = "tukey", adjust="none") %>%
 # Bonferroni Corrections
 ```{r bonf, echo=FALSE}
 contrast(brain_em, method = "tukey", adjust="bonferroni") %>%
-    tidy() |>
-  select(c(2,4,5)) |>
+  tidy(conf.int = TRUE) |>
+  select(c(2,4,7,8)) |>
   knitr::kable("html") %>% kableExtra::kable_styling("striped")
 ```
-
-
----
-# FDR
-```{r fdr, echo=FALSE}
-contrast(brain_em, method = "tukey", adjust="fdr") %>%
-    tidy() |>
-  select(c(2,4,5)) |>
-  knitr::kable("html") %>% kableExtra::kable_styling("striped")
-```
-
 
 
 ---
 # Tukey's Honestly Significant Difference
 ```{r tukey, echo=FALSE}
 contrast(brain_em, method = "tukey", adjust="tukey")  %>%
-    tidy() |>
-  select(c(2,4,5)) |>
+  tidy(conf.int = TRUE) |>
+  select(c(2,4,7,8)) |>
   knitr::kable("html") %>% kableExtra::kable_styling("striped")
 ```
 
@@ -561,8 +548,8 @@ plot(contrast(brain_em, method = "tukey", adjust="tukey")) +
 # Dunnett's Comparison to Controls
 ```{r dunnett, echo=FALSE}
 contrast(brain_em, method = "dunnett", adjust="dunnett")  %>%
-    tidy() |>
-  select(c(2,4,5)) |>
+  tidy(conf.int = TRUE) |>
+  select(c(2,4,7,8)) |>
   knitr::kable("html") %>% kableExtra::kable_styling("striped")
 
 plot(contrast(brain_em, method = "dunnett", adjust="dunnett")) +
@@ -570,7 +557,7 @@ plot(contrast(brain_em, method = "dunnett", adjust="dunnett")) +
   geom_vline(xintercept = 0, color = "red", lty = 2)
 ```
 
------------
+---
 
 # So, Many Levels of a category
 

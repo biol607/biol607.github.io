@@ -462,17 +462,15 @@ Many mini-linear models with two means....multiple comparisons!
 # Solutions to Multiple Comparisons and Family-wise Error Rate?
 
 1. Ignore it - 
-     + Just a bunch of independent linear models 
+     + Just a bunch of independent linear models
 
 --
-
 2. Increase your CI given m = # of comparisons
      + If 1 - CI of interest = `\(\alpha\)`  
      + Bonferroni Correction `\(\alpha/ = \alpha/m\)`
-     + False Discovery Rate `\(\alpha/ = k\alpha/m\)` where k is rank of test  
+     + False Discovery Rate `\(\alpha/ = k\alpha/m\)` where k is rank of test
 
 --
-
 3. Other multiple comparison corrections
     + Tukey's Honestly Significant Difference  
     + Dunnett's Compare to Control
@@ -485,24 +483,28 @@ Many mini-linear models with two means....multiple comparisons!
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.low &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.high &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0544024 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3282642 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1217358 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3955976 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0695976 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2042642 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -514,58 +516,31 @@ Many mini-linear models with two means....multiple comparisons!
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.low &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.high &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0221330 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3605337 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0894663 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4278670 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1018670 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2365337 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-
-
----
-# FDR
-&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
 
 
 ---
@@ -575,24 +550,28 @@ Many mini-linear models with two means....multiple comparisons!
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.low &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.high &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; control - schizo &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.1913333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0264873 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3561793 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; control - bipolar &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.2586667 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0938207 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4235127 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; schizo - bipolar &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.0673333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0975127 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2321793 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -608,26 +587,29 @@ Many mini-linear models with two means....multiple comparisons!
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.low &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.high &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; schizo - control &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; -0.1913333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.3474491 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0352176 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; bipolar - control &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; -0.2586667 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.067852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.4147824 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.1025509 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
 &lt;img src="anova_1_files/figure-html/dunnett-1.png" style="display: block; margin: auto;" /&gt;
 
------------
+---
 
 # So, Many Levels of a category
 
