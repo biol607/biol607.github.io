@@ -1,0 +1,558 @@
+---
+title: "Linear Models with Categorical Variables"
+author: "Biol607"
+format:
+  html:
+    toc: true
+---
+
+```{r setup}
+#| include: false
+library(knitr)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(emmeans)
+library(car)
+library(performance)
+library(ggdist)
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(root.dir = here::here())
+
+show_table <- . %>%
+  kable("html") %>%
+  kable_styling("striped")
+
+theme_set(theme_bw(base_size=17))
+
+```
+
+# 1. Comparing Means
+
+Comparing means are among the most frequently used tests in data analysis. Traditionally, they were done as a T-test, but, really, t-tests are just subsets of linear models. So, why not fit the appropriate linear model, and go from there! They’re delightfully simple, and provide a robust example of how to examine the entire workflow of a data analysis. These are steps you’ll take with any analysis you do in the future, no matter how complex the model!
+
+
+For two means, we want to fit a model where our categorical variable is translated into 0s and 1s. That corresponds to the following model:
+
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
+Here, $\beta_0$ corresponds to the mean for the group that is coded as 0 and $\beta_1$ is the difference between the two groups. If $\beta_1$ is different than 0, then the two groups are different, under a frequentist framework. 
+
+To see this, let's look at a data set examining the survival of juvenile chinook salmon (yum) in rivers with (+) versus without (-) brook trout.
+
+First, we'll load and plot the data. We'll also change the variable names, as that way we can not get tripped up with typing with spaces, etc.
+
+```{r chinook, message=FALSE}
+library(readr)
+library(ggplot2)
+library(dplyr)
+
+theme_set(theme_classic(base_size = 14))
+
+chinook <- read_csv("lab/data/05/12e4BrookTrout.csv") |>
+  rename(trout_presence = `brook trout?`,
+         chinook_survival = `Mean chinook survival`)
+
+ggplot(data=chinook, 
+       mapping=aes(x=trout_presence, y=chinook_survival)) +
+  geom_boxplot() 
+```
+
+OK, here we have two groups. We can fit a linear model with brook trout presensce as a predictor.
+
+
+```{r}
+surv_mod <- lm(chinook_survival ~ trout_presence, 
+               data = chinook)
+```
+
+Before we go forward, what is this dummy coding that we're talking about? We can look at the underlying set of predictors fit by the linear model using `model.matrix()`
+
+```{r mat}
+model.matrix(surv_mod)
+```
+
+We can see that brook trout being present is coded as a 1 and absent is a 0. This is dummy coding.
+
+## 1.1 Assumptions and Categorical Models
+
+As we are fitting a linear model with a normal error structure, the tests are the same as usual. We can use performance to take a look.
+
+```{r}
+library(performance)
+
+check_model(surv_mod)
+```
+
+Looking at this, we can see a few things worth looking at.
+
+```{r pred_check}
+check_predictions(surv_mod) |> plot()
+```
+
+The match between the model and data is a bit wonky. This can at times be due to this being a categorical variable with a lot of residual variation, so, make sure broad patterns are reproduced. Still, worriesome to some extent.
+
+What about linearity? Performance is giving somewhat wonky results, so we will use `plot()`
+
+```{r linearity}
+# weird result from performance
+#check_model(surv_mod, check = "linearity") |> plot()
+plot(surv_mod, which = 1)
+```
+
+This - looks bad. One mean has a radically different residual structure than the other. We can see this further with the std. residuals for homogeneity of variance.
+
+```{r hov}
+# weird result from performance
+#check_model(surv_mod, check = "homogeneity") |> plot()
+plot(surv_mod, which = 3)
+```
+
+Woof. OK, let's keep this in mind. Let's look at the residuals directly
+
+```{r qq}
+check_normality(surv_mod) |> plot(type = "qq")
+```
+
+This actually looks good. As does our check for outliers
+
+
+```{r cooks}
+check_outliers(surv_mod) |> plot(type = "bar")
+```
+
+Nothing over the threshold.
+
+## 1.2 Adjusting for HOV violation
+
+We have a few approaches we can use here. We can transform
+
+```{r trans}
+surv_mod_trans <- lm(asinh(chinook_survival) ~ trout_presence, 
+                     data = chinook)
+
+plot(surv_mod_trans, which = 1)
+```
+
+Nope.
+
+We can rank transform, if we are comfortable with really changing the question
+
+```{r}
+chinook <- mutate(chinook, rank_surv = rank(chinook_survival))
+
+surv_mod_rank <- lm(rank_surv ~ trout_presence, 
+                     data = chinook)
+
+plot(surv_mod_rank, which = 1)
+```
+
+This works! But, remember, answers will have a different meaning in coefficients.
+
+Last, we can model the variance with the nlme library using the `glmmTMB` library which has a nice interface for specifying error structure with the `dispformula` argument that works just like specifying y ~ x relationships (save that we don't need to specify y - it's the variance in this case).
+
+```{r}
+library(glmmTMB)
+
+surv_mod_var <- glmmTMB(chinook_survival ~ trout_presence, 
+    dispformula = ~trout_presence,
+    data = chinook)
+
+```
+
+We can compare the linear model and this model to see if it makes a difference. Note, we'll need `broom.mixed` for `glmmTMB` objects.
+
+```{r}
+library(broom)
+library(broom.mixed)
+
+tidy(surv_mod)
+
+tidy(surv_mod_var)
+```
+
+Note that our SEs are somewhat wider. But, qualitatively, not a huge difference here, and it's all about the SE.
+
+## 1.3 Model Results
+
+We can assess the model results in three different ways. First, the coefficients
+
+```{r mod_coef_t}
+tidy(surv_mod)
+```
+We can see the - condition has a mean survival of 0.234 and including brook grout appears to decrease survival. But - what if we want to see the means?  We can visualize this with the data.
+
+```{r}
+ggplot(data=chinook, 
+       mapping=aes(x=trout_presence, y=chinook_survival))  +
+  geom_point() +
+  stat_summary(fun.data = "mean_se", color = "red")
+```
+
+Useful! We can see the results in context here. We can also look at how much variability is associated with treatment.
+
+```{r}
+# this is from performance
+r2(surv_mod)
+```
+
+The difference between the two is interesting - perhaps the addition of a parameter doesn't increase fit very much?
+
+Regardless, if we want to look at the actual estimated means and their difference, we need the `emmeans` package. It is a FABULOUS package for querying fit models, and we'll use it hand in hand with `modelr` and others in the future as well as using it to explore models with many predictors - next week!
+
+Let's start by looking at those estimated means
+
+```{r}
+library(emmeans)
+
+surv_means <- emmeans(surv_mod, specs = ~trout_presence)
+
+surv_means
+```
+
+OK! There we have our means and CIs. They match our earlier plot. We can then use the `contrast` function in emmeans to compare the two means to one another with the argument `method = "pairwise"`.
+
+```{r}
+surv_cont <- contrast(surv_means, method = "pairwise")
+
+surv_cont
+```
+
+ah HA - we see the difference between the two is estimated to be 0.07 with a SE of 0.38. Are they different? It depends on your inferential framework. Here, we are just looing at confidence intervals. Let's say we wanted to see if the 89th CI (to pick one) overlaps 0, implying that possible values are 0 or are positive or negative.
+
+```{r}
+confint(surv_cont, level = 0.89)
+```
+
+OK - all is positive! So we might well conclude there is decent evidence they are different. We'll save a longer discussion for Ci choice  later.
+
+To see this on a plot of this, `plot()` produces a ggplot with the CI specified!
+
+```{r}
+plot(surv_cont, level = 0.89) +
+  geom_vline(xintercept = 0, lty = 2, color = "red")
+```
+
+We can compare this result to a classical t-test in R. Both assuming and relaxing the assumption of HOV.
+
+```{r}
+t.test(chinook_survival ~ trout_presence, 
+                     data = chinook,
+       var.equal = TRUE,
+       conf.level = 0.89)
+
+t.test(chinook_survival ~ trout_presence, 
+                     data = chinook,
+       var.equal = FALSE,
+       conf.level = 0.89)
+
+```
+
+The results are slightly different in the CI - and notice here the choice of variance DOES matter for things like testing.
+
+
+# 2. Many Levels
+
+To see how this works with many categories, let's look at the dataset `15e1KneesWhoSayNight.csv` about an experiment to help resolve jetlag by having people shine lights at different parts of themselves to try and shift their internal clocks.
+
+```{r knees}
+knees <- read_csv("lab/data/10/15e1KneesWhoSayNight.csv")
+```
+
+We can see the outcomes with `ggplot2`
+
+```{r knees_plot}
+ggplot(knees, mapping=aes(x=treatment, y=shift)) +
+  stat_summary(color="red", size=1.3) +
+    geom_point(alpha=0.7) +
+  theme_bw(base_size=17)
+```
+
+## 2.1 LM and Many Categories
+As the underlying model of ANOVA is a linear one, we fit ANOVAs using `lm()` just as with linear regression.
+
+```{r intro_knees}
+knees_lm <- lm(shift ~ treatment, data=knees)
+```
+
+Now, there are two things to notice here. One, note that treatment is a either a character or factor. If it is not, because we are using `lm()`, it will be fit like a linear regression. So, beware!
+
+We can see how this was turned into dummy coding with `model.matrix()`
+
+```{r aov_modmat}
+model.matrix(knees_lm)
+```
+
+Note that now we have an intercept and two 0/1 variables!
+
+
+## 2.2 Assumption Evaluation
+
+Because this is an lm, we can check our assumptions as before - with one new one.  First, some oldies but goodies.
+
+```{r assumptions}
+check_model(knees_lm)
+```
+
+Looks good! You can of course dig into individual plots and assumptions as above, bot, broadly, this seems good.
+
+## 2.3 Evaluating Model Results
+
+So, there are a lot of things we can do with a fit model
+
+### 2.3.1 Summary Output
+
+```{r anova_summar}
+summary(knees_lm)
+```
+
+First, notice that we get the same information as a linear regression - including $R^2$ This is great, and we can see about 43% of the variation in the data is associated with the treatments. We also get coefficients, but, what do they mean?
+
+Well, they are the treatment contrasts. Not super useful. R fits a model where treatment 1 is the intercept, and then we look at deviations from that initial treatment as your other coefficients. It's efficient, but, hard to make sense of. To not get an intercept term, you can refit the model without the intercept. You can fit a whole new model with `-1` in the model formulation. 
+
+```{r update_summary}
+knees_lm_no_int <- update(knees_lm, formula = . ~ . -1)
+
+summary(knees_lm_no_int)
+```
+
+OK - that makes more sense. But, ugh, who wants to remember that. Instead, we can see treatment means using the `emmeans` package yet again.
+
+```{r emmeans, message=FALSE}
+emmeans(knees_lm, ~treatment)
+```
+
+I also like this because it outputs CIs.
+
+### 2.3.2 Model Visualization
+
+The plot from above really sums this work up.
+
+```{r knees_plot_viz}
+ggplot(knees, mapping=aes(x=treatment, y=shift)) +
+  stat_summary(fun.data = "mean_se", color="red") +
+    geom_point(alpha=0.7)
+```
+
+This is great! But I'd argue, there are some more fun and interesting ways to look at this. The `ggdist` package and `ggridges` can create some interesting visualizations with additional information.
+
+For example, from ggridges
+
+```{r}
+library(ggridges)
+
+ggplot(data = knees,
+       mapping = aes(x = shift, y = treatment)) +
+  stat_density_ridges()
+```
+
+This might be too vague - or it might be great in terms of seeing overlap.  `ggdist` combined a few different elements. I'm a big fan of `geom_halfeye` as you get a density and mean and CI.
+
+```{r}
+library(ggdist)
+
+ggplot(data = knees,
+       mapping = aes(y = treatment, x = shift,
+                     fill = treatment)) +
+  stat_halfeye()
+```
+
+These densities are more based on the data, and a lot of this provides a clearer cleaner visualization. There are a lot of other interesting elements of `ggdist` that are worth exploring
+
+```{r}
+ggplot(data = knees,
+       mapping = aes(y = treatment, x = shift,
+                     fill = treatment)) +
+  stat_dist_dotsinterval()
+```
+
+But, as an **exercise** why not visit the [ggdist webpage](https://mjskay.github.io/ggdist/) and try and come up with the most interesting visualization of the knees project that you can!
+
+### 2.3.2 A Priori Planned Contrasts
+
+If you have a priori contrasts, you can use the `constrat` library to test them. You give contrast an a list and a b list. Then we get all comparisons of a v. b, in order. It's not great syntactically, but, it lets you do some pretty creative things.
+
+```{r contrasts, message=FALSE}
+contrast::contrast(knees_lm, 
+         a = list(treatment = "control"), 
+         b = list(treatment = "eyes"))
+```
+
+### 2.3.3 Unplanned pairwise comparisons
+
+Meh. 9 times out of 10 we want to do compare all possible levels of a categorical variable and look at which differences have cofidence intervals that contain 0. We can use our `emmeans` object here along with the `contrast()` function and `confint()`. Note, by default, confidence intervals will be adjusted using the Tukey method of adjustment.
+
+```{r tukey_emmeans}
+knees_em <- emmeans(knees_lm, specs =  ~treatment)
+
+contrast(knees_em,
+        method = "pairwise") |>
+  confint()
+```
+
+We don't need to worry about many of the fancier things that emmeans does for the moment - those will become more useful with other models. But, we can look at this test a few different ways. First, we can visualize it
+
+```{r plot_tukey}
+contrast(knees_em,
+        method = "pairwise") |>
+  plot() +
+  geom_vline(xintercept = 0, color = "red", lty=2)
+```
+
+We can also, using our tukey method of adjustment, get "groups" - i.e., see which groups are statistically the same versus different.
+
+```{r groups}
+library(multcomp)
+cld(knees_em, adjust="tukey")
+```
+
+This can be very useful in plotting. For example, we can use that output as a data frame for a `ggplot` in a few different ways.
+
+```{r plot_groups}
+cld(knees_em, adjust="tukey") %>%
+  ggplot(aes(x = treatment, y = emmean, 
+             ymin = lower.CL, ymax = upper.CL,
+             color = factor(.group))) +
+  geom_pointrange() 
+
+
+cld(knees_em, adjust="tukey") %>%
+  mutate(.group = letters[as.numeric(.group)]) %>%
+  ggplot(aes(x = treatment, y = emmean, 
+             ymin = lower.CL, ymax = upper.CL)) +
+  geom_pointrange() +
+  geom_text(mapping = aes(label = .group), y = rep(1, 3)) +
+  ylim(c(-2.5, 2))
+
+
+knees_expanded <- left_join(knees, cld(knees_em, adjust="tukey"))
+ggplot(knees_expanded,
+       aes(x = treatment, y = shift, color = .group)) + 
+  geom_point()
+```
+
+**Comparing to a Control**
+
+We can similarly use this to look at a Dunnett's test, which compares against the control
+```{r bunnett_emmeans}
+contrast(knees_em,
+        method = "dunnett") |>
+  confint()
+```
+
+Note, if the "control" had not been the first treatment, you can either re-order the factor using `forcats` or just specify which of the levels is the control. For example, eyes is the second treatment. Let's make it our new reference.
+
+```{r bunnett_emmeans_2}
+contrast(knees_em,
+        method = "dunnett", ref=2) |>
+  confint()
+```
+
+You can even plot these results
+```{r plot_contrast}
+plot(contrast(knees_em,
+        method = "dunnett", ref=2)) +
+  geom_vline(xintercept = 0, color = "red", lty=2)
+```
+
+**Bonferonni versus No Correction**
+
+Let's say you wanted to do all pairwise tests, but, compare using a Bonferroni correction or FDR. Or none! No problem! There's an `adjust` argument
+
+```{r tukey_emmeans_other_adjust}
+contrast(knees_em,
+        method = "pairwise") |>
+  confint(adjust="bonferroni")
+
+
+contrast(knees_em,
+        method = "pairwise") |>
+  confint(adjust="none")
+```
+
+
+
+## 2.4 Faded Examples
+Let's try three ANOVAs!
+First - do landscape characteristics affect the number of generations plant species can exist before local extinction?
+
+```{r plants, eval=FALSE}
+plants <- read.csv("lab/data/10/15q01PlantPopulationPersistence.csv")
+
+#Visualize
+ggplot(plants,
+      aes(x = treatment, y = generations)) +
+      geom_boxplot()
+
+#fit
+plant_lm <- lm(generations ~ treatment, data=plants)
+
+#assumptions
+check_model(plant_lm)
+
+#evaluate
+tidy(plant_lm)
+
+r2(plant_lm)
+
+#contrasts
+contrast(emmeans(plant_lm, ~treatment), 
+         method = "pairwise") |>
+  confint()
+```
+
+Second, how do different host types affect nematode longevity?
+
+
+```{r nemetods, eval=FALSE}
+worms <- read.csv("./data/10/15q19NematodeLifespan.csv")
+
+#Visualize
+ggplot(data = _______,
+       mapping = aes(x = treatment, y = lifespan)) +
+  geom_____________() #feel free to play
+
+#fit
+worm_lm <- lm(______ ~ ______, data=worms)
+
+#assumptions
+check_model(__________)
+
+#evaluate
+tidy(________)
+
+r2(________)
+
+#contrasts
+contrast(emmeans(______, ~________), 
+         method = "pairwise") |>
+  confint()
+```
+
+And last, how about how number of genotypes affect eelgrass productivity. Note, THERE IS A TRAP HERE. Look at your dataset before you do ANYTHING.
+
+```{r eelgrass, eval=FALSE}
+eelgrass <- read.csv("labs/data/10/15q05EelgrassGenotypes.csv")
+
+#DO SOMETHING HERE
+
+#Visualize
+________(data = _________,
+         mapping = aes(x = treatment.genotypes, y = shoots)) +
+  ___________
+
+#fit
+eelgrass_lm <- __(______ ~ ______, data=________)
+
+#assumptions
+________(______)
+
+#ANOVA
+________(______)
+
+#contrasts
+contrast(emmeans(_________, ~_________), 
+         method = "_________") |>
+  _________()
+
+```
