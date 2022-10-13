@@ -13,9 +13,9 @@ output:
 ---
 class: center, middle
 
-# Comparing Many Means: ANOVA and the Linear Model
+# Comparing Many Levels of One Category with the Linear Model
 
-![:scale 75%](./images/19/comparison-of-means-anova-you-must-do.jpg)
+![:scale 70%](./images/anova/cat-egorical.jpg)
 
 
 ```{r setup, include=FALSE}
@@ -55,7 +55,14 @@ class: center, middle
 ---
 class: center, middle
 
-### Wait, wait wait. What is ANOVA, what is this terminology? New words (or familiar ones, but, haven't we been...)
+## Is this what you think of when you hear categorical variables?
+![:scale 75%](./images/19/comparison-of-means-anova-you-must-do.jpg)
+
+
+---
+class: center, middle
+
+### Wait, wait wait. What is ANOVA, what is this terminology? New words! AH! (or for some of you, old words - but - you must unlearn what you have learned)
 
 ---
 class: center, middle
@@ -398,6 +405,10 @@ What does this mean?
 
 Being in group j is associated with an average outcome of y.
 
+---
+
+# What's the best way to see this?
+.center[ ![:scale 75%](./images/anova/barplot_viz.jpg)]
 
 ---
 # Many Ways to Visualize
