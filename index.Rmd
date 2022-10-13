@@ -28,7 +28,7 @@ ggplot(data=penguins,
 
 **Weekly Schedule:** Tuesday & Thursday 11 - 12:30, and Lab Friday 9 - 12:00pm in the Healey Green Computer Lab and on Zoom for those that cannot make it. The URL will be provided in the course Slack. All will be recorded for those who cannot make it, and URLS posted in the weeks' etherpads.
 
-**Office Hours:** Prof. Byrnes will hold office hours Thurs. 2-4 in ISC 3130 . Hannah Diebboll will hold office hours Tuesdays: 1-2:30 and Thursdays: 1-2:30.
+**Office Hours:** Prof. Byrnes will hold office hours Thurs. 2-4 in ISC 3130 . Hannah Diebboll will hold office hours Tuesdays: 1-2:30 and Thursdays: 9-10:30am.
 
 **Source for this Website:** https://github.com/biol607/biol607.github.io/  
   
