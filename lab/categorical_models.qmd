@@ -149,7 +149,7 @@ plot(surv_mod_rank, which = 1)
 
 This works! But, remember, answers will have a different meaning in coefficients.
 
-Last, we can model the variance with the nlme library using the `glmmTMB` library which has a nice interface for specifying error structure with the `dispformula` argument that works just like specifying y ~ x relationships (save that we don't need to specify y - it's the variance in this case).
+Last, we can model the variance with `glmmTMB` library which has a nice interface for specifying error structure with the `dispformula` argument that works just like specifying y ~ x relationships (save that we don't need to specify y - it's the variance in this case).
 
 ```{r}
 library(glmmTMB)
@@ -196,11 +196,15 @@ Useful! We can see the results in context here. We can also look at how much var
 r2(surv_mod)
 ```
 
-The difference between the two is interesting - perhaps the addition of a parameter doesn't increase fit very much?
+The difference between the two is interesting - perhaps the addition of a parameter doesn't increase fit very much? Remember
+
+$$R^2_{adj} = 1 - \frac{(1-R^2)(n-1)}{n-k-1}$$
+
+where k is the number of parameters. If a parameter doesn't contribute very much, then the adjusted R<sup>2</sup> won't increase as much as the classical R<sup>2</sup>.
 
 Regardless, if we want to look at the actual estimated means and their difference, we need the `emmeans` package. It is a FABULOUS package for querying fit models, and we'll use it hand in hand with `modelr` and others in the future as well as using it to explore models with many predictors - next week!
 
-Let's start by looking at those estimated means
+Let's start by looking at those estimated means. Se use the `specs` argument to specify which predictor or predictors we are interested in. We'll get fancier with it next week.
 
 ```{r}
 library(emmeans)
@@ -275,7 +279,7 @@ As the underlying model of ANOVA is a linear one, we fit ANOVAs using `lm()` jus
 knees_lm <- lm(shift ~ treatment, data=knees)
 ```
 
-Now, there are two things to notice here. One, note that treatment is a either a character or factor. If it is not, because we are using `lm()`, it will be fit like a linear regression. So, beware!
+Note that treatment is a either a character or factor. If it is not, because we are using `lm()`, it will be fit like a linear regression. So, beware!
 
 We can see how this was turned into dummy coding with `model.matrix()`
 
@@ -399,7 +403,7 @@ contrast(knees_em,
   geom_vline(xintercept = 0, color = "red", lty=2)
 ```
 
-We can also, using our tukey method of adjustment, get "groups" - i.e., see which groups are statistically the same versus different.
+We can also, using our tukey method of adjustment, get "groups" - i.e., see which groups are likely the same versus different.
 
 ```{r groups}
 library(multcomp)

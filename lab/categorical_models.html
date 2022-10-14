@@ -286,7 +286,7 @@ attr(,"contrasts")$trout_presence
 </div>
 </div>
 <p>This works! But, remember, answers will have a different meaning in coefficients.</p>
-<p>Last, we can model the variance with the nlme library using the <code>glmmTMB</code> library which has a nice interface for specifying error structure with the <code>dispformula</code> argument that works just like specifying y ~ x relationships (save that we don’t need to specify y - it’s the variance in this case).</p>
+<p>Last, we can model the variance with <code>glmmTMB</code> library which has a nice interface for specifying error structure with the <code>dispformula</code> argument that works just like specifying y ~ x relationships (save that we don’t need to specify y - it’s the variance in this case).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmmTMB)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -351,9 +351,11 @@ attr(,"contrasts")$trout_presence
   adj. R2: 0.185</code></pre>
 </div>
 </div>
-<p>The difference between the two is interesting - perhaps the addition of a parameter doesn’t increase fit very much?</p>
+<p>The difference between the two is interesting - perhaps the addition of a parameter doesn’t increase fit very much? Remember</p>
+<p><span class="math display">\[R^2_{adj} = 1 - \frac{(1-R^2)(n-1)}{n-k-1}\]</span></p>
+<p>where k is the number of parameters. If a parameter doesn’t contribute very much, then the adjusted R<sup>2</sup> won’t increase as much as the classical R<sup>2</sup>.</p>
 <p>Regardless, if we want to look at the actual estimated means and their difference, we need the <code>emmeans</code> package. It is a FABULOUS package for querying fit models, and we’ll use it hand in hand with <code>modelr</code> and others in the future as well as using it to explore models with many predictors - next week!</p>
-<p>Let’s start by looking at those estimated means</p>
+<p>Let’s start by looking at those estimated means. Se use the <code>specs</code> argument to specify which predictor or predictors we are interested in. We’ll get fancier with it next week.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -459,7 +461,7 @@ mean in group - mean in group +
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>knees_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(shift <span class="sc">~</span> treatment, <span class="at">data=</span>knees)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now, there are two things to notice here. One, note that treatment is a either a character or factor. If it is not, because we are using <code>lm()</code>, it will be fit like a linear regression. So, beware!</p>
+<p>Note that treatment is a either a character or factor. If it is not, because we are using <code>lm()</code>, it will be fit like a linear regression. So, beware!</p>
 <p>We can see how this was turned into dummy coding with <code>model.matrix()</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.matrix</span>(knees_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -669,7 +671,7 @@ Conf-level adjustment: tukey method for comparing a family of 3 estimates </code
 <p><img src="categorical_models_files/figure-html/plot_tukey-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>We can also, using our tukey method of adjustment, get “groups” - i.e., see which groups are statistically the same versus different.</p>
+<p>We can also, using our tukey method of adjustment, get “groups” - i.e., see which groups are likely the same versus different.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(multcomp)</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cld</span>(knees_em, <span class="at">adjust=</span><span class="st">"tukey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
