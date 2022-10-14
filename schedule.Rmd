@@ -128,6 +128,7 @@ __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)
 __Reading:__ [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), [Feiberg 3.5](https://fw8051statistics4ecologists.netlify.app/matrixreg#categorical-predictors), W&S Chapters 11, 12, 14      
 __Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast"))`    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-categorical_lm-2022  
+__Homework:__ [Models with Categorical Variables](./homework/categorical.html)  
 
 <!-- __In Class Code:__ [comparing two means](./in_class_code/2020/scripts/comparing_means.R)  -->  
 

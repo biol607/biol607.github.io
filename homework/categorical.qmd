@@ -1,0 +1,307 @@
+---
+title: "Categorical Predictor Homework"
+author: "Biol607"
+format: html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = FALSE, warning = FALSE)
+```
+
+## 1. Comparing Two Means
+
+In [this dataset](https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/18/18e4MoleRatLayabouts.csv) from Scantlebury et al, the authors explored how caste and mass affected the energy level of naked mole rats. There is an interesting problem here that we will dig into more deeply next week that we can start to get a handle on now. Namely, do different castes have different masses. Let's examine this.
+
+**1.1** Start by loading in the data and plotting it for initial inspection - remember, we are looking at caste as a predictor of mass. 
+
+
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+mole <- read.csv("homework/data/18e4MoleRatLayabouts.csv")
+
+ggplot(mole,
+       aes(x = lnmass,
+           y = caste,
+           color = caste)) +
+  geom_point()
+
+```
+
+**1.2** Fit an evaluate the model. Does it meet assumptions? Why or why not?
+
+```{r}
+#model
+mole_mod <- lm(lnmass ~ caste,
+                data = mole)
+
+library(performance)
+check_model(mole_mod)
+
+# looks good!
+```
+
+**1.3** Compare the two castes log mass values. Are they different? How would you discuss your conclusions?
+
+```{r}
+emmeans(mole_mod, ~caste) |>
+  contrast(method = "pairwise") |>
+  confint()
+
+# the lazy caste is larger than workers!
+```
+
+**1.4** With the results, make a plot that you would feel would be clear and compelling in a publication.
+
+```{r}
+# I hope they have fun here.
+```
+
+## 2. Comparing Many Means
+To start with, let's warm up with a simple one-way ANOVA model. This example, from Whitlock and Schluter chapter 15 question 22 looks at the mass of [lodgepole pinecones from different habitats](https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/15/15q22LodgepolePineCones.csv).
+
+**2.1.** Load and plot the data. Choose a plot that not only shows the raw data, but also the means and SE or CI of those means. Impress yourself by making it super fancy! Geom to your heart's content.
+
+```{r}
+library(ggplot2)
+library(readr)
+
+mass <- read_csv("https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/15/15q22LodgepolePineCones.csv")
+
+ggplot(mass,
+       aes(x = habitat, y = conemass)) +
+  geom_point() +
+  stat_summary(color = "red")
+```
+
+**2.2** Fit a model using least squares and evaluate all relevant assumptions. *List them out as you test them.* Can we use this model? If not, fix it. But if we can, no fix is needed!
+
+```{r}
+mass_mod <- lm(conemass ~ habitat, data = mass)
+
+# assumptions via performance
+# it's OK if they just use check_model and discuss,
+# but would be neat if they went one by one and discussed
+library(performance)
+
+# match to data
+check_predictions(mass_mod)
+
+# linearity
+check_model(mass_mod, check = "linearity") |> plot()
+plot(mass_mod, which = 1)
+
+# normality of residuals
+check_normality(mass_mod) |> plot()
+check_normality(mass_mod) |> plot("qq")
+
+# HOV
+check_heteroscedasticity(mass_mod) |> plot()
+plot(mass_mod, which = 3)
+
+# outliers
+check_outliers(mass_mod) |> plot(type = "bar", rescale = FALSE)
+
+#we are fine
+```
+
+**1.2** How much variation is explained by your model?
+
+```{r}
+r2(mass_mod)
+
+# a lot!!!
+```
+
+**2.3** Show which means are different from each other. What CI are you using? Are you adjusting your CIs? Justify these choices.
+
+```{r}
+library(emmeans)
+
+cont_mass <- emmeans(mass_mod, ~habitat) |>
+  contrast(method = "tukey", adjust = "none") |>
+  confint()
+
+cont_mass
+
+plot(cont_mass) +
+  geom_vline(xintercept = 0, lty = 2, color = "red")
+```
+
+## 3. Categorical Variables and Transformation
+
+In a study from Rogers et al. (2020) [link](https://www.int-res.com/abstracts/meps/v545/p161-173/), the authors performed an experiment where they moved panels that had been colonized by invertebrates on a dock to a nearby rocky jetty where predators could access panels. To separate out the effects of changes in abiotic environment versus predation, they performed a factorial experiment, either caging or not caging panels and placing them either on the side of a cinder block or hanging on a piece of PVC attached to the block where predators would have little access (but weren't entirely stopped). They then looked at change in total cover of invertebrates. Using [this old data file dug off of my hard drive](/homework/data/fouling_transplant_data.csv), let's see what they found.
+
+**3.1.** Load the data, combine cages and position into a single variable `treatment` (we'll separate next week!), and plot the data. We are interested in change in percent cover as influenced by the combined influence of caging and position. Choose a plot that not only shows the raw data, but also the means and SE or CI of those means. Impress yourself by making it as fancy as possible!
+
+```{r}
+library(dplyr)
+foul <- read.csv("http://biol607.github.io/homework/data/fouling_transplant_data.csv") %>%
+  rename(cover_change = Change.in.Cover,
+         caged = Caged,
+         position = Position.On.Block,
+         start_cover = Initial.Cover,
+         end_cover = Final.Cover) |>
+  mutate(treatment = paste(caged, position, sep = ","))
+
+library(ggdist)
+
+ggplot(foul,
+       aes(y = treatment,
+           x = cover_change, fill = caged)) +
+  stat_halfeye() + ylab("") +
+  geom_vline(xintercept = 0, color = "black", lty = 2) +
+  theme_classic() +
+  scale_fill_manual(values = c("darkred", "grey")) +
+  labs(fill = "")
+
+
+```
+
+
+**3.2** Fit a model looking at how treatment influences cover change and evaluate all relevant assumptions. Do you meet assumptions?
+
+```{r}
+foul_mod <- lm(cover_change ~ treatment,
+           data = foul)
+
+check_model(foul_mod)
+
+# this is not great
+
+```
+
+**3.3** If you answered yes to the above.... you are wrong. It doesn't! Percentage data is weird. Difference in percentages can be ever weirder! There are three tried and true solutions here. But they MIGHT not all work. 
+
+
+1. Divide change by initial cover to express change as percent change relative to initial cover.
+
+2. Calculate difference in logit cover (so, logist(initial cover) - logit(final cover)). Logit transformations linearize percentage, and are often all that is needed to work percent cover into a linear model. You can use `car::logit()` for this.
+
+3. Incorporate initial cover as a covariate. This takes out that influence, and as such we're looking at residuals of change. This sometimes, but not always, works. We will look at this next week.
+
+Try the first two methods. Which one works (or at least works better) so that you can produce valid inference?
+
+```{r}
+library(car)
+
+foul <- foul |>
+  mutate(logit_cover_change = logit(start_cover) - logit(end_cover),
+         percent_cover_change = cover_change/start_cover)
+
+# method 1
+foul_mod_porp <- lm(percent_cover_change ~ treatment,
+           data = foul)
+
+# method 2
+foul_mod_logit_diff <- lm(logit_cover_change ~ treatment,
+           data = foul)
+
+check_model(foul_mod_porp)
+check_model(foul_mod_logit_diff)
+
+
+# The proportion change model works better!
+
+```
+
+
+**3.4** Great! So, take us home! What does this fit model tell you about how and which treatments differ in change? Given that having no cage or being on the side enable greater access to predators, what does this experiment say about whether predation matters given how I have described the system? Feel free to replot the data or fit model results if helpful. FYI, one thing I find useful in ploting is that an `emmeans()` object can be turned into a data frame with `as_tibble()` and then used for plots, or you can tidy an `emmeans()` object.
+
+```{r}
+
+pairwise_cont <- emmeans(foul_mod_porp, ~treatment) %>%
+  contrast(method = "pairwise", adjust = "none")
+
+pairwise_cont |>
+  confint()
+
+ pairwise_cont |>
+  plot() +
+   geom_vline(xintercept = 0, lty = 2, color = "red")
+
+# Open on the side has more loss than any other treatment
+
+
+emmeans(foul_mod_porp, ~treatment) %>%
+  as_tibble %>%
+  ggplot(aes(x = treatment, y = emmean, 
+             ymin = emmean-SE, ymax = emmean+SE)) +
+           geom_pointrange() +
+  ylab("Proportional Change in Cover")
+
+#OH! There you see it.
+
+```
+
+<!-- ## 4. Impress Yourself with Power! -->
+
+<!-- One issue that often comes up is sample size - how big should it be! There are a *lot* of ways to answer this question. One is the idea that, with a large enough sample, there should be a clear separation of means for things that are actually different. There are a lot of specialized formulae for different statistical tests to evaluate that. But.... they're specialized. -->
+
+<!-- Shouldn't we just be able to simulate from our model at different sample sizes, and ask what sample size is adequate? -->
+
+<!-- To do this, I whipped up a package a while ago (one last thing to add and then to CRAN it will go) called `sinterval` You can install it like so: -->
+
+<!-- ```{r} -->
+<!-- #| echo: true -->
+<!-- #| eval: false -->
+<!-- install.packages("remotes") -->
+
+<!-- remotes::install_github("jebyrnes/sinterval") -->
+<!-- ``` -->
+
+<!-- How does it work? Let's say you want to look at simulations from palmer penguins... -->
+
+
+<!-- ```{r} -->
+<!-- #| echo: true -->
+<!-- #| eval: true -->
+<!-- library(sinterval) -->
+<!-- library(palmerpenguins) -->
+<!-- library(ggplot2) -->
+<!-- library(ggdist) -->
+
+<!-- gentoo <- penguins |> -->
+<!--   filter(species == "Gentoo") -->
+
+<!-- mod <- lm(flipper_length_mm ~ body_mass_g, -->
+<!--           data = gentoo) -->
+<!-- ``` -->
+
+<!-- You can get new predictions with the `add_predicted_sims()` function which takes both fitted and prediction error into account - `add_fitted_sims()` does fit error only. -->
+
+<!-- ```{r, echo = TRUE, eval = TRUE} -->
+<!-- #| echo: true -->
+<!-- #| eval: true -->
+<!-- predicted_sims <- add_predicted_sims(gentoo, mod, n_sims = 100) -->
+<!-- ``` -->
+
+<!-- This will generate simulated data sets that you can then plot, analyze, or do other things. -->
+
+<!-- ```{r} -->
+<!-- #| eval: true -->
+<!-- #| echo: true -->
+<!-- ggplot(predicted_sims, -->
+<!--        aes(x = body_mass_g,  -->
+<!--            y = flipper_length_mm_predict)) + -->
+<!--   geom_line(mapping = aes(group = .sim),  -->
+<!--             stat = "smooth", -->
+<!--             method = "lm", color = "black",  -->
+<!--             alpha = 0.1, fill = NA) + -->
+<!--   geom_point(data = gentoo, aes(y = flipper_length_mm)) + -->
+<!--   theme_classic()  -->
+<!-- ``` -->
+
+<!-- **4.1** Using `sinterval` and your model and treatment levels from fouling communities, write a function that takes a sample size as an argument, and returns `n_sims` number of simulated data sets of new predictions. Make the default number of simulations 100 for testing. Show that it works. -->
+
+<!-- ```{r} -->
+<!-- get_foul <- function(n = 3, n_sims = 100){ -->
+<!--   dat <- data.frame(treatment = rep(unique(foul$treatment), n)) -->
+
+<!--   add_predicted_sims(dat, foul_mod_porp, n_sims = n_sims) -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- **4.2** Write a function that will  -->

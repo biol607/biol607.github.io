@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Biol607">
+
+<title>Categorical Predictor Homework</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="categorical_files/libs/clipboard/clipboard.min.js"></script>
+<script src="categorical_files/libs/quarto-html/quarto.js"></script>
+<script src="categorical_files/libs/quarto-html/popper.min.js"></script>
+<script src="categorical_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="categorical_files/libs/quarto-html/anchor.min.js"></script>
+<link href="categorical_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="categorical_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="categorical_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="categorical_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="categorical_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Categorical Predictor Homework</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Biol607 </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="comparing-two-means" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-two-means">1. Comparing Two Means</h2>
+<p>In <a href="https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/18/18e4MoleRatLayabouts.csv">this dataset</a> from Scantlebury et al, the authors explored how caste and mass affected the energy level of naked mole rats. There is an interesting problem here that we will dig into more deeply next week that we can start to get a handle on now. Namely, do different castes have different masses. Let’s examine this.</p>
+<p><strong>1.1</strong> Start by loading in the data and plotting it for initial inspection - remember, we are looking at caste as a predictor of mass.</p>
+<div class="cell">
+
+</div>
+<p><strong>1.2</strong> Fit an evaluate the model. Does it meet assumptions? Why or why not?</p>
+<div class="cell">
+
+</div>
+<p><strong>1.3</strong> Compare the two castes log mass values. Are they different? How would you discuss your conclusions?</p>
+<div class="cell">
+
+</div>
+<p><strong>1.4</strong> With the results, make a plot that you would feel would be clear and compelling in a publication.</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="comparing-many-means" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-many-means">2. Comparing Many Means</h2>
+<p>To start with, let’s warm up with a simple one-way ANOVA model. This example, from Whitlock and Schluter chapter 15 question 22 looks at the mass of <a href="https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/15/15q22LodgepolePineCones.csv">lodgepole pinecones from different habitats</a>.</p>
+<p><strong>2.1.</strong> Load and plot the data. Choose a plot that not only shows the raw data, but also the means and SE or CI of those means. Impress yourself by making it super fancy! Geom to your heart’s content.</p>
+<div class="cell">
+
+</div>
+<p><strong>2.2</strong> Fit a model using least squares and evaluate all relevant assumptions. <em>List them out as you test them.</em> Can we use this model? If not, fix it. But if we can, no fix is needed!</p>
+<div class="cell">
+
+</div>
+<p><strong>1.2</strong> How much variation is explained by your model?</p>
+<div class="cell">
+
+</div>
+<p><strong>2.3</strong> Show which means are different from each other. What CI are you using? Are you adjusting your CIs? Justify these choices.</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="categorical-variables-and-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="categorical-variables-and-transformation">3. Categorical Variables and Transformation</h2>
+<p>In a study from Rogers et al.&nbsp;(2020) <a href="https://www.int-res.com/abstracts/meps/v545/p161-173/">link</a>, the authors performed an experiment where they moved panels that had been colonized by invertebrates on a dock to a nearby rocky jetty where predators could access panels. To separate out the effects of changes in abiotic environment versus predation, they performed a factorial experiment, either caging or not caging panels and placing them either on the side of a cinder block or hanging on a piece of PVC attached to the block where predators would have little access (but weren’t entirely stopped). They then looked at change in total cover of invertebrates. Using <a href="/homework/data/fouling_transplant_data.csv">this old data file dug off of my hard drive</a>, let’s see what they found.</p>
+<p><strong>3.1.</strong> Load the data, combine cages and position into a single variable <code>treatment</code> (we’ll separate next week!), and plot the data. We are interested in change in percent cover as influenced by the combined influence of caging and position. Choose a plot that not only shows the raw data, but also the means and SE or CI of those means. Impress yourself by making it as fancy as possible!</p>
+<div class="cell">
+
+</div>
+<p><strong>3.2</strong> Fit a model looking at how treatment influences cover change and evaluate all relevant assumptions. Do you meet assumptions?</p>
+<div class="cell">
+
+</div>
+<p><strong>3.3</strong> If you answered yes to the above…. you are wrong. It doesn’t! Percentage data is weird. Difference in percentages can be ever weirder! There are three tried and true solutions here. But they MIGHT not all work.</p>
+<ol type="1">
+<li><p>Divide change by initial cover to express change as percent change relative to initial cover.</p></li>
+<li><p>Calculate difference in logit cover (so, logist(initial cover) - logit(final cover)). Logit transformations linearize percentage, and are often all that is needed to work percent cover into a linear model. You can use <code>car::logit()</code> for this.</p></li>
+<li><p>Incorporate initial cover as a covariate. This takes out that influence, and as such we’re looking at residuals of change. This sometimes, but not always, works. We will look at this next week.</p></li>
+</ol>
+<p>Try the first two methods. Which one works (or at least works better) so that you can produce valid inference?</p>
+<div class="cell">
+
+</div>
+<p><strong>3.4</strong> Great! So, take us home! What does this fit model tell you about how and which treatments differ in change? Given that having no cage or being on the side enable greater access to predators, what does this experiment say about whether predation matters given how I have described the system? Feel free to replot the data or fit model results if helpful. FYI, one thing I find useful in ploting is that an <code>emmeans()</code> object can be turned into a data frame with <code>as_tibble()</code> and then used for plots, or you can tidy an <code>emmeans()</code> object.</p>
+<div class="cell">
+
+</div>
+<!-- ## 4. Impress Yourself with Power! -->
+<!-- One issue that often comes up is sample size - how big should it be! There are a *lot* of ways to answer this question. One is the idea that, with a large enough sample, there should be a clear separation of means for things that are actually different. There are a lot of specialized formulae for different statistical tests to evaluate that. But.... they're specialized. -->
+<!-- Shouldn't we just be able to simulate from our model at different sample sizes, and ask what sample size is adequate? -->
+<!-- To do this, I whipped up a package a while ago (one last thing to add and then to CRAN it will go) called `sinterval` You can install it like so: -->
+<!-- ```{r} -->
+<!-- #| echo: true -->
+<!-- #| eval: false -->
+<!-- install.packages("remotes") -->
+<!-- remotes::install_github("jebyrnes/sinterval") -->
+<!-- ``` -->
+<!-- How does it work? Let's say you want to look at simulations from palmer penguins... -->
+<!-- ```{r} -->
+<!-- #| echo: true -->
+<!-- #| eval: true -->
+<!-- library(sinterval) -->
+<!-- library(palmerpenguins) -->
+<!-- library(ggplot2) -->
+<!-- library(ggdist) -->
+<!-- gentoo <- penguins |> -->
+<!--   filter(species == "Gentoo") -->
+<!-- mod <- lm(flipper_length_mm ~ body_mass_g, -->
+<!--           data = gentoo) -->
+<!-- ``` -->
+<!-- You can get new predictions with the `add_predicted_sims()` function which takes both fitted and prediction error into account - `add_fitted_sims()` does fit error only. -->
+<!-- ```{r, echo = TRUE, eval = TRUE} -->
+<!-- #| echo: true -->
+<!-- #| eval: true -->
+<!-- predicted_sims <- add_predicted_sims(gentoo, mod, n_sims = 100) -->
+<!-- ``` -->
+<!-- This will generate simulated data sets that you can then plot, analyze, or do other things. -->
+<!-- ```{r} -->
+<!-- #| eval: true -->
+<!-- #| echo: true -->
+<!-- ggplot(predicted_sims, -->
+<!--        aes(x = body_mass_g,  -->
+<!--            y = flipper_length_mm_predict)) + -->
+<!--   geom_line(mapping = aes(group = .sim),  -->
+<!--             stat = "smooth", -->
+<!--             method = "lm", color = "black",  -->
+<!--             alpha = 0.1, fill = NA) + -->
+<!--   geom_point(data = gentoo, aes(y = flipper_length_mm)) + -->
+<!--   theme_classic()  -->
+<!-- ``` -->
+<!-- **4.1** Using `sinterval` and your model and treatment levels from fouling communities, write a function that takes a sample size as an argument, and returns `n_sims` number of simulated data sets of new predictions. Make the default number of simulations 100 for testing. Show that it works. -->
+<!-- ```{r} -->
+<!-- get_foul <- function(n = 3, n_sims = 100){ -->
+<!--   dat <- data.frame(treatment = rep(unique(foul$treatment), n)) -->
+<!--   add_predicted_sims(dat, foul_mod_porp, n_sims = n_sims) -->
+<!-- } -->
+<!-- ``` -->
+<!-- **4.2** Write a function that will  -->
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
