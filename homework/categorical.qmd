@@ -236,6 +236,22 @@ emmeans(foul_mod_porp, ~treatment) %>%
 
 ```
 
+----
+
+
+## Meta 1. 
+Are you starting to see the connections between linear regression and models with categorical variables? What about this week surprised you the most?
+
+## Meta 2. 
+What about what we did this week was the most difficult for you to understand?  Where are you feeling the boundaries of your understanding pushed the most?
+
+## Meta 3. 
+How much time did this take you, roughly? Again, I'm trying to keep track that these assignments aren't killer, more than anything.  
+
+## Meta 4. 
+Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.
+
+
 <!-- ## 4. Impress Yourself with Power! -->
 
 <!-- One issue that often comes up is sample size - how big should it be! There are a *lot* of ways to answer this question. One is the idea that, with a large enough sample, there should be a clear separation of means for things that are actually different. There are a lot of specialized formulae for different statistical tests to evaluate that. But.... they're specialized. -->
