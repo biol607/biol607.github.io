@@ -1,0 +1,843 @@
+---
+title:
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    theme: white
+    center: false
+    transition: fade
+    self_contained: false
+    lib_dir: libs
+    css: style.css
+---
+
+## 
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=4.5, comment=NA, 
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(ggplot2)
+library(car)
+library(visreg)
+library(emmeans)
+library(performance)
+
+theme_set(theme_bw(base_size = 16))
+
+```
+![](images/23/wonka_mult_regression.jpg)
+<h2> Multiple Predictor Variables in Linear Models</h2>
+
+
+<!-- Next time, make this JUST MLR and separate others into other lecture 
+
+Also, show log transform and predictions at the end.
+Add MLR equation at the beginning before path diagram.
+Port to Xaringan
+
+-->
+
+##
+\ 
+\
+\
+<h3>https://etherpad.wikimedia.org/p/607-many-predictors-2022</h3>
+
+## Data Generating Processes Until Now
+
+-   One predictor with one response\
+    \
+
+-   Or multiple possible treatment levels, each 0/1
+
+## We Have Seen Many Predictors Before
+
+$$y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}, \qquad x_{i} = 0,1$$  
+
+```{r load_brains}
+brainGene <- read.csv("lectures/data/19/15q06DisordersAndGeneExpression.csv") %>%
+  mutate(group = forcats::fct_relevel(group, c("control", "schizo", "bipolar")))
+
+ggplot(brainGene, aes(x=group, y=PLP1.expression, fill = group)) +
+  geom_boxplot() +
+  scale_fill_discrete(guide=FALSE)+
+  theme_bw(base_size=17)
+```
+
+## The Expansiveness of the Linear Model
+
+$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon} $$  
+
+-   This equation is huge. X can be anything - categorical,
+    continuous, squared, sine, etc.
+
+-   There can be straight additivity, or interactions
+
+
+
+## Many Additive Predictors
+
+1.   Multiple Linear Regression
+
+2.   Many Categories with Many Levels  
+
+3.   Combining Categorical and Continuous Predictors
+
+
+## Multiple Linear Regression: A Graphical View
+
+![image](./images/23/regression2.png){width="60.00000%"}
+
+
+<div style="text-align:left">Curved double-headed arrow indicates COVARIANCE between predictors that we account for.  
+\
+We estimate the effect of each predictor **controlling** for all others.  
+\
+</div>
+
+
+## Calculating Multiple Regression Coefficients with OLS
+
+$$\boldsymbol{Y} = \boldsymbol{b X} + \boldsymbol{\epsilon}$$
+
+<div style="text-align:left">
+Remember in Simple Linear Regression $b = \frac{cov_{xy}}{var_{x}}$?\
+\
+In Multiple Linear Regression
+$\boldsymbol{b} = \boldsymbol{cov_{xy}}\boldsymbol{S_{x}^{-1}}$\
+\
+where $\boldsymbol{cov_{xy}}$ is the covariances of $\boldsymbol{x_i}$
+with $\boldsymbol{y}$ and $\boldsymbol{S_{x}^{-1}}$ is the
+variance/covariance matrix of all *Independent variables*\
+</div>
+
+
+##  {data-background="images/23/fires.jpg"}
+<div style="bottom:100%; text-align:left; background:goldenrod">Five year study of wildfires & recovery in Southern California shurblands in 1993. 90 plots (20 x 50m)  
+\
+(data from Jon Keeley et al.)</div>
+
+
+
+## What causes species richness?
+
+- Distance from fire patch 
+- Elevation
+- Abiotic index
+- Patch age
+- Patch heterogeneity
+- Severity of last fire
+- Plant cover
+
+## Many Things may Influence Species Richness
+
+```{r keeley_pairs}
+keeley <- read.csv("lectures/data/23/Keeley_rawdata_select4.csv")
+pairs(keeley)
+```
+
+## Our Model
+\
+\
+$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$
+\
+\
+<div class="fragment">
+
+```{r mlr, echo=TRUE}
+
+klm <- lm(rich ~ cover + firesev + hetero, data=keeley)
+```
+</div>
+
+## Testing Assumptions
+> - Data Generating Process: Linearity \
+\
+> - Error Generating Process: Normality & homoscedasticity of residuals  
+\
+> - Data: Outliers not influencing residuals  
+\
+> - Predictors: **Minimal multicollinearity**
+
+## Did We Match our Data?
+
+```{r}
+check_predictions(klm)
+```
+
+## How About That Linearity?
+
+```{r}
+check_model(klm, check = "linearity") |> plot()
+```
+
+## OK, Normality of Residuals?
+```{r}
+check_normality(klm) |> plot()
+```
+
+## OK, Normality of qResiduals?
+```{r}
+check_normality(klm) |> plot("qq")
+```
+
+## No Heteroskedasticity?
+```{r}
+check_heteroscedasticity(klm) |> plot()
+```
+
+## Outliers?
+```{r}
+check_outliers(klm) |> plot()
+```
+
+## 
+![](./images/23/gosling_multicollinearity.jpg)
+
+## Why Worry about Multicollinearity?
+
+> - Adding more predictors decreases precision of estimates  
+\
+> - If predictors are too collinear, can lead to difficulty fitting model  
+\
+> - If predictors are too collinear, can inflate SE of estimates further  
+\
+> - If predictors are too collinear, are we *really* getting **unique information**
+
+## Checking for Multicollinearity: Correlation Matrices
+
+```{r klm_cor, size="normalsize"}
+with(keeley, cor(cbind(cover, firesev, hetero)))
+``` 
+
+<div style="text-align:left">Correlations over 0.4 can
+be problematic, but, meh, they may be OK even as high as 0.8. \
+</div>
+
+
+## Checking for Multicollinearity: Variance Inflation Factor
+
+> - Consider $y = \beta_{0} + \beta_{1}x_{1}  + \beta_{2}x_{2} + \epsilon$ \
+\
+> - And $X_{1} = \alpha_{0} + \alpha_{2}x_{2} + \epsilon_j$ \
+\
+> - $var(\beta_{1}) = \frac{\sigma^2}{(n-1)\sigma^2_{X_1}}\frac{1}{1-R^{2}_1}$
+\
+\
+<span class="fragment">$$VIF = \frac{1}{1-R^2_{1}}$$ </span>
+
+## Checking for Multicollinearity: Variance Inflation Factor
+$$VIF_1 = \frac{1}{1-R^2_{1}}$$ 
+
+
+```{r klm_vif, fig.height = 4}
+check_collinearity(klm) |> plot()
+``` 
+
+<div style="text-align:left">VIF $>$ 5 or 10 can be problematic and indicate an unstable solution.</div>
+
+## What Do We Do with High Collinearity?
+
+> - Cry.  
+\
+> - Evaluate **why**  
+\ 
+> - Can drop a predictor if information is redundant  
+\
+> - Can combine predictors into an index
+>     - Add them? Or other combination.  
+>     - PCA for orthogonal axes  
+>     - Factor analysis to compress into one variable
+
+## What does it all mean: the coefficients
+$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$
+```{r keeley_coe}
+tidy(klm) |>
+  dplyr::select(1:3) |>
+  knitr::kable(digits = 2) |>
+  kableExtra::kable_styling()
+``` 
+
+> - $\beta_0$ - the intercept -  is the # of species when **all other predictors are 0**  
+>     - Note the very large SE  
+  
+>  - All other $\beta$s are the effect of a 1 unit increase on # of species  
+>     - They are **not** on the same scale
+>     - They are each in the scale of species per unit of individual x
+
+## How Much Variation is Associated with the Predictors
+```{r}
+glance(klm) |>
+  dplyr::select(1:2)  |>
+  knitr::kable(digits = 2) |>
+  kableExtra::kable_styling()
+  
+```
+
+- 41% of the varition in # of species is associated with the predictors  
+\
+- Note that this is **all model**, not individual predictors 
+
+## Comparing Coefficients on the Same Scale
+
+$$r_{xy} = b_{xy}\frac{sd_{x}}{sd_{y}}$$ 
+
+```{r keeley_std}
+library(effectsize) 
+effectsize(klm, method = "basic")
+```
+
+- For linear model, makes intuitive sense to compare strength  
+\
+- Note, this is Pearson's correlation, so, it's in units of $sd_y/sd_x$
+
+## So, Uh, How Do We Visualize This?
+
+```{r klm_see_effects}
+
+qplot(cover, rich, data=keeley, colour=firesev, size=firesev) +
+  theme_bw(base_size=14) + 
+  scale_color_gradient(low="yellow", high="purple") +
+  scale_size_continuous(range=c(1,10))
+```
+
+## Visualization Strategies for Multivariate Models
+
+- Plot the effect of each variable holding the other variables constant  
+     - Mean, Median, 0
+     - Or your choice!  
+\
+- Plot **counterfactual scenarios** from model
+     - Can match data (and be shown as such)
+     - Can be exploring the response surface
+
+
+
+## Added Variable Plot to Show Unique Contributions when Holding Others at 0
+```{r klm_avplot}
+avPlots(klm)
+```
+
+## Plots at Median of Other Variables
+
+```{r klm_visreg, fig.height=6, fig.width = 10}
+library(patchwork)
+klm_vr <- visreg::visreg(klm, cex.lab=1.3,  gg = TRUE)
+
+klm_vr[[1]] + 
+klm_vr[[2]] +
+klm_vr[[3]]
+``` 
+
+## Counterfactual Predictions Overlaid on Data
+
+```{r crazy}
+pred_info <- crossing(cover = seq(0,1.5, length.out=100),
+                      firesev=c(2,5,8)) %>%
+  crossing(hetero=c(0.5, 0.8)) %>%
+  modelr::add_predictions(klm, var="rich") %>%
+  dplyr::mutate(hetero_split = hetero)
+
+het_labeller <- as_labeller(c(`0.5` = "hetero: 0.5", `0.8` = "hetero: 0.8"))
+
+
+ggplot(pred_info, mapping=aes(x=cover, y=rich)) +
+  geom_line(lwd=1.5, mapping=aes(color=factor(firesev), group=paste(firesev, hetero))) +
+    facet_wrap(vars(hetero_split), labeller = het_labeller) +
+  geom_point(data=keeley %>% 
+               dplyr::mutate(hetero_split = ifelse(hetero<mean(hetero), 0.5, 0.8))) +
+  theme_bw(base_size=14) +
+  labs(color = "firesev")
+```
+
+## Counterfactual Surfaces at Means of Other Variables
+```{r}
+visreg::visreg2d(klm, "cover", "firesev")
+```
+
+
+## 
+\
+\
+![](images/23/matrix_regression.jpg)
+
+This is an incredibly powerful technique at teasing apart different correlated influences!
+
+
+## Many Additive Predictors
+
+1.   Multiple Linear Regression
+
+2.   <font color = "red">Many Categories with Many Levels</font>  
+
+3.   Combining Categorical and Continuous Predictors
+
+
+## We've Now Done Multiple Continuous Predictors
+
+
+$$y_{i} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{i}$$
+\
+$$\epsilon_{i} \sim \mathcal{N}(0, \sigma)$$
+
+## We've Previously Done One Categorical Variable with Many Levels 
+
+$$y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}$$
+\
+$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma), \qquad x_{i} = 0,1$$  
+
+> (hey, wait, isn't that kinda the same model.... but where you can only belong to one level of one category?)
+
+## Now... Two Categories, Each with Many Levels, as Predictors
+\
+$$y_{ijk} = \beta_{0} + \sum \beta_{i}x_{ik} + \sum \beta_{j}x_{jk} + \epsilon_{ijk}$$  
+\
+$$\epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{\_k} = 0,1$$ 
+\
+
+- This model is similar to MLR, but, now we multiple categories instead of multiple continuous predictors  
+\
+- This can be extended to as many categories as we want with linear algebra  
+\
+$$Y = \beta X + \epsilon$$
+
+## Multiple Predictors: A Graphical View
+
+![image](./images/23/regression2.png){width="60.00000%"}
+
+
+<div style="text-align:left">Curved double-headed arrow indicates COVARIANCE between predictors that we account for.  
+\
+We estimate the effect of each predictor **controlling** for all others.  
+\
+</div>
+
+## We Commonly Encounter Multiple Predictors in Randomized Controlled Blocked Designs
+![image](./images/21/blocked_designs/Slide4.jpg){width="70.00000%"} 
+
+
+## An Experiment with Orthogonal Treatments: A Graphical View
+
+![image](./images/23/anova.png){width="60.00000%"}
+
+- This is convenient for estimation  
+\
+- Observational data is not always so nice, which is OK!
+
+## Effects of Stickleback Density on Zooplankton
+<br><br>
+![image](./images/21/daphnia.jpeg){width="40.00000%"}
+![image](./images/21/threespine_stickleback.jpeg){width="50.00000%"}
+
+Units placed across a lake so that 1 set of each treatment was ’blocked’ together
+
+
+## Treatment and Block Effects
+
+```{r zooplankton_boxplot}
+zoop <- read.csv("lectures/data/21/18e2ZooplanktonDepredation.csv") %>%
+  mutate(block = factor(block))
+
+a <- ggplot(zoop,
+       aes(x = treatment, y = zooplankton)) +
+  geom_boxplot()
+
+b <- ggplot(zoop,
+       aes(x = block, y = zooplankton)) +
+  geom_boxplot()
+
+a + b
+```
+
+## Multiway Categorical Model
+>- Many different treatment types  
+>     - 2-Way is for Treatment and block
+>     - 3-Way for, e.g., Sticklebacks, Nutrients, and block
+>     - 4-way, etc., all possible  
+\
+>- For experiments, we assume treatments are fully orthogonal  
+>        - Each type of treatment type A has all levels of treatment type B
+>        - E.g., Each stickleback treatment is present in each block  
+\
+> - Experiment is **balanced** for **simple effects**  
+>      - Simple effect is the unique combination of two or more treatments  
+>      - Balance implies the sample size for each treatment combination is the same 
+>      - But, hey, this is more for inference, rather than **estimation**
+
+
+## Fitting a Model with Mutiple Categorical Predictors
+```{r, echo = TRUE}
+zoop_lm <- lm(zooplankton ~ treatment + 
+                block, data=zoop)
+
+zoop_lm
+```
+
+> Note the treatment contrasts!
+
+## Assumptions of Categorical Models with Many Categories
+-   Independence of data points  
+  
+-   Normality within groups (of residuals)  
+  
+-   No relationship between fitted and residual values  
+  
+-   Homoscedasticity (homogeneity of variance) of groups  
+  
+- No *collinearity* between treatments
+  
+-   <font color = "red">Additivity of Treatments</font>  
+
+## The Usual on Predictions
+```{r}
+check_predictions(zoop_lm) |> plot()
+```
+
+## Linearity (and additivity!)
+```{r}
+check_model(zoop_lm, check = "linearity") |> plot()
+```
+
+## What is Non-Additivity?
+The effect of category depends on another
+
+```{r}
+algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
+ggplot(algae, aes(x = height, y = sqrtarea, color = herbivores)) +
+  geom_boxplot()
+```
+
+## Non-Additivity is Parabolic
+
+```{r}
+algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
+check_model(graze_linear, check = "linearity") |> plot()
+```
+
+## Normality!
+```{r}
+check_model(zoop_lm, check = "normality") |> plot()
+```
+
+## HOV!
+```{r}
+check_model(zoop_lm, check = "homogeneity") |> plot()
+```
+
+## Collinearity!
+```{r}
+check_model(zoop_lm, check = "vif") |> plot()
+```
+
+- by definition, not a problem in an experiment
+
+## How do We Understand the Modeled Results?
+
+- Coefficients (but treatment contrasts)  
+  
+- Expected means of levels of each category
+     - Average over other categories
+
+- Differences between levels of each category
+
+## Coefficients and Treatment Contrasts
+
+```{r trt_cont}
+tidy(zoop_lm)|>
+  dplyr::select(1:3) |>
+  knitr::kable(digits = 2) |>
+  kableExtra::kable_styling()
+```
+
+- Intercept is block 1, treatment control  
+\
+- Other coefs are all deviation from control in block 1
+
+## Means Averaging Over Other Category
+
+```{r}
+emmeans(zoop_lm, ~treatment)
+
+
+emmeans(zoop_lm, ~block)
+```
+
+## Can then visualize the Expected Means
+
+```{r}
+
+trt_m <- emmeans(zoop_lm, ~treatment) |>
+  confint() |>
+  tidy()
+
+ggplot(zoop,
+       aes(x = treatment, y = zooplankton)) +
+  geom_point(color = "grey") +
+  geom_pointrange(data = trt_m,
+                  mapping = aes(y = estimate,
+                      ymin = estimate - std.error,
+                      ymax = estimate + std.error),
+                  color = "red")
+```
+
+## And Look at Differences
+
+```{r}
+emmeans(zoop_lm, ~treatment) |>
+  contrast("pairwise") |>
+  confint(adjust = "none") 
+```
+
+## It's All One
+
+**The Linear Model**
+$$\boldsymbol{Y} = \boldsymbol{b X} + \boldsymbol{\epsilon}$$
+
+**Multiple Continuous Predictors**
+$$y_{i} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{i}$$
+
+
+**Many Categorical Predictors**
+$$y_{ijk} = \beta_{0} + \sum \beta_{i}x_{ik} + \sum \beta_{j}x_{jk} + \epsilon_{ijk}$$  
+
+
+## Many Additive Predictors
+
+1.   Multiple Linear Regression
+
+2.   Many Categories with Many Levels  
+
+3.   <font color = "red">Combining Categorical and Continuous Predictors</font>
+
+
+
+## Mixing Continuous and Categorical Predictors: Analysis of Covariance
+
+$$y_{ij} = \beta_0   + \sum\beta_j x_{ij} + \beta_{j+1}x_{i} + \epsilon_{ij}$$  
+
+$$ x_{ij} = 0,1 \qquad \epsilon \sim \mathcal{N}(0,\sigma)$$
+
+
+-   Categorical Variable + a continuous predictor\
+\
+-   Often used to correct for a gradient or some continuous variable affecting outcome\
+\
+-   OR used to correct a regression due to additional groups that may throw off slope estimates\
+      - e.g. Simpson's Paradox: A positive relationship between test scores and academic performance can be masked by gender differences
+
+## What is Simpson's Paradox: Penguin Example
+
+```{r}
+library(palmerpenguins)
+
+ggplot(penguins,
+       aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  stat_smooth(method = "lm")
+```
+
+
+## What is Simpson's Paradox: Penguin Example
+
+```{r}
+library(palmerpenguins)
+
+ggplot(penguins,
+       aes(x = bill_length_mm, y = bill_depth_mm,
+           color = species)) +
+  geom_point() +
+  stat_smooth(method = "lm")
+```
+
+> Note: This can happen with just continuous variables as well
+
+## Neanderthals and Categorical/Continuous Variables
+
+![image](./images/23/neanlooking.jpeg){width="60.00000%"}
+
+Who had a bigger brain: Neanderthals or us?
+
+
+
+## The Means Look the Same...
+
+```{r neand_boxplot}
+neand <- read.csv("lectures/data/23/18q09NeanderthalBrainSize.csv")
+neand_plot_box <- qplot(species, lnbrain, data=neand, fill=species, geom="boxplot")  + theme_bw()
+neand_plot_box
+```
+
+
+
+## But there appears to be a Relationship Between Body and Brain Mass
+
+```{r neand_plot}
+neand_plot <- qplot(lnmass, lnbrain, data=neand, color=species, size=I(3))  + theme_bw()
+neand_plot
+```
+
+
+
+## And Mean Body Mass is Different
+
+```{r neand_boxplot2}
+neand_plot_box2 <- qplot(species, lnmass, data=neand, fill=species, geom="boxplot")  + theme_bw()
+neand_plot_box2
+```
+
+## 
+\
+\
+![](images/23/redo_analysis.jpg)
+
+## Categorical Model with a Continuous Covariate for Control
+
+```{r neand_model, echo=FALSE}
+neand_lm <- lm(lnbrain ~ species + lnmass, data=neand)
+
+```
+
+
+```{r neand_plot_fit, fig.height=5, fig.width=7}
+neand <- cbind(neand, predict(neand_lm, interval="confidence"))
+
+neand_fit <- ggplot(data = neand,
+       aes(x = lnmass, y = lnbrain, color = species, group = species)) +
+  geom_point(size = 3) +
+  geom_line(aes(y=fit)) + 
+  geom_ribbon(aes(ymin=lwr, ymax=upr), 
+              fill="lightgrey", 
+              color = NA,
+              alpha=0.5) 
+
+neand_fit
+```
+
+Evaluate a categorical effect(s), controlling for a *covariate* (parallel lines)\
+ 
+Groups modify the *intercept*.
+
+
+
+## Assumptions are the Same!
+-   Independence of data points
+
+-   Normality and homoscedacticity within groups (of residuals)
+
+-   No relationship between fitted and residual values
+
+-   Additivity of Treatment and Covariate (Parallel Slopes)
+
+
+## Linearity Assumption KEY
+```{r zoop_assumptions, fig.height=7}
+check_model(neand_lm, check = "linearity") |> plot()
+```
+
+## Test for Parallel Slopes
+We test a model where
+$$y_{ijk} = \beta_0 + \beta_{1}x_1  + \sum_{j}^{i=1}\beta_j x_{ij} + \sum_{j}^{i=1}\beta_{k}x_1 x_{ij} + \epsilon_ijk$$
+<div class="fragment">
+
+```{r parallel_slopes}
+neand_lm_int <- lm(lnbrain ~ species * lnmass, data=neand)
+
+tidy(neand_lm_int) |>
+  dplyr::select(1:3) |>
+knitr::kable() |>
+  kableExtra::kable_styling()
+```
+
+</div>
+\
+<div class="fragment">If you have an interaction, welp, that's a different model - slopes vary by group!</div>
+
+## VIF Also *Very* Important
+```{r}
+check_collinearity(neand_lm) |> plot()
+```
+
+## Usual Normality Assumption
+```{r}
+check_normality(neand_lm) |>plot("qq")
+```
+
+## Usual HOV Assumption
+```{r}
+check_heteroscedasticity(neand_lm) |>plot()
+```
+
+
+## Usual Outlier Assumption
+```{r}
+check_outliers(neand_lm) |>plot()
+```
+
+## The Results
+
+- We can look at coefficients  
+\
+- We can look at means adjusted for covariate  
+\
+- Visualize! Visualize! Visualize!
+
+## Those Coefs
+
+```{r}
+tidy(neand_lm) |>
+  dplyr::select(1:3) |>
+  knitr::kable(digits = 2) |>
+  kableExtra::kable_styling()
+```
+
+- Intercept is species = neanderthal, but lnmass = 0?  
+\
+- Categorical coefficient is defiation from intercept for recent  
+\
+- lnmass coefficient is change in ln brain mass per change in 1 unit of ln mass
+
+
+## Groups Means at Mean of Covariate
+```{r cr_lsmanes}
+emmeans(neand_lm, ~species) %>%
+  confint() |>
+ knitr::kable(digits=3) |>
+  kableExtra::kable_styling()
+```
+
+Can also evaluate for other levels of the covariate as is interesting
+
+## Difference Between Groups at Mean of Covariate
+```{r cr_lsmanes_diff}
+contrast(emmeans(neand_lm, ~species,
+                 at = list(lnmass = mean(neand$lnmass))), method = "tukey") %>%
+  confint() |>
+ knitr::kable(digits=3) |>
+  kableExtra::kable_styling()
+```
+
+## Vsualizing Result Says it All!
+```{r, fig.height=6}
+neand_fit
+```
+
+## Or Plot at the Mean Level of the Covariate
+```{r}
+visreg::visreg(neand_lm, "species", gg = TRUE) 
+```
+
+## Extensions of the Linear Additive Model
+
+- Wow, we sure can fit a lot in there!
+\
+- Categorical is just continuous as 0/1  
+\
+- So, we can build a LOT of models, limited only by our imagination!
