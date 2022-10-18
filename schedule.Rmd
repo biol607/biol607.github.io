@@ -137,7 +137,7 @@ __Homework:__ [Models with Categorical Variables](./homework/categorical.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lectures:__ May Predictors: [Multiple Linear Regression](./lectures/23_general_linear_model.html), [Multple Categorical Predictor Types](lectures/anova_2.html)    
+__Lectures:__ May Predictors: [Many Predictors](./lectures/many_predictors.html)   
 __Lab Topic:__  Models with many types of predictors  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ [Feiberg ch 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), W&S 15, 18   
