@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>many_predictors.knit</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="libs/header-attrs-2.16/header-attrs.js"></script>
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h2></h2>
+<img data-src="images/23/wonka_mult_regression.jpg" />
+<h2>
+Multiple Predictor Variables in Linear Models
+</h2>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+ <br />
+<br />
+
+<h3>
+<a href="https://etherpad.wikimedia.org/p/607-mlr-2022"
+class="uri">https://etherpad.wikimedia.org/p/607-mlr-2022</a>
+</h3>
+</section>
+<section id="data-generating-processes-until-now" class="slide level2">
+<h2>Data Generating Processes Until Now</h2>
+<ul>
+<li><p>One predictor with one response<br />
+<br />
+</p></li>
+<li><p>Or multiple possible treatment levels, each 0/1</p></li>
+</ul>
+</section>
+<section id="we-have-seen-many-predictors-before" class="slide level2">
+<h2>We Have Seen Many Predictors Before</h2>
+<p><span class="math display">\[y_{ij} = \beta_{0} + \sum
+\beta_{j}x_{ij} + \epsilon_{ij}, \qquad x_{i} = 0,1\]</span></p>
+<p><img src="many_predictors_files/figure-revealjs/load_brains-1.jpeg" width="768" /></p>
+</section>
+<section id="the-expansiveness-of-the-linear-model"
+class="slide level2">
+<h2>The Expansiveness of the Linear Model</h2>
+<p><span class="math display">\[\Large \boldsymbol{Y} =
+\boldsymbol{\beta X} + \boldsymbol{\epsilon} \]</span></p>
+<ul>
+<li><p>This equation is huge. X can be anything - categorical,
+continuous, squared, sine, etc.</p></li>
+<li><p>There can be straight additivity, or interactions</p></li>
+</ul>
+</section>
+<section id="many-additive-predictors" class="slide level2">
+<h2>Many Additive Predictors</h2>
+<ol type="1">
+<li><p>Multiple Linear Regression</p></li>
+<li><p>Many Categories with Many Levels</p></li>
+<li><p>Combining Categorical and Continuous Predictors</p></li>
+</ol>
+</section>
+<section id="multiple-linear-regression-a-graphical-view"
+class="slide level2">
+<h2>Multiple Linear Regression: A Graphical View</h2>
+<p><img data-src="images/23/regression2.png" style="width:60.0%"
+alt="image" /></p>
+<div style="text-align:left">
+<p>Curved double-headed arrow indicates COVARIANCE between predictors
+that we account for.<br />
+<br />
+We estimate the effect of each predictor <strong>controlling</strong>
+for all others.<br />
+<br />
+</p>
+</div>
+</section>
+<section id="calculating-multiple-regression-coefficients-with-ols"
+class="slide level2">
+<h2>Calculating Multiple Regression Coefficients with OLS</h2>
+<p><span class="math display">\[\boldsymbol{Y} = \boldsymbol{b X} +
+\boldsymbol{\epsilon}\]</span></p>
+<div style="text-align:left">
+<p>Remember in Simple Linear Regression <span class="math inline">\(b =
+\frac{cov_{xy}}{var_{x}}\)</span>?<br />
+<br />
+In Multiple Linear Regression <span class="math inline">\(\boldsymbol{b}
+= \boldsymbol{cov_{xy}}\boldsymbol{S_{x}^{-1}}\)</span><br />
+<br />
+where <span class="math inline">\(\boldsymbol{cov_{xy}}\)</span> is the
+covariances of <span class="math inline">\(\boldsymbol{x_i}\)</span>
+with <span class="math inline">\(\boldsymbol{y}\)</span> and <span
+class="math inline">\(\boldsymbol{S_{x}^{-1}}\)</span> is the
+variance/covariance matrix of all <em>Independent variables</em><br />
+</p>
+</div>
+</section>
+<section id="section-2" class="slide level2"
+data-background="images/23/fires.jpg">
+<h2 data-background="images/23/fires.jpg"></h2>
+<div style="bottom:100%; text-align:left; background:goldenrod">
+Five year study of wildfires &amp; recovery in Southern California
+shurblands in 1993. 90 plots (20 x 50m)<br />
+<br />
+(data from Jon Keeley et al.)
+</div>
+</section>
+<section id="what-causes-species-richness" class="slide level2">
+<h2>What causes species richness?</h2>
+<ul>
+<li>Distance from fire patch</li>
+<li>Elevation</li>
+<li>Abiotic index</li>
+<li>Patch age</li>
+<li>Patch heterogeneity</li>
+<li>Severity of last fire</li>
+<li>Plant cover</li>
+</ul>
+</section>
+<section id="many-things-may-influence-species-richness"
+class="slide level2">
+<h2>Many Things may Influence Species Richness</h2>
+<p><img src="many_predictors_files/figure-revealjs/keeley_pairs-1.jpeg" width="768" /></p>
+</section>
+<section id="our-model" class="slide level2">
+<h2>Our Model</h2>
+<br />
+<br />
+<span class="math display">\[Richness_i =\beta_{0}+ \beta_{1} cover_i
++\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i\]</span><br />
+<br />
+
+<div class="fragment">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>klm <span class="ot">&lt;-</span> <span class="fu">lm</span>(rich <span class="sc">~</span> cover <span class="sc">+</span> firesev <span class="sc">+</span> hetero, <span class="at">data=</span>keeley)</span></code></pre></div>
+</div>
+</section>
+<section id="testing-assumptions" class="slide level2">
+<h2>Testing Assumptions</h2>
+<ul>
+<li class="fragment">Data Generating Process: Linearity<br />
+<br />
+</li>
+<li class="fragment">Error Generating Process: Normality &amp;
+homoscedasticity of residuals<br />
+<br />
+</li>
+<li class="fragment">Data: Outliers not influencing residuals<br />
+<br />
+</li>
+<li class="fragment">Predictors: <strong>Minimal
+multicollinearity</strong></li>
+</ul>
+</section>
+<section id="did-we-match-our-data" class="slide level2">
+<h2>Did We Match our Data?</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-1-1.jpeg" width="768" /></p>
+</section>
+<section id="how-about-that-linearity" class="slide level2">
+<h2>How About That Linearity?</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-2-1.jpeg" width="768" /></p>
+</section>
+<section id="ok-normality-of-residuals" class="slide level2">
+<h2>OK, Normality of Residuals?</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-3-1.jpeg" width="768" /></p>
+</section>
+<section id="ok-normality-of-qresiduals" class="slide level2">
+<h2>OK, Normality of qResiduals?</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-4-1.jpeg" width="768" /></p>
+</section>
+<section id="no-heteroskedasticity" class="slide level2">
+<h2>No Heteroskedasticity?</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-5-1.jpeg" width="768" /></p>
+</section>
+<section id="outliers" class="slide level2">
+<h2>Outliers?</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-6-1.jpeg" width="768" /></p>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<p><img data-src="images/23/gosling_multicollinearity.jpg" /></p>
+</section>
+<section id="why-worry-about-multicollinearity" class="slide level2">
+<h2>Why Worry about Multicollinearity?</h2>
+<ul>
+<li class="fragment">Adding more predictors decreases precision of
+estimates<br />
+<br />
+</li>
+<li class="fragment">If predictors are too collinear, can lead to
+difficulty fitting model<br />
+<br />
+</li>
+<li class="fragment">If predictors are too collinear, can inflate SE of
+estimates further<br />
+<br />
+</li>
+<li class="fragment">If predictors are too collinear, are we
+<em>really</em> getting <strong>unique information</strong></li>
+</ul>
+</section>
+<section id="checking-for-multicollinearity-correlation-matrices"
+class="slide level2">
+<h2>Checking for Multicollinearity: Correlation Matrices</h2>
+<pre><code>             cover     firesev      hetero
+cover    1.0000000 -0.43713460 -0.16837784
+firesev -0.4371346  1.00000000 -0.05235518
+hetero  -0.1683778 -0.05235518  1.00000000</code></pre>
+<div style="text-align:left">
+<p>Correlations over 0.4 can be problematic, but, meh, they may be OK
+even as high as 0.8.<br />
+</p>
+</div>
+</section>
+<section id="checking-for-multicollinearity-variance-inflation-factor"
+class="slide level2">
+<h2>Checking for Multicollinearity: Variance Inflation Factor</h2>
+<ul>
+<li class="fragment">Consider <span class="math inline">\(y = \beta_{0}
++ \beta_{1}x_{1} + \beta_{2}x_{2} + \epsilon\)</span><br />
+<br />
+</li>
+<li class="fragment">And <span class="math inline">\(X_{1} = \alpha_{0}
++ \alpha_{2}x_{2} + \epsilon_j\)</span><br />
+<br />
+</li>
+<li class="fragment"><span class="math inline">\(var(\beta_{1}) =
+\frac{\sigma^2}{(n-1)\sigma^2_{X_1}}\frac{1}{1-R^{2}_1}\)</span><br />
+<br />
+<span class="fragment"><span class="math display">\[VIF =
+\frac{1}{1-R^2_{1}}\]</span> </span></li>
+</ul>
+</section>
+<section id="checking-for-multicollinearity-variance-inflation-factor-1"
+class="slide level2">
+<h2>Checking for Multicollinearity: Variance Inflation Factor</h2>
+<p><span class="math display">\[VIF_1 = \frac{1}{1-R^2_{1}}\]</span></p>
+<p><img src="many_predictors_files/figure-revealjs/klm_vif-1.jpeg" width="768" /></p>
+<div style="text-align:left">
+VIF <span class="math inline">\(&gt;\)</span> 5 or 10 can be problematic
+and indicate an unstable solution.
+</div>
+</section>
+<section id="what-do-we-do-with-high-collinearity" class="slide level2">
+<h2>What Do We Do with High Collinearity?</h2>
+<ul>
+<li class="fragment">Cry.<br />
+<br />
+</li>
+<li class="fragment">Evaluate <strong>why</strong><br />
+ </li>
+<li class="fragment">Can drop a predictor if information is
+redundant<br />
+<br />
+</li>
+<li class="fragment">Can combine predictors into an index
+<ul>
+<li class="fragment">Add them? Or other combination.<br />
+</li>
+<li class="fragment">PCA for orthogonal axes<br />
+</li>
+<li class="fragment">Factor analysis to compress into one variable</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-does-it-all-mean-the-coefficients"
+class="slide level2">
+<h2>What does it all mean: the coefficients</h2>
+<span class="math display">\[Richness_i =\beta_{0}+ \beta_{1} cover_i
++\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i\]</span>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1.68
+</td>
+<td style="text-align:right;">
+10.67
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cover
+</td>
+<td style="text-align:right;">
+15.56
+</td>
+<td style="text-align:right;">
+4.49
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+firesev
+</td>
+<td style="text-align:right;">
+-1.82
+</td>
+<td style="text-align:right;">
+0.85
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hetero
+</td>
+<td style="text-align:right;">
+65.99
+</td>
+<td style="text-align:right;">
+11.17
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="fragment"><span class="math inline">\(\beta_0\)</span> - the
+intercept - is the # of species when <strong>all other predictors are
+0</strong>
+<ul>
+<li class="fragment">Note the very large SE</li>
+</ul></li>
+</ul>
+<ul>
+<li class="fragment">All other <span
+class="math inline">\(\beta\)</span>s are the effect of a 1 unit
+increase on # of species
+<ul>
+<li class="fragment">They are <strong>not</strong> on the same
+scale</li>
+<li class="fragment">They are each in the scale of species per unit of
+individual x</li>
+</ul></li>
+</ul>
+</section>
+<section id="how-much-variation-is-associated-with-the-predictors"
+class="slide level2">
+<h2>How Much Variation is Associated with the Predictors</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.41
+</td>
+<td style="text-align:right;">
+0.39
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>41% of the varition in # of species is associated with the
+predictors<br />
+<br />
+</li>
+<li>Note that this is <strong>all model</strong>, not individual
+predictors</li>
+</ul>
+</section>
+<section id="comparing-coefficients-on-the-same-scale"
+class="slide level2">
+<h2>Comparing Coefficients on the Same Scale</h2>
+<p><span class="math display">\[r_{xy} =
+b_{xy}\frac{sd_{x}}{sd_{y}}\]</span></p>
+<pre><code># Standardization method: basic
+
+Parameter   | Std. Coef. |         95% CI
+-----------------------------------------
+(Intercept) |       0.00 | [ 0.00,  0.00]
+cover       |       0.33 | [ 0.14,  0.51]
+firesev     |      -0.20 | [-0.38, -0.01]
+hetero      |       0.50 | [ 0.33,  0.67]</code></pre>
+<ul>
+<li>For linear model, makes intuitive sense to compare strength<br />
+<br />
+</li>
+<li>Note, this is Pearson’s correlation, so, it’s in units of <span
+class="math inline">\(sd_y/sd_x\)</span></li>
+</ul>
+</section>
+<section id="so-uh-how-do-we-visualize-this" class="slide level2">
+<h2>So, Uh, How Do We Visualize This?</h2>
+<p><img src="many_predictors_files/figure-revealjs/klm_see_effects-1.jpeg" width="768" /></p>
+</section>
+<section id="visualization-strategies-for-multivariate-models"
+class="slide level2">
+<h2>Visualization Strategies for Multivariate Models</h2>
+<ul>
+<li>Plot the effect of each variable holding the other variables
+constant
+<ul>
+<li>Mean, Median, 0</li>
+<li>Or your choice!<br />
+<br />
+</li>
+</ul></li>
+<li>Plot <strong>counterfactual scenarios</strong> from model
+<ul>
+<li>Can match data (and be shown as such)</li>
+<li>Can be exploring the response surface</li>
+</ul></li>
+</ul>
+</section>
+<section
+id="added-variable-plot-to-show-unique-contributions-when-holding-others-at-0"
+class="slide level2">
+<h2>Added Variable Plot to Show Unique Contributions when Holding Others
+at 0</h2>
+<p><img src="many_predictors_files/figure-revealjs/klm_avplot-1.jpeg" width="768" /></p>
+</section>
+<section id="plots-at-median-of-other-variables" class="slide level2">
+<h2>Plots at Median of Other Variables</h2>
+<p><img src="many_predictors_files/figure-revealjs/klm_visreg-1.jpeg" width="960" /></p>
+</section>
+<section id="counterfactual-predictions-overlaid-on-data"
+class="slide level2">
+<h2>Counterfactual Predictions Overlaid on Data</h2>
+<p><img src="many_predictors_files/figure-revealjs/crazy-1.jpeg" width="768" /></p>
+</section>
+<section id="counterfactual-surfaces-at-means-of-other-variables"
+class="slide level2">
+<h2>Counterfactual Surfaces at Means of Other Variables</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-8-1.jpeg" width="768" /></p>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p><br />
+<br />
+<img data-src="images/23/matrix_regression.jpg" /></p>
+<p>This is an incredibly powerful technique at teasing apart different
+correlated influences!</p>
+</section>
+<section id="many-additive-predictors-1" class="slide level2">
+<h2>Many Additive Predictors</h2>
+<ol type="1">
+<li><p>Multiple Linear Regression</p></li>
+<li><p><font color = "red">Many Categories with Many
+Levels</font></p></li>
+<li><p>Combining Categorical and Continuous Predictors</p></li>
+</ol>
+</section>
+<section id="weve-now-done-multiple-continuous-predictors"
+class="slide level2">
+<h2>We’ve Now Done Multiple Continuous Predictors</h2>
+<p><span class="math display">\[y_{i} = \beta_{0} + \sum \beta_{j}x_{ij}
++ \epsilon_{i}\]</span><br />
+<span class="math display">\[\epsilon_{i} \sim \mathcal{N}(0,
+\sigma)\]</span></p>
+</section>
+<section
+id="weve-previously-done-one-categorical-variable-with-many-levels"
+class="slide level2">
+<h2>We’ve Previously Done One Categorical Variable with Many Levels</h2>
+<p><span class="math display">\[y_{ij} = \beta_{0} + \sum
+\beta_{j}x_{ij} + \epsilon_{ij}\]</span><br />
+<span class="math display">\[\epsilon_{ij} \sim \mathcal{N}(0, \sigma),
+\qquad x_{i} = 0,1\]</span></p>
+<blockquote>
+<p>(hey, wait, isn’t that kinda the same model…. but where you can only
+belong to one level of one category?)</p>
+</blockquote>
+</section>
+<section id="now-two-categories-each-with-many-levels-as-predictors"
+class="slide level2">
+<h2>Now… Two Categories, Each with Many Levels, as Predictors</h2>
+<p><br />
+<span class="math display">\[y_{ijk} = \beta_{0} + \sum \beta_{i}x_{ik}
++ \sum \beta_{j}x_{jk} + \epsilon_{ijk}\]</span><br />
+<br />
+<span class="math display">\[\epsilon_{ijk} \sim N(0, \sigma^{2} ),
+\qquad x_{\_k} = 0,1\]</span><br />
+</p>
+<ul>
+<li>This model is similar to MLR, but, now we multiple categories
+instead of multiple continuous predictors<br />
+<br />
+</li>
+<li>This can be extended to as many categories as we want with linear
+algebra<br />
+<br />
+<span class="math display">\[Y = \beta X + \epsilon\]</span></li>
+</ul>
+</section>
+<section id="multiple-predictors-a-graphical-view" class="slide level2">
+<h2>Multiple Predictors: A Graphical View</h2>
+<p><img data-src="images/23/regression2.png" style="width:60.0%"
+alt="image" /></p>
+<div style="text-align:left">
+<p>Curved double-headed arrow indicates COVARIANCE between predictors
+that we account for.<br />
+<br />
+We estimate the effect of each predictor <strong>controlling</strong>
+for all others.<br />
+<br />
+</p>
+</div>
+</section>
+<section
+id="we-commonly-encounter-multiple-predictors-in-randomized-controlled-blocked-designs"
+class="slide level2">
+<h2>We Commonly Encounter Multiple Predictors in Randomized Controlled
+Blocked Designs</h2>
+<p><img data-src="images/21/blocked_designs/Slide4.jpg"
+style="width:70.0%" alt="image" /></p>
+</section>
+<section id="an-experiment-with-orthogonal-treatments-a-graphical-view"
+class="slide level2">
+<h2>An Experiment with Orthogonal Treatments: A Graphical View</h2>
+<p><img data-src="images/23/anova.png" style="width:60.0%"
+alt="image" /></p>
+<ul>
+<li>This is convenient for estimation<br />
+<br />
+</li>
+<li>Observational data is not always so nice, which is OK!</li>
+</ul>
+</section>
+<section id="effects-of-stickleback-density-on-zooplankton"
+class="slide level2">
+<h2>Effects of Stickleback Density on Zooplankton</h2>
+<p><br><br> <img data-src="images/21/daphnia.jpeg" style="width:40.0%"
+alt="image" /> <img data-src="images/21/threespine_stickleback.jpeg"
+style="width:50.0%" alt="image" /></p>
+<p>Units placed across a lake so that 1 set of each treatment was
+’blocked’ together</p>
+</section>
+<section id="treatment-and-block-effects" class="slide level2">
+<h2>Treatment and Block Effects</h2>
+<p><img src="many_predictors_files/figure-revealjs/zooplankton_boxplot-1.jpeg" width="768" /></p>
+</section>
+<section id="multiway-cateogircal-model" class="slide level2">
+<h2>Multiway Cateogircal Model</h2>
+<ul>
+<li class="fragment">Many different treatment types
+<ul>
+<li class="fragment">2-Way is for Treatment and block</li>
+<li class="fragment">3-Way for, e.g., Sticklebacks, Nutrients, and
+block</li>
+<li class="fragment">4-way, etc., all possible<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">For experiments, we assume treatments are fully
+orthogonal<br />
+- Each type of treatment type A has all levels of treatment type B -
+E.g., Each stickleback treatment is present in each block<br />
+<br />
+</li>
+<li class="fragment">Experiment is <strong>balanced</strong> for
+<strong>simple effects</strong>
+<ul>
+<li class="fragment">Simple effect is the unique combination of two or
+more treatments<br />
+</li>
+<li class="fragment">Balance implies the sample size for each treatment
+combination is the same</li>
+<li class="fragment">But, hey, this is more for inference, rather than
+<strong>estimation</strong></li>
+</ul></li>
+</ul>
+</section>
+<section id="fitting-a-model-with-mutiple-categorical-predictors"
+class="slide level2">
+<h2>Fitting a Model with Mutiple Categorical Predictors</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>zoop_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(zooplankton <span class="sc">~</span> treatment <span class="sc">+</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                block, <span class="at">data=</span>zoop)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>zoop_lm</span></code></pre></div>
+<pre><code>
+Call:
+lm(formula = zooplankton ~ treatment + block, data = zoop)
+
+Coefficients:
+  (Intercept)  treatmenthigh   treatmentlow         block2         block3  
+    3.420e+00     -1.640e+00     -1.020e+00      1.039e-15     -7.000e-01  
+       block4         block5  
+   -1.000e+00     -3.000e-01  </code></pre>
+<blockquote>
+<p>Note the treatment contrasts!</p>
+</blockquote>
+</section>
+<section id="assumptions-of-categorical-models-with-many-categories"
+class="slide level2">
+<h2>Assumptions of Categorical Models with Many Categories</h2>
+<ul>
+<li><p>Independence of data points</p></li>
+<li><p>Normality within groups (of residuals)</p></li>
+<li><p>No relationship between fitted and residual values</p></li>
+<li><p>Homoscedasticity (homogeneity of variance) of groups</p></li>
+<li><p>No <em>collinearity</em> between treatments</p></li>
+<li><p><font color = "red">Additivity of Treatments</font></p></li>
+</ul>
+</section>
+<section id="the-usual-on-predictions" class="slide level2">
+<h2>The Usual on Predictions</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-10-1.jpeg" width="768" /></p>
+</section>
+<section id="linearity-and-additivity" class="slide level2">
+<h2>Linearity (and additivity!)</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-11-1.jpeg" width="768" /></p>
+</section>
+<section id="what-is-non-additivity" class="slide level2">
+<h2>What is Non-Additivity?</h2>
+<p>The effect of category depends on another</p>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-12-1.jpeg" width="768" /></p>
+</section>
+<section id="non-additivity-is-parabolic" class="slide level2">
+<h2>Non-Additivity is Parabolic</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-13-1.jpeg" width="768" /></p>
+</section>
+<section id="normality" class="slide level2">
+<h2>Normality!</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-14-1.jpeg" width="768" /></p>
+</section>
+<section id="hov" class="slide level2">
+<h2>HOV!</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-15-1.jpeg" width="768" /></p>
+</section>
+<section id="collinearity" class="slide level2">
+<h2>Collinearity!</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-16-1.jpeg" width="768" /></p>
+<ul>
+<li>by definition, not a problem in an experiment</li>
+</ul>
+</section>
+<section id="how-do-we-understand-the-modeled-results"
+class="slide level2">
+<h2>How do We Understand the Modeled Results?</h2>
+<ul>
+<li><p>Coefficients (but treatment contrasts)</p></li>
+<li><p>Expected means of levels of each category</p>
+<ul>
+<li>Average over other categories</li>
+</ul></li>
+<li><p>Differences between levels of each category</p></li>
+</ul>
+</section>
+<section id="coefficients-and-treatment-contrasts" class="slide level2">
+<h2>Coefficients and Treatment Contrasts</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+3.42
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+treatmenthigh
+</td>
+<td style="text-align:right;">
+-1.64
+</td>
+<td style="text-align:right;">
+0.29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+treatmentlow
+</td>
+<td style="text-align:right;">
+-1.02
+</td>
+<td style="text-align:right;">
+0.29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+block2
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.37
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+block3
+</td>
+<td style="text-align:right;">
+-0.70
+</td>
+<td style="text-align:right;">
+0.37
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+block4
+</td>
+<td style="text-align:right;">
+-1.00
+</td>
+<td style="text-align:right;">
+0.37
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+block5
+</td>
+<td style="text-align:right;">
+-0.30
+</td>
+<td style="text-align:right;">
+0.37
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Intercept is block 1, treatment control<br />
+<br />
+</li>
+<li>Other coefs are all deviation from control in block 1</li>
+</ul>
+</section>
+<section id="means-averaging-over-other-category" class="slide level2">
+<h2>Means Averaging Over Other Category</h2>
+<pre><code> treatment emmean    SE df lower.CL upper.CL
+ control     3.02 0.205  8    2.548     3.49
+ high        1.38 0.205  8    0.908     1.85
+ low         2.00 0.205  8    1.528     2.47
+
+Results are averaged over the levels of: block 
+Confidence level used: 0.95 </code></pre>
+<pre><code> block emmean    SE df lower.CL upper.CL
+ 1       2.53 0.264  8    1.924     3.14
+ 2       2.53 0.264  8    1.924     3.14
+ 3       1.83 0.264  8    1.224     2.44
+ 4       1.53 0.264  8    0.924     2.14
+ 5       2.23 0.264  8    1.624     2.84
+
+Results are averaged over the levels of: treatment 
+Confidence level used: 0.95 </code></pre>
+</section>
+<section id="can-then-visualize-the-expected-means"
+class="slide level2">
+<h2>Can then visualize the Expected Means</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-18-1.jpeg" width="768" /></p>
+</section>
+<section id="and-look-at-differences" class="slide level2">
+<h2>And Look at Differences</h2>
+<pre><code> contrast       estimate    SE df lower.CL upper.CL
+ control - high     1.64 0.289  8    0.972   2.3075
+ control - low      1.02 0.289  8    0.352   1.6875
+ high - low        -0.62 0.289  8   -1.288   0.0475
+
+Results are averaged over the levels of: block 
+Confidence level used: 0.95 </code></pre>
+</section>
+<section id="its-all-one" class="slide level2">
+<h2>It’s All One</h2>
+<p><strong>The Linear Model</strong> <span
+class="math display">\[\boldsymbol{Y} = \boldsymbol{b X} +
+\boldsymbol{\epsilon}\]</span></p>
+<p><strong>Multiple Continuous Predictors</strong> <span
+class="math display">\[y_{i} = \beta_{0} + \sum \beta_{j}x_{ij} +
+\epsilon_{i}\]</span></p>
+<p><strong>Many Categorical Predictors</strong> <span
+class="math display">\[y_{ijk} = \beta_{0} + \sum \beta_{i}x_{ik} + \sum
+\beta_{j}x_{jk} + \epsilon_{ijk}\]</span></p>
+</section>
+<section id="many-additive-predictors-2" class="slide level2">
+<h2>Many Additive Predictors</h2>
+<ol type="1">
+<li><p>Multiple Linear Regression</p></li>
+<li><p>Many Categories with Many Levels</p></li>
+<li><p><font color = "red">Combining Categorical and Continuous
+Predictors</font></p></li>
+</ol>
+</section>
+<section
+id="mixing-continuous-and-categorical-predictors-analysis-of-covariance"
+class="slide level2">
+<h2>Mixing Continuous and Categorical Predictors: Analysis of
+Covariance</h2>
+<p><span class="math display">\[y_{ij} = \beta_0   + \sum\beta_j x_{ij}
++ \beta_{j+1}x_{i} + \epsilon_{ij}\]</span></p>
+<p><span class="math display">\[ x_{ij} = 0,1 \qquad \epsilon \sim
+\mathcal{N}(0,\sigma)\]</span></p>
+<ul>
+<li>Categorical Variable + a continuous predictor<br />
+<br />
+</li>
+<li>Often used to correct for a gradient or some continuous variable
+affecting outcome<br />
+<br />
+</li>
+<li>OR used to correct a regression due to additional groups that may
+throw off slope estimates<br />
+
+<ul>
+<li>e.g. Simpson’s Paradox: A positive relationship between test scores
+and academic performance can be masked by gender differences</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-is-simpsons-paradox-penguin-example"
+class="slide level2">
+<h2>What is Simpson’s Paradox: Penguin Example</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-20-1.jpeg" width="768" /></p>
+</section>
+<section id="what-is-simpsons-paradox-penguin-example-1"
+class="slide level2">
+<h2>What is Simpson’s Paradox: Penguin Example</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-21-1.jpeg" width="768" /></p>
+<blockquote>
+<p>Note: This can happen with just continuous variables as well</p>
+</blockquote>
+</section>
+<section id="neanderthals-and-categoricalcontinuous-variables"
+class="slide level2">
+<h2>Neanderthals and Categorical/Continuous Variables</h2>
+<p><img data-src="images/23/neanlooking.jpeg" style="width:60.0%"
+alt="image" /></p>
+<p>Who had a bigger brain: Neanderthals or us?</p>
+</section>
+<section id="the-means-look-the-same" class="slide level2">
+<h2>The Means Look the Same…</h2>
+<p><img src="many_predictors_files/figure-revealjs/neand_boxplot-1.jpeg" width="768" /></p>
+</section>
+<section
+id="but-there-appears-to-be-a-relationship-between-body-and-brain-mass"
+class="slide level2">
+<h2>But there appears to be a Relationship Between Body and Brain
+Mass</h2>
+<p><img src="many_predictors_files/figure-revealjs/neand_plot-1.jpeg" width="768" /></p>
+</section>
+<section id="and-mean-body-mass-is-different" class="slide level2">
+<h2>And Mean Body Mass is Different</h2>
+<p><img src="many_predictors_files/figure-revealjs/neand_boxplot2-1.jpeg" width="768" /></p>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<p><br />
+<br />
+<img data-src="images/23/redo_analysis.jpg" /></p>
+</section>
+<section id="categorical-model-with-a-continuous-covariate-for-control"
+class="slide level2">
+<h2>Categorical Model with a Continuous Covariate for Control</h2>
+<p><img src="many_predictors_files/figure-revealjs/neand_plot_fit-1.jpeg" width="672" /></p>
+<p>Evaluate a categorical effect(s), controlling for a
+<em>covariate</em> (parallel lines)<br />
+</p>
+<p>Groups modify the <em>intercept</em>.</p>
+</section>
+<section id="assumptions-are-the-same" class="slide level2">
+<h2>Assumptions are the Same!</h2>
+<ul>
+<li><p>Independence of data points</p></li>
+<li><p>Normality and homoscedacticity within groups (of
+residuals)</p></li>
+<li><p>No relationship between fitted and residual values</p></li>
+<li><p>Additivity of Treatment and Covariate (Parallel Slopes)</p></li>
+</ul>
+</section>
+<section id="linearity-assumption-key" class="slide level2">
+<h2>Linearity Assumption KEY</h2>
+<p><img src="many_predictors_files/figure-revealjs/zoop_assumptions-1.jpeg" width="768" /></p>
+</section>
+<section id="test-for-parallel-slopes" class="slide level2">
+<h2>Test for Parallel Slopes</h2>
+We test a model where <span class="math display">\[y_{ijk} = \beta_0 +
+\beta_{1}x_1  + \sum_{j}^{i=1}\beta_j x_{ij} +
+\sum_{j}^{i=1}\beta_{k}x_1 x_{ij} + \epsilon_ijk\]</span>
+<div class="fragment">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+4.2534953
+</td>
+<td style="text-align:right;">
+0.9768911
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+speciesrecent
+</td>
+<td style="text-align:right;">
+1.1809274
+</td>
+<td style="text-align:right;">
+1.0623095
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lnmass
+</td>
+<td style="text-align:right;">
+0.7135471
+</td>
+<td style="text-align:right;">
+0.2270081
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+speciesrecent:lnmass
+</td>
+<td style="text-align:right;">
+-0.2594885
+</td>
+<td style="text-align:right;">
+0.2481073
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<br />
+
+<div class="fragment">
+If you have an interaction, welp, that’s a different model - slopes vary
+by group!
+</div>
+</section>
+<section id="vif-also-very-important" class="slide level2">
+<h2>VIF Also <em>Very</em> Important</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-22-1.jpeg" width="768" /></p>
+</section>
+<section id="usual-normality-assumption" class="slide level2">
+<h2>Usual Normality Assumption</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-23-1.jpeg" width="768" /></p>
+</section>
+<section id="usual-hov-assumption" class="slide level2">
+<h2>Usual HOV Assumption</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-24-1.jpeg" width="768" /></p>
+</section>
+<section id="usual-outlier-assumption" class="slide level2">
+<h2>Usual Outlier Assumption</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-25-1.jpeg" width="768" /></p>
+</section>
+<section id="the-results" class="slide level2">
+<h2>The Results</h2>
+<ul>
+<li>We can look at coefficients<br />
+<br />
+</li>
+<li>We can look at means adjusted for covariate<br />
+<br />
+</li>
+<li>Visualize! Visualize! Visualize!</li>
+</ul>
+</section>
+<section id="those-coefs" class="slide level2">
+<h2>Those Coefs</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+5.19
+</td>
+<td style="text-align:right;">
+0.40
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+speciesrecent
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lnmass
+</td>
+<td style="text-align:right;">
+0.50
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Intercept is species = neanderthal, but lnmass = 0?<br />
+<br />
+</li>
+<li>Categorical coefficient is defiation from intercept for recent<br />
+<br />
+</li>
+<li>lnmass coefficient is change in ln brain mass per change in 1 unit
+of ln mass</li>
+</ul>
+</section>
+<section id="groups-means-at-mean-of-covariate" class="slide level2">
+<h2>Groups Means at Mean of Covariate</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+species
+</th>
+<th style="text-align:right;">
+emmean
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+lower.CL
+</th>
+<th style="text-align:right;">
+upper.CL
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+neanderthal
+</td>
+<td style="text-align:right;">
+7.272
+</td>
+<td style="text-align:right;">
+0.024
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+7.223
+</td>
+<td style="text-align:right;">
+7.321
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+recent
+</td>
+<td style="text-align:right;">
+7.342
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+7.317
+</td>
+<td style="text-align:right;">
+7.367
+</td>
+</tr>
+</tbody>
+</table>
+<p>Can also evaluate for other levels of the covariate as is
+interesting</p>
+</section>
+<section id="difference-between-groups-at-mean-of-covariate"
+class="slide level2">
+<h2>Difference Between Groups at Mean of Covariate</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+contrast
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+lower.CL
+</th>
+<th style="text-align:right;">
+upper.CL
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+neanderthal - recent
+</td>
+<td style="text-align:right;">
+-0.07
+</td>
+<td style="text-align:right;">
+0.028
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+-0.128
+</td>
+<td style="text-align:right;">
+-0.013
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="vsualizing-result-says-it-all" class="slide level2">
+<h2>Vsualizing Result Says it All!</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-27-1.jpeg" width="768" /></p>
+</section>
+<section id="or-plot-at-the-mean-level-of-the-covariate"
+class="slide level2">
+<h2>Or Plot at the Mean Level of the Covariate</h2>
+<p><img src="many_predictors_files/figure-revealjs/unnamed-chunk-28-1.jpeg" width="768" /></p>
+</section>
+<section id="extensions-of-the-linear-additive-model"
+class="slide level2">
+<h2>Extensions of the Linear Additive Model</h2>
+<ul>
+<li>Wow, we sure can fit a lot in there!<br />
+</li>
+<li>Categorical is just continuous as 0/1<br />
+<br />
+</li>
+<li>So, we can build a LOT of models, limited only by our
+imagination!</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
