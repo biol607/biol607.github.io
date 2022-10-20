@@ -16,11 +16,9 @@
 
 
 class: center, middle
-background-image: url(./images/21/blocked_designs/Slide4.jpg)
-background-size:cover
 
-# Many Types of Categories: Multi-Way and Factorial ANOVA
-
+# Many Types of Predictors
+![](./images/many_predictors/stop-using-linear-regression.jpg)
 
 
 
@@ -59,14 +57,20 @@ https://etherpad.wikimedia.org/p/607-many-predictors-2022
 `$$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{ik} + \sum \beta_{j}x_{jk} + \epsilon_{ijk}$$`  
   
 `$$\large \epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{\_k} = 0,1$$` 
+
 --
 
 - This model is similar to MLR, but, now we multiple categories instead of multiple continuous predictors  
  
--- 
+--
+
 - This can be extended to as many categories as we want with linear algebra  
   
 `$$Y = \beta X + \epsilon$$`
+---
+class: center, middle
+
+![:scale 50%](./images/many_predictors/reliable_linear_model_spongebob.png)
 
 ---
 # Multiple Predictors: A Graphical View
@@ -155,16 +159,16 @@ Coefficients:
 ---
 # Assumptions of Categorical Models with Many Categories
 -   Independence of data points  
+
+-   No relationship between fitted and residual values  
+     -   .red[Additivity (linearity) of Treatments]
   
 -   Normality within groups (of residuals)  
-  
--   No relationship between fitted and residual values  
   
 -   Homoscedasticity (homogeneity of variance) of groups  
   
 - No *collinearity* between treatments
   
--   .red[Additivity of Treatments]
 
 ---
 # The Usual on Predictions
@@ -184,6 +188,9 @@ The effect of category depends on another - e.g. this grazing experiment
 # Non-Additivity is Parabolic
 
 &lt;img src="many_types_of_predictors_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+![](images/many_predictors/bad_model.jpg)
 
 ---
 # Normality!
@@ -353,9 +360,15 @@ $$ x_{ij} = 0,1 \qquad \epsilon \sim \mathcal{N}(0,\sigma)$$
       - e.g. Simpson's Paradox: A positive relationship between test scores and academic performance can be masked by gender differences
 
 ---
+# Simpson's Paradox
+![](./images/many_predictors/simpsons_paradox.jpg)
+
+
+---
 # What is Simpson's Paradox: Penguin Example
 
 &lt;img src="many_types_of_predictors_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
 
 ---
 # What is Simpson's Paradox: Penguin Example
@@ -410,13 +423,15 @@ Groups modify the *intercept*.
 
 ---
 # Assumptions are the Same!
+  
 -   Independence of data points
-
--   Normality and homoscedacticity within groups (of residuals)
-
--   No relationship between fitted and residual values
-
--   Additivity of Treatment and Covariate (Parallel Slopes)
+  
+-   Additivity of Treatment and Covariate (Parallel Slopes)  
+  
+-   Normality and homoscedacticity within groups (of residuals)  
+  
+-   No relationship between fitted and residual values  
+  
 
 ---
 # Linearity Assumption KEY
@@ -561,6 +576,10 @@ If you have an interaction, welp, that's a different model - slopes vary by grou
 &lt;/table&gt;
 
 Can also evaluate for other levels of the covariate as is interesting
+
+---
+# We Can Compare Groups Adjusting for Covariates
+.center[ ![](./images/many_predictors/bonferroni_meme.jpg) ]
 
 ---
 # Difference Between Groups at Mean of Covariate
