@@ -13,11 +13,9 @@ output:
 ---
 
 class: center, middle
-background-image: url(./images/21/blocked_designs/Slide4.jpg)
-background-size:cover
 
-# Many Types of Categories: Multi-Way and Factorial ANOVA
-
+# Many Types of Predictors
+![](./images/many_predictors/stop-using-linear-regression.jpg)
 
 ```{r setup, include=FALSE}
 library(knitr)
@@ -85,14 +83,20 @@ $$\large \epsilon_{ij} \sim \mathcal{N}(0, \sigma), \qquad x_{i} = 0,1$$
 $$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{ik} + \sum \beta_{j}x_{jk} + \epsilon_{ijk}$$  
   
 $$\large \epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad x_{\_k} = 0,1$$ 
+
 --
 
 - This model is similar to MLR, but, now we multiple categories instead of multiple continuous predictors  
  
--- 
+--
+
 - This can be extended to as many categories as we want with linear algebra  
   
 $$Y = \beta X + \epsilon$$
+---
+class: center, middle
+
+![:scale 50%](./images/many_predictors/reliable_linear_model_spongebob.png)
 
 ---
 # Multiple Predictors: A Graphical View
@@ -181,16 +185,16 @@ zoop_lm
 ---
 # Assumptions of Categorical Models with Many Categories
 -   Independence of data points  
+
+-   No relationship between fitted and residual values  
+     -   .red[Additivity (linearity) of Treatments]
   
 -   Normality within groups (of residuals)  
-  
--   No relationship between fitted and residual values  
   
 -   Homoscedasticity (homogeneity of variance) of groups  
   
 - No *collinearity* between treatments
   
--   .red[Additivity of Treatments]
 
 ---
 # The Usual on Predictions
@@ -223,6 +227,9 @@ algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
 graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
 check_model(graze_linear, check = "linearity") |> plot()
 ```
+
+---
+![](images/many_predictors/bad_model.jpg)
 
 ---
 # Normality!
@@ -351,6 +358,11 @@ $$ x_{ij} = 0,1 \qquad \epsilon \sim \mathcal{N}(0,\sigma)$$
       - e.g. Simpson's Paradox: A positive relationship between test scores and academic performance can be masked by gender differences
 
 ---
+# Simpson's Paradox
+![](./images/many_predictors/simpsons_paradox.jpg)
+
+
+---
 # What is Simpson's Paradox: Penguin Example
 
 ```{r}
@@ -362,11 +374,11 @@ ggplot(penguins,
   stat_smooth(method = "lm")
 ```
 
+
 ---
 # What is Simpson's Paradox: Penguin Example
 
 ```{r}
-library(palmerpenguins)
 
 ggplot(penguins,
        aes(x = bill_length_mm, y = bill_depth_mm,
@@ -451,13 +463,15 @@ Groups modify the *intercept*.
 
 ---
 # Assumptions are the Same!
+  
 -   Independence of data points
-
--   Normality and homoscedacticity within groups (of residuals)
-
--   No relationship between fitted and residual values
-
--   Additivity of Treatment and Covariate (Parallel Slopes)
+  
+-   Additivity of Treatment and Covariate (Parallel Slopes)  
+  
+-   Normality and homoscedacticity within groups (of residuals)  
+  
+-   No relationship between fitted and residual values  
+  
 
 ---
 # Linearity Assumption KEY
@@ -545,6 +559,10 @@ emmeans(neand_lm, ~species) %>%
 ```
 
 Can also evaluate for other levels of the covariate as is interesting
+
+---
+# We Can Compare Groups Adjusting for Covariates
+.center[ ![](./images/many_predictors/bonferroni_meme.jpg) ]
 
 ---
 # Difference Between Groups at Mean of Covariate
