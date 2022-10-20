@@ -12,6 +12,11 @@ execute:
   message: false
 ---
 
+<!-- describe data more 
+re-write some questions - confusing - 4c for example
+4d - a lot of people didn't group by year, site, transect, AND species
+-->
+
 Since 2014, a group of us in New England have been surveying kelp forests from Rhode Island to Maine. There's a LOT of data from several protocols. Let's muck about with the percent cover data to learn about the sampling program and a bit about kelp forests here in New England.
 ```{r}
 #| echo: false
