@@ -1,0 +1,500 @@
+---
+title: "Many Types of Predictors in Linear Models"
+author: "Biol607"
+format:
+  html:
+    toc: true
+---
+
+## 1. Multiple Linear Regression
+
+Multiple linear regression is conceptually very similar to ANCOVA. Let's use the keeley fire severity plant richness data to see it in action.
+
+```{r keeley}
+keeley <- read.csv("./data/Keeley_rawdata_select4.csv")
+
+head(keeley)
+```
+
+For our purposes, we'll focus on fire severity and plant cover as predictors.
+
+### 1.1 Visualizing
+I'm not going to lie, visualizing multiple continuous variables is as much of an art as a science. One can use colors and sizes of points, or slice up the data into chunks and facet that. Here are a few examples.
+
+```{r plot_keeley}
+library(ggplot2)
+
+ggplot(data = keeley,
+       aes(x = cover, y = rich, color=firesev)) +
+  geom_point() +
+  scale_color_gradient(low="yellow", high="red") +
+  theme_bw() +
+  facet_wrap(vars(cut_number(firesev, 4)))
+```
+
+We can also look at everything!
+
+```{r plot_pairs}
+pairs(keeley)
+```
+
+What other plots can you make?
+
+### 1.2 Fit and Evaluate Assumptions
+Fitting is straightforward for an additive MLR model. It's just a linear model!
+
+```{r k_fit}
+keeley_mlr <- lm(rich ~ firesev + cover, data=keeley)
+```
+
+As for assumptions, we have the usual
+
+```{r k_assume}
+library(performance)
+check_model(keeley_mlr)
+```
+
+But now we also need to think about how the residuals relate to each predictor. Fortunately, there's still `residualPlots()` in `car`.
+
+```{r k_resid}
+library(car)
+residualPlots(keeley_mlr, test=FALSE)
+```
+
+Odd bow shape - but not too bad. Maybe there's an interaction? Maybe we want to log transform something? Who knows!
+
+We also want to look at multicollinearity. There are two steps for that. First, the `vif`
+
+```{r vif}
+check_collinearity(keeley_mlr) |> plot()
+```
+
+Not bad. We might also want to look at the correlation matrix. `dplyr` can help us here as we want to select down to just relevant columns.
+
+```{r k_cor, message=FALSE}
+library(dplyr)
+
+keeley |>
+  dplyr::select(firesev, cover) |>
+  cor()
+```
+
+Also, not too bad! Well within our range of tolerances.
+
+
+### 1.3 Evaluation
+
+What about those coefficients?
+
+```{r k_eval}
+library(broom)
+tidy(keeley_mlr)
+```
+
+And then the R<sup>2</sup>
+
+```{r k_coef}
+r2(keeley_mlr)
+```
+
+Not amazing fit, but, the coefficients are clearly different from 0.
+
+### 1.4 Visualization
+
+This is where things get sticky. We have two main approaches. First, visualizing with component + residual plots
+
+```{r cr_k}
+crPlots(keeley_mlr, smooth=FALSE)
+```
+
+But the values on the y axis are....odd. We get a sense of what's going on and the scatter after accounting for our predictor of interest, but we might want to look at, say, evaluation of a variable at the mean of the other.
+
+For that, we have `visreg`
+
+```{r k_visreg, message=FALSE}
+library(visreg)
+par(mfrow=c(1,2))
+visreg(keeley_mlr)
+par(mfrow=c(1,1))
+```
+
+Now the axes make far more sense, and we have a sense of the relationship.
+
+We can actually whip this up on our own using `crossing`, the median of each value, and predict.
+
+```{r k_pred}
+k_med_firesev <- data.frame(firesev = median(keeley$firesev),
+                                 cover = seq(0,1.5, length.out = 100))
+
+k_med_firesev <- augment(keeley_mlr, newdata = k_med_firesev, 
+                         interval = "confidence") 
+  
+  
+ggplot() +
+  geom_point(data=keeley, 
+             mapping = aes(x=cover, y = rich)) +
+  geom_line(data = k_med_firesev, 
+            mapping=aes(x=cover, y=.fitted), 
+            color="blue") +
+  geom_ribbon(data = k_med_firesev, mapping = aes(x=cover, 
+                                                  ymin = .lower,
+                                                  ymax = .upper),
+              fill="lightgrey", alpha=0.5)
+```
+
+Or, we can use `modelr` to explore the model and combine that exploration with the data. Let's get the curve for cover at four levels of fire severity. We'll use both `modelr::data_grid` and `modelr::add_predictions` for a nice easy workflow.
+
+```{r, message=FALSE}
+library(modelr)
+
+k_firesev_explore <- data_grid(keeley,
+                               cover = seq_range(cover, 100),
+                               firesev = seq_range(firesev, 4)) %>%
+  add_predictions(model = keeley_mlr, var = "rich")
+```
+
+Nice, no? Sadly, `add_predictions` doesn't give us variance (but see my code in https://github.com/tidyverse/modelr/issues/38 for a possible solution if you want it). If you want those, you'll have to go back to using `augment`, although you can still use it with `data_grid`. Actually, let's try that.
+
+```{r test_pred}
+k_firesev_explore <- data_grid(keeley,
+                               cover = seq_range(cover, 100),
+                               firesev = seq_range(firesev, 4)) |>
+  augment(keeley_mlr, newdata = _, interval = "confidence") |>
+  rename(rich = .fitted)
+```
+
+Huh. Not bad.
+
+Anywho, then we can visualize with the data!
+
+```{r plot_preds}
+ggplot(data=keeley,
+             mapping = aes(x=cover, y = rich, color = firesev)) +
+  geom_point() +
+  geom_line(data = k_firesev_explore, aes(group = firesev)) +
+  geom_ribbon(data = k_firesev_explore, 
+              aes(group = firesev, ymin = .lower, ymax = .upper),
+              color = "lightgrey", alpha = 0.2) +
+  scale_color_gradient(low="yellow", high="red") +
+  facet_wrap(vars(cut_interval(firesev, 4))) +
+  theme_bw(base_size = 14)
+
+```
+
+### 1.5 Examples
+OK, here are two datasets to work with:\
+
+1) `planktonSummary.csv` showing plankton from Lake Biakal (thanks, Stephanie Hampton). Evluate how Chlorophyll (`CHLFa`) is affected by other predictors.  
+\
+2) `SwaddleWestNile2002NCEAS_shortnames.csv` is about the prevalence of West Nile virus in Birds around Sacramento county in California. What predicts human WNV?\
+
+Using the following workflow, analyze these data sets.
+
+```{r sampe_workflow_mlr}
+# Load the data
+
+# Perform a preliminary visualization. Play with this and choose two predictors
+
+# Fit a MLR model
+
+# Test Asssumptions and modify model if needed
+
+# Evaluate results
+
+# Visualize results
+```
+
+
+## 2. Many Categorical Varibles
+We'll work with the zooplankton depredation dataset for two-way linear model with categorical predictors. This is a blocked experiment, so, each treatment is in each block just once.
+
+```{r zoop}
+zooplankton <- read.csv("./data/18e2ZooplanktonDepredation.csv")
+
+ggplot(data = zooplankton,
+       aes(x = treatment, y = zooplankton)) +
+  geom_boxplot()
+
+ggplot(data = zooplankton,
+       aes(x = block, y = zooplankton)) +
+  geom_boxplot()
+```
+
+Oh. That's odd. What is up with block? AH HA! It's continuous. We need to make it discrete to work with it.
+
+```{r zoop_factor}
+zooplankton <- zooplankton |>
+  mutate(block = as.character(block))
+
+ggplot(data = zooplankton,
+       aes(x = block, y = zooplankton)) +
+  geom_boxplot()
+```
+
+There we go. Always check! 
+
+### 2.1 Fit and Assumption Evaluation
+Fit is quite easy. We just add one more factor to an lm model!
+
+```{r zoop_fit}
+zooplankton_lm <- lm(zooplankton ~ treatment + block,
+                     data = zooplankton)
+```
+
+We then evaluate residuals almost as usual...
+
+```{r zoop_assume}
+library(performance)
+check_model(zooplankton_lm)
+```
+
+We want to look more deeply by fitted versus residuals to inspect for nonadditivity. Let's check it out.
+
+```{r zoop_car}
+check_model(zooplankton_lm, check = "linearity") |> plot()
+```
+
+Looks good!
+
+
+### 2.2 Coefficients
+
+Let's look at the coefs!
+
+```{r means}
+tidy(zooplankton_lm)
+```
+
+This is still a little odd, though, as our treatments are evaluated in block 1 control. To truly get just the treatment effect, we need to look at the estimated marginal means - the `emmeans`!  The big thing about `emmeans` is that it creates a reference grid based on the blocks. It then calculates the treatment effect averaged over all blocks, rather than just in block 1.
+
+```{r emmeans}
+library(emmeans)
+
+zoop_em <- emmeans(zooplankton_lm, ~treatment)
+
+zoop_em
+```
+
+### 2.3 Evaluating treatment differences
+
+Here, `emmeans` gets interesting.
+
+```{r ref}
+contrast(zoop_em, method = "pairwise") |>
+  confint()
+```
+
+Note the message that we've averaged over the levels of block. You can do any sort of posthoc evaluation (query your model!) as you wanted before. And, you could have done the same workflow for block as well.  
+
+### 2.4 Faded Examples
+
+Given then similarity with models from last week, let's just jump right into two examples, noting a key difference or two here and there.
+
+To start with, let's look at gene expression by different types of bees.
+
+```{r bees_1, eval=FALSE}
+bees <- read.csv("./data/18q07BeeGeneExpression.csv")
+
+#Visualize
+________(data=____,
+         aes(x = type, y = Expression)) +
+  _________()
+
+#fit
+bee_lm <- __(______ ~ ______ + _____, data=________)
+
+#assumptions
+________(______)
+
+#pairwise comparison
+emmeans(__________, spec = ~ ________) |>
+  contrast(type = "pairwise") |>
+  confint()
+```
+
+Wow, not that different, save adding one more term and the residualPlots.
+
+OK, one more.... repeating an experiment in the intertidal?
+```{r echo=FALSE}
+intertidal <- read.csv("./data/18e3IntertidalAlgae.csv")
+```
+
+```{r intertidal_1, eval=FALSE}
+intertidal <- read.csv("./data/18e3IntertidalAlgae.csv")
+
+#Visualize
+ggplot(data = _____________,
+       _____ = ______(x = herbivores, y = sqrtarea)) +
+  _____________()
+
+#fit
+intertidal_lm <- __(______ ~ ______ + _____, data=________)
+
+#assumptions
+________(______)
+
+#pairwise comparison
+emmeans(__________, spec = ~ ________) |>
+  contrast(type = "___________") |>
+  ________()
+```
+
+Did that last one pass the test of non-additivity?
+
+## 3. Mixing Categorical and Continuous Variables
+
+Combining categorical and continuous variables is not that different from what we have done above. To start with, let's look at the neanderthal data from class.
+```{r neand}
+neand <- read.csv("./data/18q09NeanderthalBrainSize.csv")
+head(neand)
+```
+
+We can clearly see both the categorical variable we're interested in, and the covariate.
+
+To get a preliminary sense of what's going on here, do some exploratory visualization with `ggplot2` why doncha!
+
+```{r plot_neand, message=FALSE}
+library(ggplot2)
+
+qplot(lnmass, lnbrain, color=species, data=neand) +
+  stat_smooth(method="lm")
+```
+
+Now, the CIs are going to be off as this wasn't all tested in the same model, but you begin to get a sense of whether things are parallel or not, and whether this covariate is important.
+
+What other plots might you produce?
+
+As this is a general linear model, good olde `lm()` is still there for us.
+```{r neand_lm}
+neand_lm <- lm(lnbrain ~ species + lnmass, data=neand)
+```
+
+### 3.1 Testing Assumptions
+
+In addition to the ususal tests, we need to make sure that the slopes really are parallel. We do that by fitting a model with an interaction and testing it (which, well, if there *was* and interaction, might that be interesting).
+
+First, the usual
+
+```{r neand_tests, message=FALSE}
+check_model(neand_lm)
+
+#And now look at residuals by group/predictors
+library(car)
+residualPlots(neand_lm, tests=FALSE)
+```
+
+To test the parallel presumption
+
+```{r neand_parallel}
+neand_int <- lm(lnbrain ~ species*lnmass, data=neand)
+
+tidy(neand_int)
+```
+
+We can see that there is no interaction, and hence we are a-ok to proceed with the parallel lines model.
+
+### 1.2 Assessing results
+
+First, let's look at our coefficients
+
+```{r}
+tidy(neand_lm)
+```
+
+Everything looks like it matters. If you had wanted to do this with a centered covariate, how would things differ? Try it out.
+
+Second, does our model explain much?
+
+```{r}
+r2(neand_lm)
+```
+
+Not bad - and both types agree fairly well.
+
+Next, we might want to compare covariate adjusted groups and/or look at covariate adjusted means.
+
+```{r neand_lsmeans, message=FALSE}
+library(emmeans)
+adj_means <- emmeans(neand_lm, specs = ~species)
+
+#adjusted means
+adj_means
+```
+
+Nice! But, what if we wanted to know what value of the covariate we were using?  To get those, we need to use say that we are using `lnmass` as a reference grid - i.e. we're marginalizing over it.
+
+```{r neand_em}
+avg_sp_means <- emmeans(neand_lm, ~species|lnmass)
+
+avg_sp_means
+```
+
+We can then use this for pairwise comparisons, etc.
+
+```{r neand_comp}
+#comparisons
+contrast(avg_sp_means, method="pairwise") |>
+  confint()
+```
+
+You can also specify other levels of mass, if you are more interested in those for biological relevance. You can even specify multiple levels, or even a smooth curve and plot the results!
+
+We can also see the estimates of the slopes for each species (which is more useful when there is an interaction - as `summary` is just fine without.)
+
+```{r emtrends}
+#no interaction
+emtrends(neand_lm, ~species, var = "lnmass")
+```
+
+### 3.3 Visualization
+
+Visualization is funny, as you want to make parallel lines and also get the CIs right. Rather than rely on `ggplot2` to do this natively, we need to futz around a bit with generating predictions
+
+```{r neand_predictions}
+neand_predict <- augment(neand_lm, interval="confidence")
+
+head(neand_predict)
+```
+
+So, here we have fit values, lower confidence interval, and upper confidence intervals. As we have not fed `augment()` any new data, these values line up with our `neand` data frame, so can use them immediately.
+
+```{r neand_plot_predict}
+
+ggplot(data = neand_predict,
+       aes(x = lnmass, color = species)) +
+  geom_point(mapping=aes(y=lnbrain)) +
+  geom_line(mapping = aes(y=.fitted)) + 
+  geom_ribbon(aes(ymin=.lower,
+                  ymax=.upper,
+                  group = species), 
+              fill="lightgrey", 
+              alpha=0.5,
+              color = NA) +
+  theme_bw()
+```
+
+And there we have nice parallel lines with model predicted confidence intervals!
+
+### 3.4 Examples
+I've provided two data sets:  
+1) `18e4MoleRatLayabouts.csv` looking at how caste and mass affect the energy mole rates expend  
+\
+2) `18q11ExploitedLarvalFish.csv` looking at how status of a marine area - protected or not - influences the CV around age of maturity of a number of different fish (so, age is a predictor)
+
+Using the following workflow, analyze these data sets.
+
+```{r sampe_workflow}
+# Load the data
+
+# Perform a preliminary visualization
+
+# Fit a model
+
+# Test Assumptions and modify model if needed
+
+# Evaluate results
+
+# Post-hocs if you can
+
+# Visualize results
+```

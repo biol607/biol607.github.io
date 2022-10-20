@@ -138,12 +138,11 @@ __Homework:__ [Models with Categorical Variables](./homework/categorical.html)
 ```
 `r datestring`   
 __Lectures:__ May Predictors: [Many Predictors](./lectures/many_predictors.html), [Many categories or mixing categories and continuous predictors](./lectures/many_types_of_predictors.html)   
-__Lab Topic:__  Models with many types of predictors  
+__Lab Topic:__  [Models with many types of predictors](lab/many_predictor_types.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ [Feiberg ch 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), W&S 15, 18   
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2022  
-__In Class Code:__ [lots of anova](./in_class_code/2020/scripts/glm.R)  
 __Homework:__ [GLM Homework](homework/glm.html)    
 
 
