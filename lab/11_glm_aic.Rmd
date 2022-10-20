@@ -178,7 +178,7 @@ Using the following workflow, analyze these data sets.
 
 
 ## 2. Multiple Linear Regression
-Multiple linear regression is conceptially very similar to ANCOVA. Let's use the keeley fire severity plant richness data to see it in action.
+Multiple linear regression is conceptually very similar to ANCOVA. Let's use the keeley fire severity plant richness data to see it in action.
 
 ```{r keeley}
 keeley <- read.csv("data/Keeley_rawdata_select4.csv")
