@@ -229,6 +229,8 @@ check_model(graze_linear, check = "linearity") |> plot()
 ```
 
 ---
+class: center, middle
+
 ![](images/many_predictors/bad_model.jpg)
 
 ---
@@ -395,7 +397,7 @@ Note: This can happen with just continuous variables as well
 
 # Neanderthals and Categorical/Continuous Variables
 
-![:scale 60%](./images/23/neanlooking.jpeg)  
+.center[ ![:scale 60%](./images/23/neanlooking.jpeg) ]  
 
 Who had a bigger brain: Neanderthals or us?
 
@@ -562,7 +564,7 @@ Can also evaluate for other levels of the covariate as is interesting
 
 ---
 # We Can Compare Groups Adjusting for Covariates
-.center[ ![](./images/many_predictors/bonferroni_meme.jpg) ]
+.center[ ![:scale 60%](./images/many_predictors/bonferroni_meme.jpg) ]
 
 ---
 # Difference Between Groups at Mean of Covariate
