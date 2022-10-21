@@ -6,6 +6,8 @@ format:
     toc: true
 ---
 
+<!-- Make MLR either faded examples or give more on datasets -->
+
 ## 1. Multiple Linear Regression
 
 Multiple linear regression is conceptually very similar to ANCOVA. Let's use the keeley fire severity plant richness data to see it in action.
@@ -308,7 +310,7 @@ ________(______)
 
 #pairwise comparison
 emmeans(__________, spec = ~ ________) |>
-  contrast(type = "pairwise") |>
+  contrast(method = "pairwise") |>
   confint()
 ```
 
@@ -335,7 +337,7 @@ ________(______)
 
 #pairwise comparison
 emmeans(__________, spec = ~ ________) |>
-  contrast(type = "___________") |>
+  contrast(method = "___________") |>
   ________()
 ```
 
