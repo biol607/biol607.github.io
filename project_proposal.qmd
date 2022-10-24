@@ -1,0 +1,24 @@
+---
+title: "Final Project Proposal Instructions"
+author: "Biol 607"
+format: html
+---
+
+Before reading this, go check out [the final project assignment page](final.html).
+
+Read it? OK!
+
+## Proposals  
+Before you begin work, you are required to have my (or the TA's) premission and/or address any feedback we give you. For that purpose, I'm having you write a proposal. Proposals should have
+
+1. A good description of the questions that will be asked by this project.  
+
+2. A general framework for the data that you will be using to answer these questions.  
+
+3. Preliminary thoughts on the types of analyses you might use to approach the data. These do not have the be excessively detailed, as you still have many tools and techniques to learn!  
+
+4. Optional: statement of breakdown of group work (see [the final project assignment page](final.html)).  
+
+## The Meeting
+
+Please come to one of our office hours, or schedule an additional meeting, sometime before Thanksgiving break. We'll give you feedback and also are available to discuss your ideas through. Heck, come and talk to us **before** writing this proposal, if you'd like.

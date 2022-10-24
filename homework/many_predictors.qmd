@@ -1,0 +1,253 @@
+---
+title: "Many Types of Predictors Homework"
+author: "Biol 607"
+format:
+  html:
+    toc: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = FALSE, warning = FALSE)
+```
+
+## 1. Multiple Linear Regression: A Beachday!
+
+For this question, we'll use data from the venerable RIKZ dataset ([download here](./data/rikz.csv)) as seen in Zuur 2009 and described a bit more [here](https://fw8051statistics4ecologists.netlify.app/boot.html#motivating-data-example-rikz-dutch-governmental-institute-data) in Feiberg's book. Briefly, it's from a survey invertebrates in Dutch beaches [looking at zonation](https://www.researchgate.net/publication/26409749_Zonation_of_macrofauna_across_sandy_beaches_and_surf_zones_along_the_Dutch_coast). We will look at a few variables:
+  
+- Richness = species richness (i.e., the number of species counted).   
+- NAP = height of the sample site (relative to sea level). Lower values indicate sites closer to or further below sea level, which implies more time spent submerged.
+  
+- exposure: index composed of the surf zone, slope, grain size, and depth of anaerobic layer
+  
+- grainsize: the size of sediment/sand grains in the sample  
+  
+- Beach - a unique identifier of the beach sampled
+
+**1.1** Load the data, select to those variables (you might want to also retain Sample, but, eh), and visually inspect the data. Are there any problems you might see in the data? Things you might want to mutate or watch our for in thinking about building models? Or is everything copacetic for a model where NAP, exposure, and grainsize predict species richness?
+
+```{r}
+library(GGally)
+library(readr)
+library(dplyr)
+
+rikz <- read_csv("homework/data/rikz.csv") |>
+  select(Beach, Sample, NAP, exposure, grainsize, Richness)
+
+ggpairs(rikz)
+
+#meh, it's fine!
+```
+
+**1.2** Model richness as a function of exposure, grainsize, and NAP. Evaluate the assumptions of a linear model. If it does not meet them,  either log(x+1) or asinh transform your response variable. It might still not be perfect, but, you'll see why later...
+
+```{r}
+library(performance)
+rikz_lm <- lm(asinh(Richness) ~ exposure + grainsize + NAP, data = rikz)
+
+check_model(rikz_lm)
+```
+
+**1.3** What does your model mean? Tell us what the coefficients tell us - both unstandardized and standardized. How much variation in the data is explained by the predictors?
+
+```{r}
+library(broom)
+library(effectsize)
+
+tidy(rikz_lm)
+standardize_parameters(rikz_lm, method = "basic")
+
+r2(rikz_lm)
+
+# NAP and exposure matter a lot, grainsize doesn't matter
+# And, wow, they explain a lot!
+```
+
+**1.4** Show us a plot that teases out the independent contribution of each predictor. What does it tell you that just looking at the coefficients above did not. Or does it not tell you anything new?
+
+```{r}
+library(visreg)
+visreg(rikz_lm)
+```
+
+**1.5** Based on all of the above, construct some cool visualization on the original data scale that tells you something useful and interesting about what determines species richness on a beach.
+
+```{r}
+library(modelr)
+rikz_pred <- data_grid(rikz,
+                       grainsize = mean(grainsize),
+                       NAP = seq_range(NAP, 100),
+                       exposure = seq_range(exposure, 100)) |>
+  augment(rikz_lm, newdata = _, interval = "confidence") |>
+  mutate(Richness = sinh(.fitted),
+         lower = sinh(.lower),
+         upper = sinh(.upper)
+         )
+
+ggplot(rikz_pred,
+       aes(x = NAP, y = exposure, fill = Richness)) +
+  geom_raster() +
+  scale_fill_viridis_b(n.breaks = 10)
+
+#oh - minimum tide height and exposure = highest richness
+```
+
+## 2. Multiple Categorical Variables
+
+To examine how models with multiple categorical models work, let's take a look at good ole' `palmerpenguins`! In this data, We'll look at the effects of species, sex, and year (as a categorical variable!) on bill depth.
+
+**2.1** To begin with, load up the data, and filter out anything with an NA for sex and making sure year is no longer continuous. Then, visualize the data, just to get an idea of what is going on here. Do you notice anything?
+
+
+```{r}
+library(palmerpenguins)
+
+pen <- penguins |>
+  filter(!is.na(sex),
+         !is.na(body_mass_g)) |>
+  mutate(year = as.character(year))
+
+ggplot(pen,
+       aes(x = species, y = body_mass_g, 
+           color = sex)) +
+  geom_point() +
+  facet_wrap(vars(year))
+```
+
+**2.2** Fit the model and check assumptions. Be sure to be careful of linearity. Do we meet assumptions here?
+
+```{r}
+pen_mod <- lm(bill_depth_mm ~ species + sex + year, data = pen)
+
+check_model(pen_mod)
+check_model(pen_mod, check="linearity")
+```
+
+**2.3** Great! Now - what does it all mean? Use the coefficients and/or the expected means to evaluate which of these predictors appear to influence bill depth.
+
+```{r}
+emmeans(pen_mod, ~sex)
+emmeans(pen_mod, ~year)
+emmeans(pen_mod, ~species)
+```
+
+**2.4** How would you visualize what you learned in 2.3 to communicate it to a reader in a paper? Make the relevant plots, and make it fancy! (What? I'm a fan of [the series](https://www.youtube.com/playlist?app=desktop&list=PL8zglt-LDl-iywBxcoGUoG-Sh0_1IaoQJ)).
+
+## 3. Comparing Means with Covariates
+
+We will wrap up with a model mixing continuous and discrete variables. And you've seen it before!  In [this dataset](https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/18/18e4MoleRatLayabouts.csv) from Scantlebury et al, the authors explored how caste affected the energy level of naked mole rats. BUT - castest might differ by mass as well!
+
+**3.1** Load and plot the data. Look at how each pair of variables relates to one another here. Is there a chance our covariate might be important? Impress yourself by making them super fancy! Geom to your heart’s content.
+
+
+```{r}
+mole <- read.csv("homework/data/18e4MoleRatLayabouts.csv")
+
+ggplot(mole,
+       aes(x = caste,
+           y = lnenergy)) +
+  geom_point()
+
+ggplot(mole,
+       aes(x = caste,
+           y = lnmass)) +
+  geom_point()
+
+ggplot(mole,
+       aes(x = lnmass,
+           y = lnenergy,
+           color = caste)) +
+  geom_point()
+
+
+
+```
+
+**3.2** Fit a model with BOTH sets of predictors, using least squares and evaluate all relevant assumptions. List them out as you test them. What new assumption are we testing here? Can we use this model? If not, fix it. But if we can, no fix is needed!
+
+```{r}
+library(performance)
+mole_mod <- lm(lnenergy ~ lnmass + caste, data = mole)
+
+#regular checks
+check_model(mole_mod)
+
+# parallel lines
+mole_mod_int <- lm(lnenergy ~ lnmass * caste, data = mole)
+broom::tidy(mole_mod_int)
+
+#all good
+
+```
+
+**3.3** Compare the two castes energy expendeture at the mean level of log mass. Are they different? How would you discuss your conclusions.
+
+```{r}
+library(emmeans)
+emmeans(mole_mod, ~caste) |>
+  contrast(method = "pairwise") |>
+  confint()
+```
+
+**3.4** Plot the fit model with the fit confidence interval on top of the data. Use `modelr::data_grid()` and `broom::augment()`. 
+
+```{r}
+library(modelr)
+
+mole_predict <- data_grid(mole,
+                          lnmass = seq_range(lnmass, 100),
+                          caste = unique(caste)) |>
+  broom::augment(mole_mod, newdata = _, interval = "confidence") |>
+  dplyr::mutate(lnenergy = .fitted)
+  
+ggplot(mole_predict,
+       aes(x = lnmass, y = lnenergy, color = caste)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = .lower, ymax = .upper, group = caste),
+              fill = "lightgrey", color = NA, alpha = 0.2)+
+  geom_point(data = mole) +
+  theme_bw()
+```
+
+**3.5** Impress yourself! Do the same thing, but backtransforming both your predicted values AND lnmass (so, plotting mass on the x and energy on the y) with CIs. Note - this is not a trick, and should only require some basic mutates (or advanced, if you want to dig into `across()` and `where()` - which, well, you should check them out!). Do you learn something different from this plot? Note, a log-log relationship corresponds to the following:
+
+if $y = kx^n$ then $log(y) = log(k) + n log(x))$ 
+
+```{r}
+mole_predict_natural <- mole_predict |>
+  dplyr::mutate(across(where(is.numeric), exp)) |>
+  rename(mass = lnmass, energy = lnenergy)
+
+mole_natural <- mole |>
+  dplyr::mutate(across(where(is.numeric), exp)) |>
+  rename(mass = lnmass, energy = lnenergy)
+
+
+ggplot(mole_predict_natural,
+       aes(x = mass, y = energy, color = caste)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = .lower, ymax = .upper, group = caste),
+              fill = "lightgrey", color = NA, alpha = 0.2)+
+  geom_point(data = mole_natural) +
+  theme_bw()
+```
+
+
+
+----
+
+
+## Meta 1. 
+Where do you think we will go next with models like there?
+
+## Meta 2. 
+How do you think you will use models like these in your own work?
+  
+## Meta 3. 
+What about what we did this week was the most difficult for you to understand?  Where are you feeling the boundaries of your understanding pushed the most?
+
+## Meta 4. 
+How much time did this take you, roughly? Again, I'm trying to keep track that these assignments aren't killer, more than anything.  
+
+## Meta 5. 
+Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.

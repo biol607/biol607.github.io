@@ -143,7 +143,8 @@ __Lab Data:__  [Multiple Files](lab/data_10.zip)
 __Reading:__ [Feiberg ch 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), W&S 15, 18   
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2022  
-__Homework:__ [GLM Homework](homework/glm.html)    
+__Homework:__ [Many Predictors!](homework/many_predictors.html), [RIKZ Data](homework/data/rikz.csv)  
+__Project Proposal:__ [general instructions here](project_proposal.html)  
 
 
 ### Week 8.   

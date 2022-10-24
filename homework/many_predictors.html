@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Biol 607">
+
+<title>Many Types of Predictors Homework</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="many_predictors_files/libs/clipboard/clipboard.min.js"></script>
+<script src="many_predictors_files/libs/quarto-html/quarto.js"></script>
+<script src="many_predictors_files/libs/quarto-html/popper.min.js"></script>
+<script src="many_predictors_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="many_predictors_files/libs/quarto-html/anchor.min.js"></script>
+<link href="many_predictors_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="many_predictors_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="many_predictors_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="many_predictors_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="many_predictors_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#multiple-linear-regression-a-beachday" id="toc-multiple-linear-regression-a-beachday" class="nav-link active" data-scroll-target="#multiple-linear-regression-a-beachday">1. Multiple Linear Regression: A Beachday!</a></li>
+  <li><a href="#multiple-categorical-variables" id="toc-multiple-categorical-variables" class="nav-link" data-scroll-target="#multiple-categorical-variables">2. Multiple Categorical Variables</a></li>
+  <li><a href="#comparing-means-with-covariates" id="toc-comparing-means-with-covariates" class="nav-link" data-scroll-target="#comparing-means-with-covariates">3. Comparing Means with Covariates</a></li>
+  <li><a href="#meta-1." id="toc-meta-1." class="nav-link" data-scroll-target="#meta-1.">Meta 1.</a></li>
+  <li><a href="#meta-2." id="toc-meta-2." class="nav-link" data-scroll-target="#meta-2.">Meta 2.</a></li>
+  <li><a href="#meta-3." id="toc-meta-3." class="nav-link" data-scroll-target="#meta-3.">Meta 3.</a></li>
+  <li><a href="#meta-4." id="toc-meta-4." class="nav-link" data-scroll-target="#meta-4.">Meta 4.</a></li>
+  <li><a href="#meta-5." id="toc-meta-5." class="nav-link" data-scroll-target="#meta-5.">Meta 5.</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Many Types of Predictors Homework</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Biol 607 </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="multiple-linear-regression-a-beachday" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-linear-regression-a-beachday">1. Multiple Linear Regression: A Beachday!</h2>
+<p>For this question, we’ll use data from the venerable RIKZ dataset (<a href="./data/rikz.csv">download here</a>) as seen in Zuur 2009 and described a bit more <a href="https://fw8051statistics4ecologists.netlify.app/boot.html#motivating-data-example-rikz-dutch-governmental-institute-data">here</a> in Feiberg’s book. Briefly, it’s from a survey invertebrates in Dutch beaches <a href="https://www.researchgate.net/publication/26409749_Zonation_of_macrofauna_across_sandy_beaches_and_surf_zones_along_the_Dutch_coast">looking at zonation</a>. We will look at a few variables:</p>
+<ul>
+<li><p>Richness = species richness (i.e., the number of species counted).<br>
+</p></li>
+<li><p>NAP = height of the sample site (relative to sea level). Lower values indicate sites closer to or further below sea level, which implies more time spent submerged.</p></li>
+<li><p>exposure: index composed of the surf zone, slope, grain size, and depth of anaerobic layer</p></li>
+<li><p>grainsize: the size of sediment/sand grains in the sample</p></li>
+<li><p>Beach - a unique identifier of the beach sampled</p></li>
+</ul>
+<p><strong>1.1</strong> Load the data, select to those variables (you might want to also retain Sample, but, eh), and visually inspect the data. Are there any problems you might see in the data? Things you might want to mutate or watch our for in thinking about building models? Or is everything copacetic for a model where NAP, exposure, and grainsize predict species richness?</p>
+<div class="cell">
+
+</div>
+<p><strong>1.2</strong> Model richness as a function of exposure, grainsize, and NAP. Evaluate the assumptions of a linear model. If it does not meet them, either log(x+1) or asinh transform your response variable. It might still not be perfect, but, you’ll see why later…</p>
+<div class="cell">
+
+</div>
+<p><strong>1.3</strong> What does your model mean? Tell us what the coefficients tell us - both unstandardized and standardized. How much variation in the data is explained by the predictors?</p>
+<div class="cell">
+
+</div>
+<p><strong>1.4</strong> Show us a plot that teases out the independent contribution of each predictor. What does it tell you that just looking at the coefficients above did not. Or does it not tell you anything new?</p>
+<div class="cell">
+
+</div>
+<p><strong>1.5</strong> Based on all of the above, construct some cool visualization on the original data scale that tells you something useful and interesting about what determines species richness on a beach.</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="multiple-categorical-variables" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-categorical-variables">2. Multiple Categorical Variables</h2>
+<p>To examine how models with multiple categorical models work, let’s take a look at good ole’ <code>palmerpenguins</code>! In this data, We’ll look at the effects of species, sex, and year (as a categorical variable!) on bill depth.</p>
+<p><strong>2.1</strong> To begin with, load up the data, and filter out anything with an NA for sex and making sure year is no longer continuous. Then, visualize the data, just to get an idea of what is going on here. Do you notice anything?</p>
+<div class="cell">
+
+</div>
+<p><strong>2.2</strong> Fit the model and check assumptions. Be sure to be careful of linearity. Do we meet assumptions here?</p>
+<div class="cell">
+
+</div>
+<p><strong>2.3</strong> Great! Now - what does it all mean? Use the coefficients and/or the expected means to evaluate which of these predictors appear to influence bill depth.</p>
+<div class="cell">
+
+</div>
+<p><strong>2.4</strong> How would you visualize what you learned in 2.3 to communicate it to a reader in a paper? Make the relevant plots, and make it fancy! (What? I’m a fan of <a href="https://www.youtube.com/playlist?app=desktop&amp;list=PL8zglt-LDl-iywBxcoGUoG-Sh0_1IaoQJ">the series</a>).</p>
+</section>
+<section id="comparing-means-with-covariates" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-means-with-covariates">3. Comparing Means with Covariates</h2>
+<p>We will wrap up with a model mixing continuous and discrete variables. And you’ve seen it before! In <a href="https://www.zoology.ubc.ca/~whitlock/ABD/teaching/datasets/18/18e4MoleRatLayabouts.csv">this dataset</a> from Scantlebury et al, the authors explored how caste affected the energy level of naked mole rats. BUT - castest might differ by mass as well!</p>
+<p><strong>3.1</strong> Load and plot the data. Look at how each pair of variables relates to one another here. Is there a chance our covariate might be important? Impress yourself by making them super fancy! Geom to your heart’s content.</p>
+<div class="cell">
+
+</div>
+<p><strong>3.2</strong> Fit a model with BOTH sets of predictors, using least squares and evaluate all relevant assumptions. List them out as you test them. What new assumption are we testing here? Can we use this model? If not, fix it. But if we can, no fix is needed!</p>
+<div class="cell">
+
+</div>
+<p><strong>3.3</strong> Compare the two castes energy expendeture at the mean level of log mass. Are they different? How would you discuss your conclusions.</p>
+<div class="cell">
+
+</div>
+<p><strong>3.4</strong> Plot the fit model with the fit confidence interval on top of the data. Use <code>modelr::data_grid()</code> and <code>broom::augment()</code>.</p>
+<div class="cell">
+
+</div>
+<p><strong>3.5</strong> Impress yourself! Do the same thing, but backtransforming both your predicted values AND lnmass (so, plotting mass on the x and energy on the y) with CIs. Note - this is not a trick, and should only require some basic mutates (or advanced, if you want to dig into <code>across()</code> and <code>where()</code> - which, well, you should check them out!). Do you learn something different from this plot? Note, a log-log relationship corresponds to the following:</p>
+<p>if <span class="math inline">\(y = kx^n\)</span> then <span class="math inline">\(log(y) = log(k) + n log(x))\)</span></p>
+<div class="cell">
+
+</div>
+<hr>
+</section>
+<section id="meta-1." class="level2">
+<h2 class="anchored" data-anchor-id="meta-1.">Meta 1.</h2>
+<p>Where do you think we will go next with models like there?</p>
+</section>
+<section id="meta-2." class="level2">
+<h2 class="anchored" data-anchor-id="meta-2.">Meta 2.</h2>
+<p>How do you think you will use models like these in your own work?</p>
+</section>
+<section id="meta-3." class="level2">
+<h2 class="anchored" data-anchor-id="meta-3.">Meta 3.</h2>
+<p>What about what we did this week was the most difficult for you to understand? Where are you feeling the boundaries of your understanding pushed the most?</p>
+</section>
+<section id="meta-4." class="level2">
+<h2 class="anchored" data-anchor-id="meta-4.">Meta 4.</h2>
+<p>How much time did this take you, roughly? Again, I’m trying to keep track that these assignments aren’t killer, more than anything.</p>
+</section>
+<section id="meta-5." class="level2">
+<h2 class="anchored" data-anchor-id="meta-5.">Meta 5.</h2>
+<p>Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
