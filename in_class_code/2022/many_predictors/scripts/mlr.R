@@ -286,3 +286,83 @@ plot(bees_lm)
 emmeans(bees_lm, spec = ~ type) |>
   contrast(method = "pairwise") |>
   confint()
+
+#### Mixing Categorical and Continuous Predictors ####
+
+# Load the data
+neand <- read_csv("data/18q09NeanderthalBrainSize.csv")
+str(neand)
+
+
+# Perform a preliminary visualization. 
+ggplot(neand, 
+       mapping = aes(x = species, y = lnbrain)) +
+  geom_boxplot()
+
+ggplot(neand, 
+       mapping = aes(x = species, y = lnmass)) +
+  geom_boxplot()
+
+ggplot(neand, 
+       mapping = aes(x = lnmass, y = lnbrain,
+                     color = species)) +
+  geom_point()
+
+# Fit a  model
+neand_lm <- lm(lnbrain ~ lnmass + species, data = neand)
+
+# Test Asssumptions and modify model if needed
+check_model(neand_lm)
+
+# parallel slope assumption
+neand_lm_int <- lm(lnbrain ~ lnmass + species +
+                    lnmass : species, data = neand)
+
+tidy(neand_lm_int) # our slopes ARE parallel
+
+# Evaluate results
+tidy(neand_lm)
+
+neand_means <- emmeans(neand_lm, specs = ~ species | lnmass)
+neand_means
+
+contrast(neand_means, method = "pairwise") |>
+  confint()
+
+
+# Visualize results
+
+# this is bad
+badplot <- ggplot(neand, 
+       mapping = aes(x = lnmass, y = lnbrain,
+                     color = species)) +
+  geom_point() + 
+  stat_smooth(method = "lm")
+
+
+# roll your own with data_grid and augment
+neand_pred <- data_grid(neand,
+                        lnmass = seq_range(lnmass, 100),
+                        species = unique(species))
+
+
+neand_pred <- augment(neand_lm, newdata = neand_pred,
+                      interval = "confidence") |>
+  rename(lnbrain = .fitted)
+
+# the real plot
+goodplot <- ggplot(neand, 
+       mapping = aes(x = lnmass, y = lnbrain,
+                     color = species)) +
+  geom_point() +
+  geom_line(data = neand_pred) +
+  geom_ribbon(data = neand_pred,
+              mapping = aes(ymin = .lower,
+                            ymax = .upper, 
+                            group = species),
+              alpha = 0.5, fill = "lightgrey",
+              color = NA)
+
+
+library(patchwork)
+badplot + goodplot
