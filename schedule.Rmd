@@ -164,9 +164,10 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-interactions-2022
 `r datestring`   
 __Lecture:__ Beyond Linear Regression, But Still Linear [Generalized Least Squares and Modeling Error](./lectures/gls.html), [Entering a non-normal world with Generalized Linear Models](lectures/25_generalized_linear_models.html)   
 __Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_data.zip)  
-__Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)  
+__Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html) 
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa"))`  
-__Reading:__ [O'Hara 2009](http://byrneslab.net/classes/biol607/readings/O'Hara_2009_glmm.pdf) through section on GLMs, [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), [Intro to Beta Regression for % Cover Data](https://rpubs.com/nicoleknight/936037)  
+__Reading:__ [Feiberg on GLS](https://fw8051statistics4ecologists.netlify.app/gls.html), [Feiberg on Generalized Linear Models](https://fw8051statistics4ecologists.netlify.app/glm.html), [Models for Count Data](https://fw8051statistics4ecologists.netlify.app/poissonr), [Feiberg on Logistic Regression](https://fw8051statistics4ecologists.netlify.app/logistic) - ignore Bayes parts in these. [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), [Analyzing % Cover and Porportional Data](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13234)  
+__Additional Reading:__ [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Intro to Beta Regression for % Cover Data](https://rpubs.com/nicoleknight/936037), [Zero-One Inflated Beta Regression](https://journal.r-project.org/archive/2015/RJ-2015-019/index.html)    
 
 ## Block 3. Experimental and Observational Study Design and Causal Inference
 
