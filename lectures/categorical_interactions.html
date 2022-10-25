@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Factorial ANOVA-style Models</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+
+# When The Effect of One Category Depends on Another
+![](images/anova/yoda_factorial.jpg)
+
+
+
+
+
+---
+class: center, middle
+
+# Etherpad
+&lt;br&gt;&lt;br&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-interactions-nonlinearities-2022&lt;/h3&gt;&lt;/center&gt;
+
+
+---
+# The world isn't additive
+
+-   Until now, we have assumed predictors combine additively  
+     - the effect of one is not dependent on the effect of the other
+
+--
+
+-   BUT - what if the effect of one variable depends on the level of another?
+
+--
+
+-   This is an **INTERACTION** and is quite common  
+     - Heck, a squared term is the interaction of a variable with itself!
+
+--
+
+- Biology: The science of "It depends..."  
+
+--
+
+-   This is challenging to think about and visualize, but if you can master it, you will go far!
+
+---
+
+# We Have Explored Nonliearities Via Transforming our Response
+
+&lt;img src="categorical_interactions_files/figure-html/loglinear-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# But We Have Also Always Tested for Non-Additivity of Predictors
+
+&lt;img src="categorical_interactions_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Linear Model Can Accomodate Many Flavors of Nonlinearity
+
+`$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} = \beta_2 x_{2i}$$`
+`$$y_i \sim N(\hat{y_i}, \sigma)$$`
+--
+Could become...
+
+
+`$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2$$`
+--
+Could be...
+
+
+`$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i}x_{2i}$$`
+--
+.center[**It is ALL additive terms**]
+
+---
+class: center, middle
+
+![](images/anova/two_way_interaction.jpg)
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. Evaluating Interaction Effects
+
+3. How to Look at Means  and Differences with an Interaction Effect
+
+
+---
+# Intertidal Grazing!
+.center[
+![image](./images/22/grazing-expt.jpeg)
+
+#### Do grazers reduce algal cover in the intertidal?
+]
+
+---
+# Experiment Replicated on Two Ends of a gradient
+
+![image](./images/22/zonation.jpg)
+
+---
+# Factorial Experiment
+
+![image](./images/22/factorial_blocks.jpg)
+
+---
+# Factorial Design
+
+![image](./images/22/factorial_layout.jpg)
+
+Note: You can have as many treatment types or observed category combinations as you want (and then 3-way, 4-way, etc. interactions)
+
+---
+# The Data: See the dependency of one treatment on another?
+
+&lt;img src="categorical_interactions_files/figure-html/plot_algae-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# If we had fit y ~ a + b, residuals look weird
+
+&lt;img src="categorical_interactions_files/figure-html/graze_assumptions-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# A Factorial Model
+
+`$$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$`  
+
+`$$\large \epsilon_{ijk} \sim N(0, \sigma^{2} )$$`
+`$$\large x_{i} = 0,1, x_{j} = 0,1, x_{ij} = 0,1$$` 
+--
+
+- Note the new last term  
+
+--
+
+- Deviation due to *combination of categories i and j*  
+
+
+--
+
+&lt;hr&gt;
+This is still something that is in  
+
+`$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$`
+
+---
+# The Data (Four Rows)
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; height &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; herbivores &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sqrtarea &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; minus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.4055728 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.9767608 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mid &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; minus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7071068 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mid &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7071068 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# The Dummy-Coded Treatment Contrasts
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; (Intercept) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; heightmid &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; herbivoresplus &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; heightmid:herbivoresplus &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Fitting with Least Squares
+
+
+```r
+graze_int &lt;- lm(sqrtarea ~ height + herbivores +
+                  height:herbivores,
+                data=algae)
+
+## OR
+graze_int &lt;- lm(sqrtarea ~ height*herbivores,
+                data=algae)
+```
+
+---
+# Now We Are Linear/Additive
+&lt;img src="categorical_interactions_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Residuals A-OK
+&lt;img src="categorical_interactions_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# HOV Good!
+&lt;img src="categorical_interactions_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# No Outliers
+&lt;img src="categorical_interactions_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Collinearity is Tricky - unimportant for interaction
+&lt;img src="categorical_interactions_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. .red[Evaluating Interaction Effects]
+
+3. How to Look at Means  and Differences with an Interaction Effect
+
+
+---
+# What do the  Coefficients Mean?
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 32.91450 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.855532 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; heightmid &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10.43090 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; herbivoresplus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -22.51075 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; heightmid:herbivoresplus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25.57809 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.711064 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+- Intercept chosen as basal condition (low, herbivores -)  
+
+--
+
+- Changing height to high is associated with a loss of 10 units of algae relative to low/-
+
+--
+
+
+- Adding herbivores is associated with a loss of 22 units of algae relative to low/-
+
+--
+
+- BUT - if you add herbivores and mid, that's also associated with an additional increase of 25 units of algae relative to mid and + alone  
+      - 25.5 - 22.5 - 10.4 = only a loss of 7.4 relative to low/-
+
+--
+
+.center[**NEVER TRY AND INTERPRET ADDITIVE EFFECTS ALONE WHEN AN INTERACTION IS PRESENT**&lt;Br&gt;that way lies madness]
+
+
+---
+# This view is intuitive
+
+&lt;img src="categorical_interactions_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# This view is also intuitive
+
+&lt;img src="categorical_interactions_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# We Can Still Look at R^2
+
+
+```
+# R2 for Linear Regression
+       R2: 0.228
+  adj. R2: 0.190
+```
+
+Eh, not great, not bad...  
+
+--
+
+- Note: adding more interaction effects will always increase the R&lt;sup&gt;2&lt;/sup&gt; so only add if warranted - NO FISHING!
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. Evaluating Interaction Effects]
+
+3. .red[How to Look at Means  and Differences with an Interaction Effect]
+
+
+---
+# Posthoc Estimated Means and Interactions with Categorical Variables
+
+-   Must look at **simple effects** first in the presence of an interaction  
+     - The effects of individual treatment combinations
+     - If you have an interaction, this is what you do!
+
+
+--
+
+-   **Main effects describe effects of one variable in the absence of an interaction**
+    - Useful only if there is no interaction  
+    - Or useful if one categorical variable can be absent   
+
+---
+# Estimated Means with No Interaction - Misleading!
+
+```
+ herbivores emmean   SE df lower.CL upper.CL
+ minus        27.7 2.73 60     22.2     33.2
+ plus         18.0 2.73 60     12.5     23.4
+
+Results are averaged over the levels of: height 
+Confidence level used: 0.95 
+```
+
+```
+ height emmean   SE df lower.CL upper.CL
+ low      21.7 2.73 60     16.2     27.1
+ mid      24.0 2.73 60     18.6     29.5
+
+Results are averaged over the levels of: herbivores 
+Confidence level used: 0.95 
+```
+
+---
+# Posthoc Comparisons Averaging Over Blocks - Misleading!
+
+
+```
+ contrast     estimate   SE df lower.CL upper.CL
+ minus - plus     9.72 3.86 60     2.01     17.4
+
+Results are averaged over the levels of: height 
+Confidence level used: 0.95 
+```
+
+---
+# Simple Effects Means
+
+```
+ height herbivores emmean   SE df lower.CL upper.CL
+ low    minus        32.9 3.86 60    25.20     40.6
+ mid    minus        22.5 3.86 60    14.77     30.2
+ low    plus         10.4 3.86 60     2.69     18.1
+ mid    plus         25.6 3.86 60    17.84     33.3
+
+Confidence level used: 0.95 
+```
+
+
+---
+# Posthoc with Simple Effects
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t.ratio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low minus - mid minus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.430905 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.913034 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0605194 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low minus - low plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.510748 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.128484 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0001146 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low minus - mid plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.363559 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.350481 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1819337 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mid minus - low plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.079843 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.215450 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0305355 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mid minus - mid plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.067346 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.562553 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5758352 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; low plus - mid plus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -15.147189 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.452546 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.778003 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0072896 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+.center[**That's a Lot to Drink In!**]
+
+---
+# Might be easier visually
+
+&lt;img src="categorical_interactions_files/figure-html/graze_posthoc_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# We are often interested in looking at differences within levels...
+
+```
+height = low:
+ herbivores emmean   SE df lower.CL upper.CL
+ minus        32.9 3.86 60    25.20     40.6
+ plus         10.4 3.86 60     2.69     18.1
+
+height = mid:
+ herbivores emmean   SE df lower.CL upper.CL
+ minus        22.5 3.86 60    14.77     30.2
+ plus         25.6 3.86 60    17.84     33.3
+
+Confidence level used: 0.95 
+```
+
+---
+# We Can Then Look at Something Simpler...
+
+&lt;img src="categorical_interactions_files/figure-html/graze_posthoc_plot2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Why think about interactions
+
+- It Depends is a rule in biology
+
+- Context dependent interactions everywhere
+
+- Using categorical predictors in a factorial design is an elegant way to see interactions without worrying about shapes of relationships
+
+- BUT - it all comes down to a general linear model! And the same inferential frameworks we have been dealing with since linear regression!
+
+---
+# Final Thought - You can have 2, 3, and more-way interactions!
+
+.center[.middle[
+![image](./images/22/4_way_interaction.jpg)
+]]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
