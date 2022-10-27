@@ -12,7 +12,7 @@ output:
       countIncrementalSlides: false
 ---
 class: center, middle
-
+<!-- make the interaction plots make more sense and relate to a question -->
 
 # When The Effect of One Category Depends on Another
 ![](images/anova/yoda_factorial.jpg)
@@ -132,7 +132,7 @@ check_model(mod, check = "linearity", panel = FALSE) |> perform_plot()
 
 # The Linear Model Can Accomodate Many Flavors of Nonlinearity
 
-$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} = \beta_2 x_{2i}$$
+$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}$$
 $$y_i \sim N(\hat{y_i}, \sigma)$$
 --
 Could become...
