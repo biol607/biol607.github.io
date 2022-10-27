@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>So Many Variables: Multiple Linear Regression and Variable Selection</title>
+    <title>Interactions and Nonlinearities with Linear Models and Continuous Variables</title>
     <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
   <body>
@@ -14,7 +17,7 @@
 class: center, middle
 
 
-# So Many Variables: Multiple Linear Regression and Variable Selection
+# Interactions and Nonlinearities with Linear Models and Continuous Variables
 ![](./images/23/regression_depression.jpg)
 
 
@@ -24,37 +27,75 @@ class: center, middle
 
 # Etherpad
 &lt;br&gt;&lt;br&gt;
-&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-mlr-2020 &lt;/h3&gt;&lt;/center&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-interactions-nonlinearities-2022&lt;/h3&gt;&lt;/center&gt;
+
 
 ---
-# So many variables.
+# The world isn't additive
 
-1. Multiple linear regression review  
+-   Until now, we have assumed predictors combine additively  
+     - the effect of one is not dependent on the effect of the other
+
+--
+
+-   BUT - what if the effect of one variable depends on the level of another?
+
+--
+
+-   This is an **INTERACTION** and is quite common  
+     - Heck, a squared term is the interaction of a variable with itself!
+
+--
+
+- Biology: The science of "It depends..."  
+
+--
+
+-   This is challenging to think about and visualize, but if you can master it, you will go far!
+
+---
+
+# The Linear Model Can Accomodate Many Flavors of Nonlinearity
+
+`$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} = \beta_2 x_{2i}$$`
+`$$y_i \sim N(\hat{y_i}, \sigma)$$`
+--
+Could become...
+
+
+`$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2$$`
+--
+Could be...
+
+
+`$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i}x_{2i}$$`
+--
+.center[**It is ALL additive terms**]
+
+---
+# We Saw How One Category Can Influence Another
+
+`$$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$` 
+
+&lt;img src="mlr_int_files/figure-html/plot_algae-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Nonlinear World
+
+1. Interactions between categorical and continuous variables
 
 2. Multiple linear regression with interactions
 
-3. Visualizaing MLR
-
-4. The problem of what variables to choose: muti-model inference
-
----
-# Previously On Multiple Regression and the General Linear Model!
-
-.middle[.center[
-![image](./images/23/regression2.png)
-]
-
-With multiple regression, we estimate the effect of one variable as if we were controlling for the other, given the covariance between predictors.
-
-]
-
+3. Multiple linear regression and nonlinear predictors in general  
+  
 ---
 background-image:url(images/23/fires.jpg)
 background-size:contain
 background-position:center
 class: bottom, inverse
 
-### Five year study of wildfires &amp; recovery in Southern California shurblands in 1993. 90 plots (20 x 50m)  
+
+### Previously - a five year study of wildfires &amp; recovery in Southern California shurblands in 1993. 90 plots (20 x 50m)  
 
 (data from Jon Keeley et al.)
 
@@ -75,85 +116,274 @@ class: bottom, inverse
 
 - Plant cover  
 
----
-# Our Model
 
-`$$Richness_i =\beta_{0} + \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$`
+---
+# Does The Effect of Plant Cover Vary by Elevation?
+
+&lt;img src="mlr_int_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Does The Effect of Plant Cover Vary by Elevation?
+
+&lt;img src="mlr_int_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Previously, the Effect of One Category Depended on Another
+
+`$$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$`  
+
+`$$\large \epsilon_{ijk} \sim N(0, \sigma^{2} )$$`
+`$$\large x_{i} = 0,1, x_{j} = 0,1, x_{ij} = 0,1$$` 
+
+---
+# Now the Effect of Continuous Predictor Varies by a Category
+
+`$$\large y_{ij} = \beta_{0} + \beta_{1}x_{1} + \sum \beta_{j1}x_{j} + \sum \beta_{j2}x_{1}x_{j} + \epsilon_{ij}$$`  
+
+`$$\large \epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad  x_{j} = 0,1,$$`
+
+- Here, we have a model with a continuous covariate and a categorical variable  
+
 --
 
+- The final term is the deviation in the slope ( `\(\beta_1\)` ) due to being in group j  
 
+--
 
+- This is, yet again, an interaction effect
+
+--
+
+- Yet again, this can ALL be represented in `\(Y = \beta X + \epsilon\)`
+
+---
+# This Model and its Contrasts Should be Familiar
 
 ```r
-klm &lt;- lm(rich ~ cover + firesev + hetero, data=keeley)
+elev_int_mod &lt;- lm(rich ~ cover * elev_group, data = keeley)
+```
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.645 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.744 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cover &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 29.864 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.282 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; elev_groupLow &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.815 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.030 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; elev_groupModerate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.850 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; elev_groupHigh &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42.441 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.221 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cover:elev_groupLow &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9.961 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.480 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cover:elev_groupModerate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -19.578 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cover:elev_groupHigh &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -44.962 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.107 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Yes, Assumptions as Usual
+&lt;img src="mlr_int_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+VIF for interactions is not really important
+
+
+---
+# What Does it All Mean: Slopes Affected by Groups
+
+
+```
+ elev_group cover.trend    SE df lower.CL upper.CL
+ Sealevel          29.9  8.28 82    13.39    46.34
+ Low               19.9  9.34 82     1.33    38.47
+ Moderate          10.3  8.85 82    -7.32    27.89
+ High             -15.1 10.16 82   -35.31     5.11
+
+Confidence level used: 0.95 
 ```
 
 ---
-# Evaluating If Multicollinearity is a Problem
-# Checking for Multicollinearity: Variance Inflation Factor
-`$$VIF_1 = \frac{1}{1-R^2_{1}}$$` 
-
-
-
-```r
-vif(klm)
-```
-
-```
-   cover  firesev   hetero 
-1.294950 1.261695 1.050381 
-```
-
----
-# Other Diagnostics as Usual!
-
-&lt;img src="mlr_int_files/figure-html/klm_diag-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Modeled Results
-
-
-|            | Estimate| Std. Error| t value| Pr(&gt;&amp;#124;t&amp;#124;)|
-|:-----------|--------:|----------:|-------:|------------------:|
-|(Intercept) |     1.68|      10.67|    0.16|               0.88|
-|cover       |    15.56|       4.49|    3.47|               0.00|
-|firesev     |    -1.82|       0.85|   -2.14|               0.04|
-|hetero      |    65.99|      11.17|    5.91|               0.00|
-
-- Coefficients are the change in units of y per change in 1 unit of X
-
-- Intercept is value of y when all variables are 0
----
-# Comparing Coefficients on the Same Scale
-
-If we want to get Partial Correlation Coefficients, we can z-transform all predictors or use this formula:
-
-`$$r_{xy} = b_{xy}\frac{sd_{x}}{sd_{y}}$$` 
+# Yes, You Can Compare Slopes
 
 
 ```
-     cover    firesev     hetero 
- 0.3267325 -0.1987243  0.5016017 
+ contrast            estimate   SE df lower.CL upper.CL
+ Sealevel - Low          9.96 12.5 82   -22.77     42.7
+ Sealevel - Moderate    19.58 12.1 82   -12.21     51.4
+ Sealevel - High        44.96 13.1 82    10.59     79.3
+ Low - Moderate          9.62 12.9 82   -24.12     43.3
+ Low - High             35.00 13.8 82    -1.18     71.2
+ Moderate - High        25.38 13.5 82    -9.95     60.7
+
+Confidence level used: 0.95 
+Conf-level adjustment: tukey method for comparing a family of 4 estimates 
 ```
 
-Now, `\(\beta\)`s are change in SD of Y per change in 1 SD of X
 
 ---
-# Viz is an art
+# What Does it All Mean: Group Means at Different Values of Covariates
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; elev_group &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; cover &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sealevel &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.056 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 26.305 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.346 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Low &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.056 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 34.566 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.495 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Moderate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.056 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 45.606 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.292 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; High &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.056 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 66.246 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.923 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sealevel &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.795 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 48.401 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.182 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Low &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.795 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49.292 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.961 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Moderate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.795 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 53.217 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.059 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; High &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.795 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 55.075 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.776 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sealevel &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.535 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70.498 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.171 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Low &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.535 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 64.019 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.412 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Moderate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.535 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60.828 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.054 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; High &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.535 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 43.903 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.103 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
-&lt;img src="mlr_int_files/figure-html/klm_visreg-1.png" style="display: block; margin: auto;" /&gt;
+---
+# What Does it All Mean: Group Comparisons Change with Covariates
+
+```
+cover = 0.0556:
+ contrast            estimate    SE df lower.CL upper.CL
+ Sealevel - Low         -8.26  8.41 82   -30.32    13.80
+ Sealevel - Moderate   -19.30  8.26 82   -40.95     2.35
+ Sealevel - High       -39.94  9.56 82   -65.01   -14.88
+ Low - Moderate        -11.04  9.04 82   -34.76    12.67
+ Low - High            -31.68 10.25 82   -58.55    -4.81
+ Moderate - High       -20.64 10.12 82   -47.17     5.89
+
+cover = 1.5354:
+ contrast            estimate    SE df lower.CL upper.CL
+ Sealevel - Low          6.48 11.73 82   -24.28    37.24
+ Sealevel - Moderate     9.67 11.47 82   -20.42    39.76
+ Sealevel - High        26.60 11.51 82    -3.58    56.77
+ Low - Moderate          3.19 11.65 82   -27.35    33.73
+ Low - High             20.12 11.68 82   -10.52    50.75
+ Moderate - High        16.92 11.42 82   -13.04    46.89
+
+Confidence level used: 0.95 
+Conf-level adjustment: tukey method for comparing a family of 4 estimates 
+```
+        
+
+---
+# Visualization is Key: Changing Slopes and Counterfactuals
+
+&lt;img src="mlr_int_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# So many variables.
+# A Nonlinear World
 
-1. Multiple linear regression review  
+1. Interactions between categorical and continuous variables
 
 2. .red[Multiple linear regression with interactions]
 
-3. Visualizaing MLR
-
-4. The problem of what variables to choose: muti-model inference
+3. Multiple linear regression and nonlinear predictors in general  
+  
 
 ---
 # Problem: What if Continuous Predictors are Not Additive?
@@ -183,15 +413,15 @@ Now, `\(\beta\)`s are change in SD of Y per change in 1 SD of X
 
 --
 
-Code just like factorial models!
+Code just like previous models!
 
 
 ```r
-keeley_lm_int &lt;- lm(firesev ~ age*elev, data=keeley)
+keeley_lm_int &lt;- lm(firesev ~ age * elev, data=keeley)
 ```
 
 ---
-# A Problem: Interactions are Collinear with Predictors
+# Interactions are Collinear with Predictors
 
 `$$VIF_1 = \frac{1}{1-R^2_{1}}$$` 
 
@@ -206,7 +436,7 @@ vif(keeley_lm_int)
 ```
 
 --
-This isn't that bad. But it can be. 
+This isn't that bad.
 
 --
 
@@ -214,7 +444,7 @@ Often, interactions or nonlinear derived predictors are collinear with one or mo
 
 --
 
-To remove, this, we can **center** predictors - i.e., `\(X_i - mean(X)\)`
+If you want to remove, this, we can **center** predictors - i.e., `\(X_i - mean(X)\)`
 
 ---
 # Interpretation of Centered Coefficients
@@ -256,29 +486,54 @@ Variance Inflation Factors for Centered Model:
     1.016721     1.041830     1.037929 
 ```
 
----
-# F-Tests to Evaluate Model
-What type of Sums of Squares??
-
 --
 
+- Honestly, again, not important - unless you are using a parameter search algorithm where collinearity can get it lost.  
 
-|          |     Sum Sq| Df|   F value|    Pr(&gt;F)|
-|:---------|----------:|--:|---------:|---------:|
-|age       |  52.963196|  1| 27.709228| 0.0000010|
-|elev      |   6.253129|  1|  3.271505| 0.0739877|
-|age:elev  |  22.304523|  1| 11.669256| 0.0009722|
-|Residuals | 164.379710| 86|          |          |
-
+- E.g., centering can *dramatically* spead up Bayesian MCMC and HMC  
 ---
 # Coefficients (non-centered model)!
-
-|            |   Estimate| Std. Error|   t value| Pr(&gt;&amp;#124;t&amp;#124;)|
-|:-----------|----------:|----------:|---------:|------------------:|
-|(Intercept) |  1.8132153|  0.6156070|  2.945411|          0.0041484|
-|age         |  0.1206292|  0.0208618|  5.782298|          0.0000001|
-|elev        |  0.0030852|  0.0013329|  2.314588|          0.0230186|
-|age:elev    | -0.0001472|  0.0000431| -3.416029|          0.0009722|
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Std. Error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;|t|) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.8132153 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.6156070 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.945411 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0041484 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; age &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1206292 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0208618 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.782298 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000001 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; elev &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0030852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0013329 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.314588 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0230186 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; age:elev &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0001472 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000431 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.416029 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0009722 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 
 R&lt;sup&gt;2&lt;/sup&gt; = 0.3235187
@@ -291,13 +546,47 @@ R&lt;sup&gt;2&lt;/sup&gt; = 0.3235187
 
 ---
 # Centered Coefficients!
-
-|             |   Estimate| Std. Error|   t value| Pr(&gt;&amp;#124;t&amp;#124;)|
-|:------------|----------:|----------:|---------:|------------------:|
-|(Intercept)  |  4.6091266|  0.1463029| 31.503991|          0.0000000|
-|age_c        |  0.0581123|  0.0117591|  4.941901|          0.0000038|
-|elev_c       | -0.0006786|  0.0005792| -1.171587|          0.2445985|
-|age_c:elev_c | -0.0001472|  0.0000431| -3.416029|          0.0009722|
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Std. Error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Pr(&amp;gt;|t|) &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.6091266 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1463029 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 31.503991 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; age_c &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0581123 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0117591 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.941901 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000038 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; elev_c &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0006786 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0005792 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.171587 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2445985 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; age_c:elev_c &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0001472 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000431 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.416029 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0009722 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 
 
@@ -309,21 +598,10 @@ R&lt;sup&gt;2&lt;/sup&gt; = 0.3235187
 
 - Intercept is value of Y at the **average level** of all predictors.
 
----
-# So many variables.
-
-1. Multiple linear regression review  
-
-2. Multiple linear regression with interactions
-
-3. .red[Visualizaing MLR]
-
-4. The problem of what variables to choose: muti-model inference
-
 
 ---
 # Interpretation
-- What the heck does an interaction effect mean?
+- What the heck does an interaction effect with continuous variables mean?
 
 --
 
@@ -350,6 +628,10 @@ R&lt;sup&gt;2&lt;/sup&gt; = 0.3235187
 &lt;img src="mlr_int_files/figure-html/surf_int-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
+# Surfaces and Heatmaps
+&lt;img src="mlr_int_files/figure-html/surf_int_heat-1.png" style="display: block; margin: auto;" /&gt;
+
+---
 # Or all in one plot
 &lt;img src="mlr_int_files/figure-html/keeley_int_pred-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -357,315 +639,86 @@ R&lt;sup&gt;2&lt;/sup&gt; = 0.3235187
 # Without Data and Including CIs
 &lt;img src="mlr_int_files/figure-html/keeley_int_pred_nodata-1.png" style="display: block; margin: auto;" /&gt;
 
+
 ---
-# A Heatmap Approach
-&lt;img src="mlr_int_files/figure-html/int_heatmap-1.png" style="display: block; margin: auto;" /&gt;
+# A Nonlinear World
+
+1. Interactions between categorical and continuous variables
+
+2. Multiple linear regression with interactions
+
+3. .red[Multiple linear regression and nonlinear predictors in general]  
+  
+---
+# What if Plant Cover's Impact is Highest at Intermediate Levels?
+
+&lt;img src="mlr_int_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# It's Just Another Linear Model!
+`$$y_i = \beta_0 + \beta_{1}x_{i} + \beta_{2}x_{i}^2 +\epsilon_{i}$$`
+`$$\epsilon_i \sim \mathcal{N}(0 , \sigma)$$`
+
+--
+- Hey, that looks familiar!  
+    
+--
+  
+- This is the same thing as before  
+  
+--
+  
+- It's not just for squares!
+  
+--
+
+
+```r
+#note the I()
+keeley_sq &lt;- lm(rich ~ cover + I(cover^2), data = keeley)
+```
+
+---
+# Yes, This is the Same
+&lt;img src="mlr_int_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+- Note VIFs - again, not a worry with Least Squares
+
+---
+# We Can Look at Coefs...
+
+
+```
+# A tibble: 3 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)     25.6      6.57      3.90 0.000189
+2 cover           58.0     18.9       3.06 0.00291 
+3 I(cover^2)     -28.6     12.4      -2.31 0.0234  
+```
+
+---
+# But Visualization is the Way to Go
+
+&lt;img src="mlr_int_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # You know know all the models
 
 - Interaction effects or other nonlinearities are often one of the most useful and yet hardest to grok parts of building models
 
-- BUT, if you can learn *how to understand* interactions in your model, you've reached the upper echelons
+--
 
-- BUT, beware. Not every model needs an interaction - start with the fundamentals of theory and biology first
+- BUT, if you can learn *how to understand* interactions and nonlinearities in your model, you've reached the upper echelons
+
+--
+
+- BUT, beware. Not every model needs an nonlinearity or interaction - start with the fundamentals of theory and biology first
 
 ---
 class:middle, center
 
-![](images/23/matrix_regression.jpg)
-
-
----
-# So many variables.
-
-1. Multiple linear regression review  
-
-2. Multiple linear regression with interactions
-
-3. Visualizaing MLR
-
-4. .red[The problem of what variables to choose: muti-model inference]
-
-
----
-# So.... How do you Choose What Variables to Include?
-
-
-
-7 models alone with 1 term each  
-127 possible **without** interactions.
-
-#
-![](images/mmi/mmi_aic_batman.jpg)
-
----
-class: center, middle
-
-##Hint: The real answer is to think about biology - it's coming - but sometimes, you are doing pure exploration, so...
-
----
-# A Quantitative Measure of Relative Support
-
-`$$w_{i} = \frac{e^{-\Delta_{i}/2 }}{\displaystyle \sum^R_{r=1} e^{-\Delta_{i}/2 }}$$`
-
-Where `\(w_{i}\)` is the relative supporfor model i
-compared to other models in the set being considered.
-
-Model weights summed together = 1
-
----
-# Let's Begin with a Full Model
-
-
-```r
-keeley_full &lt;- lm(rich ~  elev + abiotic + hetero +
-                          distance + firesev + 
-                          age + cover,
-                  data = keeley)
-```
- We use this model as a jumping off point, and construct a series of nested models with subsets of the variables.  
-
-Evaluate using AICc Weights!
-
----
-# Sometimes, You Can Use a Models broken down by CLASSES of Predictors
-
-
-```r
-keeley_soil_fire &lt;- lm(rich ~ elev + abiotic + hetero +
-                          distance + firesev,
-                  data = keeley)
-
-keeley_plant_fire &lt;- lm(rich ~  distance + firesev + 
-                          age + cover,
-                  data = keeley)
-
-keeley_soil_plant &lt;- lm(rich ~  elev + abiotic + hetero +
-                          age + cover,
-                  data = keeley)
-```
----
-
-# One Factor Models
-
-.middle[
-
-
-```r
-keeley_soil &lt;- lm(rich ~  elev + abiotic + hetero,
-                  data = keeley)
-
-keeley_fire &lt;- lm(rich ~  distance + firesev,
-                  data = keeley)
-
-keeley_plant &lt;- lm(rich ~  age + cover,
-                  data = keeley)
-```
-
-]
-
----
-# Null Model
-.middle[
-
-
-```r
-keeley_null &lt;- lm(rich ~  1,
-                  data = keeley)
-```
-
-]
-
----
-# Now Compare Models Weights
-
-
-
-
-|   |Modnames   |  K|    AICc| Delta_AICc| ModelLik| AICcWt|       LL|
-|:--|:----------|--:|-------:|----------:|--------:|------:|--------:|
-|1  |full       |  9| 688.162|      0.000|    1.000|  0.888| -333.956|
-|3  |soil_fire  |  7| 692.554|      4.392|    0.111|  0.099| -338.594|
-|4  |soil_plant |  7| 696.569|      8.406|    0.015|  0.013| -340.601|
-|7  |fire       |  4| 707.493|     19.331|    0.000|  0.000| -349.511|
-|2  |plant_fire |  6| 709.688|     21.526|    0.000|  0.000| -348.338|
-|5  |soil       |  5| 711.726|     23.564|    0.000|  0.000| -350.506|
-|6  |plant      |  4| 737.163|     49.001|    0.000|  0.000| -364.346|
-|8  |null       |  2| 747.254|     59.092|    0.000|  0.000| -371.558|
-
----
-class:center, middle
-
-## So, I have some sense of good models? What now?
-
----
-
-class: center, middle
-
-![](images/mmi/batman_model_averaging.jpg)
-
----
-# Variable Weights
-
-How to I evaluate the importance of a variable?   
-
---
-
-Variable Weight = sum of all weights of all models including a variable. Relative support for inclusion of parameter in models. 
-
---
-
-
-```
-
-Importance values of 'firesev':
-
-w+ (models including parameter): 0.99 
-w- (models excluding parameter): 0.01 
-```
-
---
-
-But what about the estimand and its precision?
----
-background-color: black
-class: center, middle
-
-![](./images/mmi/bjork-on-phone-yes-i-am-all-about-the-deviance-let-us-make-it-shrink-our-parameters.jpg)
-
----
-# We can Use Model Averaged Parameters
-
-`$$\hat{\bar{\beta}} = \frac{\sum w_{i}\hat\beta_{i}}{\sum{w_i}}$$`
-
-
-
-`$$var(\hat{\bar{\beta}}) = \left [ w_{i} \sqrt{var(\hat\beta_{i}) + (\hat\beta_{i}-\hat{\bar{\beta_{i}}})^2}  \right ]^2$$`
-
-
-Buckland et al. 1997
-
----
-
-# Model Averaged Parameters
-
-
-```r
-modavgShrink(modelList, parm="firesev",  modnames=names(modelList))
-```
-
-```
-
-Multimodel inference on "firesev" based on AICc
-
-AICc table used to obtain model-averaged estimate with shrinkage:
-
-           K   AICc Delta_AICc AICcWt Estimate   SE
-full       9 688.16       0.00   0.89    -1.02 0.80
-plant_fire 6 709.69      21.53   0.00    -1.39 0.92
-soil_fire  7 692.55       4.39   0.10    -1.89 0.73
-soil_plant 7 696.57       8.41   0.01     0.00 0.00
-soil       5 711.73      23.56   0.00     0.00 0.00
-plant      4 737.16      49.00   0.00     0.00 0.00
-fire       4 707.49      19.33   0.00    -2.03 0.80
-null       2 747.25      59.09   0.00     0.00 0.00
-
-Model-averaged estimate with shrinkage: -1.09 
-Unconditional SE: 0.84 
-95% Unconditional confidence interval: -2.74, 0.56
-```
-
----
-class:center, middle
-background-color: black
-![](./images/mmi/chorus_line_model_selection.jpg)
-
----
-# Best to Use Model Averaged Predictions
-
-
-```r
-newData &lt;- data.frame(distance = 50,
-                      elev = 400,
-                      abiotic = 48,
-                      age = 2,
-                      hetero = 0.5,
-                      firesev = 10,
-                      cover=0.4)
-```
-
-
-```
-
-Model-averaged predictions on the response scale
-based on entire model set and 95% confidence interval:
-
-  mod.avg.pred uncond.se lower.CL upper.CL
-1       31.666     6.136    19.64   43.692
-```
----
-
-# Death to single models!
-- While sometimes the model you should use is clear, more often it is *not*  
-
---
-
-- Further, you made those models for a reason: you suspect those terms are important  
-
---
-
-- Better to look at coefficients across models  
-
---
-
-- For actual predictions, ensemble predictions provide real uncertainty
-
----
-
-# What about IC Analyses in Bayes?
-
-.center[.middle[
-![](./images/mmi/hey-girl-the-bayesian-inference-indicates-the-effect-you-have-on-my-life-isnt-too-large.jpg)
-]]
----
-
-# Bayesian MMI
-
-- We can calculate an IC and Model Weight using LOOIC or WAIC
-
-- We can get weighted parameter estimates by sampling from the chains of different models in proportion to their IC weight
-
-- We can get MMI predictions by doing the same with predictions!
-
----
-
-# Final Notes on Many Models
-
-- If you can, don't do this. Start by building models and working up. We will talk about this soon.
-
---
-
--   BUT, if you are exploring model space, IC analyses aid in model selection. One must still evaluate parameters and parameter error.  
-
---
-
--   Your inferences are constrained solely to the range of models
-    you consider. You may have missed the ’best’ model for prediction.
-    
---
-
-- Remember, this is ALL ABOUT PREDICTION
-
---
-
-
--   All inferences &lt;span&gt;**MUST**&lt;/span&gt; be based on &lt;span&gt;*a*
-    priori&lt;/span&gt; models. Post-hoc model dredging could result in an erroneous ’best’ model suited to your unique data set.  
-
---
-
--   Ensemble predictions are a powerful practice to show true uncertainty
+![](images/many_predictors/nonlinear.jpg)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -714,6 +767,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

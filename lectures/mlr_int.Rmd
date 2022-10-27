@@ -1,5 +1,5 @@
 ---
-title: "So Many Variables: Multiple Linear Regression and Variable Selection"
+title: "Interactions and Nonlinearities with Linear Models and Continuous Variables"
 output:
   xaringan::moon_reader:
     seal: false
@@ -14,7 +14,7 @@ output:
 class: center, middle
 
 
-# So Many Variables: Multiple Linear Regression and Variable Selection
+# Interactions and Nonlinearities with Linear Models and Continuous Variables
 ![](./images/23/regression_depression.jpg)
 
 ```{r setup, include=FALSE}
@@ -24,13 +24,11 @@ library(dplyr)
 library(tidyr)
 library(broom)
 library(readr)
-library(brms)
-library(ggdist)
-library(tidybayes)
 library(car)
-library(AICcmodavg)
+library(modelr)
 library(emmeans)
 library(visreg)
+library(performance)
 
 opts_chunk$set(fig.height=6, 
                fig.width = 8,
@@ -54,37 +52,83 @@ class: center, middle
 
 # Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-mlr-2020 </h3></center>
+<center><h3>https://etherpad.wikimedia.org/p/607-interactions-nonlinearities-2022</h3></center>
+
 
 ---
-# So many variables.
+# The world isn't additive
 
-1. Multiple linear regression review  
+-   Until now, we have assumed predictors combine additively  
+     - the effect of one is not dependent on the effect of the other
+
+--
+
+-   BUT - what if the effect of one variable depends on the level of another?
+
+--
+
+-   This is an **INTERACTION** and is quite common  
+     - Heck, a squared term is the interaction of a variable with itself!
+
+--
+
+- Biology: The science of "It depends..."  
+
+--
+
+-   This is challenging to think about and visualize, but if you can master it, you will go far!
+
+---
+
+# The Linear Model Can Accomodate Many Flavors of Nonlinearity
+
+$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} = \beta_2 x_{2i}$$
+$$y_i \sim N(\hat{y_i}, \sigma)$$
+--
+Could become...
+
+
+$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2$$
+--
+Could be...
+
+
+$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i}x_{2i}$$
+--
+.center[**It is ALL additive terms**]
+
+---
+# We Saw How One Category Can Influence Another
+
+$$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$ 
+
+```{r plot_algae}
+algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+
+algae_plot <- qplot(height, sqrtarea,  data=algae, geom="boxplot", fill=herbivores) + theme_bw(base_size=16)
+
+algae_plot
+
+
+```
+
+---
+# A Nonlinear World
+
+1. Interactions between categorical and continuous variables
 
 2. Multiple linear regression with interactions
 
-3. Visualizaing MLR
-
-4. The problem of what variables to choose: muti-model inference
-
----
-# Previously On Multiple Regression and the General Linear Model!
-
-.middle[.center[
-![image](./images/23/regression2.png)
-]
-
-With multiple regression, we estimate the effect of one variable as if we were controlling for the other, given the covariance between predictors.
-
-]
-
+3. Multiple linear regression and nonlinear predictors in general  
+  
 ---
 background-image:url(images/23/fires.jpg)
 background-size:contain
 background-position:center
 class: bottom, inverse
 
-### Five year study of wildfires & recovery in Southern California shurblands in 1993. 90 plots (20 x 50m)  
+
+### Previously - a five year study of wildfires & recovery in Southern California shurblands in 1993. 90 plots (20 x 50m)  
 
 (data from Jon Keeley et al.)
 
@@ -105,91 +149,150 @@ class: bottom, inverse
 
 - Plant cover  
 
----
-# Our Model
 
-$$Richness_i =\beta_{0} + \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$
+---
+# Does The Effect of Plant Cover Vary by Elevation?
+
+```{r}
+keeley <- read.csv("lectures/data/23/Keeley_rawdata_select4.csv")
+
+ggplot(keeley,
+       aes(x = cover, y = rich, 
+           color = elev)) +
+  geom_point() +
+  scale_color_viridis_c(option = "B")
+```
+
+---
+# Does The Effect of Plant Cover Vary by Elevation?
+
+```{r}
+keeley <- keeley |>
+  mutate(elev_group = cut_number(elev, 4))
+
+levels(keeley$elev_group) <- c("Sealevel", "Low", "Moderate", "High")
+
+ggplot(keeley,
+       aes(x = cover, y = rich, 
+           color = elev)) +
+  geom_point() +
+  scale_color_viridis_b(option = "B", n.breaks = 5) +
+  facet_wrap(vars(elev_group))
+```
+
+
+---
+# Previously, the Effect of One Category Depended on Another
+
+$$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$  
+
+$$\large \epsilon_{ijk} \sim N(0, \sigma^{2} )$$
+$$\large x_{i} = 0,1, x_{j} = 0,1, x_{ij} = 0,1$$ 
+
+---
+# Now the Effect of Continuous Predictor Varies by a Category
+
+$$\large y_{ij} = \beta_{0} + \beta_{1}x_{1} + \sum \beta_{j1}x_{j} + \sum \beta_{j2}x_{1}x_{j} + \epsilon_{ij}$$  
+
+$$\large \epsilon_{ijk} \sim N(0, \sigma^{2} ), \qquad  x_{j} = 0,1,$$
+
+- Here, we have a model with a continuous covariate and a categorical variable  
+
 --
 
-```{r keeley_pairs}
-keeley <- read.csv("data/23/Keeley_rawdata_select4.csv")
-```
+- The final term is the deviation in the slope ( $\beta_1$ ) due to being in group j  
 
-```{r mlr, echo=TRUE}
+--
 
-klm <- lm(rich ~ cover + firesev + hetero, data=keeley)
-```
+- This is, yet again, an interaction effect
 
----
-# Evaluating If Multicollinearity is a Problem
-# Checking for Multicollinearity: Variance Inflation Factor
-$$VIF_1 = \frac{1}{1-R^2_{1}}$$ 
+--
 
-
-```{r klm_vi, echo = TRUE}
-vif(klm)
-``` 
+- Yet again, this can ALL be represented in $Y = \beta X + \epsilon$
 
 ---
-# Other Diagnostics as Usual!
+# This Model and its Contrasts Should be Familiar
+```{r, echo = TRUE}
+elev_int_mod <- lm(rich ~ cover * elev_group, data = keeley)
+```
 
-```{r klm_diag, fig.height=6}
-par(mfrow=c(2,2))
-plot(klm, which=c(1,2,5))
-par(mfrow=c(1,1))
+```{r}
+tidy(elev_int_mod) |>
+  select(1:3) |>
+  knitr::kable(digits = 3) |>
+  kableExtra::kable_styling()
 ```
 
 ---
-# Modeled Results
-
-```{r keeley_coe}
-knitr::kable(coef(summary(klm)), digits=2)
-``` 
-
-- Coefficients are the change in units of y per change in 1 unit of X
-
-- Intercept is value of y when all variables are 0
----
-# Comparing Coefficients on the Same Scale
-
-If we want to get Partial Correlation Coefficients, we can z-transform all predictors or use this formula:
-
-$$r_{xy} = b_{xy}\frac{sd_{x}}{sd_{y}}$$ 
-
-```{r keeley_std, size="normalsize"}
-library(QuantPsyc) 
-lm.beta(klm)
+# Yes, Assumptions as Usual
+```{r}
+check_model(elev_int_mod)
 ```
 
-Now, $\beta$s are change in SD of Y per change in 1 SD of X
+VIF for interactions is not really important
+
 
 ---
-# Viz is an art
+# What Does it All Mean: Slopes Affected by Groups
 
-```{r klm_visreg, fig.height=6}
-library(patchwork)
-a <- visreg::visreg(klm, gg=TRUE)
-a[[1]] + a[[2]] + a[[3]] + 
-  plot_layout(ncol = 2, guides = 'collect')
+```{r}
+emtrends(elev_int_mod, specs = ~elev_group, var = "cover")
+```
+
+---
+# Yes, You Can Compare Slopes
+
+```{r}
+emtrends(elev_int_mod, specs = ~elev_group, var = "cover") |>
+  contrast("pairwise") |>
+  confint()
 ```
 
 
 ---
-# So many variables.
+# What Does it All Mean: Group Means at Different Values of Covariates
+```{r}
+emmeans(elev_int_mod, ~elev_group | cover,
+        at = list(cover = seq_range(keeley$cover, 3))) |>
+  tidy() |>
+  select(1:4) |>
+  knitr::kable(digits = 3) |>
+  kableExtra::kable_styling()
+```
 
-1. Multiple linear regression review  
+---
+# What Does it All Mean: Group Comparisons Change with Covariates
+```{r}
+emmeans(elev_int_mod, ~elev_group | cover,
+        at = list(cover = seq_range(keeley$cover, 2))) |>
+  contrast("pairwise") |>
+  confint()
+```
+        
+
+---
+# Visualization is Key: Changing Slopes and Counterfactuals
+
+```{r}
+visreg(elev_int_mod, "cover", by = "elev_group", gg = TRUE) 
+```
+
+
+---
+# A Nonlinear World
+
+1. Interactions between categorical and continuous variables
 
 2. .red[Multiple linear regression with interactions]
 
-3. Visualizaing MLR
-
-4. The problem of what variables to choose: muti-model inference
+3. Multiple linear regression and nonlinear predictors in general  
+  
 
 ---
 # Problem: What if Continuous Predictors are Not Additive?
 
 ```{r keeley_int_plot3d, fig.height=6, fig.width=7}
-source("./3dplotting.R")
+source("lectures/3dplotting.R")
 with(keeley, scatterPlot3d(age,elev,firesev, 
                            col="black", xlab="age", ylab="elev",
                            zlab="firesev",
@@ -227,14 +330,14 @@ $$y_i = \beta_0 + \beta_{1}x_{1i} + \beta_{2}x_{2i}+ \beta_{3}x_{1i}x_{2i} + \ep
 
 --
 
-Code just like factorial models!
+Code just like previous models!
 
 ```{r keeley_mod_int, echo=TRUE}
-keeley_lm_int <- lm(firesev ~ age*elev, data=keeley)
+keeley_lm_int <- lm(firesev ~ age * elev, data=keeley)
 ```
 
 ---
-# A Problem: Interactions are Collinear with Predictors
+# Interactions are Collinear with Predictors
 
 $$VIF_1 = \frac{1}{1-R^2_{1}}$$ 
 
@@ -243,7 +346,7 @@ vif(keeley_lm_int)
 ```
 
 --
-This isn't that bad. But it can be. 
+This isn't that bad.
 
 --
 
@@ -251,7 +354,7 @@ Often, interactions or nonlinear derived predictors are collinear with one or mo
 
 --
 
-To remove, this, we can **center** predictors - i.e., $X_i - mean(X)$
+If you want to remove, this, we can **center** predictors - i.e., $X_i - mean(X)$
 
 ---
 # Interpretation of Centered Coefficients
@@ -297,16 +400,11 @@ keeley_lm_int_cent <- lm(firesev ~ age_c*elev_c, data=keeley)
 vif(keeley_lm_int_cent)
 ```
 
----
-# F-Tests to Evaluate Model
-What type of Sums of Squares??
-
 --
 
-```{r int_anova}
-knitr::kable(Anova(keeley_lm_int))
-```
+- Honestly, again, not important - unless you are using a parameter search algorithm where collinearity can get it lost.  
 
+- E.g., centering can *dramatically* spead up Bayesian MCMC and HMC  
 ---
 # Coefficients (non-centered model)!
 ```{r int_coef}
@@ -338,21 +436,10 @@ R<sup>2</sup> = `r summary(keeley_lm_int_cent)$r.square`
 
 - Intercept is value of Y at the **average level** of all predictors.
 
----
-# So many variables.
-
-1. Multiple linear regression review  
-
-2. Multiple linear regression with interactions
-
-3. .red[Visualizaing MLR]
-
-4. The problem of what variables to choose: muti-model inference
-
 
 ---
 # Interpretation
-- What the heck does an interaction effect mean?
+- What the heck does an interaction effect with continuous variables mean?
 
 --
 
@@ -387,6 +474,12 @@ with(keeley, scatterPlot3d(age,elev,firesev, add=T, background=p, col="black", a
 ```
 
 ---
+# Surfaces and Heatmaps
+```{r surf_int_heat, fig.height=8, fig.width=10}
+visreg2d(keeley_lm_int, "age", "elev")
+```
+
+---
 # Or all in one plot
 ```{r keeley_int_pred}
 k_pred <- crossing(elev = 100:1200, age = quantile(keeley$age)) %>%
@@ -416,16 +509,72 @@ ggplot() +
   theme_bw(base_size=17)
 ```
 
----
-# A Heatmap Approach
-```{r int_heatmap}
-k_pred_grid <- crossing(elev = 100:1200, age = 3:60) %>%
-  modelr::add_predictions(keeley_lm_int, var="firesev")
 
-ggplot(k_pred_grid, mapping=aes(x=age, y=elev, colour=firesev)) +
-  geom_tile() +
-#  scale_color_continuous(low="lightblue", high="red")
-  scale_color_gradient2(low = "blue", high="red", mid="white", midpoint=5)
+---
+# A Nonlinear World
+
+1. Interactions between categorical and continuous variables
+
+2. Multiple linear regression with interactions
+
+3. .red[Multiple linear regression and nonlinear predictors in general]  
+  
+---
+# What if Plant Cover's Impact is Highest at Intermediate Levels?
+
+```{r}
+ggplot(keeley,
+       aes(x = cover, y = rich)) +
+  geom_point() +
+  stat_smooth(method = "lm", formula = y ~ poly(x,2))
+```
+
+---
+# It's Just Another Linear Model!
+$$y_i = \beta_0 + \beta_{1}x_{i} + \beta_{2}x_{i}^2 +\epsilon_{i}$$
+$$\epsilon_i \sim \mathcal{N}(0 , \sigma)$$
+
+--
+- Hey, that looks familiar!  
+    
+--
+  
+- This is the same thing as before  
+  
+--
+  
+- It's not just for squares!
+  
+--
+
+```{r, echo = TRUE}
+#note the I()
+keeley_sq <- lm(rich ~ cover + I(cover^2), data = keeley)
+```
+
+---
+# Yes, This is the Same
+```{r}
+check_model(keeley_sq)
+```
+
+- Note VIFs - again, not a worry with Least Squares
+
+---
+# We Can Look at Coefs...
+
+```{r}
+tidy(keeley_sq)
+```
+
+---
+# But Visualization is the Way to Go
+
+```{r}
+ggplot(keeley,
+       aes(x = cover, y = rich)) +
+  geom_point() +
+  stat_smooth(method = "lm", formula = y ~ poly(x,2))
 ```
 
 ---
@@ -433,278 +582,15 @@ ggplot(k_pred_grid, mapping=aes(x=age, y=elev, colour=firesev)) +
 
 - Interaction effects or other nonlinearities are often one of the most useful and yet hardest to grok parts of building models
 
-- BUT, if you can learn *how to understand* interactions in your model, you've reached the upper echelons
+--
 
-- BUT, beware. Not every model needs an interaction - start with the fundamentals of theory and biology first
+- BUT, if you can learn *how to understand* interactions and nonlinearities in your model, you've reached the upper echelons
+
+--
+
+- BUT, beware. Not every model needs an nonlinearity or interaction - start with the fundamentals of theory and biology first
 
 ---
 class:middle, center
 
-![](images/23/matrix_regression.jpg)
-
-
----
-# So many variables.
-
-1. Multiple linear regression review  
-
-2. Multiple linear regression with interactions
-
-3. Visualizaing MLR
-
-4. .red[The problem of what variables to choose: muti-model inference]
-
-
----
-# So.... How do you Choose What Variables to Include?
-
-```{r keeley_pairs, height = 5}
-```
-
-7 models alone with 1 term each  
-`r sum(choose(7,1:7))` possible **without** interactions.
-
-#
-![](images/mmi/mmi_aic_batman.jpg)
-
----
-class: center, middle
-
-##Hint: The real answer is to think about biology - it's coming - but sometimes, you are doing pure exploration, so...
-
----
-# A Quantitative Measure of Relative Support
-
-$$w_{i} = \frac{e^{-\Delta_{i}/2 }}{\displaystyle \sum^R_{r=1} e^{-\Delta_{i}/2 }}$$
-
-Where $w_{i}$ is the relative supporfor model i
-compared to other models in the set being considered.
-
-Model weights summed together = 1
-
----
-# Let's Begin with a Full Model
-
-```{r fullmod0, echo=TRUE}
-keeley_full <- lm(rich ~  elev + abiotic + hetero +
-                          distance + firesev + 
-                          age + cover,
-                  data = keeley)
-```
- We use this model as a jumping off point, and construct a series of nested models with subsets of the variables.  
-
-Evaluate using AICc Weights!
-
----
-# Sometimes, You Can Use a Models broken down by CLASSES of Predictors
-
-```{r models1, echo=TRUE}
-keeley_soil_fire <- lm(rich ~ elev + abiotic + hetero +
-                          distance + firesev,
-                  data = keeley)
-
-keeley_plant_fire <- lm(rich ~  distance + firesev + 
-                          age + cover,
-                  data = keeley)
-
-keeley_soil_plant <- lm(rich ~  elev + abiotic + hetero +
-                          age + cover,
-                  data = keeley)
-```
----
-
-# One Factor Models
-
-.middle[
-
-```{r models2, echo=TRUE}
-keeley_soil <- lm(rich ~  elev + abiotic + hetero,
-                  data = keeley)
-
-keeley_fire <- lm(rich ~  distance + firesev,
-                  data = keeley)
-
-keeley_plant <- lm(rich ~  age + cover,
-                  data = keeley)
-```
-
-]
-
----
-# Null Model
-.middle[
-
-```{r models3, echo=TRUE}
-keeley_null <- lm(rich ~  1,
-                  data = keeley)
-
-```
-
-]
-
----
-# Now Compare Models Weights
-
-```{r modelList}
-modelList <- list(keeley_full,
-                  keeley_plant_fire,
-                  keeley_soil_fire,
-                  keeley_soil_plant,
-                  keeley_soil,
-                  keeley_plant,
-                  keeley_fire,
-                  keeley_null)
-
-names(modelList) <- c("full",
-     "plant_fire",
-     "soil_fire",
-     "soil_plant",
-     "soil",
-     "plant",
-     "fire", "null")
-
-```
-
-```{r aicctab}
-knitr::kable(aictab(modelList)[,-8], modnames = names(modelList), digits=3)
-```
-
----
-class:center, middle
-
-## So, I have some sense of good models? What now?
-
----
-
-class: center, middle
-
-![](images/mmi/batman_model_averaging.jpg)
-
----
-# Variable Weights
-
-How to I evaluate the importance of a variable?   
-
---
-
-Variable Weight = sum of all weights of all models including a variable. Relative support for inclusion of parameter in models. 
-
---
-
-```{r importance2}
-importance(modelList, parm="firesev", modnames=names(modelList))
-```
-
---
-
-But what about the estimand and its precision?
----
-background-color: black
-class: center, middle
-
-![](./images/mmi/bjork-on-phone-yes-i-am-all-about-the-deviance-let-us-make-it-shrink-our-parameters.jpg)
-
----
-# We can Use Model Averaged Parameters
-
-$$\hat{\bar{\beta}} = \frac{\sum w_{i}\hat\beta_{i}}{\sum{w_i}}$$
-
-
-
-$$var(\hat{\bar{\beta}}) = \left [ w_{i} \sqrt{var(\hat\beta_{i}) + (\hat\beta_{i}-\hat{\bar{\beta_{i}}})^2}  \right ]^2$$
-
-
-Buckland et al. 1997
-
----
-
-# Model Averaged Parameters
-
-```{r varEst, echo = TRUE}
-modavgShrink(modelList, parm="firesev",  modnames=names(modelList))
-```
-
----
-class:center, middle
-background-color: black
-![](./images/mmi/chorus_line_model_selection.jpg)
-
----
-# Best to Use Model Averaged Predictions
-
-```{r Predict_data, echo=TRUE}
-
-newData <- data.frame(distance = 50,
-                      elev = 400,
-                      abiotic = 48,
-                      age = 2,
-                      hetero = 0.5,
-                      firesev = 10,
-                      cover=0.4)
-```
-
-```{r predict}
-modavgPred(modelList, modnames=names(modelList), newdata = newData)
-```
----
-
-# Death to single models!
-- While sometimes the model you should use is clear, more often it is *not*  
-
---
-
-- Further, you made those models for a reason: you suspect those terms are important  
-
---
-
-- Better to look at coefficients across models  
-
---
-
-- For actual predictions, ensemble predictions provide real uncertainty
-
----
-
-# What about IC Analyses in Bayes?
-
-.center[.middle[
-![](./images/mmi/hey-girl-the-bayesian-inference-indicates-the-effect-you-have-on-my-life-isnt-too-large.jpg)
-]]
----
-
-# Bayesian MMI
-
-- We can calculate an IC and Model Weight using LOOIC or WAIC
-
-- We can get weighted parameter estimates by sampling from the chains of different models in proportion to their IC weight
-
-- We can get MMI predictions by doing the same with predictions!
-
----
-
-# Final Notes on Many Models
-
-- If you can, don't do this. Start by building models and working up. We will talk about this soon.
-
---
-
--   BUT, if you are exploring model space, IC analyses aid in model selection. One must still evaluate parameters and parameter error.  
-
---
-
--   Your inferences are constrained solely to the range of models
-    you consider. You may have missed the ’best’ model for prediction.
-    
---
-
-- Remember, this is ALL ABOUT PREDICTION
-
---
-
-
--   All inferences <span>**MUST**</span> be based on <span>*a*
-    priori</span> models. Post-hoc model dredging could result in an erroneous ’best’ model suited to your unique data set.  
-
---
-
--   Ensemble predictions are a powerful practice to show true uncertainty
+![](images/many_predictors/nonlinear.jpg)
