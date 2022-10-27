@@ -1,0 +1,353 @@
+---
+title: "Interactions and Nonlinearities in the Linear Model"
+author: "biol607"
+format:
+  html:
+    toc: true
+---
+
+Let's look at interacting predictors! For today, let's start with some standard libraries for these analyses.
+
+```{r}
+#| warning: false
+#| message: false
+
+library(readr)
+library(dplyr)
+library(car)
+library(broom)
+library(modelr)
+library(performance)
+library(ggplot2)
+library(GGally)
+library(emmeans)
+library(visreg)
+
+theme_set(theme_bw(base_size = 14))
+```
+
+## 1. Interacting Categorical Variables
+Going with that last intertidal example, if you really looked, it was a factorial design, with multiple treatments and conditions.
+
+```{r plot_mice}
+intertidal <- read.csv("./data/18e3IntertidalAlgae.csv")
+
+qplot(herbivores, sqrtarea, data=intertidal, fill=height, geom="boxplot")
+```
+
+### 1.1 Fit and Assumption Evaluation
+We fit factorial models using one of two different notations - both expand to the same thing
+
+```{r int_fact}
+intertidal_lm <- lm(sqrtarea ~ herbivores + height + herbivores:height, data=intertidal)
+
+intertidal_lm <- lm(sqrtarea ~ herbivores*height, data=intertidal)
+```
+
+Both mean the same thing as `:` is the interaction. `*` just means, expand all the interactions.
+
+But, after that's done...all of the assumption tests are the same. Try them out.
+
+```{r}
+check_model(intertidal_lm)
+```
+
+### 1.2 Post-Hocs
+Post-hocs are a bit funnier. But not by much. As we have an interaction, let's look at the simple effects. There are a few ways we can do this
+
+```{r tukey_simple}
+emmeans(intertidal_lm, ~ herbivores + height)
+
+emmeans(intertidal_lm, ~ herbivores | height)
+
+emmeans(intertidal_lm, ~ height | herbivores)
+```
+
+Notice how each presents the information in a different way. The numbers are not different, they just show you information in different ways. The contrasts each reference grid implies *do* make s difference, though, in how p-value corrections for FWER is handled. Consider the first case.
+
+```{r tuk_simp}
+emmeans(intertidal_lm, ~ herbivores + height) |>
+  contrast(method = "pairwise")
+```
+
+OK, cool. Every comparison is made. But what if we don't want to do that? What if we just want to see if the herbivore effect differs by height?
+
+```{r tuk_2}
+emmeans(intertidal_lm, ~ herbivores |height) |>
+  contrast(method = "pairwise")
+```
+
+Notice that, because we're only doing two contrasts, the correction is not as extreme. This method of contrasts might be more what you are interested in given your question. We can also see how this works visuall.
+
+```{r plot_tuk_fact}
+cont <- emmeans(intertidal_lm, ~ herbivores |height) |>
+  contrast(method = "pairwise")
+
+plot(cont) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+
+### 1.3 A Kelpy example
+
+Let's just jump right in with an example, as you should have all of this well in your bones by now. This was from a kelp, predator-diversity experiment I ran ages ago. Note, some things that you want to be factors might be loaded as 
+```{r echo=FALSE}
+kelp <- read.csv("./data/kelp_pred_div_byrnesetal2006.csv")
+```
+
+```{r kelp_1, eval=FALSE}
+kelp <- read.csv("lab/data/kelp_pred_div_byrnesetal2006.csv")
+
+## Check and correct for non-factors
+## (this is some dplyr fun)
+____________
+_________
+
+
+#Visualize
+________(data = _____,
+         aes(Treatment, Porp_Change, fill=Trial)) +
+  geom______()
+
+#fit
+kelp_lm <- __(______ ~ ______ * _____, data=________)
+
+#assumptions
+performance::_______(__________)
+
+# look at the model
+broom::____________(__________)
+
+# how well did we explain the data?
+________(_____________)
+
+#Pairwise Comparison of simple effects
+emmeans(_______, specs = ~ __________ |___________) |>
+  contrast(method = "________")
+```
+
+### 1.4 Replicated Regression and mixing Categorical and Continuous Variables
+
+So.... the above was actually a replicated regression design. This is a design where you have continuous treatments, but you replicate at each treatment level. There are a few ways to deal with this. Note the column `Predator_Diversity`
+
+Try this whole thing as a model with diversity as a continuous predictor an interaction by trial. What do you see?
+
+Note - this is a great time to try out `emmeans::emtrends()`.
+
+Make a new column that is `Predator_Diversity` as a factor. Refit the factorial ANOVA with this as your treatment. Now try a pairwise test. What do you see? Visualize both. How do they give you different information? What would you conclude?
+
+
+
+## 2. Interaction Effects in MLR
+
+Let's use the keeley fire severity plant richness data to see it Multiple Linear Regression with interaction effects action.
+
+```{r keeley}
+keeley <- read.csv("./data/Keeley_rawdata_select4.csv")
+
+ggpairs(keeley)
+```
+
+For our purposes, we'll focus on fire severity and plot age as predictors of richness.
+
+### 2.1 Explore and Model
+
+What if there was an interaction here? One reasonable hypothesis is that fires affect stands of different ages differently. So, let's look at richness as a function of age and fire severity.  First, we'll visualize, then fit a model.
+
+```{r k_int_vis}
+ggplot(keeley,
+       aes(x = age, y = rich, color = firesev)) +
+  geom_point(size = 2) +
+  scale_color_viridis_c(option = "B") +
+  facet_wrap(~cut_number(firesev, 4))
+```
+
+Huh. Kinda looks like age doesn't have any effect until high fire severity.
+
+```{r int_mod_keeley}
+keeley_mlr_int <- lm(rich ~ age * firesev, data=keeley)
+```
+
+### 2.2 Assumptions
+
+The assumptions here are the same as for MLR - normality of residuals, homoscedasticity, the relationship should not be driven by outliers alone, and, of course, lack of collinearity. Let's explore the first few.
+
+```{r mlr_int_assume}
+check_model(keeley_mlr_int)
+```
+
+Also, excellent. Now, the vif...
+
+```{r int_vif}
+vif(keeley_mlr_int)
+```
+
+Oh hey! It tells us there's a problem with interactions. I like `performance`'s solution even more.
+
+```{r vif_perform}
+check_collinearity(keeley_mlr_int)
+```
+
+Let's look at the correlation between the predictors to see if there really is a problem.
+
+```{r cor_int}
+keeley %>% select(firesev, age) %>%
+  mutate(int = firesev*age) %>%
+  cor()
+```
+
+OK, the interaction is pretty highly correlated with age. But, well, again, not really a problem unless it is for the algorithm you are working with. We can instead look at the age-firesev correlation, which is only 0.45. We're fine.
+
+### 2.3 Centering?
+
+Well, if we did want to worry about this - or were using an algorithm that choked - one way to break that correlation is to center our predictors before using them in the relationship. It changes the meaning of the coefficients, but, the model results are the same.  Let's try that here.
+
+```{r cent}
+keeley <- keeley %>%
+  mutate(firesev_c = firesev - mean(firesev),
+         age_c = age - mean(age))
+
+keeley_mlr_int_c <- lm(rich ~ age_c * firesev_c, data=keeley)
+
+vif(keeley_mlr_int_c)
+```
+
+We see the vif is now small. Moreover...
+
+```{r cor_cent}
+keeley %>% select(firesev_c, age_c) %>%
+  mutate(int = firesev_c*age_c) %>%
+  cor()
+```
+
+Look at that correlation melt away. We're still explaining variation in the same way. Let's see how the coefficients differ.
+
+```{r mlr_coef}
+coef(keeley_mlr_int)
+coef(keeley_mlr_int_c)
+```
+
+So, in the no interaction model, the intercept is the richness when age and firesev are 0. The age and firesev effects are their effect when the other is 0, respectively. And the interaction is how they modify one another. Note that in the centered model, the interaction is **the same**. But, now the intercept is the richness at the average level of both predictors, and the additive predictors are the effects of each predictor at the average level of the other.
+
+### 2.4 Evaluate
+
+Given the lack of difference between the two models, we're going to work with the original one. We've seen the coefficients and talked about their interpretation. The rest of the output can be interpreted as usual for a linear model.
+
+```{r sum_int}
+summary(keeley_mlr_int)
+```
+
+Not that it doesn't look like fire severity has an effect when age is 0. But what does age = 0 really mean? This is one reason by often the centered model is more interpretable. 
+
+So, how do we understand the interaction?
+
+We can do things like calculate out the effect of one predictor at different levels of the other...
+
+```{r coef_play}
+tibble(age = 0:10) %>%
+  mutate(fire_effect = coef(keeley_mlr_int)[3] + coef(keeley_mlr_int)[4]*age)
+```
+
+But this can be unsatisfying, and we have to propogate error and - ECH. Why not try and create something more intuitive...
+
+### 2.5 Visualize Results
+
+Fundamentally, we have to create visualizations that look at different levels of both predictors somehow. There are a number of strategies.
+
+#### 2.5.1 Visreg
+
+We can begin by looking at the effect of one variable at different levels of the other.
+
+```{r visreg_int}
+visreg(keeley_mlr_int, "age", "firesev", gg=TRUE)
+```
+
+Here we see a plot where the points are adjusted for different levels of fireseverity - an even split between three levels - and then we see the resulting fit lines. We can of course reverse this, if we're ore interested in the other effect.
+
+```{r visreg_int_2}
+visreg(keeley_mlr_int, "firesev", "age", gg=TRUE)
+```
+
+Both tell a compelling story of changing slopes that are easily understood. For example, in the later, fire has a stronger effect on older stands.
+
+#### 2.5.2 Fitted Model under Different Conditions
+
+We might want to roll our own, however, and see the plot with different slices of the data. Fortunately, we can use the identical strategy as our MLR above - only now the slope changes. So, using the same strategy as above for making predicted data frames:
+
+```{r mlr_int_pred}
+k_int_explore <- data_grid(keeley,
+                               firesev = seq_range(firesev, 100),
+                               age = seq_range(age, 4)) |>
+  augment(keeley_mlr_int, newdata = _, interval = "confidence") |>
+  rename(rich = .fitted)
+```
+
+Notice the lack of difference. We can now play with how we want to plot this. Here's one, but you can come up with others easily.
+
+
+
+```{r mlr_int_pred_plot}
+ggplot(keeley,
+       aes(x = firesev, y = rich, color = age)) + 
+  geom_point() +
+  geom_line(data = k_int_explore, aes(group = age)) +
+  geom_ribbon(data = k_int_explore, aes(ymin = .lower, ymax = .upper), alpha = 0.2, color = NA) +
+  facet_wrap(~cut_interval(age,4)) +
+  scale_color_viridis_c(option = "D")
+```
+
+
+#### 2.5.3 Surface Plot of Model
+Finally, a surface plot can be very helpful - particularly under a condition of many interactions. To make a surface plot, we can look at the model and exract values at the intersection of multiple predictors and then visualize a grid where color or some other property reflects predicted values. It lets us see more nuance about an interaction. Let's start with getting our surface values for a 100x100 grid of predictors.
+
+```{r surf_mlr_int}
+keeley_surface <- data_grid(keeley,
+                            age = seq_range(age, 100),
+                            firesev = seq_range(firesev, 100)) |>
+  augment(keeley_mlr_int, newdata = _) |>
+  rename(rich = .fitted)
+```
+
+Now, we can plot this grid using `geom_raster` or `geom_tile` (raster will smooth things a bit).
+
+```{r surf_mlr_int_plot}
+ggplot(keeley_surface,
+       aes(x = age, y = firesev, fill = rich)) +
+  geom_raster() +
+  scale_fill_viridis_c(option = "B")
+```
+
+Now we can see the landscape more clearly. old stands with high fire severity have low richness. However, either youth or low fire severity means higher richness. This kind of technique can be great with higher order interactions. For example, you can facet by up to two variables (or more) to examine higher order interactions, etc.
+
+Also note, if you want to be lazy, you can do this with visreg for two variables
+
+```{r visreg_int_surf}
+visreg2d(keeley_mlr_int, "age", "firesev")
+```
+
+### 2.6 Examples
+OK, here are two datasets to work with. Choose one, and play around with possible interactions using ggplot. Then fit and evaluate a model!
+
+1) `planktonSummary.csv` showing plankton from Lake Biakal (thanks, Stephanie Hampton). Evluate how Chlorophyll (`CHLFa`) is affected by other predictors.  
+
+2) Data on plant species richness in grazed salt marsh meadows in Finland. Meadows are grazed or ungrazed. see `?piecewiseSEM::meadows` to learn more. To load:
+
+```{r}
+data(meadows, package = "piecewiseSEM")
+```
+
+3) If you are tired of biology, see `data(tips, package = "reshape")` which looks at factors which might influence the tips given to one waiter over a few months. See `?reshape:tips`.
+
+```{r sampe_workflow_mlr_int}
+# Load the data
+
+# Perform a preliminary visualization. Play with this and choose two predictors
+
+# Fit a MLR model with an interaction
+
+# Test Asssumptions and modify model if needed
+
+# Evaluate results
+
+# Visualize results
+```

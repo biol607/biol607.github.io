@@ -152,7 +152,7 @@ __Project Proposal:__ [general instructions here](project_proposal.html)
 ```
 `r datestring`   
 __Lectures:__ [Interaction Effects with Categorical Variables](lectures/categorical_interactions.html), [Interaction Effects and Nonlinearities in Any Model](./lectures/23_general_linear_model.html)    
-__Lab Topic:__ [Multiple Regression, Multimodel Inference](lab/11_glm_aic.html) - [data files](lab/data_11.zip)  
+__Lab Topic:__ [Models with Interaction Effects](lab/interacting_predictors.html) - [data files](lab/data_11.zip)  
 __Readings:__ Re-Read [Feiberg ch 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf)  
 __Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)   
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-interactions-2022  
