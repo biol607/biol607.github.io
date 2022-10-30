@@ -156,7 +156,7 @@ __Lab Topic:__ [Models with Interaction Effects](lab/interacting_predictors.html
 __Readings:__ Re-Read [Feiberg ch 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf)  
 __Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)   
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-interactions-2022  
-<!--__Packages for the Week:__ `install.packages(c("AICcmodavg", "MuMIn", "modelr"))`  -->
+__Homework:__ [Interactions](homework/interactions.html)  
 
 ### Week 9   
 ```{r next_date, echo=FALSE}
