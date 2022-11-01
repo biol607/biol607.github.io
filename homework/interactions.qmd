@@ -31,7 +31,7 @@ In lab, we looked at an experiment from my time as a graduate student manipulati
 
 ## 2. Interactions with Continuous Variables
 
-Scientists wanted to simulate how different biological interactions might influence the carbon burial potential of sinking algae in the deep ocean. L'et use [this simulated data](data/carbon_burial_sims.csv) which features sinking rate, microbial abundance, and detritovore abundance as predictors of net carbon sequestration.
+Scientists wanted to simulate how different biological interactions might influence the carbon burial potential of sinking algae in the deep ocean. Let's use [this simulated data](data/c_burial_sims.csv) which features sinking rate, microbial abundance, and detritovore abundance as predictors of net carbon sequestration.
 
 **2.1** Load the data, inspect it, and fit a model with a 3-way interaction, Do you meet assumptions?
 
