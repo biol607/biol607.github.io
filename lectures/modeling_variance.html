@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Linear Regression and Frequentist Hypothesis Testing</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+# Modeling Error: From the Ordinary to the General(ized)
+
+![:scale 80%](./images/gls/hamilton_weight.jpg)
+
+
+
+
+---
+class: center, middle
+
+# https://etherpad.wikimedia.org/p/607-glm-2022
+
+---
+# Oh, The Things We Have Done with this Model
+
+`$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$`  
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+`$$\Large \boldsymbol{\epsilon} \sim N(\boldsymbol{0}, \boldsymbol{\sigma})$$`
+
+---
+# But THIS is Still Possible
+&lt;img src="modeling_variance_files/figure-html/qqbad-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Or this!
+
+&lt;img src="modeling_variance_files/figure-html/groupbad-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Your Golem Can Now Blow Up Prague
+.center[ ![](images/glm/prague-golem-old-town-square.jpg)]
+
+---
+# Why Limit Ourselves?
+
+`$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$`  
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+`$$\Large \boldsymbol{\epsilon} \sim N(\boldsymbol{0}, \boldsymbol{\sigma})$$`
+--
+Is this all there is?
+
+---
+# What if We Could Model Variance
+
+`$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$`  
+&lt;br&gt;&lt;bR&gt;
+
+`$$\Large \boldsymbol{\epsilon} \sim N(\boldsymbol{0}, \boldsymbol{\sigma_i})$$`
+&lt;br&gt;&lt;br&gt;
+`$$\Large \boldsymbol{\sigma_i} = ...$$`
+
+---
+# What If We Could Harness Other Distributions?
+
+$$\Large \boldsymbol{\hat{Y}} = \boldsymbol{\beta X} $$  
+&lt;br&gt;&lt;bR&gt;
+
+`$$\Large \boldsymbol{Y} \sim \mathcal{D}(\boldsymbol{\hat{Y}}, \boldsymbol{\tau})$$`
+
+---
+# Out of the Normal
+
+1. Modeling Variance &amp; Generalized Least Squares (GLS)  
+
+2. Robust Assumption Tests with Randomized Quantile Residuals  
+  
+3. Moving from Normality to Generalized Linear Models (GLM)
+
+
+---
+# Basic Principles of Linear Models
+
+-   Y is determined by X: p(Y `\(|\)` X=x)  
+
+--
+
+-   The relationship between X and Y is Linear  
+
+--
+
+-   The residuals of `\(\widehat{Y_i} = \beta_0 + \beta_1 X_i + \epsilon\)` are normally distributed with constant variance   
+  
+      - `\(\epsilon_i \sim N(0,\sigma)\)`  
+
+---
+# Basic Principles of Ordinary Least Squares
+
+`\(\widehat{Y} = \beta_0 + \beta_1 X + \epsilon\)` where `\(\beta_0\)` = intercept, `\(\beta_1\)` = slope
+
+&lt;img src="modeling_variance_files/figure-html/linefit-1.png" style="display: block; margin: auto;" /&gt;
+
+Minimize Residuals defined as `\(SS_{residuals} = \sum(Y_{i} - \widehat{Y})^2\)`
+
+---
+# Should Every Point get Equal Weight?
+
+**Ordinary Least Squares:**  
+
+`$$SS_{residuals} = \sum(Y_{i} - \widehat{Y})^2$$`
+
+This implies each point contains as much information as every other
+
+--
+
+&lt;hr&gt;
+
+**Weighted Least Squares:**  
+
+`\(SS_{residuals} = W_i\sum(Y_{i} - \widehat{Y})^2\)`
+
+Implies each data point might have less information - porportional to variance
+
+---
+# Weighted Least Squares and Our Model
+
+`$$\Large y_i \sim \mathcal{N}(\hat{y_i}, \sigma^2_i)$$`
+
+`$$\Large \hat{y_i} = \beta_0 + \beta_1 x_i$$`
+
+--
+What if
+
+`$$\Large \sigma^2_i =  \sigma^2 f(x_i)$$`
+
+or other predictors (maybe even different ones than in the linear model itself!)
+
+--
+
+If we also model the *off diagonal* of `\(\sigma^2\)` we get into **generalized least squares**
+
+---
+# Iteratively Reweighted Least Squares Algorithm
+`$$\hat{y_i} = \beta_0 + \beta_1 x_i$$`
+`$$\sigma^2_i =  \sigma^2 f(x_i)$$`
+`\(SS_{residuals} = W_i\sum(Y_{i} - \widehat{Y})^2\)`
+
+1. Start with wi = 1  
+
+2. Use least squares to estimate `\(\beta\)`  
+
+3. use the residuals to estimate f(x) (i.e., regress residuals on `\(x_1\)`)  
+
+4. Recompute the weights and go back to 2.  
+
+---
+# SQUID!
+![](./images/gls/loligo_orig.jpeg)
+
+
+
+---
+# How does that Variance Look?
+
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# How Bad Is It?
+
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Weight by Inverse of Covariate
+
+`$$w_i = \frac{1}{\sqrt{x_i}}$$`
+`$$\sigma^2_i = \sigma^2 w_i$$`
+--
+
+- This means that we downweight the contribution of covariates with larger values  
+  
+- Common, as it is a simple solution using least squares  
+  
+- However, unsatisfying as it cannot accommodate some complex error structures
+
+---
+# Different Variance Structures
+
+- `varFixed` - Linear continuous variance  
+
+- `varIdent` - Variance differs by groups  
+
+- `varPower` - Variance increases by a power  
+
+- `varExp`  - Variance exponentiated  
+
+- `varConstPower` - Variance is constant + power  
+
+- `varComb` - Combines different variance functions
+
+--
+
+*All assume weights are porportional to some property, and do not estimate relationship underlying variance explicitly*
+
+---
+# Modeling Variance with Likelihood
+
+`$$\Large \hat{y_i} = \beta_0 + \beta_1 x_i$$`
+`$$\Large \sigma^2_i =  \gamma_0 + \gamma_1x_i$$`
+--
+
+- Flexible  
+  
+- Likelihood maximizes the probability density of `\(y_i\)` given the above two equations  
+  
+- Isn't this a more general solution - LM, but for your variance!
+
+---
+# GLS versus Likelihood
+GLS
+
+```r
+library(nlme)
+squid_gls &lt;- gls(Testisweight ~ DML, 
+                 
+                 weights = varFixed(~ DML),
+                                  
+                 data=squid)
+```
+
+--
+
+Likelihood
+
+```r
+library(glmmTMB)
+squid_lik &lt;- glmmTMB(Testisweight ~ DML,
+                     
+                     dispformula = ~ DML,
+                     
+                     data = squid)
+```
+
+---
+# GLS versus Likelihood - Coefficients
+
+GLS
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -5.624 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.338 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; DML &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.043 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Likelihood
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -4.098 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.313 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; DML &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.036 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.002 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+Difference in saying variance is porportional to predictor v. modeling variance explicitly
+
+---
+# GLS versus Likelihood - R2
+
+GLS
+
+```
+  R2: 0.563
+```
+
+
+Likelihood
+
+```
+Random effect variances not available. Returned R2 does not account for random effects.
+```
+
+```
+# R2 for Mixed Models
+
+  Conditional R2: NA
+     Marginal R2: 0.896
+```
+
+---
+# Out of the Normal
+
+1. Modeling Variance &amp; Generalized Least Squares (GLS)  
+
+2. .red[Robust Assumption Tests with Randomized Quantile Residuals]  
+  
+3. Moving from Normality to Generalized Linear Models (GLM)
+
+
+---
+# Assessing Assumptions when Modeling Variance: Quantile Residuals
+
+- Every residual point comes from a distribution  
+
+--
+
+- Every distribution has a *cummulative distribution function*
+
+--
+
+- The CDF of a probability distribution defines it's quantiles - from 0 to 1.
+
+--
+
+- We can determine the quantile of any point relative to its distribution
+
+---
+# A Quantile from a Distribution: Say this is your distribution 
+
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Quantile from a Distribution: Overlay the CDF
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Quantile from a Distribution: This is our Point
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Quantile from a Distribution: We see where it lies on the CDF
+
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Quantile from a Distribution: And we can get its quantile
+
+
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals
+
+- Every observation is distributed around an estimated value
+
+--
+
+- We can calculate its quantile
+
+--
+
+- If model fits well, quantiles of residuals should be uniformly distributed  
+
+--
+- I.E., for any point, if we had its distribution, there should be no bias in its quantile  
+
+--
+
+- We do this via simulation for flexibility  
+
+--
+
+- Works for **many** (any?) models
+
+---
+# Randomized quantile residuals: Steps
+1. Get 1000 (or more!) simulations of model coefficients 
+
+--
+
+2. For each response (y) value, create an empirical distribution from the simuations  
+
+--
+
+3. For each response, determine it's quantile from that empirical distribution
+
+--
+4. The quantiles of all y values should be uniformly distributed  
+      - QQ plot of a uniform distribution!  
+      
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="modeling_variance_files/figure-html/rqr-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="modeling_variance_files/figure-html/rqr1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="modeling_variance_files/figure-html/rqr2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="modeling_variance_files/figure-html/rqr3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="modeling_variance_files/figure-html/rqr4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized Quantile Residuals from Squid Model
+
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Interpretation and Everything Thereafter is The Same
+
+```
+ Family: gaussian  ( identity )
+Formula:          Testisweight ~ DML
+Dispersion:                    ~DML
+Data: squid
+
+     AIC      BIC   logLik deviance df.resid 
+  3732.2   3750.8  -1862.1   3724.2      764 
+
+
+Conditional model:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -4.098095   0.312644  -13.11   &lt;2e-16 ***
+DML          0.035681   0.001549   23.04   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Dispersion model:
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -1.1258723  0.1994501  -5.645 1.65e-08 ***
+DML          0.0123888  0.0007563  16.380  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+---
+# Out of the Normal
+
+1. Modeling Variance &amp; Generalized Least Squares (GLS)  
+
+2. Robust Assumption Tests with Randomized Quantile Residuals  
+  
+3. .red[Moving from Normality to Generalized Linear Models (GLM)]
+
+---
+# Not All Error Generating Processes Are Normal
+
+
+![](images/25/whalberg_assumptions.jpg)
+
+---
+
+# Remember our Wolves?
+
+.pull-left[
+
+&lt;img src="modeling_variance_files/figure-html/wolf_scatterplot-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+
+&lt;br&gt;&lt;br&gt;
+![](./images/11/CUTE_WOLF_PUPS_by_horsesrock44.jpeg)
+]
+
+---
+
+# We Had to Log Transform The Count of Pups
+
+`$$log(y_i) = \beta_0 + \beta_1 x_i + \epsilon_i$$`
+  - relationship is curved
+  - cannot have negative pups 
+  
+
+&lt;img src="modeling_variance_files/figure-html/logplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# But...
+
+![](images/glm/do_not_log.png)
+
+--
+
+Note, there is a healthy back-and-forth about this paper in the literature... but I think it has some REALLY good points
+
+---
+# Why? Count Data is Discrete - so we need something like a Poisson Distribution
+In a Poisson, Variance = Mean
+
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# How do we Make a Poisson Fit Into This Linear Model?
+
+
+`$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$`  
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+`$$\Large \boldsymbol{\epsilon} \sim N(\boldsymbol{0}, \boldsymbol{\sigma})$$`
+---
+# Rewriting The General(ized) Linear Model
+
+$$\Large {\hat{Y}_{i}} = {\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+`$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+
+---
+# Rewriting The General(ized) Linear Model
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large f(\hat{Y_i}) = \eta_{i}$$`
+.red[f is a link function]
+&lt;br&gt;&lt;br&gt;
+
+
+
+`$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+
+---
+# The Generalized Linear Model
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large f(\hat{Y_i}) = \eta_{i}$$`
+.red[f is a link function]
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large Y_i \sim \mathcal{D}(\hat{Y_i}, \tau)$$`
+&lt;br&gt;&lt;br&gt;
+
+Here `\(\mathcal{D}\)` is some distribution from the exponential family, and `\(\tau\)` are additional parameters specifying the shape of the residual distribution
+
+---
+# So, the Linear Model is Just a Special Case
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large \hat{Y_i} = \eta_{i}$$`
+.red[Identity link]
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+
+---
+
+# A Generalized Linear Model with a Log Link and Gaussian Error
+
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large Log(\hat{Y_i}) = \eta_{i}$$`
+.red[Log Link Function]
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+    
+---
+# Wait - isn't this just a log transform?
+
+--
+No.
+--
+
+`$$\Large \boldsymbol{log(Y_{i})} = \boldsymbol{\beta X_i} + \boldsymbol{\epsilon_i}$$` 
+implies...
+ 
+--
+`$$\Large \boldsymbol{Y_{i}} = e^{\boldsymbol{\beta X_i} + \boldsymbol{\epsilon_i}}$$`
+--
+
+This is multiplicative error!  
+
+--
+
+We want additive error - which we get from a GLM with a log link:
+
+`$$\Large y = e^{\beta X} + \epsilon$$`
+
+---
+
+# A Generalized Linear Model with a Log Link and POISSON Error
+
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large Log(\hat{Y_i}) = \eta_{i}$$`
+&lt;br&gt;&lt;br&gt;
+
+
+
+`$$\Large Y_i \sim \mathcal{P}(\hat{Y_i})$$`
+
+---
+# The Code is Only Slightly Different
+
+
+```r
+wolves_glm &lt;- glm(pups ~ inbreeding.coefficient, 
+                  
+                  family = poisson(link = "log"),
+                  
+                  data = wolves)
+```
+
+--
+Compare to...
+
+
+
+```r
+wolves_lm &lt;- lm(pups ~ inbreeding.coefficient, 
+                  
+                  data = wolves)
+```
+---
+# We Still Check Some of the Same Assumptions
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# But Now Quantile Residuals Help Assessment
+&lt;img src="modeling_variance_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Coefficients... Here Have the Same Meaning as a Log-Normal Model
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.946 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.220 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; inbreeding.coefficient &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.656 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.969 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- If inbreeding is 0, there are ~ 7 pups
+
+- An increase in 1 unit of inbreeding is a ~93% loss in # of pups
+
+---
+class: center, middle
+
+![:scale 80%](images/glm/name_five_analyses.png)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
