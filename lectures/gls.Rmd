@@ -363,7 +363,7 @@ squid_gls_month <- gls(Testisweight ~ DML, data=squid,
 
                        weights = varComb(varFixed(~DML),
                                          
-                                         varFixed(~MONTH)))
+                                         varIdent( form = ~ 1|MONTH)))
 ```
 
 ## Weighted v. Naieve Fit
