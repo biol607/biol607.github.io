@@ -20,11 +20,65 @@ In lab, we looked at an experiment from my time as a graduate student manipulati
 
 **1.0** Filter out the `no herbivore` treatment - it has an NA for diversity and is not useful here. Also..... is trial really continuous?
 
-**1.1** Fit the appropriate model (remember, the experiment was run in three `Trial`s) with diversity as a continuous versus discrete variable. Do the assumption tests differ, or is everything OK? If you are *really* worried, note, you can also just use `Change_g` as the response variable with `Before_g` as a covariate (weight before versus change in weight) - it's what I actually did in the paper.
+**1.1** Fit the appropriate two models (remember, the experiment was run in three `Trial`s) with diversity as a continuous versus discrete variable (i.e., one model with continuous, one model with discrete). Do the assumption tests differ, or is everything OK? If you are *really* worried, note, you can also just use `Change_g` as the response variable with `Before_g` as a covariate (weight before versus change in weight) - it's what I actually did in the paper.
+
+```{r}
+library(readr)
+library(dplyr)
+library(performance)
+library(ggplot2)
+
+kelp <- read_csv("https://biol607.github.io/lab/data/kelp_pred_div_byrnesetal2006.csv") |>
+  mutate(Trial = as.character(Trial),
+         Predator_Diversity_f = as.factor(Predator_Diversity))
+
+#continuous model
+mod_c <- lm(Change_g ~ Trial*Predator_Diversity + Before_g, data = kelp)
+check_model(mod_c) # looks good  
+
+mod_f <- lm(Change_g ~ Trial*Predator_Diversity_f + Before_g, data = kelp)
+check_model(mod_f) # looks good  
+
+```
 
 **1.2** If you compare results - in both - asking if the diversity effect differed by trial (you'll need both `emmeans` and `emtrends` here) does it really look like there is an interaction with trial? If not, refit the model with no interaction!
 
-**1.3** OK, with the two models you now have, what different inferences about the role of predator diversity do they give you, seemingly? Use one or more of the tools you have at your disposal - from things in the `emmeans` package to visualizations. to make a convincing case. 
+```{r}
+library(emmeans)
+emtrends(mod_c, ~   Trial, var = "Predator_Diversity") |>
+  contrast("pairwise") |>
+  confint() #nope, no difference
+
+
+emmeans(mod_f, ~   Predator_Diversity_f | Trial) |>
+  contrast("pairwise") |>
+  confint() #nope, no difference
+
+#refit and check
+mod_c <- lm(Change_g ~ Trial+Predator_Diversity + Before_g, data = kelp)
+check_model(mod_c) # looks good  
+
+mod_f <- lm(Change_g ~ Trial+Predator_Diversity_f + Before_g, data = kelp)
+check_model(mod_f) # looks good  
+```
+
+**1.3** OK, with the two models you now have, what different inferences about the role of predator diversity do they give you, seemingly? Use one or more of the tools you have at your disposal - from things in the `emmeans` package (hey, check out that `at` argument for `emmeans()`...) to visualizations to make a convincing case. 
+
+```{r}
+# what is different
+emmeans(mod_f, ~   Predator_Diversity_f ) |>
+  contrast("pairwise") |>
+  confint("none") #1 and 3 species the same?
+
+
+emmeans(mod_c, ~   Predator_Diversity, 
+        at = list(Predator_Diversity = c(0,1,3) )) |>
+  contrast("pairwise") |>
+  confint() # all are different
+
+#The regression shows a positive relationship, but, the factor shows that maybe 1 and 3 are not different? 
+
+```
 
 **1.4** IMPRESS YOURSELF - if you really want to get into the weeds, in the paper, I also did comparisons between indivity monocultures (1 species treatments, which varied in identity) to the polyculture (the mixture) to ask if the polyculture was better than the best performing monoculture - something in the Biodiversity Ecosystem Function literature known as the Overyielding. Do you find evidence of that. Note - this is ticky, so, impress yourself if you want, but, don't worry if you want to move on.
 
