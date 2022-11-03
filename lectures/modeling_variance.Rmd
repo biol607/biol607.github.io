@@ -1,5 +1,5 @@
 ---
-title: "Linear Regression and Frequentist Hypothesis Testing"
+title: "Modeling Variance"
 output:
   xaringan::moon_reader:
     seal: false
@@ -109,7 +109,7 @@ $$\Large \boldsymbol{\sigma_i} = ...$$
 $$\Large \boldsymbol{\hat{Y}} = \boldsymbol{\beta X} $$  
 <br><bR>
 
-$$\Large \boldsymbol{Y} \sim \mathcal{D}(\boldsymbol{\hat{Y}}, \boldsymbol{\tau})$$
+$$\Large \boldsymbol{Y} \sim \mathcal{D}(\boldsymbol{\hat{Y}}, \boldsymbol{\theta})$$
 
 ---
 # Out of the Normal
@@ -168,7 +168,7 @@ This implies each point contains as much information as every other
 
 **Weighted Least Squares:**  
 
-$SS_{residuals} = W_i\sum(Y_{i} - \widehat{Y})^2$
+$SS_{residuals} = \sum W_i(Y_{i} - \widehat{Y})^2$
 
 Implies each data point might have less information - porportional to variance
 
@@ -194,9 +194,9 @@ If we also model the *off diagonal* of $\sigma^2$ we get into **generalized leas
 # Iteratively Reweighted Least Squares Algorithm
 $$\hat{y_i} = \beta_0 + \beta_1 x_i$$
 $$\sigma^2_i =  \sigma^2 f(x_i)$$
-$SS_{residuals} = W_i\sum(Y_{i} - \widehat{Y})^2$
+$SS_{residuals} = \sum W_i(Y_{i} - \widehat{Y})^2$
 
-1. Start with wi = 1  
+1. Start with all wi = 1  
 
 2. Use least squares to estimate $\beta$  
 
@@ -654,10 +654,10 @@ $$\Large f(\hat{Y_i}) = \eta_{i}$$
 .red[f is a link function]
 <br><br>
 
-$$\Large Y_i \sim \mathcal{D}(\hat{Y_i}, \tau)$$
+$$\Large Y_i \sim \mathcal{D}(\hat{Y_i}, \theta)$$
 <br><br>
 
-Here $\mathcal{D}$ is some distribution from the exponential family, and $\tau$ are additional parameters specifying the shape of the residual distribution
+Here $\mathcal{D}$ is some distribution from the exponential family, and $\theta$ are additional parameters specifying the shape of the residual distribution
 
 ---
 # So, the Linear Model is Just a Special Case
