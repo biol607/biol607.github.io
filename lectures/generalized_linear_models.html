@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Generalized Linear Models</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+# Generalized Linear Models
+
+![:scale 80%](./images/glm/why_cant_you_be_normal.jpg)
+
+
+
+
+&lt;style type="text/css"&gt;
+.pull-left-small {
+  float: left;
+  width: 20%;
+}
+.pull-right-large {
+  float: right;
+  width: 80%;
+}
+&lt;/style&gt;
+
+---
+# Where We Have Lived Until Now - a Normal World
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Gaussian Distributions are Part of a Larger Interconnected Family of Distributions
+
+![:scale 90%](images/25/all_dists.jpg)
+
+---
+# It Gets Crazy
+
+.center[ ![:scale 50%](images/glm/distributions.png) ]
+
+See https://www.randomservices.org/random/special/GeneralExponential.html
+---
+# The Linear Model with Gaussian Error is a Special Case
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large \hat{Y_i} = \eta_{i}$$`
+&lt;br&gt;&lt;br&gt;
+
+
+
+`$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+---
+# The Generalized Linear Model
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large f(\hat{Y_i}) = \eta_{i}$$`
+.red[f is a link function]
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large Y_i \sim \mathcal{D}(\hat{Y_i}, \theta)$$`
+&lt;br&gt;&lt;br&gt;
+
+`\(\mathcal{D}\)` is some distribution from the **exponential family**, and `\(\theta\)` are additional parameters specifying dispersion
+
+---
+# A Generalized Linear World
+
+1. Wait, what are these different distributions and links?  
+
+2. A Logistic Regression Example  
+  
+3. Overdispersion
+
+---
+# What Are Properties of Data that is Not Normal?
+
+
+--
+
+- Bounded
+
+--
+
+- Discrete
+
+--
+
+- Variance scales with mean
+
+--
+
+- Skewed, bimodal, or kurtotic
+
+---
+class: center, middle
+
+![:scale 90%](images/25/gosling_normality.jpg)
+
+---
+# Count Data - Poisson or Negative Binomial
+Discrete, variance-mean relationships (linear or squared)
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Outcomes of Trials - Binomial
+Discrete, Yes/No or # of Outcomes of a Class - we model the probability
+
+.pull-left-small[
+![](images/glm/test.jpg)
+]
+
+.pull-right-large[
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Time to Achieve Outcomes - Gamma
+Skewed continuous, variance-mean relationship
+
+.pull-left-small[
+![](images/glm/waiting_time.jpg)
+]
+
+.pull-right-large[
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+# Percents and Porportions - Beta
+Bounded, Unimodal to Bimodal
+
+.pull-left-small[
+![](images/glm/cover.jpg)
+]
+
+.pull-right-large[
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+# The Generalized Linear Model
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large f(\hat{Y_i}) = \eta_{i}$$`
+.red[f is a link function]
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large Y_i \sim \mathcal{D}(\hat{Y_i}, \theta)$$`
+&lt;br&gt;&lt;br&gt;
+
+`\(\mathcal{D}\)` is some distribution from the **exponential family**, and `\(\theta\)` are additional parameters specifying dispersion
+
+---
+
+# Generalized Linear Models: Distributions
+
+
+1.  The error distribution is from the **exponential family**
+  - e.g., Normal, Poisson, Binomial, and more.  
+
+--
+
+2.  For these distributions, the variance is a funciton of the fitted
+    value on the curve: `\(var(Y_i) = \theta V(\hat{Y_i})\)`
+  - For a normal distribution, `\(var(Y_i) = \theta*1\)` as
+        `\(V(\hat{Y_i})=1\)`   
+
+  - For a poisson distribution, `\(var(Y_i) = 1*\mu_i\)` as
+  `\(V(\hat{Y_i})=\hat{Y_i}\)`  
+
+--
+
+3. They have *canonical links* which are link functions that fall out from the shape of the distribution and map on to the domain of possible values  
+
+  - e.g., the identity for the Gaussian  
+     
+  - We can also use non-canonical links  
+        
+---
+# Distributions, Canonical Links, and Dispersion
+
+|Distribution | Canonical Link | Variance Function|
+|-------------|-------------|-------------|
+|Normal | identity | `\(\theta\)`|
+|Poisson | log | `\(\hat{Y_i}\)`|
+|Binomial | logit | `\(\hat{Y_i}(1-\hat{Y_i})\)`|
+|Negative Binomial | log | `\(\hat{Y_i} + \theta\hat{Y_i}^2\)`|
+|Gamma | inverse | `\(\hat{Y_i}^2\)`|
+| Beta | logit | `\(\hat{Y_i}(1 - \hat{Y_i})/(\theta + 1)\)`|
+
+The key is to think about your residual variance and what is appropriate
+
+---
+# A Generalized Linear World
+
+1. Wait, what are these different distributions and links?  
+
+2. .red[A Logistic Regression Example]  
+  
+3. Overdispersion
+
+---
+background-image: url("images/25/cryptosporidiosis-cryptosporidium-hominis.jpeg")
+background-position: center
+background-size: cover
+class: inverse, center
+
+# Cryptosporidium Parasite
+
+
+---
+background-image: url("images/25/mouseinject.jpg")
+background-position: center
+background-size: cover
+class: inverse
+
+# What dose is needed to generate infection?
+
+---
+
+# Cryptosporidum Infection Rates
+
+
+&lt;img src="generalized_linear_models_files/figure-html/crypto_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# This is not linear or gaussian
+
+&lt;img src="generalized_linear_models_files/figure-html/crypto_linear-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, middle
+
+# STOP - before we go any further, you COULD .red[logit transform] a fraction from trials and use a linear model - if it meets assumptions, OK!
+
+---
+# Logit Transform
+
+![](images/25/logit_conversion.jpg)
+---
+# Why GLM then?
+1. It might not work,  2. We have unequal # of trials per point, 3. If our response had been binary
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Binary GLM
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: center, middle
+
+![](images/glm/OLS_binary.png)
+
+---
+# Binomial Distribution
+$$ Y_i \sim B(prob, size) $$
+
+ * Discrete Distribution
+ 
+--
+
+ * prob = probability of something happening (% Infected)  
+
+--
+
+ * size = # of discrete trials  
+
+--
+
+ * Used for frequency or probability data  
+ 
+--
+
+ * We estimate coefficients that influence *prob*  
+ 
+---
+# Generalized Linear Model with a Logit Link
+
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+`$$\Large Logit(\hat{Y_i}) = \eta_{i}$$`
+.red[Logit Link Function]
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+`$$\Large Y_i \sim \mathcal{B}(\hat{Y_i}, size)$$`
+---
+# Generalized Linear Model with Logit Link
+
+```r
+crypto_glm &lt;- glm(Y/N ~ Dose,
+                  weights=N,
+                  family=binomial(link="logit"),
+                  data=crypto)
+```
+
+OR, with Success and Failures
+
+
+```r
+crypto_glm &lt;- glm(cbind(Y, Y-N) ~ Dose,
+                  family=binomial(link="logit"),
+                  data=crypto)
+```
+
+---
+# How About those Assumptions?
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# How About those Assumptions?
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Quantile Residuals
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Binned Residuals
+### For a  *fitted* probability, look at average residual in a bin around it
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# OK, What Are We Estimating? 
+### The Odds
+
+
+## The Odds
+
+`$$Odds  = \frac{p}{1-p}$$`
+(e.g., 50:50 is an odds ratio of 1, 2:1 odds are pretty good! 1:100 odds is not!)
+
+--
+
+Logit coefficients are in:
+
+`$$Log-Odds = Log\frac{p}{1-p} = logit(p)$$`
+
+(log of 1 is 0, log of .69, log of .01 is -4.60517)
+
+---
+# Coefficients and Interpretation
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.408 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.148 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Dose &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.013 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+- Woof. Logit coefficients are tricky (go visualization!)  
+
+--
+
+- In essence, an increase in 1 unit of dose = an exp( 0.0135) increase in the ODDS of infection  
+      - 1.014 increase (remember, 1 is a 50:50 chance!)
+
+--
+
+- You *can* use this to estimate change in %, but it requires knowing where you start from on the curve (this is a nonlinear curve after all)
+
+---
+# Easier to visualize to interpret
+&lt;img src="generalized_linear_models_files/figure-html/crypto_logit-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Final Note on Logistic Regression
+
+- Ideal for yes/no classification  
+     - e.g. if your response variable is purely binary
+
+- Has an extension to *multinomial logistic regression*
+      - Many categories, often used for classification
+
+- Only use if you can represent data as indepenent *trials*  
+      - Internally, breaks responses into yes/no 
+      
+---
+# A Generalized Linear World
+
+1. Wait, what are these different distributions and links?  
+
+2. A Logistic Regression Example  
+  
+3. .red[Overdispersion]
+
+---
+# What is the relationship between kelp holdfast size and number of fronds?
+
+.center[ ![](images/25/Giant_kelp_adult.jpeg) ]
+
+---
+# What About Kelp Holdfasts?
+&lt;img src="generalized_linear_models_files/figure-html/kelp-1.png" style="display: block; margin: auto;" /&gt;
+---
+# If you had Tried a Linear Model
+
+```r
+kelp_lm &lt;- lm(FRONDS ~ HLD_DIAM, data=kelp)
+```
+
+&lt;img src="generalized_linear_models_files/figure-html/plot_lelp-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What is our data and error generating process?
+&lt;img src="generalized_linear_models_files/figure-html/kelp-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What is our data and error generating process?
+- Data generating process should be exponential
+       - No values less than 1  
+
+--
+
+- Error generating process should be Poisson
+       - Count data
+
+---
+# Let's Fit a Model!
+
+
+```r
+kelp_glm &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp,
+                family=poisson(link="log"))
+```
+
+---
+# Quantile Residuals for Kelp GLM with Log Link
+&lt;img src="generalized_linear_models_files/figure-html/kelp_resid_dharma-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Ruh Roh! What happened? Overdispersion of Data!
+- When the variance increases faster than the mean, our data is overdispersed  
+
+--
+
+- This can be solved with different distributions whose variance have different properties  
+--
+
+ - OR, we can fit a model, then scale it’s variance posthoc with a coefficient  
+
+--
+
+-  The likelihood of these latter models is called a Quasi-likelihood, as it does not reflect the true spread of the data  
+      - Good to avoid, as it causes inferential difficulties down the line
+      
+---
+# For Count Data, Two Common Solutions
+
+1. Negative Binomial
+  - Variance = `\(\hat{Y_i}^2 + \theta\hat{Y_i}^2\)`|$
+  - Increases with the square, not linearly
+  - Although some forms also do linear...
+  - Common for **clumped data**  
+  
+--
+
+2. Quasi-Poisson  
+  - Basically, Variance = `\(\theta\hat{Y}\)`  
+  - Posthoc estimation of `\(\theta\)`
+  - (Also a similar quasibinomial)  
+
+--
+
+3. Others where you model dispersion explicitly
+  - You are in deeper waters here
+       
+---
+# Plot of Smoothed Binned Residuals v. Predictor
+Linear: Quasipoisson, Squared: Negative Binomial
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+See Ver Hoef and Boveng 2007
+
+---
+# New Fits
+
+
+Negative Binomial
+
+
+```r
+library(MASS)
+kelp_glm_nb &lt;- glm.nb(FRONDS ~ HLD_DIAM, data=kelp)
+```
+
+OR
+
+Quasipoisson
+
+```r
+kelp_glm_qp &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp, 
+                 family=quasipoisson(link="log"))
+```
+
+---
+# Checking The Quantile Residuals
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Looks Good!
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Final Note About GLMs and Overdispersion
+### Many Distributions Cannot Handle 0s or 1s
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# The GLM Frontier
+.pull-left[
+![](images/glm/star_wars_glm.jpg)
+]
+
+.pull-right[
+- GLMs can be intimidating, but, think about your data and shape of your data generating process  
+
+- They are a jumping off point to more interesting error distributions  
+
+- Mastering GLMs will unlock data that formerly was just frustrating
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

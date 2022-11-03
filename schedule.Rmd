@@ -162,7 +162,7 @@ __Homework:__ [Interactions](homework/interactions.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Beyond Linear Regression, But Still Linear [Modeling Error](./lectures/modeling_variance.html), [Entering a non-normal world with Generalized Linear Models](lectures/25_generalized_linear_models.html)   
+__Lecture:__ Beyond Linear Regression, But Still Linear [Modeling Error](./lectures/modeling_variance.html), [Generalized Linear Models](lectures/generalized_linear_models.html)   
 __Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_data.zip)  
 __Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html) 
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa"))`  
