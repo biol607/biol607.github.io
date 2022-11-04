@@ -483,7 +483,7 @@ emmeans(sodium_beta, specs = ~Supplement) |>
 
 Or if we had a continuous covariate, we could get fitted values and error and put them into the model.
 
-### 5.1 Exercises
+### 4.1 Exercises
 
 1) Try it out with some of my old data on docks looking at how predators shape the percent cover of bare space - `dock_pred_div_byrnes.xls`. You might have to add 0.01 to the 0 values to make it work. OR - if using glmmTMB, explore the `zi` argument!
 
