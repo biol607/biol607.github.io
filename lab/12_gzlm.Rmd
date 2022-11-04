@@ -10,147 +10,21 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(htmltools.dir.version = FALSE)
+
 ```
 
-## 1. Nonlinear Least Squares
-### 1.1 Nonlinear Terms in Linear Regression
-Fitting a simple squared or other nonlinear term in a model is fairly straightforward in R. One simply has to include the term in the model itself. So, let's take a look at how it works.
+## 1. Poisson and Gamma Regression - exploring Links
+Let's explore non-normal data with genearalized linear models Let's start with some count data. If we look at the train collisons with motor vehicle data from Agresti (1996, page 83), we see an interesting pattern.
 
-```{r libraries, message=FALSE, warning=FALSE}
-library(tidyverse)
+```{r trainplot, warning = FALSE, message = FALSE}
 library(readr)
-library(readxl)
-theme_set(theme_classic(base_size = 17))
-
-turtles <- read_excel("./data/Ashton_2007.xlsx")
-
-turtle_plot <- ggplot(turtles,
-                      aes(x = Length, y = Clutch)) +
-  geom_point()
-
-turtle_plot
-```
-
-This is clearly nonlinear. In fact, if we'd fit a linear model, the assumption plots would look wonky. Particularly the fitted-residual, which would show a leftover nonlinear relationship.
-
-```{r assume_poly}
-plot(lm(Clutch ~ Length , data = turtles), which = 1)
-```
-
-To take this data and fit a squared polynomial, you need to do a bit more than add it to the model. We use the function `I()` inside of the model. It says to R to stop and evaluate that transformed term.
-
-```{r fit_poly}
-turtle_poly <- lm(Clutch ~ Length + I(Length^2), data = turtles)
-```
-
-Now, if we look at the results...
-
-```{r poly_res}
-library(car)
+library(ggplot2)
+library(dplyr)
 library(broom)
+library(performance)
 
-Anova(turtle_poly)
-tidy(turtle_poly)
-```
-
-We can see that the squared term is included in both sets of results. Not that it will naturally be incorporated into `predict()` as well. To put our fit model into `ggplot`, we need to do a little work with `stat_smooth()`
-
-```{r polygg}
-turtle_plot +
-  stat_smooth(method = "lm", formula = y ~ x + I(x^2))
-```
-
-Note, collinearity can at times be problematic with squared terms. To get your model to fit centered polynomial terms without having to deal with manually doing the centering, try
-
-```{r cent_poly}
-cent_mod <- lm(Clutch ~ poly(Length, 2), data = turtles)
-
-tidy(cent_mod)
-```
-
-While the estimates are different, that's because they're calculated at the average of the predictor. So, don't forget to back-transform if you use this formulation.
-
-### 1.2 True Nonlinear Least Squares Regression
-You do not always want to fit a model that can easily be turned into a series of additive terms. For example, consider the power model:
-
-$$y_i = ax^b + \epsilon_i$$
-
-Sure, you can fit a log-log relationship, but then your error term is nonlonger additive. We encountered a dataset that would do well in this model with the zoo mortality dataset - animals with larger home ranges experience higher mortality.
-
-```{r zoo, message=FALSE}
-zoo <- read_csv("./data/17q02ZooMortality Clubb and Mason 2003 replica.csv")
-
-zoo_plot <- ggplot(zoo,
-                   aes(x = homerange, y = mortality)) +
-  geom_point()
-
-zoo_plot
-```
-
-Now, this would do well in a power relationship with an additive error. To achieve this, we need to minimize least squares algorithmically. R provides a nice function for that, `nls`, which allows you to define a model with coefficients, but then also requires you to provide some reasonable starting values. Not a bad tradeoff. (Although remember to always test alternate start values!)
-
-
-```{r nls}
-zoo_nls <- nls(mortality ~ a*homerange^b,
-               data = zoo,
-               start = list(a = 1, b = 1))
-```
-
-While F tests won't work for this model, we can examine coefficients
-
-```{r nls_coefs}
-tidy(zoo_nls)
-```
-
-Easy peasy! Even better, if we want to plot the result - and we're not interested in plotting confidence intervals, that's straightforward as well using `stat_smooth()`. Note, though, that we have to set `se=FALSE` as otherwise it borks on us as it tries to get CIs. For that, we'd have to use predict.
-
-
-```{r nls_plot}
-zoo_plot +
-  stat_smooth(method = "nls",
-              formula = y ~ a*x^b,
-              method.args = list(start = list(a = 1, b = 1)),
-              se = FALSE)
-```
-
-Unfortunately, we don't have an automatic $R^2$, but we can magic that up using our classic formula.
-
-```{r r2}
-1 - var(fitted(zoo_nls))/var(zoo$mortality)
-```
-
-`nls()` can take a very very wide variety of functional forms. Moreover, if you do need to move to likelihood, you can code functions for models and use `bbmle`.
-
-```{r bbmle, warning = FALSE}
-library(bbmle)
-
-zoo_pow <- function(a, b, sigma){
-  yhat <- a * homerange ^ b
- # sigma <- sd(mortality - yhat)
-  -sum(dnorm(mortality, yhat, sigma, log = TRUE))
-}
-
-zoo_mle <- mle2(zoo_pow,
-                data = zoo,
-                start = list(a = 30, b = 0.5, sigma = 10),
-                method="Nelder-Mead")
-
-
-#OR
-zoo_mle2 <- mle2(mortality ~ dnorm(a * homerange ^ b, sigma),
-                 data = zoo,
-                 start = list(a = 30, b = 0.5, sigma = 10),
-                 method="Nelder-Mead")
-```
-
-
-And then proceed accordingly.
-
-## 2. Poisson and Gamma Regression - exploring Links
-So what about non-normal data? Let's start with some count data. If we look at the train collisons with motor vehicle data from Agresti (1996, page 83), we see an interesting pattern.
-
-```{r trainplot}
-train <- read_csv("./data/trains_agresti.csv")
+train <- read_csv("lab/data/trains_agresti.csv")
 
 train_plot <- ggplot(train,
        aes(x = km_train_travel,
@@ -165,15 +39,12 @@ Just looking at this, we can see that the variance differs with the predictor. A
 ```{r lm_pois}
 train_lm <- lm(collisions ~ km_train_travel, data = train)
 
-plot(train_lm, which = 1)
-plot(train_lm, which = 2)
-
-shapiro.test(residuals(train_lm))
+check_model(train_lm)
 ```
 
-Not good. Weird varianec in the fitted-residual relationship. A bad qq plot. And a failing Shapiro-Wilks test. Part of this is because the response variable here is **not** normal in its residuals. It's Poisson, as it's count data.
+Not good. Weird variance in the fitted-residual relationship. A bad qq plot. And a mismatch between predictions and observed. Part of this is because the response variable here is **not** normal in its residuals. It's Poisson, as it's count data.
 
-### 2.1 Poisson Regression
+### 1.1 Poisson Regression
 
 A GLM with a Poisson error typically has a log link, although it can also have an identity link. To remind you, a poisson distribution is one for discrete data whose variance scales with it's mean. This one parameter, $\lambda$, encompasses both. So, for example,
 
@@ -197,15 +68,15 @@ train_glm <- glm(collisions ~ km_train_travel,
                 data = train)
 ```
 
-We can then evaluate the profile likelihoods as usual to make sure they are either straight lines (default functions) or nice and quadratic.
+We can then re-evaluate model assumptions - including now overdispersion. Note, the qq plot below doesn't really mean anything, as this isn't normal.
 
 ```{r pois_assume}
-plot(profile(train_glm))
+check_model(train_glm)
 ```
 
-But...whither residuals? Given that the residuals are not normal, a `qqnorm` plot hardly makes sense. And a residual-fitted relationship is still likely to look odd.
+So...whither residuals? Given that the residuals are not normal, a `qqnorm` plot hardly makes sense. And a residual-fitted relationship is still likely to look odd.
 
-### 2.2 Quantile Residuals with GLMs
+### 1.2 Quantile Residuals with GLMs
 
 One way to evaluate GLMs, and many other model forms, is to look at their quantil residuals. As we discussed in lecture, we essentially use simulation to get an empirical distribution for each y value. We then ask what the quantile of the observed y value is. For any model - regardless of complexity - we would assume that the quantiles should be randomly distributed - i.e. according to a uniform distribution. We can therefore look at the `qqunif` plot, if you will. This is a lot of work - simulating, making empirical distributions, testing to see if we fall on a qqunif line. Fortunately, there is Florian Hartig's excellent DHARMa package which has a beautiful and clear [vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html).
 
@@ -223,31 +94,29 @@ We can then plot these (and get a nonparametric test of fit).
 plotQQunif(res)
 ```
 
-Wonderful - a good fit.
+Wonderful - a good fit. Ignore the outlier test, as we saw there aren't any in a more detailed look.
 
-We also can look at the prediction v. quantile residual plot. Curiously, here, we should see that different strata (different quantiles) all have nice straight parallel lines. If they don't, then we might have a case of overdispersino - the variance does not scale with the mean in the way described by the distribution. More on that soon.
+We also can look at the prediction v. quantile residual plot. Curiously, here, we should see that different strata (different quantiles) all have nice straight parallel lines. If they don't, then we might have a case of overdispersion - the variance does not scale with the mean in the way described by the distribution. More on that soon.
 
 ```{r plot_res}
 plotResiduals(res)
 ```
 
-This isn't amazing, but, given the good qqunif fit, it's not terrible. When there is true overdispersion, all three are badly curved. It's pretty shocking.
+Personally I prefer what `performance` does.
 
-### 2.3 Looking at glm results
-
-First, let's hit this with our LR Test.
-
-```{r train_anova}
-Anova(train_glm)
+```{r}
+check_overdispersion(train_glm) |> plot()
 ```
 
-Looks good! There is a relationship suggested at the 0.056 level. We can also look at model results.
+### 1.3 Looking at glm results
+
+Let's look at model results.
 
 ```{r train_sum}
 summary(train_glm)
 ```
 
-Note we see standard glm outputs here. We also have a **dispersion parameter** which described the relationship between the mean and variance. For Poisson, it's 1.
+Note we see standard glm outputs here, and can interpret coefficients as we would with any log transform. We also have a **dispersion parameter** which described the relationship between the mean and variance. For Poisson, it's 1.
 
 Last, we can plot. Because we have a single predictor, we don't need to get fancy. `stat_smooth` can accomodate glms with one predictor.
 
@@ -257,12 +126,12 @@ train_plot +
               method.args = list(family = poisson(link = "log")))
 ```
 
-### 2.4 Gamma Regression
+### 1.4 Gamma Regression
 
-Often our data is not discrete, though. For example, we might have continuous data that has a terrible QQ plot due to being overdispersed. Worse, the curve might be non-normal. Consider the clam data
+Often our data is not discrete, though. For example, we might have continuous data that has a terrible QQ plot due to being overdispersed. Worse, the curve might be non-normal. Consider this clam data from Zuur.
 
 ```{r clams}
-clams <- read_delim("./data/clams.txt", delim = "\t") %>%
+clams <- read_delim("lab/data/clams.txt", delim = "\t") %>%
   mutate(MONTH = factor(MONTH))
 ```
 
@@ -276,7 +145,15 @@ clam_plot <- ggplot(clams,
 clam_plot
 ```
 
-But a qq plot of log transfomed AFD is still not good - nor is a residual-fitted plot. One reason that the relationship might be non-normal is that we're talking about growth - many multiplicative events that combine together. Gamma distributions are more typically used for data that is about time to some number of events - it's excellent for rates, for example - but it can also be used here. Gamma glms take the inverse function (e.g. $\hat{Y} = 1/(a + bx)$) as their canonical link, but they often work well with log links as well. 
+Now, it looks like we should just fit a log-transformed model, but...
+
+```{r}
+clam_lm <- lm(log(AFD) ~ LENGTH + MONTH, data = clams)
+
+check_model(clam_lm)
+```
+
+There are clear and obvious problems. Even a qq plot of log transfomed AFD is still not good - nor is a residual-fitted plot. One reason that the relationship might be non-normal is that we're talking about growth - many multiplicative events that combine together. Gamma distributions are more typically used for data that is about time to some number of events - it's excellent for rates, for example - but it can also be used here. Gamma glms take the inverse function (e.g. $\hat{Y} = 1/(a + bx)$) as their canonical link, but they often work well with log links as well. 
 
 ```{r clam_gamma}
 clam_gamma <- glm(AFD ~ LENGTH + MONTH,
@@ -284,16 +161,18 @@ clam_gamma <- glm(AFD ~ LENGTH + MONTH,
                   data = clams)
 ```
 
-Does it blend?
+Does it blend? Let's see!
 
 ```{r clam_dharma, warning=FALSE}
-clam_res <- simulateResiduals(clam_gamma)
-plotQQunif(clam_res)
+check_model(clam_gamma)
 ```
 
 Looks good! And
 
 ```{r clam_dharma_2}
+clam_res <- simulateResiduals(clam_gamma)
+plotQQunif(clam_res)
+
 plotResiduals(clam_res)
 ```
 
@@ -311,21 +190,27 @@ clam_plot +
 We can also look at other properties.
 
 ```{r prop_clam}
-Anova(clam_gamma)
-
 #coefficients
 tidy(clam_gamma)
 
 #more info
 summary(clam_gamma)
+
 ```
 
 Oh, hey, what's that dispersion parameter? Well, a Gamma usually takes two parameters - a shape and a rate. We can reparameterize a gamma such that a mean = shape/rate In this case, we parameterize the Gamma with that mean and the shape. The dispersion parameter is 1/shape. 
 
 But, to make this more understandable, the variance with a Gamma expands porportionally to the mean squared. Typically it's shown as $Var[Y] = \phi \mu^2$ where $\phi$ is the dispersion parameter. Larger dispersion parameter, faster expansion of the variance.
-Faded examples - 3?
 
-### 2.5 Was it normal?
+Last, we can look at an $R^2$ using Nagelkerke's pseudo-$R^2$
+
+```{r}
+# fit
+r2(clam_gamma)
+```
+
+
+### 1.5 Was it normal?
 
 One question you may well have is - why Gamma and not normal here? We can fit a glm with a normal error and log link.
 
@@ -345,16 +230,16 @@ plotResiduals(norm_res)
 
 We can see that the QQ is great, actually. And the predobs is not terrible (particularly compared to the above). This is some solid evidence that perhaps a normal error and log link is all that is required here.
 
-### 2.6 Exercise
+### 1.6 Exercise
 1) Open up the `monarch_gardens.csv` which describes the number of monarch butterflies in different types of gardens and analyze it with the appropriate family and link. Note, this is an ANOVA-style design, but with a glm. You can use `emmeans` and the link to draw conclusions. What does this data show you?
 
 2) Take a look at a data set we have long used before, `16e2InbreedingWolves.csv` describing how inbreeding coefficients influence the number of wolves born. This is Poisson count data. Which link function is better? Use AIC to compare. Do you meet assumptions?
 
-## 3. Logistic Regression
+## 2. Logistic Regression
 Let's take a look at our mouse infection by cryptosporidium example. Note that the data is bounded at 0 and 1.
 
 ```{r mouse, message=FALSE}
-mouse <- read_csv("./data/cryptoDATA.csv") %>%
+mouse <- read_csv("lab/data/cryptoDATA.csv") %>%
   mutate(Porportion = Y/N)
 
 mouse_plot <- ggplot(mouse,
@@ -366,7 +251,7 @@ mouse_plot
 
 That's because while `N` is our total number of mice per sample, we cannot have more than N infections! In essence, each mouse is like a coin flip. Did it get infected or not. And when we have many coin flips - Bernouli trials -  that leads to a binomial distribution.
 
-### 3.1 The Binomial Distribution
+### 2.1 The Binomial Distribution
 A binomial distribution has two parameters. The probability of success and the number of coin flips. The resulting distribution is always bounded between 0 and 1. So, consider 15 coin flips with different probabilities.
 
 ```{r bin_viz}
@@ -396,7 +281,7 @@ ggplot(bin_tibble,
 You can see both parameters matter for the shape of the distribution.
 
 
-### 3.2 Binomial Logistic Regression
+### 2.2 Binomial Logistic Regression
 
 With binomial logistic regression, we are essentially estimating the probability of getting heads. We then supply - not estimate - the number of trials as a weights argument. The canonical link - the logit link - is perfect here, as it describes a logistic curve that saturates both at 0 and 1. There are other links we can use. If none of our values get to 0 or 1, linear might even be appropriate. Or log. There are other useful ones. The probit link, for example, describes the saturating shape of the cummulative function for a normal distribution, and has real meaning with respect to survivorship - although it approaches 0 and 1 very quickly. There are a wide variety of others - [see here](http://cran.r-project.org/doc/Rnews/Rnews_2006-4.pdf) (page 32) or [here](https://www.sciencedirect.com/science/article/pii/S0304407609000207) for more info. Also, try saying "Scobit" without feeling silly.
 
@@ -422,38 +307,49 @@ These two models are identical.
 From this point forward, the worflow is as usual - assumptions, analysis, and visualization.
 
 ```{r assume_bin}
+check_model(mouse_glm)
+
+binned_residuals(mouse_glm, check = "binned_residuals", n_bins = 8) |> plot()
+
 res_bin <- simulateResiduals(mouse_glm)
 
 plotQQunif(res_bin)
 plotResiduals(res_bin)
 ```
 
-Looks good!
-
-```{r}
-Anova(mouse_glm)
-```
+Looks mostly good!
 
 Dose matters!
 
 ```{r}
 summary(mouse_glm)
+
+r2(mouse_glm)
 ```
 
 Note that the dispersion parameter is 1, just like the poisson.
 
-### 3.3 Examples
+```{r}
+ggplot(mouse,
+       aes(x= Dose, y = Porportion,
+                 weight = N)) +
+  geom_point() +
+  stat_smooth(method = "glm", 
+              method.args = list(family = binomial))
+```
+
+### 1.3 Examples
 1) With `passing.csv`, how does Grade influence the probability of passing?  
 \
 2) With `UCBAdmissions.csv`, how does gender and department affect the probability of being admitted? You might have to do some data manipulation first. Then, you should be able to analyze this using all of the tools you have developed for analyzing categorical data.
 
 
-## 4. Overdispersion: Negative Binomial and Quasipoisson
+## 3. Overdispersion: Negative Binomial and Quasipoisson
 
 What if we massively fail our test of overdispersion? Consider this data on seals haulouts.
 
 ```{r seals, message=FALSE}
-seals <- read_delim("./data/SSEAK98_FINAL.txt", delim = "\t")
+seals <- read_delim("lab/data/SSEAK98_FINAL.txt", delim = "\t")
 ```
 
 There are a lot of predictors here, but let's just look at Year.
@@ -473,9 +369,11 @@ seal_pois <- glm(Number ~ TideHtMeters,
 
 seal_pois_res <- simulateResiduals(seal_pois)
 plot(seal_pois_res)
+
+check_overdispersion(seal_pois) |> plot()
 ```
 
-### 4.2 The Quasipoisson
+### 3.2 The Quasipoisson
 A first guess might be that the variance and mean, while scaling linearly, aren't linked by a factor of 1. Maybe the variance increases at twice the rate of the mean! Or something else. This type of model is called a Quasipoisson model. It's a bit of a hack, but, in essene, you fit a poisson model, and then algorithmically futz with a parameter to see what scaling coefficient you would need to actually encompass 95% of the CI.
 
 
@@ -494,49 +392,8 @@ summary(seal_qpois)
 
 We can see it's nearly 150! That's huge! Note also that the coefficients and p-values are not different from the poisson. 
 
-### 4.2.1 Enough of this quasi stuff
 
-Incidentally, if you can write a function for it and use `bbmle` in conduction with `rethinking`, another name for a more formal version of the quasipoisson that doesn't involve this quasi- meishegas is the Gamma Poisson. See `rethinking::dgampois` where you explicitly parameterize the scaling factor.
-
-```{r rethink}
-library(rethinking)
-library(bbmle)
-
-seal_fun <- function(int, slope, scale){
-  mu <- exp(int + slope*TideHtMeters)
-  -sum(dgampois(Number, mu, scale, log = TRUE))
-}
-
-seal_bbmle <- mle2(seal_fun,
-                   data = seals,
-                   start = list(int = 5, slope = 1, scale = 150))
-
-summary(seal_bbmle)
-```
-
-### 4.2.2 A Binomial Note
-Yes, there is also a quasibinomial. If you want to be more formal about it, and use bbmle, an overdispersed binomial is also known as a beta binomial distribution. I'm not going to get into it here, but, see again what we can do with some rethinking + bbmle magic using theta as our scaling parameter.
-
-```{r betabinom, eval = FALSE}
-crypto_quasi <- glm(Y ~ Dose,
-                    family = quasibinomial(),
-                    data = mouse)
-
-#OR
-crypto_fun <- function(int, slope, theta){
-  prob <- int + slope * Dose
-  -sum(dbetabinom(Y, N, prob, theta, log = TRUE))
-}
-
-crypto_bbmle <- mle2(crypto_fun,
-                     data = mouse,
-                     start = list(int = -2, slope = 0.01, theta = 3),
-                     optimizer = "nlminb",
-                     lower = list(theta = 0.1))
-
-```
-
-### 4.3 The Negative Binomial
+### 3.3 The Negative Binomial
 That scaling coefficient was large. Maybe instead of a linear scaling, it's a squared mean-variance relationship. This corresponds to the negative binomial - a distribution of the number of successes before a specified number of failures. Like the gamma, there a squared relationship between mean and variance, making it flexible for overdispersion. It's not part of `glm`, but there's a function for it - `glm.nb` in the `MASS` package. It doesn't require a family, but instead we can give it a link function only.
 
 ```{r nb}
@@ -550,61 +407,39 @@ seal_nb <-  glm.nb(Number ~ TideHtMeters,
 How does this stack up on the diagnostic front.
 
 ```{r nb-diag}
+check_model(seal_nb)
+
 seal_nb_res <- simulateResiduals(seal_nb)
-plot(seal_nb_res)
+plotQQunif(seal_nb_res)
 ```
 
 Bingo! A beautiful fit! We can now go forward with the coefficients produced by this model with confidence.
 
 ### 4.3 Quasi or NB
 
-So....which to use? Often, by looking at the data, you can intuit whether the relationship between fitted values and the variance in residuals is linear or nonlinear. But, sometimes, you just need to test it out. In this case, we can look at the results from our poisson fit, bin them into "residual bins", and ask if there is a linear or squared relationship between the variance and bins.  Let's start by getting fitted and residual values.
+So....which to use? Often, by looking at the data, you can intuit whether the relationship between fitted values and the variance in residuals is linear or nonlinear. But, sometimes, you just need to test it out. Fortunately, `performance` gives us a `check_overdispersion()` function to evaluate this (you used to have to do it by hand!)
 
 ```{r}
-res_test <- tibble(fit = fitted(seal_pois),
-                    res = residuals(seal_pois))
+check_overdispersion(seal_pois) |> plot()
 ```
 
-Now, we have to make bins. Depending on the number of data points, you can chose a different number of bins. We have `r nrow(res_test)` points here, so, I'll go with ~10 bins of 161 points. Don't forget to get the median of your fitted values as well. 
+This looks roughly linear after a point, and so the QP would seem to be the way to go! If it's more curveliniear, or squared, we'd go with NB here.
 
-```{r make_bins}
-res_summary <- res_test %>%
-  arrange(fit) %>%
-  mutate(bin = sort(rep(1:10, 161))) %>%
-  group_by(bin) %>%
-  summarize(fit_bin = mean(fit),
-            var_res = var(res))
-```
-
-We can then visualize this to look for a linear or nonlinear relationship.
-
-```{r}
-ggplot(res_summary,
-       aes(x = fit_bin,
-           y = var_res)) + 
-  geom_point() +
-  stat_smooth(method = "lm", color = "red", se = FALSE)+
-  stat_smooth(method = "lm", formula = y ~ poly(x,2),
-              color = "blue", se = FALSE)
-```
-
-This looks roughly linear, and so the QP would seem to be the way to go!
-
-### 4.4 Exercise
+### 3.4 Exercise
 
 1) Load up the `kelp_holdfast.csv` data and explore the predictors of number of kelp stipes. Should you use a NB or Quasipoisson error with the model you've chosen? What does your chosen model say?
 
 2) Try out other predictors in the seal data. Does including more predictors change which error distribution you should use? Sometimes, dispersion is caused by unaccounted and correlated predictors!
 
 
-## 5. Beta Regression
+## 4. Beta Regression
 
 Finally, we often have data that is bounded, but is not drawn from a binomial - i.e., there are not independent "coin flips", if you will. This data can easily be accomodated by the beta distirbution. The Beta is often used to describe a distribution of probabilities (an overdispersed binomial glm is actually beta binomial - but more on that another time). But, it's also useful for things like porportional data, percent cover, and more. All of these can be logit transformed, but a beta provides a more natural fit.  We use the package `betareg` for beta regression.
 
 Consider this analysis of porportion of sodium intake from different supplements when you exercise with different gym teachers.  2300 is your RDA, so we're standardizing to that.
 
 ```{r sodium}
-sodium <- read_csv("./data/sodium_intake.csv")
+sodium <- read_csv("lab/data/sodium_intake.csv")
 
 ggplot(sodium,
        aes(x = Supplement, y = Porportion_Sodium_Intake,
@@ -621,19 +456,28 @@ sodium_beta <- betareg(Porportion_Sodium_Intake ~ Supplement + Instructor,
                        data = sodium)
 ```
 
-Beta regression isn't standard in DHARMa yet, so, we're a bit more by the seat of our pants. It does, however, have a function for plotting the linearized fited versus residual values.
+Beta regression isn't standard in DHARMa yet, so, we're a bit more by the seat of our pants. Performance similarly isn't happy about it. We can use another library, though! [glmmTMB](https://cran.r-project.org/web/packages/glmmTMB/index.html) although it can be a pain in the butt to install
 
 ```{r beta_prob}
-plot(sodium_beta, which = 4)
+library(glmmTMB)
+sodium_beta_tmb <- glmmTMB(Porportion_Sodium_Intake ~ Supplement + Instructor,
+                           family = beta_family(link = "logit"),
+                       data = sodium)
+check_model(sodium_beta_tmb)
+
+sodium_res <- simulateResiduals(sodium_beta_tmb)
+plotQQunif(sodium_beta_tmb)  
 ```
+
+Looks good!
 
 We can then go forward with all of our usual tests and visualizations. For example - 
 
 ```{r em}
 library(emmeans)
-cld(emmeans(sodium_beta, ~Supplement))
-
-cld(emmeans(sodium_beta, ~Instructor))
+emmeans(sodium_beta, specs = ~Supplement) |>
+  contrast("pairwise") |>
+  confint(adjust = "none")
 ```
 
 
@@ -641,10 +485,10 @@ Or if we had a continuous covariate, we could get fitted values and error and pu
 
 ### 5.1 Exercises
 
-1) Try it out with some of my old data on docks looking at how predators shape the percent cover of bare space - `dock_pred_div_byrnes.xls`. You might have to add 0.01 to the 0 values to make it work.
+1) Try it out with some of my old data on docks looking at how predators shape the percent cover of bare space - `dock_pred_div_byrnes.xls`. You might have to add 0.01 to the 0 values to make it work. OR - if using glmmTMB, explore the `zi` argument!
 
 ```{r, echo = FALSE, eval = FALSE}
-docks <- read_excel("./data/dock_pred_div_byrnes.xls") %>%
+docks <- read_excel("lab/data/dock_pred_div_byrnes.xls") %>%
   mutate(porp_bare = `% bare space`/100 + ifelse(`% bare space`==0, 0.01, 0))
 
 dock_beta <- betareg(porp_bare ~ `Total Predators` * Richness,
