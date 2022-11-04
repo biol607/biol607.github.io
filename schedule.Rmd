@@ -178,19 +178,19 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2022
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  Structural Causal Models and Sampling Design. [Causal Inference and Experiments](./lectures/causality_experiments.pptx) 
-__Reading:__ [Experimental Design Reading Packet](readings/exp_design_papers.zip)    
+__Lecture:__  Structural Causal Models and Sampling Design. [Causal Inference and Experiments](./lectures/causality_experiments.pptx)  
+__Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf)  
+__Optional Reading:__ [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2022  
-__Lab:__ Discussion of papers (see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments)  
+  
   
 ### Week 11.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
 __Lecture:__   [Fundamental Experimental Designs from a Causal Perspective](lectures/expt_designs.pptx), [Using causal models to get valid inference from observational and quasi-experimental studies](lectures/causal_models_regression.pptx)  
-__Reading:__ [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2022  
-__Lab:__ Discussion of papers (see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments)  
+__Lab:__ Discussion of [papers](readings/exp_design_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
   
   
 ### Week 12.   
