@@ -178,7 +178,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2022
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  Structural Causal Models and Sampling Design. [Causal Inference and Experiments](./lectures/causality_experiments.pptx)  
+__Lecture:__  [Structural Causal Models](lectures/causal_diagrams.pptx). [Causal Inference and Experiments](./lectures/causality_experiments.pptx)  
 __Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf)  
 __Optional Reading:__ [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2022  
