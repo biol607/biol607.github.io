@@ -170,7 +170,7 @@ __Reading:__ [Feiberg on GLS](https://fw8051statistics4ecologists.netlify.app/gl
 __Additional Reading:__ [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Intro to Beta Regression for % Cover Data](https://rpubs.com/nicoleknight/936037), [Zero-One Inflated Beta Regression](https://journal.r-project.org/archive/2015/RJ-2015-019/index.html)    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2022  
 
-
+__MIDTERM__: Due Tues Nov 22nd, 5pm. [Get it here](exams/exam_2022.html)  
 
 ## Block 3. Experimental and Observational Study Design and Causal Inference
 
