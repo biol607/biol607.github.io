@@ -200,7 +200,8 @@ __Lab:__ Exam work time
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  [Papers](readings/obs_sampling.zip)  Discussion About Observational Studies, Thanksgiving Break!  
+__Paper Discussion:__  Discussion of [papers](readings/obs_sampling.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
+__Homework:__ THANKSGIVING BREAK! EAT PIE!  
 
 ## Block 4. Drawing Inference from Studies
 
