@@ -1,5 +1,5 @@
 ---
-title: "Linear Regression and Frequentist Hypothesis Testing"
+title: "Linear Models and Frequentist Hypothesis Testing"
 output:
   xaringan::moon_reader:
     seal: false
@@ -13,7 +13,7 @@ output:
 ---
 class: center, middle
 
-# Linear Regression and Frequentist Hypothesis Testing
+# Linear Models and Frequentist Hypothesis Testing
 <br>
 ![:scale 75%](images/07/xkcd_sig_blowup.png)
 .left[.small[https://xkcd.com/882/]]
@@ -24,6 +24,7 @@ library(dplyr)
 library(tidyr)
 library(mvtnorm)
 library(broom)
+library(purrr)
 
 opts_chunk$set(fig.height=6, 
                fig.width = 8,
@@ -39,7 +40,7 @@ theme_set(theme_bw(base_size=18))
 
 
 ```{r puffer, include=FALSE}
-puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
+puffer <- read.csv("lectures/data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
 puffer_lm <- lm(predators ~ resemblance, data=puffer)
 ```
 
@@ -49,69 +50,20 @@ class: center, middle
 
 # Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-lm-eval-2020</h3></center>
-
-
----
-
-
-# Putting Linear Regression Into Practice with Pufferfish
-
-```{r pufferload}
-puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
-```
-
-.pull-left[
-- Pufferfish are toxic/harmful to predators  
-<br>
-- Batesian mimics gain protection from predation - why?
-<br><br>
-- Evolved response to appearance?
-<br><br>
-- Researchers tested with mimics varying in toxic pufferfish resemblance
-]
-
-.pull-right[
-![:scale 80%](./images/11/puffer_mimics.jpg)
-]
----
-# Question of the day: Does Resembling a Pufferfish Reduce Predator Visits?
-```{r puffershow}
-pufferplot <- ggplot(puffer, mapping=aes(x=resemblance, y=predators)) +
-  ylab("Predator Approaches per Trial") + 
-  xlab("Dissimilarity to Toxic Pufferfish")  +
-  geom_point(size = 3) +
-  theme_bw(base_size=24) 
-
-pufferplot + stat_smooth(method = "lm")
-```
-
-```{r wolf_scatterplot, include = FALSE}
-wolves <- read.csv("./data/11/16e2InbreedingWolves.csv") %>%
-  mutate(inbreeding_coefficient = inbreeding.coefficient)
-
-wolfplot <- ggplot(data=wolves, mapping=aes(x=inbreeding.coefficient, y=pups)) +
-xlab("Inbreeding Coefficient") + ylab("# of Pups") +
-geom_point(size=3) +
-theme_bw(base_size=24) 
-
-wolf_mod <- lm(pups ~ inbreeding_coefficient,
-               data = wolves)
-
-wolfplot + stat_smooth(method = "lm")
-```
+<center><h3>https://etherpad.wikimedia.org/p/607-nht-2022</h3></center>
 
 ---
 
-# Testing Our Models
+# Up Until Now, I've Shied Away from Inference
 
-1. How do we Know
+```{r}
+broom::tidy(puffer_lm) |>
+  select(1:3) |>
+  knitr::kable(digits = 2) |>
+  kableExtra::kable_classic()
+```
 
-2. Evaluating a Null Hypothesis.
-
-3. Null Hypothesis Significance Testing: Friend of Foe of Science?
-
-4. Testing Linear Models
+We've talked about effect sizes, confidence intervals as a measure of precision...
 
 ---
 class: center, middle
@@ -146,6 +98,220 @@ to shape a larger theory and degree of belief.
       - Inductive
 
 ---
+
+# Testing Our Models
+
+1. How do we Know
+
+2. Evaluating a Null Hypothesis
+
+3. Testing Linear Models
+
+---
+# The Core Philosophy of Frequentist Inference and Severe Statistical Testing
+
+- We are estimating the probability of an outcome of an event over the long-term  
+
+--
+
+- Thus, we calculate a **test statistic** based on our **sample** assuming it is representative of a population  
+
+--
+
+- We compare that to the distribution of the test statistic from an assumed population  
+
+--
+
+- We ask, in the long-term, what's the probability of observing our test statistic of a more extreme statistic given our assumed population
+
+---
+
+# R.A. Fisher and The P-Value
+
+.pull-left[
+![](./images/07/fisher2.jpeg)
+]
+
+.pull-right[
+P-value: The Probability of making an observation or more extreme
+observation given that the particular hypothesis is true.
+]
+
+
+---
+# Putting P-Values Into Practice with Pufferfish
+
+```{r pufferload}
+puffer <- read.csv("lectures/data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
+```
+
+.pull-left[
+- Pufferfish are toxic/harmful to predators  
+<br>
+- Batesian mimics gain protection from predation - why?
+<br><br>
+- Evolved response to appearance?
+<br><br>
+- Researchers tested with mimics varying in toxic pufferfish resemblance
+]
+
+.pull-right[
+![:scale 80%](./images/11/puffer_mimics.jpg)
+]
+
+---
+# Does Resembling a Pufferfish Reduce Predator Visits?
+```{r puffershow}
+puffer_lm <- lm(predators ~ resemblance, data = puffer)
+
+pufferplot <- ggplot(puffer, mapping=aes(x=resemblance, y=predators)) +
+  ylab("Predator Approaches per Trial") + 
+  xlab("Dissimilarity to Toxic Pufferfish")  +
+  geom_point(size = 3) +
+  theme_bw(base_size=24) +
+  labs(subtitle = paste0("Slope = ", round(coef(puffer_lm)[2], 2)))
+
+pufferplot + stat_smooth(method = "lm")
+```
+
+---
+
+#  What is the probability of a slope of ~3 or greater GIVEN a Hypothesis of a Slope of 2?
+
+We know our SE of our estimate is 0.57, so, we have a distribution of what we **could** observe.
+
+```{r slopedist, fig.height = 5}
+dat_slope <- tibble(x = seq(-1,5,length.out = 200),
+                    y = dnorm(x, 2, 0.57))
+
+slopedist <- ggplot(dat_slope,
+                    aes(x = x, y = y)) +
+  geom_line() +
+  labs(x = "Hypothesized Slope", y = "Probability Density")
+
+slopedist
+```
+
+---
+#  What is the probability of a slope of ~3 or greater GIVEN a Hypothesis of a Slope of 2?
+
+BUT - our estimated slope is ~3.
+
+```{r add_obs, fig.height = 5}
+slopedist +
+  geom_vline(xintercept = 3, color = "red", lty = 2) 
+```
+
+---
+# To test the 2:1 hypothesis, we need to know the probability of observing 3, or something GREATER than 3.
+
+We want to know if we did this experiment again and again, what's the probability of observing what we saw or worse (frequentist!)
+
+```{r add_p, fig.height = 5}
+dat_obs <- tibble(x = seq(3,5,length.out = 200),
+                    y = dnorm(x, 2, 0.57),
+                  ymin = 0)
+
+slopedist +
+  geom_vline(xintercept = 3, color = "red", lty = 2) +
+  geom_ribbon(aes(ymin = ymin, ymax = y), 
+              data = dat_obs, fill = "red", alpha = 0.5)
+```
+--
+
+Probability = `r round(1-pnorm(3, 2, 0.57),3)`
+
+---
+# Two-Tails for Testing
+
+We typically look at extremes in both tails to get at "worse" unless we have a directional hypothesis
+
+
+```{r add_p_2, fig.height = 5}
+dat_obs <- tibble(x = seq(3,5,length.out = 200),
+                    y = dnorm(x, 2, 0.57),
+                  ymin = 0)
+
+dat_obs_2 <- tibble(x = seq(-1,1,length.out = 200),
+                    y = dnorm(x, 2, 0.57),
+                  ymin = 0)
+
+slopedist +
+  geom_vline(xintercept = 3, color = "red", lty = 2) +
+  geom_ribbon(aes(ymin = ymin, ymax = y), 
+              data = dat_obs, fill = "red", alpha = 0.5) +
+  geom_vline(xintercept = 1, color = "red", lty = 2) +
+  geom_ribbon(aes(ymin = ymin, ymax = y), 
+              data = dat_obs_2, fill = "red", alpha = 0.5)
+```
+--
+
+Probability = `r 2*round(1-pnorm(3, 2, 0.57),3)`
+
+---
+# But What does a P-Value MEAN?!?!?!
+
+.center[**The Probability of Observing Your Sample or a More Extreme Sample Given that a Hypothesis is True**]
+
+--
+
+- It is NOT evidence FOR the hypothesis  
+
+--
+
+- It is evidence AGAINST the hypothesis
+
+--
+
+- It is not conclusive - it's value depends on study design
+
+---
+# For Example, Sample Size
+Difference between groups = 0.1, sd = 0.5, Hypothesis: Difference Between Groups is 0
+
+```{r n_p, cache = TRUE}
+set.seed(671)
+
+make_p <- function(n, offset = 0.1){
+  dat <- tibble(group = rep(c("a", "b"), n),
+                y = rnorm(n*2, sd = 0.5)+ c(0,offset))
+  
+  lm(y ~ group, data = dat) |> broom::tidy() %>% `[`(2,5) |> pull()
+}
+
+n_sims = 100
+dat <- tibble(n = 2:1000) |>
+  group_by(n) |>
+  summarize(p = map_dbl(1:n_sims,
+                     ~make_p(n, offset = 0.1)))
+
+ggplot(dat,aes(x = n, y = p)) +
+  #stat_summary() +
+  stat_summary(geom = "line")  +
+  scale_y_log10() +
+  labs(x = "Sample Size Per Group", subtitle = "100 sims per sample size")
+
+```
+
+---
+
+# How Does a P-Value Work with Respect to Inference?
+
+![](images/nht/muff_et_al_2022_pvalue.png)
+Muff et al. 2022 TREE
+
+---
+
+# Testing Our Models
+
+1. How do we Know
+
+2. .red[Evaluating a Null Hypothesis.]
+
+3. Testing Linear Models
+
+
+---
 # Null Hypothesis Testing is a Form of Deductive Inference
 
 .pull-left[
@@ -172,88 +338,18 @@ Look at a whole research program and falsify auxilliary hypotheses
 
 .small[https://plato.stanford.edu/entries/lakatos/#ImprPoppScie]
 
----
 
-# Testing Our Models
-
-1. How do we Know
-
-2. .red[Evaluating a Null Hypothesis.]
-
-3. Null Hypothesis Significance Testing: Friend of Foe of Science?
-
-4. Testing Linear Models
----
-
-# Reifying Refutation - What is the probability something is false?
-
-What if our hypothesis was that the resemblance-predator relationship was 2:1. We know our SE of our estimate is 0.57, so, we have a distribution of what we **could** observe.
-
-```{r slopedist, fig.height = 5}
-dat_slope <- tibble(x = seq(-1,5,length.out = 200),
-                    y = dnorm(x, 2, 0.57))
-
-slopedist <- ggplot(dat_slope,
-                    aes(x = x, y = y)) +
-  geom_line() +
-  labs(x = "Hypothesized Slope", y = "Probability Density")
-
-slopedist
-```
-
----
-# Reifying Refutation - What is the probability something is false?
-
-BUT - our estimated slope is 3.
-
-```{r add_obs, fig.height = 5}
-slopedist +
-  geom_vline(xintercept = 3, color = "red", lty = 2) 
-```
-
----
-# To falsify the 2:1 hypothesis, we need to know the probability of observing 3, or something GREATER than 3.
-
-We want to know if we did this experiment again and again, what's the probability of observing what we saw or worse (frequentist!)
-
-```{r add_p, fig.height = 5}
-dat_obs <- tibble(x = seq(3,5,length.out = 200),
-                    y = dnorm(x, 2, 0.57),
-                  ymin = 0)
-
-slopedist +
-  geom_vline(xintercept = 3, color = "red", lty = 2) +
-  geom_ribbon(aes(ymin = ymin, ymax = y), 
-              data = dat_obs, fill = "red", alpha = 0.5)
-```
---
-
-Probability = `r round(1-pnorm(3, 2, 0.57),3)`
-
---
-Note: We typically would multiply this by 2 to look at extremes in both tails.
 
 ---
 class: center, middle
 
-# Null hypothesis testing is asking what is the probability of our observation or more extreme observation given that some null expectation is true.
+# Null hypothesis testing is asking what is the probability of our observation or more extreme observation given that some **null expectation** is true.
 
 ### (it is .red[**NOT**] the probability of any particular alternate hypothesis being true)
 
----
-# R.A. Fisher and The P-Value For Null Hypotheses
-
-.pull-left[
-![](./images/07/fisher2.jpeg)
-]
-
-.pull-right[
-P-value: The Probability of making an observation or more extreme
-observation given that the null hypothesis is true.
-]
 
 ---
-# Applying Fisher: Evaluation of a Test Statistic
+# Applying Fisherian P-Values: Evaluation of a Test Statistic
 
 We  use our data to calculate a **test statistic** that maps to a value
 of the null distribution. 
@@ -286,15 +382,11 @@ $$\large P(X \leq Data | H_{0})$$
 
 ---
 
-# Testing Our Models
+# How Should We Evaluate NHT P-Values?
 
-1. How do we Know
+![](images/nht/muff_et_al_2022_pvalue.png)
+Muff et al. 2022 TREE
 
-2. Evaluating a Null Hypothesis.
-
-3. .red[Null Hypothesis Significance Testing: Friend of Foe of Science?]
-
-4. Testing Linear Models
 
 ---
 # Neyman-Pearson Hypothesis Testing and Decision Making: What if you have to make a choice?
@@ -316,11 +408,10 @@ Egon Pearson
 
 - For Industrial Quality Control, NHST was introduced to establish cutoffs of reasonable p, called an $\alpha$
 
-- This corresponds to Confidence intervals - 1-$\alpha$ = CI of interest
+- This corresponds to Confidence intervals: 1 - $\alpha$ = CI of interest  
 
-- This has become weaponized so that $\alpha = 0.05$ has become a norm.... and often determines if something is worthy of being published?
-     - Chilling effect on science
-     
+- Results with p $\le$ $\alpha$ are deemed **statistically significant**
+
 ---
 
 # NHST in a nutshell
@@ -330,73 +421,58 @@ Egon Pearson
 --
 
 2. Neyman and Pearon state that if p $\le$ $\alpha$ then we reject the null. 
-     - Think about this in a quality control setting - it's GREAT!
+     - Think about this in a quality control setting - it's GREAT!  
 --
 
 3. Fisher suggested a typical $\alpha$ of 0.05 as indicating **statistical significance**, although eschewed the idea of a decision procedure where a null is abandoned. 
-     - Codified by the FDA for testing!
+     - Codified by the FDA for testing!  
+
+--
+
+4. This has become weaponized so that $\alpha = 0.05$ has become a norm.... and often determines if something is worthy of being published?
      
 --
 .center[
-## But... Statistical Significance is NOT Biological Signficance.
+## AND... Statistical Significance is NOT Biological Signficance.
 ]
 
 ---
-# Types of Errors in a NHST framework
 
-```{r}
-type_dat <- tibble::tribble(
-  ~` `, ~`Ho is True`, ~`Ho is False`,
-  "Reject Ho", "Type I Error", "Correct or Type S Error",
-  "Fail to Reject Ho", "-", "Type II Error"
-)
-knitr::kable(type_dat)
-```
+# Why 0.05? Remember, 2SD = 95% CI
 
+> **It is convenient** to take this point as a limit in judging whether a deviation is to be considered significant or not. Deviations exceeding twice the standard deviation are thus formally regarded as significant
 
-
-- Possibility of Type I error regulated by choice of $\alpha$
-  
-- Probability of Type II error regulated by choice of $\beta$
-  
-- Probability of Type S error is called $\delta$
-
----
-# Type I & II Error
-
-.center[
-![](./images/nht/error_pregnant.jpg)
-]
----
-# Power of a Test
-
--   If $\beta$ is the probability of committing a type II error,
-1 - $\beta$ is the power of a test.
-
--   The higher the power, the less of a chance of committing a type II
-error.
-
--   We often want a power of 0.8 or higher. (20% chance of failing to reject a false null)
-
-### $\alpha = 0.05$ & $\beta = 0.20$
-
-5% Chance of Falsely Rejecting the Null, 20% Chance of Falsely Accepting the Null
-
---
-
-Are you comfortable with this? Why or why not?
+ Fisher, R.A. (1925) Statistical Methods for Research Workers, p. 47
 
 ---
 
-# What is Power, Anyway?
+# But Even Fisher Argued for Situational $\alpha$
 
-Given that we often begin by setting our acceptable $\alpha$, how do we
-then determine $\beta$ given our sample design?
+>If one in twenty does not seem high enough odds, we may, if we prefer it, draw the line at one in fifty (the 2 per cent point), or one in a hundred (the 1 per cent point). Personally, the writer prefers to set a low standard of significance at the 5 per cent point, and ignore entirely all results which fail to reach this level. A scientific fact should be regarded as experimentally established only if a properly designed experiment rarely fails to give this level of significance.
 
--   Formula for a specific test, using sample size, effect size, etc.
+ Fisher, R.A. (1926) The arrangement of field experiments.
+ Journal of the Ministry of Agriculture, p. 504
 
--   Simulate many samples, and see how often we get the wrong answer
-assuming a given $\alpha$!
+---
+# And, Really, All of This is Just Fisher Dodging Royalty Payments
+
+> We were surprised to learn, in the course of writing this article, that the p<0.05 cutoff was established as a competitive response to a disagreement over book royalties between two foundational statisticians. 
+
+> In the early 1920s, Kendall Pearson ... whose income depended on the sale of extensive statistical tables, was unwilling to allow Ronald A. Fisher to use them in his new book. To work around this barrier, Fisher created a method of inference based on only two values: p-values of 0.05 and 0.01.
+
+from Brent Goldfarb and Andrew W. King. "Scientific Apophenia in Strategic Management Research: Significance & Mistaken Inference." Strategic Management Journal, vol. 37, no. 1, Wiley, 2016, pp. 167–76.
+
+---
+# And really, what does p = 0.061 mean?
+
+- There is a 6.1% chance of obtaining the observed data or more extreme data given that the null hypothesis is true.
+
+- If you choose to reject the null, you have a ~ 1 in 16 chance of being wrong
+
+- Are you comfortable with that? 
+
+- OR - What other evidence would you need to make you more or less comfortable?
+
 
 ---
 # How do you talk about results from a p-value?
@@ -406,17 +482,6 @@ assuming a given $\alpha$!
 - Smaller p values indicate stronger support for rejection, larger ones weaker. Use that language! Not significance!
 
 - Accumulate multiple lines of evidence so that the entire edifice of your research does not rest on a single p-value!!!!
-
----
-# For example, what does p = 0.061 mean?
-
-- There is a 6.1% chance of obtaining the observed data or more extreme data given that the null hypothesis is true.
-
-- If you choose to reject the null, you have a ~ 1 in 16 chance of being wrong
-
-- Are you comfortable with that? 
-
-- OR - What other evidence would you need to make you more or less comfortable?
 
 ---
 # How I talk about p-values
@@ -440,42 +505,12 @@ assuming a given $\alpha$!
 - A p-value of > 0.1 means I have low confidence in rejecting the null
 
 ---
-# My Guiding Light
+# My Guiding Light (alongside Muff et al. 2022)
+
 .center[
 ![](./images/15/ipcc_uncertainty_ar5.jpg)
 ]
 
----
-
-# Why we need to be careful (because power!)
-
-- In the search for the Higgs Boson, scientists studied billions of particles
-
-- They used a "five-sigma" threshold (e.g., an observation beyond 5 SD)
-
-- This corresponds to an $\alpha$ of 0.0000003
-
-.center[
-![](./images/nht/higgs.jpg)
-]
-
----
-
-# Problems with NHST When Used by Humans
-
-.pull-left[
-
-![](./images/nht/gungun_p.jpg)
-]
-
-.pull-right[
-![](./images/nht/sad_bear_p.jpg)
-]
-
----
-class: center, middle
-
-## Take home: p-values are great for some kinds of inference. But, they only provide *one* answer at a time. Use carefully, and never depend on one p-value alone!
 
 ---
 
@@ -485,22 +520,101 @@ class: center, middle
 
 2. Evaluating a Null Hypothesis.
 
-3. Null Hypothesis Significance Testing: Friend of Foe of Science?
+3. .red[Testing Linear Models]
 
-4. .red[Testing Linear Models]
 
 ---
 
 # Common Regression Test Statistics
 
+   
+- Are my coefficients 0?
+    - **Null Hypothesis**: Coefficients are 0  
+    - **Test Statistic**: T distribution (normal distribution modified for low sample size)
+
+--
+
 - Does my model explain variability in the data?
      - **Null Hypothesis**: The ratio of variability from your predictors versus noise is 1
      - **Test Statistic**: F distribution (describes ratio of two variances)
-     
-- Are my coefficients not 0?
-    - **Null Hypothesis**: Coefficients are 0  
-    - **Test Statistic**: T distribution (normal distribution modified for low sample size)
-    
+  
+
+---
+background-image: url(images/09/guiness_full.jpg)
+background-position: center
+background-size: contain
+background-color: black
+
+---
+background-image: url(images/09/gosset.jpg)
+background-position: center
+background-size: contain
+
+---
+# T-Distributions are What You'd Expect Sampling a Standard Normal Population with a Small Sample Size
+
+- t = mean/SE, DF = n-1
+- It assumes a normal population with mean of 0 and SD of 1
+
+```{r dist_shape_t, fig.height=5}
+x_dists <- data.frame(x=seq(-2.5, 2.5, 0.01)) %>%
+  mutate(dn = dnorm(x),
+         dt_1 = dt(x, 1),
+         dt_2 = dt(x, 2),
+         dt_3 = dt(x, 3)
+  )
+
+x_df <- data.frame(x=rnorm(100), x_unif=runif(100))
+
+ggplot() +
+  geom_line(data=x_dists, mapping=aes(x=x, y=dn)) +
+  geom_line(data=x_dists, mapping=aes(x=x, y=dt_1), color="red") +
+  geom_line(data=x_dists, mapping=aes(x=x, y=dt_2), color="orange") +
+  geom_line(data=x_dists, mapping=aes(x=x, y=dt_3), color="blue") +
+  theme_classic(base_size=14) +
+  annotate(x=c(0.2,0.7,1.1,1.2), y=c(0.4, 0.3, 0.2, 0.1), 
+             label=c("Normal","3DF", "2DF", "1DF"), fill="white",
+            fontface = "bold", geom="label") +
+  ylab("density")
+```
+
+---
+# Assessing the Slope with a T-Test
+<br>
+$$\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}$$ 
+
+#### DF=n-2
+
+$H_0: \beta_{0} = 0$, but we can test other hypotheses
+
+---
+# Slope of Puffer Relationship (DF = 1 for Parameter Tests)
+```{r puffer_t}
+knitr::kable(coef(summary(puffer_lm)), digits = 3)
+```
+
+<Br>
+p is **very** small here so...  
+We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept.
+
+---
+
+# So, what can we say in a null hypothesis testing framework?
+
+.pull-left[
+
+- We reject that there is no relationship between resemblance and predator visits in our experiment. 
+
+- `r round(summary(puffer_lm)$r.squared, 2)` of the variability in predator visits is associated with resemblance. 
+]
+
+.pull-right[
+
+```{r puffershow}
+```
+]
+
+
 ---
 # Does my model explain variability in the data?
 
@@ -510,7 +624,11 @@ Ha = The model predicts variation in the data.
 
 --
 
-To evaluate these hypotheses, we need to have a measure of variation explained by data versus error - the sums of squares!
+To evaluate these hypotheses, we need to have a measure of variation explained by data versus error - the sums of squares! 
+
+--
+
+This is an Analysis of Variance..... **ANOVA**!
 
 --
 $$SS_{Total} = SS_{Regression} + SS_{Error}$$
@@ -527,26 +645,16 @@ abline(a, lwd=2)
 segments(x,fitted(a),x,y, col="red", lwd=2)
 ``` 
 
----
-# Sums of Squares of Regression, Visually
-```{r grandmean}
-set.seed(697)
-
-plot(x,y,pch=19, cex=0, cex.lab=1.5, cex.axis=1.1)
-abline(a, lwd=2)
-#segments(x,fitted(a),x,y, col="red", lwd=2)
-points(mean(x), mean(y), col="blue", pch=15)
-``` 
 
 ---
 # Sums of Squares of Regression, Visually
 ```{r ssr}
-set.seed(697)
-
 plot(x,y,pch=19, cex=0, cex.lab=1.5, cex.axis=1.1)
 abline(a, lwd=2)
+abline(b = 0, a = mean(y), col = "blue")
 points(mean(x), mean(y), col="blue", pch=15)
 points(x, fitted(a), col="blue", pch=1)
+segments(x, fitted(a), x, mean(y), col = "blue")
 ``` 
 
 Distance from $\hat{y}$ to $\bar{y}$
@@ -608,97 +716,175 @@ We  reject the null hypothesis that resemblance does not explain variability in 
     - T can be more sensitive with multiple predictors
 
 ---
-background-color: black
-class: center, middle, inverse
 
-![:scale 90%](images/09/t_distribution.png)
+# What About Models with Categorical Variables?
 
-.small[xkcd]
+- T-tests for Coefficients with Treatment Contrasts  
 
----
-background-image: url(images/09/guiness_full.jpg)
-background-position: center
-background-size: contain
-background-color: black
+- F Tests for Variability Explained by Including Categorical Predictor  
+      - **ANOVA**
+  
+- More T-Tests for Posthoc Evaluation
 
 ---
-background-image: url(images/09/gosset.jpg)
-background-position: center
-background-size: contain
+# What Explains This Data? Same as Regression (because it's all a linear model)
+```{r brain_anova_viz_1}
 
----
-# T-Distributions are What You'd Expect Sampling a Standard Normal Population with a Small Sample Size
+brainGene <- read.csv("lectures/data/19/15q06DisordersAndGeneExpression.csv") %>%
+  mutate(group = forcats::fct_relevel(group, c("control", "schizo", "bipolar")))
 
-- t = mean/SE, DF = n-1
-- It assumes a normal population with mean of 0 and SD of 1
+brain_lm <- lm(PLP1.expression ~ group, data=brainGene)
 
-```{r dist_shape_t, fig.height=5}
-x_dists <- data.frame(x=seq(-2.5, 2.5, 0.01)) %>%
-  mutate(dn = dnorm(x),
-         dt_1 = dt(x, 1),
-         dt_2 = dt(x, 2),
-         dt_3 = dt(x, 3)
-  )
+brainGene$subj <- 1:nrow(brainGene)
+jls <- brainGene %>%
+  group_by(group) %>%
+  summarise(mean_expression = mean(PLP1.expression)) %>%
+  ungroup()
 
-x_df <- data.frame(x=rnorm(100), x_unif=runif(100))
+data_plot <- ggplot(data=brainGene, mapping=aes(x=group, y=PLP1.expression, color=group)) +
+  geom_point(mapping=aes(group=subj), position=position_dodge(width=0.5)) +
+  theme_bw(base_size=14)
 
-ggplot() +
-  geom_line(data=x_dists, mapping=aes(x=x, y=dn)) +
-  geom_line(data=x_dists, mapping=aes(x=x, y=dt_1), color="red") +
-  geom_line(data=x_dists, mapping=aes(x=x, y=dt_2), color="orange") +
-  geom_line(data=x_dists, mapping=aes(x=x, y=dt_3), color="blue") +
-  theme_classic(base_size=14) +
-  annotate(x=c(0.2,0.7,1.1,1.2), y=c(0.4, 0.3, 0.2, 0.1), 
-             label=c("Normal","3DF", "2DF", "1DF"), fill="white",
-            fontface = "bold", geom="label") +
-  ylab("density")
+data_plot
 ```
 
 ---
-# Error in the Slope Estimate
-<br>
+# Variability due to Model (between groups)
+```{r brain_anova_viz_2}
+model_plot <- data_plot +
+    geom_boxplot(data=jls, mapping=aes(x=group, y=mean_expression)) 
 
-
-$$\Large SE_{b} = \sqrt{\frac{MS_{E}}{SS_{X}}}$$
-
-.center[
-#### 95% CI = $b \pm t_{\alpha,df}SE_{b}$  
-
-
-(~ 1.96 when N is large)
-]
-
----
-# Assessing the Slope with a T-Test
-<br>
-$$\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}$$ 
-
-#### DF=n-2
-
-$H_0: \beta_{0} = 0$, but we can test other hypotheses
-
----
-# Slope of Puffer Relationship (DF = 1 for Parameter Tests)
-```{r puffer_t}
-knitr::kable(coef(summary(puffer_lm)), digits = 3)
+model_plot+
+  geom_hline(yintercept = mean(brainGene$PLP1.expression), lty = 2) +
+  geom_segment(data = bind_cols(jls, data.frame(y = mean(brainGene$PLP1.expression))),
+               aes(xend = group, yend = y, y = mean_expression),
+               size = 2, color = "black")
 ```
 
-<Br>
-We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept.
+---
+# Variability due to Error (Within Groups)
+```{r brain_anova_viz_3}
+brainGene <- brainGene %>%
+  group_by(group) %>%
+  mutate(mean_expression = mean(PLP1.expression)) %>%
+  ungroup()
+
+model_plot + 
+  geom_linerange(data = brainGene, mapping=aes(x=group, ymin = mean_expression, ymax = PLP1.expression, group=subj), position=position_dodge(width=0.5))
+```
+
+
+---
+# F-Test to Compare
+<br><br>
+$SS_{Total} = SS_{Model} + SS_{Error}$ 
+
+--
+
+(Classic ANOVA: $SS_{Total} = SS_{Between} + SS_{Within}$)
+
+--
+
+Yes, these are the same!
+
+---
+# F-Test to Compare
+
+$SS_{Model} = \sum_{i}\sum_{j}(\bar{Y_{i}} - \bar{Y})^{2}$, df=k-1  
+
+$SS_{Error} = \sum_{i}\sum_{j}(Y_{ij} - \bar{Y_{i}})^2$, df=n-k  
+
+
+To compare them, we need to correct for different DF. This is the Mean Square.  
+
+MS = SS/DF, e.g, $MS_{W} = \frac{SS_{W}}{n-k}$   
+
+
+---
+# ANOVA
+
+```{r brainGene_anova}
+brain_lm <- lm(PLP1.expression ~ group, data=brainGene)
+knitr::kable(anova(lm(PLP1.expression ~ group, data=brainGene)))
+```
+
+We have strong confidence that we can reject the null hypothesis
+
+---
+# This Works the Same for Multiple Categorical
+
+
+TreatmentHo: $\mu_{i1} = \mu{i2} = \mu{i3} = ...$
+
+
+Block Ho: $\mu_{j1} = \mu{j2} = \mu{j3} = ...$
+
+
+i.e., The variance due to each treatment type is no different than noise
+
+---
+# We Decompose Sums of Squares for Multiple Predictors
+
+$SS_{Total} = SS_{A} + SS_{B} + SS_{Error}$
+
+- Factors are Orthogonal and Balanced, so, Model SS can be split
+     -   F-Test using Mean Squares as Before
+
 
 ---
 
-# So, what can we say in a null hypothesis testing framework?
+# What About Unbalanced Data or Mixing in Continuous Predictors?
 
-.pull-left[
+- Let's Assume Y ~ A + B where A is categorical and B is continuous  
 
-- We reject that there is no relationship between resemblance and predator visits in our experiment. 
+--
 
-- `r round(summary(puffer_lm)$r.squared, 2)` of the variability in predator visits is associated with resemblance. 
-]
+- F-Tests are really model comparisons
 
-.pull-right[
+--
 
-```{r puffershow}
-```
-]
+- The SS for A is the Residual SS of Y ~ A + B  - Residual SS of Y ~ B 
+      - This type of SS is called **marginal SS** or **type II SS**
+      
+--
+
+- Proceed as normal
+
+--
+
+- This also works for interactions, where interactions are all tested including additive or lower-level interaction components
+     - e.g., SS for AB is RSS for A+B+AB - RSS for A+B
+     
+---
+
+# Warning for Working with SAS Product Users (e.g., JMP)
+
+- You will sometimes see *Type III* which is sometimes nonsensical
+     - e.g., SS for A is RSS for A+B+AB - RSS for B+AB
+     
+--
+
+- Always question the default settings!
+
+---
+class:center, middle
+
+# F-Tests tell you if you can reject the null that predictors do not explain anything
+
+---
+# Post-Hoc Comparisons of Groups
+
+- **Only compare groups if you reject a Null Hypothesis via F-Test**
+      - Otherwise, any results are spurious  
+      - This is why they are called post-hocs
+      
+--
+
+- We've been here before with SEs and CIs  
+
+--
+- In truth, we are using T-tests
+
+--
+
+- BUT - we now corret p-values for Family-Wise Error (if at all)

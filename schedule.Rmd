@@ -212,11 +212,10 @@ __Homework:__ THANKSGIVING BREAK! EAT PIE!
 `r datestring`   
 __Lecture:__ Ways of Knowing: [NHST](./lectures/linear_regression_nht) and [NHST with Likelihood](lectures/mle_cv.html)    
 __Lab Topic:__ [Likelihood and linear models](lab/07_likelihood.html), [data](./lab/data/17e8ShrinkingSeals Trites 1996.csv)\
-__Reading:__ W&S 20, W&G Chapter [Iteration](http://r4ds.had.co.nz/iteration.html)  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-eval-2022, https://etherpad.wikimedia.org/p/607-mle-2022  
-__In Class Code:__  [linear models with likelihood](in_class_code/2020/scripts/likelihood.R)  
-__Packages for The Week:__ `install.packages(c("MASS", "profileModel", "bbmle", "rsample"))`  
-__Homework:__[inference and likelihood](./homework/07_likelihood.html)  
+__Reading:__ W&S 20, [Muff et al. 2022 on p-values](./readings/muff_et_al_2022.pdf), [Feiberg on Maximum Likelihood](https://fw8051statistics4ecologists.netlify.app/mle.html)     
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-nht-eval-2022
+__Packages for The Week:__ `install.packages(c("car", "MASS", "profileModel"))`  
+
 
 ### Week 14-15.   
 ```{r next_date, echo=FALSE}
@@ -229,7 +228,7 @@ __Homework:__[inference and likelihood](./homework/07_likelihood.html)
 
 __Lecture:__ Ways of Knowing: [Cross-Validation and AIC](./lectures/crossvalidation.html), [Bayesian Data Analaysis](lectures/bayes.html), [Fitting a line with Bayesian techniques](lectures/16_bayesian_lm.html), [Bayesian Inference on a Line](lectures/bayesian_lm_inference.html)  
 __Lab Topic:__  [Cross-Validation](lab/crossvalidation.html), [Bayes](lab/08_bayes.html)   
-__Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1](http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and [Chapter 2](http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf), [R Users will Now Inevitably Become Bayesians](https://thinkinator.com/2016/01/12/r-users-will-now-inevitably-become-bayesians/), [bayesplot cheat sheet](https://github.com/roualdes/stan_cheatsheets/blob/master/bayesplot/main.pdf)  
+__Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1](http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and [Chapter 2](http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf), [Aho et al. 2014](./readings/Aho_2014_ecolog_bic.pdf)    
 __Additional Reading__: [how to choose a prior](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations), [bayesian t-tests](https://vuorre.netlify.com/post/2017/how-to-compare-two-groups-with-robust-bayesian-estimation-using-r-stan-and-brms/), [regression models with brms](https://magesblog.com/post/2015-09-01-bayesian-regression-models-using-stan/), [rethinking with brms](https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/) (many very cool examples), [brms tutorials](https://www.rensvandeschoot.com/tutorials/brms/), [How to use rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/rstanarm.html), [Linear Models in rstanarm](https://cran.r-project.org/web/packages/rstanarm/vignettes/lm.html), [Bayesian basics with R](https://m-clark.github.io/bayesian-basics/)  
 __Packages for The Week:__ `install.packages(c("brms", "rstanarm", "arm", "rethinking"))` and `devtools::install_github("mjskay/tidybayes")`  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-bayes-2022, https://etherpad.wikimedia.org/p/607-bayes-lm-2022    
