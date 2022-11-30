@@ -3,10 +3,12 @@
   <head>
     <title>Maximum Likelihood Estimation and Likelihood Ratio Testing</title>
     <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
   <body>
@@ -28,7 +30,7 @@ class: center, middle
 
 # Etherpad
 &lt;br&gt;&lt;br&gt;
-&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-mle-2020&lt;/h3&gt;&lt;/center&gt;
+&lt;center&gt;&lt;h3&gt;https://etherpad.wikimedia.org/p/607-nht-2022&lt;/h3&gt;&lt;/center&gt;
 
 ---
 
@@ -516,6 +518,10 @@ Compare `\(p(D|\theta_{1})\)` versus `\(p(D|\theta_{2})\)`
 
 --
 
+- We then scale by *dispersion parameter* (e.g., variance, etc.)  
+
+--
+
 - It's `\(\chi^2\)` distributed!   
      - DF = Difference in # of Parameters  
 
@@ -554,6 +560,25 @@ Model 2: predators ~ resemblance
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
+
+Note, uses Difference in Deviance / Dispersion where Dispersion = Variance as LRT
+
+
+---
+# Or, R has Tools to Automate Doing This Piece by Piece
+
+
+```
+Analysis of Deviance Table (Type II tests)
+
+Response: predators
+            LR Chisq Df Pr(&gt;Chisq)    
+resemblance   27.371  1  1.679e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Here, LRT = Difference in Deviance / Dispersion where Dispersion = Variance
 
 ---
 # When to Use Likelihood?
@@ -622,6 +647,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

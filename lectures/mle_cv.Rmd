@@ -38,7 +38,7 @@ theme_set(theme_bw(base_size=18))
 
 
 ```{r puffer, include=FALSE}
-puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
+puffer <- read.csv("lectures/data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
 puffer_lm <- lm(predators ~ resemblance, data=puffer)
 ```
 
@@ -48,7 +48,7 @@ class: center, middle
 
 # Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-mle-2020</h3></center>
+<center><h3>https://etherpad.wikimedia.org/p/607-nht-2022</h3></center>
 
 ---
 
@@ -406,7 +406,7 @@ ggplot(ml_search_ll,
 # Putting MLE Into Practice with Pufferfish
 
 ```{r pufferload}
-puffer <- read.csv("./data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
+puffer <- read.csv("lectures/data/11/16q11PufferfishMimicry Caley & Schluter 2003.csv")
 ```
 
 .pull-left[
@@ -700,6 +700,10 @@ $$\LARGE G = \frac{L(H_1 | D)}{L(H_2 | D)}$$
 
 --
 
+- We then scale by *dispersion parameter* (e.g., variance, etc.)  
+
+--
+
 - It's $\chi^2$ distributed!   
      - DF = Difference in # of Parameters  
 
@@ -728,6 +732,18 @@ int_only <- glm(predators ~ 1, data = puffer)
 ```{r}
 anova(int_only, puffer_glm, test = "LRT")
 ```
+
+Note, uses Difference in Deviance / Dispersion where Dispersion = Variance as LRT
+
+
+---
+# Or, R has Tools to Automate Doing This Piece by Piece
+
+```{r}
+car::Anova(puffer_glm)
+```
+
+Here, LRT = Difference in Deviance / Dispersion where Dispersion = Variance
 
 ---
 # When to Use Likelihood?
