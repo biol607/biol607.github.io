@@ -103,3 +103,10 @@ td {
   color: #333;
   background: #f8f8f8;
 }
+
+.bottom {
+    bottom: 5%;
+    left:5%;
+    position: fixed;
+    text-align:left;
+}
