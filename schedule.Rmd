@@ -211,7 +211,8 @@ __Homework:__ THANKSGIVING BREAK! EAT PIE!
 ```
 `r datestring`   
 __Lecture:__ Ways of Knowing: [NHT](./lectures/linear_regression_nht), [NHT with Likelihood](lectures/mle_cv.html), [Power Analysis](./lectures/power_analysis.html)    
-__Lab Topic:__ [Likelihood and linear models](lab/07_likelihood.html), [data](./lab/data/17e8ShrinkingSeals Trites 1996.csv)\
+__Lab Topic:__ [Null Hypothesis Testing](lab/nht.html), [Power Analysis](lab/power_analysis_lab.html)  
+__Data for Lab__: [mole rats](lab/data/18e4MoleRatLayabouts.csv), [intertidal algae](lab/data/18e3IntertidalAlgae.csv), [cryptosporidium infection](lab/data/cryptoDATA.csv), [Keeley et al. data](lab/data/Keeley_rawdata_select4.csv)   
 __Reading:__ W&S 20, [Muff et al. 2022 on p-values](./readings/muff_et_al_2022.pdf), [Feiberg on Maximum Likelihood](https://fw8051statistics4ecologists.netlify.app/mle.html)     
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-nht-eval-2022  
 __Packages for The Week:__ `install.packages(c("car", "MASS", "profileModel"))`  
