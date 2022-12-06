@@ -3,11 +3,10 @@
   <head>
     <title>Cross Validation and Model Selection</title>
     <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
-    <link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
-    <script src="libs/anchor-sections/anchor-sections.js"></script>
     <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
   <body>
@@ -190,13 +189,13 @@ versus specificity --&gt;
 RMSE Temperature Model:
 
 ```
-[1] 27.31889
+[1] 24.87981
 ```
 
 RMSE Intercept Only Model:
 
 ```
-[1] 32.00178
+[1] 30.71823
 ```
 
 This is the estimate of the SD of the training set - which is acceptable for your predictions?
@@ -244,13 +243,13 @@ class: center, middle
 
 |id    |      mse|     rmse|
 |:-----|--------:|--------:|
-|Fold1 | 566.6716| 23.80487|
-|Fold2 | 482.6707| 21.96977|
-|Fold3 | 493.9591| 22.22519|
-|Fold4 | 586.6068| 24.21997|
-|Fold5 | 515.8802| 22.71300|
+|Fold1 | 460.5438| 21.46029|
+|Fold2 | 544.1828| 23.32773|
+|Fold3 | 517.2836| 22.74387|
+|Fold4 | 584.8471| 24.18361|
+|Fold5 | 558.6796| 23.63641|
 
-Temperature Model Score: 529.1576829  
+Temperature Model Score: 533.1073992  
 
 Intercept Only Score: 788.2974 &lt;!-- eh, I was lazy, and just reran the above with a different model --&gt;
 
@@ -574,7 +573,59 @@ Model weights summed together = 1
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-.center[So... how much better are the top models? What about Parsimody? What would you say?]
+.center[So... how much better are the top models? What about Parsimony? What would you say?]
+
+---
+class: center, middle
+background-color:black
+
+# We Need an Ensemble
+
+![](./images/mmi/chorus_line_model_selection.jpg)
+
+---
+# Death to single models!
+- While sometimes the model you should use is clear, more often it is *not*  
+
+- Further, you made those models for a reason: you suspect those terms are important  
+
+- Better to look at coefficients across models  
+
+- For actual predictions, ensemble predictions provide real uncertainty
+
+
+---
+# Ensemble Prediction
+- Ensemble prediction gives us better uncertainty estimates  
+
+- Takes relative weights of predictions into account  
+
+- Takes weights of coefficients into account  
+
+- Basicaly, get simulated predicted values, multiply them by model weight
+
+---
+# Model Averaged Predictions
+
+
+```r
+newData &lt;- data.frame(temperature = mean(roaches$temperature))
+```
+
+
+```
+
+Model-averaged predictions on the response scale
+based on entire model set and 95% confidence interval:
+
+  mod.avg.pred uncond.se lower.CL upper.CL
+1        98.22     5.949    86.56   109.88
+```
+
+---
+# Model Averaged Predictions for FULL UNCERTAINTY
+
+&lt;img src="crossvalidation_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Inferential Frameworks of Today
@@ -635,6 +686,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

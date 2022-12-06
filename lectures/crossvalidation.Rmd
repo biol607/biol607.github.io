@@ -62,7 +62,7 @@ theme_set(theme_bw(base_size=24))
 # Which is best?
 
 ```{r roach_prep}
-roaches <- read.csv("data/chap17f5_4CockroachNeurons.csv")
+roaches <- read.csv("lectures/data/chap17f5_4CockroachNeurons.csv")
 
 roach_lm <- lm(rate ~ temperature, data = roaches)
 roach_intonly <- lm(rate ~ 1, data = roaches)
@@ -665,6 +665,81 @@ aictab(mods, modnames = paste("Order", 1:10),
 ```
 
 .center[So... how much better are the top models? What about Parsimony? What would you say?]
+
+---
+class: center, middle
+background-color:black
+
+# We Need an Ensemble
+
+![](./images/mmi/chorus_line_model_selection.jpg)
+
+---
+# Death to single models!
+- While sometimes the model you should use is clear, more often it is *not*  
+
+- Further, you made those models for a reason: you suspect those terms are important  
+
+- Better to look at coefficients across models  
+
+- For actual predictions, ensemble predictions provide real uncertainty
+
+
+---
+# Ensemble Prediction
+- Ensemble prediction gives us better uncertainty estimates  
+
+- Takes relative weights of predictions into account  
+
+- Takes weights of coefficients into account  
+
+- Basicaly, get simulated predicted values, multiply them by model weight
+
+---
+# Model Averaged Predictions
+
+```{r Predict_data, echo=TRUE}
+
+newData <- data.frame(temperature = mean(roaches$temperature))
+```
+
+```{r predict}
+modavgPred(mods, modnames=paste("Order", 1:10), newdata = newData)
+```
+
+---
+# Model Averaged Predictions for FULL UNCERTAINTY
+
+```{r}
+newdat <- modelr::data_grid(roaches, temperature = seq_range(temperature, 100))
+
+modavg <- as.data.frame(modavgPred(mods, 
+                                   modnames=paste("Order", 1:10), 
+                                   newdata = newdat)) |>
+  bind_cols(newdat)
+
+
+pred_intervals <- map(mods, predict, newdata = newdat, interval="prediction") %>%
+  map(as_tibble) %>%
+  map(~select(., -fit)) %>%
+  map2(aictab(mods, sort=FALSE)$AICcWt, `*`) %>%
+  reduce(`+`)
+
+modavg <- cbind(modavg, pred_intervals)
+
+
+ggplot(modavg,
+       aes(x = temperature,
+           y = mod.avg.pred)) +
+  geom_ribbon(aes( ymin  = lwr, ymax = upr),
+              fill = "lightblue") +
+  geom_ribbon(aes( ymin  = lower.CL, ymax = upper.CL),
+              fill = "lightgrey") +
+  geom_line() +
+  geom_point(data = roaches, aes(y = rate)) +
+  labs(y = "model average prediction", subtitle = "blue = prediction interval, grey = fit interval")
+
+```
 
 ---
 # Inferential Frameworks of Today
