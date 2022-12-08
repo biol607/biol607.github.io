@@ -1,7 +1,11 @@
 ---
 title: "Cross-Validation"
 author: "Biol 607"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -10,14 +14,14 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE)
 ```
 
-## The data
+## 1. The data
 
 Let's start with the roach data looking at activity of prothoracic ganglia under different temperature regimes. Here's the data and a plot of a linear model fit.
 
 ```{r}
 library(ggplot2)
 
-roaches <- read.csv("data/chap17f5_4CockroachNeurons.csv")
+roaches <- read.csv("lab/data/chap17f5_4CockroachNeurons.csv")
 
 roach_lm <- lm(rate ~ temperature, data = roaches)
 
@@ -29,7 +33,7 @@ roach_lm_plot <- ggplot(roaches,
 roach_lm_plot
 ```
 
-## Basic Cross-validation with One Point
+## 2. Basic Cross-validation with One Point
 
 We can easily pluck out any random point and see how out of sample error works. For that, we use the {modelr} library and the `mse()` to get mean square error.
 
@@ -64,7 +68,7 @@ mse(model = roach_int_no_5,
 
 Much higher.
 
-## K-Fold Cross-Validation
+## 3. K-Fold Cross-Validation
 
 OK, let's look at a more general solution here. One problem in doing cross-validation is that making folds in the data can add up to ballooning the size of data in memory. For that, there's the library {rsample} which plays beautifully with {dplyr} and {purrr}. It uses some underlying tricks to not ballon data. Let's look at an `rsample` object for 5-folk cross-validation. Note, the function for this is `vfold_cv()` not kfold - no, I'm not sure why.
 
@@ -106,7 +110,7 @@ roach_five_fold
 
 We can then get the average MSE by summing up that last column. We could do the same for an intercept only model and compare.
 
-## LOO Cross-Validation
+## 4. LOO Cross-Validation
 
 We can do the same for leave-one-out using `rsample::loo_cv()` with pretty much the same workflow.
 
@@ -151,7 +155,7 @@ roach_loo %>%
   summarise(mse = mean(mse))
 ```
 
-## Using boot::cv.glm() for Cross-Validation
+## 5. Using boot::cv.glm() for Cross-Validation
 
 This is great. But, kind of annoying as we have to do all of this work. It's wonderful for arbitrary out of sample error functions. But.... WOuldn't it be nice if we could do a lot of this in one line?
 
@@ -172,7 +176,7 @@ loo_roach$delta[1]
 
 Hey, it's the same as above.... but less work! Note the K argument. We can lower it to be a more traditional k-fold analysis. Now, granted, it's a bit ungainly to use, but we can wrap it up in a function and make it easier to use.
 
-## AIC
+## 6. AIC
 
 Last, AIC! Any fit model can give us an AIC score.
 
@@ -200,4 +204,99 @@ aictab(list(roach_lm, roach_int),
 
 ```
 
-Note that by default it gives the AICd. You can, however, use `second.ord = TRUE` to get the AIC.
+Note that by default it gives the AICc. You can, however, use `second.ord = TRUE` to get the AIC.
+
+This is somewhat boring (yes, temperature matters), so let's make it more interesting!
+
+```{r}
+roach_lm_2 <- lm(rate ~ poly(temperature,2), data = roaches)
+roach_lm_3 <- lm(rate ~ poly(temperature,3), data = roaches)
+roach_lm_4 <- lm(rate ~ poly(temperature,4), data = roaches)
+
+modlist <- list(roach_lm, roach_int, roach_lm_2, roach_lm_3, roach_lm_4)
+modnames <- 0:4
+
+aictab(modlist,
+       modnames)
+
+```
+### 6.1 AIC model averaging
+
+We can get the model averaged coefficients, as it were with these models, using `modavg()`
+
+```{r}
+modavg(modlist, modnames, parm = "(Intercept)")
+```
+
+There's a lot of controversy, however, as to whether this is a good idea. Rather, we should focus on model predictions! We can get these and their fit intervals using `modavgPred()`
+
+```{r}
+mod_pred <- tibble(temperature = seq(11, 34, length.out = 200)) |>
+  modavgPred(modlist, modnames, newdata = _) |>
+  as_tibble()
+
+mod_pred
+```
+
+Prediction intervals are a bit trickier. They're not specified in the function. Fortunately, uh, I figured this out a few years ago. And then forgot I figured it out. But past me had been smart and made https://rpubs.com/jebyrnes/aic_prediction to look at. It all comes down to getting prediction intervals from each model, and then calculating a weighted average.
+
+```{r}
+pred_list <- modlist |>
+  map(predict, 
+      interval = "prediction", 
+      newdata = tibble(temperature = seq(11, 34, length.out = 200))) |>
+  map(as_tibble)
+```
+
+Every element of that list corresponds to a model. We can get the weighted value of each by multiplying them against the model weights for that model.
+
+```{r}
+aicc_weights <- aictab(modlist, modnames, sort=FALSE)$AICcWt
+
+weighted_pred_list <- pred_list |>
+  map2(aicc_weights, `*`)
+```
+
+Great! Now we just need to sum up across the lists. We can use `purrr::reduce()` for this which iterates through a list, and applies a function to the cummulative result.
+
+```{r}
+reduce(1:5, sum) #for example
+
+pred_intervals <- reduce(weighted_pred_list, `+`) |>
+  select(-fit)
+```
+
+Now we can bind this to our model predictions and plot!
+
+```{r}
+mod_pred <- mod_pred |>
+  mutate(temperature = seq(11, 34, length.out = 200)) |>
+  rename(rate = mod.avg.pred) |>
+  select(temperature, rate, lower.CL, upper.CL) |>
+  bind_cols(pred_intervals)
+
+ggplot(mod_pred,
+       aes(x = temperature, y = rate)) +
+  geom_ribbon(fill = "lightblue",
+              aes(ymin = lwr, ymax = upr)) +
+  geom_ribbon(fill = "darkgrey",
+              aes(ymin = lower.CL, ymax = upper.CL)) +
+  geom_line() +
+  geom_point(data = roaches)
+```
+
+### 6.2 Example
+
+Load up the keeley data  - `data("keeley", package = "piecewiseSEM")`. Fit the following five models.
+
+```{r}
+data("keeley", package = "piecewiseSEM")
+
+keeley_firecover <- lm(rich ~ firesev + cover, data=keeley)
+keeley_firecover_int <- lm(rich ~ age * firesev, data=keeley)
+keeley_agefirecover <- lm(rich ~ age + firesev + cover, data = keeley)
+keeley_two_ints <- lm(rich ~ age * firesev + cover*firesev + age*cover, data = keeley)
+keeley_three_ints <- lm(rich ~ age * firesev * cover, data = keeley)
+```
+
+Which model is the best? Would you use just that one, or a model averaged dataset? Plot the model averaged predictions for a range of age, firesev, or cover holding all other predictors at their mean.
