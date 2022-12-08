@@ -21,7 +21,7 @@ Let's start with the roach data looking at activity of prothoracic ganglia under
 ```{r}
 library(ggplot2)
 
-roaches <- read.csv("lab/data/chap17f5_4CockroachNeurons.csv")
+roaches <- read.csv("http://biol607.github.io/lab/data/chap17f5_4CockroachNeurons.csv")
 
 roach_lm <- lm(rate ~ temperature, data = roaches)
 
