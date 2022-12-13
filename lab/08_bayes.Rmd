@@ -440,6 +440,22 @@ seal_plot +
 
 We can see the tightness of the fit, and that we have high confidence in the output of our model.
 
+If you didn't want to work with the raw chains, there's also a great tool in `tidybayes::add_linpred_draws()`.
+
+```{r}
+library(modelr)
+seal_fit <- data_grid(seals, age.days = seq_range(age.days, 100)) |>
+  add_linpred_draws(seal_lm_bayes)
+
+head(seal_fit)
+
+seal_plot +
+  geom_line(data = seal_fit,
+            aes(y = .linpred, group = .draw), color = "grey") +
+  geom_abline(intercept = fixef(seal_lm_bayes)[1], slope = fixef(seal_lm_bayes)[2], color="red")
+
+```
+
 #### 2.5.3 Prediction Uncertainty
 So how to we visualize uncertainty given our large SD of our fit? We can add additional simulated values from `posterior_predict` at upper and lower values of our x-axis, and put lines through them.
 
@@ -464,6 +480,18 @@ seal_plot +
 ```
 
 We can now see how much of the range of the data is specified by both our data and error generating process. There's still some data that falls outside of the range, although that's not surprising given our large sample size.
+
+We can also again do this with tidybayes and `add_predicted_draws()` and `ggdist::stat_lineribbon()` to great effect!
+
+```{r}
+seal_pred <- data_grid(seals, age.days = seq_range(age.days, 100)) |>
+  add_predicted_draws(seal_lm_bayes)
+
+seal_plot +
+  stat_lineribbon(data = seal_pred, aes(y = .prediction),
+                  alpha = 0.5)+
+  scale_fill_viridis_d(option = "F")
+```
 
 ### 2.6 Futzing With Priors
 
