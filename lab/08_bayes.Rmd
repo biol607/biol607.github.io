@@ -12,7 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message=FALSE)
 ```
 
-For this lab, see the etherpad at  https://etherpad.wikimedia.org/p/607-bayes 
+For this lab, see the etherpad at  https://etherpad.wikimedia.org/p/607-cv_bayes-2022 
 
 ## 1. Fitting a Single Parameter Model with Bayes
 
@@ -163,8 +163,10 @@ We'll use the seal linear regression as an example.
 
 ```{r load_seals}
 library(brms)
+library(tidybayes)
+library(ggdist)
 
-seals <- read.csv("data/17e8ShrinkingSeals Trites 1996.csv")
+seals <- read.csv("http://biol607.github.io/lab/data/17e8ShrinkingSeals%20Trites%201996.csv")
 
 head(seals)
 ```
@@ -198,7 +200,7 @@ set.seed(607)
 
 seal_lm_bayes <- brm(length.cm ~ age.days,
                          data = seals,
-                         family=gaussian(), file = "./brms_fits/seal_lm_bayes")
+                         family=gaussian(), file = "lab/brms_fits/seal_lm_bayes")
 ```
 
 Note the output - you can see you're doing something! And you get a sense of speed. And you can see the multiple cores going!
@@ -222,44 +224,53 @@ So, first, did your model converge? The easiest way to see this is to plot the t
 plot(seal_lm_bayes)
 ```
 
-Note, there's a `par` argument, so, you can look at just one chain if you want.
+Note, there's a `variable` argument, so, you can look at just one chain if you want.
 
 ```{r one_par}
-plot(seal_lm_bayes, par = "b_Intercept")
+get_variables(seal_lm_bayes)
+plot(seal_lm_bayes, variable = "b_Intercept")
 ```
 
 This looks pretty good, and those posteriors look pretty normal!
 
-You can also look at just the chains by turning our fit model into a posterior data frame.
+You can also look at just the chains by turning our fit model into a posterior data frame using `tidybayes::gather_draws()` or `tidybayes::spread_draws()`. Or we can use  `brms::as_draws()` to get an mcmc object that other packages use.
 
 ```{r post_df}
-seal_posterior <- posterior_samples(seal_lm_bayes, add_chain = T)
+#this is for a certain kind of object
+seal_posterior_mcmc <- as_draws(seal_lm_bayes, add_chain = T)
 
+seal_posterior <- gather_draws(seal_lm_bayes, b_age.days, b_Intercept)
+
+seal_posterior_wide <- spread_draws(seal_lm_bayes, b_age.days, b_Intercept)
+
+head(seal_posterior_mcmc)
 head(seal_posterior)
+head(seal_posterior_wide)
 ```
 
-Then, you can make whatever plot you want! The `bayesplot` function `mcmc_trace()` works great here.
+Then, you can make whatever plot you want! 
 
 ```{r plot_df}
-library(bayesplot)
-mcmc_trace(seal_posterior)+
+ggplot(seal_posterior,
+       aes(x = .iteration, y = .value, color = as.factor(.chain))) +
+  geom_line(alpha = 0.4) +
+  facet_wrap(vars(.variable), scale = "free_y") +
   scale_color_manual(values = c("red", "blue", "orange", "yellow"))
 ```
 
 You can assess convergence by examining the Rhat values in `rhat(seal_lm_bayes)`. These values are something called the Gelman-Rubin statistic, and it should be at or very close to 1. You can also do fun things to visualize them with bayesplot
 
 ```{r rhat}
+library(bayesplot)
 rhat(seal_lm_bayes)
 
 mcmc_rhat(rhat(seal_lm_bayes))
 ```
 
-Note that the function itself tells you what the intervals are. You can set them yourself, for example for the 67% interval and showing the full width of the distribution using
-
 Last, we want to look at autocorrelation within our chains. We want values in the thinned chain to be uncorelated with each other. So, while they'd have an autocorrelation that might be high at a distance of 1, this should drop to near zero very quickly. If not, we need a different thinning interval.
 
 ```{r autcorrelation}
-mcmc_acf(seal_posterior)
+mcmc_acf(seal_lm_bayes)
 ```
 
 What do you do if you have funky errors?
@@ -289,80 +300,16 @@ So, your MCMC is ok. What now? Well, we have our usual suite of model diagnostic
 
 #### 2.3.1 Classical Point Model Diagnostics
 
-Let's start by looking at point diagnostics. Note, because we're dealing with MCMC output here, we have to average over our posterior to get the responses we want. So, we can start by looking at the fitted versus residual values.
+It's all there with `performance`!
 
-```{r fitres}
-seal_fit <- fitted(seal_lm_bayes) %>% as.data.frame()
-res <- residuals(seal_lm_bayes) %>% as.data.frame()
-
-plot(seal_fit$Estimate, res$Estimate)
+```{r}
+library(performance)
+check_model(seal_lm_bayes)
 ```
-
-
-Good. Now the QQ plot.
-
-```{r qq}
-qqnorm(res$Estimate)
-qqline(res$Estimate)
-```
-
-
-This looks excellent
-
-#### 2.3.1 Model Diagnostics with Simulations
-
-This is well and good, but, we know that we're working with chains here. So, while these plots might be good for point estimates, we reall want to look at either replicate simiulated outputs or the same plots as above, but with mean values from MCMC draws of our posterior predictions. For example, here's a qq plot with simulated residuals from 4000 simulations per each data point. Note that the only funky thing here, besides generating the prediction simulation matrix via `posterior_predict`, is the transposition of matrices we have to do to get things to align for the subtraction
-
-```{r qq_sim, cache=TRUE}
-pred_vals <- posterior_predict(seal_lm_bayes)
-resid_vals <- t( t(pred_vals) - seals$length.cm)
-
-qqnorm(colMeans(resid_vals))
-qqline(colMeans(resid_vals))
-```
-
-Not too different. And, hey, now we can look at the average of the posterior prediction against the residual.
-
-```{r qq_fit_res_sim}
-plot(colMeans(pred_vals), colMeans(resid_vals))
-```
-
-`brms` has a few of these types of diagnostics builtin. They look at simulated draws, as those give you a better idea of how your model is behaving. They use the function`pp_check()` whose options you can see from `?"PPC-overview"`
-
-For residuals, the first is to look at the histogram of residuals from several simulated runs.
-
-```{r res_hist, cache=TRUE}
-pp_check(seal_lm_bayes, "error_hist", bins=10)
-```
-
-We can also look at the relationship between average fitted and observed values
-
-```{r fit_scatter, cache=TRUE}
-pp_check(seal_lm_bayes, "scatter")
-```
-
-Note, you can add the `nreps` argument to look at individual simulation runs. But, in general there should be a nice cloud around this line. And it should follow a roughly 1:1 relationship.
-
-Another check is to see if we have reproduced the properties of our observed response variable. The "test" check gets at that. You can one or more properties of the response variable. The default is to look at the mean, but it's often useful to look at both the mean and SD
-
-```{r properties, cache=TRUE}
-pp_check(seal_lm_bayes, "stat")
-pp_check(seal_lm_bayes, "stat", stat = "sd")
-pp_check(seal_lm_bayes, "stat_2d", stat=c("mean", "sd"))
-```
-
-Last, we can look at whether simulations of the posterior lineup with the actual distribution of the posterior. If there are wild swings, we know there is a problem.
-
-```{r check, cache=TRUE}
-pp_check(seal_lm_bayes, "dens")
-
-pp_check(seal_lm_bayes, "dens_overlay")
-
-```
-
+            
 As with all diagnostics, failures indicate a need to consider respecifying a model and/or poor assumptions in the error generating process.
 
-Last, we can look for outliers using `loo` - leave one out. We use a particular form of this function as there are a few.
+Last, we can look for outliers using `loo` - leave one out - and their influence on our HMC process We use a particular form of this function as there are a few.
 
 ```{r loo, cache=TRUE, eval=FALSE}
 plot(loo(seal_lm_bayes), label_points = TRUE, cex=1.1)
@@ -372,7 +319,7 @@ Points with a score >0.5 are a bit worrisoome, and scores >1.0 have a large deal
 
 ### 2.4 Assessing Coefficients and Credible Intervals
 
-OK, *phew* we have gotten through the mdoel checking stage. Now, what does our model tell us?
+OK, *phew* we have gotten through the model checking stage. Now, what does our model tell us?
 
 ```{r mod_summary}
 #adding extra digits as some of these are quite small
@@ -385,41 +332,39 @@ Wow. No p-values, no nothing. We have, in the first block, the mean, SD (assumin
 We can also visualize coefficients. Here we'll use `tidybayes` which has some really cool plotting tools.
 
 ```{r coef_plot}
-#devtools::install_github("mjskay/tidybayes")
 library(tidybayes)
+library(ggdist)
 
-
-seal_lm_bayes %>%
-  gather_draws(b_Intercept, b_age.days, sigma) %>%
+post_ggplot <- seal_lm_bayes |>
+  gather_draws(b_Intercept, b_age.days, sigma) |>
   ggplot(aes(x = .value, y = .variable)) +
-  geom_halfeyeh( .width = c(0.8, 0.95)) +
+  stat_halfeye( .width = c(0.8, 0.95)) +
   ylab("") +
   ggtitle("Posterior Medians with 80% and 95% Credible Intervals")
+
+post_ggplot
 ```
 
 
 Woof - things are so different, we can't get a good look in there. Let's try looking at just one parameter.
 
 ```{r coef_plot_slope}
-#devtools::install_github("mjskay/tidybayes")
-library(tidybayes)
-
-
-seal_lm_bayes %>%
-  gather_draws(b_age.days) %>%
+seal_lm_bayes |>
+  gather_draws(b_age.days) |>
   ggplot(aes(x = .value, y = .variable)) +
-  geom_halfeyeh( .width = c(0.8, 0.95)) +
+  stat_halfeye( .width = c(0.8, 0.95)) +
   ylab("") +
   ggtitle("Posterior Medians with 80% and 95% Credible Intervals")
 ```
+
 
 That's an interesting look! We might also want to see how things differ by chain. To do that (and we can incorporate this for looking at multiple parameters), let's try `ggridges`.
 
 ```{r ggridges}
 library(ggridges)
 
-seal_lm_bayes %>%
-  gather_draws(b_age.days) %>%
+seal_lm_bayes |>
+  gather_draws(b_age.days) |>
   ggplot(aes(x = .value, y = .chain, fill = factor(.chain))) +
   geom_density_ridges(alpha = 0.5)
 ```
@@ -537,7 +482,7 @@ seal_lm_bayes_prior <- brm(length.cm ~ age.days,
                    prior = c(prior(normal(110, 5), class = Intercept),
                              prior(normal(1, 1), class = b),
                              prior(uniform(3, 10), class = sigma)),
-                   file = "brms_fits/seal_lm_bayes_prior")
+                   file = "lab/brms_fits/seal_lm_bayes_prior")
 ```
 
 Note that this was faster due to the tighter priors.
