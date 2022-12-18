@@ -1,0 +1,66 @@
+---
+title: "Final Self Evaluation"
+format: html
+---
+
+-----
+# First, Final Paper Evaluation
+
+## Presentation
+How did it go for you? How well do you think you performed, vis a vis the weak, satisfactory, and strong rubric.
+
+## Too bad
+You got an A. Sorry. I don't make the rules. Oh, wait, I do. (You all did great!)
+
+## The paper
+Please rate yourself as weak, sufficient, or strong on the following criteria, and tell me why.
+
+* Clear statement of questions & hypotheses?
+
+* Did you choose the right analyses?
+
+* Did you justify the analysis?
+
+* Did you execute it properly?
+
+* Did you overcome assumption violations, or inferential traps (p-values, etc.)?
+
+* Did you describe their results cleanly and clearly
+
+## Overall
+Please rate your paper as weak, sufficient, or strong, and tell me why.
+
+----
+# Final Self-Evaluation
+
+## To start with
+How are you? How has your semester been? Where are you in headspace right now?
+
+## Learning Objectives
+This course had several learning objectives. Please comment on how you feel you have advanced in each of them. Have you achieved them in a way that is satisfactory to you? Please comment on your performance for each objective.
+
+**1)	To learn how to think about your study system and research question of interest in a systematic way in order to design an efficient observational or experimental research program.**
+
+**2)	To understand how to analyze collected data to derive the most information possible about your research questions.**
+
+**3)	Provide the grounding needed to effectively collaborate with statistical experts.**
+
+**4)	Allow students to feel sufficiently comfortable with the basic principles of statistical analysis so that they can learn and implement techniques outside of the purview of this course.**
+
+## Let's dig a little deeper
+Answer each of the below.
+
+* Tell me about your relationship with thinking about your system of interest, the pathways of causality within it, and how you ask a research question. What has changed over the course of the semester from who you were in September to who you are now?
+
+* How do you feel you are able to translate your questions about your system of interest into statistical models. What has changed over the course of the semester from who you were in September to who you are now?
+
+* What is your grasp on inference? How do you feel you will approach deriving inference from models now that you have been through this course? What has changed over the course of the semester from who you were in September to who you are now?
+
+* Code - it's how we work with data. How do you feel about coding? How do you feel about how you will work with it into the future? What has changed over the course of the semester from who you were in September to who you are now?
+
+* Given this course, how do you see yourself developing as a scientist on into the future? This could be about how you see yourself developing in terms of designing studies, making inferences, expanding your toolkit, or more. How has this changed who you are and who you will become as a scientist?
+
+# Pause. Re-read everything you just wrote.
+
+## OK, then. Final question.
+Given all you have just said, and really thinking about what is possible in the span of just one semester, what letter grade (bearing in mind we don't have A+ at UMB) would you give yourself? Why? Note, I reserve the right to change this (and I've seen most of you be too down on yourseelves!), but, in all likelihood, this will be your course grade. Tell me what it about it.
