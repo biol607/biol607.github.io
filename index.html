@@ -13,7 +13,7 @@
 
 <title>Biol 607/617: Biostatistics and Experimental Design</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
@@ -178,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -187,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -299,12 +292,12 @@ Experimental Design</h1>
 <p><strong>Email:</strong> <a href="mailto:jarrett.byrnes@umb.edu"
 class="email">jarrett.byrnes@umb.edu</a></p>
 <p><strong>Weekly Schedule:</strong> Tuesday &amp; Thursday 11 - 12:30,
-and Lab Friday 9 - 12:00pm in the Healey Green Computer Lab and on Zoom
+and Lab Friday 9 - 12:00pm in the Healey Blue Computer Lab and on Zoom
 for those that cannot make it. The URL will be provided in the course
 Slack. All will be recorded for those who cannot make it, and URLS
 posted in the weeks’ etherpads.</p>
 <p><strong>Office Hours:</strong> Prof. Byrnes will hold office hours
-Thurs. 2-4 in ISC 3130 . Hannah Diebboll will hold office hours
+Thurs. 2-4 in ISC 3130. Cooper Kimball-Rhimes will hold office hours
 Tuesdays: 1-2:30 and Thursdays: 9-10:30am.</p>
 <p><strong>Source for this Website:</strong> <a
 href="https://github.com/biol607/biol607.github.io/"
