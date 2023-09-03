@@ -19,6 +19,7 @@ title: "Resources, Blogs, and More"
 [Fundamentals of Data Visualization](http://serialmentor.com/dataviz/). 2018. Claus Wilke. A wonderful online collection of best principles and practices for data viz.  
 [Forecasting: Principles and Practice](http://otexts.org/fpp2/). 2018. Rob Hyndman and George Athanasaopoules. A great intro to timeseries and forecasting in R.  
 [Meta-Analysis in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/) 2019. Harrer, M., Cuijpers, P., Furukawa, T.A, & Ebert, D. D.  
+[Spatial Statistics for Data Science: Theory and Practice with R](http://paulamoraga.com/book-spatial/) 2023. Paula Moraga.  
 
 
 
