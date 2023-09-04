@@ -13,7 +13,7 @@
 
 <title>Course Schedule and Readings</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
@@ -178,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -187,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -296,52 +289,43 @@ $(document).ready(function () {
 <!--
 
 
-NEXT TIME I TEACH 607 in 2022
-1. Intro to R
-2. Plotting
-3. Functions, tidy data, dplyr
-4. Sampling and Simulation
-5. Cut modular programming. Introduce it via questions.
-6. Simplify comparing means lab - emphasize main point not exceptions
--->
-<!--
-
-
 NEXT TIME I TEACH 607 in 2024
 -->
 <p>While the topics covered are broad, each week will feature different
 examples from genetics, ecology, molecular, and evolutionary biology
 highlighting uses of each individual set of techniques.</p>
-<p>W&amp;S = Whitlock and Schluter, W&amp;G = <a
-href="http://r4ds.had.co.nz">Wickham and Grolemund</a>, U/P for linked
-pdfs = biol607</p>
-<p>Change .html to .Rmd in your browser to get the markdown</p>
+<p>F = Fieberg, W&amp;G = <a href="http://r4ds.had.co.nz">Wickham and
+Grolemund</a>, U/P for linked pdfs = biol607</p>
+<p>Change .html to .Rmd in your browser to get the markdown of all
+lectures, etc.</p>
 <p><strong>Recorded Lecture</strong>: All lectures and labs will be
 recorded and are available at <a
 href="https://www.youtube.com/playlist?list=PLZRMqMK8aRmJeuW9n5QMXLYUMRm1zmJcD"
 class="uri">https://www.youtube.com/playlist?list=PLZRMqMK8aRmJeuW9n5QMXLYUMRm1zmJcD</a></p>
 <p><strong>Turning in Homework</strong>: All homework should be
 completed using RMarkdown or Quarto. You’ll freely mix answers in text
-and code there. Please submit both the .rmd (or .qmd) and .html output
-of your homework. If there are data files associated with your homework,
-when working on it, please make sure you are using the</p>
-<p>homework/<br />
+and code there. Use projects. Please zip up the full project folder for
+each to submit so that we have the .rmd (or .qmd), .html output, data,
+etc. and can recompile your homework if we need to. An ideal project
+structure would be something like this:</p>
+<p>homework_X/<br />
   |— markdown<br />
+  |— scripts<br />
   |— data</p>
-<p>directory structure, so that all data is in <code>../data/</code>
-relative to where your homework markdown and outputs are. Please zip up
-the archive for the homework and standardize filenames as follows:
-<code>number_lastName_firstName_2022.zip</code> where number is the week
-number the homework is due (from weeks below) and make sure to include
-the 0s for numbers like 01), and your last and first names - well, you
-should know them!</p>
+<p>directory structure, so that all data is in <code>data/</code>.
+<strong>Please zip up the archive for the homework and standardize
+filenames as follows:
+<code>number_lastName_firstName_2023.zip</code></strong> where number is
+the week number the homework is due (from weeks below) and make sure to
+include the 0s for numbers like 01), and your last and first names -
+well, you should know them!</p>
 <p>To submit homework, use the dropbox link you were sent by the TA.</p>
 <div id="block-1-introduction-to-programming-and-reproducibility"
 class="section level2">
 <h2>Block 1: Introduction to Programming and Reproducibility</h2>
 <div id="week-1." class="section level3">
 <h3>Week 1.</h3>
-<p>9/5/2022<br />
+<p>9/4/2023<br />
 <strong>Lecture:</strong> <a href="lectures/01_intro_x.html">Class
 intro</a>, <a href="lectures/02_r_intro.html">Intro to R</a>.<br />
 <strong>Lab:</strong> <a
@@ -368,39 +352,39 @@ href="https://www.rstudio.com/products/rstudio/download/#download"
 class="uri">https://www.rstudio.com/products/rstudio/download/#download</a>
 and install Rstudio.<br />
 <strong>Etherpad:</strong> <a
-href="https://etherpad.wikimedia.org/p/607-intro-2022"
-class="uri">https://etherpad.wikimedia.org/p/607-intro-2022</a><br />
+href="https://etherpad.wikimedia.org/p/607-intro-2023"
+class="uri">https://etherpad.wikimedia.org/p/607-intro-2023</a><br />
 <strong>Homework:</strong> <a href="./homework/intro_to_r.html">Intro to
 R and Data Frames</a></p>
 </div>
 <div id="week-2." class="section level3">
 <h3>Week 2.</h3>
-<p>9/12/2022<br />
+<p>9/11/2023<br />
 <strong>Lecture:</strong> <a
 href="lectures/05_data_viz_principles.pptx">Data visualization</a><br />
 <strong>Lab Topic:</strong> <a
 href="lab/04_ggplot_palmer_intro.html">Introduction to
 ggplot2</a>.<br />
-<strong>Reading:</strong> W&amp;S Chapter 2, <a
+<strong>Reading:</strong> <a
 href="http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf">Unwin
 2008</a>, W&amp;G Chapters on <a
 href="http://r4ds.had.co.nz/data-visualisation.html">Data
 Vizualization</a> and <a
 href="http://r4ds.had.co.nz/graphics-for-communication.html">Graphics
 for Communication</a>, <a
-href="http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html">DC
-Starting with Data</a>, <a
 href="https://journal.r-project.org/articles/RJ-2022-020/">Introducing
 Palmer Penguins</a><br />
 <strong>Optional Reading:</strong> <a
 href="http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf">Friendly
 2008 on History of Data Viz</a>, <a
+href="http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html">DC
+Starting with Data</a>, <a
 href="https://serialmentor.com/dataviz/">Fundamentals of Data
 Visualization</a> - note, this is a whole book, but scan it - it’s
 amazing<br />
 <strong>Etherpad:</strong> <a
-href="https://etherpad.wikimedia.org/p/dataviz-2022"
-class="uri">https://etherpad.wikimedia.org/p/dataviz-2022</a><br />
+href="https://etherpad.wikimedia.org/p/dataviz-2023"
+class="uri">https://etherpad.wikimedia.org/p/dataviz-2023</a><br />
 <strong>Packages used this Week:</strong> <a
 href="https://ggplot2.tidyverse.org/">ggplot2</a>, <a
 href="https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html">ggridges</a>,
@@ -417,7 +401,7 @@ homework</a></p>
 </div>
 <div id="week-3." class="section level3">
 <h3>Week 3.</h3>
-<p>9/19/2022<br />
+<p>9/18/2023<br />
 <strong>Lecture:</strong> <a
 href="lectures/06_read_data_libraries.html">Data import, using
 libraries</a>, <a
@@ -456,15 +440,14 @@ href="https://docs.ropensci.org/skimr/">skimr</a>, <a
 href="https://garthtarr.github.io/meatR/janitor.html">janitor</a>, <a
 href="https://docs.ropensci.org/visdat/">visdat</a><br />
 <strong>Etherpad:</strong> <a
-href="http://etherpad.wikimedia.org/p/607-tidy-2022"
-class="uri">http://etherpad.wikimedia.org/p/607-tidy-2022</a><br />
-<!-- __In Class Code:__ [functions](in_class_code/2020/scripts/functions.R), [loading data](in_class_code/2020/scripts/loading_data.R), [data reshaping](in_class_code/2020/scripts/tidyr.R), [created data](in_class_code/2020/data/test_data.xlsx) -->
+href="http://etherpad.wikimedia.org/p/607-tidy-2023"
+class="uri">http://etherpad.wikimedia.org/p/607-tidy-2023</a><br />
 <strong>Homework:</strong> <a href="./homework/dplyr_tidyr.html">Data
 Manipulation and Pivot homework</a></p>
 </div>
 <div id="week-4." class="section level3">
 <h3>Week 4.</h3>
-<p>9/26/2022<br />
+<p>9/25/2023<br />
 <strong>Lecture:</strong> Descriptive statistics, probability
 distributions, simulation and sample size - <a
 href="lectures/functions.html">Functions</a>, <a
@@ -499,7 +482,7 @@ class="section level2">
 <h2>Block 2: Linear Models for Data Analysis</h2>
 <div id="week-5." class="section level3">
 <h3>Week 5.</h3>
-<p>10/3/2022<br />
+<p>10/2/2023<br />
 <strong>Lecture:</strong> Introduction to Regression: <a
 href="lectures/linear_regression.html">Correlation and Regression</a>,
 <a href="lectures/linear_regression_details.html">Fit and
@@ -507,7 +490,7 @@ Precision</a><br />
 <strong>Lab Topic:</strong> <a href="lab/06_lm.html">Linear regression,
 diagnostics, visualization</a>, and <a
 href="lab/data_06.zip">data</a><br />
-<strong>Reading:</strong> W&amp;S 16-17, <a
+<strong>Reading:</strong> <a
 href="https://fw8051statistics4ecologists.netlify.app/linreg.html">Fieberg
 linear regression review</a>, W&amp;G on <a
 href="http://r4ds.had.co.nz/model-basics.html">model basics</a><br />
@@ -521,7 +504,7 @@ Models</a></p>
 </div>
 <div id="week-6" class="section level3">
 <h3>Week 6</h3>
-<p>10/10/2022<br />
+<p>10/9/2023<br />
 <strong>Lecture:</strong> Categorical Predictors <a
 href="lectures/t_as_lm.html">It s All Linear Models; t-test edition</a>,
 <a href="lectures/anova_1.html">Many Levels of a Categorical
@@ -546,7 +529,7 @@ with Categorical Variables</a></p>
 </div>
 <div id="week-7" class="section level3">
 <h3>Week 7</h3>
-<p>10/17/2022<br />
+<p>10/16/2023<br />
 <strong>Lectures:</strong> May Predictors: <a
 href="./lectures/many_predictors.html">Many Predictors</a>, <a
 href="./lectures/many_types_of_predictors.html">Many categories or
@@ -573,7 +556,7 @@ href="project_proposal.html">general instructions here</a></p>
 </div>
 <div id="week-8." class="section level3">
 <h3>Week 8.</h3>
-<p>10/24/2022<br />
+<p>10/23/2023<br />
 <strong>Lectures:</strong> <a
 href="lectures/categorical_interactions.html">Interaction Effects with
 Categorical Variables</a>, <a
@@ -600,7 +583,7 @@ href="homework/interactions.html">Interactions</a></p>
 </div>
 <div id="week-9" class="section level3">
 <h3>Week 9</h3>
-<p>10/31/2022<br />
+<p>10/30/2023<br />
 <strong>Lecture:</strong> Beyond Linear Regression, But Still Linear <a
 href="./lectures/modeling_variance.html">Modeling Error</a>, <a
 href="lectures/generalized_linear_models.html">Generalized Linear
@@ -646,7 +629,7 @@ class="section level2">
 Inference</h2>
 <div id="week-10." class="section level3">
 <h3>Week 10.</h3>
-<p>11/7/2022<br />
+<p>11/6/2023<br />
 <strong>Lecture:</strong> <a
 href="lectures/causal_diagrams.pptx">Structural Causal Models</a>. <a
 href="./lectures/causality_experiments.pptx">Causal Inference and
@@ -665,7 +648,7 @@ class="uri">https://etherpad.wikimedia.org/p/607-causal-2022</a></p>
 </div>
 <div id="week-11." class="section level3">
 <h3>Week 11.</h3>
-<p>11/14/2022<br />
+<p>11/13/2023<br />
 <strong>Paper Discussion:</strong> Discussion of <a
 href="readings/exp_design_papers.zip">papers</a> - see <a
 href="https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing">here</a>
@@ -686,7 +669,7 @@ class="uri">https://etherpad.wikimedia.org/p/607-obs-2022</a><br />
 </div>
 <div id="week-12." class="section level3">
 <h3>Week 12.</h3>
-<p>11/21/2022<br />
+<p>11/20/2023<br />
 <strong>Paper Discussion:</strong> Discussion of <a
 href="readings/obs_sampling.zip">papers</a> - see <a
 href="https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing">here</a>
@@ -699,7 +682,7 @@ class="section level2">
 <h2>Block 4. Drawing Inference from Studies</h2>
 <div id="week-13." class="section level3">
 <h3>Week 13.</h3>
-<p>11/28/2022<br />
+<p>11/27/2023<br />
 <strong>Lecture:</strong> Ways of Knowing: <a
 href="./lectures/linear_regression_nht">NHT</a>, <a
 href="lectures/mle_cv.html">NHT with Likelihood</a>, <a
@@ -725,8 +708,8 @@ class="uri">https://etherpad.wikimedia.org/p/607-nht-eval-2022</a><br />
 </div>
 <div id="week-14-15." class="section level3">
 <h3>Week 14-15.</h3>
-<p>12/5/2022</p>
-<p>12/12/2022</p>
+<p>12/4/2023</p>
+<p>12/11/2023</p>
 <p><strong>Lecture:</strong> Ways of Knowing: <a
 href="./lectures/crossvalidation.html">Cross-Validation and AIC</a>, <a
 href="lectures/bayes.html">Bayesian Data Analaysis</a>, <a
