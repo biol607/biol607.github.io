@@ -14,7 +14,7 @@ NEXT TIME I TEACH 607 in 2024
   
   Change .html to .Rmd in your browser to get the markdown of all lectures, etc.
 
-**Recorded Lecture**: All lectures and labs will be recorded and are available at https://www.youtube.com/playlist?list=PLZRMqMK8aRmJeuW9n5QMXLYUMRm1zmJcD  
+**Recorded Lecture**: All lectures and labs will be recorded and are available at https://www.youtube.com/playlist?list=PLZRMqMK8aRmIMuiEX-QVxLNk2o6SlRa-m   
     
 **Turning in Homework**: All homework should be completed using RMarkdown or Quarto. You'll freely mix answers in text and code there. Use projects. Please zip up the full project folder for each to submit so that we have the .rmd (or .qmd), .html output, data, etc. and can recompile your homework if we need to. An ideal project structure would be something like this:
   
