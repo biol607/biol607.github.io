@@ -10,7 +10,7 @@ NEXT TIME I TEACH 607 in 2024
 
   While the topics covered are broad, each week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
   
-  F = Fieberg, W&G = [Wickham and Grolemund](http://r4ds.had.co.nz), U/P for linked pdfs = biol607  
+  F = Fieberg, R4DS = [Wickham et al.](https://r4ds.hadley.nz/), U/P for linked pdfs = biol607  
   
   Change .html to .Rmd in your browser to get the markdown of all lectures, etc.
 
@@ -40,7 +40,7 @@ datestring <- paste(month(current_date), day(current_date), year(current_date), 
 `r datestring`   
 __Lecture:__ [Class intro](lectures/01_intro_x.html), [Intro to R](lectures/02_r_intro.html). \
 __Lab:__ [Matrices, Lists and Data Frames](lectures/02a_r_intro_list_matrix_df.html). [Introduction to Markdown](https://rmarkdown.rstudio.com/lesson-1.html)    
-__Reading:__ W&G   [Intro](https://r4ds.hadley.nz/intro), [Workflow basics](https://r4ds.hadley.nz/workflow-basics), [Scripts and Projects](https://r4ds.hadley.nz/workflow-scripts), [Code Style](https://r4ds.hadley.nz/workflow-style), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Quarto](https://r4ds.hadley.nz/quarto)   
+__Reading:__ R4DS [Intro](https://r4ds.hadley.nz/intro), [Workflow basics](https://r4ds.hadley.nz/workflow-basics), [Scripts and Projects](https://r4ds.hadley.nz/workflow-scripts), [Code Style](https://r4ds.hadley.nz/workflow-style), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Quarto](https://r4ds.hadley.nz/quarto)   
 __Further Exploration:__ [Quarto Formats](https://r4ds.hadley.nz/quarto-formats), https://quarto.org/ for everything!  
 __Cheat Sheets:__ [Quarto Cheat Sheet](https://rstudio.github.io/cheatsheets/quarto.pdf)  
 __Install R:__ Go to https://cloud.r-project.org/ and get the right version of R for you. Then, go to https://www.rstudio.com/products/rstudio/download/#download and install Rstudio.  
@@ -55,7 +55,7 @@ datestring <- paste(month(current_date), day(current_date), year(current_date), 
 `r datestring`   
 __Lecture:__  [Data visualization](lectures/05_data_viz_principles.pptx)  
 __Lab Topic:__ [Introduction to ggplot2](lab/04_ggplot_palmer_intro.html).  
-__Reading:__  [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), W&G Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html),  [Introducing Palmer Penguins](https://journal.r-project.org/articles/RJ-2022-020/)    
+__Reading:__  [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), R4DS Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html),  [Introducing Palmer Penguins](https://journal.r-project.org/articles/RJ-2022-020/)    
 __Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html), [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/) - note, this is a whole book, but scan it - it's amazing\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2023  
 __Packages used this Week:__ [ggplot2](https://ggplot2.tidyverse.org/), [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), [ggdist](https://mjskay.github.io/ggdist/) - `install.packages(c("ggplot2", "ggridges", "palmerpenguins", "ggdist"))`  
@@ -70,7 +70,7 @@ __Homework:__ [ggplot2 homework](./homework/ggplot.html)
 __Lecture:__  [Data import, using libraries](lectures/06_read_data_libraries.html),  [Data manipulation, summarization, and making it tidy](https://datacarpentry.org/R-ecology-lesson/03-dplyr.html)    
 <!--, [Joins](lectures/18_join.html)  -->
 __Data:__ [Portal Data](https://ndownloader.figshare.com/files/2292169) - and learn more [here](https://portal.weecology.org/)  
-__Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), W&G Chapters on [data import](https://r4ds.hadley.nz/data-import.html),  [pipes](https://r4ds.hadley.nz/workflow-pipes.html), [data transformation](https://r4ds.hadley.nz/data-transform.html), [tidy data](https://r4ds.hadley.nz/data-tidy.html)    
+__Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf), [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), R4DS Chapters on [data import](https://r4ds.hadley.nz/data-import.html),  [pipes](https://r4ds.hadley.nz/workflow-pipes.html), [data transformation](https://r4ds.hadley.nz/data-transform.html), [tidy data](https://r4ds.hadley.nz/data-tidy.html)    
 __Optional Reading:__ [Managing Data Frames with the Dplyr package](https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html), [Strings](http://r4ds.had.co.nz/strings.html), [factors](https://r4ds.hadley.nz/factors.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
 __Cheat Sheets:__ [Reading data into R](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-import.pdf), [Dplyr cheat sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf).  
 __Packages:__ `install.packages(c("dplyr", "janitor", "skimr", "lubridate", "tidyr", "readr", "readxl", "tibble"))` - [readr](https://readr.tidyverse.org/),  [readxl](https://readxl.tidyverse.org/),  [tibble](https://tibble.tidyverse.org/),  [skimr](https://docs.ropensci.org/skimr/), 
@@ -101,7 +101,7 @@ __Homework:__ [Functions, Iteration, and Precision](./homework/function_iteratio
 `r datestring`   
 __Lecture:__ Introduction to Regression: [Correlation and Regression](lectures/linear_regression.html), [Fit and Precision](lectures/linear_regression_details.html)  
 __Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), and [data](lab/data_06.zip) \
-__Reading:__ [Fieberg linear regression review](https://fw8051statistics4ecologists.netlify.app/linreg.html), W&G on [model basics](http://r4ds.had.co.nz/model-basics.html)  
+__Reading:__ [Fieberg linear regression review](https://fw8051statistics4ecologists.netlify.app/linreg.html), R4DS on [model basics](http://r4ds.had.co.nz/model-basics.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-2022  
 <!--__In Class Code:__ [reproducible examples](in_class_code/2020/scripts/reprex.R), [lm](in_class_code/2020/scripts/linear_regression.R)  -->
 __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression.html)  
