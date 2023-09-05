@@ -55,12 +55,11 @@ datestring <- paste(month(current_date), day(current_date), year(current_date), 
 `r datestring`   
 __Lecture:__  [Data visualization](lectures/05_data_viz_principles.pptx)  
 __Lab Topic:__ [Introduction to ggplot2](lab/04_ggplot_palmer_intro.html).  
-__Reading:__  [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), R4DS Chapters on [Data Vizualization](http://r4ds.had.co.nz/data-visualisation.html) and [Graphics for Communication](http://r4ds.had.co.nz/graphics-for-communication.html),  [Introducing Palmer Penguins](https://journal.r-project.org/articles/RJ-2022-020/)    
-__Optional Reading:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html), [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/) - note, this is a whole book, but scan it - it's amazing\
+__Reading:__ R4DS Chapters on [Data Vizualization](https://r4ds.hadley.nz/data-visualize), [Layers of Plots](https://r4ds.hadley.nz/layers), and [Graphics for Communication](https://r4ds.hadley.nz/communication),  [Introducing Palmer Penguins](https://journal.r-project.org/articles/RJ-2022-020/)    
+__Further Exploration:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf), [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html), [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/) - note, this is a whole book, but scan it - it's amazing\
 __Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2023  
 __Packages used this Week:__ [ggplot2](https://ggplot2.tidyverse.org/), [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), [ggdist](https://mjskay.github.io/ggdist/) - `install.packages(c("ggplot2", "ggridges", "palmerpenguins", "ggdist"))`  
 __Cheat Sheets:__  [Ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf), [Choosing a good chart cheat sheet](https://biol355.github.io/Readings/choosing-a-good-chart-09.pdf)  
-<!-- __In Class Code:__  [Intro to data and  ggplot2](in_class_code/2020/scripts/ggplot2_intro.R)\ -->
 __Homework:__ [ggplot2 homework](./homework/ggplot.html)  
   
 ### Week 3.   
