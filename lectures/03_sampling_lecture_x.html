@@ -16,22 +16,22 @@
 
 
 class: middle, center
-background-image: url(images/03/mice_men.jpg)
 background-position: center
 background-size: cover
 
 
-&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
-&lt;div style="align:center; background:black; color:white; font-size: 3em;font-weight: bold;"&gt;Samples and Populations&lt;/div&gt;
+# Sample Distributions
+&lt;br&gt;
+![](images/03/barbie_sample_distribution_mean.jpg)
 
 ---
 # Outline
 
-1. Taking a Sample
+1. What is a Good Sample?
 
-2. Describing a Sample
+2. Sample Distributions and Parameters
 
-3. Using a Sample to Describe a Population
+3. Non-parameteric Properties of Samples and Populations
 
 ---
 class:center
@@ -40,7 +40,6 @@ class:center
 
 &lt;img src="03_sampling_lecture_x_files/figure-html/population-1.png" style="display: block; margin: auto;" /&gt;
 
--- 
 
 **Population** = All Individuals
 
@@ -52,14 +51,14 @@ class: center, middle
 ]
 
 .pull-right[
-&lt;img src="03_sampling_lecture_x_files/figure-html/normplot-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/normplot3-1.png" style="display: block; margin: auto;" /&gt;
 ]
 ---
 class: center
 
 # What is a sample?
 
-&lt;img src="03_sampling_lecture_x_files/figure-html/sample-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/sampleSpread-1.png" style="display: block; margin: auto;" /&gt;
 
 --
 A **sample** of individuals in a randomly distributed population.
@@ -68,7 +67,7 @@ A **sample** of individuals in a randomly distributed population.
 class: center, middle
 # Population
 .pull-left[
-&lt;img src="03_sampling_lecture_x_files/figure-html/sample-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/sampleSpread-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -104,10 +103,18 @@ class: center, middle
 
 ---
 
-# Bias from Unequal Representation
-&lt;img src="03_sampling_lecture_x_files/figure-html/colorSize-1.png" style="display: block; margin: auto;" /&gt;
-If you only chose one color, you would only get one range of sizes.
+# Are You Representative? Or Biased from Unequal Representation
+&lt;img src="03_sampling_lecture_x_files/figure-html/spatialBias-1.png" style="display: block; margin: auto;" /&gt;
+If you only chose individuals from the bottom, you would only get one range of sizes.
 
+---
+class: center, middle
+
+## The key for most statistical models is that a replicates in a sample are i.i.d.  
+  
+  &lt;br&gt;
+  
+## Independent and Identically Distributed
 
 ---
 # Exercise:
@@ -115,21 +122,20 @@ If you only chose one color, you would only get one range of sizes.
 ### 1. What is a population you sample?  
   &lt;br&gt;&lt;br&gt;
   
-### 2. How do you ensure validity, reliability, and representativeness of a sample?
-
+### 2. How do you ensure validity, reliability, and representativeness of a sample from your population?
 
 ---
 # Outline
 
-1. Sampling Nature
+1. What is a Good Sample?
 
-2. .red[Describing a Sample]
+2. .red[Sample Distributions and Parameters]
 
-3. Using a Sample to Describe a Population
+3. Non-parameteric Properties of Samples and Populations
 
 ---
 # Taking a Descriptive
-&lt;img src="03_sampling_lecture_x_files/figure-html/sample-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/sampleSpread-1.png" style="display: block; margin: auto;" /&gt;
 
 &lt;center&gt;How big are individuals in this population?  
 
@@ -202,108 +208,73 @@ Frequency = Probability of Drawing that Value from a Sample
 
 ---
 
-# Visualizing Our Sample as Frequencies
+# Visualizing Our Sample as Continuous Probability Densities
 
-&lt;img src="03_sampling_lecture_x_files/figure-html/sampPlotFreq-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/sampPlotDens-1.png" style="display: block; margin: auto;" /&gt;
 
-Frequency = Probability Density, Sums to One.
+Probability Density = Relative likleihood of encountering a value. Sums to One.
+
+---
+class: center, middle
+
+# Our goal is to get samples representative of a population, and estimate population parameters. We assume a **distribution** of values to the population from which we then estimate parameters. Makes it easier to describe nature!
+
+---
+# A Population versus Sample Distribution: Normal
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/normplot-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
-# Describing Our Sample as a unique thing  
+# The Normal (Gaussian) Distribution
 
---
-- What is the value smack in the middle?  
+&lt;img src="03_sampling_lecture_x_files/figure-html/normplot2-1.png" style="display: block; margin: auto;" /&gt;
 
---
-  
-- What are large and small values like?
+- Arises from some deterministic value and many small additive deviations. 
+- Variability is additive over time.
+- VERY common.
 
---
-  
-- Is our sample clustered, or waaaay spread out?
+---
+class: center
 
+# Understanding Gaussian Distributions with a Galton Board (Quinqunx)
+
+&lt;video controls loop&gt;&lt;source src="03_sampling_lecture_x_files/figure-html/quincunx.webm" /&gt;&lt;/video&gt;
 
 ---
 
-# The Empirical Cummulative Distribution Plot of our Sample
+# We see this pattern everywhere - the Random or Drunkard's Walk aka Brownian Motion
 
-
-
-
-
-
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/walk-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
-# The Box Plot (or Box-and-Whisker Plot)
+# A Normal Result for Final Position
 
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-# Two ways of seeing the same data
-
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/final_walk-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
-# Median: Middle of the Sample
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
----
+# Other Distributions Possible: Lognormal and Multiplicative error
 
-# Quartiles: Upper and Lower Quarter
+&lt;img src="03_sampling_lecture_x_files/figure-html/lnormplot-1.png" style="display: block; margin: auto;" /&gt;
 
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
-
-
-1&lt;sup&gt;st&lt;/sup&gt; and 3&lt;sup&gt;rd&lt;/sup&gt; **Quartile** = 25&lt;sup&gt;th&lt;/sup&gt; and 75&lt;sup&gt;th&lt;/sup&gt; **Percentile**
+- e.g., `\(N_t = \lambda N_{t-1}, \lambda \sim \mathcal{N}(\mu, \sigma)\)`
+- Error compounds over time
 
 ---
 
-# Reasonable Range of Data (Beyond which are Outliers)
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+# Other Distributions: Binomial from Binary Yes/Nos 
+&lt;img src="03_sampling_lecture_x_files/figure-html/binomplot-1.png" style="display: block; margin: auto;" /&gt;
+
+- Discrete, not continuous. 
+- From underlying 1/0 trials, e.g., drug success, probability of predation
 
 
 ---
-
-# Where's the action in R?
-
-
-```r
-# Quantiles
-quantile(samp)
-```
-
-```
-      0%      25%      50%      75%     100% 
-31.41510 41.11041 46.56152 48.15706 60.69390 
-```
-
-```r
-# Interquartile range
-IQR(samp)
-```
-
-```
-[1] 7.046652
-```
-
----
-# Outline
-
-1. Sampling Nature
-
-2. Describing a Sample
-
-3. .red[Using a Sample to Describe a Population]
-
----
-
 # This is just a sample
 
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 class: center, middle
@@ -318,24 +289,26 @@ class: center, middle
 
 ---
 
-# Describing a sample with reference to a population
+# Describing a Gaussian population using a representative sample
   
     
 --
 
-- If I were to draw from this sample, or it's like, what value would I most likely get?    
+- **The mean**: If I were to draw from this sample, or it's like, what value would I most likely get?   
+
+--
+    
+- **The standard deviation**: If I assume a normal distribution, what's the range of 66% or 95% of the variability?    
+
 --
   
-- If I assume a normal distribution, what's the range of 66% or 95% of the variability?    
---
-  
-- Is this sample peaked, flat, shifted one way or another?
+- **Skew and kurtosis**: Is this sample peaked, flat, shifted one way or another?
 
 ---
 
 # Expected Value: the Mean
 
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -358,20 +331,15 @@ n - The number of individuals in a sample
   
 - Greek chracters (e.g., `\(\mu\)`) for **population**
 
-
+&lt;!--
 .center[https://istats.shinyapps.io/sampdist_cont/]
-
----
-
-# Mean versus Median
-
-.center[https://istats.shinyapps.io/MeanvsMedian/]
+--&gt;
 
 ---
 
 # How Variable is the Population
 
-&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Sample Estimate of Population Properties: **Variance**
@@ -379,7 +347,7 @@ How variable was that population?
 `$$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^2}} {n-1}$$`
 
 * Sums of Squares over n-1  
-* n-1 corrects for both sample size and sample bias  
+* n-1 corrects for biase from estimating from a sample.  
 * `\(\sigma^2\)` if describing the population
 * Units in square of measurement...
 
@@ -419,81 +387,110 @@ How much of your population is close to the mode versus way out in the tails?
 
 &lt;img src="03_sampling_lecture_x_files/figure-html/samp_pop_plot-1.png" style="display: block; margin: auto;" /&gt;
 
-&lt;!-- --- --&gt;
+---
+# Outline
 
-&lt;!-- # Unrepresentative Bias from Unequal Change of Sampling --&gt;
-&lt;!-- ```{r spatialBias,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- -- --&gt;
+1. What is a Good Sample?
 
-&lt;!-- Spatial gradient in size --&gt;
+2. Sample Distributions and Parameters
 
-&lt;!-- --- --&gt;
+3. .red[Non-parameteric Properties of Samples and Populations]
 
-&lt;!-- # Unrepresentative bias from Unequal Choice of Sampling --&gt;
-&lt;!-- ```{r spatialSample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- Oh, I'll just grab those individuals closest to me... --&gt;
+---
 
-&lt;!-- --- --&gt;
+# What if we don't want to assume Gaussian? Other ways to describe a population from a sample:
 
-&lt;!-- # Solutions --&gt;
+--
+- **Median**: What is the value smack in the middle?  
 
-&lt;!-- 1. Validity: Can you connect your measurement and question? --&gt;
+--
+  
+- **Upper and Lower Quantiles/Percentiles**: What are large and small values like?
 
-&lt;!-- 2. Reliability: Sample a standard or known population   --&gt;
-
-&lt;!-- 3. Representative: Sampling design! --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # A more representative sample from Random Sampling --&gt;
-&lt;!-- ```{r spatialSample2,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!-- Two sampling schemes --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- - Random - samples chosen using random numbers   --&gt;
-
-&lt;!-- --  --&gt;
-
-&lt;!-- - Haphazard - samples chosen without any system (careful!) --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # A more representative sample from **Stratified** Sampling --&gt;
-&lt;!-- ```{r stratified,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- Sample over a known gradient, aka **cluster sampling** --&gt;
-
-&lt;!-- Can incorporate multiple gradients --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Stratified or Random? --&gt;
-
-&lt;!-- - How is your population defined?   --&gt;
+--
+  
+- **Interquartile Range**: Is our sample clustered, or waaaay spread out?
 
 
-&lt;!-- - What is the scale of your inference?   --&gt;
+---
+
+# The Empirical Cummulative Distribution Plot of our Sample
 
 
-&lt;!-- - What might influence the inclusion of a replicate?   --&gt;
 
 
-&lt;!-- - How important are external factors you know about?   --&gt;
 
 
-&lt;!-- - How important are external factors you cannot assess?   --&gt;
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Stratified Random Sampling --&gt;
+# The Box Plot (or Box-and-Whisker Plot)
 
-&lt;!-- .center[.middle[![](./images/03/stratified_random_sampling_meme.jpg)]] --&gt;
+![](images/03/Box-Plot-and-Whisker-Plot-1.png)
+
+---
+
+# The Box Plot (or Box-and-Whisker Plot)
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Two ways of seeing the same data
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Median: Middle of the Sample
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Mean versus Median
+
+.center[https://istats.shinyapps.io/MeanvsMedian/]
+
+---
+
+# Quartiles: Upper and Lower Quarter
+
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+
+1&lt;sup&gt;st&lt;/sup&gt; and 3&lt;sup&gt;rd&lt;/sup&gt; **Quartile** = 25&lt;sup&gt;th&lt;/sup&gt; and 75&lt;sup&gt;th&lt;/sup&gt; **Percentile**
+
+---
+
+# Reasonable Range of Data (Beyond which are Outliers)
+&lt;img src="03_sampling_lecture_x_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Where's the action in R?
+
+
+```r
+# Quantiles
+quantile(samp)
+```
+
+```
+      0%      25%      50%      75%     100% 
+31.41510 41.11041 46.56152 48.15706 60.69390 
+```
+
+```r
+# Interquartile range
+IQR(samp)
+```
+
+```
+[1] 7.046652
+```
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

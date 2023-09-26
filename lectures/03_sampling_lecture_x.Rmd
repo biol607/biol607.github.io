@@ -13,7 +13,6 @@ output:
 ---
 
 class: middle, center
-background-image: url(images/03/mice_men.jpg)
 background-position: center
 background-size: cover
 
@@ -34,17 +33,18 @@ options(htmltools.dir.version = FALSE)
 read_chunk("lectures/03_sampling_lecture.R")
 theme_set(theme_bw(base_size=16))
 ```
-<br><br><br><br><br>
-<div style="align:center; background:black; color:white; font-size: 3em;font-weight: bold;">Samples and Populations</div>
+# Sample Distributions
+<br>
+![](images/03/barbie_sample_distribution_mean.jpg)
 
 ---
 # Outline
 
-1. Taking a Sample
+1. What is a Good Sample?
 
-2. Describing a Sample
+2. Sample Distributions and Parameters
 
-3. Using a Sample to Describe a Population
+3. Non-parameteric Properties of Samples and Populations
 
 ---
 class:center
@@ -54,7 +54,6 @@ class:center
 ```{r population,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
 ```
 
--- 
 
 **Population** = All Individuals
 
@@ -67,7 +66,7 @@ class: center, middle
 ]
 
 .pull-right[
-```{r normplot, echo = FALSE, fig.width=6, fig.height=6}
+```{r normplot3, echo = FALSE, fig.width=6, fig.height=6}
 normdat <- tibble(
   x = seq(-3, 3, length.out = 200),
   y = dnorm(x),
@@ -86,7 +85,7 @@ class: center
 
 # What is a sample?
 
-```{r sample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```{r sampleSpread,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
 ```
 
 --
@@ -96,7 +95,7 @@ A **sample** of individuals in a randomly distributed population.
 class: center, middle
 # Population
 .pull-left[
-```{r sample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=6}
+```{r sampleSpread,  echo=FALSE, fig.align='center',fig.width=6, fig.height=6}
 ```
 ]
 
@@ -144,11 +143,19 @@ normplot +
 
 ---
 
-# Bias from Unequal Representation
-```{r colorSize,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+# Are You Representative? Or Biased from Unequal Representation
+```{r spatialBias,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
 ```
-If you only chose one color, you would only get one range of sizes.
+If you only chose individuals from the bottom, you would only get one range of sizes.
 
+---
+class: center, middle
+
+## The key for most statistical models is that a replicates in a sample are i.i.d.  
+  
+  <br>
+  
+## Independent and Identically Distributed
 
 ---
 # Exercise:
@@ -156,21 +163,20 @@ If you only chose one color, you would only get one range of sizes.
 ### 1. What is a population you sample?  
   <br><br>
   
-### 2. How do you ensure validity, reliability, and representativeness of a sample?
-
+### 2. How do you ensure validity, reliability, and representativeness of a sample from your population?
 
 ---
 # Outline
 
-1. Sampling Nature
+1. What is a Good Sample?
 
-2. .red[Describing a Sample]
+2. .red[Sample Distributions and Parameters]
 
-3. Using a Sample to Describe a Population
+3. Non-parameteric Properties of Samples and Populations
 
 ---
 # Taking a Descriptive
-```{r sample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
+```{r sampleSpread,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5}
 ```
 
 <center>How big are individuals in this population?  
@@ -224,141 +230,140 @@ Frequency = Probability of Drawing that Value from a Sample
 
 ---
 
-# Visualizing Our Sample as Frequencies
+# Visualizing Our Sample as Continuous Probability Densities
 
-```{r sampPlotFreq, echo=FALSE}
+```{r sampPlotDens, echo=FALSE}
+ggplot(samp_data, aes(x = size)) +
+  geom_density() 
 ```
 
-Frequency = Probability Density, Sums to One.
+Probability Density = Relative likleihood of encountering a value. Sums to One.
+
+---
+class: center, middle
+
+# Our goal is to get samples representative of a population, and estimate population parameters. We assume a **distribution** of values to the population from which we then estimate parameters. Makes it easier to describe nature!
+
+---
+# A Population versus Sample Distribution: Normal
+
+```{r normplot, fig.height=7, fig.width = 10}
+norm_dat <- tibble(
+  size = seq(30,60,length.out=200),
+  density = dnorm(size, mean = mean(samp), sd = sd(samp))
+)
+
+ggplot(samp_data, aes(x = size)) +
+  geom_density(color = "darkgrey") +
+  geom_line(data = norm_dat, 
+            mapping = aes(y = density),
+            color = "red",
+            size = 1.5)
+```
 
 ---
 
-# Describing Our Sample as a unique thing  
+# The Normal (Gaussian) Distribution
 
---
-- What is the value smack in the middle?  
+```{r normplot2, fig.height=5, fig.width = 9, fig.align = "center"}
+ggplot() +
+  geom_line(data = norm_dat, 
+            mapping = aes(x = size, y = density),
+            color = "red",
+            size = 1.5)
+```
 
---
+- Arises from some deterministic value and many small additive deviations. 
+- Variability is additive over time.
+- VERY common.
+
+---
+class: center
+
+# Understanding Gaussian Distributions with a Galton Board (Quinqunx)
+
+```{r quincunx, fig.show='animate', cache = TRUE}
+#see also https://evamaerey.github.io/little_flipbooks_library/galton_board/galton_board.html#1
+animation::quincunx(balls = 100)
+```
+
+---
+
+# We see this pattern everywhere - the Random or Drunkard's Walk aka Brownian Motion
+
+```{r walk, echo = FALSE, fig.height = 5}
+puce <- "#a95c68"
+
+one_path <- function(steps){
   
-- What are large and small values like?
+  each_step <- c(0, runif(steps, min = -1, max = 1))
 
---
+  path <- cumsum(each_step)
   
-- Is our sample clustered, or waaaay spread out?
+  return(path)
+}
 
+#now the simulations
+steps <- 100
+walk_sims <- purrr::map_df(1:1000, 
+                    ~data.frame(sim = .x, 
+                                time = -1*(0:steps), 
+                                position = one_path(steps)))
 
----
-
-# The Empirical Cummulative Distribution Plot of our Sample
-
-```{r make_exploratory_plots, echo = FALSE}
-ecdf_plot <- ggplot(data = samp_data,
-       aes(x = size)) +
-  stat_ecdf(geom = "point") +
-  stat_ecdf(geom = "step") +
-  labs(y = "Cummulative Frequency")
-
-box_plot <- ggplot(data = samp_data,
-       aes(y = size)) +
-  geom_boxplot(width = 0.2) +
-  xlim(c(-0.5, 0.5))
-
-quants <- quantile(samp)
-samp_iqs <- c(quants[2] - 1.5*IQR(samp),
-              quants[4] + 1.5*IQR(samp))
-samp_iqs <- c(sort(samp[samp>samp_iqs[1]], decreasing=FALSE)[1],
-              sort(samp[samp<samp_iqs[2]], decreasing=TRUE)[1])
-              
-```
-
-
-
-
-```{r}
-ecdf_plot
+ggplot(walk_sims,
+       aes(x = time, y = position, group = sim)) +
+  geom_line(alpha = 0.1) +
+  coord_flip() +
+  scale_x_continuous(breaks = -1*seq(0,steps, by = 10),
+                     labels = seq(0,steps, by = 10))
 ```
 
 ---
 
-# The Box Plot (or Box-and-Whisker Plot)
+# A Normal Result for Final Position
 
-```{r}
-box_plot + 
-  geom_point(position = position_nudge(x = 1), x = 0.25) +
-  xlim(c(-0.3, 0.3))
+```{r final_walk}
+walk_sims %>%
+  filter(time == min(time)) %>%
+  ggplot(aes(x = position)) +
+  geom_histogram(fill = puce, bins = 100)
 ```
 
 ---
 
-# Two ways of seeing the same data
+# Other Distributions Possible: Lognormal and Multiplicative error
 
-```{r}
+```{r lnormplot, fig.height=5, fig.width = 9}
+lnorm_dat <- tibble(
+  x = seq(0,4,length.out=200),
+  density = dlnorm(x)
+)
 
-ecdf_plot + box_plot
+ggplot(lnorm_dat, aes(x = x, y = density)) +
+  geom_line(lwd = 1.5)
 ```
 
+- e.g., $N_t = \lambda N_{t-1}, \lambda \sim \mathcal{N}(\mu, \sigma)$
+- Error compounds over time
+
 ---
 
-# Median: Middle of the Sample
-```{r}
-(ecdf_plot+
-  geom_hline(color = "red", yintercept = 0.5)) + 
-(box_plot +
-  geom_hline(color = "red", yintercept = median(samp)))
-```
----
+# Other Distributions: Binomial from Binary Yes/Nos 
+```{r binomplot, fig.height=5, fig.width = 9}
+binom_dat <- tibble(
+  x = 1:50,
+  probability = dbinom(x, size = 50, prob = 0.3 )
+)
 
-# Quartiles: Upper and Lower Quarter
-
-```{r}
-(ecdf_plot+
-  geom_hline(color = "red", yintercept = c(0.25, 0.75))) +
-(box_plot +
-  geom_hline(color = "red", yintercept = quants[c(2,4)]))
+ggplot(binom_dat, aes(x = x, y = probability)) +
+  geom_col(lwd = 1.5)
 ```
 
-
-1<sup>st</sup> and 3<sup>rd</sup> **Quartile** = 25<sup>th</sup> and 75<sup>th</sup> **Percentile**
-
----
-
-# Reasonable Range of Data (Beyond which are Outliers)
-```{r}
-
-#make an ecdf function
-efun <- ecdf(samp)
-
-
-(ecdf_plot+
-  geom_hline(color = "red", yintercept = efun(samp_iqs)))+
-(box_plot +
-  geom_hline(color = "red", yintercept = samp_iqs))
-```
+- Discrete, not continuous. 
+- From underlying 1/0 trials, e.g., drug success, probability of predation
 
 
 ---
-
-# Where's the action in R?
-
-```{r quantile_demo, echo = TRUE}
-# Quantiles
-quantile(samp)
-
-# Interquartile range
-IQR(samp)
-```
-
----
-# Outline
-
-1. Sampling Nature
-
-2. Describing a Sample
-
-3. .red[Using a Sample to Describe a Population]
-
----
-
 # This is just a sample
 
 ```{r}
@@ -404,18 +409,20 @@ sample_demo_plot + pop_demo_plot
 
 ---
 
-# Describing a sample with reference to a population
+# Describing a Gaussian population using a representative sample
   
     
 --
 
-- If I were to draw from this sample, or it's like, what value would I most likely get?    
+- **The mean**: If I were to draw from this sample, or it's like, what value would I most likely get?   
+
+--
+    
+- **The standard deviation**: If I assume a normal distribution, what's the range of 66% or 95% of the variability?    
+
 --
   
-- If I assume a normal distribution, what's the range of 66% or 95% of the variability?    
---
-  
-- Is this sample peaked, flat, shifted one way or another?
+- **Skew and kurtosis**: Is this sample peaked, flat, shifted one way or another?
 
 ---
 
@@ -451,14 +458,9 @@ $\mu$ - The average value of a population
   
 - Greek chracters (e.g., $\mu$) for **population**
 
-
+<!--
 .center[https://istats.shinyapps.io/sampdist_cont/]
-
----
-
-# Mean versus Median
-
-.center[https://istats.shinyapps.io/MeanvsMedian/]
+-->
 
 ---
 
@@ -492,7 +494,7 @@ How variable was that population?
 $$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^2}} {n-1}$$
 
 * Sums of Squares over n-1  
-* n-1 corrects for both sample size and sample bias  
+* n-1 corrects for biase from estimating from a sample.  
 * $\sigma^2$ if describing the population
 * Units in square of measurement...
 
@@ -533,78 +535,142 @@ $$\large s^2=  \frac{\displaystyle \sum_{i=1}^{n}{(X_i - \bar{X})^4}} {(n-1)s^4}
 ```{r samp_pop_plot}
 ```
 
-<!-- --- -->
+---
+# Outline
 
-<!-- # Unrepresentative Bias from Unequal Change of Sampling -->
-<!-- ```{r spatialBias,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} -->
-<!-- ``` -->
-<!-- -- -->
+1. What is a Good Sample?
 
-<!-- Spatial gradient in size -->
+2. Sample Distributions and Parameters
 
-<!-- --- -->
+3. .red[Non-parameteric Properties of Samples and Populations]
 
-<!-- # Unrepresentative bias from Unequal Choice of Sampling -->
-<!-- ```{r spatialSample,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} -->
-<!-- ``` -->
-<!-- Oh, I'll just grab those individuals closest to me... -->
+---
 
-<!-- --- -->
+# What if we don't want to assume Gaussian? Other ways to describe a population from a sample:
 
-<!-- # Solutions -->
+--
+- **Median**: What is the value smack in the middle?  
 
-<!-- 1. Validity: Can you connect your measurement and question? -->
+--
+  
+- **Upper and Lower Quantiles/Percentiles**: What are large and small values like?
 
-<!-- 2. Reliability: Sample a standard or known population   -->
-
-<!-- 3. Representative: Sampling design! -->
-
-<!-- --- -->
-
-<!-- # A more representative sample from Random Sampling -->
-<!-- ```{r spatialSample2,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} -->
-<!-- ``` -->
-<!-- -- -->
-
-<!-- Two sampling schemes -->
-
-<!-- -- -->
-
-<!-- - Random - samples chosen using random numbers   -->
-
-<!-- --  -->
-
-<!-- - Haphazard - samples chosen without any system (careful!) -->
-
-<!-- --- -->
-
-<!-- # A more representative sample from **Stratified** Sampling -->
-<!-- ```{r stratified,  echo=FALSE, fig.align='center',fig.width=6, fig.height=5} -->
-<!-- ``` -->
-<!-- Sample over a known gradient, aka **cluster sampling** -->
-
-<!-- Can incorporate multiple gradients -->
-
-<!-- --- -->
-
-<!-- # Stratified or Random? -->
-
-<!-- - How is your population defined?   -->
+--
+  
+- **Interquartile Range**: Is our sample clustered, or waaaay spread out?
 
 
-<!-- - What is the scale of your inference?   -->
+---
+
+# The Empirical Cummulative Distribution Plot of our Sample
+
+```{r make_exploratory_plots, echo = FALSE}
+ecdf_plot <- ggplot(data = samp_data,
+       aes(x = size)) +
+  stat_ecdf(geom = "point") +
+  stat_ecdf(geom = "step") +
+  labs(y = "Cummulative Frequency")
+
+box_plot <- ggplot(data = samp_data,
+       aes(y = size)) +
+  geom_boxplot(width = 0.2) +
+  xlim(c(-0.5, 0.5))
+
+quants <- quantile(samp)
+samp_iqs <- c(quants[2] - 1.5*IQR(samp),
+              quants[4] + 1.5*IQR(samp))
+samp_iqs <- c(sort(samp[samp>samp_iqs[1]], decreasing=FALSE)[1],
+              sort(samp[samp<samp_iqs[2]], decreasing=TRUE)[1])
+              
+```
 
 
-<!-- - What might influence the inclusion of a replicate?   -->
 
 
-<!-- - How important are external factors you know about?   -->
+```{r}
+ecdf_plot
+```
+
+---
+
+# The Box Plot (or Box-and-Whisker Plot)
+
+![](images/03/Box-Plot-and-Whisker-Plot-1.png)
+
+---
+
+# The Box Plot (or Box-and-Whisker Plot)
+
+```{r}
+box_plot + 
+  geom_point(position = position_nudge(x = 1), x = 0.25) +
+  xlim(c(-0.3, 0.3))
+```
+
+---
+
+# Two ways of seeing the same data
+
+```{r}
+
+ecdf_plot + box_plot
+```
+
+---
+
+# Median: Middle of the Sample
+```{r}
+(ecdf_plot+
+  geom_hline(color = "red", yintercept = 0.5)) + 
+(box_plot +
+  geom_hline(color = "red", yintercept = median(samp)))
+```
+
+---
+
+# Mean versus Median
+
+.center[https://istats.shinyapps.io/MeanvsMedian/]
+
+---
+
+# Quartiles: Upper and Lower Quarter
+
+```{r}
+(ecdf_plot+
+  geom_hline(color = "red", yintercept = c(0.25, 0.75))) +
+(box_plot +
+  geom_hline(color = "red", yintercept = quants[c(2,4)]))
+```
 
 
-<!-- - How important are external factors you cannot assess?   -->
+1<sup>st</sup> and 3<sup>rd</sup> **Quartile** = 25<sup>th</sup> and 75<sup>th</sup> **Percentile**
 
-<!-- --- -->
+---
 
-<!-- # Stratified Random Sampling -->
+# Reasonable Range of Data (Beyond which are Outliers)
+```{r}
 
-<!-- .center[.middle[![](./images/03/stratified_random_sampling_meme.jpg)]] -->
+#make an ecdf function
+efun <- ecdf(samp)
+
+
+(ecdf_plot+
+  geom_hline(color = "red", yintercept = efun(samp_iqs)))+
+(box_plot +
+  geom_hline(color = "red", yintercept = samp_iqs))
+```
+
+
+---
+
+# Where's the action in R?
+
+```{r quantile_demo, echo = TRUE}
+# Quantiles
+quantile(samp)
+
+# Interquartile range
+IQR(samp)
+```
+
