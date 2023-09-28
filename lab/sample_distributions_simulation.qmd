@@ -110,3 +110,69 @@ sample_properties
 ```
 
 **Exercise** Plot the distributions of the properties. What do they look like. Now repeat the sample simulations and properties for a uniform distribution. Do the resulting distributions look different?
+
+## Sample Size and SE
+
+To take this all one step further, we can also look at the effect of sample size on our precision in our estimation of a mean. To do so using dplyr is a snap. We can still group by simulations, but also add in a sample size parameter. To make a full simulation frame, we can use `tidyr::crossing()` which creates all possible combinations of vectors and turns them into a data frame.
+
+```{r sims_frame}
+library(tidyr)
+
+#for example
+crossing(x = 1:3, y = 7:9)
+
+# our simulations
+sims_frame <- crossing(sims = 1:1000, n = c(3,5,7,9)) |>
+  group_by(sims, n) |>
+  mutate(sample_mean = rnorm(n, mean = m, sd = s) |> mean())|>
+  ungroup()
+```
+
+We can then look at the effect of sample size on the standard error of the mean by getting the SD of each sim/sample size combination and plotting. This is why I didn't `ungroup()` before.
+
+```{r se_plot_n}
+sims_frame |>
+  group_by(n) |>
+  summarize(se = sd(sample_mean)) |>
+  
+  #oh, piping right into a ggplot!
+  ggplot(aes(x = n, y = se)) +
+  geom_line() +
+  geom_point()
+```
+
+
+If we do this for many many sample sizes, we can generate a curve and see if there is some sample size where the SE levels off, or find a place where we are comfortable with the n versus se tradeoff.
+
+## Bootstrap resampling
+
+This is all well and good if we're pulling from a theoretical distribution. But, what's this bootstrap resampling we hear about? Quite simply, it's sampling from a sample with replacement. Rinse and repeat this many many times, and you can calculate bootstrapped statistics. We do this primarily with the `sample()` function. For example:
+
+```{r sample}
+vec <- 1:10
+
+sample(vec, replace = TRUE)
+```
+
+So, if we want to get the boostrapped SE of a sample, we can use `sample()` instead of `rnorm()` in our workflow.
+
+```{r sample_se}
+# The OG Sample
+my_samp <- rnorm(10, mean = m, sd = s) 
+
+boot_frame <- tibble(sims = 1:1000) |>
+  group_by(sims) |>
+  mutate(boot_mean = sample(my_samp, replace = TRUE) |>
+           mean()) |>
+  ungroup()
+```
+
+So, how does the bootstrapped SE compare to the estimate?
+
+```{r comp_se}
+sd(boot_frame$boot_mean)
+
+sd(my_samp) / sqrt(10)
+```
+
+Not bad!
