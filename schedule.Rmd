@@ -83,12 +83,11 @@ __Homework:__ [Data Manipulation and Pivot homework](./homework/dplyr_tidyr.html
 ```{r next_date, echo=FALSE }
 ```
 `r datestring`   
-__Lecture:__ Descriptive statistics, probability distributions, simulation and sample size - [Functions](lectures/functions.html), [What is a Sample?](lectures/03_sampling_lecture_x.html) and [Precision and Simulation for Estimation](lectures/04_simulation_estimation_x.html).   
+__Lecture:__  [What is a Sample?](lectures/03_sampling_lecture_x.html) and [Sampling Distribution](lectures/04_sampling_dist.html).   
 __Lab Topic:__ [Sampling and simulation](lab/02_sim_samp.html).    
-__Reading:__ W&S 1,3-4,  [functions](https://r4ds.had.co.nz/functions.html), [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf)   
+__Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf)   
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2023  
 __Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages(c("dplyr", "purrr"))`  
-__In Class Code:__ [Code from Lab for dplyr](in_class_code/2020/scripts/intro_to_tidyverse.R), [Code from Lab for simulation from a population](in_class_code/2020/scripts/simulation.R), [Code from Lab for Bootstrapped SE](in_class_code/2020/scripts/boot_se.R)\
 __Homework:__ [Functions, Iteration, and Precision](./homework/function_iteration.html)  
 
 

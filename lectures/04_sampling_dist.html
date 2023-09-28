@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Sampling Estimate, Precision, and Simulation</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: middle, center
+
+
+
+# Sampling Distributions
+
+![](./images/04/meanception.jpg)
+
+---
+# Last Time: Sample Versus Population
+
+&lt;img src="04_sampling_dist_files/figure-html/samp_pop_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Sample Properties: **Mean**
+
+`$$\bar{x} = \frac{ \displaystyle \sum_{i=1}^{n}{x_{i}} }{n}$$`
+
+`\(\large \bar{x}\)` - The average value of a sample  
+`\(x_{i}\)` - The value of a measurement for a single individual   
+n - The number of individuals in a sample  
+&amp;nbsp;  
+`\(\mu\)` - The average value of a population  
+(Greek = population, Latin = Sample)
+
+---
+class: center, middle
+
+# Our goal is to get samples representative of a population, and estimate population parameters. We assume a **distribution** of values to the population.
+
+---
+# Probability Distributions
+&lt;img src="04_sampling_dist_files/figure-html/normplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Probability Distributions Come in Many Shapes
+
+&lt;img src="04_sampling_dist_files/figure-html/dists-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Sample Versus Sampling Distributions
+
+- A sampling distribution is the distribution of estimates of population parameters if we repeated our study an infinite number of times. 
+
+- For example, if we take a sample with n = 5 of plant heights, we might get a mean of 10.5cm. If we do it again, 8.6cm. Again, 11.3cm, etc....  
+  
+- Repeatedly sampling gives us a distribution, and a measure of how precise our ability to estimate a population parameter is
+
+---
+
+class:middle
+
+.center[![:scale 95%](images/04/Accuracy-and-Precision.png)]
+
+- Accuracy represents *is your estimate of a population parameter baised*. 
+  
+- Precision tells us the *variability in replicate measurements of a population parameter*
+
+---
+# A simple simulation
+
+Let's say you sampled a population of corals and assessed Zooxanthelle concentration. You did this with n = 10, an then calculated the average concentration per coral.
+
+&lt;img src="04_sampling_dist_files/figure-html/conc_10-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A simple simulation
+
+Now do it again 10 more times
+
+&lt;img src="04_sampling_dist_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What's the Distribution of Those Means?
+
+&lt;img src="04_sampling_dist_files/figure-html/mean_dist_10-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What About After 1000 repeated sample events with n = 10?
+
+&lt;img src="04_sampling_dist_files/figure-html/mean_100-1.png" style="display: block; margin: auto;" /&gt;
+--
+
+This is a **sampling distribution** and looks normal for the mean.
+
+---
+# Does Sample Size Matter?
+
+&lt;img src="04_sampling_dist_files/figure-html/mean_many_n-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+This looks normal, with different SD?
+
+---
+class: center, middle
+# **Central Limit Theorem** The distribution of means of a sufficiently large sample size will be approximately normal
+
+https://istats.shinyapps.io/sampdist_cont/
+
+https://istats.shinyapps.io/SampDist_discrete/
+
+--
+
+## This is true for many estimated parameters based on means
+
+---
+# So what about the SD of the Simulated Estimated Means?
+
+&lt;img src="04_sampling_dist_files/figure-html/mean_many_n-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: center, middle
+# The Standard Error
+&lt;br&gt;&lt;br&gt;
+.large[
+A standard error is the standard deviation of an estimated parameter if we were able to sample it repeatedly. It measures the precision of our estimate.
+]
+
+---
+class: large
+
+# So I always have to repeat my study to get a Standard Error?
+
+--
+
+## .center[**No**]
+
+--
+
+Many common estimates have formulae, e.g.:  
+
+`$$SE_{mean} = \frac{s}{\sqrt(n)}$$`
+
+
+---
+
+# Others Have Complex Formulae for a Single Sample, but Still Might be Easier to Get Via Simulation - e.g., Standard Deviation
+
+&lt;img src="04_sampling_dist_files/figure-html/sd_100-1.png" style="display: block; margin: auto;" /&gt;
+
+```
+     2.5%       33%       66%     97.5% 
+ 1.189182  4.462456  7.290618 12.960790 
+```
+
+
+---
+class: large
+
+# Standard Error as a Measure of Confidence
+--
+
+.center[.red[**Warning: this gets weird**]]
+
+--
+
+
+- We have calculated our SE from a **sample** - not the **population**
+
+--
+
+- Our estimate ± 1 SE tells us 2/3 of the *means* we could get by **resampling this sample**  
+
+--
+
+- This is **not** 2/3 of the possible **true parameter values**  
+
+--
+
+- BUT, if we *were* to sample the population many times, 2/3 of the time, the sample-based SE will contain the "true" value
+
+
+---
+
+# Confidence Intervals
+
+.large[
+- So, 1 SE = the 66% Confidence Interval  
+
+- ~2 SE = 95% Confidence Interval  
+
+- Best to view these as a measure of precision of your estimate
+
+- And remember, if you were able to do the sampling again and again and again, some fraction of your intervals would *not* contain a true value
+]
+---
+
+class: large, middle
+
+# Let's see this in action
+
+### .center[.middle[https://istats.shinyapps.io/ExploreCoverage/]]
+
+---
+
+# Frequentist Philosophy
+
+.large[The ideal of drawing conclusions from data based on properties derived from theoretical resampling is fundamentally **frequentist** - i.e., assumes that we can derive truth by observing a result with some frequency in the long run.]
+
+&lt;img src="04_sampling_dist_files/figure-html/CI_sim-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# SE, SD, CIs.... They are Different
+
+![:scale 95%](images/04/cumming_table_2007.jpg)
+
+
+.bottom[.small[.left[[Cumming et al. 2007 Table 1](http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf)]]]
+
+---
+# SE (sample), CI (sample), and SD (population) visually
+
+.center[![:scale 55%](images/04/cumming_comparison_2007.jpg)] 
+
+
+
+.bottom[.small[.left[[Cumming et al. 2007 Table 1](http://byrneslab.net/classes/biol-607/readings/Cumming_2007_error.pdf)]]]
+
+---
+# So what does this mean?
+
+&lt;img src="04_sampling_dist_files/figure-html/one_ci-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# 95% CI and Frequentist Logic
+
+- Having 0 in your 95% CI means that, we you to repeat an analysis 100 times, 0 will be in 95 of the CIs of those trials. 
+
+--
+
+- In the long run, you have a 95% chance of being wrong if you say that 0 is not a possible value. 
+
+--
+
+- But..... why 95%? Why not 80% Why not 75%? 95% can be finicky!  
+
+--
+
+- Further, there is no probability of being wrong about sign, just, in the long run, you'll often have a CI overlapping 0 given the design of your study
+
+--
+
+- A lot depends on how well you trust the precision of your estimate based on your study design
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
