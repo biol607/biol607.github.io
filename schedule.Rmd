@@ -84,7 +84,7 @@ __Homework:__ [Data Manipulation and Pivot homework](./homework/dplyr_tidyr.html
 ```
 `r datestring`   
 __Lecture:__  [What is a Sample?](lectures/03_sampling_lecture_x.html) and [Sampling Distribution](lectures/04_sampling_dist.html).   
-__Lab Topic:__ [Sampling and simulation](lab/02_sim_samp.html).    
+__Lab Topic:__ [Sampling and simulation](lab/sample_distributions_simulation.html).    
 __Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf)   
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2023  
 __Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages(c("dplyr", "purrr"))`  
