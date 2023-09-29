@@ -1,0 +1,157 @@
+---
+title: "Iteration and Functions"
+author: "Biol 607"
+format: 
+  html:
+    toc: true
+
+execute:
+  echo: false
+  message: false
+  warning: false
+  eval: false
+---
+
+## 0. Intro
+You're going to be using tidyr, purrr, dplyr, and more today. Might want to start the head of your script with just `library(tidyverse)` so you don't have to worry too much. Set a ggplot theme if you want!
+```{r}
+#| eval: true
+library(tidyverse)
+```
+
+
+## 1. Visualizing the Exponential distribution
+
+The normal distibution is fun, but let's play with another one! The [exponential distribution](https://en.wikipedia.org/wiki/Exponential_distribution) is a continuous distribution that is bounded at 0 and has an infinitely long tail. It's skewed to 0, and takes a `rate` as it's argument to determine its shape.
+
+```{r exp}
+#| eval = TRUE
+library(dplyr)
+library(ggplot2)
+tibble(x = seq(0,3, length.out = 100),
+           y = dexp(x, 3)) |>
+  ggplot(aes(x=x,y=y)) +
+  geom_line()+
+  theme_classic(base_size = 14) +
+  labs(y = "density", x = "value", subtitle = "rate = 3")
+```
+
+&nbsp; &nbsp; 1a. Make a tibble that has two columns. The first is a sequence of 200 evenly spaced numbers between 0 and 4. Let's call that column x. The second is 4 values for rate - `c(0.2, 0.5, 1, 2, 4)`. Let's get all possible combinations of the two (some function in `tidyr` will do....)
+
+```{r exp_params}
+exp_frame <- 
+  crossing(x = seq(0, 4, length.out = 200),
+           rate = c(0.2, 0.5, 1, 2, 4))
+```
+
+&nbsp; &nbsp; 1b. Now, how do you make those sweet sweet probability densities? Why, with a `d*()` function! In this case, `dexp()`. Make a column that gets the probability density of the exponential distribution for each value of x and rate. You might want to look at the help file to see how to use `dexp()`.
+
+```{r dexp}
+exp_frame <- exp_frame |>
+  mutate(density = dexp(x, rate = rate))
+```
+
+&nbsp; &nbsp; 1c. Plot how the density of the exponential changes with rate using the tibble you just generated. How do things change with rate?
+
+```{r pexp}
+ggplot(exp_frame, 
+       aes(x = x, y = density, color = factor(rate))) +
+  geom_line()
+
+# higher rates are steeper curves more clustered at 0 as there are more events per interval, so lower time between events.
+```
+
+## 2. Precision and Sampling the Exponential
+
+&nbsp; &nbsp; 2a. To start to sample, let's begin by building up a set of parameters that link up with simulations. We are going to explore how rate changes the standard error of different properties from our sample. Let's start by creating a tibble or data frame that has one column for simulations (1 through 1000) and one column with rates. Let's use the rates from before - `c(0.2, 0.5, 1, 2, 4)`. 
+
+```{r}
+library(tidyr)
+
+samp_frame <- crossing(sims = 1:1000,
+                       rate = c(0.2, 0.5, 1, 2, 4))
+```
+
+&nbsp; &nbsp; 2b. Great! Now simulate your sampling of exponential populations! Assume n = 10. To check yourself, your resulting data frame should be ungrouped and have 50K rows.
+
+```{r}
+samp_frame <- samp_frame |>
+  group_by(sims, rate) |>
+  reframe(samp_data = rexp(10, rate = rate))
+```
+
+
+&nbsp; &nbsp; 2c. Now, for each simulation (and rate!) get the sample mean, median, and SD.
+
+
+```{r}
+samp_properties <- samp_frame |>
+  group_by(sims, rate) |>
+  summarize(
+    sample_mean = mean(samp_data),
+    sample_median = median(samp_data),
+    sample_sd = sd(samp_data),
+    .groups = "drop"
+  )
+```
+
+
+
+&nbsp; &nbsp; 2d. So, how does rate influence the SE of each of these properties? First show with a table and then a plot. One plot with three facets (get your pivot on!) For your table, try out `knitr::kable()` or the `gt` package.
+
+```{r}
+samp_se <- samp_properties |>
+  group_by(rate) |>
+  summarize(se_mean = sd(sample_mean),
+            se_median = sd(sample_median),
+            se_sd = sd(sample_sd)
+            )
+
+knitr::kable(samp_se)
+
+samp_se |>
+  pivot_longer(-rate) |>
+  ggplot(aes(x=rate, y = value)) +
+  facet_wrap(vars(name)) +
+  geom_point() +
+  geom_line()
+
+# higher rate, lower SE
+```
+
+
+&nbsp; &nbsp; 2e. Do these results surprise you or are they predictable given the plots of exponential distributions you made in #1?
+
+```{r}
+# falls out naturally. More data pressed against 0, 
+# thinner tail, lowe SE
+```
+
+## 3. Finish your tidy tuesday! Include a cool plot! And your code!
+
+
+## Impress yourself! Post it to twitter or bluesky and put the link in slack!
+
+## Impress yourself more! Put your tidy tuesday code up on github as a gist (http://gist.github.com) and link to it in that post!
+
+--------
+
+
+## Meta 1. 
+Whew. We covered a lot this week. Sample distributions, sampling distributions, and simulation. How much of this was new to you? How much of it was familiar or at least made sense? How much was totally alien and offputting?
+
+## Meta 2. 
+What are possible uses you could see using simulations for? 
+
+## Meta 3.
+How did your progress through this assignment feel after lab? Did you find yourself speeding up as you went along? Are there things that clicked for you along the way? Lightbulbs going off.
+
+## Meta 4. 
+There are a lot of things that also re-appear this week. ggplot, tidyr and pivoting, dplyr, pipes, and more. Are they becoming old friends? What apsects of them are you still struggling with, if at all?
+
+## Meta 5. 
+How much time did this take you, roughly? Again, I'm trying to keep track that these assignments aren't killer, more than anything.  
+
+## Meta 6. 
+Please give yourself a weak/sufficient/strong assessment on this assignment. Feel free to comment on why.
+

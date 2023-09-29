@@ -88,7 +88,7 @@ __Lab Topic:__ [Sampling and simulation](lab/sample_distributions_simulation.htm
 __Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf)   
 __Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2023  
 __Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages(c("dplyr", "purrr"))`  
-__Homework:__ [Functions, Iteration, and Precision](./homework/function_iteration.html)  
+__Homework:__ [Sampling, Simulation, and Tidy Tuesday](./homework/sampling_dist_tidytuesday.html)  
 
 
 ## Block 2: Linear Models for Data Analysis
