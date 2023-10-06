@@ -13,7 +13,7 @@
 
 <title>Course Schedule and Readings</title>
 
-<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
@@ -290,6 +290,12 @@ $(document).ready(function () {
 
 
 NEXT TIME I TEACH 607 in 2024
+redo explaining least squares - it's not good in the lecture
+
+re-arrange the linear regression lab
+  - workflow
+  - transforms
+  - viz of prediction intervals and such
 -->
 <p>While the topics covered are broad, each week will feature different
 examples from genetics, ecology, molecular, and evolutionary biology
@@ -497,10 +503,11 @@ Models</a></p>
 <div id="week-6" class="section level3">
 <h3>Week 6</h3>
 <p>10/9/2023<br />
-<strong>Lecture:</strong> Categorical Predictors <a
-href="lectures/t_as_lm.html">It s All Linear Models; t-test edition</a>,
-<a href="lectures/anova_1.html">Many Levels of a Categorical
-Predictor</a><br />
+<strong>Lecture:</strong> Many Predictors: <a
+href="./lectures/many_predictors.html">Many Predictors</a>, Categorical
+Predictors <a href="lectures/t_as_lm.html">It s All Linear Models;
+t-test edition</a>, <a href="lectures/anova_1.html">Many Levels of a
+Categorical Predictor</a><br />
 <strong>Lab Topic:</strong> <a href="lab/categorical_models.html">Models
 with Categorical Variables</a>, Final Proposal Meetings<br />
 <strong>Lab Data:</strong> <a
@@ -508,10 +515,10 @@ href="lab/data/categorical_data.zip">Multiple Files</a><br />
 <strong>Reading:</strong> <a
 href="https://lindeloev.github.io/tests-as-linear/">Common statistical
 tests are linear models</a>, <a
-href="https://fw8051statistics4ecologists.netlify.app/matrixreg#categorical-predictors">Feiberg
-3.5</a>, W&amp;S Chapters 11, 12, 14<br />
+href="https://fw8051statistics4ecologists.netlify.app/matrixreg">Feiberg
+3</a>, W&amp;S Chapters 11, 12, 14<br />
 <strong>Packages for The Week:</strong>
-<code>install.packages(c("car", "emmeans", "multcompView", "contrast"))</code><br />
+<code>install.packages(c("car", "emmeans", "multcompView", "contrast", "visreg"))</code><br />
 <strong>Etherpad:</strong> <a
 href="https://etherpad.wikimedia.org/p/607-categorical_lm-2023"
 class="uri">https://etherpad.wikimedia.org/p/607-categorical_lm-2023</a><br />
@@ -522,8 +529,7 @@ with Categorical Variables</a></p>
 <div id="week-7" class="section level3">
 <h3>Week 7</h3>
 <p>10/16/2023<br />
-<strong>Lectures:</strong> May Predictors: <a
-href="./lectures/many_predictors.html">Many Predictors</a>, <a
+<strong>Lectures:</strong> <a
 href="./lectures/many_types_of_predictors.html">Many categories or
 mixing categories and continuous predictors</a><br />
 <strong>Lab Topic:</strong> <a
