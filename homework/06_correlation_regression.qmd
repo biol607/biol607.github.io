@@ -9,23 +9,37 @@ knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
 library(tidyverse)
 ```
 
-Note: Datasets are available at http://whitlockschluter.zoology.ubc.ca/data so you don't have to type anything in (and have to load it!)  
+Note: Some datasets are available at http://whitlockschluter.zoology.ubc.ca/data so you don't have to type anything in (and have to load it!)  
 
 
 ## 1. Correlation - W&S Chapter 16
-Data at https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter16/chap16q15LanguageGreyMatter.csv
+Data at [https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter16/chap16q15LanguageGreyMatter.csv](https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter16/chap16q15LanguageGreyMatter.csv). Take a look at `cor()` and `cor.test()`. Or get saucy and z-transform your variables! `(x - mean(x))/var(x)`
+
 ![](images/16_15.png)
-Remember, a correlation is just a regression on z-transformed variables. Also, note - *skip part c for now*. But the assumptions are still the assumptions of doing a correlation!
+Remember, a correlation is just a regression on z-transformed variables. Also, note - *skip part c for now*. But the assumptions are still the assumptions of doing a correlation/regression!
 
 
-## 2. W&S Chapter 17
-Data at https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter17/chap17q19GrasslandNutrientsPlantSpecies.csv
+## 2.
+From [Fieberg](https://statistics4ecologistsexercises.netlify.app/linear-regression-review). For this exercise, we will consider the `LizardBite` data set in the `abd` library [@abd].  This data set was collected by @lappin2005weapon and featured in a problem in @whitlock2015analysis's popular introductory statistics book. @lappin2005weapon was interested in whether the bite force (`bite`) of male lizards in the species *Crotaphyutus collaris* was predictive of their territory size (`territory`). 
 
-![](./images/17_19.png)
-Ignore part d.
+A. Fit a linear model using R that could be used to predict territory size from a lizard's bite force.
+
+B. Evaluate the assumptions of the model using graphical methods. Be sure to comment on what you are looking for in each plot (e.g., the assumption you are looking to evaluate and what would constitute an assumption violation).
+
+C. Interpret the intercept and slope parameters in the context of the problem.
+
+D. Provide a confidence interval for the slope parameter and interpret the confidence interval. Take a look at `confint()`
+
+E. Explain what the standard error associated with the slope parameter tells us.  Your explanation should include reference to a *sampling distribution*, and you should define what this term means. 
+
+F. Create a confidence interval for the mean territory size associated with a bite force of 5 and a prediction interval for a lizard that has a bite force of 5. Explain the difference between the two intervals. When would you prefer the latter type of interval?
 
 ## 3. W&S Chapter 17-25
-https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter17/chap17q25BeetleWingsAndHorns.csv
+Data at [https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter17/chap17q25BeetleWingsAndHorns.csv](https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter17/chap17q25BeetleWingsAndHorns.csv)
+
+Note, you'll want to use either `residuals()` or `broom::augment()` for this one.
+
+
 ![](images/17-25a.png)
 
 ![](images/17-25b.png)
