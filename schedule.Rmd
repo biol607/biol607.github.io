@@ -119,7 +119,8 @@ __Lecture:__ Many Predictors: [Many Predictors](./lectures/many_predictors.html)
 s All Linear Models; t-test edition](lectures/t_as_lm.html),  [Many Levels of a Categorical Predictor](lectures/anova_1.html)      
 __Lab Topic:__ [Models with Categorical Variables](lab/categorical_models.html), Final Proposal Meetings	  
 __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)   
-__Reading:__ [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), [Feiberg 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), W&S Chapters 11, 12, 14      
+__Reading:__ [Feiberg 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/)   
+__Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
 __Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast", "visreg"))`    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-categorical_lm-2023  
 __Homework:__ [Models with Categorical Variables](./homework/categorical.html)  
@@ -135,7 +136,6 @@ __Lectures:__  [Many categories or mixing categories and continuous predictors](
 __Lab Topic:__  [Models with many types of predictors](lab/many_predictor_types.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__ [Feiberg ch 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), W&S 15, 18   
-__Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2023  
 __Homework:__ [Many Predictors!](homework/many_predictors.html), [RIKZ Data](homework/data/rikz.csv)  
 __Project Proposal:__ [general instructions here](project_proposal.html)  
