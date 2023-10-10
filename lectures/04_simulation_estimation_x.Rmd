@@ -639,7 +639,7 @@ one_sim <- function(){
          upr = m + se)
 }
 
-dat <- map_df(1:100, ~one_sim()) %>%
+dat <- purrr::map_df(1:100, ~one_sim()) %>%
   mutate(sim = 1:100,
          cover = ifelse(lwr < 4 & upr > 4, "yes", "no"))
 
@@ -657,7 +657,7 @@ ggplot(dat,
 ```
 
 ---
-# A Final Note: SE (sample), CI (sample), and SD (population)....
+# To Address some Confusion: SE (sample), CI (sample), and SD (population)....
 
  ![:scale 55%](images/04/cumming_comparison_2007.jpg) 
 
