@@ -761,7 +761,7 @@ library(effectsize)
 effectsize(klm, method = "basic")
 ```
 
----
+--
 
 - For linear model, makes intuitive sense to compare strength of association  
 
