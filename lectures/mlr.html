@@ -282,12 +282,18 @@ background-size: cover
 ## Our Model
 
 `$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$`
+
+`$$\epsilon_i \sim \mathcal{N}(0, \sigma^2)$$`
 --
 
+**In R code:**
+
+.large[
 
 ```r
 klm &lt;- lm(rich ~ cover + firesev + hetero, data=keeley)
 ```
+]
 
 ---
 
@@ -381,23 +387,36 @@ firesev -0.4371346  1.00000000 -0.05235518
 hetero  -0.1683778 -0.05235518  1.00000000
 ```
 
-Correlations over 0.4 can
-be problematic, but, meh, they may be OK even as high as 0.8. 
-
+- Correlations over 0.4 can
+be problematic, but, meh, they may be OK even as high as 0.8.   
+  
+- To be sure, we should look at how badly they change the SE around predictors. 
+     - How much do they **inflate variance** and harm our precision
+     
 ---
 ## Checking for Multicollinearity: Variance Inflation Factor
 
-- Consider `\(y = \beta_{0} + \beta_{1}x_{1}  + \beta_{2}x_{2} + \epsilon\)`  
+Consider our model:
+
+`$$y = \beta_{0} + \beta_{1}x_{1}  + \beta_{2}x_{2} + \epsilon$$`  
 
 --
 
-- And `\(X_{1} = \alpha_{0} + \alpha_{2}x_{2} + \epsilon_j\)` with the variance explained as `\(R^{2}_1\)`  
+We can also model:
+
+`$$X_{1} = \alpha_{0} + \alpha_{2}x_{2} + \epsilon_j$$` 
+
+The variance of `\(X_1\)` associated with other predictors is `\(R^{2}_1\)`  
 
 --
 
-- `\(var(\beta_{1}) = \frac{\sigma^2}{(n-1)\sigma^2_{X_1}}\frac{1}{1-R^{2}_1}\)`
+In MLR, the variance around our parameter estimate (square of SE) is:
+
+`$$var(\beta_{1}) = \frac{\sigma^2}{(n-1)\sigma^2_{X_1}}\frac{1}{1-R^{2}_1}$$`
 
 --
+
+The second term in that equation is the **Variance Inflation Parameter**
 
 `$$VIF = \frac{1}{1-R^2_{1}}$$`
 
@@ -492,6 +511,32 @@ VIF `\(&gt;\)` 5 or 10 can be problematic and indicate an unstable solution.
      - They are **not** on the same scale
      - They are each in the scale of species per unit of individual x
 
+
+---
+## Comparing Coefficients on the Same Scale
+
+`$$r_{xy} = b_{xy}\frac{sd_{x}}{sd_{y}}$$` 
+
+
+```
+# Standardization method: basic
+
+Parameter   | Std. Coef. |         95% CI
+-----------------------------------------
+(Intercept) |       0.00 | [ 0.00,  0.00]
+cover       |       0.33 | [ 0.14,  0.51]
+firesev     |      -0.20 | [-0.38, -0.01]
+hetero      |       0.50 | [ 0.33,  0.67]
+```
+
+---
+
+- For linear model, makes intuitive sense to compare strength of association  
+
+
+- Note, this is Pearson's correlation, so, it's in units of `\(sd_y/sd_x\)`
+
+
 ---
 ## How Much Variation is Associated with the Predictors
 &lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
@@ -519,30 +564,6 @@ VIF `\(&gt;\)` 5 or 10 can be problematic and indicate an unstable solution.
 - `\(R_{adj}^2 = 1 - \frac{(1-R^2)(n-1)} {n-k-1}\)`
      - Scales fit by model complexity
      - If we add more terms, but don't increase `\(R^2\)`, it can go down
-
----
-## Comparing Coefficients on the Same Scale
-
-`$$r_{xy} = b_{xy}\frac{sd_{x}}{sd_{y}}$$` 
-
-
-```
-# Standardization method: basic
-
-Parameter   | Std. Coef. |         95% CI
------------------------------------------
-(Intercept) |       0.00 | [ 0.00,  0.00]
-cover       |       0.33 | [ 0.14,  0.51]
-firesev     |      -0.20 | [-0.38, -0.01]
-hetero      |       0.50 | [ 0.33,  0.67]
-```
-
----
-
-- For linear model, makes intuitive sense to compare strength of association  
-
-
-- Note, this is Pearson's correlation, so, it's in units of `\(sd_y/sd_x\)`
 
 ---
 ## So, Uh, How Do We Visualize This?
