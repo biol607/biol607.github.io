@@ -115,7 +115,7 @@ __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Many Predictors: [Many Predictors](./lectures/many_predictors.html), Categorical Predictors [It
+__Lecture:__ Many Predictors: [Many Predictors](./lectures/mlr.html), Categorical Predictors [It
 s All Linear Models; t-test edition](lectures/t_as_lm.html),  [Many Levels of a Categorical Predictor](lectures/anova_1.html)      
 __Lab Topic:__ [Models with Categorical Variables](lab/categorical_models.html), Final Proposal Meetings	  
 __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)   
