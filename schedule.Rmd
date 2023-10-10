@@ -122,7 +122,7 @@ __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)
 __Reading:__ [Feiberg 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/)   
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf)  
 __Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast", "visreg"))`    
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-categorical_lm-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2023  
 __Homework:__ [Models with Categorical Variables](./homework/categorical.html)  
 
 <!-- __In Class Code:__ [comparing two means](./in_class_code/2020/scripts/comparing_means.R)  -->  
