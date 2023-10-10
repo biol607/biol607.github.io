@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Multiple Linear Regression</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: center, middle
+
+
+![](images/23/wonka_mult_regression.jpg)
+## Multiple Predictor Variables in Linear Models
+
+---
+## Models with Multiple Predictors
+.large[
+1. What is multiple regression?  
+  
+2. Fitting multiple regression to data. 
+  
+3. Multicollinearity. 
+  
+4. Inference with fit models
+
+]
+
+---
+
+## Our Model for Simple Linear Regression
+
+`$$\Large{y_i = \beta_0 + \beta_1  x_i + \epsilon_i}$$`
+`$$\Large{\epsilon_i \sim N(0, \sigma)}$$`
+
+
+--
+
+This corresponds to
+
+&lt;img src="mlr_files/figure-html/unnamed-chunk-1-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## But what if...
+
+&lt;img src="mlr_files/figure-html/mlr_dag-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+--
+
+
+.large[
+`$$y_i = \beta_0 + \beta_1  x_{1i }+ \beta_2  x_{2i} + \epsilon_i$$`
+`$$\epsilon_i \sim N(0, \sigma)$$`
+]
+
+---
+## A Small Problem: We don't know how X's relate to one another
+
+&lt;img src="mlr_files/figure-html/unnamed-chunk-2-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Assumption of Exogeneity and Low Collinearity
+
+&lt;img src="mlr_files/figure-html/mlr_dag_cov-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+--
+
+- **Exogeneity**: Xs are not correlated with e. 
+  
+- **Low collinearity** `\(\mid r_{x_1x_2} \mid\)` less that ~ 0.7 or 0.8 
+
+---
+## The Mechanics: Correlation and Partial Correlation
+
+We can always calculate correlations. 
+
+`$$r_{xy} = \frac{\sigma{xy}}{\sigma_x \sigma_y}$$`
+
+--
+
+Now we can look at a correlation matrix
+
+`$$\rho_{X_i, Y} = 
+  \begin{matrix} 
+        &amp; Y &amp; X_1 &amp; X_2 \\
+      Y &amp; 1 &amp; 0.2 &amp; 0.5 \\
+      X_1 &amp;  &amp; 1 &amp; -0.3 \\
+      X_2 &amp;  &amp;  &amp; 1 \\
+  \end{matrix}$$`
+
+--
+
+From this, we can calculate partial correlations
+
+---
+## Partial Correlations
+
+Answers, what is the correlation between `\(X_i\)` and Y if we remove the portion of `\(X_1\)` correlated with `\(X_2\)`
+
+--
+
+`$$\Large{
+r_{yx_1, x_2} = \frac{r_{yx_1} - r_{yx_2}r_{x_1x_2}}{\sqrt{(1-r^2_{x_1x_2})(1-r^2_{yx_2})}}
+}$$`
+
+--
+
+- Subtract out the correlation of `\(X_2\)` on `\(Y\)` controlling for the correlation between `\(X_1\)` and `\(X_2\)`
+
+--
+
+- Scale by variability left over after accounting for the same
+
+--
+
+`$$\Large{
+\beta_{yx_1, x_2} = \rho_{yx_1, x_2} \frac{\sigma_{x_1}}{\sigma_y}
+}$$`
+
+
+---
+## Sums of Squares and Partioning
+
+
+`$$SS_{total} = SS_{model} + SS_{error}$$`
+
+--
+
+$$\sum{(Y_i - \bar{Y})^2} = \sum{(\hat{Y_i} - \bar{Y})^2} + \sum{(Y_i -\hat{Y_i})^2} $$
+
+
+--
+
+We are trying to minimize `\(SS_{error}\)` and partition `\(SS_{model}\)` between `\(X_1\)` and `\(X_2\)`
+
+
+---
+## Paritioning Variation
+&lt;img src="mlr_files/figure-html/venn_mlr-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+
+.center[Each area is a sums of squares (i.e., amount of variability)]
+
+
+---
+## Paritioning Variation
+&lt;img src="mlr_files/figure-html/venn_mlr_x_y-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+.center[The variation in X&lt;sub&gt;2&lt;/sub&gt; associated with Y]
+
+
+---
+## You can see how collinearity would be a problem
+&lt;img src="mlr_files/figure-html/venn_mlr_coll-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+.center[
+How can we partition this? What is unique?
+]
+
+---
+## Generalizing 2 Predictors to N Predictors
+
+How do we represent our models that go beyond 2 predictors...
+
+
+`$$y_i = \beta_0 + \beta_1  x_{1i }+ \beta_2  x_{2i} + \epsilon_i$$`
+`$$\epsilon_i \sim N(0, \sigma)$$`
+
+
+--
+
+### With n predictors
+
+
+`$$y_i = \beta_0 + \sum_{j = 1}^{K} \beta_1  x_{ij} + \epsilon_i$$`
+`$$\epsilon_i \sim N(0, \sigma)$$`
+
+
+
+
+---
+
+## Translating to Matrices: The General Linear Model
+
+For a simple linear regression:
+`$$\begin{bmatrix}y_1 \\ y_2 \\ y_3 \\ y_4 \\ y_5 \\ y_6 \\ y_7 \end{bmatrix}
+= 
+\begin{bmatrix}1 &amp; x_1  \\1 &amp; x_2  \\1 &amp; x_3  \\1 &amp; x_4  \\1 &amp; x_5  \\1 &amp; x_6 \\ 1 &amp; x_7  \end{bmatrix}
+\begin{bmatrix} \beta_0 \\ \beta_1  \end{bmatrix}
++
+\begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\
+\varepsilon_4 \\ \varepsilon_5 \\ \varepsilon_6 \\ \varepsilon_7 \end{bmatrix}$$`
+
+---
+
+## Multiple Regression in Matrix Form
+
+$$
+`\begin{equation*}
+\begin{bmatrix}Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{bmatrix}  = 
+\begin{bmatrix}1 &amp; X_{11} &amp; X_{12} &amp; \cdots &amp; X_{1,p-1} \\ 
+  1 &amp; X_{21} &amp; X_{22} &amp; \cdots &amp; X_{2,p-1} \\
+  \vdots &amp; \vdots &amp; \vdots &amp; &amp; \vdots \\ 
+  1 &amp; X_{n1} &amp; X_{n2} &amp; \cdots &amp; X_{n,p-1} \end{bmatrix}  \times 
+\begin{bmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_{p-1} \end{bmatrix}  + 
+\begin{bmatrix} \epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{bmatrix}
+\end{equation*}`
+$$
+--
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+`$$\widehat {\textbf{Y} } = \textbf{X}\beta$$`
+`$$\textbf{Y} \sim \mathcal{N}(\widehat {\textbf{Y} }, \Sigma)$$`
+---
+## The Expansiveness of the General Linear Model
+.Large[
+`$$\widehat {\textbf{Y} } = \textbf{X}\beta$$`
+`$$\textbf{Y} \sim \mathcal{N}(\widehat {\textbf{Y} }, \Sigma)$$`
+]
+
+
+-   This equation is huge. X can be anything - categorical,
+    continuous, squared, sine, etc.
+
+-   There can be straight additivity, or interactions
+
+---
+## Why Multiple Predictors?
+
+&lt;img src="mlr_files/figure-html/unnamed-chunk-3-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Models with Multiple Predictors
+.large[
+1. What is multiple regression?  
+  
+2. .red[Fitting multiple regression to data] 
+  
+3. Multicollinearity 
+  
+4. Inference with fit models
+
+]
+
+---
+background-image: url("images/23/fires.jpg")
+class: center, inverse
+background-size: cover
+
+
+.bottom[ .left[ .small[ Five year study of wildfires &amp; recovery in Southern California shurblands in 1993. 90 plots (20 x 50m)  
+
+(data from Jon Keeley et al.)
+]]]
+
+
+---
+## What causes species richness?
+
+- Distance from fire patch 
+- Elevation
+- Abiotic index
+- Patch age
+- Patch heterogeneity
+- Severity of last fire
+- Plant cover
+
+---
+## Many Things may Influence Species Richness
+
+&lt;img src="mlr_files/figure-html/keeley_pairs-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Our Model
+
+`$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$`
+--
+
+
+```r
+klm &lt;- lm(rich ~ cover + firesev + hetero, data=keeley)
+```
+
+---
+
+## Testing Assumptions
+
+
+- Data Generating Process: Linearity 
+
+--
+
+- Error Generating Process: Normality &amp; homoscedasticity of residuals  
+
+--
+
+- Data: Outliers not influencing residuals  
+
+--
+
+- Predictors: **Minimal multicollinearity**
+
+---
+## Did We Match our Data?
+
+&lt;img src="mlr_files/figure-html/unnamed-chunk-4-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## How About That Linearity?
+
+&lt;img src="mlr_files/figure-html/unnamed-chunk-5-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## OK, Normality of Residuals?
+&lt;img src="mlr_files/figure-html/unnamed-chunk-6-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## OK, Normality of qResiduals?
+&lt;img src="mlr_files/figure-html/unnamed-chunk-7-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## No Heteroskedasticity?
+&lt;img src="mlr_files/figure-html/unnamed-chunk-8-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Outliers?
+&lt;img src="mlr_files/figure-html/unnamed-chunk-9-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, middle
+## 
+![](./images/23/gosling_multicollinearity.jpg)
+
+---
+## Models with Multiple Predictors
+.large[
+1. What is multiple regression?  
+  
+2. Fitting multiple regression to data. 
+  
+3. .red[Multicollinearity] 
+  
+4. Inference with fit models
+
+]
+
+---
+## Why Worry about Multicollinearity?
+
+- Adding more predictors decreases precision of estimates  
+
+--
+
+- If predictors are too collinear, can lead to difficulty fitting model  
+
+--
+
+- If predictors are too collinear, can inflate SE of estimates further  
+
+--
+
+- If predictors are too collinear, are we *really* getting **unique information**
+
+---
+
+## Checking for Multicollinearity: Correlation Matrices
+
+
+```
+             cover     firesev      hetero
+cover    1.0000000 -0.43713460 -0.16837784
+firesev -0.4371346  1.00000000 -0.05235518
+hetero  -0.1683778 -0.05235518  1.00000000
+```
+
+Correlations over 0.4 can
+be problematic, but, meh, they may be OK even as high as 0.8. 
+
+---
+## Checking for Multicollinearity: Variance Inflation Factor
+
+- Consider `\(y = \beta_{0} + \beta_{1}x_{1}  + \beta_{2}x_{2} + \epsilon\)`  
+
+--
+
+- And `\(X_{1} = \alpha_{0} + \alpha_{2}x_{2} + \epsilon_j\)` with the variance explained as `\(R^{2}_1\)`  
+
+--
+
+- `\(var(\beta_{1}) = \frac{\sigma^2}{(n-1)\sigma^2_{X_1}}\frac{1}{1-R^{2}_1}\)`
+
+--
+
+`$$VIF = \frac{1}{1-R^2_{1}}$$`
+
+---
+## Checking for Multicollinearity: Variance Inflation Factor
+`$$VIF_1 = \frac{1}{1-R^2_{1}}$$` 
+
+
+&lt;img src="mlr_files/figure-html/klm_vif-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+VIF `\(&gt;\)` 5 or 10 can be problematic and indicate an unstable solution.
+
+---
+## What Do We Do with High Collinearity?
+
+- Cry.  
+
+--
+
+- Evaluate **why**  
+
+--
+
+
+- Can drop a predictor if information is redundant  
+
+--
+
+- Can combine predictors into an index  
+
+      - Add them? Or other combination.  
+
+      - PCA for orthogonal axes  
+
+      - Factor analysis to compress into one variable
+
+---
+## Models with Multiple Predictors
+.large[
+1. What is multiple regression?  
+  
+2. Fitting multiple regression to data. 
+  
+3. Multicollinearity. 
+  
+4. .red[Inference with fit models]
+
+]
+
+---
+## What does it all mean: the coefficients
+`$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$`
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.68 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.67 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cover &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.56 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.49 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; firesev &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.82 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.85 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; hetero &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.17 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- `\(\beta_0\)` - the intercept -  is the # of species when **all other predictors are 0**  
+    - Note the very large SE  
+    
+--
+
+- All other `\(\beta\)`s are the effect of a 1 unit increase on # of species  
+     - They are **not** on the same scale
+     - They are each in the scale of species per unit of individual x
+
+---
+## How Much Variation is Associated with the Predictors
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj.r.squared &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.41 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- 41% of the variation in # of species is associated with the predictors  
+
+--
+
+- Note that this is **all model**, not individual predictors 
+
+--
+- `\(R_{adj}^2 = 1 - \frac{(1-R^2)(n-1)} {n-k-1}\)`
+     - Scales fit by model complexity
+     - If we add more terms, but don't increase `\(R^2\)`, it can go down
+
+---
+## Comparing Coefficients on the Same Scale
+
+`$$r_{xy} = b_{xy}\frac{sd_{x}}{sd_{y}}$$` 
+
+
+```
+# Standardization method: basic
+
+Parameter   | Std. Coef. |         95% CI
+-----------------------------------------
+(Intercept) |       0.00 | [ 0.00,  0.00]
+cover       |       0.33 | [ 0.14,  0.51]
+firesev     |      -0.20 | [-0.38, -0.01]
+hetero      |       0.50 | [ 0.33,  0.67]
+```
+
+---
+
+- For linear model, makes intuitive sense to compare strength of association  
+
+
+- Note, this is Pearson's correlation, so, it's in units of `\(sd_y/sd_x\)`
+
+---
+## So, Uh, How Do We Visualize This?
+
+&lt;img src="mlr_files/figure-html/klm_see_effects-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Visualization Strategies for Multivariate Models
+
+  
+  
+
+- Plot the effect of each variable holding the other variables constant  
+     - Mean, Median, 0
+     - Or your choice!  
+
+    
+- Plot **counterfactual scenarios** from model
+     - Can match data (and be shown as such)
+     - Can bexplore the response surface
+
+
+---
+## Added Variable Plot to Show Unique Contributions when Holding Others at 0
+&lt;img src="mlr_files/figure-html/klm_avplot-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Plots at Median of Other Variables
+
+&lt;img src="mlr_files/figure-html/klm_visreg-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Counterfactual Predictions Overlaid on Data
+
+&lt;img src="mlr_files/figure-html/crazy-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Counterfactual Surfaces at Means of Other Variables
+&lt;img src="mlr_files/figure-html/unnamed-chunk-11-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+class:center, middle
+
+![](images/23/matrix_regression.jpg)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

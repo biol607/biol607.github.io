@@ -1,0 +1,849 @@
+---
+title: "Multiple Linear Regression"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, shinobi, default-fonts, style.css]
+    nature:
+      beforeInit: "my_macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+class: center, middle
+
+```{r prep, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+opts_chunk$set(fig.height=6, fig.width = 8, comment=NA, fig.align = "center",
+               warning=FALSE, message=FALSE, 
+               dev="jpeg", echo=FALSE)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(ggplot2)
+library(car)
+library(visreg)
+library(emmeans)
+library(performance)
+
+
+library(dagitty)
+library(ggdag)
+library(eulerr)
+
+theme_set(theme_bw(base_size = 16))
+
+```
+![](images/23/wonka_mult_regression.jpg)
+## Multiple Predictor Variables in Linear Models
+
+---
+## Models with Multiple Predictors
+.large[
+1. What is multiple regression?  
+  
+2. Fitting multiple regression to data. 
+  
+3. Multicollinearity. 
+  
+4. Inference with fit models
+
+]
+
+---
+
+## Our Model for Simple Linear Regression
+
+$$\Large{y_i = \beta_0 + \beta_1  x_i + \epsilon_i}$$
+$$\Large{\epsilon_i \sim N(0, \sigma)}$$
+
+
+--
+
+This corresponds to
+
+```{r, fig.height = 3.5, fig.width = 6, fig.align="center"}
+slr_dag <- dagify(y ~ x + e,
+  exposure = "x",
+  outcome = "y",
+  latent = "e",
+  coords = list(x = c(x = 0, y = 1, e = 2),
+                y = c(x = 0, y = 0, e = 0.5))
+)
+
+
+tidy_dagitty(slr_dag) |>
+  mutate(latent = c(TRUE, FALSE, FALSE)) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(shape = latent), size = 21) +
+  geom_dag_edges(edge_width = 1.5) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  scale_shape_manual(values = c(22, 21), guide = "none") +
+  theme_void(base_size = 16)
+
+```
+
+---
+## But what if...
+
+```{r mlr_dag, fig.height = 3.7, fig.width = 6, fig.align="center"}
+mlr_dag <- dagify(y ~ x1 + x2 + e,
+  coords = list(x = c(x1 = 0, x2 = 0, y = 1, e = 2),
+                y = c(x1 = -0.3, x2 = 0.3, y = 0, e = 0.5))
+)
+
+
+tidy_dagitty(mlr_dag) |>
+  mutate(latent = c(TRUE, FALSE, FALSE, FALSE)) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(shape = latent), size = 21) +
+  geom_dag_edges(edge_width = 1.5) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  scale_shape_manual(values = c(22, 21), guide = "none") +
+  theme_void(base_size = 16)
+```
+
+--
+
+
+.large[
+$$y_i = \beta_0 + \beta_1  x_{1i }+ \beta_2  x_{2i} + \epsilon_i$$
+$$\epsilon_i \sim N(0, \sigma)$$
+]
+
+---
+## A Small Problem: We don't know how X's relate to one another
+
+```{r, fig.height = 6.5, fig.width = 9}
+mlr_dag_x1 <- dagify(y ~ x1 + x2 + e,
+                     x2 ~ x1,
+  coords = list(x = c(x1 = 0, x2 = 0, y = 1, e = 2),
+                y = c(x1 = -0.3, x2 = 0.3, y = 0, e = 0.5))
+)
+
+mlr_dag_x2 <- dagify(y ~ x1 + x2 + e,
+                     x1 ~ x2,
+  coords = list(x = c(x1 = 0, x2 = 0, y = 1, e = 2),
+                y = c(x1 = -0.3, x2 = 0.3, y = 0, e = 0.5))
+)
+
+mlr_dag_x3 <- dagify(y ~ x1 + x2 + e,
+                     x1 ~ x3,
+                     x2 ~ x3,
+  coords = list(x = c(x1 = 0, x2 = 0, y = 1, e = 2, x3 = -1),
+                y = c(x1 = -0.3, x2 = 0.3, y = 0, e = 0.5, x3 = 0))
+)
+
+mlr_x1 <- tidy_dagitty(mlr_dag_x1) |>
+  mutate(latent = c(TRUE, FALSE, FALSE, FALSE, FALSE)) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(shape = latent), size = 18) +
+  geom_dag_edges(edge_width = 1.5) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  scale_shape_manual(values = c(22, 21), guide = "none") +
+  theme_void(base_size = 16)
+
+mlr_x2 <- tidy_dagitty(mlr_dag_x2) |>
+  mutate(latent = c(TRUE, FALSE, FALSE, FALSE, FALSE)) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(shape = latent), size = 18) +
+  geom_dag_edges(edge_width = 1.5) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  scale_shape_manual(values = c(22, 21), guide = "none") +
+  theme_void(base_size = 16)
+
+mlr_x3 <- tidy_dagitty(mlr_dag_x3) |>
+  mutate(latent = c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE)) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(shape = latent), size = 18) +
+  geom_dag_edges(edge_width = 1.5) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  scale_shape_manual(values = c(22, 21), guide = "none") +
+  theme_void(base_size = 16)
+
+library(patchwork)
+
+design <- "AB
+           CC"
+
+mlr_x1 + mlr_x2 + mlr_x3 +
+  plot_layout(design = design) & 
+  theme(panel.border = element_rect(colour = "black", fill=NA))
+
+```
+
+---
+## Assumption of Exogeneity and Low Collinearity
+
+```{r mlr_dag_cov, fig.height = 4, fig.width = 6, fig.align="center"}
+mlr_dag_cov <- dagify(y ~ x1 + x2 + e,
+                  x1 ~~ x2,
+  coords = list(x = c(x1 = 0, x2 = 0, y = 1, e = 2),
+                y = c(x1 = -0.3, x2 = 0.3, y = 0, e = 0.5))
+)
+
+
+tidy_dagitty(mlr_dag_cov) |>
+  mutate(latent = c(TRUE, FALSE, FALSE, FALSE, FALSE)) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(aes(shape = latent), size = 21) +
+  geom_dag_edges(edge_width = 1.5, curvature = 0.8) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  scale_shape_manual(values = c(22, 21), guide = "none") +
+  theme_void(base_size = 16)
+```
+
+--
+
+- **Exogeneity**: Xs are not correlated with e. 
+  
+- **Low collinearity** $\mid r_{x_1x_2} \mid$ less that ~ 0.7 or 0.8 
+
+---
+## The Mechanics: Correlation and Partial Correlation
+
+We can always calculate correlations. 
+
+$$r_{xy} = \frac{\sigma{xy}}{\sigma_x \sigma_y}$$
+
+--
+
+Now we can look at a correlation matrix
+
+$$\rho_{X_i, Y} = 
+  \begin{matrix} 
+        & Y & X_1 & X_2 \\
+      Y & 1 & 0.2 & 0.5 \\
+      X_1 &  & 1 & -0.3 \\
+      X_2 &  &  & 1 \\
+  \end{matrix}$$
+
+--
+
+From this, we can calculate partial correlations
+
+---
+## Partial Correlations
+
+Answers, what is the correlation between $X_i$ and Y if we remove the portion of $X_1$ correlated with $X_2$
+
+--
+
+$$\Large{
+r_{yx_1, x_2} = \frac{r_{yx_1} - r_{yx_2}r_{x_1x_2}}{\sqrt{(1-r^2_{x_1x_2})(1-r^2_{yx_2})}}
+}$$
+
+--
+
+- Subtract out the correlation of $X_2$ on $Y$ controlling for the correlation between $X_1$ and $X_2$
+
+--
+
+- Scale by variability left over after accounting for the same
+
+--
+
+$$\Large{
+\beta_{yx_1, x_2} = \rho_{yx_1, x_2} \frac{\sigma_{x_1}}{\sigma_y}
+}$$
+
+
+---
+## Sums of Squares and Partioning
+
+
+$$SS_{total} = SS_{model} + SS_{error}$$
+
+--
+
+$$\sum{(Y_i - \bar{Y})^2} = \sum{(\hat{Y_i} - \bar{Y})^2} + \sum{(Y_i -\hat{Y_i})^2} $$
+
+
+--
+
+We are trying to minimize $SS_{error}$ and partition $SS_{model}$ between $X_1$ and $X_2$
+
+
+---
+## Paritioning Variation
+```{r venn_mlr}
+fit <- euler(c("X1" = 4, "X2" = 4, "Y" = 4, 
+               "X1&X2" = 1, "X1&Y" = 2, "X2&Y" = 2, 
+               "X1&X2&Y" = 0.5),
+             shape = "circle")
+plot(fit, labels = list(cex = 3))
+```
+
+
+.center[Each area is a sums of squares (i.e., amount of variability)]
+
+
+---
+## Paritioning Variation
+```{r venn_mlr_x_y}
+plot(fit, 
+     fills = c(rep("white", 5), rep("#FF4136", 2)),
+      labels = list(cex = 3))
+```
+
+.center[The variation in X<sub>2</sub> associated with Y]
+
+
+---
+## You can see how collinearity would be a problem
+```{r venn_mlr_coll}
+
+
+coll <- euler(c("X1" = 4, "X2" = 4, "Y" = 4, 
+               "X1&X2" = 8, "X1&Y" = 0.1, "X2&Y" = 0.1, 
+               "X1&X2&Y" = 8),
+             shape = "circle")
+
+plot(coll, 
+     fills = c("white", "white", "white", "red","white", "white", "red"),
+     labels = list(cex = 3))
+```
+
+.center[
+How can we partition this? What is unique?
+]
+
+---
+## Generalizing 2 Predictors to N Predictors
+
+How do we represent our models that go beyond 2 predictors...
+
+
+$$y_i = \beta_0 + \beta_1  x_{1i }+ \beta_2  x_{2i} + \epsilon_i$$
+$$\epsilon_i \sim N(0, \sigma)$$
+
+
+--
+
+### With n predictors
+
+
+$$y_i = \beta_0 + \sum_{j = 1}^{K} \beta_1  x_{ij} + \epsilon_i$$
+$$\epsilon_i \sim N(0, \sigma)$$
+
+
+
+
+---
+
+## Translating to Matrices: The General Linear Model
+
+For a simple linear regression:
+$$\begin{bmatrix}y_1 \\ y_2 \\ y_3 \\ y_4 \\ y_5 \\ y_6 \\ y_7 \end{bmatrix}
+= 
+\begin{bmatrix}1 & x_1  \\1 & x_2  \\1 & x_3  \\1 & x_4  \\1 & x_5  \\1 & x_6 \\ 1 & x_7  \end{bmatrix}
+\begin{bmatrix} \beta_0 \\ \beta_1  \end{bmatrix}
++
+\begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\
+\varepsilon_4 \\ \varepsilon_5 \\ \varepsilon_6 \\ \varepsilon_7 \end{bmatrix}$$
+
+---
+
+## Multiple Regression in Matrix Form
+
+$$
+\begin{equation*}
+\begin{bmatrix}Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{bmatrix}  = 
+\begin{bmatrix}1 & X_{11} & X_{12} & \cdots & X_{1,p-1} \\ 
+  1 & X_{21} & X_{22} & \cdots & X_{2,p-1} \\
+  \vdots & \vdots & \vdots & & \vdots \\ 
+  1 & X_{n1} & X_{n2} & \cdots & X_{n,p-1} \end{bmatrix}  \times 
+\begin{bmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_{p-1} \end{bmatrix}  + 
+\begin{bmatrix} \epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{bmatrix}
+\end{equation*}
+$$
+--
+<br><br><br>
+
+$$\widehat {\textbf{Y} } = \textbf{X}\beta$$
+$$\textbf{Y} \sim \mathcal{N}(\widehat {\textbf{Y} }, \Sigma)$$
+---
+## The Expansiveness of the General Linear Model
+.Large[
+$$\widehat {\textbf{Y} } = \textbf{X}\beta$$
+$$\textbf{Y} \sim \mathcal{N}(\widehat {\textbf{Y} }, \Sigma)$$
+]
+
+
+-   This equation is huge. X can be anything - categorical,
+    continuous, squared, sine, etc.
+
+-   There can be straight additivity, or interactions
+
+---
+## Why Multiple Predictors?
+
+```{r, fig.height = 8, fig.width = 9}
+
+med_dag <- dagify(y ~ x1 + x2,
+                  x2 ~ x1,
+  coords = list(x = c(x1 = 0, x2 = 0, y = 1),
+                y = c(x1 = -0.3, x2 = 0.3, y = 0))
+)
+
+
+med <- tidy_dagitty(med_dag) |>
+  mutate(label = c("+", "+", "+", "+")) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend,
+    label = label
+  )) +
+  geom_dag_point(shape = 22, size = 21) +
+  geom_dag_edges_link(edge_width = 1.5, 
+                      angle_calc = "across", 
+                      label_push = unit(0.05, "npc"),
+                      label_size = 10) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  theme_void(base_size = 16) +
+  ggtitle("Mediation of X1 Via X2")
+
+
+sup <- tidy_dagitty(med_dag) |>
+  mutate(label = c("+", "+", "-", "+")) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend,
+    label = label
+  )) +
+  geom_dag_point(shape = 22, size = 21) +
+  geom_dag_edges_link(edge_width = 1.5, 
+                      angle_calc = "across", 
+                      label_push = unit(0.05, "npc"),
+                      label_size = 10) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  theme_void(base_size = 16) +
+  ggtitle("Supression of X1 By X2")
+
+
+
+conf_dag <- dagify(y ~  x2,
+                  x1 ~ x2,
+  coords = list(x = c(x1 = 0, x2 = 0, y = 1),
+                y = c(x1 = -0.3, x2 = 0.3, y = 0))
+)
+
+
+conf <- tidy_dagitty(conf_dag) |>
+#  mutate(label = c("-", "+", "+", "+")) |>
+  ggplot(aes(
+    x = x,
+    y = y,
+    xend = xend,
+    yend = yend
+  )) +
+  geom_dag_point(shape = 22, size = 21) +
+  geom_dag_edges_link(edge_width = 1.5) +
+  geom_dag_text(color = "black", size = 10, nudge_y = 0.005) + 
+  theme_void(base_size = 16) +
+  ggtitle("Confounding of X1")
+
+
+design <- "AB
+           CC"
+
+med + sup + conf +
+  plot_layout(design = design) & 
+  theme(panel.border = element_rect(colour = "black", fill=NA))
+```
+
+---
+## Models with Multiple Predictors
+.large[
+1. What is multiple regression?  
+  
+2. .red[Fitting multiple regression to data] 
+  
+3. Multicollinearity 
+  
+4. Inference with fit models
+
+]
+
+---
+background-image: url("images/23/fires.jpg")
+class: center, inverse
+background-size: cover
+
+
+.bottom[ .left[ .small[ Five year study of wildfires & recovery in Southern California shurblands in 1993. 90 plots (20 x 50m)  
+
+(data from Jon Keeley et al.)
+]]]
+
+
+---
+## What causes species richness?
+
+- Distance from fire patch 
+- Elevation
+- Abiotic index
+- Patch age
+- Patch heterogeneity
+- Severity of last fire
+- Plant cover
+
+---
+## Many Things may Influence Species Richness
+
+```{r keeley_pairs}
+keeley <- read.csv("lectures/data/23/Keeley_rawdata_select4.csv")
+GGally::ggpairs(keeley)
+```
+
+---
+## Our Model
+
+$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$
+--
+
+```{r mlr, echo=TRUE}
+
+klm <- lm(rich ~ cover + firesev + hetero, data=keeley)
+```
+
+---
+
+## Testing Assumptions
+
+
+- Data Generating Process: Linearity 
+
+--
+
+- Error Generating Process: Normality & homoscedasticity of residuals  
+
+--
+
+- Data: Outliers not influencing residuals  
+
+--
+
+- Predictors: **Minimal multicollinearity**
+
+---
+## Did We Match our Data?
+
+```{r}
+check_predictions(klm)
+```
+
+---
+## How About That Linearity?
+
+```{r}
+check_model(klm, check = "linearity") |> plot()
+```
+
+---
+## OK, Normality of Residuals?
+```{r}
+check_normality(klm) |> plot()
+```
+
+---
+## OK, Normality of qResiduals?
+```{r}
+check_normality(klm) |> plot("qq")
+```
+
+---
+## No Heteroskedasticity?
+```{r}
+check_heteroscedasticity(klm) |> plot()
+```
+
+---
+## Outliers?
+```{r}
+check_outliers(klm) |> plot()
+```
+
+---
+class: center, middle
+## 
+![](./images/23/gosling_multicollinearity.jpg)
+
+---
+## Models with Multiple Predictors
+.large[
+1. What is multiple regression?  
+  
+2. Fitting multiple regression to data. 
+  
+3. .red[Multicollinearity] 
+  
+4. Inference with fit models
+
+]
+
+---
+## Why Worry about Multicollinearity?
+
+- Adding more predictors decreases precision of estimates  
+
+--
+
+- If predictors are too collinear, can lead to difficulty fitting model  
+
+--
+
+- If predictors are too collinear, can inflate SE of estimates further  
+
+--
+
+- If predictors are too collinear, are we *really* getting **unique information**
+
+---
+
+## Checking for Multicollinearity: Correlation Matrices
+
+```{r klm_cor, size="normalsize"}
+with(keeley, cor(cbind(cover, firesev, hetero)))
+``` 
+
+Correlations over 0.4 can
+be problematic, but, meh, they may be OK even as high as 0.8. 
+
+---
+## Checking for Multicollinearity: Variance Inflation Factor
+
+- Consider $y = \beta_{0} + \beta_{1}x_{1}  + \beta_{2}x_{2} + \epsilon$  
+
+--
+
+- And $X_{1} = \alpha_{0} + \alpha_{2}x_{2} + \epsilon_j$ with the variance explained as $R^{2}_1$  
+
+--
+
+- $var(\beta_{1}) = \frac{\sigma^2}{(n-1)\sigma^2_{X_1}}\frac{1}{1-R^{2}_1}$
+
+--
+
+$$VIF = \frac{1}{1-R^2_{1}}$$
+
+---
+## Checking for Multicollinearity: Variance Inflation Factor
+$$VIF_1 = \frac{1}{1-R^2_{1}}$$ 
+
+
+```{r klm_vif, fig.height = 4}
+check_collinearity(klm) |> plot()
+``` 
+
+VIF $>$ 5 or 10 can be problematic and indicate an unstable solution.
+
+---
+## What Do We Do with High Collinearity?
+
+- Cry.  
+
+--
+
+- Evaluate **why**  
+
+--
+
+
+- Can drop a predictor if information is redundant  
+
+--
+
+- Can combine predictors into an index  
+
+      - Add them? Or other combination.  
+
+      - PCA for orthogonal axes  
+
+      - Factor analysis to compress into one variable
+
+---
+## Models with Multiple Predictors
+.large[
+1. What is multiple regression?  
+  
+2. Fitting multiple regression to data. 
+  
+3. Multicollinearity. 
+  
+4. .red[Inference with fit models]
+
+]
+
+---
+## What does it all mean: the coefficients
+$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$
+
+```{r keeley_coe}
+tidy(klm) |>
+  dplyr::select(1:3) |>
+  knitr::kable(digits = 2) |>
+  kableExtra::kable_styling()
+``` 
+
+- $\beta_0$ - the intercept -  is the # of species when **all other predictors are 0**  
+    - Note the very large SE  
+    
+--
+
+- All other $\beta$s are the effect of a 1 unit increase on # of species  
+     - They are **not** on the same scale
+     - They are each in the scale of species per unit of individual x
+
+---
+## How Much Variation is Associated with the Predictors
+```{r}
+glance(klm) |>
+  dplyr::select(1:2)  |>
+  knitr::kable(digits = 2) |>
+  kableExtra::kable_styling()
+  
+```
+
+- 41% of the variation in # of species is associated with the predictors  
+
+--
+
+- Note that this is **all model**, not individual predictors 
+
+--
+- $R_{adj}^2 = 1 - \frac{(1-R^2)(n-1)} {n-k-1}$
+     - Scales fit by model complexity
+     - If we add more terms, but don't increase $R^2$, it can go down
+
+---
+## Comparing Coefficients on the Same Scale
+
+$$r_{xy} = b_{xy}\frac{sd_{x}}{sd_{y}}$$ 
+
+```{r keeley_std}
+library(effectsize) 
+effectsize(klm, method = "basic")
+```
+
+---
+
+- For linear model, makes intuitive sense to compare strength of association  
+
+
+- Note, this is Pearson's correlation, so, it's in units of $sd_y/sd_x$
+
+---
+## So, Uh, How Do We Visualize This?
+
+```{r klm_see_effects}
+
+qplot(cover, rich, data=keeley, colour=firesev, size=firesev) +
+  theme_bw(base_size=14) + 
+  scale_color_gradient(low="yellow", high="purple") +
+  scale_size_continuous(range=c(1,10))
+```
+
+
+---
+## Visualization Strategies for Multivariate Models
+
+  
+  
+
+- Plot the effect of each variable holding the other variables constant  
+     - Mean, Median, 0
+     - Or your choice!  
+
+    
+- Plot **counterfactual scenarios** from model
+     - Can match data (and be shown as such)
+     - Can bexplore the response surface
+
+
+---
+## Added Variable Plot to Show Unique Contributions when Holding Others at 0
+```{r klm_avplot}
+avPlots(klm)
+```
+
+---
+## Plots at Median of Other Variables
+
+```{r klm_visreg, fig.height=6, fig.width = 10}
+library(patchwork)
+klm_vr <- visreg::visreg(klm, cex.lab=1.3,  gg = TRUE)
+
+klm_vr[[1]] + 
+klm_vr[[2]] +
+klm_vr[[3]]
+``` 
+
+---
+## Counterfactual Predictions Overlaid on Data
+
+```{r crazy}
+pred_info <- crossing(cover = seq(0,1.5, length.out=100),
+                      firesev=c(2,5,8)) %>%
+  crossing(hetero=c(0.5, 0.8)) %>%
+  modelr::add_predictions(klm, var="rich") %>%
+  dplyr::mutate(hetero_split = hetero)
+
+het_labeller <- as_labeller(c(`0.5` = "hetero: 0.5", `0.8` = "hetero: 0.8"))
+
+
+ggplot(pred_info, mapping=aes(x=cover, y=rich)) +
+  geom_line(lwd=1.5, mapping=aes(color=factor(firesev), group=paste(firesev, hetero))) +
+    facet_wrap(vars(hetero_split), labeller = het_labeller) +
+  geom_point(data=keeley %>% 
+               dplyr::mutate(hetero_split = ifelse(hetero<mean(hetero), 0.5, 0.8))) +
+  theme_bw(base_size=14) +
+  labs(color = "firesev")
+```
+
+---
+## Counterfactual Surfaces at Means of Other Variables
+```{r}
+visreg::visreg2d(klm, "cover", "firesev")
+```
+
+---
+class:center, middle
+
+![](images/23/matrix_regression.jpg)
