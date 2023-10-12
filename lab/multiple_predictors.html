@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Biol 607">
+
+<title>Multiple Predictors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="multiple_predictors_files/libs/clipboard/clipboard.min.js"></script>
+<script src="multiple_predictors_files/libs/quarto-html/quarto.js"></script>
+<script src="multiple_predictors_files/libs/quarto-html/popper.min.js"></script>
+<script src="multiple_predictors_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="multiple_predictors_files/libs/quarto-html/anchor.min.js"></script>
+<link href="multiple_predictors_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="multiple_predictors_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="multiple_predictors_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="multiple_predictors_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="multiple_predictors_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="3">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#multiple-linear-regression" id="toc-multiple-linear-regression" class="nav-link active" data-scroll-target="#multiple-linear-regression">1. Multiple Linear Regression</a>
+  <ul class="collapse">
+  <li><a href="#visualizing" id="toc-visualizing" class="nav-link" data-scroll-target="#visualizing">1.1 Visualizing</a></li>
+  <li><a href="#fit-and-evaluate-assumptions" id="toc-fit-and-evaluate-assumptions" class="nav-link" data-scroll-target="#fit-and-evaluate-assumptions">1.2 Fit and Evaluate Assumptions</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">1.3 Evaluation</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">1.4 Visualization</a></li>
+  <li><a href="#counterfactual-plots-and-advanced-visualization" id="toc-counterfactual-plots-and-advanced-visualization" class="nav-link" data-scroll-target="#counterfactual-plots-and-advanced-visualization">1.5 Counterfactual Plots and Advanced Visualization</a></li>
+  <li><a href="#faded-examples" id="toc-faded-examples" class="nav-link" data-scroll-target="#faded-examples">1.6 Faded Examples</a></li>
+  </ul></li>
+  <li><a href="#categorical-predictors" id="toc-categorical-predictors" class="nav-link" data-scroll-target="#categorical-predictors">2. Categorical Predictors</a>
+  <ul class="collapse">
+  <li><a href="#lm-and-many-categories" id="toc-lm-and-many-categories" class="nav-link" data-scroll-target="#lm-and-many-categories">2.1 LM and Many Categories</a></li>
+  <li><a href="#assumption-evaluation" id="toc-assumption-evaluation" class="nav-link" data-scroll-target="#assumption-evaluation">2.2 Assumption Evaluation</a></li>
+  <li><a href="#evaluating-model-results" id="toc-evaluating-model-results" class="nav-link" data-scroll-target="#evaluating-model-results">2.3 Evaluating Model Results</a></li>
+  <li><a href="#faded-examples-1" id="toc-faded-examples-1" class="nav-link" data-scroll-target="#faded-examples-1">2.4 Faded Examples</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Multiple Predictors</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Biol 607 </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="multiple-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-linear-regression">1. Multiple Linear Regression</h2>
+<p>Multiple linear regression is conceptually very similar to simple linear regression, but we need to be mindful of parsing apart the contribution of each predictor. Let’s use the keeley fire severity plant richness data to see it in action.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(piecewiseSEM)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(keeley)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(keeley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  distance elev  abiotic age   hetero firesev     cover rich
+1 53.40900 1225 60.67103  40 0.757065    3.50 1.0387974   51
+2 37.03745   60 40.94291  25 0.491340    4.05 0.4775924   31
+3 53.69565  200 50.98805  15 0.844485    2.60 0.9489357   71
+4 53.69565  200 61.15633  15 0.690847    2.90 1.1949002   64
+5 51.95985  970 46.66807  23 0.545628    4.30 1.2981890   68
+6 51.95985  970 39.82357  24 0.652895    4.00 1.1734866   34</code></pre>
+</div>
+</div>
+<p>For our purposes, we’ll focus on fire severity and plant cover as predictors.</p>
+<section id="visualizing" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing">1.1 Visualizing</h3>
+<p>I’m not going to lie, visualizing multiple continuous variables is as much of an art as a science. One can use colors and sizes of points, or slice up the data into chunks and facet that. Here are a few examples.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> keeley,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cover, <span class="at">y =</span> rich, <span class="at">color=</span>firesev)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low=</span><span class="st">"yellow"</span>, <span class="at">high=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(<span class="fu">cut_number</span>(firesev, <span class="dv">4</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/plot_keeley-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also look at everything!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(keeley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/plot_pairs-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>I’m a bigger fan of a more information rich display. The <a href="https://ggobi.github.io/ggally/">GGally</a> package has a lot of neat extensions to ggplot2, including the <code>ggpairs()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(keeley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/ggpairs-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>What other plots can you make?</p>
+</section>
+<section id="fit-and-evaluate-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="fit-and-evaluate-assumptions">1.2 Fit and Evaluate Assumptions</h3>
+<p>Fitting is straightforward for an additive MLR model. It’s just a linear model!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>keeley_mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(rich <span class="sc">~</span> firesev <span class="sc">+</span> cover, <span class="at">data=</span>keeley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As for assumptions, we have the usual</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(keeley_mlr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/k_assume-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>But now we also need to think about how the residuals relate to each predictor. Fortunately, there’s still <code>residualPlots()</code> in <code>car</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">residualPlots</span>(keeley_mlr, <span class="at">test=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/k_resid-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Odd bow shape - but not too bad. Maybe there’s an interaction? Maybe we want to log transform something? Who knows!</p>
+<p>We also want to look at multicollinearity. There are two steps for that. First, the <code>vif</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_collinearity</span>(keeley_mlr) <span class="sc">|&gt;</span> <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/vif-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Not bad. We might also want to look at the correlation matrix. <code>dplyr</code> can help us here as we want to select down to just relevant columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>keeley <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(firesev, cover) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           firesev      cover
+firesev  1.0000000 -0.4371346
+cover   -0.4371346  1.0000000</code></pre>
+</div>
+</div>
+<p>Also, not too bad! Well within our range of tolerances.</p>
+</section>
+<section id="evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation">1.3 Evaluation</h3>
+<p>What about those coefficients?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(keeley_mlr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)    53.9      7.04       7.66 2.45e-11
+2 firesev        -2.53     0.993     -2.55 1.25e- 2
+3 cover           9.91     5.17       1.92 5.85e- 2</code></pre>
+</div>
+</div>
+<p>OK, but which one is more strongly associated with our response?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">standardize_parameters</span>(keeley_mlr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Standardization method: refit
+
+Parameter   | Std. Coef. |         95% CI
+-----------------------------------------
+(Intercept) |   2.66e-17 | [-0.19,  0.19]
+firesev     |      -0.28 | [-0.49, -0.06]
+cover       |       0.21 | [-0.01,  0.42]</code></pre>
+</div>
+</div>
+<p>Note, this uses <code>refit</code> as the default method, where it basically refits the entire model with z-transformed parameters. You can use <code>method = "basic"</code> for simple models as well. Refit is nice, though, for more complex models. Just make sure you know what R is doing!</p>
+<p>And then the R<sup>2</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(keeley_mlr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># R2 for Linear Regression
+       R2: 0.170
+  adj. R2: 0.151</code></pre>
+</div>
+</div>
+<p>Not amazing fit, but, the coefficients are clearly different from 0.</p>
+</section>
+<section id="visualization" class="level3">
+<h3 class="anchored" data-anchor-id="visualization">1.4 Visualization</h3>
+<p>This is where things get sticky. We have two main approaches. First, visualizing with component + residual plots</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">crPlots</span>(keeley_mlr, <span class="at">smooth=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/cr_k-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>But the values on the y axis are….odd. We get a sense of what’s going on and the scatter after accounting for our predictor of interest, but we might want to look at, say, evaluation of a variable at the mean of the other.</p>
+<p>For that, we have <code>visreg</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visreg)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">visreg</span>(keeley_mlr, <span class="at">gg =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/k_visreg-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+[[2]]</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/k_visreg-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Now the axes make far more sense, and we have a sense of the relationship.</p>
+</section>
+<section id="counterfactual-plots-and-advanced-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="counterfactual-plots-and-advanced-visualization">1.5 Counterfactual Plots and Advanced Visualization</h3>
+<p>We can actually whip this up on our own using the median of each value, and <code>broom::augment()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>k_med_firesev <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">firesev =</span> <span class="fu">median</span>(keeley<span class="sc">$</span>firesev),</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">cover =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="fl">1.5</span>, <span class="at">length.out =</span> <span class="dv">100</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>(keeley_mlr, <span class="at">newdata =</span> _, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">interval =</span> <span class="st">"confidence"</span>) </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>keeley, </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>cover, <span class="at">y =</span> rich)) <span class="sc">+</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> k_med_firesev, </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>cover, <span class="at">y=</span>.fitted), </span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">color=</span><span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> k_med_firesev, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>cover, </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>                                                  <span class="at">ymin =</span> .lower,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>                                                  <span class="at">ymax =</span> .upper),</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill=</span><span class="st">"lightgrey"</span>, <span class="at">alpha=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/k_pred-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Or, we can use <code>modelr</code> to explore the model and combine that exploration with the data. Let’s get the curve for cover at four levels of fire severity. We’ll use both <code>modelr::data_grid</code> and <code>broom::augment</code> for a nice easy workflow.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelr)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>k_firesev_explore <span class="ot">&lt;-</span> <span class="fu">data_grid</span>(keeley,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">cover =</span> <span class="fu">seq_range</span>(cover, <span class="dv">100</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">firesev =</span> <span class="fu">seq_range</span>(firesev, <span class="dv">4</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>(keeley_mlr, <span class="at">newdata =</span> _, <span class="at">interval =</span> <span class="st">"confidence"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">rich =</span> .fitted)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can then use this to visualize the predictions with different slices of the data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>keeley,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>cover, <span class="at">y =</span> rich, <span class="at">color =</span> firesev)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> k_firesev_explore, <span class="fu">aes</span>(<span class="at">group =</span> firesev)) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> k_firesev_explore, </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">group =</span> firesev, <span class="at">ymin =</span> .lower, <span class="at">ymax =</span> .upper),</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"lightgrey"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low=</span><span class="st">"yellow"</span>, <span class="at">high=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(<span class="fu">cut_interval</span>(firesev, <span class="dv">4</span>))) <span class="sc">+</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/plot_preds-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="faded-examples" class="level3">
+<h3 class="anchored" data-anchor-id="faded-examples">1.6 Faded Examples</h3>
+<p>Let’s go through some faded examples from data from the Data4Ecologists package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">"jfieberg/Data4Ecologists"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>First, here’s that keeley analysis again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(keeley)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a preliminary visualization </span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>keeley <span class="sc">|&gt;</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(cover, distance, hetero) <span class="sc">|&gt;</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  GGally<span class="sc">::</span><span class="fu">ggpairs</span>()</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a MLR model</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>cover_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(cover <span class="sc">~</span> distance <span class="sc">+</span> hetero, <span class="at">data =</span> keeley)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Test Assumptions and modify model if needed</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(cover_mod)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate results</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(cover_mod)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize results</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="fu">visreg</span>(cover_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(RIKZdat)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a preliminary visualization </span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>RIKZdat <span class="sc">|&gt;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Richness, NAP, humus) <span class="sc">|&gt;</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  GGally<span class="sc">::</span><span class="fu">_____</span>()</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a MLR model</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>rikz_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(Richness <span class="sc">~</span> NAP <span class="sc">+</span> humus, <span class="at">data =</span> RIKZdat)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Test Assumptions and modify model if needed</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="fu">_____</span>(rikz_mod)</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate results</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(_____)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize results</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="fu">_____</span>(rikz_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Kelp)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a preliminary visualization </span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>Kelp <span class="sc">|&gt;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  ____<span class="sc">::</span><span class="fu">_____</span>()</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a MLR model</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>kelp_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(Response <span class="sc">~</span> OD <span class="sc">+</span> BD <span class="sc">+</span> LTD <span class="sc">+</span> W, <span class="at">data =</span> Kelp)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Test Assumptions and modify model if needed</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="fu">_____</span>(______)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate results</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="fu">_____</span>(_____)</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize results</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="fu">_____</span>(kelp_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="categorical-predictors" class="level2">
+<h2 class="anchored" data-anchor-id="categorical-predictors">2. Categorical Predictors</h2>
+<p>Comparing means are among the most frequently used tests in data analysis. Traditionally, they were done as a T-test or ANOVA, but, really, these are just subsets of linear models. So, why not fit the appropriate linear model, and go from there! They’re delightfully simple, and provide a robust example of how to examine the entire workflow of a data analysis. These are steps you’ll take with any analysis you do in the future, no matter how complex the model!</p>
+<p>For two means, we want to fit a model where our categorical variable is translated into 0s and 1s. That corresponds to the following model:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1 x_i + \epsilon_i\]</span></p>
+<p>Here, <span class="math inline">\(\beta_0\)</span> corresponds to the mean for the group that is coded as 0 and <span class="math inline">\(\beta_1\)</span> is the difference between the two groups. If <span class="math inline">\(\beta_1\)</span> is different than 0, then the two groups are different, under a frequentist framework.</p>
+<p>For many categories, we just extend this framework for</p>
+<p><span class="math display">\[y_i = \beta_0 + \sum^K_{j = 1} \beta_j x_{ij} + \epsilon_i\]</span> where now we have a reference group and then we look at the deviation from that reference for each other level of the category.</p>
+<p>To see how this works with many categories, as comparing two means is just a simple subset of this analysis, let’s look at the dataset <code>15e1KneesWhoSayNight.csv</code> about an experiment to help resolve jetlag by having people shine lights at different parts of themselves to try and shift their internal clocks.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>knees <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"lab/data/10/15e1KneesWhoSayNight.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see the outcomes with <code>ggplot2</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(knees, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>treatment, <span class="at">y=</span>shift)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">color=</span><span class="st">"red"</span>, <span class="at">size=</span><span class="fl">1.3</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size=</span><span class="dv">17</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/knees_plot-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="lm-and-many-categories" class="level3">
+<h3 class="anchored" data-anchor-id="lm-and-many-categories">2.1 LM and Many Categories</h3>
+<p>As the underlying model of ANOVA is a linear one, we fit ANOVAs using <code>lm()</code> just as with linear regression.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>knees_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(shift <span class="sc">~</span> treatment, <span class="at">data=</span>knees)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that treatment is a either a character or factor. If it is not, because we are using <code>lm()</code>, it will be fit like a linear regression. So, beware!</p>
+<p>We can see how this was turned into dummy coding with <code>model.matrix()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.matrix</span>(knees_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   (Intercept) treatmenteyes treatmentknee
+1            1             0             0
+2            1             0             0
+3            1             0             0
+4            1             0             0
+5            1             0             0
+6            1             0             0
+7            1             0             0
+8            1             0             0
+9            1             0             1
+10           1             0             1
+11           1             0             1
+12           1             0             1
+13           1             0             1
+14           1             0             1
+15           1             0             1
+16           1             1             0
+17           1             1             0
+18           1             1             0
+19           1             1             0
+20           1             1             0
+21           1             1             0
+22           1             1             0
+attr(,"assign")
+[1] 0 1 1
+attr(,"contrasts")
+attr(,"contrasts")$treatment
+[1] "contr.treatment"</code></pre>
+</div>
+</div>
+<p>Note that now we have an intercept and two 0/1 variables!</p>
+</section>
+<section id="assumption-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="assumption-evaluation">2.2 Assumption Evaluation</h3>
+<p>Because this is an lm, we can check our assumptions as before - with one new one. First, some oldies but goodies.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(knees_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/assumptions-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Looks good! You can of course dig into individual plots and assumptions as above, bot, broadly, this seems good.</p>
+</section>
+<section id="evaluating-model-results" class="level3">
+<h3 class="anchored" data-anchor-id="evaluating-model-results">2.3 Evaluating Model Results</h3>
+<p>So, there are a lot of things we can do with a fit model</p>
+<section id="summary-output" class="level4">
+<h4 class="anchored" data-anchor-id="summary-output">2.3.1 Summary Output</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(knees_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = shift ~ treatment, data = knees)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.27857 -0.36125  0.03857  0.61147  1.06571 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)   -0.30875    0.24888  -1.241  0.22988   
+treatmenteyes -1.24268    0.36433  -3.411  0.00293 **
+treatmentknee -0.02696    0.36433  -0.074  0.94178   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7039 on 19 degrees of freedom
+Multiple R-squared:  0.4342,    Adjusted R-squared:  0.3746 
+F-statistic: 7.289 on 2 and 19 DF,  p-value: 0.004472</code></pre>
+</div>
+</div>
+<p>First, notice that we get the same information as a linear regression - including <span class="math inline">\(R^2\)</span> This is great, and we can see about 43% of the variation in the data is associated with the treatments. We also get coefficients, but, what do they mean?</p>
+<p>Well, they are the treatment contrasts. Not super useful. R fits a model where treatment 1 is the intercept, and then we look at deviations from that initial treatment as your other coefficients. It’s efficient, but, hard to make sense of. To not get an intercept term, you can refit the model without the intercept. You can fit a whole new model with <code>-1</code> in the model formulation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>knees_lm_no_int <span class="ot">&lt;-</span> <span class="fu">update</span>(knees_lm, <span class="at">formula =</span> . <span class="sc">~</span> . <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(knees_lm_no_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = shift ~ treatment - 1, data = knees)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.27857 -0.36125  0.03857  0.61147  1.06571 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+treatmentcontrol  -0.3087     0.2489  -1.241    0.230    
+treatmenteyes     -1.5514     0.2661  -5.831 1.29e-05 ***
+treatmentknee     -0.3357     0.2661  -1.262    0.222    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7039 on 19 degrees of freedom
+Multiple R-squared:  0.6615,    Adjusted R-squared:  0.6081 
+F-statistic: 12.38 on 3 and 19 DF,  p-value: 0.0001021</code></pre>
+</div>
+</div>
+<p>OK - that makes more sense. But, ugh, who wants to remember that. Instead, we can see treatment means using the <code>emmeans</code> package yet again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(knees_lm, <span class="sc">~</span>treatment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> treatment emmean    SE df lower.CL upper.CL
+ control   -0.309 0.249 19   -0.830    0.212
+ eyes      -1.551 0.266 19   -2.108   -0.995
+ knee      -0.336 0.266 19   -0.893    0.221
+
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+<p>I also like this because it outputs CIs.</p>
+</section>
+<section id="model-visualization" class="level4">
+<h4 class="anchored" data-anchor-id="model-visualization">2.3.2 Model Visualization</h4>
+<p>The plot from above really sums this work up.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(knees, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>treatment, <span class="at">y=</span>shift)) <span class="sc">+</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> <span class="st">"mean_se"</span>, <span class="at">color=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha=</span><span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/knees_plot_viz-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This is great! But I’d argue, there are some more fun and interesting ways to look at this. The <code>ggdist</code> package and <code>ggridges</code> can create some interesting visualizations with additional information.</p>
+<p>For example, from ggridges</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> knees,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> shift, <span class="at">y =</span> treatment)) <span class="sc">+</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_density_ridges</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This might be too vague - or it might be great in terms of seeing overlap. <code>ggdist</code> combined a few different elements. I’m a big fan of <code>geom_halfeye</code> as you get a density and mean and CI.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggdist)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> knees,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> treatment, <span class="at">x =</span> shift,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">fill =</span> treatment)) <span class="sc">+</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>These densities are more based on the data, and a lot of this provides a clearer cleaner visualization. There are a lot of other interesting elements of <code>ggdist</code> that are worth exploring</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> knees,</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> treatment, <span class="at">x =</span> shift,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">fill =</span> treatment)) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_dist_dotsinterval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>But, as an <strong>exercise</strong> why not visit the <a href="https://mjskay.github.io/ggdist/">ggdist webpage</a> and try and come up with the most interesting visualization of the knees project that you can!</p>
+</section>
+<section id="a-priori-planned-contrasts" class="level4">
+<h4 class="anchored" data-anchor-id="a-priori-planned-contrasts">2.3.2 A Priori Planned Contrasts</h4>
+<p>If you have a priori contrasts, you can use the <code>constrat</code> library to test them. You give contrast an a list and a b list. Then we get all comparisons of a v. b, in order. It’s not great syntactically, but, it lets you do some pretty creative things.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>contrast<span class="sc">::</span><span class="fu">contrast</span>(knees_lm, </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">a =</span> <span class="fu">list</span>(<span class="at">treatment =</span> <span class="st">"control"</span>), </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">b =</span> <span class="fu">list</span>(<span class="at">treatment =</span> <span class="st">"eyes"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lm model parameter contrast
+
+  Contrast      S.E.     Lower    Upper    t df Pr(&gt;|t|)
+1 1.242679 0.3643283 0.4801306 2.005227 3.41 19   0.0029</code></pre>
+</div>
+</div>
+</section>
+<section id="unplanned-pairwise-comparisons" class="level4">
+<h4 class="anchored" data-anchor-id="unplanned-pairwise-comparisons">2.3.3 Unplanned pairwise comparisons</h4>
+<p>Meh. 9 times out of 10 we want to do compare all possible levels of a categorical variable and look at which differences have cofidence intervals that contain 0. We can use our <code>emmeans</code> object here along with the <code>contrast()</code> function and <code>confint()</code>. Note, by default, confidence intervals will be adjusted using the Tukey method of adjustment.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>knees_em <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(knees_lm, <span class="at">specs =</span>  <span class="sc">~</span>treatment)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(knees_em,</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"pairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast       estimate    SE df lower.CL upper.CL
+ control - eyes    1.243 0.364 19    0.317    2.168
+ control - knee    0.027 0.364 19   -0.899    0.953
+ eyes - knee      -1.216 0.376 19   -2.172   -0.260
+
+Confidence level used: 0.95 
+Conf-level adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+</div>
+<p>We don’t need to worry about many of the fancier things that emmeans does for the moment - those will become more useful with other models. But, we can look at this test a few different ways. First, we can visualize it</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(knees_em,</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"pairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>() <span class="sc">+</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/plot_tukey-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also, using our tukey method of adjustment, get “groups” - i.e., see which groups are likely the same versus different.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(multcomp)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cld</span>(knees_em, <span class="at">adjust=</span><span class="st">"tukey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> treatment emmean    SE df lower.CL upper.CL .group
+ eyes      -1.551 0.266 19    -2.25   -0.855  1    
+ knee      -0.336 0.266 19    -1.03    0.361   2   
+ control   -0.309 0.249 19    -0.96    0.343   2   
+
+Confidence level used: 0.95 
+Conf-level adjustment: sidak method for 3 estimates 
+P value adjustment: tukey method for comparing a family of 3 estimates 
+significance level used: alpha = 0.05 
+NOTE: If two or more means share the same grouping symbol,
+      then we cannot show them to be different.
+      But we also did not show them to be the same. </code></pre>
+</div>
+</div>
+<p>This can be very useful in plotting. For example, we can use that output as a data frame for a <code>ggplot</code> in a few different ways.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cld</span>(knees_em, <span class="at">adjust=</span><span class="st">"tukey"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> emmean, </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">ymin =</span> lower.CL, <span class="at">ymax =</span> upper.CL,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="fu">factor</span>(.group))) <span class="sc">+</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/plot_groups-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cld</span>(knees_em, <span class="at">adjust=</span><span class="st">"tukey"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.group =</span> letters[<span class="fu">as.numeric</span>(.group)]) <span class="sc">%&gt;%</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> emmean, </span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">ymin =</span> lower.CL, <span class="at">ymax =</span> upper.CL)) <span class="sc">+</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>() <span class="sc">+</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">label =</span> .group), <span class="at">y =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>)) <span class="sc">+</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/plot_groups-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>knees_expanded <span class="ot">&lt;-</span> <span class="fu">left_join</span>(knees, <span class="fu">cld</span>(knees_em, <span class="at">adjust=</span><span class="st">"tukey"</span>))</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(knees_expanded,</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> shift, <span class="at">color =</span> .group)) <span class="sc">+</span> </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/plot_groups-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>Comparing to a Control</strong></p>
+<p>We can similarly use this to look at a Dunnett’s test, which compares against the control</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(knees_em,</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"dunnett"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast       estimate    SE df lower.CL upper.CL
+ eyes - control   -1.243 0.364 19   -2.118   -0.367
+ knee - control   -0.027 0.364 19   -0.903    0.849
+
+Confidence level used: 0.95 
+Conf-level adjustment: dunnettx method for 2 estimates </code></pre>
+</div>
+</div>
+<p>Note, if the “control” had not been the first treatment, you can either re-order the factor using <code>forcats</code> or just specify which of the levels is the control. For example, eyes is the second treatment. Let’s make it our new reference.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(knees_em,</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"dunnett"</span>, <span class="at">ref=</span><span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast       estimate    SE df lower.CL upper.CL
+ control - eyes     1.24 0.364 19    0.367     2.12
+ knee - eyes        1.22 0.376 19    0.311     2.12
+
+Confidence level used: 0.95 
+Conf-level adjustment: dunnettx method for 2 estimates </code></pre>
+</div>
+</div>
+<p>You can even plot these results</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">contrast</span>(knees_em,</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"dunnett"</span>, <span class="at">ref=</span><span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="multiple_predictors_files/figure-html/plot_contrast-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>Bonferonni versus No Correction</strong></p>
+<p>Let’s say you wanted to do all pairwise tests, but, compare using a Bonferroni correction or FDR. Or none! No problem! There’s an <code>adjust</code> argument</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(knees_em,</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"pairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>(<span class="at">adjust=</span><span class="st">"bonferroni"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast       estimate    SE df lower.CL upper.CL
+ control - eyes    1.243 0.364 19    0.286    2.199
+ control - knee    0.027 0.364 19   -0.929    0.983
+ eyes - knee      -1.216 0.376 19   -2.203   -0.228
+
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 3 estimates </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(knees_em,</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"pairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>(<span class="at">adjust=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast       estimate    SE df lower.CL upper.CL
+ control - eyes    1.243 0.364 19    0.480    2.005
+ control - knee    0.027 0.364 19   -0.736    0.790
+ eyes - knee      -1.216 0.376 19   -2.003   -0.428
+
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="faded-examples-1" class="level3">
+<h3 class="anchored" data-anchor-id="faded-examples-1">2.4 Faded Examples</h3>
+<p>Let’s try three ANOVAs! First - do landscape characteristics affect the number of generations plant species can exist before local extinction?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>plants <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"lab/data/10/15q01PlantPopulationPersistence.csv"</span>)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Visualize</span></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plants,</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> generations)) <span class="sc">+</span></span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_boxplot</span>()</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a><span class="co">#fit</span></span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>plant_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(generations <span class="sc">~</span> treatment, <span class="at">data=</span>plants)</span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a><span class="co">#assumptions</span></span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(plant_lm)</span>
+<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a><span class="co">#evaluate</span></span>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(plant_lm)</span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(plant_lm)</span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a><span class="co">#contrasts</span></span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(plant_lm, <span class="sc">~</span>treatment), </span>
+<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Second, how do different host types affect nematode longevity?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>worms <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/10/15q19NematodeLifespan.csv"</span>)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Visualize</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> _______,</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> lifespan)) <span class="sc">+</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_____________</span>() <span class="co">#feel free to play</span></span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="co">#fit</span></span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>worm_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(______ <span class="sc">~</span> ______, <span class="at">data=</span>worms)</span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a><span class="co">#assumptions</span></span>
+<span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(__________)</span>
+<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a><span class="co">#evaluate</span></span>
+<span id="cb65-15"><a href="#cb65-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(________)</span>
+<span id="cb65-16"><a href="#cb65-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-17"><a href="#cb65-17" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(________)</span>
+<span id="cb65-18"><a href="#cb65-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-19"><a href="#cb65-19" aria-hidden="true" tabindex="-1"></a><span class="co">#contrasts</span></span>
+<span id="cb65-20"><a href="#cb65-20" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(______, <span class="sc">~</span>________), </span>
+<span id="cb65-21"><a href="#cb65-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"pairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb65-22"><a href="#cb65-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And last, how about how number of genotypes affect eelgrass productivity. Note, THERE IS A TRAP HERE. Look at your dataset before you do ANYTHING.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>eelgrass <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"labs/data/10/15q05EelgrassGenotypes.csv"</span>)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="co">#DO SOMETHING HERE</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Visualize</span></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="fu">________</span>(<span class="at">data =</span> _________,</span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> treatment.genotypes, <span class="at">y =</span> shoots)) <span class="sc">+</span></span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>  ___________</span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a><span class="co">#fit</span></span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>eelgrass_lm <span class="ot">&lt;-</span> <span class="fu">__</span>(______ <span class="sc">~</span> ______, <span class="at">data=</span>________)</span>
+<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a><span class="co">#assumptions</span></span>
+<span id="cb66-14"><a href="#cb66-14" aria-hidden="true" tabindex="-1"></a><span class="fu">________</span>(______)</span>
+<span id="cb66-15"><a href="#cb66-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-16"><a href="#cb66-16" aria-hidden="true" tabindex="-1"></a><span class="co">#evaluate</span></span>
+<span id="cb66-17"><a href="#cb66-17" aria-hidden="true" tabindex="-1"></a><span class="fu">________</span>(______)</span>
+<span id="cb66-18"><a href="#cb66-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-19"><a href="#cb66-19" aria-hidden="true" tabindex="-1"></a><span class="fu">________</span>(______)</span>
+<span id="cb66-20"><a href="#cb66-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-21"><a href="#cb66-21" aria-hidden="true" tabindex="-1"></a><span class="co">#contrasts</span></span>
+<span id="cb66-22"><a href="#cb66-22" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(_________, <span class="sc">~</span>_________), </span>
+<span id="cb66-23"><a href="#cb66-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"_________"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb66-24"><a href="#cb66-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">_________</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
