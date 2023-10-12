@@ -1,0 +1,741 @@
+---
+title: "Models with Categorical Variables"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, shinobi, default-fonts, style.css]
+    nature:
+      beforeInit: "my_macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class: center, middle
+
+![:scale 70%](./images/anova/cat-egorical.jpg)
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(readr)
+library(emmeans)
+library(performance)
+library(ggdist)
+
+opts_chunk$set(fig.height=6, 
+               fig.width = 8,
+               fig.align = "center",
+               comment=NA, 
+               warning=FALSE, 
+               echo = FALSE,
+               message = FALSE)
+
+options(htmltools.dir.version = FALSE)
+theme_set(theme_bw(base_size=24))
+```
+
+## Models with Categorical Variables
+
+
+
+---
+# So, We've Done this Linear Deliciousness
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
+$$\epsilon_i \sim \mathcal{N}(0, \sigma)$$
+
+```{r pp}
+library(palmerpenguins)
+penguins <- penguins %>% drop_na(sex)
+ggplot(penguins,
+       aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point() +
+  stat_smooth(method = "lm", color = "red")
+```
+
+
+
+---
+# And We've Seen Many Predictors
+$$y_i = \beta_0 + \sum^K_{j=1}\beta_j x_{ij} + \epsilon_i$$
+
+```{r pp_mlr}
+library(piecewiseSEM)
+klm <- lm(rich ~ firesev + hetero, data = keeley )
+
+ggplot(keeley,
+       aes(x = firesev, y = rich)) +
+  facet_wrap(vars(cut_interval(hetero, 3))) +
+  geom_point() +
+  stat_smooth(method = "lm", color = "red")
+```
+
+
+---
+
+# What if our X Variable Is Categorical?
+### Comparing Two Means
+
+```{r}
+ggplot(penguins,
+       aes(y = body_mass_g, x = sex)) +
+  geom_point(alpha = 0.3, position = position_jitter(width = 0.2))  +
+  stat_summary(fun.data = mean_cl_boot, color = "red") +
+  labs(subtitle = "Is Body Mass Different Between\nDifferent Penguin Sexes?")
+```
+
+--
+$$mass_i = \beta_0 + \beta_1 sex_i + \epsilon_i$$
+
+---
+
+# What if it Has Many Levels
+### Comparing Many Means
+
+```{r}
+ggplot(penguins,
+       aes(y = body_mass_g, x = species)) +
+  geom_point(alpha = 0.3, position = position_jitter(width = 0.2))  +
+  stat_summary(fun.data = mean_cl_boot, color = "red") +
+  labs(subtitle = "Is Body Mass Different Between\nDifferent Penguin Species?")
+```
+
+--
+$$mass_i =  \beta_1 adelie_i + \beta_2 chinstrap_i + \beta_3 gentoo_i + \epsilon_i$$
+
+---
+# Different Types of Categories?
+### Comparing Many Means in Many categories
+
+```{r}
+ggplot(penguins |> filter(!is.na(sex)),
+       aes(y = body_mass_g, x = species, color = sex)) +
+  geom_point(alpha = 0.3, position = position_jitterdodge(jitter.width = 0.2))  +
+  stat_summary(fun.data = mean_cl_boot, aes(group = sex),
+               color = "black",
+               position = position_dodge(width = 0.75)) +
+  labs(subtitle = "Is Body Mass Different Between\nDifferent Penguin Species and Sexes?")
+```
+--
+$$mass_i =  \beta_1 adelie_i + \beta_2 chinstrap_i + \beta_3 gentoo_i + \beta_4 male_i + \epsilon_i$$
+
+---
+class:center
+
+![](images/categorical_lm/corporate_categorical_lm.jpg)
+
+
+---
+
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous
+
+2. Many Levels of One Category
+
+3. Interpretation of Categorical Results. 
+
+4. Querying Your Model to Compare Groups
+
+---
+
+# We Know the Linear Model
+.large[
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
+  
+$$\epsilon_i \sim N(0, \sigma)$$
+]
+
+But, what if $x_i$ was just 0,1?
+
+
+---
+# Consider Comparing Two Means
+#### Consider the Horned Lizard 
+.center[
+![:scale 50%](images/09/horned_lizard.jpg)
+]
+
+
+Horns prevent these lizards from being eaten by birds. Are horn lengths different between living and dead lizards, indicating selection pressure?
+
+---
+class: center, middle
+background-image: url("./images/09/gosset.jpg")
+background-position: center
+background-size: cover
+
+---
+# The Data
+```{r lizard_load, warning=FALSE}
+library(readr)
+library(dplyr)
+lizards <- read_csv("lectures/data/09/12e3HornedLizards.csv",
+                    col_types = "di") %>%
+  mutate(Status = ifelse(Survive==1, "Living", "Dead")) %>%
+  filter(!is.na(`Squamosal horn length`))
+
+ggplot(lizards) +
+  aes(x=Status, y=`Squamosal horn length`, fill=Status) +
+  geom_boxplot() +
+  theme_bw(base_size=17)
+```
+
+---
+# Looking at Means and SE
+```{r lizard_mean, warning=FALSE}
+liz_mean <- ggplot(lizards) +
+  aes(x=Status, y=`Squamosal horn length`) +
+  geom_jitter(alpha = 0.2, position = position_jitter(width = 0.2)) +
+  stat_summary(color = "red", fun.data = mean_cl_boot)
+
+liz_mean
+```
+
+
+---
+# What is Really Going On?
+```{r lizard_mean, warning=FALSE}
+```
+--
+What if we think of Dead = 0, Living = 1
+
+---
+# Let's look at it a different way
+
+.center[
+![](images/all_linear_models/graph-me.png)
+]
+
+
+---
+# First, Recode the Data with Dummy Variables
+```{r design_matrix}
+l_dat <- lizards |> 
+  arrange(`Squamosal horn length`) 
+
+l_dat |> head() |>
+  knitr::kable() |>
+  kableExtra::kable_styling()
+```
+
+---
+# First, Recode the Data with Dummy Variables
+```{r design_matrix_2}
+l_dat_mat <- bind_cols(l_dat, 
+          l_dat |>
+  modelr::model_matrix(`Squamosal horn length` ~ Status-1, data = _)
+)
+
+l_dat_mat |> head()|>
+  knitr::kable() |>
+  kableExtra::kable_styling()
+```
+
+---
+# But with an Intercept, we don't need Two Dummy Variables
+```{r design_matrix_3}
+l_dat_mat_int <- bind_cols(l_dat, 
+          l_dat |>
+  modelr::model_matrix(`Squamosal horn length` ~ Status, data = _)
+)
+
+l_dat_mat_int |> head()|>
+  knitr::kable() |>
+  kableExtra::kable_styling()
+```
+
+--
+
+.center[This is known as a Treatment Contrast structure]
+
+---
+# This is Just a Linear Regression
+```{r}
+lizards <- lizards %>%
+  mutate(Status_numeric = as.numeric(as.factor(Status))-1)
+
+ggplot(lizards) +
+  aes(x=Status_numeric, y=`Squamosal horn length`) +
+  geom_point(alpha = 0.2) +
+  stat_summary(color = "red", fun.data = mean_cl_boot) +
+stat_smooth(method = "lm", color = "red")
+```
+
+$$Length_i = \beta_0 + \beta_1 Status_i + \epsilon_i$$
+
+---
+
+# You're Not a Dummy, Even If You Code a Dummy Variable
+
+
+$$Length_i = \beta_0 + \beta_1 Status_i + \epsilon_i$$
+
+- Setting $Status_i$ to 0 or 1 (Dead or Living) is called Dummy Coding
+     - Or One Hot Encoding in the ML world. 
+
+--
+
+- We can always turn groups into "Dummy" 0 or 1
+
+--
+
+- We could even fit a model wit no $\beta_0$ and code Dead = 0 or 1 and Living = 0 or 1
+
+--
+
+- This approach works for any **unordered categorical (nominal) variable**
+
+
+---
+class: center, middle
+
+## The Only New Assumption-Related Thing is a More Gimlet Eye on Homogeneity of Variance
+
+
+---
+# Homogeneity of Variance Important for CI Estimation
+
+```{r}
+horn_mod <- lm(`Squamosal horn length` ~ Status, 
+               data = lizards)
+               
+check_heteroscedasticity(horn_mod) |> plot() +
+  theme_bw(base_size = 18)
+```
+
+
+---
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous. 
+
+2. .red[Many Levels of One Category]  
+
+3. Interpretation of Categorical Results. 
+
+4. Querying Your Model to Compare Groups
+
+---
+# Categorical Predictors: Gene Expression and Mental Disorders
+
+.pull-left[
+![](./images/19/neuron_label.jpeg)
+]
+
+.pull-right[
+![](./images/19/myelin.jpeg)
+]
+
+```{r load_brains}
+brainGene <- read.csv("lectures/data/19/15q06DisordersAndGeneExpression.csv") %>%
+  mutate(group = forcats::fct_relevel(group, c("control", "schizo", "bipolar")))
+```
+
+---
+# The data
+```{r boxplot}
+ggplot(brainGene, aes(x=group, y=PLP1.expression, fill = group)) +
+  geom_boxplot() +
+  scale_fill_discrete(guide=FALSE)+
+  theme_bw(base_size=17)
+```
+
+---
+# Traditional Way to Think About Categories
+```{r meansplot}
+ggplot(brainGene, aes(x=group, y=PLP1.expression, color = group)) +
+#  geom_boxplot() +
+  stat_summary(size = 1.5) +
+  scale_color_discrete(guide="none") +
+  theme_bw(base_size=17)
+```
+
+What is the variance between groups v. within groups?
+
+---
+# If We Only Had Control v. Bipolar...
+
+```{r brainGene_points}
+
+bgsub1 <- subset(brainGene, brainGene$group != "schizo")
+bgPoints <- ggplot(bgsub1, aes(x=group, y=PLP1.expression)) +
+                 geom_point(size=1.5) +
+  theme_bw(base_size=24)
+                   
+bgPoints
+```
+
+
+---
+# If We Only Had Control v. Bipolar...
+
+```{r brainGene_points_fit}
+bgPoints + stat_smooth(method="lm", mapping=aes(group=1), color="red", lwd=2)
+
+```
+
+--
+
+Underlying linear model with control = intercept, dummy variable for bipolar
+
+---
+
+# If We Only Had Control v. Bipolar...
+
+```{r brainGene_points_fit1}
+bgPoints + stat_smooth(method="lm", mapping = aes(group=1), color="red", lwd=2) +
+scale_x_discrete(labels=c("0", "1"))
+
+```
+
+Underlying linear model with control = intercept, dummy variable for bipolar
+
+
+
+---
+# If We Only Had Control v. Schizo...
+
+```{r brainGene_points_fit_2}
+bgsub2 <- subset(brainGene, brainGene$group != "bipolar")
+bgPoints2 <- ggplot(bgsub2, aes(x=group, y=PLP1.expression)) +
+  geom_point(size=1.5) +
+  theme_bw() + 
+  stat_smooth(method="lm", mapping = aes(group=1), color="red", lwd=2)+
+  theme_bw(base_size=24)
+
+bgPoints2
+```
+
+Underlying linear model with control = intercept, dummy variable for schizo
+
+---
+
+# If We Only Had Control v. Schizo...
+```{r ctl_schizo}
+bgPoints2 +
+  scale_x_discrete(labels = c(0,1))
+```
+
+Underlying linear model with control = intercept, dummy variable for schizo
+
+
+---
+# Linear Dummy Variable (Fixed Effect) Model
+$$\large y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}, \qquad x_{i} = 0,1$$  
+$$\epsilon_{ij} \sim N(0, \sigma^{2})$$
+
+- i = replicate, j = group  
+
+--
+
+- $x_{ij}$ inidicates presence/abscence (1/0) of level j for individual i  
+     - A **Dummy variable**  
+
+--
+
+- This is the multiple predictor extension of a two-category model
+
+--
+
+- All categories are *orthogonal*
+
+--
+
+- One category set to $\beta_{0}$ for ease of fitting, and other $\beta$s are different from it  
+
+
+---
+# A Simpler Way to Write: The Means Model
+$$\large y_{ij} = \alpha_{j} + \epsilon_{ij}$$  
+$$\epsilon_{ij} \sim N(0, \sigma^{2} )$$
+
+
+- i = replicate, j = group  
+
+
+- Different mean for each group  
+
+
+- Focus is on specificity of a categorical predictor  
+  
+
+
+
+---
+# Partioning Model to See What Varies
+
+$$\large y_{ij} = \bar{y} + (\bar{y}_{j} - \bar{y}) + ({y}_{ij} - \bar{y}_{j})$$
+
+- i = replicate, j = group  
+
+
+- Shows partitioning of variation  
+     - Between group v. within group variation  
+
+--
+
+- Consider $\bar{y}$ an intercept, deviations from intercept by treatment, and residuals
+
+--
+
+- Can Calculate this with a fit model to answer questions - it's a relic of a bygone era
+     - That bygone era has some good papers, so, you should recognize this
+     
+     
+---
+# Let's Fit that Model
+
+**Using Least Squares**
+```{r, echo = TRUE}
+brain_lm <- lm(PLP1.expression ~ group, data=brainGene)
+
+tidy(brain_lm) |> 
+  select(-c(4:5)) |>
+  knitr::kable(digits = 3) |>
+  kableExtra::kable_styling()
+```
+
+
+
+---
+
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous
+
+2. Many Levels of One Category
+
+3. .red[Interpretation of Categorical Results]  
+
+4. Querying Your Model to Compare Groups
+
+
+---
+# R Fits with Treatment Contrasts
+$$y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}$$
+
+```{r trt_means}
+tidy(brain_lm) |>
+  select(1:3) |>
+  knitr::kable(digits = 3) |>
+  kableExtra::kable_styling()
+```
+
+--
+
+What does this mean?
+
+--
+
+- Intercept ($\beta_{0}$) = the average value associated with being in the control group
+
+- Others = the average difference between control and each other group
+
+- Note: Order is alphabetical
+
+---
+# Actual Group Means
+
+$$y_{ij} = \alpha_{j} + \epsilon_{ij}$$
+
+
+```{r brainGene_noint}
+library(emmeans)
+brain_em <- emmeans(brain_lm, ~group)
+
+brain_em |>
+  tidy() |>
+  select(1:3) |>
+  knitr::kable("html") %>%
+  kableExtra::kable_styling()
+```
+
+--
+
+What does this mean?
+
+--
+
+Being in group j is associated with an average outcome of y.
+
+---
+
+# What's the best way to see this?
+.center[ ![:scale 75%](./images/anova/barplot_viz.jpg)]
+
+---
+# Many Ways to Visualize
+
+```{r}
+ggplot(brainGene,
+       aes(x = group, y = PLP1.expression)) +
+  geom_jitter(color = "lightgrey") +
+  stat_summary(fun.data = "mean_se", color = "red")
+```
+
+---
+# Many Ways to Visualize
+
+```{r}
+ggplot(brainGene,
+       aes(y = group, x = PLP1.expression,
+           fill = group)) +
+ stat_dotsinterval(dotsize = 0.3, binwidth = 0.1) +
+  labs(y="")
+```
+
+---
+# Many Ways to Visualize
+
+```{r}
+library(ggdist)
+ggplot(brainGene,
+       aes(y = group, x = PLP1.expression,
+           fill = group)) +
+  stat_halfeye() +
+  labs(y="") +
+  stat_dots(side = "bottom", dotsize = .17, binwidth = 0.1, color = NA)
+```
+
+---
+# How Well Do Groups Explain Variation in Response Data?
+
+We can look at fit to data - even in categorical data!
+
+```{r}
+r2(brain_lm)
+```
+
+--
+
+But, remember, this is based on the sample at hand.
+
+--
+
+Adjusted R<sup>2</sup>: adjusts for sample size and model complexity (k = # params = # groups)
+
+$$R^2_{adj} = 1 - \frac{(1-R^2)(n-1)}{n-k-1}$$
+
+
+---
+
+# Dummy Codding for Dummy Models
+
+1. The Categorical as Continuous
+
+2. Many Levels of One Category
+
+3. Interpretation of Categorical Results. 
+
+4. .red[Querying Your Model to Compare Groups]
+
+
+---
+# Which groups are different from each other?
+```{r meansplot}
+```
+
+--
+
+Many mini-linear models with two means....multiple comparisons!
+
+
+---
+# Post-Hoc Means Comparisons: Which groups are different from one another?
+
+- Each group has a mean and SE
+
+- We can calculate a comparison for each 
+
+- BUT, we lose precision as we keep resampling the model  
+  
+- Remember, for every time we look at a system, we have some % of our CI not overlapping the true value  
+
+- Each time we compare means, we have a chance of our CI not covering the true value  
+
+- To minimize this possibility, we correct (widen) our CIs for this **Family-Wise Error Rate**
+
+
+---
+# Solutions to Multiple Comparisons and Family-wise Error Rate?
+
+1. Ignore it - 
+     + Just a bunch of independent linear models
+
+--
+2. Increase your CI given m = # of comparisons
+     + If 1 - CI of interest = $\alpha$  
+     + Bonferroni Correction $\alpha/ = \alpha/m$
+     + False Discovery Rate $\alpha/ = k\alpha/m$ where k is rank of test
+
+--
+3. Other multiple comparison corrections
+    + Tukey's Honestly Significant Difference  
+    + Dunnett's Compare to Control
+
+---
+
+# No Correction: Least Square Differences
+```{r pairs, echo=FALSE}
+contrast(brain_em, method = "tukey", adjust="none") %>%
+  tidy(conf.int = TRUE) |>
+  select(c(2,4,7,8)) |>
+  knitr::kable("html") %>% kableExtra::kable_styling("striped")
+```
+
+---
+# Bonferroni Corrections
+```{r bonf, echo=FALSE}
+contrast(brain_em, method = "tukey", adjust="bonferroni") %>%
+  tidy(conf.int = TRUE) |>
+  select(c(2,4,7,8)) |>
+  knitr::kable("html") %>% kableExtra::kable_styling("striped")
+```
+
+
+---
+# Tukey's Honestly Significant Difference
+```{r tukey, echo=FALSE}
+contrast(brain_em, method = "tukey", adjust="tukey")  %>%
+  tidy(conf.int = TRUE) |>
+  select(c(2,4,7,8)) |>
+  knitr::kable("html") %>% kableExtra::kable_styling("striped")
+```
+
+---
+# Visualizing Comparisons (Tukey)
+```{r tukey-viz, echo=FALSE}
+plot(contrast(brain_em, method = "tukey", adjust="tukey")) +
+  theme_bw(base_size=17) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+---
+# Dunnett's Comparison to Controls
+```{r dunnett, echo=FALSE}
+contrast(brain_em, method = "dunnett", adjust="dunnett")  %>%
+  tidy(conf.int = TRUE) |>
+  select(c(2,4,7,8)) |>
+  knitr::kable("html") %>% kableExtra::kable_styling("striped")
+
+plot(contrast(brain_em, method = "dunnett", adjust="dunnett")) +
+  theme_bw(base_size=17) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+---
+
+# So, Categorical Models...
+
+- At the end of the day, they are just another linear model  
+  
+- We can understand a lot about groups, though  
+
+- We can begin to see the value of queries/counterfactuals 
+
+$$\widehat {\textbf{Y} } = \textbf{X}\beta$$
+$$\textbf{Y} \sim \mathcal{N}(\widehat {\textbf{Y} }, \Sigma)$$
