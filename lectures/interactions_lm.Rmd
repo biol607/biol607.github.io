@@ -1,0 +1,731 @@
+---
+title: "Interaction Effects"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: [default, shinobi, default-fonts, style.css]
+    nature:
+      beforeInit: "my_macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class: center, middle
+<!-- make the interaction plots make more sense and relate to a question -->
+
+# When The Effect of One Predictor Depends on Another
+![](images/anova/yoda_factorial.jpg)
+
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(broom)
+library(readr)
+library(brms)
+library(ggdist)
+library(car)
+library(emmeans)
+library(visreg)
+library(performance)
+library(piecewiseSEM)
+data(keeley)
+
+opts_chunk$set(fig.height=6, 
+               fig.width = 8,
+               fig.align = "center",
+               comment=NA, 
+               warning=FALSE, 
+               echo = FALSE,
+               message = FALSE)
+
+options(htmltools.dir.version = FALSE,
+        knitr.kable.NA = '')
+theme_set(theme_bw(base_size=28))
+
+table_out <- . %>%
+  knitr::kable("html") %>%
+  kableExtra::kable_styling("striped")
+
+perform_plot <- function(x){
+   x |> plot() %>%
+  `[[`(1) + theme_bw(base_size = 18)
+}
+```
+
+
+---
+class: center, middle
+
+# Etherpad
+<br><br>
+<center><h3>https://etherpad.wikimedia.org/p/607-interactions-nonlinearities-2022</h3></center>
+
+
+---
+# The world isn't additive
+
+-   Until now, we have assumed predictors combine additively  
+     - the effect of one is not dependent on the effect of the other
+
+--
+
+-   BUT - what if the effect of one variable depends on the level of another?
+
+--
+
+-   This is an **INTERACTION** and is quite common  
+     - Heck, a squared term is the interaction of a variable with itself!
+
+--
+
+- Biology: The science of "It depends..."  
+
+--
+
+-   This is challenging to think about and visualize, but if you can master it, you will go far!
+
+---
+
+# We Have Explored Nonliearities Via Transforming our Response
+
+```{r loglinear}
+dat <- read_csv("lectures/data/11/16e2InbreedingWolves.csv") |>
+  mutate(log_pups = log(pups))
+
+mod <- lm(log_pups ~ inbreeding.coefficient, data = dat)
+
+line <- tibble(inbreeding.coefficient = modelr::seq_range(dat$inbreeding.coefficient, 100)) |>
+  augment(mod, newdata = _, interval = "confidence") |>
+  mutate(across(c(.fitted:.upper), exp)) |>
+  rename(pups = .fitted)
+
+ggplot(line,
+       aes(x = inbreeding.coefficient, y = pups)) +
+  geom_ribbon(aes(ymin = .lower, ymax = .upper),
+              color = "lightgrey", alpha = 0.4) +
+  geom_line(color = "red") +
+  geom_point(data = dat)
+  
+```
+
+---
+
+# But We Have Also Always Tested for Non-Additivity of Predictors
+
+```{r, results='hide'}
+set.seed(607)
+dat <- crossing(a = 1:3,
+                b = 10:15,
+                n = 1:10) |>
+  mutate(val = rnorm(n(), mean = a + b + a*b^2, sd = 15),
+         a = as.character(a),
+         b = as.character(b))
+
+mod <- lm(val ~ a + b, data = dat)
+
+check_model(mod, check = "linearity", panel = FALSE) |> perform_plot()
+```
+
+---
+
+# The Linear Model Can Accomodate Many Flavors of Nonlinearity
+
+$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}$$
+$$y_i \sim N(\hat{y_i}, \sigma)$$
+--
+Could become...
+
+
+$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2$$
+--
+Could be...
+
+
+$$\hat{y_i} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i}x_{2i}$$
+--
+.center[**It is ALL additive terms**]
+
+---
+class: center, middle
+
+![](images/anova/two_way_interaction.jpg)
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. Evaluating Interaction Effects
+
+3. How to Look at Means and Differences with an Interaction Effect. 
+
+4. Continuous Variables and Interaction Effects
+
+
+---
+# Intertidal Grazing!
+.center[
+![image](./images/22/grazing-expt.jpeg)
+
+#### Do grazers reduce algal cover in the intertidal?
+]
+
+---
+# Experiment Replicated on Two Ends of a gradient
+
+![image](./images/22/zonation.jpg)
+
+---
+# Factorial Experiment
+
+![image](./images/22/factorial_blocks.jpg)
+
+---
+# Factorial Design
+
+![image](./images/22/factorial_layout.jpg)
+
+Note: You can have as many treatment types or observed category combinations as you want (and then 3-way, 4-way, etc. interactions)
+
+---
+# The Data: See the dependency of one treatment on another?
+
+```{r plot_algae}
+algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+
+algae_plot <- qplot(height, sqrtarea,  data=algae, geom="boxplot", fill=herbivores) + theme_bw(base_size=16)
+
+algae_plot
+
+
+```
+
+---
+# If we had fit y ~ a + b, residuals look weird
+
+```{r graze_assumptions, fig.height=7, results = "hide"}
+library(performance)
+graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
+
+check_model(graze_linear, check = "linearity", panel = FALSE) |> perform_plot()
+```
+
+
+---
+# A Factorial Model
+
+$$\large y_{ijk} = \beta_{0} + \sum \beta_{i}x_{i} + \sum \beta_{j}x_{j} + \sum \beta_{ij}x_{ij} + \epsilon_{ijk}$$  
+
+$$\large \epsilon_{ijk} \sim N(0, \sigma^{2} )$$
+$$\large x_{i} = 0,1, x_{j} = 0,1, x_{ij} = 0,1$$ 
+--
+
+- Note the new last term  
+
+--
+
+- Deviation due to *combination of categories i and j*  
+
+
+--
+
+<hr>
+This is still something that is in  
+
+$$\Large \boldsymbol{Y} = \boldsymbol{\beta X} + \boldsymbol{\epsilon}$$
+
+---
+# The Data (Four Rows)
+
+```{r dat}
+algae   %>%
+  group_by(height, herbivores) %>%
+  slice(1L) %>%
+  table_out
+```
+
+---
+# The Dummy-Coded Treatment Contrasts
+
+```{r modmat}
+graze_int <- lm(sqrtarea ~ height + herbivores + 
+                  herbivores:height, 
+                data=algae)
+
+model.matrix(graze_int) %>% 
+  as.data.frame() %>%
+  group_by_all() %>%
+  slice(1L) %>%
+  ungroup() %>% table_out()
+```
+
+---
+# Fitting with Least Squares
+
+```{r lsq_fact, echo = TRUE}
+graze_int <- lm(sqrtarea ~ height + herbivores +
+                  height:herbivores,
+                data=algae)
+
+## OR
+graze_int <- lm(sqrtarea ~ height*herbivores,
+                data=algae)
+```
+
+---
+# Now We Are Linear/Additive
+```{r, results='hide'}
+check_model(graze_int, check = "linearity", panel = FALSE) |> perform_plot()
+
+```
+
+---
+# Residuals A-OK
+```{r}
+check_normality(graze_int) |> plot(type = "qq") + theme_bw(base_size = 18)
+```
+
+---
+# HOV Good!
+```{r}
+check_heteroscedasticity(graze_int) |> plot() + theme_bw(base_size = 18)
+```
+
+
+---
+# No Outliers
+```{r}
+check_outliers(graze_int) |> plot(type = "bar")+ 
+  theme_bw(base_size = 18) +
+  theme(axis.text.x = element_text(angle = -90, hjust = 1))
+```
+
+---
+# Collinearity is Tricky - unimportant for interaction
+```{r}
+check_collinearity(graze_int) |> plot()+ theme_bw(base_size = 18)
+```
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. .red[ Evaluating Interaction Effects ]
+
+3. How to Look at Means  and Differences with an Interaction Effect  
+
+4. Continuous Variables and Interaction Effects
+
+
+---
+# What do the  Coefficients Mean?
+
+```{r graze_interaction_coefs}
+tidy(graze_int) %>%
+  select(1:3) %>%
+  table_out
+```
+
+--
+
+- Intercept chosen as basal condition (low, herbivores -)  
+
+--
+
+- Changing height to high is associated with a loss of 10 units of algae relative to low/-
+
+--
+
+
+- Adding herbivores is associated with a loss of 22 units of algae relative to low/-
+
+--
+
+- BUT - if you add herbivores and mid, that's also associated with an additional increase of 25 units of algae relative to mid and + alone  
+      - 25.5 - 22.5 - 10.4 = only a loss of 7.4 relative to low/-
+
+--
+
+.center[**NEVER TRY AND INTERPRET ADDITIVE EFFECTS ALONE WHEN AN INTERACTION IS PRESENT**<Br>that way lies madness]
+
+
+---
+# This view is intuitive
+
+```{r}
+ggplot(algae,
+       aes(x = herbivores, y = sqrtarea,
+           fill = height)) +
+  geom_boxplot(position = "dodge")
+
+```
+
+---
+# This view is also intuitive
+
+```{r}
+ggplot(algae,
+       aes(x = herbivores, y = sqrtarea,
+           color = height, fill = height)) +
+  stat_summary(fun.data = "mean_se", size = 2)  +
+  stat_summary(fun = mean, geom = "line",
+               aes(group = height), size = 1.5) 
+
+```
+
+
+---
+# We Can Still Look at R^2
+
+```{r}
+r2(graze_int)
+```
+
+Eh, not great, not bad...  
+
+--
+
+- Note: adding more interaction effects will always increase the R<sup>2</sup> so only add if warranted - NO FISHING!
+
+---
+# A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. Evaluating Interaction Effects
+
+3. .red[ How to Look at Means  and Differences with an Interaction Effect ]  
+
+4. Continuous Variables and Interaction Effects
+
+
+---
+# Posthoc Estimated Means and Interactions with Categorical Variables
+
+-   Must look at **simple effects** first in the presence of an interaction  
+     - The effects of individual treatment combinations
+     - If you have an interaction, this is what you do!
+
+
+--
+
+-   **Main effects describe effects of one variable in the absence of an interaction**
+    - Useful only if there is no interaction  
+    - Or useful if one categorical variable can be absent   
+
+---
+# Estimated Means with No Interaction - Misleading!
+```{r}
+emmeans(graze_int, ~ herbivores)
+
+emmeans(graze_int, ~ height)
+
+```
+
+---
+# Posthoc Comparisons Averaging Over Blocks - Misleading!
+
+```{r graze_posthoc_trt, warning=TRUE, messages=TRUE}
+contrast( emmeans(graze_int, "herbivores"), "pairwise", adjust="none") |>
+  confint()
+```
+
+---
+# Simple Effects Means
+```{r}
+emmeans(graze_int, ~ height + herbivores)
+```
+
+
+---
+# Posthoc with Simple Effects
+
+```{r graze_posthoc}
+contrast( emmeans(graze_int, c("height", "herbivores")), "pairwise", adjust="none") %>%
+  table_out()
+```
+
+--
+.center[**That's a Lot to Drink In!**]
+
+---
+# Might be easier visually
+
+```{r graze_posthoc_plot}
+plot(contrast( emmeans(graze_int, ~herbivores + height), "pairwise", adjust="none")) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+
+---
+# We are often interested in looking at differences within levels...
+```{r}
+emmeans(graze_int, ~herbivores | height) |>
+  confint()
+```
+
+---
+# We Can Then Look at Something Simpler...
+
+```{r graze_posthoc_plot2}
+plot(contrast( emmeans(graze_int, ~herbivores | height), "pairwise", adjust="none")) +
+  geom_vline(xintercept = 0, color = "red", lty = 2)
+```
+
+---
+# Why think about interactions
+
+- It Depends is a rule in biology
+
+- Context dependent interactions everywhere
+
+- Using categorical predictors in a factorial design is an elegant way to see interactions without worrying about shapes of relationships
+
+- BUT - it all comes down to a general linear model! And the same inferential frameworks we have been dealing with since linear regression!
+
+---
+# To Blow Your Mind - You can have 2, 3, and more-way interactions!
+
+.center[.middle[
+![image](./images/22/4_way_interaction.jpg)
+]]
+
+---
+## A Non-Additive World
+
+1. Replicating Categorical Variable Combinations: Factorial Models
+
+2. Evaluating Interaction Effects
+
+3. How to Look at Means and Differences with an Interaction Effect. 
+
+4. .red[ Continuous Variables and Interaction Effects ]
+---
+
+## Problem: What if Continuous Predictors are Not Additive?
+
+```{r keeley_int_plot3d, fig.height=6, fig.width=7}
+library(plotly)
+plot_ly(x=~age, y=~elev, z=~firesev, type="scatter3d", mode="markers",  data = keeley, color = ~firesev)
+
+
+```
+
+
+
+
+## Problem: What if Continuous Predictors are Not Additive?
+
+```{r keeley_int_plot}
+keeley$egroup <- keeley$elev<600
+
+k_plot <- ggplot(keeley,
+       aes(x = age, y = firesev,color = elev)) +
+  geom_point(size = 5)+
+  scale_color_continuous(low="blue", high="red")
+
+k_plot  +
+  facet_wrap(vars(cut_interval(elev, 4)))
+```
+
+
+## Problem: What if Continuous Predictors are Not Additive?
+
+```{r keeley_int_plot2}
+k_plot  +
+  facet_wrap(vars(cut_interval(elev, 4))) +
+  stat_smooth(method = "lm")
+```
+
+---
+
+class:center, middle
+![](./images/23/regression_depression.jpg)
+
+---
+## Model For Age Interacting with Elevation to Influence Fire Severity
+$$y_i = \beta_0 + \beta_{1}x_{1i} + \beta_{2}x_{2i}+ \beta_{3}x_{1i}x_{2i} + \epsilon_{i}$$
+
+$$\epsilon_{i} \sim \mathcal{N}(0,\sigma^2)$$
+
+
+Or in code:
+```{r keeley_mod_int, echo=TRUE}
+keeley_lm_int <- lm(firesev ~ age * elev, data=keeley)
+```
+
+
+## Assumption Tests as Usual!
+
+```{r klm_diag_int}
+check_model(keeley_lm_int)
+```
+
+
+## Examine Residuals With Respect to Each Predictor
+
+```{r klm_diag2_int}
+residualPlots(keeley_lm_int, test=FALSE, fitted = FALSE)
+```
+
+
+## Interactions, VIF, and Centering
+```{r int_vif}
+check_collinearity(keeley_lm_int)
+```
+
+- Collinearities between additive predictors and interaction effects are not problematic.
+
+--
+
+- However, you should make sure your ADDITIVE predictors do not have VIF problems in a model with no interactions.
+
+--
+- If you are worried, **center** your predictors - i.e., $X_i - mean(X)$
+      - This can also fix issues with some models not converging
+
+
+## Interpretation of Centered Coefficients
+$$\huge X_i - \bar{X}$$
+
+--
+- Additive coefficients are the effect of a predictor at the mean value of the other predictors 
+
+--
+
+-   Intercepts are at the mean value of all predictors 
+
+--
+
+-   Visualization will keep you from getting confused! 
+
+## Interactions, VIF, and Centering
+$$y = \beta_0 + \beta_{1}(x_{1}-\bar{x_{1}}) + \beta_{2}(x_{2}-\bar{x_{2}})+ \beta_{3}(x_{1}-\bar{x_{1}})(x_{2}-\bar{x_{2}})$$
+
+  
+Variance Inflation Factors for Centered Model:
+
+```{r keeley_vif_cent}
+keeley <- keeley %>%
+  mutate(age_c = age-mean(age),
+         elev_c = elev - mean(elev))
+
+keeley_lm_int_cent <- lm(firesev ~ age_c*elev_c, data=keeley)
+
+check_collinearity(keeley_lm_int_cent)
+```
+
+
+## Coefficients!
+```{r int_coef}
+tidy(keeley_lm_int) %>% table_out
+```
+
+  
+    
+R<sup>2</sup> = `r summary(keeley_lm_int)$r.square`. 
+  
+Note that additive coefficients signify the effect of one predictor in the abscence of all others.
+
+## Centered Coefficients!
+```{r int_coef_cent}
+tidy(keeley_lm_int_cent) %>% table_out
+```
+
+
+
+R<sup>2</sup> = `r summary(keeley_lm_int_cent)$r.square`  
+  
+Note that additive coefficients signify the effect of one predictor at the average level of all others.
+
+## Interpretation
+- What the heck does a continuous interaction effect mean?
+
+--
+
+- We can look at the effect of one variable at different levels of the other
+
+--
+
+- We can look at a surface 
+
+--
+
+- We can construct *counterfactual* plots showing how changing both variables influences our outcome
+
+---
+
+## Age at Different Levels of Elevation
+```{r int_visreg}
+visreg(keeley_lm_int, "age", by="elev")
+```
+
+---
+## Elevation at Different Levels of Age
+```{r int_visreg_2}
+visreg(keeley_lm_int, "elev", by="age")
+```
+
+---
+## Or all in one plot
+```{r keeley_int_pred}
+k_pred <- crossing(elev = 100:1200, age = quantile(keeley$age)) %>%
+  modelr::add_predictions(keeley_lm_int, var="firesev") %>%
+  mutate(age_levels = paste("Age = ", age, sep=""))
+
+ggplot() +
+  geom_point(keeley, mapping=aes(x=elev, y=firesev, color=age, size=age)) +
+  geom_line(data=k_pred, mapping=aes(x=elev, y=firesev, color=age, group=age)) +
+  scale_color_continuous(low="blue", high="red") +
+  theme_bw(base_size=17)
+```
+
+---
+
+## Without Data and Including CIs
+```{r keeley_int_pred_nodata}
+
+k <- predict(keeley_lm_int, newdata=k_pred, se.fit=TRUE, interval="confidence")
+k_pred$lwr = k$fit[,2]
+k_pred$upr = k$fit[,3]
+
+ggplot() +
+  geom_ribbon(data=k_pred, mapping=aes(x=elev, y=firesev, group=age, ymin = lwr, ymax=upr),
+              alpha=0.1) +
+  geom_line(data=k_pred, mapping=aes(x=elev, y=firesev, color=age, group=age)) +
+  scale_color_continuous(low="blue", high="red") +
+  theme_bw(base_size=17)
+```
+
+## A Heatmap Approach
+```{r int_heatmap}
+k_pred_grid <- crossing(elev = 100:1200, age = 3:60) %>%
+  modelr::add_predictions(keeley_lm_int, var="firesev")
+
+ggplot(k_pred_grid, mapping=aes(x=age, y=elev, colour=firesev)) +
+  geom_tile() +
+#  scale_color_continuous(low="lightblue", high="red")
+  scale_color_gradient2(low = "blue", high="red", mid="white", midpoint=5)
+```
+
+
+---
+## Surfaces and Other 3d Objects
+```{r surf_int, fig.height=8, fig.width=10}
+surf <- modelr::data_grid(keeley,
+                          age = seq(0,60,length.out=200),
+                          elev = seq(0,1250, length.out=200)) |>
+  augment(keeley_lm_int, newdata = _) |>
+  rename(firesev = .fitted)
+
+plot_ly(x=~age, y=~elev, z=~firesev, type="scatter3d", mode="surface",  data = surf, color = ~firesev) |>
+  add_markers(data = keeley, 
+              x=~age, y=~elev, z=~firesev,
+              color = I("black"))
+```
+

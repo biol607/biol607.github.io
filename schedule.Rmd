@@ -118,7 +118,7 @@ __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression
 __Lecture:__  [Many Predictors](./lectures/mlr.html),  [Categorical Predictors: Just Another Linear Model](lectures/categorical_predictors.html)   
 __Lab Topic:__ [Models with Categorical Variables](lab/multiple_predictors.html)  
 __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)   
-__Reading:__ [Feiberg 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/)   
+__Reading:__ [Feiberg 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html)   
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf), [Day and Quinn 1989 on Post-hocs](https://www.jstor.org/stable/1943075).   
 __Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast", "visreg"))`    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2023  
@@ -131,27 +131,17 @@ __Homework:__ None. Catch up!
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lectures:__  [Many categories or mixing categories and continuous predictors](./lectures/many_types_of_predictors.html)   
+__Lectures:__  [Many categories or mixing categories and continuous predictors](./lectures/many_types_of_predictors.html), [When one predictor's effect depends on the other](lectures/interactions_lm.html)   
 __Lab Topic:__  [Models with many types of predictors](lab/many_predictor_types.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
-__Reading:__ [Feiberg ch 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), W&S 15, 18   
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2023  
+__Reading:__  [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Understanding ‘it depends’ in ecology: a guide to hypothesising, visualising and interpreting statistical interactions](https://onlinelibrary.wiley.com/doi/full/10.1111/brv.12939)   
+__Optional Readings:__ [Interactions in statistical models: Three things to know](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13714), [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-complex-linear-models-2023  
 __Homework:__ [Many Predictors!](homework/many_predictors.html), [RIKZ Data](homework/data/rikz.csv)  
 __Project Proposal:__ [general instructions here](project_proposal.html)  
 
 
-### Week 8.   
-```{r next_date, echo=FALSE}
-```
-`r datestring`   
-__Lectures:__ [Interaction Effects with Categorical Variables](lectures/categorical_interactions.html), [Interaction Effects and Nonlinearities in Any Model](./lectures/23_general_linear_model.html)    
-__Lab Topic:__ [Models with Interaction Effects](lab/interacting_predictors.html) - [data files](lab/data_11.zip)  
-__Readings:__ Re-Read [Feiberg ch 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf)  
-__Optional Readings:__  [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)   
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-interactions-2023  
-__Homework:__ [Interactions](homework/interactions.html)  
-
-### Week 9   
+### Week 8   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
@@ -161,6 +151,19 @@ __Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa", "TMB", "glmmTMB"))`  
 __Reading:__ [Feiberg on GLS](https://fw8051statistics4ecologists.netlify.app/gls.html), [Feiberg on Generalized Linear Models](https://fw8051statistics4ecologists.netlify.app/glm.html), [Models for Count Data](https://fw8051statistics4ecologists.netlify.app/poissonr), [Feiberg on Logistic Regression](https://fw8051statistics4ecologists.netlify.app/logistic) - ignore Bayes parts in these. [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), [Analyzing % Cover and Porportional Data](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13234)  
 __Additional Reading:__ [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Intro to Beta Regression for % Cover Data](https://rpubs.com/nicoleknight/936037), [Zero-One Inflated Beta Regression](https://journal.r-project.org/archive/2015/RJ-2015-019/index.html)    
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2023  
+
+### Week 9   
+```{r next_date, echo=FALSE}
+```
+`r datestring`   
+__Lecture:__ [Random Effects](https://biol609.github.io/lectures/07_random_effects.html#/section), [Mixed Models](https://biol609.github.io/lectures/08_mixed_effects.html#/section)   
+__Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_data.zip)  
+__Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)  
+__Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa", "TMB", "glmmTMB"))`  
+__Reading:__ [Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/mixed), [Generalized Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/glmm)   
+__Additional Reading:__ [Generalized linear mixed models: a practical guide for ecology and evolution](https://www.cell.com/trends/ecology-evolution/fulltext/S0169-5347(09)00019-6), [Gelman and Hill Ch 12](https://byrneslab.net/classes/biol609/gelman_hill_ch_12.pdf) login/pass biol609, [Zuur ch. 9](https://byrneslab.net/classes/biol609/Zuur_ch_5.pdf). 
+__Your One Stop FAQ:__ [Your One Stop FAQ: Ben Bolker’s Mixed Model’s FAQ](https://bbolker.github.io/mixedmodels-misc/). 
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2023  
 
 __MIDTERM__: Due Tues Nov 22nd, 5pm. [Get it here](exams/exam_2022.html)  
