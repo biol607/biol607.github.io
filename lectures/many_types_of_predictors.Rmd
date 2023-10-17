@@ -55,7 +55,7 @@ class: center, middle
 
 <br><br>
 
-https://etherpad.wikimedia.org/p/607-many-predictors-2022
+https://etherpad.wikimedia.org/p/607-complex-linear-models-2023. 
 
 ---
 
@@ -187,13 +187,13 @@ zoop_lm
 -   Independence of data points  
 
 -   No relationship between fitted and residual values  
-     -   .red[Additivity (linearity) of Treatments]
+     - .red[ Additivity (linearity) of Treatments ]
   
 -   Normality within groups (of residuals)  
   
 -   Homoscedasticity (homogeneity of variance) of groups  
   
-- No *collinearity* between treatments
+- No *collinearity* between levels of different categories
   
 
 ---
@@ -347,7 +347,7 @@ $$y_{ijk} = \beta_{0} + \sum \beta_{i}x_{ik} + \sum \beta_{j}x_{jk} + \epsilon_{
 ---
 # Mixing Continuous and Categorical Predictors: Analysis of Covariance
 
-$$y_{ij} = \beta_0   + \sum\beta_j x_{ij} + \beta_{j+1}x_{i} + \epsilon_{ij}$$  
+$$y_{ij} = \beta_0   + \beta_{1}x_{1i} + \sum\beta_j x_{ij} +  + \epsilon_{ij}$$  
 
 $$ x_{ij} = 0,1 \qquad \epsilon \sim \mathcal{N}(0,\sigma)$$
 

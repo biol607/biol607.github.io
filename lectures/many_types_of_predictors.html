@@ -29,7 +29,7 @@ class: center, middle
 
 &lt;br&gt;&lt;br&gt;
 
-https://etherpad.wikimedia.org/p/607-many-predictors-2022
+https://etherpad.wikimedia.org/p/607-complex-linear-models-2023. 
 
 ---
 
@@ -148,9 +148,9 @@ lm(formula = zooplankton ~ treatment + block, data = zoop)
 
 Coefficients:
   (Intercept)  treatmenthigh   treatmentlow         block2         block3  
-    3.420e+00     -1.640e+00     -1.020e+00      1.039e-15     -7.000e-01  
+     3.42e+00      -1.64e+00      -1.02e+00       9.57e-16      -7.00e-01  
        block4         block5  
-   -1.000e+00     -3.000e-01  
+    -1.00e+00      -3.00e-01  
 ```
 
 --
@@ -161,13 +161,13 @@ Coefficients:
 -   Independence of data points  
 
 -   No relationship between fitted and residual values  
-     -   .red[Additivity (linearity) of Treatments]
+     - .red[ Additivity (linearity) of Treatments ]
   
 -   Normality within groups (of residuals)  
   
 -   Homoscedasticity (homogeneity of variance) of groups  
   
-- No *collinearity* between treatments
+- No *collinearity* between levels of different categories
   
 
 ---
@@ -349,7 +349,7 @@ Confidence level used: 0.95
 ---
 # Mixing Continuous and Categorical Predictors: Analysis of Covariance
 
-`$$y_{ij} = \beta_0   + \sum\beta_j x_{ij} + \beta_{j+1}x_{i} + \epsilon_{ij}$$`  
+`$$y_{ij} = \beta_0   + \beta_{1}x_{1i} + \sum\beta_j x_{ij} +  + \epsilon_{ij}$$`  
 
 $$ x_{ij} = 0,1 \qquad \epsilon \sim \mathcal{N}(0,\sigma)$$
 
