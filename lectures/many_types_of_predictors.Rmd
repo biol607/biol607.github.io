@@ -214,7 +214,9 @@ The effect of category depends on another - e.g. this grazing experiment
 
 ```{r}
 algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+
 graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
+
 ggplot(algae, aes(x = height, y = sqrtarea, color = herbivores)) +
   geom_boxplot()
 ```
@@ -224,7 +226,9 @@ ggplot(algae, aes(x = height, y = sqrtarea, color = herbivores)) +
 
 ```{r}
 algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+
 graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
+
 check_model(graze_linear, check = "linearity") |> plot()
 ```
 
@@ -235,20 +239,22 @@ class: center, middle
 
 ---
 # Normality!
+
 ```{r}
-check_model(zoop_lm, check = "normality") |> plot()
+check_normality(zoop_lm) |> plot()
 ```
 
 ---
 # HOV!
+
 ```{r}
-check_model(zoop_lm, check = "homogeneity") |> plot()
+check_heteroscedasticity(zoop_lm) |> plot()
 ```
 
 ---
 # Collinearity!
 ```{r}
-check_model(zoop_lm, check = "vif") |> plot()
+check_collinearity(zoop_lm) |> plot()
 ```
 
 - by definition, not a problem in an experiment
