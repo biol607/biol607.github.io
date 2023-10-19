@@ -62,7 +62,7 @@ class: center, middle
 
 # Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-interactions-nonlinearities-2023</h3></center>
+<center><h3>https://etherpad.wikimedia.org/p/607-complex-linear-models-2023</h3></center>
 
 
 ---
