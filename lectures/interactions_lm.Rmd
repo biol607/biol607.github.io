@@ -62,7 +62,7 @@ class: center, middle
 
 # Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-interactions-nonlinearities-2022</h3></center>
+<center><h3>https://etherpad.wikimedia.org/p/607-interactions-nonlinearities-2023</h3></center>
 
 
 ---
@@ -161,7 +161,7 @@ class: center, middle
 
 2. Evaluating Interaction Effects
 
-3. How to Look at Means and Differences with an Interaction Effect. 
+3. How to Look at Means and Differences with an Interaction Effect  
 
 4. Continuous Variables and Interaction Effects
 
@@ -559,6 +559,7 @@ Or in code:
 keeley_lm_int <- lm(firesev ~ age * elev, data=keeley)
 ```
 
+---
 
 ## Assumption Tests as Usual!
 
@@ -566,6 +567,7 @@ keeley_lm_int <- lm(firesev ~ age * elev, data=keeley)
 check_model(keeley_lm_int)
 ```
 
+---
 
 ## Examine Residuals With Respect to Each Predictor
 
@@ -573,6 +575,7 @@ check_model(keeley_lm_int)
 residualPlots(keeley_lm_int, test=FALSE, fitted = FALSE)
 ```
 
+---
 
 ## Interactions, VIF, and Centering
 ```{r int_vif}
@@ -589,6 +592,7 @@ check_collinearity(keeley_lm_int)
 - If you are worried, **center** your predictors - i.e., $X_i - mean(X)$
       - This can also fix issues with some models not converging
 
+---
 
 ## Interpretation of Centered Coefficients
 $$\huge X_i - \bar{X}$$
@@ -603,6 +607,8 @@ $$\huge X_i - \bar{X}$$
 --
 
 -   Visualization will keep you from getting confused! 
+
+---
 
 ## Interactions, VIF, and Centering
 $$y = \beta_0 + \beta_{1}(x_{1}-\bar{x_{1}}) + \beta_{2}(x_{2}-\bar{x_{2}})+ \beta_{3}(x_{1}-\bar{x_{1}})(x_{2}-\bar{x_{2}})$$
@@ -620,6 +626,7 @@ keeley_lm_int_cent <- lm(firesev ~ age_c*elev_c, data=keeley)
 check_collinearity(keeley_lm_int_cent)
 ```
 
+---
 
 ## Coefficients!
 ```{r int_coef}
@@ -632,6 +639,8 @@ R<sup>2</sup> = `r summary(keeley_lm_int)$r.square`.
   
 Note that additive coefficients signify the effect of one predictor in the abscence of all others.
 
+---
+
 ## Centered Coefficients!
 ```{r int_coef_cent}
 tidy(keeley_lm_int_cent) %>% table_out
@@ -642,6 +651,8 @@ tidy(keeley_lm_int_cent) %>% table_out
 R<sup>2</sup> = `r summary(keeley_lm_int_cent)$r.square`  
   
 Note that additive coefficients signify the effect of one predictor at the average level of all others.
+
+---
 
 ## Interpretation
 - What the heck does a continuous interaction effect mean?
@@ -702,6 +713,8 @@ ggplot() +
   theme_bw(base_size=17)
 ```
 
+---
+
 ## A Heatmap Approach
 ```{r int_heatmap}
 k_pred_grid <- crossing(elev = 100:1200, age = 3:60) %>%
@@ -729,3 +742,7 @@ plot_ly(x=~age, y=~elev, z=~firesev, type="scatter3d", mode="surface",  data = s
               color = I("black"))
 ```
 
+---
+class: center, middle
+
+![](images/interactions/main-effects-without.jpg)
