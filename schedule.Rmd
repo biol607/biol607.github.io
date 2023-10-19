@@ -132,7 +132,7 @@ __Homework:__ None. Catch up!
 ```
 `r datestring`   
 __Lectures:__  [Many categories or mixing categories and continuous predictors](./lectures/many_types_of_predictors.html), [When one predictor's effect depends on the other](lectures/interactions_lm.html)   
-__Lab Topic:__  [Models with many types of predictors](lab/many_predictor_types.html)  
+__Lab Topic:__  [Models with many types of predictors - and interactions!](lab/complex_linear_models.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__  [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Understanding ‘it depends’ in ecology: a guide to hypothesising, visualising and interpreting statistical interactions](https://onlinelibrary.wiley.com/doi/full/10.1111/brv.12939)   
 __Optional Readings:__ [Interactions in statistical models: Three things to know](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13714), [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)  
