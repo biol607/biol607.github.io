@@ -137,7 +137,7 @@ __Lab Data:__  [Multiple Files](lab/data_10.zip)
 __Reading:__  [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Understanding ‘it depends’ in ecology: a guide to hypothesising, visualising and interpreting statistical interactions](https://onlinelibrary.wiley.com/doi/full/10.1111/brv.12939)   
 __Optional Readings:__ [Interactions in statistical models: Three things to know](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13714), [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-complex-linear-models-2023  
-__Homework:__ [Many Predictors!](homework/many_predictors.html), [RIKZ Data](homework/data/rikz.csv)  
+__Homework:__ [Complex linear models](homework/complex_linear_models.html)    
 __Project Proposal:__ [general instructions here](project_proposal.html)  
 
 

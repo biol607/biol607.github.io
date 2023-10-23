@@ -1,0 +1,180 @@
+---
+title: "Complex Linear Models"
+format: html
+---
+**Homework adapted from https://statistics4ecologistsexercises.netlify.app/multiple-regression-and-design-matrices**
+
+## 1. Complex Linear Models and their Design Matrices
+
+1. For this exercise, we will consider the `penguins` data set from the `palmerpenguins` package. The data set contains various measures of penguin size, species, and sex, along with the year and island when/where the observations were made.  Begin by loading the data and dropping observations that have missing values for some of the predictors. For this data, we can filter on not being NA for sex:
+
+```{r warning=FALSE, message=FALSE}
+library(dplyr)
+library(palmerpenguins)
+data(penguins)
+
+#some incomplete cases to filter out
+penguins <- penguins |> filter(!is.na(sex))
+```
+
+
+**1A.** First, consider a linear model in which you attempt to predict a penguin's body mass (`body_mass_g`) from its flipper length (`flipper_length-mm`) and the sex (`sex`) of the penguin.  
+
+```{r warning=FALSE, message=FALSE, include = FALSE}
+lmeffects <- lm(body_mass_g ~ flipper_length_mm + sex, data = penguins)
+summary(lmeffects)
+```
+
+
+**1B.** Write down the entries in the design matrix, $X$ for the first 3 observations in the data set. Don't forget the intercept! Verify you are correct with the `model.matrix()` function.  Note, to see how to write a table in markdown for a quarto document, check out https://quarto.org/docs/authoring/tables.html
+
+```{r}
+penguins[1:3,c("body_mass_g", "flipper_length_mm", "sex")]
+```
+<!-- Lets look at the first 3 observations:
+
+
+
+The design matrix for the first 3 observations is:
+
+
+$$\begin{bmatrix} 1 & 181 & 1 \\
+1 & 186 & 0 \\
+1 & 195 & 0\end{bmatrix}$$
+
+
+Let's verify  using the `model.matrix` function. 
+```{r}
+model.matrix(lmeffects)[1:3,]
+```
+
+-->
+
+
+**1C.** Now, consider adding `species` to the model in addition to flipper length (`flipper_length-mm`) and the sex (`sex`) of the penguin. Fit the model using effects coding. 
+
+```{r, echo = FALSE}
+lmspecies <- lm(body_mass_g ~ flipper_length_mm + sex + species, data = penguins)
+```
+
+Write down the entries in the design matrix for the following observations:
+
+```{r}
+penguins[c(1, 2, 200, 201, 300, 301),
+         c("body_mass_g", "flipper_length_mm", "sex", "species")]
+```
+
+<!-- The design matrix for the first 6 observations is:
+
+$$\begin{bmatrix} 1 & 181 & 1 & 0 & 0 \\
+1 & 186 & 0 & 0 & 0 \\
+1 & 217 & 0 & 0 & 1 \\
+1 & 220 & 1 & 0 & 1 \\
+1 & 195 & 1 & 1 & 0 \\
+1 & 199 & 0 & 1 & 0 \end{bmatrix}$$
+
+
+
+Again, we can use the `model.matrix` function to verify this:
+
+
+
+```{r}
+model.matrix(lmspecies)[c(1, 2, 200, 201, 300, 301),] 
+```
+
+-->
+
+**1D.** Lastly, let's allow the effect of flipper length to be sex-specific.  This can be accomplished by adding an interaction between `sex` and `flipper_length_mm`.  Again, write down the entries in the design matrix for 6 observations selected just above. Check yourself with `model.matrix()`
+
+```{r, echo = FALSE}
+lmspecies2 <- lm(body_mass_g ~ flipper_length_mm + sex + sex:flipper_length_mm + 
+                   species, data = penguins)
+```
+
+<!-- 
+The design matrix for the first 6 observations is:
+
+$$\begin{bmatrix} 1 & 181 & 1 & 0 & 0 & 181\\
+1 & 186 & 0 & 0 & 0 & 0\\
+1 & 217 & 0 & 0 & 1 & 0\\
+1 & 220 & 1 & 0 & 1 & 220\\
+1 & 195 & 1 & 1 & 0 & 195\\
+1 & 199 & 0 & 1 & 0 & 0 \end{bmatrix}$$
+
+-->
+
+## 2. Three variations on a theme
+
+For this exercise, we will use the `leaftemp` data set in the `DAAG` package.  The data set contains measurements of vapor pressure (`vapPress`) and differences between leaf and air temperatures (`tempDiff`) in an experiment conducted at three different levels of carbon dioxide (`CO2level`). 
+
+```{r warning=FALSE, message = FALSE}
+pacman::p_load(DAAG)
+data(leaftemp)
+```
+
+
+**2A.** Fit the following three models to these data:
+
+- simple linear regression: `lm(tempDiff ~ vapPress, data = leaftemp)` 
+- Analysis of covariance:  `lm(tempDiff ~ vapPress + CO2level, data= leaftemp)`
+- Interaction model:  `lm(tempDiff ~ vapPress*CO2level, data= leaftemp)`
+
+```{r}
+lm1 <- lm(tempDiff ~ vapPress, data = leaftemp)
+lm2 <- lm(tempDiff ~ vapPress + CO2level, data= leaftemp)
+lm3 <- lm(tempDiff ~ vapPress*CO2level, data= leaftemp)
+```
+
+**2B.** Do all of these models pass checks of assumptions?
+
+**2C.** For the **Analysis of covariance model**, write down the equation Corresponding to the model. In quarto, you can use LaTeX to write equations fairly simply. Check out this quick primer [here](https://rmd4sci.njtierney.com/math) and/or just use this LaTeX equation generator [here](https://latexeditor.lagrida.com/). I promise, it's super useful!
+
+<!--
+
+The ANCOVA model is given by:
+
+$$tempdiff_i = \beta_0 + \beta_1vapPress_i + \beta_2 I(C02level == medium)_i + \beta_3I(C02level == high)_i + \epsilon_i\\
+\epsilon_i \sim N(0, \sigma^2)$$
+
+-->
+
+2D. Plot the predicted mean temperature difference as a function of vapor pressure (and when appropriate, CO$_2$ level) for each of the 3 models.
+
+```{r echo = FALSE}
+# Visregs or a good ggplot with predictions
+```
+
+
+
+## 3. Interactions with Continuous Variables
+
+Scientists wanted to simulate how different biological interactions might influence the carbon burial potential of sinking algae in the deep ocean. Let's use [this simulated data](data/c_burial_sims.csv) which features sinking rate, microbial abundance, and detritovore abundance as predictors of net carbon sequestration.
+
+**3A** Load the data, inspect it, and fit a model with a 3-way interaction, Do you meet assumptions?
+
+**3B** Now the fun part - inference. What do the coefficients tell you?
+
+**3C** OK - that's a lot. Use your skills of visualization do tease out what the data is telling us. You can use `visreg()` or `augment()` with `data_grid()` or whatever you would like. Make this model make sense so that you can tell your audience how these three parameters work together to influence carbon burial!
+
+
+----
+
+## Meta 1. 
+Where do you think we will go next with models like there?
+
+## Meta 2. 
+In particular, what do you find most interesting about intereaction effects? What do you find most intimidating?
+
+## Meta 3. 
+How do you think you will use complex linear models like these in your own work?
+
+## Meta 3.
+Now that we have fully explored purely "linear" models, what one question or concern do you still have?
+
+## Meta 4. 
+How much time did this take you, roughly? Again, I'm trying to keep track that these assignments aren't killer, more than anything.  
+
+## Meta 5. 
+Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.
+
