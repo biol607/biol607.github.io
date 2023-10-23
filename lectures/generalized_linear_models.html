@@ -34,9 +34,110 @@ class: center, middle
 &lt;/style&gt;
 
 ---
-# Where We Have Lived Until Now - a Normal World
+background-image:url("images/glm/4_consumers.png")
+background-size: contain
 
+---
+background-image:url("images/glm/plate.png")
+background-size: contain
+
+---
+### My Data
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; predator_richness &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; percent_open &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 81 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 100 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 97 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 58 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 96 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 92 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 83 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 99 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 92 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+## So....
+
+&lt;img src="generalized_linear_models_files/figure-html/cons_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## That was a Terrible Idea
 &lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+## That was a Terrible Idea
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## That was a Terrible Idea
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## Log (and other transformations) are not better
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## The Answer is Not Normal.... or Linear
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class:center, middle
+
+![](images/glm/nonnormal_barbie.jpg)
+
+---
+# A Generalized Linear World
+
+1. The Generalized Linear Model 
+  
+2. Logistic Regression &amp; Assumption Tests 
+  
+3. Logit Curves with Continuous Data
+
+---
+# We Have Lived In a Normal World - Until Now
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -50,8 +151,20 @@ class: center, middle
 .center[ ![:scale 50%](images/glm/distributions.png) ]
 
 See https://www.randomservices.org/random/special/GeneralExponential.html
+
 ---
-# The Linear Model with Gaussian Error is a Special Case
+# The Linear Model with Gaussian Error 
+$$\Large \hat{Y_i} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+
+
+
+`$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+
+
+---
+# Let's Make a Small Change
 $$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
 &lt;br&gt;&lt;br&gt;
 
@@ -61,6 +174,52 @@ $$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$
 
 
 `$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+
+
+---
+# Another Teeeny Change - Link Functions
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large f(\hat{Y_i}) = \eta_{i}$$`
+.red[f is a link function]  
+.red[for linear regression, we call this an **identity link**]  
+
+
+
+`$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+
+
+---
+## Hold up, isn't this just transformation?
+
+- No.
+
+--
+
+- `\(log(Y) = \beta X + \epsilon\)` means that `\(Y = exp(\beta X + \epsilon)\)`
+
+--
+
+- A **log link** with a normal residual means that
+    - `\(log(\widehat{Y}) = \beta X\)` but `\(\epsilon\)` is additive to `\(\widehat{Y}\)`  
+    - SO `\(Y = exp(\beta X) + \epsilon\)`
+
+
+---
+# So if THIS is the Generalized Linear Model with a Gaussian Error and an Identity Link...
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large\hat{Y_i} = \eta_{i}$$`
+
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$`
+
+
+
 ---
 # The Generalized Linear Model
 $$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
@@ -68,22 +227,13 @@ $$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$
 
 
 `$$\Large f(\hat{Y_i}) = \eta_{i}$$`
-.red[f is a link function]
+.red[our link doesn't have to be linear]
 &lt;br&gt;&lt;br&gt;
 
 `$$\Large Y_i \sim \mathcal{D}(\hat{Y_i}, \theta)$$`
 &lt;br&gt;&lt;br&gt;
 
 `\(\mathcal{D}\)` is some distribution from the **exponential family**, and `\(\theta\)` are additional parameters specifying dispersion
-
----
-# A Generalized Linear World
-
-1. Wait, what are these different distributions and links?  
-
-2. A Logistic Regression Example  
-  
-3. Overdispersion
 
 ---
 # What Are Properties of Data that is Not Normal?
@@ -108,13 +258,13 @@ $$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$
 ---
 class: center, middle
 
-![:scale 90%](images/25/gosling_normality.jpg)
+![:scale 80%](images/25/gosling_normality.jpg)
 
 ---
 # Count Data - Poisson or Negative Binomial
 Discrete, variance-mean relationships (linear or squared)
 
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Outcomes of Trials - Binomial
@@ -125,7 +275,7 @@ Discrete, Yes/No or # of Outcomes of a Class - we model the probability
 ]
 
 .pull-right-large[
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -137,7 +287,7 @@ Skewed continuous, variance-mean relationship
 ]
 
 .pull-right-large[
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 ]
 ---
 # Percents and Porportions - Beta
@@ -149,7 +299,7 @@ Bounded, Unimodal to Bimodal
 
 .pull-right-large[
 
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -211,11 +361,11 @@ The key is to think about your residual variance and what is appropriate
 ---
 # A Generalized Linear World
 
-1. Wait, what are these different distributions and links?  
-
-2. .red[A Logistic Regression Example]  
+1. The Generalized Linear Model 
   
-3. Overdispersion
+2. .red[Logistic Regression &amp; Assumption Tests]  
+  
+3. Logit Curves with Continuous Data
 
 ---
 background-image: url("images/25/cryptosporidiosis-cryptosporidium-hominis.jpeg")
@@ -255,16 +405,17 @@ class: center, middle
 # Logit Transform
 
 ![](images/25/logit_conversion.jpg)
+
 ---
 # Why GLM then?
-1. It might not work,  2. We have unequal # of trials per point, 3. If our response had been binary
+1. It might not work,  2. Unequal # of trials per point, 3. A binary response 
 
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Binary GLM
 
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -273,7 +424,8 @@ class: center, middle
 ![](images/glm/OLS_binary.png)
 
 ---
-# Binomial Distribution
+# Binomial Distribution (coin flips!)
+
 $$ Y_i \sim B(prob, size) $$
 
  * Discrete Distribution
@@ -327,22 +479,127 @@ crypto_glm &lt;- glm(cbind(Y, Y-N) ~ Dose,
 ---
 # How About those Assumptions?
 
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+1. Is there a match between observations and predictions?  
+
+2. No Outliers 
+
+3. Quantile Residuals  
 
 ---
 # How About those Assumptions?
 
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Quantile Residuals
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+# How About those Assumptions?
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Binned Residuals
-### For a  *fitted* probability, look at average residual in a bin around it
+# Assessing Assumptions when Modeling Variance: Quantile Residuals
 
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+- Every residual point comes from a distribution  
+
+--
+
+- Every distribution has a *cummulative distribution function*
+
+--
+
+- The CDF of a probability distribution defines it's quantiles - from 0 to 1.
+
+--
+
+- We can determine the quantile of any point relative to its distribution
+
+---
+# A Quantile from a Distribution: Say this is your distribution 
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Quantile from a Distribution: Overlay the CDF
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Quantile from a Distribution: This is our Point
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Quantile from a Distribution: We see where it lies on the CDF
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# A Quantile from a Distribution: And we can get its quantile
+
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals
+
+- Every observation is distributed around an estimated value
+
+--
+
+- We can calculate its quantile
+
+--
+
+- If model fits well, quantiles of residuals should be uniformly distributed  
+
+--
+- I.E., for any point, if we had its distribution, there should be no bias in its quantile  
+
+--
+
+- We do this via simulation for flexibility  
+
+--
+
+- Works for **many** (any?) models
+
+---
+# Randomized quantile residuals: Steps
+1. Get 1000 (or more!) simulations of model coefficients 
+
+--
+
+2. For each response (y) value, create an empirical distribution from the simuations  
+
+--
+
+3. For each response, determine it's quantile from that empirical distribution
+
+--
+4. The quantiles of all y values should be uniformly distributed  
+      - QQ plot of a uniform distribution!  
+      
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="generalized_linear_models_files/figure-html/rqr-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="generalized_linear_models_files/figure-html/rqr1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="generalized_linear_models_files/figure-html/rqr2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="generalized_linear_models_files/figure-html/rqr3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized quantile residuals: Visualize
+&lt;img src="generalized_linear_models_files/figure-html/rqr4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Randomized Quantile Residuals from Squid Model
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # OK, What Are We Estimating? 
@@ -415,141 +672,151 @@ Logit coefficients are in:
 
 - Only use if you can represent data as indepenent *trials*  
       - Internally, breaks responses into yes/no 
-      
+
 ---
 # A Generalized Linear World
 
-1. Wait, what are these different distributions and links?  
-
-2. A Logistic Regression Example  
+1. The Generalized Linear Model 
   
-3. .red[Overdispersion]
-
----
-# What is the relationship between kelp holdfast size and number of fronds?
-
-.center[ ![](images/25/Giant_kelp_adult.jpeg) ]
-
----
-# What About Kelp Holdfasts?
-&lt;img src="generalized_linear_models_files/figure-html/kelp-1.png" style="display: block; margin: auto;" /&gt;
----
-# If you had Tried a Linear Model
-
-```r
-kelp_lm &lt;- lm(FRONDS ~ HLD_DIAM, data=kelp)
-```
-
-&lt;img src="generalized_linear_models_files/figure-html/plot_lelp-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# What is our data and error generating process?
-&lt;img src="generalized_linear_models_files/figure-html/kelp-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# What is our data and error generating process?
-- Data generating process should be exponential
-       - No values less than 1  
-
---
-
-- Error generating process should be Poisson
-       - Count data
-
----
-# Let's Fit a Model!
-
-
-```r
-kelp_glm &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp,
-                family=poisson(link="log"))
-```
-
----
-# Quantile Residuals for Kelp GLM with Log Link
-&lt;img src="generalized_linear_models_files/figure-html/kelp_resid_dharma-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Ruh Roh! What happened? Overdispersion of Data!
-- When the variance increases faster than the mean, our data is overdispersed  
-
---
-
-- This can be solved with different distributions whose variance have different properties  
---
-
- - OR, we can fit a model, then scale it’s variance posthoc with a coefficient  
-
---
-
--  The likelihood of these latter models is called a Quasi-likelihood, as it does not reflect the true spread of the data  
-      - Good to avoid, as it causes inferential difficulties down the line
-      
----
-# For Count Data, Two Common Solutions
-
-1. Negative Binomial
-  - Variance = `\(\hat{Y_i}^2 + \theta\hat{Y_i}^2\)`|$
-  - Increases with the square, not linearly
-  - Although some forms also do linear...
-  - Common for **clumped data**  
+2. Logistic Regression &amp; Assumption Tests  
   
---
-
-2. Quasi-Poisson  
-  - Basically, Variance = `\(\theta\hat{Y}\)`  
-  - Posthoc estimation of `\(\theta\)`
-  - (Also a similar quasibinomial)  
-
---
-
-3. Others where you model dispersion explicitly
-  - You are in deeper waters here
-       
----
-# Plot of Smoothed Binned Residuals v. Predictor
-Linear: Quasipoisson, Squared: Negative Binomial
-
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
-
-See Ver Hoef and Boveng 2007
+3. .red[Logit Curves with Continuous Data]
 
 ---
-# New Fits
+background-image:url("images/glm/plate.png")
+background-size: contain
+
+---
+### My Data
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; predator_richness &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; percent_open &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 81 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 100 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 97 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 58 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 96 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 92 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 83 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 99 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 92 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# This was wrong
+
+&lt;img src="generalized_linear_models_files/figure-html/cons_plot-1.png" style="display: block; margin: auto;" /&gt;
 
 
-Negative Binomial
+---
+# Dirchlet (and Beta) Regression
+
+![](images/glm/dirchlet_paper.png)
+- Dirchlet distribution describes probability density for **many** variables that are constrained to sum together to 1.  
+
+- Beta distribution is a special case of the Dirchlet where there are only two variables that must sum to one. For example:
+     - Percent cover  
+     - Completion rates  
+     - Purity of distillate 
+
+---
+# Percents and Porportions - Beta
+Bounded, Unimodal to Bimodal
+
+.pull-left-small[
+![](images/glm/cover.jpg)
+]
+
+.pull-right-large[
+
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+# The Beta Generalized Linear Model
+
+
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+
+`$$\Large f(\hat{Y_i}) = \eta_{i}$$`
+.red[canonical link is logit, so] `\(0 &lt; \hat{Y_i} &lt; 1\)`  
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large Y_i \sim \mathcal{B}(\hat{Y_i}, \phi)$$`
+&lt;br&gt;&lt;br&gt;
+
+`\(\mathcal{D}\)` is the Beta Distribution and `\(\phi\)` is a parameter that changes with the mean so that `\(Var(Y) = \hat{Y_i}(1-\hat{Y_i})/(1+\phi)\)`
+
+---
+# A Few Other Links
+
+![](images/glm/beta_links.png)
+
+---
+## Our Model
 
 
 ```r
-library(MASS)
-kelp_glm_nb &lt;- glm.nb(FRONDS ~ HLD_DIAM, data=kelp)
+library(glmmTMB)
+
+cons_div_aug &lt;- cons_div_aug |&gt;
+  mutate(porportion_open = percent_open/100)
+
+breg &lt;- glmmTMB(porportion_open ~ predator_richness,
+                data = cons_div_aug,
+                family = ordbeta())
 ```
 
-OR
-
-Quasipoisson
-
-```r
-kelp_glm_qp &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp, 
-                 family=quasipoisson(link="log"))
-```
+(note, ordbeta allows for 0, 1 - ordered beta regression)
+---
+# Check Your Quantile Residuals!
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Checking The Quantile Residuals
+# Let's Plot Instead of Coefficients
 
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 
----
-# Looks Good!
-
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Final Note About GLMs and Overdispersion
-### Many Distributions Cannot Handle 0s or 1s
-
-&lt;img src="generalized_linear_models_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # The GLM Frontier

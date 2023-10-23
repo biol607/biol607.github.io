@@ -33,6 +33,7 @@ options(htmltools.dir.version = FALSE)
 
 library(ggplot2)
 
+library(car)
 library(dplyr)
 library(tidyr)
 library(broom)
@@ -43,6 +44,8 @@ library(performance)
 library(glmmTMB)
 library(nlme)
 library(DHARMa)
+library(readxl)
+library(readr)
 
 theme_set(theme_bw(base_size = 16))
 ```
@@ -59,7 +62,121 @@ theme_set(theme_bw(base_size = 16))
 ```
 
 ---
-# Where We Have Lived Until Now - a Normal World
+background-image:url("images/glm/4_consumers.png")
+background-size: contain
+
+---
+background-image:url("images/glm/plate.png")
+background-size: contain
+
+---
+### My Data
+```{r load_dat}
+cons_div_aug <- read_xls("data/consumer_div_august_sample.xls") |>
+    janitor::clean_names() |>
+  dplyr::select(c(block:limpets_start, percent_open)) |>
+  group_by(plate) |>
+  mutate(abundance = sum(crabs_start,
+                         urchins_start, 
+                         chitons_start, 
+                         limpets_start,
+                         na.rm = TRUE)) |>
+  ungroup() |>
+         mutate(across(crabs_start:limpets_start, \(x) grepl("[0-9]", x)),
+         predator_richness = crabs_start + urchins_start + chitons_start + limpets_start,
+         is_replace = (abundance == 4 | abundance == 0)) |>
+  dplyr::select(-c(crabs_start:limpets_start, x1:x4))|>
+  filter(is_replace)
+
+cons_div_aug |>
+  dplyr::select(predator_richness, percent_open) |>
+  head(10) |>
+  kable() |> kableExtra::kable_paper()
+```
+
+---
+## So....
+
+```{r cons_plot}
+ggplot(cons_div_aug,
+       aes(x = predator_richness,
+           y = percent_open)) +
+  geom_point(position = position_jitter(width = 0.2))+
+  stat_smooth(method = "lm")
+```
+
+---
+## That was a Terrible Idea
+```{r}
+cons_lm <- lm(percent_open ~ predator_richness, data = cons_div_aug)
+
+check_posterior_predictions(cons_lm) |> plot()
+```
+
+
+---
+## That was a Terrible Idea
+```{r}
+plot(cons_lm, which = 1)
+```
+
+---
+## That was a Terrible Idea
+```{r}
+check_normality(cons_lm) |> plot()
+```
+
+---
+## Log (and other transformations) are not better
+```{r}
+lm(log(percent_open/100) ~ predator_richness, data = cons_div_aug) |>
+check_normality() |> plot()
+```
+
+---
+## The Answer is Not Normal.... or Linear
+```{r}
+cons_div_aug <- cons_div_aug |>
+  mutate(porportion_open = percent_open/100)
+
+breg <- glmmTMB(porportion_open ~ predator_richness,
+                data = cons_div_aug,
+                family = ordbeta())
+
+cda <- augment(breg, type = "response", conf.int = TRUE,
+               newdata = data.frame(predator_richness = seq(0,4, length.out = 200))) |>
+  mutate(
+         .lower = boot::inv.logit(.fitted - 2*.se.fit),
+         .upper = boot::inv.logit(.fitted + 2*.se.fit),
+         .fitted = boot::inv.logit(.fitted))
+
+ggplot(cons_div_aug,
+       aes(x = predator_richness,
+           y = percent_open)) +
+  geom_point(position = position_jitter(width = 0.2)) +
+  geom_line(data = cda, aes(y = .fitted*100), color = "red") +
+  geom_ribbon(data = cda, aes(y = .fitted*100,
+                              ymin = 100*.lower,
+                              ymax = 100*.upper),
+              alpha = 0.2, color = "grey")
+```
+
+---
+class:center, middle
+
+![](images/glm/nonnormal_barbie.jpg)
+
+---
+# A Generalized Linear World
+
+1. The Generalized Linear Model 
+  
+2. Logistic Regression & Assumption Tests 
+  
+3. Logit Curves with Continuous Data
+
+---
+# We Have Lived In a Normal World - Until Now
 
 ```{r}
 
@@ -85,8 +202,20 @@ ggplot(tibble(x = seq(-3,3, length.out=200), y = dnorm(x)),
 .center[ ![:scale 50%](images/glm/distributions.png) ]
 
 See https://www.randomservices.org/random/special/GeneralExponential.html
+
 ---
-# The Linear Model with Gaussian Error is a Special Case
+# The Linear Model with Gaussian Error 
+$$\Large \hat{Y_i} = \boldsymbol{\beta X_i} $$ 
+<br><br>
+
+
+
+
+$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$
+
+
+---
+# Let's Make a Small Change
 $$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
 <br><br>
 
@@ -96,6 +225,52 @@ $$\Large \hat{Y_i} = \eta_{i}$$
 
 
 $$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$
+
+
+---
+# Another Teeeny Change - Link Functions
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+<br><br>
+
+$$\Large f(\hat{Y_i}) = \eta_{i}$$
+.red[f is a link function]  
+.red[for linear regression, we call this an **identity link**]  
+
+
+
+$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$
+
+
+---
+## Hold up, isn't this just transformation?
+
+- No.
+
+--
+
+- $log(Y) = \beta X + \epsilon$ means that $Y = exp(\beta X + \epsilon)$
+
+--
+
+- A **log link** with a normal residual means that
+    - $log(\widehat{Y}) = \beta X$ but $\epsilon$ is additive to $\widehat{Y}$  
+    - SO $Y = exp(\beta X) + \epsilon$
+
+
+---
+# So if THIS is the Generalized Linear Model with a Gaussian Error and an Identity Link...
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+<br><br>
+
+$$\Large\hat{Y_i} = \eta_{i}$$
+
+<br><br>
+
+
+$$\Large Y_i \sim \mathcal{N}(\hat{Y_i},\sigma^{2})$$
+
+
+
 ---
 # The Generalized Linear Model
 $$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
@@ -103,22 +278,13 @@ $$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$
 
 
 $$\Large f(\hat{Y_i}) = \eta_{i}$$
-.red[f is a link function]
+.red[our link doesn't have to be linear]
 <br><br>
 
 $$\Large Y_i \sim \mathcal{D}(\hat{Y_i}, \theta)$$
 <br><br>
 
 $\mathcal{D}$ is some distribution from the **exponential family**, and $\theta$ are additional parameters specifying dispersion
-
----
-# A Generalized Linear World
-
-1. Wait, what are these different distributions and links?  
-
-2. A Logistic Regression Example  
-  
-3. Overdispersion
 
 ---
 # What Are Properties of Data that is Not Normal?
@@ -143,7 +309,7 @@ $\mathcal{D}$ is some distribution from the **exponential family**, and $\theta$
 ---
 class: center, middle
 
-![:scale 90%](images/25/gosling_normality.jpg)
+![:scale 80%](images/25/gosling_normality.jpg)
 
 ---
 # Count Data - Poisson or Negative Binomial
@@ -287,11 +453,11 @@ The key is to think about your residual variance and what is appropriate
 ---
 # A Generalized Linear World
 
-1. Wait, what are these different distributions and links?  
-
-2. .red[A Logistic Regression Example]  
+1. The Generalized Linear Model 
   
-3. Overdispersion
+2. .red[Logistic Regression & Assumption Tests]  
+  
+3. Logit Curves with Continuous Data
 
 ---
 background-image: url("images/25/cryptosporidiosis-cryptosporidium-hominis.jpeg")
@@ -314,13 +480,15 @@ class: inverse
 
 # Cryptosporidum Infection Rates
 ```{r crypto_data}
-crypto <- read.csv("lectures/data/25/cryptoDATA.csv") %>%
+crypto <- read.csv("data/25/cryptoDATA.csv") %>%
   mutate(success=Y/N)
 ```
 
 ```{r crypto_plot}
 
-cryptoPlot <- qplot(Dose, success, data=crypto) +
+cryptoPlot <- ggplot(data = crypto,
+                     mapping = aes(x = Dose, y = success))+
+  geom_point() +
   theme_bw(base_size=16) +
   ylab("Fraction of Mice Infected")
 
@@ -344,13 +512,18 @@ class: center, middle
 # Logit Transform
 
 ![](images/25/logit_conversion.jpg)
+
 ---
 # Why GLM then?
-1. It might not work,  2. We have unequal # of trials per point, 3. If our response had been binary
+1. It might not work,  2. Unequal # of trials per point, 3. A binary response 
 
 ```{r}
 
-qplot(Dose, success, data=crypto, size = N) +
+ggplot(data = crypto,
+                     mapping = aes(x = Dose, 
+                                   y = success,
+                                   size = N))+
+  geom_point() +
   theme_bw(base_size=16) +
   ylab("Fraction of Mice Infected")
 ```
@@ -377,7 +550,8 @@ class: center, middle
 ![](images/glm/OLS_binary.png)
 
 ---
-# Binomial Distribution
+# Binomial Distribution (coin flips!)
+
 $$ Y_i \sim B(prob, size) $$
 
  * Discrete Distribution
@@ -429,8 +603,18 @@ crypto_glm <- glm(cbind(Y, Y-N) ~ Dose,
 ---
 # How About those Assumptions?
 
+1. Is there a match between observations and predictions?  
+
+2. No Outliers 
+
+3. Quantile Residuals  
+
+---
+# How About those Assumptions?
+
 ```{r}
-check_predictions(crypto_glm, iterations = 50) |> plot() + theme_bw(base_size = 18)
+check_predictions(crypto_glm, 
+                  type = "discrete_dots") |> plot() + theme_bw(base_size = 18)
 ```
 
 ---
@@ -441,18 +625,180 @@ check_outliers(crypto_glm) |> plot() + theme_bw(base_size = 18)
 ```
 
 ---
-# Quantile Residuals
+# Assessing Assumptions when Modeling Variance: Quantile Residuals
+
+- Every residual point comes from a distribution  
+
+--
+
+- Every distribution has a *cummulative distribution function*
+
+--
+
+- The CDF of a probability distribution defines it's quantiles - from 0 to 1.
+
+--
+
+- We can determine the quantile of any point relative to its distribution
+
+---
+# A Quantile from a Distribution: Say this is your distribution 
+
 ```{r}
-a <- simulateResiduals(crypto_glm, n = 1e3)
-plotQQunif(a, testUniformity = FALSE, testOutliers = FALSE, testDispersion = FALSE)
+distplot <- tibble(x = seq(-3,3, length.out=200),
+                   dens = dnorm(x),
+                   cdf = pnorm(x))
+x_obs <- 1.4
+
+p <- ggplot(distplot, aes(x = x, y = dens)) +
+  geom_line() +
+  labs(x = "", y = "Density or Cummulative Density")
+
+p
 ```
 
 ---
-# Binned Residuals
-### For a  *fitted* probability, look at average residual in a bin around it
+# A Quantile from a Distribution: Overlay the CDF
+```{r}
+ p <- p +
+  geom_line(aes(y = cdf), color = "blue")
+
+p
+```
+
+---
+# A Quantile from a Distribution: This is our Point
+```{r}
+p + geom_point(x = x_obs, y = 0, color = "red", size = 2)
+```
+
+---
+# A Quantile from a Distribution: We see where it lies on the CDF
 
 ```{r}
-binned_residuals(crypto_glm, n_bins = 8) |> plot()
+p + geom_point(x = x_obs, y = 0, color = "red", size = 2) +
+  geom_segment(x = x_obs, y = 0,
+               xend = x_obs, yend = pnorm(x_obs), 
+               lty = 2, color = "red")
+```
+
+---
+# A Quantile from a Distribution: And we can get its quantile
+
+
+```{r}
+p + geom_point(x = x_obs, y = 0, color = "red", size = 2) +
+  geom_segment(x = x_obs, y = 0,
+               xend = x_obs, yend = pnorm(x_obs), 
+               lty = 2, color = "red") +
+  geom_segment(x = x_obs, y = pnorm(x_obs),
+               xend = -3.3, yend = pnorm(x_obs), 
+               lty = 2, color = "red")
+
+```
+
+---
+# Randomized quantile residuals
+
+- Every observation is distributed around an estimated value
+
+--
+
+- We can calculate its quantile
+
+--
+
+- If model fits well, quantiles of residuals should be uniformly distributed  
+
+--
+- I.E., for any point, if we had its distribution, there should be no bias in its quantile  
+
+--
+
+- We do this via simulation for flexibility  
+
+--
+
+- Works for **many** (any?) models
+
+---
+# Randomized quantile residuals: Steps
+1. Get 1000 (or more!) simulations of model coefficients 
+
+--
+
+2. For each response (y) value, create an empirical distribution from the simuations  
+
+--
+
+3. For each response, determine it's quantile from that empirical distribution
+
+--
+4. The quantiles of all y values should be uniformly distributed  
+      - QQ plot of a uniform distribution!  
+      
+---
+# Randomized quantile residuals: Visualize
+```{r rqr}
+z <- data.frame(vals=rpois(250, 20))
+zdist <- ecdf(z$vals)
+
+zplot <- ggplot() +
+  geom_histogram(data=z, mapping=aes(vals, ..density..), bins=40) + 
+  theme_bw(base_size=17) +
+  ylab("Density\n(point or cummulative)")+
+  xlim(c(0,35))
+
+zplot
+```
+
+---
+# Randomized quantile residuals: Visualize
+```{r rqr1}
+z <- data.frame(vals=rpois(250, 20))
+zdist <- ecdf(z$vals)
+
+zplot <- zplot + 
+  stat_ecdf(data=z, mapping=aes(vals)) 
+
+zplot
+```
+
+---
+# Randomized quantile residuals: Visualize
+```{r rqr2}
+v <- data.frame(x=25, y=0, quant = zdist(25))
+zplot <- zplot + 
+  geom_point(data = v, color = "red",size = 5, mapping=aes(x=x, y=y))
+zplot
+```
+
+---
+# Randomized quantile residuals: Visualize
+```{r rqr3}
+zplot <- zplot + 
+  geom_segment(data=v, color="red", lty=2, mapping=aes(x=x, y=y, xend=x, yend=quant)) +
+  geom_point(data = v, color = "red",size = 5, mapping=aes(x=x, y=quant))
+zplot
+```
+
+---
+# Randomized quantile residuals: Visualize
+```{r rqr4}
+zplot <- zplot + 
+  geom_segment(data=v, color="red", lty=2, mapping=aes(x=x, y=quant, xend=0, yend=quant))+
+  geom_point(data = v, color = "red",size = 5, mapping=aes(x=0, y=quant)) 
+zplot
+```
+
+---
+# Randomized Quantile Residuals from Squid Model
+
+```{r}
+crypto_res <- simulateResiduals(crypto_glm, n = 1000)
+
+plotQQunif(crypto_res, testUniformity = FALSE,
+           testOutliers = FALSE, testDispersion = FALSE)
 ```
 
 ---
@@ -516,173 +862,139 @@ cryptoPlot+
 
 - Only use if you can represent data as indepenent *trials*  
       - Internally, breaks responses into yes/no 
-      
+
 ---
 # A Generalized Linear World
 
-1. Wait, what are these different distributions and links?  
-
-2. A Logistic Regression Example  
+1. The Generalized Linear Model 
   
-3. .red[Overdispersion]
-
----
-# What is the relationship between kelp holdfast size and number of fronds?
-
-.center[ ![](images/25/Giant_kelp_adult.jpeg) ]
-
----
-# What About Kelp Holdfasts?
-```{r kelp}
-kelp <- read.csv("lectures/data/25/kelp_holdfast.csv")
-
-kelp_plot <- qplot(HLD_DIAM, FRONDS, data=kelp) +
-  theme_bw(base_size=17) +
-  geom_point(size=2) +
-  labs(x = "Holdfast Diameter (cm)", y = "# of Fronds")
-
-kelp_plot 
-```
----
-# If you had Tried a Linear Model
-```{r fit_kelp, echo=TRUE}
-kelp_lm <- lm(FRONDS ~ HLD_DIAM, data=kelp)
-```
-
-```{r plot_lelp}
-check_normality(kelp_lm) |> plot("qq") + theme_bw(base_size = 16)
-```
-
----
-# What is our data and error generating process?
-```{r kelp}
-```
-
----
-# What is our data and error generating process?
-- Data generating process should be exponential
-       - No values less than 1  
-
---
-
-- Error generating process should be Poisson
-       - Count data
-
----
-# Let's Fit a Model!
-
-```{r kelp glm, echo=TRUE}
-kelp_glm <- glm(FRONDS ~ HLD_DIAM, data=kelp,
-                family=poisson(link="log"))
-```
-
----
-# Quantile Residuals for Kelp GLM with Log Link
-```{r kelp_resid_dharma, echo=FALSE}
-simulationOutput <- simulateResiduals(kelp_glm)
-plotQQunif(simulationOutput, testUniformity = FALSE, testOutliers = FALSE,
-           testDispersion = FALSE)
-```
-
----
-# Ruh Roh! What happened? Overdispersion of Data!
-- When the variance increases faster than the mean, our data is overdispersed  
-
---
-
-- This can be solved with different distributions whose variance have different properties  
---
-
- - OR, we can fit a model, then scale it’s variance posthoc with a coefficient  
-
---
-
--  The likelihood of these latter models is called a Quasi-likelihood, as it does not reflect the true spread of the data  
-      - Good to avoid, as it causes inferential difficulties down the line
-      
----
-# For Count Data, Two Common Solutions
-
-1. Negative Binomial
-  - Variance = $\hat{Y_i}^2 + \theta\hat{Y_i}^2$|$
-  - Increases with the square, not linearly
-  - Although some forms also do linear...
-  - Common for **clumped data**  
+2. Logistic Regression & Assumption Tests  
   
---
-
-2. Quasi-Poisson  
-  - Basically, Variance = $\theta\hat{Y}$  
-  - Posthoc estimation of $\theta$
-  - (Also a similar quasibinomial)  
-
---
-
-3. Others where you model dispersion explicitly
-  - You are in deeper waters here
-       
----
-# Plot of Smoothed Binned Residuals v. Predictor
-Linear: Quasipoisson, Squared: Negative Binomial
-
-```{r, fig.height = 6}
-check_overdispersion(kelp_glm) |> plot() + theme_bw(base_size = 16)
-```
-
-See Ver Hoef and Boveng 2007
+3. .red[Logit Curves with Continuous Data]
 
 ---
-# New Fits
+background-image:url("images/glm/plate.png")
+background-size: contain
 
-
-Negative Binomial
-
-```{r nb, echo=TRUE}
-library(MASS)
-kelp_glm_nb <- glm.nb(FRONDS ~ HLD_DIAM, data=kelp)
-```
-
-OR
-
-Quasipoisson
-```{r qp, echo=TRUE}
-kelp_glm_qp <- glm(FRONDS ~ HLD_DIAM, data=kelp, 
-                 family=quasipoisson(link="log"))
+---
+### My Data
+```{r the_data}
+cons_div_aug |>
+  dplyr::select(predator_richness, percent_open) |>
+  head(10) |>
+  kable() |> kableExtra::kable_paper()
 ```
 
 ---
-# Checking The Quantile Residuals
+# This was wrong
+
+```{r cons_plot}
+```
+
+
+---
+# Dirchlet (and Beta) Regression
+
+![](images/glm/dirchlet_paper.png)
+- Dirchlet distribution describes probability density for **many** variables that are constrained to sum together to 1.  
+
+- Beta distribution is a special case of the Dirchlet where there are only two variables that must sum to one. For example:
+     - Percent cover  
+     - Completion rates  
+     - Purity of distillate 
+
+---
+# Percents and Porportions - Beta
+Bounded, Unimodal to Bimodal
+
+.pull-left-small[
+![](images/glm/cover.jpg)
+]
+
+.pull-right-large[
 
 ```{r}
-nb_qr <- simulateResiduals(kelp_glm_nb)
-plotQQunif(nb_qr,
-           testUniformity = FALSE,
-           testOutliers = FALSE,
-           testDispersion = FALSE)
+beta_df <- crossing(a = c(0.95,  2), b = c(0.95, 2), x=seq(0,1,length.out=200)) %>%
+  mutate(dens = dbeta(x, a, b),
+         ymin = 0)
+
+ggplot(beta_df, aes(x=x, y=dens, ymax = dens,
+                    ymin = ymin, xmin = x,
+                    fill=factor(a), 
+                    group=paste(a, b, sep=","))) +
+  geom_ribbon() +
+  facet_grid(a~b, labeller = "label_both") +
+  scale_fill_discrete(guide = "none") +
+  labs(y = "probability density", x = "porportion")
+```
+
+]
+
+---
+# The Beta Generalized Linear Model
+
+
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+<br><br>
+
+
+$$\Large f(\hat{Y_i}) = \eta_{i}$$
+.red[canonical link is logit, so] $0 < \hat{Y_i} < 1$  
+<br><br>
+
+$$\Large Y_i \sim \mathcal{B}(\hat{Y_i}, \phi)$$
+<br><br>
+
+$\mathcal{D}$ is the Beta Distribution and $\phi$ is a parameter that changes with the mean so that $Var(Y) = \hat{Y_i}(1-\hat{Y_i})/(1+\phi)$
+
+---
+# A Few Other Links
+
+![](images/glm/beta_links.png)
+
+---
+## Our Model
+
+```{r, echo = TRUE}
+library(glmmTMB)
+
+cons_div_aug <- cons_div_aug |>
+  mutate(porportion_open = percent_open/100)
+
+breg <- glmmTMB(porportion_open ~ predator_richness,
+                data = cons_div_aug,
+                family = ordbeta())
+```
+
+(note, ordbeta allows for 0, 1 - ordered beta regression)
+---
+# Check Your Quantile Residuals!
+```{r}
+simulateResiduals(breg) |> plotQQunif()
 ```
 
 ---
-# Looks Good!
+# Let's Plot Instead of Coefficients
 
 ```{r}
-kelp_plot +
-    stat_smooth(method="glm.nb", 
-                method.args=list(link="log"))
+cda <- augment(breg, type = "response", conf.int = TRUE,
+               newdata = data.frame(predator_richness = seq(0,4, length.out = 200))) |>
+  mutate(
+         .lower = boot::inv.logit(.fitted - 2*.se.fit),
+         .upper = boot::inv.logit(.fitted + 2*.se.fit),
+         .fitted = boot::inv.logit(.fitted))
+
+ggplot(cons_div_aug,
+       aes(x = predator_richness,
+           y = percent_open)) +
+  geom_point(position = position_jitter(width = 0.2)) +
+  geom_line(data = cda, aes(y = .fitted*100), color = "red") +
+  geom_ribbon(data = cda, aes(y = .fitted*100,
+                              ymin = 100*.lower,
+                              ymax = 100*.upper),
+              alpha = 0.2, color = "grey")
 ```
 
----
-# Final Note About GLMs and Overdispersion
-### Many Distributions Cannot Handle 0s or 1s
-
-```{r}
-x <- rpois(100, 10)
-x <- c(x, rep(0,50))
-
-ggplot(data.frame(x=x),
-       aes(x=x)) +
-  geom_histogram(binwidth = 0.1) +
-  labs(title = "This is Count Data", subtitle = "Needs a zero inflated distribution")
-```
 
 ---
 # The GLM Frontier
