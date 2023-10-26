@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Generalized Linear Models and Overdispersion</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: center, middle
+
+# Generalized Linear Models and Overdispersion
+ 
+![:scale 75%](images/glm/name_five_analyses.jpg)
+
+&lt;style type="text/css"&gt;
+.pull-left-small {
+  float: left;
+  width: 20%;
+}
+.pull-right-large {
+  float: right;
+  width: 80%;
+}
+&lt;/style&gt;
+
+
+
+---
+# A Generalized Linear World
+  
+1. How do we fit this: Likelihood  
+
+2. Count Data and GLMs  
+
+3. Overdispersion
+
+
+---
+class: middle, left
+
+# Likelihood: how well data support a given hypothesis.
+
+--
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+### Note: Each and every parameter choice IS a hypothesis&lt;/span&gt;&lt;/h4&gt;
+
+---
+## Likelihood Defined
+&lt;br&gt;&lt;br&gt;
+`$$\Large L(H | D) = p(D | H)$$`
+
+
+Where the D is the data and H is the hypothesis (model) including a both a data generating process with some choice of parameters (often called `\(\theta\)`). The error generating process is inherent in the choice of probability distribution used for calculation.
+
+---
+## Example of Maximum Likelihood Fit
+
+Let’s say we have counted 10 individuals in a plot. Given that the
+population is Poisson distributed, what is the value of `\(\lambda\)`?
+
+&lt;div id = "left" style="width:60%"&gt;
+&lt;img src="glm_overdispersion_files/figure-html/likelihoodSapply-1.png" style="display: block; margin: auto;" /&gt;
+
+&lt;/div&gt;
+
+&lt;div id="right", style="width:40%"&gt;
+&lt;br&gt;&lt;br&gt;
+`$$p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$` 
+&lt;br&gt;where we search all possible values of &amp;lambda;
+&lt;/div&gt;
+
+---
+## Likelihood Function
+
+`$$\Large p(x) = \frac{\lambda^{x}e^{-\lambda}}{x!}$$` 
+&lt;br&gt;&lt;br&gt;  
+
+- This is a **Likelihood Function** for one sample 
+     - It is the Poisson Probability Density function
+
+--
+
+- `\(Dpois = \frac{\lambda^{x}e^{-\lambda}}{x!}\)`
+
+---
+## What is the probability of many data points given a parameter?
+
+&lt;div id="left", style="width:60%"&gt;
+&lt;img src="glm_overdispersion_files/figure-html/likelihoodDemo2-1.png" style="display: block; margin: auto;" /&gt;
+
+&lt;/div&gt;
+
+&lt;div id="right", style="width:40%"&gt;
+&lt;br&gt;&lt;br&gt;
+p(a and b) = p(a)p(b)  
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+`$$p(D | \theta) = \prod_{i=1}^n p(d_{i} | \theta)$$`
+&lt;br&gt;&lt;br&gt;
+&lt;span class="fragment"&gt;$$    = \prod_{i=1}^n \frac{\theta^{x_i}e^{-\theta}}{x_!}$$&lt;/span&gt;
+&lt;/div&gt;
+
+---
+
+## Can Compare p(data | H) for alternate Parameter Values
+
+&lt;img src="glm_overdispersion_files/figure-html/likelihoodDemo3-1.png" style="display: block; margin: auto;" /&gt;
+
+Compare `\(p(D|\theta_{1})\)` versus `\(p(D|\theta_{2})\)`, choose the one with higher likelihood 
+
+---
+# In Practice We Use Log-Likelihood Surfaces for Computation and Shape to find the Maximum Likelihood
+## (Or Really, Deviance, -2 LL, for optimization)
+
+&lt;img src="glm_overdispersion_files/figure-html/likelihoodSapply1Plot-1.png" style="display: block; margin: auto;" /&gt;
+&lt;!--
+Maximum Likelihood: 1.3319144\times 10^{-11} at 17  
+Maximum Log Likelihood: -25.0418188 at 17
+Deviance: 50.0836375
+--&gt;
+
+---
+## Optimizing over Multiple Parameters get's Harder
+
+
+
+&lt;img src="glm_overdispersion_files/figure-html/mleSurfPersp-1.png" style="display: block; margin: auto;" /&gt;
+
+Want to find the Maximum Likelihood (or minimum Deviance) to get the MLE (Maximum Likelihood Estimate) of parameters
+---
+
+## Contour Plot of a Likelihood Surface
+&lt;img src="glm_overdispersion_files/figure-html/contour_LL-1.png" style="display: block; margin: auto;" /&gt;
+
+&lt;p align="left"&gt;
+MLEs: mean = 3730.05, SD = 1293.4
+&lt;/p&gt;
+
+---
+
+## Issues with Likelihood and Models
+
+1.  What Values Are Used for 95% CI?
+
+2.  Grid Sampling Becomes Slow
+
+3.  Algorithmic Solutions Necessary
+
+4.  Specification of Likelihood Function Unwieldy
+
+---
+## Likelihood Profile of One Coefficient Along ML Estimates of the Other
+&lt;font color="red"&gt;Mean profile&lt;/font&gt;, &lt;font color="blue"&gt;SD Profile&lt;/font&gt;
+
+&lt;img src="glm_overdispersion_files/figure-html/profileBrute4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## Then Use Likelihood Profiles to get CIs (more on this later)
+
+&lt;img src="glm_overdispersion_files/figure-html/mleWolvesMeanProfile-1.png" style="display: block; margin: auto;" /&gt;
+
+```
+        2.5 %   97.5 %
+mean 3704.364 3756.122
+sd   1275.384 1311.887
+```
+
+---
+
+## How Do We Search Multiparameter Likelihood Space?
+
+We use &lt;span style="color:red"&gt;Algorithms&lt;/span&gt;
+
+-   Newtown-Raphson (algorithmicly implemented in &lt;span&gt;nlm&lt;/span&gt; and
+    &lt;span&gt;BFGS&lt;/span&gt; method) uses derivatives
+     - good for smooth surfaces &amp; good start values  
+
+--
+
+-   Nelder-Mead Simplex (&lt;span&gt;optim&lt;/span&gt;’s default)
+     - good for rougher surfaces, but slower  
+
+--
+
+-   Simulated Annealing (&lt;span&gt;SANN&lt;/span&gt;) uses Metropolis Algorithm search
+     - global solution, but slow  
+
+--
+
+- For GLMs, we use **Iteratively Reweighted Lease Squares**
+     - fast
+     - specific to models from the exponential family 
+
+---
+# A Generalized Linear World
+  
+1. How do we fit this: Likelihood  
+
+2. .red[Count Data and GLMs]  
+
+3. Overdispersion
+
+
+---
+
+# Remember our Wolves?
+
+.pull-left[
+
+&lt;img src="glm_overdispersion_files/figure-html/wolf_scatterplot-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+
+&lt;br&gt;&lt;br&gt;
+![](./images/11/CUTE_WOLF_PUPS_by_horsesrock44.jpeg)
+]
+
+---
+
+# We Had to Log Transform The Count of Pups
+
+`$$log(y_i) = \beta_0 + \beta_1 x_i + \epsilon_i$$`
+  - using count data  
+  - relationship is curved
+  - cannot have negative pups 
+  
+&lt;img src="glm_overdispersion_files/figure-html/logplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# But...
+
+![](images/glm/do_not_log.png)
+
+--
+
+Note, there is a healthy back-and-forth about this paper in the literature... but I think it has some REALLY good points
+
+---
+# Why? Count Data is Discrete - so we need an appropriate distribution
+### Enter the Poisson!
+
+In a Poisson, Variance = Mean
+
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# The Poisson Generalized Linear Model with its Canonical Link
+
+$$\Large \boldsymbol{\eta_{i}} = \boldsymbol{\beta X_i} $$ 
+&lt;br&gt;&lt;br&gt;
+
+`$$\Large log(\hat{Y_i}) = \eta_{i}$$`
+&lt;br&gt;&lt;br&gt;
+
+
+
+`$$\Large Y_i \sim \mathcal{P}(\hat{Y_i})$$`
+
+---
+# Wait - isn't this just a log transform?
+
+--
+No.
+--
+
+`$$\Large \boldsymbol{log(Y_{i})} = \boldsymbol{\beta X_i} + \boldsymbol{\epsilon_i}$$` 
+implies...
+ 
+--
+`$$\Large \boldsymbol{Y_{i}} = e^{\boldsymbol{\beta X_i} + \boldsymbol{\epsilon_i}}$$`
+--
+
+This is multiplicative error!  
+
+--
+
+We want additive error - which we get from a GLM with a log link:
+
+`$$\Large y = e^{\beta X} + \epsilon$$`
+
+
+---
+# The Code Matches the Model
+
+
+```r
+wolves_glm &lt;- glm(pups ~ inbreeding.coefficient, 
+                  
+                  family = poisson(link = "log"),
+                  
+                  data = wolves)
+```
+
+--
+Compare to...
+
+
+
+```r
+wolves_lm &lt;- lm(log(pups) ~ inbreeding.coefficient, 
+                  
+                  data = wolves)
+```
+
+---
+# We Still Check Some of the Same Assumptions
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# But Now Quantile Residuals Help Assessment
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Coefficients... Here Have the Same Meaning as a Log-Normal Model
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.946 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.220 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; inbreeding.coefficient &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.656 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.969 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- If inbreeding is 0, there are ~ 7 pups ( `\(e^{1.946}\)` )
+
+- An increase in 1 unit of inbreeding is a ~93% loss in # of pups
+      - `\(1-e^{-2.656}\)`
+
+---
+# Did it make a difference?
+
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# A Generalized Linear World
+  
+1. How do we fit this: Likelihood  
+  
+2. Count Data and GLMs  
+
+3. .red[Overdispersion]
+
+---
+# What is the relationship between kelp holdfast size and number of fronds?
+  
+  .center[ ![](images/25/Giant_kelp_adult.jpeg) ]
+
+---
+# What About Kelp Holdfasts?
+&lt;img src="glm_overdispersion_files/figure-html/kelp-1.png" style="display: block; margin: auto;" /&gt;
+---
+# If you had Tried a Linear Model
+
+```r
+kelp_lm &lt;- lm(FRONDS ~ HLD_DIAM, data=kelp)
+```
+
+&lt;img src="glm_overdispersion_files/figure-html/plot_lelp-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What is our data and error generating process?
+&lt;img src="glm_overdispersion_files/figure-html/kelp-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What is our data and error generating process?
+  - Data generating process should be exponential
+- No values less than 1  
+
+--
+  
+  - Error generating process should be Poisson
+- Count data
+
+---
+# Let's Fit a Model!
+  
+
+```r
+kelp_glm &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp,
+                family=poisson(link="log"))
+```
+
+---
+# Quantile Residuals for Kelp GLM with Log Link
+&lt;img src="glm_overdispersion_files/figure-html/kelp_resid_dharma-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Ruh Roh! What happened? Overdispersion of Data!
+
+- When the variance increases faster than it should from a model, your data is overdispersed 
+     - Underdispersion is also possible
+
+--
+  
+- This can be solved with different distributions whose variance have different properties  
+  
+--
+  
+- OR, we can fit a model, then scale it’s variance posthoc with a coefficient  
+
+--
+  
+-  The likelihood of these latter models is called a Quasi-likelihood, as it does not reflect the true spread of the data  
+     - Good to avoid, as it causes inferential difficulties down the line
+
+---
+# For Count Data, Two Common Solutions
+  
+1) Negative Binomial
+- Variance = `\(\hat{Y_i}^2 + \theta\hat{Y_i}^2\)`|$
+   - Increases with the square, not linearly
+- Although some forms also do linear...  
+- Common for **clumped data**  
+  
+--
+  
+2) Quasi-Poisson  
+- Basically, Variance = `\(\theta\hat{Y}\)`  
+- Posthoc estimation of `\(\theta\)`
+- (Also a similar quasibinomial)  
+
+--
+  
+3) Others where you model dispersion explicitly
+- You are in deeper waters here
+
+---
+# Plot of Smoothed Residuals v. Predictor
+Linear: Quasipoisson, Squared: Negative Binomial
+
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+See Ver Hoef and Boveng 2007
+
+---
+# New Fits
+  
+Negative Binomial
+
+
+```r
+library(MASS)
+kelp_glm_nb &lt;- glm.nb(FRONDS ~ HLD_DIAM, data=kelp)
+```
+
+OR
+
+Quasipoisson
+
+```r
+kelp_glm_qp &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp, 
+                   family=quasipoisson(link="log"))
+```
+
+---
+# Checking The Quantile Residuals
+  
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Looks Good!
+  
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# What if Fronds Had Been Continuous and We Wanted to Model Overdispersion?
+
+- Can Use a continuous distribution with overdispersion
+     - Gamma
+     - Variance is `\(\hat{Y_i}^2\)`
+     
+- Can model the overdispersion
+     - `\(y_i \sim \mathcal{N}(\widehat{y_i}, \sigma^2_i)\)`
+     - Can be a function of predictors
+
+---
+# Gamma
+Skewed continuous, variance-mean relationship
+
+.pull-left-small[
+![](images/glm/waiting_time.jpg)
+]
+
+.pull-right-large[
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Similar to Negative Binomial, So, Does it Blend with a log link?
+
+
+```r
+kelp_gamma &lt;- glm(FRONDS ~ HLD_DIAM,
+                     family = Gamma(link = "log"),
+                     data = kelp)
+```
+
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Or, Modeling Variance
+
+`$$log(\widehat{Y_i}) = \beta X_i$$`
+  
+`$$Y_i \sim \mathcal{N}(\widehat{Y_i}, \sigma^2_i)$$`
+  
+  
+`$$\sigma^2_i = \gamma X_i$$`
+Variance can be **linear** function of predictors, or otherwise
+
+---
+# Would simple Scaling the Variance have Worked Here?
+
+
+
+```r
+kelp_var &lt;- glmmTMB(FRONDS ~ HLD_DIAM,
+                
+                family = gaussian(link = "log"),
+                
+                dispformula = ~ HLD_DIAM,
+                
+                data = kelp)
+```
+
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Final Note About GLMs and Overdispersion
+### Many Distributions Cannot Handle 0s or 1s
+  
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, middle
+
+![](images/25/whalberg_assumptions.jpg)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
