@@ -145,7 +145,7 @@ __Project Proposal:__ [general instructions here](project_proposal.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [Generalized Linear Models](lectures/generalized_linear_models.html), Count Data and Overdispersion     
+__Lecture:__ [Generalized Linear Models](lectures/generalized_linear_models.html), [Fitting, Count Data,  and Overdispersion](lectures/glm_overdispersion.html)     
 __Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_data.zip)  
 __Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)  
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa", "TMB", "glmmTMB"))`  
