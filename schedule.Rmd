@@ -149,8 +149,8 @@ __Lecture:__ [Generalized Linear Models](lectures/generalized_linear_models.html
 __Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_data.zip)  
 __Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)  
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa", "TMB", "glmmTMB"))`  
-__Reading:__ [Feiberg on GLS](https://fw8051statistics4ecologists.netlify.app/gls.html), [Feiberg on Generalized Linear Models](https://fw8051statistics4ecologists.netlify.app/glm.html), [Models for Count Data](https://fw8051statistics4ecologists.netlify.app/poissonr), [Feiberg on Logistic Regression](https://fw8051statistics4ecologists.netlify.app/logistic) - ignore Bayes parts in these. [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), [Analyzing % Cover and Porportional Data](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13234)  
-__Additional Reading:__ [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Intro to Beta Regression for % Cover Data](https://rpubs.com/nicoleknight/936037), [Zero-One Inflated Beta Regression](https://journal.r-project.org/archive/2015/RJ-2015-019/index.html)    
+__Reading:__ [Feiberg on Generalized Linear Models](https://fw8051statistics4ecologists.netlify.app/glm.html), [Models for Count Data](https://fw8051statistics4ecologists.netlify.app/poissonr), [Feiberg on Logistic Regression](https://fw8051statistics4ecologists.netlify.app/logistic) - ignore Bayes parts in these. [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), [Analyzing % Cover and Porportional Data](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13234)  
+__Additional Reading:__ [Maximum Likelihood](https://fw8051statistics4ecologists.netlify.app/mle), [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Ver Hoef and Boveng 2007 on NB v. Quasi](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/07-0043.1),  [Intro to Beta Regression for % Cover Data](https://rpubs.com/nicoleknight/936037), [Zero-One Inflated Beta Regression](https://journal.r-project.org/archive/2015/RJ-2015-019/index.html), [Feiberg on GLS](https://fw8051statistics4ecologists.netlify.app/gls.html)      
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2023  
 
 ### Week 9   
@@ -158,9 +158,9 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2023
 ```
 `r datestring`   
 __Lecture:__ [Random Effects](https://biol609.github.io/lectures/07_random_effects.html#/section), [Mixed Models](https://biol609.github.io/lectures/08_mixed_effects.html#/section)   
-__Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_data.zip)  
-__Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)  
-__Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa", "TMB", "glmmTMB"))`  
+__Data:__ TBA  
+__Lab Topic:__ Mixed Models  
+__Packages for the Week:__ `install.packages(c("glmmTMB", "lme4", "merTools", "broom.mixed))`  
 __Reading:__ [Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/mixed), [Generalized Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/glmm)   
 __Additional Reading:__ [Generalized linear mixed models: a practical guide for ecology and evolution](https://www.cell.com/trends/ecology-evolution/fulltext/S0169-5347(09)00019-6), [Gelman and Hill Ch 12](https://byrneslab.net/classes/biol609/gelman_hill_ch_12.pdf) login/pass biol609, [Zuur ch. 9](https://byrneslab.net/classes/biol609/Zuur_ch_5.pdf). 
 __Your One Stop FAQ:__ [Your One Stop FAQ: Ben Bolker’s Mixed Model’s FAQ](https://bbolker.github.io/mixedmodels-misc/). 
