@@ -1,0 +1,27 @@
+---
+title: "Generalized Linear Models Homework"
+format: html
+---
+
+![](https://imgs.classicfm.com/images/320539?crop=16_9&width=660&relax=1&format=webp&signature=AlZj-uBM_R7MXYeUyHTaTe5NlIU=)
+
+It's Halloween! Let's get Ghoulish! The `carData` package has a data set in it, well formatted, of who survived and who did not on the Titanic. Load it up! THen filter out any individuals for whom we do not have age data.
+
+```{r}
+library(carData)
+data("TitanicSurvival")
+```
+
+1. Let's think about the information contained here. What hypotheses might you have about what would influence your probability of survival?  
+  
+2. Visualize the data in ways you find useful.  
+
+3. OK, describe the model you are going to fit. Justify your choices of things like error distribution or how you are combining (or not) different predictors. Then fit the model.  
+
+4. Evaluate if your model meets assumptions. If not, go back and rework it.  
+
+5. What do the coefficients of the model tell you?  
+
+6. Visualize the results of your model and discuss what you have learned about surviving the sinking of the Titanic! 
+
+{{< video https://www.youtube.com/embed/30UZbPAspUA?si=3CWw2yRKs8V6EUSa >}}
