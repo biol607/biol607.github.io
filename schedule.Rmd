@@ -164,8 +164,8 @@ __Lab Topic:__ Mixed Models
 __Packages for the Week:__ `install.packages(c("glmmTMB", "lme4", "merTools", "broom.mixed))`  
 __Reading:__ [Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/mixed), [Generalized Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/glmm)   
 __Additional Reading:__ [Generalized linear mixed models: a practical guide for ecology and evolution](https://www.cell.com/trends/ecology-evolution/fulltext/S0169-5347(09)00019-6), [Gelman and Hill Ch 12](https://byrneslab.net/classes/biol609/gelman_hill_ch_12.pdf) login/pass biol609, [Zuur ch. 9](https://byrneslab.net/classes/biol609/Zuur_ch_5.pdf). 
-__Your One Stop FAQ:__ [Your One Stop FAQ: Ben Bolker’s Mixed Model’s FAQ](https://bbolker.github.io/mixedmodels-misc/). 
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2023  
+__Your One Stop FAQ:__ [Your One Stop FAQ: Ben Bolker’s Mixed Model’s FAQ](https://bbolker.github.io/mixedmodels-misc/)   
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-mixed-2023  
 
 __MIDTERM__: Due Tues Nov 22nd, 5pm. [Get it here](exams/exam_2022.html)  
 
