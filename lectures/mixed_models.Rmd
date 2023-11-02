@@ -72,6 +72,11 @@ table_out <- . %>%
 5. Visualizing Uncertainty with Mixed Models
 
 ---
+class: center, middle
+
+![](images/mixed_models/mixed_barbenheimer.jpg)
+
+---
 
 ## A Random Effects Model for a Clustered Mean
 
