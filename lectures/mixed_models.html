@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Interaction Effects</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+&lt;!-- make the interaction plots make more sense and relate to a question --&gt;
+
+# Mixed Models
+![:scale 70%](images/mixed_models/lmer_lemur_tim_doherty.jpg)
+
+
+
+
+---
+## A Mixed Outline
+
+1. Mixed Models  
+  
+2. A Variable Intercept Mixed Model  
+      - Yes, there will be assumption checks
+  
+3. Variable Slopes and Intercepts  
+
+4. GLMMs - a digression
+  
+5. Visualizing Uncertainty with Mixed Models
+
+---
+
+## A Random Effects Model for a Clustered Mean
+
+`$$Y_{ij} =  \alpha_{j} + \epsilon_{ij}$$`
+  
+  
+`$$\alpha_{j} \sim \mathcal{N}(\mu_{\alpha}, \sigma^2_{\alpha})$$`
+
+  
+`$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$`
+
+
+---
+
+## A Random Effects Model for a Clustered Mean
+
+`$$Y_{ij} =  \beta_0 + \alpha_{j} + \epsilon_{ij}$$`
+  
+  
+`$$\alpha_{j} \sim \mathcal{N}(0, \sigma^2_{\alpha})$$`
+
+  
+`$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$`
+
+- here `\(\beta_0\)` is the grand mean
+
+- `\(\alpha_j\)` is the random effect due to being in cluster j
+
+---
+## Now add predictors: Mixed Models with Variable Intercepts
+  
+  
+`$$Y_{ij} =  \beta_0 + \beta_1 X_{ij} + \alpha_{j} + \epsilon_{ij}$$`
+
+  
+`$$\alpha_{j} \sim \mathcal{N}(0, \sigma^2_{\alpha})$$`
+  
+  
+`$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$`
+
+- Here, `\(alpha_j\)` is the deviation from the grand mean due to being in cluster j
+
+---
+
+## Wait.... Isn't this Just a Model with a Categorical variable and a Continuous Variable?
+  
+  
+`$$Y_{ij} =  \beta_0 + \beta_1 X_{ij} + \alpha_{j} + \epsilon_{ij}$$`
+
+--
+Let's Re-write
+--
+
+`$$Y_{ij} =  \beta_0 + \beta_1 X_{1i} + \sum \beta_j X_{ij} + \epsilon_{ij}$$`
+`$$X_{ij} = 0,1$$`
+
+--
+- Yup -  THE SAME as a linear model with a categorical and continuous predictor
+
+--
+
+- BUT -  `\(\alpha_j\)` in model 1 or `\(\beta_j\)` in model 2 is constrained by a gaussian distribution 
+
+--
+- And we do not control for the categorical variable when estimating `\(\beta_1\)`  
+     - Endogeneity assumption!
+
+---
+
+## Now add predictors: Mixed Models with Variable Slopes and Intercepts
+
+`$$Y_{ij} = \alpha_{j} + \beta_{j}X_{ij} + \epsilon_{ij}$$`
+  
+  
+  
+`$$\begin{pmatrix}
+\alpha_{j}  \\  \beta_{j}  \end{pmatrix} \sim 
+\mathcal{MVN}
+\left ( \begin{pmatrix} \mu_{\alpha}  \\  \mu_{\beta}  \end{pmatrix} ,  \begin{pmatrix}  \sigma_{\alpha}^{2}&amp; \sigma_{\alpha \beta}\\
+\sigma_{\alpha \beta} &amp; \sigma_{\beta}^{2} \end{pmatrix}  \right )$$`
+  
+  
+
+`$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$`
+
+- Here we see the slope and intercept vary around a grand mean. 
+     - Those grand means are often refered to as the fixed effects.
+     
+--
+
+- The slope and intercept covary, and hence follow a multivariate normal distribution.
+
+---
+
+## Now add predictors: Mixed Models with Variable Slopes and Intercepts
+
+`$$Y_{ij} = \beta_0 + \beta_1 X_{ij} + \alpha_{j} + \gamma_{j}X_{ij} + \epsilon_{ij}$$`  
+
+
+`$$\begin{pmatrix}
+\alpha_{j}  \\  \gamma_{j}  \end{pmatrix} \sim \mathcal{MVN}
+\left ( \begin{pmatrix} 0  \\  0  \end{pmatrix} ,  
+\begin{pmatrix}  \sigma_{\alpha}^{2} &amp; \sigma_{\alpha \gamma}\\ 
+\sigma_{\alpha \gamma} &amp; \sigma_{\beta}^{2} \end{pmatrix}  \right )$$`
+  
+  
+`$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$`
+
+- Here `\(\beta_0 + \beta_1 X_{ij}\)` is the average model for the population.
+     - You might see these refered to as the fixed effects. 
+
+--
+     
+- `\(\alpha_j + \gamma_j X_{ij}\)` are the random effects.  
+
+--
+  
+- We still have a MVN of the RE
+
+
+---
+## Why MVN?
+
+When the slope changes, the intercept must also change so that the center of the line is close to `\(\bar{X}\)` and `\(\bar{Y}\)`
+
+&lt;img src="mixed_models_files/figure-html/mvn-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Wait, isn't this just an interaction effect?
+
+Consider the Following Model
+`$$Y_{ij} = \beta_0 + \beta_1 X_{ij} + \alpha_{j} + \gamma_{j}X_{ij} + \epsilon_{ij}$$`  
+
+--
+
+- If `\(\alpha_j\)` and `\(\gamma_j\)` are drawn from a MVN distribution, this is a mixed model. 
+  
+--
+
+- If they are not, this is a model with an interaction between cluster and a covariate
+
+--
+
+Consider the model re-written:
+`$$Y_{ij} = \beta_0 + \beta_1 X_{i} + \sum \alpha_{j} X_j + \sum \gamma_{j}X_{i} X_j + \epsilon_{ij}$$` 
+
+`$$X_j = 0,1$$`
+
+--
+
+- This is ye olde interaction between a continuous and categorical predictor
+     - It's the same model, re-written - it's all about constraining our terms &amp; assuming exogeneity of the RE
+     
+---
+
+# THE BIG DIFFERENCE between RE and FE
+
+- Up until now, we have been fitting models where `\(\alpha_j\)` could be anything. 
+
+--
+
+- In truth, that made an assumption:
+`$$\alpha_j ~ N(0, \infty)$$`
+
+--
+
+- With an RE, we assume
+`$$\alpha_j ~ N(0, \sigma^2_{cluster})$$`
+
+--
+
+- BUT we also assume that covariate levels do not depend on clusters
+      - i.e., if we were to resample X in our clusters, the rank order of the mean values of X per cluster would change every time
+
+---
+## A Mixed Outline
+
+1. Mixed Models  
+  
+2. .red[ A Variable Intercept Mixed Model ]  
+      - Yes, there will be assumption checks
+  
+3. Variable Slopes and Intercepts  
+
+4. GLMMs - a digression
+  
+5. Visualizing Uncertainty with Mixed Models
+
+---
+# Let's take this to the beach with Tide Height: RIKZ
+
+![:scale 80%](./images/08/denmark-lightsbeach.jpeg)
+
+Richness of benthic species in 45 sampling stations along the coastline of The Netherlands, measured by two researches of the the RIKZ (Rijksinstituut voor Kust en Zee), i.e., the Dutch Institute for Coastal and Marine Management.
+
+
+
+---
+# How is Tidal Height of Measurement Associated With Species Richness?
+
+&lt;img src="mixed_models_files/figure-html/plot_varint-1.png" style="display: block; margin: auto;" /&gt;
+
+(note, log as this is count data, which, really....)
+---
+
+# A Variable Intercept Model
+
+
+`$$Y_{ij} =  \beta_0 + \beta_1 X_{ij} + \alpha_{j} + \epsilon_{ij}$$`
+
+  
+`$$\alpha_{j} \sim \mathcal{N}(0, \sigma^2_{\alpha})$$`
+  
+  
+`$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$`
+
+- Here, `\(\beta_0\)` is the grand mean (fixed effect) intercept. 
+
+- `\(\alpha_{j}\)` is the deviation from that due to random beach-to-beach variation
+
+
+---
+# Quick Endogeneity Check
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+- In truth, this should come from system-specific knowledge. 
+  
+- Also some formal tests (e.g., Hausman test), but, not always useful
+
+---
+# The R model, two ways
+
+LME4: From Doug Bates, Ben Bolker, and Many More
+
+```r
+library(lme4)
+
+# first the lmer
+rikz_varint &lt;- lmer(log_richness ~ NAP +
+                      
+                      (1|Beach),
+                    
+                    data = RIKZdat)
+```
+
+Using Template Model Builder from Mollie Brooks, Ben Bolker, and more
+
+```r
+library(glmmTMB)
+
+# now with TMB
+rikz_varint_tmb &lt;- glmmTMB(log_richness ~ NAP +
+                             
+                      (1|Beach),
+                    
+                    data = RIKZdat)
+```
+
+---
+# The R model, two ways
+
+LME4: From Doug Bates, Ben Bolker, and Many More
+
+```r
+library(lme4)
+
+# first the lmer
+rikz_varint &lt;- lmer(log_richness ~ NAP +
+                      
+                      `(1|Beach)`,
+                    
+                    data = RIKZdat)
+```
+
+Using Template Model Builder from Mollie Brooks, Ben Bolker, and more
+
+```r
+library(glmmTMB)
+
+# now with TMB
+rikz_varint_tmb &lt;- glmmTMB(log_richness ~ NAP +
+                             
+                      `(1|Beach)`,
+                    
+                    data = RIKZdat)
+```
+
+---
+# You Knew Assumption Checks Were Coming, Right?
+
+1. Check your prediction distribution!
+  
+2. For LMMs, all linearity and normality assumptions hold. 
+  
+3. BUT - we are now also assuming our REs have a normal distribution
+
+---
+# Ye Olde Predictions
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Ye Olde QQ Plot
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Ye Olde HOV Plot
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Are Our REs Normal?
+
+
+```
+[[1]]
+```
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, middle
+
+# Next: Evaluate!
+
+---
+
+# Coefficients and SDs
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; effect &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; group &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; fixed &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.81 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; fixed &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NAP &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7.96 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_pars &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sd__(Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.37 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_pars &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Residual &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sd__Observation &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.41 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Our fixed slope and intercept mean what they did as an lm. 
+
+--
+
+- Note, these are FEs - for the entire population
+
+--
+
+- We also get the SD of the RE
+
+---
+
+# What are my REs?
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; effect &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; component &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; group &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; level &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.33 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.67 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.21 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.32 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.19 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.19 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.19 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.13 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.19 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.21 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.19 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.19 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_vals &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cond &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.08 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.19 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# Combined coefficients
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; (Intercept) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; NAP &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2.15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1.48 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1.51 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1.96 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1.68 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1.60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1.70 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1.73 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+
+# Whither the R2?
+
+
+```
+# R2 for Mixed Models
+
+  Conditional R2: 0.708
+     Marginal R2: 0.492
+```
+
+--
+
+- The *Marginal R&lt;sup&gt;2&lt;/sup&gt;* is the R&lt;sup&gt;2&lt;/sup&gt; due to fixed effects alone
+     - The fit explained by population-level effects
+     
+--
+
+- The *Conditional R&lt;sup&gt;2&lt;/sup&gt;* is the R&lt;sup&gt;2&lt;/sup&gt; due to fixed + random effects
+     - The fit explained by both population level effects and individual variation
+     
+--
+
+- The Conditional R&lt;sup&gt;2&lt;/sup will always be larger  
+     - If Marginal = 0.01, but Conditional = 0.99, what have you explained?
+---
+class: center, middle
+
+# And now, some model visualization
+
+---
+# Visualizing Fixed (Marginal) Effects Only
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Visualizing Conditional Effects Only
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Putting it All Together
+
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Putting it All Together
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Putting it All Together
+
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+## A Mixed Outline
+
+1. Mixed Models  
+  
+2. A Variable Intercept Mixed Model  
+      - Yes, there will be assumption checks
+  
+3. .red[ Variable Slopes and Intercepts ] 
+
+4. GLMMs - a digression
+  
+5. Visualizing Uncertainty with Mixed Models
+
+---
+class: center, middle
+
+![](images/mixed_models/same_model.png)
+
+---
+
+## Now add predictors: Mixed Models with Variable Slopes and Intercepts
+
+`$$Y_{ij} = \beta_0 + \beta_1 X_{ij} + \alpha_{j} + \gamma_{j}X_{ij} + \epsilon_{ij}$$`  
+
+
+`$$\begin{pmatrix}
+\alpha_{j}  \\  \gamma_{j}  \end{pmatrix} \sim \mathcal{MVN}
+\left ( \begin{pmatrix} 0  \\  0  \end{pmatrix} ,  
+\begin{pmatrix}  \sigma_{\alpha}^{2} &amp; \sigma_{\alpha \gamma}\\ 
+\sigma_{\alpha \gamma} &amp; \sigma_{\beta}^{2} \end{pmatrix}  \right )$$`
+  
+  
+`$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$`
+
+- Here, we will allow the effect of NAP to vary by Beach
+
+---
+# Level-1, Level-2 Model Style
+
+- What if you want to be explicit about where different sources of variation entered from?  
+
+--
+
+- For example, what if we had sample nested in beach nested in region nested in country, nested in....
+
+--
+
+- This can get a bit crazy, but, it makes life easier to separate models into levels, with the replicate/individual level as Level-1, the lowest level cluset as level-2, etc...
+
+---
+# Level-1, Level-2 Model Style
+
+ 
+Level-1 Model (the measurement level)
+
+`$$Y_{ij} = \beta_{0j} + \beta_{1j} X_{ij} + \epsilon_{ij}$$`
+
+--
+
+Level-2 Model (the beach level)
+
+`$$\beta_{0j} = \beta_0 + \alpha_{j}$$`
+
+`$$\beta_{1j} = \beta_1 + \gamma_{j}$$`
+
+--
+
+We now refer to parameters in the level-2 model as **hyperparameters**
+
+---
+# Variable Slope-Intercept Models in R
+
+
+
+
+```r
+rikz_varslopeint &lt;- lmer(log_richness ~ NAP +
+                             
+                      `(NAP + 1|Beach)`,
+                    
+                    data = RIKZdat)
+```
+
+- Including both slope and intercept in random term. 
+  
+- Could have left off intercept
+
+---
+# Diagnostics on Multiple REs
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Visualize As Before
+
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; R2_conditional &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; R2_marginal &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.8265222 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4360792 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+class:center, middle
+
+![](images/mixed_models/many_names.jpg)
+
+---
+
+# Let's Get Hierarchical
+
+- Clusters can have **cluster-level predictors**. 
+  
+--
+
+- Think infection of cells within individuals within counties within states within...
+     - Individuals might have different jobs that bring them into contact with different numbers of other infected people 
+     - Counties will have different levels of masking prevalence 
+     - States will have different levels of funding for testing
+--
+
+- For example, in the RIKZ data, each beach has a different wave exposure  
+
+--
+
+- Hierarchical predictors can affect outcomes - they could even affect slopes
+
+
+---
+# Level-1, Level-2 Model Style Makes this Easier
+
+ 
+Level-1 Model (the measurement level)
+
+`$$Y_{ij} = \beta_{0j} + \beta_{1j} X_{ij} + \epsilon_{ij}$$`
+
+--
+
+Level-2 Model (the beach level)
+
+`$$\beta_{0j} = \beta_0 + \alpha_{j} + \beta_2 X_j$$`
+
+`$$\beta_{1j} = \beta_1 + \gamma_{j}$$`
+
+
+---
+
+class: center, middle
+
+![](images/mixed_models/hyperparameters.jpg)
+
+---
+
+## Or All One
+
+`$$Y_{ij} = \beta_0 + \beta_1 X_{ij} + \beta_2 X_{j} + \alpha_{j} + \gamma_{j}X_{ij} + \epsilon_{ij}$$`  
+
+
+`$$\begin{pmatrix}
+\alpha_{j}  \\  \gamma_{j}  \end{pmatrix} \sim \mathcal{MVN}
+\left ( \begin{pmatrix} 0  \\  0  \end{pmatrix} ,  
+\begin{pmatrix}  \sigma_{\alpha}^{2} &amp; \sigma_{\alpha \gamma}\\ 
+\sigma_{\alpha \gamma} &amp; \sigma_{\beta}^{2} \end{pmatrix}  \right )$$`
+  
+  
+`$$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$`
+
+---
+# The Model in R
+
+
+
+
+---
+# We can look at All Paremeters
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; effect &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; group &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; fixed &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.84 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.80 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.32 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; fixed &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NAP &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.54 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.09 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6.23 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; fixed &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; exposure &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.08 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -5.02 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_pars &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sd__(Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.16 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_pars &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; cor__(Intercept).NAP &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.41 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_pars &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Beach &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sd__NAP &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ran_pars &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Residual &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sd__Observation &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.35 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+
+# More Coefficients - some vary some don't
+
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; (Intercept) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; NAP &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; exposure &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5.97 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.45 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5.78 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5.77 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.49 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5.76 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.47 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.87 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5.85 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5.84 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.52 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5.73 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.55 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5.82 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.72 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.39 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# Visualization is an MLR Problem
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Plotting Fixed Effects of Multiple Predictors
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Plotting Everything
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Mixed Model Structure
+
+- You can build models as complex as you want, but...
+
+--
+
+- Your RE structure should reflect your sampling design
+
+--
+
+- Sometimes variance components are close to 0. Do they need to be there?
+
+--
+
+- Also, do not forget your endogeneity assumption!
+
+--
+- Hierarchies: you can do a lot with level-1 and level-2 thinking!
+
+
+---
+## A Mixed Outline
+
+1. Mixed Models  
+  
+2. A Variable Intercept Mixed Model  
+      - Yes, there will be assumption checks
+  
+3. Variable Slopes and Intercepts  
+
+4. .red[ GLMMs - a digression ]
+  
+5. Visualizing Uncertainty with Mixed Models
+
+---
+
+class: center, middle
+
+![](images/mixed_models/more_names.png)
+
+---
+# This is Not Normal
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# We CAN fit Generalized Linear Mixed Models
+
+Let's try this for a variable-slope variable intercept Poisson model with a Log Link
+
+
+`$$\large \eta_{ij} =  \alpha + \beta_{j}$$`
+\
+`$$\ \beta_{j} \sim \mathcal{N}(0, \sigma^2_{site})$$`
+\
+\
+`$$\large log(\widehat{Y_{ij}}) = \eta_{ij}$$`
+\
+
+`$$\large Y_{ij} \sim \mathcal{P}(\widehat{Y_{ij}})$$`
+
+---
+# We can fit with glmer or glmmTMB
+
+
+
+
+---
+# Check that prediction
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Check that Overdispersion
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Check that Overdispersion
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Check the Random Effects
+
+
+```
+[[1]]
+```
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Evaluate Away!
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
+
+```
+# A tibble: 1 × 2
+  R2_conditional R2_marginal
+           &lt;dbl&gt;       &lt;dbl&gt;
+1          0.815       0.400
+```
+
+---
+
+# Final Thoughts on Mixed Models
+
+- These are *very* powerful
+
+--
+
+- They let you cope with data structures FE would fail on
+
+--
+
+- They are more efficient with respect to DF and hence narrower CIs
+
+--
+
+- Shrinkage is philosophically a real plus
+
+--
+
+- BUT - they will take some fiddling, as MANY parameters and hyperparameters as well as complex likelihood functions
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightSpans": true,
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
