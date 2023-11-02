@@ -1,5 +1,5 @@
 ---
-title: "Interaction Effects"
+title: "Mixed Models"
 output:
   xaringan::moon_reader:
     seal: false
