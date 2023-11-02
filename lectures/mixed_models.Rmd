@@ -912,12 +912,14 @@ Let's try this for a variable-slope variable intercept Poisson model with a Log 
 
 
 $$\large \eta_{ij} =  \alpha + \beta_{j}$$
-\
+  
+  
 $$\ \beta_{j} \sim \mathcal{N}(0, \sigma^2_{site})$$
-\
-\
+  
+  
+  
 $$\large log(\widehat{Y_{ij}}) = \eta_{ij}$$
-\
+  
 
 $$\large Y_{ij} \sim \mathcal{P}(\widehat{Y_{ij}})$$
 
@@ -925,7 +927,7 @@ $$\large Y_{ij} \sim \mathcal{P}(\widehat{Y_{ij}})$$
 # We can fit with glmer or glmmTMB
 
 
-```{r}
+```{r, echo = TRUE}
 rikz_pois <- glmer(Richness ~ NAP +
                            
                            (NAP + 1|Beach),

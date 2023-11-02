@@ -1031,12 +1031,14 @@ Let's try this for a variable-slope variable intercept Poisson model with a Log 
 
 
 `$$\large \eta_{ij} =  \alpha + \beta_{j}$$`
-\
+  
+  
 `$$\ \beta_{j} \sim \mathcal{N}(0, \sigma^2_{site})$$`
-\
-\
+  
+  
+  
 `$$\large log(\widehat{Y_{ij}}) = \eta_{ij}$$`
-\
+  
 
 `$$\large Y_{ij} \sim \mathcal{P}(\widehat{Y_{ij}})$$`
 
@@ -1045,6 +1047,15 @@ Let's try this for a variable-slope variable intercept Poisson model with a Log 
 
 
 
+```r
+rikz_pois &lt;- glmer(Richness ~ NAP +
+                           
+                           (NAP + 1|Beach),
+                   
+                    family = poisson(link = "log"),
+                   
+                    data = RIKZdat)
+```
 
 ---
 # Check that prediction
