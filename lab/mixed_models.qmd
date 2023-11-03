@@ -1,0 +1,441 @@
+---
+title: "Fitting Mixed Models"
+author: "Biol607"
+format:
+  html:
+    toc: true
+---
+
+# 1. Variable Intercepts and Bear Movement
+
+To begin with, let's work on a really neat data set about the bears. This is the `bearmove` dataset in `Data4Ecologists`. We'll start by taking a look at the data.
+
+```{r, warning=FALSE}
+library(Data4Ecologists)
+library(ggplot2)
+library(dplyr)
+theme_set(theme_bw(base_size = 14))
+
+bearmove <- bearmove |>
+  mutate(BearIDYear = as.character(BearIDYear),
+         BearID = as.character(BearID),
+         log_hr = log(hr))
+
+head(bearmove)
+```
+
+Lots going on here! To begin our exploration of variable intercept models, we'll look at how heart rate is a function of log movement. We can visualize this, and also look at how different things are from bear-to-bear. We will use the variable `BearIDYear` and assume that measurements within a bear are independent of one another after we account for this variance component.
+
+```{r}
+bear_base <- ggplot(bearmove,
+       aes(y = hr, x = log.move, color = BearID)) +
+  geom_point() +
+  facet_wrap(vars(BearID)) 
+
+bear_base
+```
+
+
+OK, we can see that the data bounces around from bear to bear. Maybe the slope does to? Who's to say! Yet...  We can ponder an initial model that accounts for this non-independence where Bear is a random effect. We sample the same bears over time, and as such, there might be a bear effect on heart rate (I mean, not all bears are created equal).
+
+**THINK**: Is it reasonable to assume endogeneity?
+
+## 1.1 Fitting and Evaluating a Variable Intercept Model
+
+We'll work with `lme4` to fit a variable intercept model. Note, `glmmTMB` will have the same syntax, and many of the same workflows.
+
+```{r}
+library(lme4)
+
+bear_int <- lmer(hr ~ log.move + (1|BearID), data = bearmove)
+```
+
+Great! Let's look at whether we can use this model.
+
+```{r}
+library(performance)
+
+check_model(bear_int)
+
+```
+
+Looking at this overview, things look pretty good! The big new bit is checking the normality of the random effects here.
+
+```{r}
+check_normality(bear_int, effects = "random") |> plot()
+```
+
+These look great.
+
+## 1.2 Evaluating the Fit Model
+
+We can look at our outputs in a number of ways. Let's look at the `summary()` output first.
+
+```{r}
+summary(bear_int)
+```
+
+One - note it tells us we have convergence. This is key. Now, we can see information on the variance and SD of the random effects, and estimated of the fixed effects.  We can also see this with `broom.mixed::tidy()`. The `broom.mixed` package is the mixed model extension of `broom`. It was forked off as there are some specific things with REs that don't fit into the general output of `broom`.
+
+```{r}
+library(broom.mixed)
+
+tidy(bear_int)
+```
+
+We see the same info, summarized a bit more neatly. If we wanted CI, we can use `confint()`
+
+```{r}
+confint(bear_int)
+```
+
+If we want to look at the random effects, we have a few options. `ranef()` will give you the coefficients.
+
+
+```{r}
+ranef(bear_int)
+```
+
+If we want to get more info, we can use `tidy()`.
+
+```{r}
+tidy(bear_int, effects="ran_vals")
+```
+
+This is going to be easier to turn into a plot. There's a great easystats library called `modelbased` that works much like `performance`. It has a few tools for visualization.
+
+```{r}
+library(modelbased)
+
+estimate_grouplevel(bear_int) |> plot()
+```
+
+Nice, no? We can also look at combined effects
+
+```{r}
+coef(bear_int)
+```
+
+Or tidy:
+
+```{r}
+tidy(bear_int, effects="ran_coefs")
+```
+
+Or make it fancy for just the fixed + random effects
+
+```{r}
+estimate_grouplevel(bear_int, type = "total")
+```
+
+## 1.3 Visualizing the model
+
+Now, one CAN use the outputs of different tidiers from above to build visualizations from scratch. It takes some work and reshaping. Perhaps it will be an "impress yourself" somewhere. For visualization, I'm a big fan of two things. First is `estimate_relation()` from `modelbased` and second it getting simulations from `merTools::predictInterval()`. We'll stick with the former for the moment.
+
+First up, do you want to look at just the marginal (fixed) effects?
+
+```{r}
+estimate_relation(bear_int) |> 
+  plot()
+```
+
+There you go. All of the data with the FE through it. If you wanted to be more detailed, you can use the output to generate your own plot.
+
+```{r}
+bear_int_marginal <- estimate_relation(bear_int) |>
+  as_tibble() |>
+  rename(hr = Predicted)
+
+ggplot(bearmove,
+       aes(x = log.move, y = hr)) +
+  geom_point() +
+  geom_line(data = bear_int_marginal, 
+            color = "red", linewidth = 2) +
+  geom_ribbon(data = bear_int_marginal, 
+              aes(ymin = CI_low, ymax = CI_high),
+              alpha = 0.5, fill = "grey")
+```
+
+
+But for initial viz, meh, just use `estimate_relation`.  We can also see the BLUP predictions.
+
+```{r}
+estimate_relation(bear_int, include_random = TRUE) |> plot() 
+```
+
+We can also drop CIs
+```{r}
+estimate_relation(bear_int, include_random = TRUE) |> 
+  plot(ribbon = list(alpha = 0))
+```
+
+Or add FE on top of that.
+
+```{r}
+
+estimate_relation(bear_int, include_random = TRUE) |> 
+  plot(ribbon = list(alpha = 0)) +
+  geom_line(data = bear_int_marginal, 
+            aes(x = log.move, y = hr),linewidth = 2) 
+```
+
+Or do any number of things - facets, etc.
+
+## 1.4 Variable Int Exercise
+
+Consider the data set `birdmalariaO` in the `Data4Ecologists` library. These data are associated with the following paper: Asghar, M., Hasselquist, D., Hansson, B., Zehtindjiev, P., Westerdahl, H., & Bensch, S. (2015). Hidden costs of infection: chronic malaria accelerates telomere degradation and senescence in wild birds. Science, 347(6220), 436-438.
+
+If we assess `OffBTL` - Offspring ealy-life telomere length (at 9 day age) - as a measure of fitness, how does mother's age - `mage` - affect fitness, 
+given that `dam` is mother id and `brood` is brood id (one mother can have many broods).
+
+Now, consider not just mother's age, but also mother's malarial status - `mmal`. Note, you will have to make this a character.
+
+```{r}
+birdmalariaO <- birdmalariaO |>
+  mutate(mmal = as.character(mmal))
+```
+
+# 2. Variable Slope-Intercept
+
+Back to bears, what if movement's effect varied on heart rate by bear? Some are strong, some not so much... Might we have a variable slope?
+
+```{r}
+bear_base
+```
+
+We can examine this with a variable-slope variable-intercept model.
+
+```{r}
+bear_slope_int <- lmer(hr ~ log.move + 
+                         
+                         (log.move + 1|BearID), 
+                       
+                       data = bearmove)
+```
+
+As before, we can examine assumptions
+
+```{r}
+check_model(bear_slope_int)
+```
+
+There are some potential footballs in our HOV, and the QQ is a little funky, but largely this looks OK (for fun, try a DHARMa quantile residuals plot).
+
+We can look at coefficients
+
+```{r}
+tidy(bear_slope_int)
+
+confint(bear_slope_int)
+```
+
+And, indeed, all terms suggest they should be included in the model. Note the correlation between random slopes and intercepts, FYI.
+
+We can look at our REs
+
+```{r}
+estimate_grouplevel(bear_slope_int) |> plot()
+```
+
+I find this one fairly interesting, as we can see both that there were some that were further away from the mean slope than others - but not too far when compared to the magnitude of the slope. No outright sign flips, etc.
+
+How much variability did we explain?
+
+```{r}
+r2(bear_slope_int)
+```
+
+Interestingly, things.... have not changed a lot. While there is a variable intercept here, our fit hasn't changed much. Heck
+
+```{r}
+tidy(bear_int, effect = "fixed")
+tidy(bear_slope_int, effect = "fixed")
+```
+
+We can see that the FEs are not that different. More interestingly, our conditional R<sup>2</sup>
+
+To understand what is going on, though, we can visualize as before.
+
+```{r}
+estimate_relation(bear_slope_int, include_random = TRUE) |> 
+  plot()
+```
+
+We can visually see here that while slopes do vary, it's not by a heck of a lot. But, this variability can be important, particularly with respect to proper CIs.
+
+## 2.1 Example
+ Let's just back into `birdmalariaO` 
+If we assess `OffBTL` - Offspring ealy-life telomere length (at 9 day age) - as a measure of fitness, how does mother's age - `mage` - and malarial status `mmal` - affect fitness, given that `dam` is mother id and `brood` is brood id (one mother can have many broods). 
+
+Should there be a `mage*mmal` interaction? What do you think, after thinking about the biology and looking at the data?
+
+
+Now, where should the RE go? Begin with one where the effects of malaria vary by brood. After all, different years might experience different strains or severity.
+
+**Note**, for multiple predictors, use `estimate_relation()` instead of `estimate_prediction()`. You might also want to take it, turn it into a tibble, and plot instead of relying on `plot()`
+
+Once you are comfortable with results, fit a model where `mage`'s effect varies by `dam` as well. Birds might vary in how age-related maternal effects influence fitness.
+
+But - what happens? This is where we grapple with some of the complexity. Let's talk about RE structure and look at those warning messages carefully.
+
+```{r, echo = FALSE, eval = FALSE}
+bird_slope <- lmer(OffBTL ~ mage * mmal +
+                     ( 1 | dam) +
+                     (mmal + 1 | brood),
+                   data = birdmalariaO)
+
+estimate_relation(bird_slope, include_random = TRUE,
+                  allow.new.levels=TRUE) |> plot()
+```
+
+# 3. Hierarchical Models
+
+Back to bears, our fuzzy bears have some properties that do not vary from individual to individual. And some of which could be linked right to heart rate. For example, does Sex change bear heart rate?
+
+```{r}
+bear_hier <- lmer(hr ~ log.move +
+                    Sex +
+                    (log.move + 1 | BearID),
+                  data = bearmove)
+```
+
+I'll leave it as an exercise for you to evalute assumptions and see if the R<sup>2</sup>. But, what's great is that we can use `emmeans` to actually ask if the sexes are different, just as before.
+
+```{r}
+library(emmeans)
+
+emmeans(bear_hier, ~ Sex)
+
+```
+
+Note that it mentions DF used for calculating those CIs. These are different methods for calculating those DF, and the K-W method is fairly standard.  We can then do a contrast as usual.
+
+```{r}
+emmeans(bear_hier, ~ Sex) |>
+  contrast(method = "pairwise") |>
+  confint()
+```
+
+So, while our estimate is that females have a higher heart rate, there is considerable variability, or low precision, in our estimate. We cannot reject the idea that sex does not matter here.
+
+# 4. GLMMs
+
+Some times, our response variables are not normal. For example, in the RIKZ beach data, richness is likely to be Poisson distributed. Or negative binomial. Either way, it's count. Let's look at that with a variable random-slope model where NAP determines richness, but it's effect varies by beach. To do this with a poisson, we'll need `glmer()` the generalized implementation of `lmer()`
+
+```{r}
+# Start with the data, and make a character for Beach
+RIKZdat <- RIKZdat |>
+  mutate(Beach = as.character(Beach))
+
+
+rikz_mod <- glmer(Richness ~ NAP +
+                   (NAP + 1 | Beach),
+                 
+                 family = poisson(link = "log"),
+                 
+                 data = RIKZdat)
+```
+
+This works beautifully. Now, while we should look at our predictions, our RE QQ plots, and our outliers - we also have to look at quantile residuals. We can also check overdispersion.
+
+```{r}
+check_model(rikz_mod)
+```
+
+Most things look pretty good here. Our overdispersion is a bit wonky, but we can check that in more detail with quantile residuals.
+
+```{r}
+library(DHARMa)
+
+simulateResiduals(rikz_mod) |> plot()
+```
+
+This again.... actually is fine. We still see that wiggliness, though, in the rank prediction against residual. If one was really worried about that, we could use a negative binomial error. Here, though, be dragons, and we'll need to switch to `glmmTMB`.
+
+```{r}
+library(glmmTMB)
+
+rikz_nb <- glmmTMB(Richness ~  NAP +
+                     
+                   (NAP + 1 | Beach),
+                 
+                 family = nbinom2(link = "log"),
+                 
+                 data = RIKZdat)
+```
+
+Everything fit, so we can re-assess.
+
+```{r, warning = FALSE}
+check_model(rikz_nb)
+```
+
+Same.
+
+```{r, warning = FALSE}
+simulateResiduals(rikz_nb) |> plot()
+```
+
+Same. One may well ask, did we need the nbinom2 here?
+
+```{r}
+summary(rikz_nb)
+```
+
+With a fairly substantial dispersion, perhaps. We can also visualize to see how this might change our inference, or look at comparisons of coefficients.
+
+```{r}
+tidy(rikz_mod)
+tidy(rikz_nb)
+```
+
+We can see why plots looked so similar - we get the same coefficients more or less. So, while the NB is more flexible, it might not be as big if an issue here.
+
+This is actually a great place to introduce `merTools::predictInterval()` which allows one to generate intervals around fit due to fit error, random effects, or RE + residual error (i.e., fill prediction intervals).
+
+```{r}
+library(merTools)
+pred <- predictInterval(rikz_mod, which = "fixed",
+                          n.sims = 10000) |>
+  cbind(RIKZdat)
+
+ggplot(pred,
+       aes(x = NAP, y = Richness)) +
+  geom_point() +
+  geom_line(aes(y = exp(fit)))
+```
+
+Note, this line is janky because it's from simulations, and those aren't 100% simple with a complex model structure. You *could* just start all of this using `estimate_relation()` or somesuch for a smoother fit. But where `predictInterval` shines is the creation of prediction intervals using full RE and residual structure.  However, we need to select the extreme upper and lower values, otherwise we'll just plot the values for each beach.
+
+
+```{r, warning = FALSE}
+
+newdat <- tidyr::crossing(
+  NAP = seq(-1.4,2.3, length.out = 200),
+  Beach = unique(RIKZdat$Beach)
+)
+
+rikz_full <- predictInterval(rikz_mod, 
+                             newdata = newdat,
+                             which = "full",
+                          n.sims = 10000,
+                           include.resid.var=TRUE) |>
+  cbind(newdat) |>
+  rename(Richness = fit) |>
+  group_by(NAP) |>
+  summarize(Richness = mean(Richness),
+            lwr = min(lwr),
+            upr = max(upr)) 
+
+ggplot(RIKZdat,
+       aes(x = NAP, y = Richness)) +
+  geom_point() +
+  geom_line(data = pred, aes(y = exp(fit))) +
+  geom_ribbon(data = rikz_full,
+              aes(ymin = exp(lwr), ymax = exp(upr)),
+              alpha = 0.1, color = "grey")
+```
+
+We can contrast that to either a) just the residual variation, b) just the full variation, or c) just the CI from before.
+
+## 4.2 Explore!

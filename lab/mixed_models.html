@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Biol607">
+
+<title>Fitting Mixed Models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="mixed_models_files/libs/clipboard/clipboard.min.js"></script>
+<script src="mixed_models_files/libs/quarto-html/quarto.js"></script>
+<script src="mixed_models_files/libs/quarto-html/popper.min.js"></script>
+<script src="mixed_models_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="mixed_models_files/libs/quarto-html/anchor.min.js"></script>
+<link href="mixed_models_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="mixed_models_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="mixed_models_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="mixed_models_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="mixed_models_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#variable-intercepts-and-bear-movement" id="toc-variable-intercepts-and-bear-movement" class="nav-link active" data-scroll-target="#variable-intercepts-and-bear-movement">1. Variable Intercepts and Bear Movement</a>
+  <ul class="collapse">
+  <li><a href="#fitting-and-evaluating-a-variable-intercept-model" id="toc-fitting-and-evaluating-a-variable-intercept-model" class="nav-link" data-scroll-target="#fitting-and-evaluating-a-variable-intercept-model">1.1 Fitting and Evaluating a Variable Intercept Model</a></li>
+  <li><a href="#evaluating-the-fit-model" id="toc-evaluating-the-fit-model" class="nav-link" data-scroll-target="#evaluating-the-fit-model">1.2 Evaluating the Fit Model</a></li>
+  <li><a href="#visualizing-the-model" id="toc-visualizing-the-model" class="nav-link" data-scroll-target="#visualizing-the-model">1.3 Visualizing the model</a></li>
+  <li><a href="#variable-int-exercise" id="toc-variable-int-exercise" class="nav-link" data-scroll-target="#variable-int-exercise">1.4 Variable Int Exercise</a></li>
+  </ul></li>
+  <li><a href="#variable-slope-intercept" id="toc-variable-slope-intercept" class="nav-link" data-scroll-target="#variable-slope-intercept">2. Variable Slope-Intercept</a>
+  <ul class="collapse">
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">2.1 Example</a></li>
+  </ul></li>
+  <li><a href="#hierarchical-models" id="toc-hierarchical-models" class="nav-link" data-scroll-target="#hierarchical-models">3. Hierarchical Models</a></li>
+  <li><a href="#glmms" id="toc-glmms" class="nav-link" data-scroll-target="#glmms">4. GLMMs</a>
+  <ul class="collapse">
+  <li><a href="#explore" id="toc-explore" class="nav-link" data-scroll-target="#explore">4.2 Explore!</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Fitting Mixed Models</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Biol607 </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="variable-intercepts-and-bear-movement" class="level1">
+<h1>1. Variable Intercepts and Bear Movement</h1>
+<p>To begin with, let’s work on a really neat data set about the bears. This is the <code>bearmove</code> dataset in <code>Data4Ecologists</code>. We’ll start by taking a look at the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Data4Ecologists)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>bearmove <span class="ot">&lt;-</span> bearmove <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">BearIDYear =</span> <span class="fu">as.character</span>(BearIDYear),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">BearID =</span> <span class="fu">as.character</span>(BearID),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">log_hr =</span> <span class="fu">log</span>(hr))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bearmove)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    log.move hr Season DayNight Sex Stage julian BearID Year BearIDYear
+1  2.9391619 60 Spring      Day   F   Fem     96   4021 2010     402110
+2  0.5247285 54 Spring      Day   F   Fem     97   4021 2010     402110
+3 -0.5960205 34 Spring      Day   F   Fem     99   4021 2010     402110
+4 -0.3754210 37 Spring      Day   F   Fem    102   4021 2010     402110
+5 -0.6386590 37 Spring      Day   F   Fem    103   4021 2010     402110
+6  0.5399960 41 Spring      Day   F   Fem    104   4021 2010     402110
+    log_hr
+1 4.094345
+2 3.988984
+3 3.526361
+4 3.610918
+5 3.610918
+6 3.713572</code></pre>
+</div>
+</div>
+<p>Lots going on here! To begin our exploration of variable intercept models, we’ll look at how heart rate is a function of log movement. We can visualize this, and also look at how different things are from bear-to-bear. We will use the variable <code>BearIDYear</code> and assume that measurements within a bear are independent of one another after we account for this variance component.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>bear_base <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(bearmove,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> hr, <span class="at">x =</span> log.move, <span class="at">color =</span> BearID)) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(BearID)) </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>bear_base</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>OK, we can see that the data bounces around from bear to bear. Maybe the slope does to? Who’s to say! Yet… We can ponder an initial model that accounts for this non-independence where Bear is a random effect. We sample the same bears over time, and as such, there might be a bear effect on heart rate (I mean, not all bears are created equal).</p>
+<p><strong>THINK</strong>: Is it reasonable to assume endogeneity?</p>
+<section id="fitting-and-evaluating-a-variable-intercept-model" class="level2">
+<h2 class="anchored" data-anchor-id="fitting-and-evaluating-a-variable-intercept-model">1.1 Fitting and Evaluating a Variable Intercept Model</h2>
+<p>We’ll work with <code>lme4</code> to fit a variable intercept model. Note, <code>glmmTMB</code> will have the same syntax, and many of the same workflows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>bear_int <span class="ot">&lt;-</span> <span class="fu">lmer</span>(hr <span class="sc">~</span> log.move <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>BearID), <span class="at">data =</span> bearmove)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Great! Let’s look at whether we can use this model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'performance' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(bear_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Looking at this overview, things look pretty good! The big new bit is checking the normality of the random effects here.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_normality</span>(bear_int, <span class="at">effects =</span> <span class="st">"random"</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>These look great.</p>
+</section>
+<section id="evaluating-the-fit-model" class="level2">
+<h2 class="anchored" data-anchor-id="evaluating-the-fit-model">1.2 Evaluating the Fit Model</h2>
+<p>We can look at our outputs in a number of ways. Let’s look at the <code>summary()</code> output first.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bear_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by REML ['lmerMod']
+Formula: hr ~ log.move + (1 | BearID)
+   Data: bearmove
+
+REML criterion at convergence: 22537
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4210 -0.6341  0.0124  0.6749  4.3851 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ BearID   (Intercept)  65.56    8.097  
+ Residual             199.01   14.107  
+Number of obs: 2768, groups:  BearID, 7
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   56.243      3.118   18.04
+log.move       3.388      0.139   24.37
+
+Correlation of Fixed Effects:
+         (Intr)
+log.move -0.167</code></pre>
+</div>
+</div>
+<p>One - note it tells us we have convergence. This is key. Now, we can see information on the variance and SD of the random effects, and estimated of the fixed effects. We can also see this with <code>broom.mixed::tidy()</code>. The <code>broom.mixed</code> package is the mixed model extension of <code>broom</code>. It was forked off as there are some specific things with REs that don’t fit into the general output of <code>broom</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom.mixed)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(bear_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  effect   group    term            estimate std.error statistic
+  &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 fixed    &lt;NA&gt;     (Intercept)        56.2      3.12       18.0
+2 fixed    &lt;NA&gt;     log.move            3.39     0.139      24.4
+3 ran_pars BearID   sd__(Intercept)     8.10    NA          NA  
+4 ran_pars Residual sd__Observation    14.1     NA          NA  </code></pre>
+</div>
+</div>
+<p>We see the same info, summarized a bit more neatly. If we wanted CI, we can use <code>confint()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(bear_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Computing profile confidence intervals ...</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                2.5 %    97.5 %
+.sig01       4.753429 14.169146
+.sigma      13.740660 14.485013
+(Intercept) 49.736048 62.735881
+log.move     3.114563  3.659708</code></pre>
+</div>
+</div>
+<p>If we want to look at the random effects, we have a few options. <code>ranef()</code> will give you the coefficients.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ranef</span>(bear_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$BearID
+     (Intercept)
+4011  8.66779550
+4021 -1.59423861
+4041 -6.84108643
+4055  0.08034266
+4083 -3.77098810
+4085 -9.34363086
+4087 12.80180584
+
+with conditional variances for "BearID" </code></pre>
+</div>
+</div>
+<p>If we want to get more info, we can use <code>tidy()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(bear_int, <span class="at">effects=</span><span class="st">"ran_vals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 6
+  effect   group  level term        estimate std.error
+  &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+1 ran_vals BearID 4011  (Intercept)   8.67       0.846
+2 ran_vals BearID 4021  (Intercept)  -1.59       0.600
+3 ran_vals BearID 4041  (Intercept)  -6.84       1.01 
+4 ran_vals BearID 4055  (Intercept)   0.0803     0.585
+5 ran_vals BearID 4083  (Intercept)  -3.77       0.726
+6 ran_vals BearID 4085  (Intercept)  -9.34       0.671
+7 ran_vals BearID 4087  (Intercept)  12.8        0.741</code></pre>
+</div>
+</div>
+<p>This is going to be easier to turn into a plot. There’s a great easystats library called <code>modelbased</code> that works much like <code>performance</code>. It has a few tools for visualization.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelbased)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'modelbased' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_grouplevel</span>(bear_int) <span class="sc">|&gt;</span> <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Nice, no? We can also look at combined effects</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(bear_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$BearID
+     (Intercept) log.move
+4011    64.91082  3.38807
+4021    54.64878  3.38807
+4041    49.40194  3.38807
+4055    56.32337  3.38807
+4083    52.47203  3.38807
+4085    46.89939  3.38807
+4087    69.04483  3.38807
+
+attr(,"class")
+[1] "coef.mer"</code></pre>
+</div>
+</div>
+<p>Or tidy:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(bear_int, <span class="at">effects=</span><span class="st">"ran_coefs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 5
+   effect    group  level term        estimate
+   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;
+ 1 ran_coefs BearID 4011  (Intercept)    64.9 
+ 2 ran_coefs BearID 4021  (Intercept)    54.6 
+ 3 ran_coefs BearID 4041  (Intercept)    49.4 
+ 4 ran_coefs BearID 4055  (Intercept)    56.3 
+ 5 ran_coefs BearID 4083  (Intercept)    52.5 
+ 6 ran_coefs BearID 4085  (Intercept)    46.9 
+ 7 ran_coefs BearID 4087  (Intercept)    69.0 
+ 8 ran_coefs BearID 4011  log.move        3.39
+ 9 ran_coefs BearID 4021  log.move        3.39
+10 ran_coefs BearID 4041  log.move        3.39
+11 ran_coefs BearID 4055  log.move        3.39
+12 ran_coefs BearID 4083  log.move        3.39
+13 ran_coefs BearID 4085  log.move        3.39
+14 ran_coefs BearID 4087  log.move        3.39</code></pre>
+</div>
+</div>
+<p>Or make it fancy for just the fixed + random effects</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_grouplevel</span>(bear_int, <span class="at">type =</span> <span class="st">"total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Group  | Level |   Parameter | Coefficient
+------------------------------------------
+BearID |  4011 | (Intercept) |       64.91
+BearID |  4021 | (Intercept) |       54.65
+BearID |  4041 | (Intercept) |       49.40
+BearID |  4055 | (Intercept) |       56.32
+BearID |  4083 | (Intercept) |       52.47
+BearID |  4085 | (Intercept) |       46.90
+BearID |  4087 | (Intercept) |       69.04</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizing-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-the-model">1.3 Visualizing the model</h2>
+<p>Now, one CAN use the outputs of different tidiers from above to build visualizations from scratch. It takes some work and reshaping. Perhaps it will be an “impress yourself” somewhere. For visualization, I’m a big fan of two things. First is <code>estimate_relation()</code> from <code>modelbased</code> and second it getting simulations from <code>merTools::predictInterval()</code>. We’ll stick with the former for the moment.</p>
+<p>First up, do you want to look at just the marginal (fixed) effects?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_relation</span>(bear_int) <span class="sc">|&gt;</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>There you go. All of the data with the FE through it. If you wanted to be more detailed, you can use the output to generate your own plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>bear_int_marginal <span class="ot">&lt;-</span> <span class="fu">estimate_relation</span>(bear_int) <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">hr =</span> Predicted)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bearmove,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> log.move, <span class="at">y =</span> hr)) <span class="sc">+</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> bear_int_marginal, </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> bear_int_marginal, </span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">ymin =</span> CI_low, <span class="at">ymax =</span> CI_high),</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">fill =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>But for initial viz, meh, just use <code>estimate_relation</code>. We can also see the BLUP predictions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_relation</span>(bear_int, <span class="at">include_random =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">plot</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also drop CIs</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_relation</span>(bear_int, <span class="at">include_random =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">ribbon =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Or add FE on top of that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_relation</span>(bear_int, <span class="at">include_random =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">ribbon =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> bear_int_marginal, </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> log.move, <span class="at">y =</span> hr),<span class="at">linewidth =</span> <span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Or do any number of things - facets, etc.</p>
+</section>
+<section id="variable-int-exercise" class="level2">
+<h2 class="anchored" data-anchor-id="variable-int-exercise">1.4 Variable Int Exercise</h2>
+<p>Consider the data set <code>birdmalariaO</code> in the <code>Data4Ecologists</code> library. These data are associated with the following paper: Asghar, M., Hasselquist, D., Hansson, B., Zehtindjiev, P., Westerdahl, H., &amp; Bensch, S. (2015). Hidden costs of infection: chronic malaria accelerates telomere degradation and senescence in wild birds. Science, 347(6220), 436-438.</p>
+<p>If we assess <code>OffBTL</code> - Offspring ealy-life telomere length (at 9 day age) - as a measure of fitness, how does mother’s age - <code>mage</code> - affect fitness, given that <code>dam</code> is mother id and <code>brood</code> is brood id (one mother can have many broods).</p>
+<p>Now, consider not just mother’s age, but also mother’s malarial status - <code>mmal</code>. Note, you will have to make this a character.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>birdmalariaO <span class="ot">&lt;-</span> birdmalariaO <span class="sc">|&gt;</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mmal =</span> <span class="fu">as.character</span>(mmal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="variable-slope-intercept" class="level1">
+<h1>2. Variable Slope-Intercept</h1>
+<p>Back to bears, what if movement’s effect varied on heart rate by bear? Some are strong, some not so much… Might we have a variable slope?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>bear_base</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can examine this with a variable-slope variable-intercept model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>bear_slope_int <span class="ot">&lt;-</span> <span class="fu">lmer</span>(hr <span class="sc">~</span> log.move <span class="sc">+</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                         </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                         (log.move <span class="sc">+</span> <span class="dv">1</span><span class="sc">|</span>BearID), </span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                       </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">data =</span> bearmove)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As before, we can examine assumptions</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(bear_slope_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>There are some potential footballs in our HOV, and the QQ is a little funky, but largely this looks OK (for fun, try a DHARMa quantile residuals plot).</p>
+<p>We can look at coefficients</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(bear_slope_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  effect   group    term                      estimate std.error statistic
+  &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;                        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 fixed    &lt;NA&gt;     (Intercept)                 56.6       4.25      13.3 
+2 fixed    &lt;NA&gt;     log.move                     3.34      0.537      6.23
+3 ran_pars BearID   sd__(Intercept)             11.1      NA         NA   
+4 ran_pars BearID   cor__(Intercept).log.move   -0.814    NA         NA   
+5 ran_pars BearID   sd__log.move                 1.37     NA         NA   
+6 ran_pars Residual sd__Observation             13.9      NA         NA   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(bear_slope_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Computing profile confidence intervals ...</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 2.5 %     97.5 %
+.sig01       6.4746186 19.5411287
+.sig02      -0.9605630 -0.3127309
+.sig03       0.7579669  2.4507354
+.sigma      13.5330800 14.2670811
+(Intercept) 47.7161523 65.5162086
+log.move     2.2175234  4.4693293</code></pre>
+</div>
+</div>
+<p>And, indeed, all terms suggest they should be included in the model. Note the correlation between random slopes and intercepts, FYI.</p>
+<p>We can look at our REs</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_grouplevel</span>(bear_slope_int) <span class="sc">|&gt;</span> <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>I find this one fairly interesting, as we can see both that there were some that were further away from the mean slope than others - but not too far when compared to the magnitude of the slope. No outright sign flips, etc.</p>
+<p>How much variability did we explain?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(bear_slope_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># R2 for Mixed Models
+
+  Conditional R2: 0.365
+     Marginal R2: 0.153</code></pre>
+</div>
+</div>
+<p>Interestingly, things…. have not changed a lot. While there is a variable intercept here, our fit hasn’t changed much. Heck</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(bear_int, <span class="at">effect =</span> <span class="st">"fixed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  effect term        estimate std.error statistic
+  &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 fixed  (Intercept)    56.2      3.12       18.0
+2 fixed  log.move        3.39     0.139      24.4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(bear_slope_int, <span class="at">effect =</span> <span class="st">"fixed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  effect term        estimate std.error statistic
+  &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 fixed  (Intercept)    56.6      4.25      13.3 
+2 fixed  log.move        3.34     0.537      6.23</code></pre>
+</div>
+</div>
+<p>We can see that the FEs are not that different. More interestingly, our conditional R<sup>2</sup></p>
+<p>To understand what is going on, though, we can visualize as before.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_relation</span>(bear_slope_int, <span class="at">include_random =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can visually see here that while slopes do vary, it’s not by a heck of a lot. But, this variability can be important, particularly with respect to proper CIs.</p>
+<section id="example" class="level2">
+<h2 class="anchored" data-anchor-id="example">2.1 Example</h2>
+<p>Let’s just back into <code>birdmalariaO</code> If we assess <code>OffBTL</code> - Offspring ealy-life telomere length (at 9 day age) - as a measure of fitness, how does mother’s age - <code>mage</code> - and malarial status <code>mmal</code> - affect fitness, given that <code>dam</code> is mother id and <code>brood</code> is brood id (one mother can have many broods).</p>
+<p>Should there be a <code>mage*mmal</code> interaction? What do you think, after thinking about the biology and looking at the data?</p>
+<p>Now, where should the RE go? Begin with one where the effects of malaria vary by brood. After all, different years might experience different strains or severity.</p>
+<p><strong>Note</strong>, for multiple predictors, use <code>estimate_relation()</code> instead of <code>estimate_prediction()</code>. You might also want to take it, turn it into a tibble, and plot instead of relying on <code>plot()</code></p>
+<p>Once you are comfortable with results, fit a model where <code>mage</code>’s effect varies by <code>dam</code> as well. Birds might vary in how age-related maternal effects influence fitness.</p>
+<p>But - what happens? This is where we grapple with some of the complexity. Let’s talk about RE structure and look at those warning messages carefully.</p>
+</section>
+</section>
+<section id="hierarchical-models" class="level1">
+<h1>3. Hierarchical Models</h1>
+<p>Back to bears, our fuzzy bears have some properties that do not vary from individual to individual. And some of which could be linked right to heart rate. For example, does Sex change bear heart rate?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>bear_hier <span class="ot">&lt;-</span> <span class="fu">lmer</span>(hr <span class="sc">~</span> log.move <span class="sc">+</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>                    Sex <span class="sc">+</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>                    (log.move <span class="sc">+</span> <span class="dv">1</span> <span class="sc">|</span> BearID),</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> bearmove)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I’ll leave it as an exercise for you to evalute assumptions and see if the R<sup>2</sup>. But, what’s great is that we can use <code>emmeans</code> to actually ask if the sexes are different, just as before.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(bear_hier, <span class="sc">~</span> Sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Sex emmean   SE   df lower.CL upper.CL
+ F     72.9 3.10 5.83     65.3     80.6
+ M     64.4 3.58 5.91     55.6     73.2
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+<p>Note that it mentions DF used for calculating those CIs. These are different methods for calculating those DF, and the K-W method is fairly standard. We can then do a contrast as usual.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(bear_hier, <span class="sc">~</span> Sex) <span class="sc">|&gt;</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">contrast</span>(<span class="at">method =</span> <span class="st">"pairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast estimate   SE   df lower.CL upper.CL
+ F - M        8.57 4.71 4.97    -3.55     20.7
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+<p>So, while our estimate is that females have a higher heart rate, there is considerable variability, or low precision, in our estimate. We cannot reject the idea that sex does not matter here.</p>
+</section>
+<section id="glmms" class="level1">
+<h1>4. GLMMs</h1>
+<p>Some times, our response variables are not normal. For example, in the RIKZ beach data, richness is likely to be Poisson distributed. Or negative binomial. Either way, it’s count. Let’s look at that with a variable random-slope model where NAP determines richness, but it’s effect varies by beach. To do this with a poisson, we’ll need <code>glmer()</code> the generalized implementation of <code>lmer()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with the data, and make a character for Beach</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>RIKZdat <span class="ot">&lt;-</span> RIKZdat <span class="sc">|&gt;</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Beach =</span> <span class="fu">as.character</span>(Beach))</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>rikz_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(Richness <span class="sc">~</span> NAP <span class="sc">+</span></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>                   (NAP <span class="sc">+</span> <span class="dv">1</span> <span class="sc">|</span> Beach),</span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>                 </span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">family =</span> <span class="fu">poisson</span>(<span class="at">link =</span> <span class="st">"log"</span>),</span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>                 </span>
+<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> RIKZdat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This works beautifully. Now, while we should look at our predictions, our RE QQ plots, and our outliers - we also have to look at quantile residuals. We can also check overdispersion.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(rikz_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Most things look pretty good here. Our overdispersion is a bit wonky, but we can check that in more detail with quantile residuals.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DHARMa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is DHARMa 0.4.6. For overview type '?DHARMa'. For recent changes, type news(package = 'DHARMa')</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simulateResiduals</span>(rikz_mod) <span class="sc">|&gt;</span> <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This again…. actually is fine. We still see that wiggliness, though, in the rank prediction against residual. If one was really worried about that, we could use a negative binomial error. Here, though, be dragons, and we’ll need to switch to <code>glmmTMB</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmmTMB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in checkDepPackageVersion(dep_pkg = "TMB"): Package version inconsistency detected.
+glmmTMB was built with TMB version 1.9.4
+Current TMB version is 1.9.6
+Please re-install glmmTMB from source or restore original 'TMB' package (see '?reinstalling' for more information)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>rikz_nb <span class="ot">&lt;-</span> <span class="fu">glmmTMB</span>(Richness <span class="sc">~</span>  NAP <span class="sc">+</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>                     </span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>                   (NAP <span class="sc">+</span> <span class="dv">1</span> <span class="sc">|</span> Beach),</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>                 </span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">family =</span> <span class="fu">nbinom2</span>(<span class="at">link =</span> <span class="st">"log"</span>),</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>                 </span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> RIKZdat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Everything fit, so we can re-assess.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(rikz_nb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`check_outliers()` does not yet support models of class `glmmTMB`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Same.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simulateResiduals</span>(rikz_nb) <span class="sc">|&gt;</span> <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>qu = 0.25, log(sigma) = -3.495193 : outer Newton did not converge fully.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>qu = 0.25, log(sigma) = -3.510995 : outer Newton did not converge fully.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Same. One may well ask, did we need the nbinom2 here?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(rikz_nb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: nbinom2  ( log )
+Formula:          Richness ~ NAP + (NAP + 1 | Beach)
+Data: RIKZdat
+
+     AIC      BIC   logLik deviance df.resid 
+   220.7    231.5   -104.3    208.7       39 
+
+Random effects:
+
+Conditional model:
+ Groups Name        Variance Std.Dev. Corr 
+ Beach  (Intercept) 0.25773  0.5077        
+        NAP         0.08211  0.2865   0.20 
+Number of obs: 45, groups:  Beach, 9
+
+Dispersion parameter for nbinom2 family ():  103 
+
+Conditional model:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)   1.6935     0.1864   9.086  &lt; 2e-16 ***
+NAP          -0.6076     0.1370  -4.436 9.16e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>With a fairly substantial dispersion, perhaps. We can also visualize to see how this might change our inference, or look at comparisons of coefficients.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(rikz_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  effect   group term                 estimate std.error statistic   p.value
+  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 fixed    &lt;NA&gt;  (Intercept)             1.69      0.187      9.07  1.18e-19
+2 fixed    &lt;NA&gt;  NAP                    -0.607     0.137     -4.42  9.81e- 6
+3 ran_pars Beach sd__(Intercept)         0.513    NA         NA    NA       
+4 ran_pars Beach cor__(Intercept).NAP    0.180    NA         NA    NA       
+5 ran_pars Beach sd__NAP                 0.299    NA         NA    NA       </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(rikz_nb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  effect   component group term           estimate std.error statistic   p.value
+  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 fixed    cond      &lt;NA&gt;  (Intercept)       1.69      0.186      9.09  1.03e-19
+2 fixed    cond      &lt;NA&gt;  NAP              -0.608     0.137     -4.44  9.16e- 6
+3 ran_pars cond      Beach sd__(Intercep…    0.508    NA         NA    NA       
+4 ran_pars cond      Beach sd__NAP           0.287    NA         NA    NA       
+5 ran_pars cond      Beach cor__(Interce…    0.202    NA         NA    NA       </code></pre>
+</div>
+</div>
+<p>We can see why plots looked so similar - we get the same coefficients more or less. So, while the NB is more flexible, it might not be as big if an issue here.</p>
+<p>This is actually a great place to introduce <code>merTools::predictInterval()</code> which allows one to generate intervals around fit due to fit error, random effects, or RE + residual error (i.e., fill prediction intervals).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(merTools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: arm</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: MASS</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'MASS'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    select</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+arm (Version 1.13-1, built: 2022-8-25)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Working directory is /Users/jebyrnes/Dropbox (Byrnes Lab)/Classes/biol_607_biostats/lab</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'arm'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:modelbased':
+
+    standardize</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:performance':
+
+    display</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predictInterval</span>(rikz_mod, <span class="at">which =</span> <span class="st">"fixed"</span>,</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.sims =</span> <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(RIKZdat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in predictInterval(rikz_mod, which = "fixed", n.sims = 10000):
+Prediction for NLMMs or GLMMs that are not mixed binomial regressions is not
+tested. Sigma set at 1.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: executing %dopar% sequentially: no parallel backend registered</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pred,</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> NAP, <span class="at">y =</span> Richness)) <span class="sc">+</span></span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">exp</span>(fit)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note, this line is janky because it’s from simulations, and those aren’t 100% simple with a complex model structure. You <em>could</em> just start all of this using <code>estimate_relation()</code> or somesuch for a smoother fit. But where <code>predictInterval</code> shines is the creation of prediction intervals using full RE and residual structure. However, we need to select the extreme upper and lower values, otherwise we’ll just plot the values for each beach.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>newdat <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">crossing</span>(</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">NAP =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">1.4</span>,<span class="fl">2.3</span>, <span class="at">length.out =</span> <span class="dv">200</span>),</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Beach =</span> <span class="fu">unique</span>(RIKZdat<span class="sc">$</span>Beach)</span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a>rikz_full <span class="ot">&lt;-</span> <span class="fu">predictInterval</span>(rikz_mod, </span>
+<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">newdata =</span> newdat,</span>
+<span id="cb96-8"><a href="#cb96-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">which =</span> <span class="st">"full"</span>,</span>
+<span id="cb96-9"><a href="#cb96-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n.sims =</span> <span class="dv">10000</span>,</span>
+<span id="cb96-10"><a href="#cb96-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">include.resid.var=</span><span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb96-11"><a href="#cb96-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(newdat) <span class="sc">|&gt;</span></span>
+<span id="cb96-12"><a href="#cb96-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Richness =</span> fit) <span class="sc">|&gt;</span></span>
+<span id="cb96-13"><a href="#cb96-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(NAP) <span class="sc">|&gt;</span></span>
+<span id="cb96-14"><a href="#cb96-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Richness =</span> <span class="fu">mean</span>(Richness),</span>
+<span id="cb96-15"><a href="#cb96-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">lwr =</span> <span class="fu">min</span>(lwr),</span>
+<span id="cb96-16"><a href="#cb96-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">upr =</span> <span class="fu">max</span>(upr)) </span>
+<span id="cb96-17"><a href="#cb96-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-18"><a href="#cb96-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RIKZdat,</span>
+<span id="cb96-19"><a href="#cb96-19" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> NAP, <span class="at">y =</span> Richness)) <span class="sc">+</span></span>
+<span id="cb96-20"><a href="#cb96-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb96-21"><a href="#cb96-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> pred, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">exp</span>(fit))) <span class="sc">+</span></span>
+<span id="cb96-22"><a href="#cb96-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> rikz_full,</span>
+<span id="cb96-23"><a href="#cb96-23" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">ymin =</span> <span class="fu">exp</span>(lwr), <span class="at">ymax =</span> <span class="fu">exp</span>(upr)),</span>
+<span id="cb96-24"><a href="#cb96-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">color =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="mixed_models_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can contrast that to either a) just the residual variation, b) just the full variation, or c) just the CI from before.</p>
+<section id="explore" class="level2">
+<h2 class="anchored" data-anchor-id="explore">4.2 Explore!</h2>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
