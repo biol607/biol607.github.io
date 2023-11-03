@@ -536,6 +536,11 @@ class: center, middle
 
 ---
 
+# Visualizing REs?
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
 # Combined coefficients
 
 &lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
@@ -610,7 +615,7 @@ class: center, middle
      
 --
 
-- The Conditional R&lt;sup&gt;2&lt;/sup will always be larger  
+- The Conditional R&lt;sup&gt;2&lt;/sup&gt; will always be larger  
      - If Marginal = 0.01, but Conditional = 0.99, what have you explained?
 ---
 class: center, middle
@@ -620,29 +625,29 @@ class: center, middle
 ---
 # Visualizing Fixed (Marginal) Effects Only
 
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Visualizing Conditional Effects Only
-
 &lt;img src="mixed_models_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Putting it All Together
-
+# Visualizing Conditional Effects Only
 
 &lt;img src="mixed_models_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Putting it All Together
 
+
 &lt;img src="mixed_models_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Putting it All Together
 
-
 &lt;img src="mixed_models_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Putting it All Together
+
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -736,13 +741,13 @@ rikz_varslopeint &lt;- lmer(log_richness ~ NAP +
 ---
 # Diagnostics on Multiple REs
 
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualize As Before
 
 
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;&lt;table&gt;
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;&lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; R2_conditional &lt;/th&gt;
@@ -806,6 +811,7 @@ class: center, middle
 
 ![](images/mixed_models/hyperparameters.jpg)
 
+
 ---
 
 ## Or All One
@@ -826,6 +832,15 @@ class: center, middle
 # The Model in R
 
 
+```r
+rikz_hier &lt;- lmer(log_richness ~ NAP +
+                           
+                           exposure +
+                           
+                           (NAP + 1|Beach),
+                    
+                    data = RIKZdat)
+```
 
 
 ---
@@ -968,18 +983,18 @@ class: center, middle
 
 # Visualization is an MLR Problem
 
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Plotting Fixed Effects of Multiple Predictors
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
 # Plotting Everything
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1026,7 +1041,7 @@ class: center, middle
 ---
 # This is Not Normal
 
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1065,18 +1080,18 @@ rikz_pois &lt;- glmer(Richness ~ NAP +
 ---
 # Check that prediction
 
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
-
-
----
-# Check that Overdispersion
-
 &lt;img src="mixed_models_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
+
 
 ---
 # Check that Overdispersion
 
 &lt;img src="mixed_models_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Check that Overdispersion
+
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Check the Random Effects
@@ -1086,13 +1101,13 @@ rikz_pois &lt;- glmer(Richness ~ NAP +
 [[1]]
 ```
 
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Evaluate Away!
 
-&lt;img src="mixed_models_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="mixed_models_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto;" /&gt;
 
 ```
 # A tibble: 1 × 2

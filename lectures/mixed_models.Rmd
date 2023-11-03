@@ -458,8 +458,13 @@ tidy(rikz_varint) |>
 broom.mixed::tidy(rikz_varint_tmb, effects="ran_vals") |>
   knitr::kable(digits = 2) |>
   kableExtra::kable_styling("striped")
+```
 
-#modelbased::estimate_grouplevel(rikz_varint) |> plot()
+---
+
+# Visualizing REs?
+```{r}
+modelbased::estimate_grouplevel(rikz_varint) |> plot()
 ```
 
 ---
@@ -493,7 +498,7 @@ r2(rikz_varint_tmb)
      
 --
 
-- The Conditional R<sup>2</sup will always be larger  
+- The Conditional R<sup>2</sup> will always be larger  
      - If Marginal = 0.01, but Conditional = 0.99, what have you explained?
 ---
 class: center, middle
@@ -738,6 +743,7 @@ class: center, middle
 
 ![](images/mixed_models/hyperparameters.jpg)
 
+
 ---
 
 ## Or All One
@@ -757,7 +763,7 @@ $$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$
 ---
 # The Model in R
 
-```{r}
+```{r, echo = TRUE}
 rikz_hier <- lmer(log_richness ~ NAP +
                            
                            exposure +
