@@ -117,7 +117,7 @@ $$\alpha_{j} \sim \mathcal{N}(0, \sigma^2_{\alpha})$$
   
 $$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$
 
-- Here, $alpha_j$ is the deviation from the grand mean due to being in cluster j
+- Here, $\alpha_j$ is the deviation from the grand mean due to being in cluster j
 
 ---
 
@@ -251,12 +251,12 @@ $$X_j = 0,1$$
 --
 
 - In truth, that made an assumption:
-$$\alpha_j ~ N(0, \infty)$$
+$$\alpha_j \sim N(0, \infty)$$
 
 --
 
 - With an RE, we assume
-$$\alpha_j ~ N(0, \sigma^2_{cluster})$$
+$$\alpha_j \sim N(0, \sigma^2_{cluster})$$
 
 --
 
@@ -280,7 +280,7 @@ $$\alpha_j ~ N(0, \sigma^2_{cluster})$$
 ---
 # Let's take this to the beach with Tide Height: RIKZ
 
-![:scale 80%](./images/08/denmark-lightsbeach.jpeg)
+![:scale 80%](./images/mixed_models/denmark-lightsbeach.jpeg)
 
 Richness of benthic species in 45 sampling stations along the coastline of The Netherlands, measured by two researches of the the RIKZ (Rijksinstituut voor Kust en Zee), i.e., the Dutch Institute for Coastal and Marine Management.
 
@@ -421,7 +421,7 @@ check_heteroscedasticity(rikz_varint) |> plot()
 ---
 # Are Our REs Normal?
 
-```{r}
+```{r, results = "hide"}
 check_normality(rikz_varint, effects = "random") |> plot()
 ```
 
@@ -759,7 +759,9 @@ $$\begin{pmatrix}
   
   
 $$\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$$
-
+  
+  
+- Note that the hierarchical predictor is multiplied by $X_j$
 ---
 # The Model in R
 
