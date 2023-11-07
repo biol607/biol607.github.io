@@ -175,30 +175,34 @@ __MIDTERM__: Due Tues Nov 22nd, 5pm. [Get it here](exams/exam_2022.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  [Structural Causal Models](lectures/causal_diagrams.pptx). [Causal Inference and Experiments](./lectures/causality_experiments.pptx)  
-__Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf)  
-__Optional Reading:__ [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf)  
+__Lecture:__  [Causal Inference](lectures/causal_diagrams.pptx). [Causal Inference and Experiments](./lectures/causality_experiments.pptx)  
+__Lab:__ Daggity and Causal Models. 
+__Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Fieberg on Causal Models](https://fw8051statistics4ecologists.netlify.app/causal).   
+__Optional Reading:__ [An Intro to the PO Framework from The Causal Mixtape](https://mixtape.scunning.com/04-potential_outcomes), [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [Does Water Kill?](https://pdf.sciencedirectassets.com/271328/1-s2.0-S1047279716X00105/1-s2.0-S1047279716302800/main.pdf)    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2023  
   
   
+
 ### Week 11.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Paper Discussion:__  Discussion of [papers](readings/exp_design_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
-__Lecture:__  [Using causal models to get valid inference from observational and quasi-experimental studies](lectures/causal_models_regression.pptx)  
-__Reading:__ [The Causal Dag and Haunted Terror](./readings/McElreath_Ch_6.pdf)  
-__Optional Reading:__ [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2023  
-__Lab:__ Exam work time  
+__Lecture:__   [Causal Inference and Experiments](./lectures/causality_experiments.pptx), [Using causal models to get valid inference from observational and quasi-experimental studies](lectures/causal_models_regression.pptx)    
+__Paper Discussion:__  Thursday discussion of [papers](readings/exp_design_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
+__Reading:__   [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf), [The Causal Dag and Haunted Terror](./readings/McElreath_Ch_6.pdf)  
+__Optional Reading:__  [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf)  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2023  
+  
   
   
 ### Week 12.   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Paper Discussion:__  Discussion of [papers](readings/obs_sampling.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
-__Homework:__ THANKSGIVING BREAK! EAT PIE!  
+__Paper Discussion:__  Discussion of [papers](readings/obs_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
+__Optional Reading:__ [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2023  
+
 
 ## Block 4. Drawing Inference from Studies
 
@@ -215,19 +219,22 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-nht-eval-2023
 __Packages for The Week:__ `install.packages(c("car", "MASS", "profileModel"))`  
 
 
-### Week 14-15.   
+### Week 14   
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
 
+
+__Lecture:__ Ways of Knowing: [Cross-Validation and AIC](./lectures/crossvalidation.html), 
+__Lab Topic:__  [Cross-Validation and AIC](lab/crossvalidation.html)
+__Reading:__ [AIC in Behavioral Ecology](https://link.springer.com/article/10.1007/s00265-010-1029-6), [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), [Aho et al. 2014](./readings/Aho_2014_ecolog_bic.pdf) 
+__Optional Books__ [Model Selection and Multimodel Inference](https://ebookcentral.proquest.com/lib/umboston/reader.action?docID=3035464) 
+__Packages for The Week:__ `install.packages(c("AICcmodavg")`   
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-2023  
+
+
+## Week 15
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-
-__Lecture:__ Ways of Knowing: [Cross-Validation and AIC](./lectures/crossvalidation.html), [Bayesian Data Analaysis](lectures/bayes.html), [Fitting a line with Bayesian techniques](lectures/16_bayesian_lm.html), [Bayesian Inference on a Line](lectures/bayesian_lm_inference.html)  
-__Lab Topic:__  [Cross-Validation](lab/crossvalidation.html), [Bayes](lab/08_bayes.html)   
-__Reading:__ [AIC in Behavioral Ecology](https://link.springer.com/article/10.1007/s00265-010-1029-6), [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), Statistical Rethinking [Chapter 1](http://byrneslab.net/classes/biol607/readings/rethinking_ch_1.pdf) and [Chapter 2](http://byrneslab.net/classes/biol607/readings/rethinking_ch_2.pdf), [Aho et al. 2014](./readings/Aho_2014_ecolog_bic.pdf)    
-__Additional Reading__: [Intro to Bayes](https://www.bayesrulesbook.com/chapter-1.html), [Bayes' Rule](https://www.bayesrulesbook.com/chapter-2.html)[how to choose a prior](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations),  [regression models with brms](https://magesblog.com/post/2015-09-01-bayesian-regression-models-using-stan/), [rethinking with brms](https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/) (many very cool examples), [brms tutorials](https://www.rensvandeschoot.com/tutorials/brms/),  [Bayesian basics with R](https://m-clark.github.io/bayesian-basics/)  
-__Optional Books__ [Model Selection and Multimodel Inference](https://ebookcentral.proquest.com/lib/umboston/reader.action?docID=3035464), [Bayes Rules!](https://www.bayesrulesbook.com/)  
-__Packages for The Week:__ `install.packages(c("AICcmodavg", "brms", "tidybayes", ggdist", "bayesplot")`   
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-bayes-2023  
+Project work and Project Presentations on Dec 15th
