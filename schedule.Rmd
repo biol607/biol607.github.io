@@ -167,7 +167,7 @@ __Additional Reading:__ [Generalized linear mixed models: a practical guide for 
 __Your One Stop FAQ:__ [Your One Stop FAQ: Ben Bolker’s Mixed Model’s FAQ](https://bbolker.github.io/mixedmodels-misc/), [optimizer tips](https://svmiller.com/blog/2018/06/mixed-effects-models-optimizer-checks/)     
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-mixed-2023  
 
-__MIDTERM__: Due Tues Nov 22nd, 5pm. [Get it here](exams/exam_2022.html)  
+__MIDTERM__: Due Tues Nov 22nd, 5pm. [Get it here](exams/exam_2023.html)  
 
 ## Block 3. Experimental and Observational Study Design and Causal Inference
 
