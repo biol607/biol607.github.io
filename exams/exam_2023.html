@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -72,7 +106,17 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#d.-prediction-intervals-from-your-model" id="toc-d.-prediction-intervals-from-your-model" class="nav-link" data-scroll-target="#d.-prediction-intervals-from-your-model">4d. Prediction intervals from your model</a></li>
   <li><a href="#e.-inmpress-yourself-prediction-intervals-from-your-model" id="toc-e.-inmpress-yourself-prediction-intervals-from-your-model" class="nav-link" data-scroll-target="#e.-inmpress-yourself-prediction-intervals-from-your-model">4e. INMPRESS YOURSELF! Prediction intervals from your model</a></li>
   </ul></li>
-  <li><a href="#mix-it-up" id="toc-mix-it-up" class="nav-link" data-scroll-target="#mix-it-up">5. Mix it up!</a></li>
+  <li><a href="#mix-it-up" id="toc-mix-it-up" class="nav-link" data-scroll-target="#mix-it-up">5. Mix it up!</a>
+  <ul class="collapse">
+  <li><a href="#load-it-up-and-plot." id="toc-load-it-up-and-plot." class="nav-link" data-scroll-target="#load-it-up-and-plot.">5.1 Load it up and plot.</a></li>
+  <li><a href="#are-you-over-it" id="toc-are-you-over-it" class="nav-link" data-scroll-target="#are-you-over-it">5.2 Are you <em>over</em> it?</a></li>
+  <li><a href="#fixed-or-random-intercept" id="toc-fixed-or-random-intercept" class="nav-link" data-scroll-target="#fixed-or-random-intercept">5.3 Fixed or Random Intercept</a></li>
+  <li><a href="#what-did-we-do" id="toc-what-did-we-do" class="nav-link" data-scroll-target="#what-did-we-do">5.4 What did we do</a></li>
+  <li><a href="#changes-in-parameters" id="toc-changes-in-parameters" class="nav-link" data-scroll-target="#changes-in-parameters">5.5 Changes in Parameters</a></li>
+  <li><a href="#dont-soak-up-the-good-stuff" id="toc-dont-soak-up-the-good-stuff" class="nav-link" data-scroll-target="#dont-soak-up-the-good-stuff">5.5 Don’t Soak up the Good Stuff!</a></li>
+  <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation">5.6 Model evaluation</a></li>
+  <li><a href="#impress-yourself-variable-slopes" id="toc-impress-yourself-variable-slopes" class="nav-link" data-scroll-target="#impress-yourself-variable-slopes">IMPRESS YOURSELF! Variable slopes</a></li>
+  </ul></li>
   <li><a href="#midterm-self-evaluation" id="toc-midterm-self-evaluation" class="nav-link" data-scroll-target="#midterm-self-evaluation">Midterm Self-Evaluation</a>
   <ul class="collapse">
   <li><a href="#a.-how-are-you-doing" id="toc-a.-how-are-you-doing" class="nav-link" data-scroll-target="#a.-how-are-you-doing">A. How are you doing?</a></li>
@@ -119,7 +163,8 @@ ul.task-list li input[type="checkbox"] {
 <p>First, breathe.</p>
 <p>Second, think about the steps you need to execute to get answer the question. Write them down.</p>
 <p>Third, for those parts of problems that require code, put those steps, in sequence, in comments in your script file. Use those as signposts to step-by-step walk through the things you need to do.</p>
-<p>Fourth, go over these steps, and see if there are any that could be easily abstracted into functions, could be vectorized, or otherwise done so that you can expend the minimum amount of effort on the problem to get the correct answer.</p>
+<p>Last, note there are some impress yourselves. You do not need to do them if you don’t want to. But they are there for you to stretch your wings, if you so desire, and get lost in the questions. Or learn something new.</p>
+<p>Have fun!</p>
 <p>The exam will be due on Nov 17th, 5pm.</p>
 <section id="sampling-your-system" class="level2">
 <h2 class="anchored" data-anchor-id="sampling-your-system">1. Sampling your system</h2>
@@ -198,8 +243,54 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="mix-it-up" class="level2">
 <h2 class="anchored" data-anchor-id="mix-it-up">5. Mix it up!</h2>
-<p>COMING SOON</p>
+<p>To explore the consequences of random effects, we are going to look at an example from Vonesh, J. R. and Bolker, B. M. (2005). Compensatory larval responses shift trade-offs associated with predator-induced hatching plasticity. Ecology, 86:1580–1591. In the paper, one thing they explore is the effect of tank size, predator presence, and prey density on larval tadpoles. They go on to look at induced plastic defenses in those tadpoles. It’s a cool paper, and worth a look! But, it also shows something really interesting about logistic regression models - namely, when should we consider them as mixed models.</p>
+<section id="load-it-up-and-plot." class="level3">
+<h3 class="anchored" data-anchor-id="load-it-up-and-plot.">5.1 Load it up and plot.</h3>
+<p>Load the data with the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>reedfrogs <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"https://github.com/rmcelreath/rethinking/raw/master/data/reedfrogs.csv"</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">delim =</span> <span class="st">";"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tank =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>() <span class="sc">|&gt;</span> <span class="fu">as.character</span>(),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">died =</span> density <span class="sc">-</span> surv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To get used to the data, plot survivorship as a function of tank size and predator treatment. Then, to challenge yourself a bit. Expand the data to 1s and 0s (lived or died) as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>reedfrogs_expanded <span class="ot">&lt;-</span> reedfrogs <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tank, size, pred, density) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">status =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, surv), <span class="fu">rep</span>(<span class="dv">0</span>, died))) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now with the expanded data, plot it showing who lived, who died (who tells their story…), and how that corresponds to treatment AND tank. Do you see anything to do with within-tank variability?</p>
+</section>
+<section id="are-you-over-it" class="level3">
+<h3 class="anchored" data-anchor-id="are-you-over-it">5.2 Are you <em>over</em> it?</h3>
+<p>Often, we treat data like this as a binomial logistic regression. We look at each tank as a set of ‘coin flips’ - some living some dead. Fit a glm here with survivorship determined by pred*size, and then evaluate it for overdispersion. Careful to adjust for number of individuals stocked in a tank! What do you see when you look at overdispersion?</p>
+</section>
+<section id="fixed-or-random-intercept" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-or-random-intercept">5.3 Fixed or Random Intercept</h3>
+<p>One way to fix this problem is a quasi-binomial. But, this is unsatisfying, as it’s a posthoc adjustment and not figured into the likelihood. But, another is to think in this case about what is happening in each tank. Fit a mixed model version of 5.2, and assess its assumptions. How does it compare in overdispersion? Why the difference? What is a random tank effect doing here? And why couldn’t we use a FE of tank with this pred*size model (try it if you don’t believe me - the model will fit, but something will be… off)?</p>
+</section>
+<section id="what-did-we-do" class="level3">
+<h3 class="anchored" data-anchor-id="what-did-we-do">5.4 What did we do</h3>
+<p>Write out the model equations for the glmm you have fit in 5.3. Use LaTeX to write it all out. Explain what your symbols mean in text.</p>
+</section>
+<section id="changes-in-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="changes-in-parameters">5.5 Changes in Parameters</h3>
+<p>Now that you have a model with and without a random intercept, how do the estimates of fixed effects change? Why?</p>
+</section>
+<section id="dont-soak-up-the-good-stuff" class="level3">
+<h3 class="anchored" data-anchor-id="dont-soak-up-the-good-stuff">5.5 Don’t Soak up the Good Stuff!</h3>
+<p>Sometimes, random effects are used inappropriately. They become sponges for sources of real variation, and then our estimates of fixed effects can be inappropriate if they are not balanced. In this case, we have a balanced experiment. I’d like you to explore this concept a bit, though. Fit every model - from just a random intercept to the full pred*surv + random intercept - and everything in between (that’s 5 models) and visually show how the estimate of the RE standard deviation or variance changes. Explain what is happening here. Note, for the model with only a variable intercept, add the argument <code>nAGQ=20</code> (or play with options otherwise to get it to fit). If you visualize this, make sure you are getting confidence intervals of the RE. It’s illuminating.</p>
+</section>
+<section id="model-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="model-evaluation">5.6 Model evaluation</h3>
+<p>Last, let’s evaluate this model - both with contrasts and a crisp visualization of results. <code>emmeans</code>, <code>modelbased</code>, and other friends might help you here. Or not! You do you, and extract things from the model with other helpers! There’s no one right way to do this, but, make it sing.</p>
+</section>
+<section id="impress-yourself-variable-slopes" class="level3">
+<h3 class="anchored" data-anchor-id="impress-yourself-variable-slopes">IMPRESS YOURSELF! Variable slopes</h3>
+<p>Explore multiple different RE structures beyond a variable intercept. What errors do you get? What do they mean? Can you implement some of the suggested solutions, and what do they tell you about why more complex structures don’t work well here and/or might not be appropriate. Do these different RE structures make a difference for your evaluation of the FE? What RE structure would you use? What if you added density as a covariate/predictor as in the paper?</p>
 <hr>
+</section>
 </section>
 <section id="midterm-self-evaluation" class="level1">
 <h1>Midterm Self-Evaluation</h1>
