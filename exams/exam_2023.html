@@ -111,11 +111,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#a.-load-it-up-and-plot" id="toc-a.-load-it-up-and-plot" class="nav-link" data-scroll-target="#a.-load-it-up-and-plot">5a. Load it up and plot</a></li>
   <li><a href="#b.-are-you-over-it" id="toc-b.-are-you-over-it" class="nav-link" data-scroll-target="#b.-are-you-over-it">5b. Are you <em>over</em> it?</a></li>
   <li><a href="#c.-fixed-or-random-intercept" id="toc-c.-fixed-or-random-intercept" class="nav-link" data-scroll-target="#c.-fixed-or-random-intercept">5c. Fixed or Random Intercept</a></li>
-  <li><a href="#d.-what-did-we-do" id="toc-d.-what-did-we-do" class="nav-link" data-scroll-target="#d.-what-did-we-do">5d. What did we do</a></li>
-  <li><a href="#e.-changes-in-parameters" id="toc-e.-changes-in-parameters" class="nav-link" data-scroll-target="#e.-changes-in-parameters">5e. Changes in Parameters</a></li>
-  <li><a href="#f.-dont-soak-up-the-good-stuff" id="toc-f.-dont-soak-up-the-good-stuff" class="nav-link" data-scroll-target="#f.-dont-soak-up-the-good-stuff">5f. Don’t Soak up the Good Stuff!</a></li>
-  <li><a href="#g.-model-evaluation" id="toc-g.-model-evaluation" class="nav-link" data-scroll-target="#g.-model-evaluation">5g. Model evaluation</a></li>
-  <li><a href="#impress-yourself-variable-slopes" id="toc-impress-yourself-variable-slopes" class="nav-link" data-scroll-target="#impress-yourself-variable-slopes">IMPRESS YOURSELF! Variable slopes</a></li>
+  <li><a href="#d.-changes-in-parameters" id="toc-d.-changes-in-parameters" class="nav-link" data-scroll-target="#d.-changes-in-parameters">5d. Changes in Parameters</a></li>
+  <li><a href="#e.-model-evaluation" id="toc-e.-model-evaluation" class="nav-link" data-scroll-target="#e.-model-evaluation">5e. Model evaluation</a></li>
+  <li><a href="#f.-impress-yourself-what-did-we-do" id="toc-f.-impress-yourself-what-did-we-do" class="nav-link" data-scroll-target="#f.-impress-yourself-what-did-we-do">5f. IMPRESS YOURSELF What did we do</a></li>
+  <li><a href="#g.-impress-yourself-variable-slopes" id="toc-g.-impress-yourself-variable-slopes" class="nav-link" data-scroll-target="#g.-impress-yourself-variable-slopes">5g. IMPRESS YOURSELF! Variable slopes</a></li>
   </ul></li>
   <li><a href="#midterm-self-evaluation" id="toc-midterm-self-evaluation" class="nav-link" data-scroll-target="#midterm-self-evaluation">Midterm Self-Evaluation</a>
   <ul class="collapse">
@@ -264,30 +263,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="b.-are-you-over-it" class="level3">
 <h3 class="anchored" data-anchor-id="b.-are-you-over-it">5b. Are you <em>over</em> it?</h3>
-<p>Often, we treat data like this as a binomial logistic regression. We look at each tank as a set of ‘coin flips’ - some living some dead. Fit a glm here with survivorship determined by pred*size, and then evaluate it for overdispersion. Careful to adjust for number of individuals stocked in a tank! What do you see when you look at overdispersion?</p>
+<p>Often, we treat data like this as a binomial logistic regression. We look at each tank as a set of ‘coin flips’ - some living some dead. Fit a glm here with survivorship determined by pred*size, and then evaluate it for overdispersion. Careful to weight for number of individuals stocked in a tank (density)! What do you see when you look at overdispersion?</p>
 </section>
 <section id="c.-fixed-or-random-intercept" class="level3">
 <h3 class="anchored" data-anchor-id="c.-fixed-or-random-intercept">5c. Fixed or Random Intercept</h3>
-<p>One way to fix this problem is a quasi-binomial. But, this is unsatisfying, as it’s a posthoc adjustment and not figured into the likelihood. But, another is to think in this case about what is happening in each tank. Fit a mixed model version of 5.2, and assess its assumptions. How does it compare in overdispersion? Why the difference? What is a random tank effect doing here? And why couldn’t we use a FE of tank with this pred*size model (try it if you don’t believe me - the model will fit, but something will be… off)?</p>
+<p>One way to fix this problem is a quasi-binomial. But, this is unsatisfying, as it’s a posthoc adjustment and not figured into the likelihood. But, another is to think in this case about what is happening in each tank. Fit a mixed model version of 5b, and assess its assumptions. How does it compare in overdispersion? Why the difference? What is a random tank effect doing here? And why couldn’t we use a FE of tank with this pred*size model (try it if you don’t believe me - the model will fit, but something will be… off)?</p>
 </section>
-<section id="d.-what-did-we-do" class="level3">
-<h3 class="anchored" data-anchor-id="d.-what-did-we-do">5d. What did we do</h3>
-<p>Write out the model equations for the glmm you have fit in 5.3. Use LaTeX to write it all out. Explain what your symbols mean in text.</p>
-</section>
-<section id="e.-changes-in-parameters" class="level3">
-<h3 class="anchored" data-anchor-id="e.-changes-in-parameters">5e. Changes in Parameters</h3>
+<section id="d.-changes-in-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="d.-changes-in-parameters">5d. Changes in Parameters</h3>
 <p>Now that you have a model with and without a random intercept, how do the estimates of fixed effects change? Why?</p>
+<!--
+
+### 5e. Don't Soak up the Good Stuff!
+
+Sometimes, random effects are used inappropriately. They become sponges for sources of real variation, and then our estimates of fixed effects can be inappropriate if they are not balanced. In this case, we have a balanced experiment. I'd like you to explore this concept a bit, though. Fit every model - from just a random intercept to the full pred*surv + random intercept - and everything in between (that's 5 models) and visually show how the estimate of the RE standard deviation or variance changes. Explain what is happening here. Note, for the model with only a variable intercept, add the argument `nAGQ=20` (or play with options otherwise to get it to fit). If you visualize this, make sure you are getting  confidence intervals of the RE.  It's illuminating.
+
+
+::: {.cell}
+
+:::
+
+-->
 </section>
-<section id="f.-dont-soak-up-the-good-stuff" class="level3">
-<h3 class="anchored" data-anchor-id="f.-dont-soak-up-the-good-stuff">5f. Don’t Soak up the Good Stuff!</h3>
-<p>Sometimes, random effects are used inappropriately. They become sponges for sources of real variation, and then our estimates of fixed effects can be inappropriate if they are not balanced. In this case, we have a balanced experiment. I’d like you to explore this concept a bit, though. Fit every model - from just a random intercept to the full pred*surv + random intercept - and everything in between (that’s 5 models) and visually show how the estimate of the RE standard deviation or variance changes. Explain what is happening here. Note, for the model with only a variable intercept, add the argument <code>nAGQ=20</code> (or play with options otherwise to get it to fit). If you visualize this, make sure you are getting confidence intervals of the RE. It’s illuminating.</p>
-</section>
-<section id="g.-model-evaluation" class="level3">
-<h3 class="anchored" data-anchor-id="g.-model-evaluation">5g. Model evaluation</h3>
+<section id="e.-model-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="e.-model-evaluation">5e. Model evaluation</h3>
 <p>Last, let’s evaluate this model - both with contrasts and a crisp visualization of results. <code>emmeans</code>, <code>modelbased</code>, and other friends might help you here. Or not! You do you, and extract things from the model with other helpers! There’s no one right way to do this, but, make it sing.</p>
 </section>
-<section id="impress-yourself-variable-slopes" class="level3">
-<h3 class="anchored" data-anchor-id="impress-yourself-variable-slopes">IMPRESS YOURSELF! Variable slopes</h3>
+<section id="f.-impress-yourself-what-did-we-do" class="level3">
+<h3 class="anchored" data-anchor-id="f.-impress-yourself-what-did-we-do">5f. IMPRESS YOURSELF What did we do</h3>
+<p>Write out the model equations for the glmm you have fit in 5.3. Use LaTeX to write it all out. Explain what your symbols mean in text.</p>
+</section>
+<section id="g.-impress-yourself-variable-slopes" class="level3">
+<h3 class="anchored" data-anchor-id="g.-impress-yourself-variable-slopes">5g. IMPRESS YOURSELF! Variable slopes</h3>
 <p>Explore multiple different RE structures beyond a variable intercept. What errors do you get? What do they mean? Can you implement some of the suggested solutions, and what do they tell you about why more complex structures don’t work well here and/or might not be appropriate. Do these different RE structures make a difference for your evaluation of the FE? What RE structure would you use? What if you added density as a covariate/predictor as in the paper?</p>
 <hr>
 </section>
