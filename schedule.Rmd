@@ -176,7 +176,7 @@ __MIDTERM__: Due Tues Nov 17th, 5pm. [Get it here](exams/exam_2023.html)
 ```
 `r datestring`   
 __Lecture:__  [Causal Inference](lectures/causal_diagrams.pptx)     
-__Lab:__ Daggity and Causal Models   
+__Lab:__ [Daggity and Causal Models](lab/dagitty.html)   
 __Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Fieberg on Causal Models](https://fw8051statistics4ecologists.netlify.app/causal).   
 __Optional Reading:__ [An Intro to the PO Framework from The Causal Mixtape](https://mixtape.scunning.com/04-potential_outcomes), [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [Does Water Kill?](https://pdf.sciencedirectassets.com/271328/1-s2.0-S1047279716X00105/1-s2.0-S1047279716302800/main.pdf)    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2023  

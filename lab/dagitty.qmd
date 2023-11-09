@@ -1,0 +1,215 @@
+---
+title: "Directed Acyclic Graphs in R with dagitty and ggdag"
+author: "Biol607"
+format:
+  html:
+    toc: true
+---
+
+## DAGitty
+
+DAGitty is a wonderful platform that utilizes the graph properties of DAGs in order to determine key insights about the causal structure of the graphs in order to build causally identified statistical models. It has a web interface at [https://www.dagitty.net/](https://www.dagitty.net/) as well as an R package. The R package also plays well with `tidygraph`, `ggdag`, `ggrpah` and others. Let's take a look at DAGs in R with these tools.
+
+First, let's load up DAGitty and create a simple DAG for three variables - biodiversity, nutrients, and productivity. Here, biodiversity and nutrients influence productivity. Nutrients also influence biodiversity.
+
+```{r}
+pacman::p_load("dagitty")
+```
+
+Now, we can build a DAG in a few ways. One is to use a `->` notation specifying we are working with a DAG.
+
+```{r dag}
+bef_dag <- dagitty("dag{
+                   nutrients -> biodiversity -> productivity
+                   nutrients -> productivity}
+                   ")
+
+bef_dag
+```
+
+We can also plot this
+
+```{r}
+plot(bef_dag)
+```
+
+Note we get this error about coordinates. Coordinates are nice if you have them to make things look better!
+
+```{r}
+coordinates(bef_dag) <- list(
+  x = c(biodiversity = 0, nutrients = 1, productivity = 2),
+  y = c(biodiversity = 0, nutrients = -1, productivity = 0)
+)
+
+plot(bef_dag)
+```
+
+Cumbersome, but, possible if needed.  We can also use our good ole `~` notation with `dagify()` from the `ggdag` package.
+
+```{r}
+#| warning: false
+
+pacman::p_load("ggdag")
+
+bef_dagified <- dagify(
+  biodiversity ~ nutrients,
+  productivity ~ biodiversity + nutrients
+)
+
+plot(bef_dagified)
+```
+
+We can also visualize this using `ggdag`.
+
+```{r}
+ggdag(bef_dagified)
+```
+
+Note, if we'd set coordinates here, it might look better!
+
+## Unalyzed correlations
+
+DAGs can also have correlation relationships that are unanalyzed. We can represent this in one of two ways:
+
+```{r}
+#| warning: false
+cor_dag <- dagitty("dag{
+                   a <-> b
+                   }")
+
+#or
+
+cor_dagify <- dagify(
+  a ~~ b
+)
+
+plot(cor_dag)
+```
+
+
+
+## Getting Independence Relationships
+
+We can check to see which variables are conditionally independent of one another using `impliedConditionalIndependencies()`
+
+```{r}
+impliedConditionalIndependencies(bef_dagified)
+```
+
+Wait, why did nothing get returned? That's because this DAG is saturated, and nothing is conditionally independent. Let's try something different, where biodiversity and productivity lead to polination
+
+## What to Condition On to Eliminate Confounding
+
+```{r}
+bef_dag_2 <- dagify(
+  biodiversity ~ nutrients,
+  productivity ~ biodiversity + nutrients,
+  pollination ~ biodiversity + productivity
+)
+
+impliedConditionalIndependencies(bef_dag_2)
+
+```
+
+Here we can see nutrients and pollination are independent conditioned on biodiversity and productivity.
+
+## How do we see what to control for?
+
+If we want ot know what must be controlled for to deal with confounders, etc., we can use `adjustmentSets()`. This function takes a DAG, and "expose", and an "outcome" - our direct causal path. Note, we need to se `effect = "direct"`, as otherwise it would look for what to adjust for for every path going from biodiversity to pollinators - which is a different question!
+
+```{r}
+adjustmentSets(bef_dag_2, 
+               exposure = "biodiversity",
+               outcome = "pollination", 
+               effect = "direct")
+```
+
+We can also visualize this using ggdag.
+
+```{r}
+ggdag_adjustment_set(bef_dag_2, 
+               exposure = "biodiversity",
+               outcome = "pollination", 
+               effect = "direct")
+```
+
+We can see the graph left over after we adjust for the set, and see that it severs the link we needed to control for.
+
+## A more complex example
+Let's take a look at a model for regime shifts from Arif et al. 2022.
+
+```{r}
+seychelles <- dagify(
+  regime_shift ~ initial_algae + wave_exposure + herbivore_biomass + depth + nutrients + branching_coral + structural_complexity,
+  initial_algae ~ wave_exposure + herbivore_biomass + nutrients,
+  herbivore_biomass ~ mpa + structural_complexity,
+  nutrients ~ depth,
+  branching_coral ~ mpa + depth + wave_exposure,
+  structural_complexity ~ branching_coral
+)
+
+plot(seychelles)
+```
+
+Whew - that's a lot! Let's say we are interested in the relationship between MPA and regime shift and waves and regime shifts!
+
+Note, if you want to get the minimal set of conditional independence relationships, set `type = "basis.set"`
+
+## More Plots
+
+If you want to get checkier with `ggdag` you can work with DAGs in some interesting ways.  First off, you can turn them into a data frame.
+
+```{r}
+tidy_dagitty(bef_dag_2)
+```
+
+This shows you what variables you have to work with if you want to plot directly. Note the x and y. You could have earlier set them as coordinates. Indeed, let's check that out.
+
+```{r}
+
+bef_dag_2 <- dagify(
+  biodiversity ~ nutrients,
+  productivity ~ biodiversity + nutrients,
+  pollination ~ biodiversity + productivity,
+  
+  coords = list(
+    x = c(biodiversity = 0, nutrients = 1, 
+          pollination = 1, productivity = 2),
+    y = c(biodiversity = 0, nutrients = 1, 
+          pollination = -1, productivity = 0)
+  )
+)
+
+tidy_dagitty(bef_dag_2)
+
+```
+
+From this, we can then generate a `ggplot`
+
+```{r}
+library(ggplot2)
+
+ggplot(bef_dag_2,
+       aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_dag_point(size = 44, shape = 22, fill = "white") +
+  geom_dag_text(color = "black") +
+  geom_dag_edges() +
+  theme_dag() +
+  xlim(c(-0.5,2.5)) +
+  ylim(c(-1.5,1.5))
+```
+
+You might want to adjust the ends, but, otherwise, getting there!
+
+Note, if you have some notes that are shapes, e.g., latents, you can modify the circular property, and set that as an aesthetic with the node shape as 21 for those.
+
+## Further Reading
+[https://dagitty.net/learn/](https://dagitty.net/learn/)  
+
+Arif, S., N. Graham, S. Wilson, and A. MacNeil. 2022. “Causal Drivers of Climate-Mediated Coral Reef Regime Shifts.” Ecosphere 13(3): e3956. [https://doi.org/10.1002/ecs2.3956](https://doi.org/10.1002/ecs2.3956).
+  
+Textor, J., van der Zander, B., Gilthorpe, M. S., Liśkiewicz, M., & Ellison, G. T. H. (2017). Robust causal inference using directed acyclic graphs: the R package ‘dagitty.’ In International Journal of Epidemiology (p. dyw341). Oxford University Press (OUP). [https://doi.org/10.1093/ije/dyw341](https://doi.org/10.1093/ije/dyw341). 
+  
+Ankan, A., Wortel, I. M. N., & Textor, J. (2021). Testing Graphical Causal Models Using the R Package “dagitty.” In Current Protocols (Vol. 1, Issue 2). Wiley. [https://doi.org/10.1002/cpz1.45](https://doi.org/10.1002/cpz1.45). 
+  
+ShinyDAG - [https://apps.gerkelab.com/shinyDAG/](https://apps.gerkelab.com/shinyDAG/)
