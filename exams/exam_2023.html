@@ -177,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="b.-its-big-and-wide" class="level3">
 <h3 class="anchored" data-anchor-id="b.-its-big-and-wide">2b. It’s big and wide!</h3>
-<p>The data is, well, huge. It’s also wide, with dates as columns. Write a function that, given a state name as its input argument, will output a time series (long data where every row is a day) with columns for date, new daily cases and for cumulative cases in that state.</p>
+<p>The data is, well, huge. It’s also wide, with dates as columns. Write a workflow that will filter to a state (your choice which one!), and then returns a <!-- Write a function that, given a state name as its input argument, will output a--> time series (long data where every row is a day) with columns for date, new daily cases and for cumulative cases in that state.</p>
 <p>Note, let’s make the date column that emerges a true date object. Let’s say you’ve called it <code>date_col</code>. If you mutate it, <code>mutate(date_col = lubridate::mdy(date_col))</code>, it will be turned into a date object that will have a recognized order. {lubridate} is da bomb, and I’m hoping we have some time to cover it in the future.</p>
 <p>Even better - impress yourself (if you want - not required!) and merge it with some other data source to also return cases per 100,000 people.</p>
 </section>
