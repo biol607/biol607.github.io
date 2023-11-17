@@ -12,6 +12,12 @@ re-arrange the linear regression lab
   - workflow
   - transforms
   - viz of prediction intervals and such
+
+Causal Intro is 2 lectures
+  - End is week and flabby. Rework
+
+Add more on randomization (dee slides) and SUTVA for expts
+  - It's really 2 lectures
 -->
 
   While the topics covered are broad, each week will feature different examples from genetics, ecology, molecular, and evolutionary biology highlighting uses of each individual set of techniques.    
@@ -187,7 +193,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2023
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__   [Causal Inference and Experiments](./lectures/causality_experiments.pptx), [Using causal models to get valid inference from observational and quasi-experimental studies](lectures/causal_models_regression.pptx)    
+__Lecture:__   [Causal Inference and Experiments](./lectures/causality_experiments.pptx), [Using causal models to get valid inference from observational and quasi-experimental studies](lectures/causal_observational.pptx)    
 __Paper Discussion:__  Thursday discussion of [papers](readings/exp_design_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
 __Reading:__   [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf), [The Causal Dag and Haunted Terror](./readings/McElreath_Ch_6.pdf)  
 __Optional Reading:__  [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf)  
