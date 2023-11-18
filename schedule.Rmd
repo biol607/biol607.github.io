@@ -234,8 +234,9 @@ __Packages for The Week:__ `install.packages(c("car", "MASS", "profileModel"))`
 
 __Lecture:__ Ways of Knowing: [Cross-Validation and AIC](./lectures/crossvalidation.html)   
 __Lab Topic:__  [Cross-Validation and AIC](lab/crossvalidation.html)  
-__Reading:__ [AIC in Behavioral Ecology](https://link.springer.com/article/10.1007/s00265-010-1029-6), [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf), [Aho et al. 2014](./readings/Aho_2014_ecolog_bic.pdf)   
-__Optional Books__ [Model Selection and Multimodel Inference](https://ebookcentral.proquest.com/lib/umboston/reader.action?docID=3035464) 
+__Reading:__ [AIC in Behavioral Ecology](https://link.springer.com/article/10.1007/s00265-010-1029-6), [Fieberg on Modeling Strategies](https://fw8051statistics4ecologists.netlify.app/mmi), [Aho et al. 2014 on BIC](./readings/Aho_2014_ecolog_bic.pdf)   
+__Optional Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf)  
+__Optional Books:__ [Model Selection and Multimodel Inference](https://ebookcentral.proquest.com/lib/umboston/reader.action?docID=3035464) 
 __Packages for The Week:__ `install.packages(c("AICcmodavg")`   
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-2023  
 
