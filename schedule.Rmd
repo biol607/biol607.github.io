@@ -206,7 +206,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2023
 ```
 `r datestring`   
 **Thanksgiving Week**. 
-__Paper Discussion:__  Discussion of [papers](readings/obs_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments    
+__Paper Discussion:__  Discussion of [papers](readings/obs_sampling.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments    
 __Optional Reading:__ [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2023  
 
