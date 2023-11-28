@@ -50,7 +50,7 @@ class: center, middle
 
 # Etherpad
 <br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-nht-2022</h3></center>
+<center><h3>https://etherpad.wikimedia.org/p/607-nht-2023</h3></center>
 
 ---
 
@@ -368,17 +368,19 @@ $$\large P(X \leq Data | H_{0})$$
 
 --
 
-- We don't know how to talk about it
+- We don't know how to talk about it  
+
 --
 
 - Interpretation of P-values as confirmation of an alternative hypothesis
      
 --
+
 - Like SE, it gets smaller with sample size!
 
 --
 
-- Misususe of setting a threshold for rejecting a hypothesis
+- Misuse of setting a threshold for rejecting a hypothesis
 
 ---
 
@@ -425,15 +427,17 @@ Egon Pearson
 --
 
 3. Fisher suggested a typical $\alpha$ of 0.05 as indicating **statistical significance**, although eschewed the idea of a decision procedure where a null is abandoned. 
-     - Codified by the FDA for testing!  
+    - Codified by the FDA for testing!  
 
 --
 
 4. This has become weaponized so that $\alpha = 0.05$ has become a norm.... and often determines if something is worthy of being published?
      
---
+---
+class: center, middle
+
 .center[
-## AND... Statistical Significance is NOT Biological Signficance.
+# AND... Statistical Significance is NOT Biological Signficance.
 ]
 
 ---
@@ -883,8 +887,13 @@ class:center, middle
 - We've been here before with SEs and CIs  
 
 --
+
 - In truth, we are using T-tests
 
 --
 
-- BUT - we now corret p-values for Family-Wise Error (if at all)
+- BUT - we now correct p-values for Family-Wise Error (if at all)
+
+---
+
+![](images/nht/princess_bride_significant.png)
