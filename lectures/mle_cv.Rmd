@@ -673,6 +673,8 @@ ggplot(norm_curves %>% filter(mu %in% c(0,3)),
 
 Compare $p(D|\theta_{1})$ versus $p(D|\theta_{2})$
 
+---
+
 ## Likelihood Ratios
 <br>
 $$\LARGE G = \frac{L(H_1 | D)}{L(H_2 | D)}$$

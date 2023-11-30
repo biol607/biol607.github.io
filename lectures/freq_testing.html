@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Frequentist Tests of Statistical Models</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center
+# Frequentist Tests of Statistical Models
+
+![:scale 80%](images/nht/princess_bride_significant.png)
+
+
+
+
+
+
+---
+## Making P-Values with Models
+
+
+1. Linear Models  
+  
+2. Generalized Linear Models &amp; Likelihood  
+  
+3. Mixed Models
+
+---
+
+# Common Regression Test Statistics
+
+   
+- Are my coefficients 0?
+    - **Null Hypothesis**: Coefficients are 0  
+    - **Test Statistic**: T distribution (normal distribution modified for low sample size)
+
+--
+
+- Does my model explain variability in the data?
+     - **Null Hypothesis**: The ratio of variability from your predictors versus noise is 1
+     - **Test Statistic**: F distribution (describes ratio of two variances)
+  
+
+---
+background-image: url(images/09/guiness_full.jpg)
+background-position: center
+background-size: contain
+background-color: black
+
+---
+background-image: url(images/09/gosset.jpg)
+background-position: center
+background-size: contain
+
+---
+# T-Distributions are What You'd Expect Sampling a Standard Normal Population with a Small Sample Size
+
+- t = mean/SE, DF = n-1
+- It assumes a normal population with mean of 0 and SD of 1
+
+&lt;img src="freq_testing_files/figure-html/dist_shape_t-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Assessing the Slope with a T-Test
+&lt;br&gt;
+`$$\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}$$` 
+
+#### DF=n-2
+
+`\(H_0: \beta_{0} = 0\)`, but we can test other hypotheses
+
+---
+# Slope of Puffer Relationship (DF = 1 for Parameter Tests)
+
+|            | Estimate| Std. Error| t value| Pr(&gt;&amp;#124;t&amp;#124;)|
+|:-----------|--------:|----------:|-------:|------------------:|
+|(Intercept) |    1.925|      1.506|   1.278|              0.218|
+|resemblance |    2.989|      0.571|   5.232|              0.000|
+
+&lt;Br&gt;
+p is **very** small here so...  
+We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept.
+
+---
+
+# So, what can we say in a null hypothesis testing framework?
+
+.pull-left[
+
+- We reject that there is no relationship between resemblance and predator visits in our experiment. 
+
+- 0.6 of the variability in predator visits is associated with resemblance. 
+]
+
+.pull-right[
+
+&lt;img src="freq_testing_files/figure-html/puffershow-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# Does my model explain variability in the data?
+
+Ho = The model predicts no variation in the data.  
+
+Ha = The model predicts variation in the data.
+
+--
+
+To evaluate these hypotheses, we need to have a measure of variation explained by data versus error - the sums of squares! 
+
+--
+
+This is an Analysis of Variance..... **ANOVA**!
+
+--
+`$$SS_{Total} = SS_{Regression} + SS_{Error}$$`
+---
+
+# Sums of Squares of Error, Visually
+&lt;img src="freq_testing_files/figure-html/linefit-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Sums of Squares of Regression, Visually
+&lt;img src="freq_testing_files/figure-html/ssr-1.png" style="display: block; margin: auto;" /&gt;
+
+Distance from `\(\hat{y}\)` to `\(\bar{y}\)`
+
+---
+# Components of the Total Sums of Squares
+
+`\(SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}\)`, df=1
+
+`\(SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2\)`, df=n-2
+
+
+--
+To compare them, we need to correct for different DF. This is the Mean
+Square.
+
+MS=SS/DF
+
+e.g, `\(MS_{E} = \frac{SS_{E}}{n-2}\)`
+
+---
+
+# The F Distribution and Ratios of Variances
+
+`\(F = \frac{MS_{R}}{MS_{E}}\)` with DF=1,n-2 
+
+&lt;img src="freq_testing_files/figure-html/f-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# F-Test and Pufferfish
+
+|            | Df| Deviance| Resid. Df| Resid. Dev|
+|:-----------|--:|--------:|---------:|----------:|
+|NULL        | NA|       NA|        19|   422.9500|
+|resemblance |  1| 255.1532|        18|   167.7968|
+
+&lt;br&gt;&lt;br&gt;
+--
+We  reject the null hypothesis that resemblance does not explain variability in predator approaches
+
+---
+# Testing the Coefficients
+
+ -  F-Tests evaluate whether elements of the model contribute to variability in the data
+      - Are modeled predictors just noise?
+      - What's the difference between a model with only an intercept and an intercept and slope?
+
+--
+
+- T-tests evaluate whether coefficients are different from 0
+
+--
+
+- Often, F and T agree - but not always
+    - T can be more sensitive with multiple predictors
+
+---
+
+# What About Models with Categorical Variables?
+
+- T-tests for Coefficients with Treatment Contrasts  
+
+- F Tests for Variability Explained by Including Categorical Predictor  
+      - **ANOVA**
+  
+- More T-Tests for Posthoc Evaluation
+
+---
+# What Explains This Data? Same as Regression (because it's all a linear model)
+&lt;img src="freq_testing_files/figure-html/brain_anova_viz_1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Variability due to Model (between groups)
+&lt;img src="freq_testing_files/figure-html/brain_anova_viz_2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Variability due to Error (Within Groups)
+&lt;img src="freq_testing_files/figure-html/brain_anova_viz_3-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# F-Test to Compare
+&lt;br&gt;&lt;br&gt;
+`\(SS_{Total} = SS_{Model} + SS_{Error}\)` 
+
+--
+
+(Classic ANOVA: `\(SS_{Total} = SS_{Between} + SS_{Within}\)`)
+
+--
+
+Yes, these are the same!
+
+---
+# F-Test to Compare
+
+`\(SS_{Model} = \sum_{i}\sum_{j}(\bar{Y_{i}} - \bar{Y})^{2}\)`, df=k-1  
+
+`\(SS_{Error} = \sum_{i}\sum_{j}(Y_{ij} - \bar{Y_{i}})^2\)`, df=n-k  
+
+
+To compare them, we need to correct for different DF. This is the Mean Square.  
+
+MS = SS/DF, e.g, `\(MS_{W} = \frac{SS_{W}}{n-k}\)`   
+
+
+---
+# ANOVA
+
+
+|          | Df|    Sum Sq|   Mean Sq|  F value|    Pr(&gt;F)|
+|:---------|--:|---------:|---------:|--------:|---------:|
+|group     |  2| 0.5402533| 0.2701267| 7.823136| 0.0012943|
+|Residuals | 42| 1.4502267| 0.0345292|       NA|        NA|
+
+We have strong confidence that we can reject the null hypothesis
+
+---
+# This Works the Same for Multiple Categorical
+
+
+TreatmentHo: `\(\mu_{i1} = \mu{i2} = \mu{i3} = ...\)`
+
+
+Block Ho: `\(\mu_{j1} = \mu{j2} = \mu{j3} = ...\)`
+
+
+i.e., The variance due to each treatment type is no different than noise
+
+---
+# We Decompose Sums of Squares for Multiple Predictors
+
+`\(SS_{Total} = SS_{A} + SS_{B} + SS_{Error}\)`
+
+- Factors are Orthogonal and Balanced, so, Model SS can be split
+     -   F-Test using Mean Squares as Before
+
+
+---
+
+# What About Unbalanced Data or Mixing in Continuous Predictors?
+
+- Let's Assume Y ~ A + B where A is categorical and B is continuous  
+
+--
+
+- F-Tests are really model comparisons
+
+--
+
+- The SS for A is the Residual SS of Y ~ A + B  - Residual SS of Y ~ B 
+      - This type of SS is called **marginal SS** or **type II SS**
+      
+--
+
+- Proceed as normal
+
+--
+
+- This also works for interactions, where interactions are all tested including additive or lower-level interaction components
+     - e.g., SS for AB is RSS for A+B+AB - RSS for A+B
+     
+---
+
+# Warning for Working with SAS Product Users (e.g., JMP)
+
+- You will sometimes see *Type III* which is sometimes nonsensical
+     - e.g., SS for A is RSS for A+B+AB - RSS for B+AB
+     
+--
+
+- Always question the default settings!
+
+---
+class:center, middle
+
+# F-Tests tell you if you can reject the null that predictors do not explain anything
+
+---
+# Post-Hoc Comparisons of Groups
+
+- **Only compare groups if you reject a Null Hypothesis via F-Test**
+      - Otherwise, any results are spurious  
+      - This is why they are called post-hocs
+      
+--
+
+- We've been here before with SEs and CIs  
+
+--
+
+- In truth, we are using T-tests
+
+--
+
+- BUT - we now correct p-values for Family-Wise Error (if at all)
+
+---
+## Making P-Values with Models
+
+
+1. Linear Models   
+  
+2. .red[Generalized Linear Models &amp; Likelihood]   
+  
+3. Mixed Models
+
+
+---
+# To Get There to Testing, We Need To Understand Likelihood and Deviance
+
+.center[
+![](./images/mmi/bjork-on-phone-yes-i-am-all-about-the-deviance-let-us-make-it-shrink-our-parameters.jpg)
+
+---
+
+class: middle
+
+# Likelihood: how well data support a given hypothesis.
+
+--
+
+
+### Note: Each and every parameter choice IS a hypothesis
+
+---
+
+# Likelihood Defined
+&lt;br&gt;&lt;br&gt;
+`$$\Large L(H | D) = p(D | H)$$`
+
+
+
+Where the D is the data and H is the hypothesis (model) including a both a data generating process with some choice of parameters (often called `\(\theta\)`). The error generating process is inherent in the choice of probability distribution used for calculation.
+
+---
+class: middle
+
+## The Maximum Likelihood Estimate is the value at which `\(p(D | \theta)\)` - our likelihood function -  is highest.
+
+--
+
+#### To find it, we search across various values of `\(\theta\)`
+
+---
+# MLE for Multiple Data Points
+
+Let's say this is our data:
+
+```
+ [1]  3.37697212  3.30154837  1.90197683  1.86959410  0.20346568  3.72057350
+ [7]  3.93912102  2.77062225  4.75913135  3.11736679  2.14687718  3.90925918
+[13]  4.19637296  2.62841610  2.87673977  4.80004312  4.70399588 -0.03876461
+[19]  0.71102505  3.05830349
+```
+
+--
+
+We know that the data comes from a normal population with a `\(\sigma\)` of 1.... but we want to get the MLE of the mean.
+
+--
+
+`\(p(D|\theta) = \prod p(D_i|\theta)\)`  
+
+
+--
+
+&amp;nbsp; &amp;nbsp;     = `\(\prod dnorm(D_i, \mu, \sigma = 1)\)`
+     
+---
+
+# Likelihood At Different Choices of Mean, Visually
+
+&lt;img src="freq_testing_files/figure-html/ml_search-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# The Likelihood Surface
+
+&lt;img src="freq_testing_files/figure-html/lik_mean_surf-1.png" style="display: block; margin: auto;" /&gt;
+
+MLE = 2.896
+
+---
+
+# The Log-Likelihood Surface
+
+We use Log-Likelihood as it is not subject to rounding error, and approximately `\(\chi^2\)` distributed.
+
+&lt;img src="freq_testing_files/figure-html/loglik_surf-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+# The `\(\chi^2\)` Distribution
+
+- Distribution of sums of squares of k data points drawn from N(0,1)
+
+- k = Degrees of Freedom
+
+- Measures goodness of fit
+
+- A large probability density indicates a match between the squared difference of an observation and expectation
+
+---
+
+# The `\(\chi^2\)` Distribution, Visually
+&lt;img src="freq_testing_files/figure-html/chisq_dist-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Hey, Look, it's the Standard Error!
+
+The 68% CI of  a `\(\chi^2\)` distribution is 0.49, so....
+
+&lt;img src="freq_testing_files/figure-html/loglik_zoom-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Hey, Look, it's the 95% CI!
+
+The 95% CI of  a `\(\chi^2\)` distribution is 1.92, so....
+
+&lt;img src="freq_testing_files/figure-html/ll_ci-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# The Deviance: -2 * Log-Likelihood
+
+- Measure of fit. Smaller deviance = closer to perfect fit  
+- We are minimizing now, just like minimizing sums of squares 
+- Point deviance residuals have meaning  
+- Point deviance of linear regression = mean square error!
+
+&lt;img src="freq_testing_files/figure-html/show_dev-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Putting MLE Into Practice with Pufferfish
+
+
+
+.pull-left[
+- Pufferfish are toxic/harmful to predators  
+&lt;br&gt;
+- Batesian mimics gain protection from predation - why?
+&lt;br&gt;&lt;br&gt;
+- Evolved response to appearance?
+&lt;br&gt;&lt;br&gt;
+- Researchers tested with mimics varying in toxic pufferfish resemblance
+]
+
+.pull-right[
+![:scale 80%](./images/11/puffer_mimics.jpg)
+]
+---
+# This is our fit relationship
+&lt;img src="freq_testing_files/figure-html/puffershow-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Likelihood Function for Linear Regression
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;center&gt;Will often see:&lt;br&gt;&lt;br&gt;
+`\(\large L(\theta | D) = \prod_{i=1}^n p(y_i\; | \; x_i;\ \beta_0, \beta_1, \sigma)\)` &lt;/center&gt;
+
+---
+# Likelihood Function for Linear Regression: What it Means
+&lt;br&gt;&lt;br&gt;
+`$$L(\theta | Data) = \prod_{i=1}^n \mathcal{N}(Visits_i\; |\; \beta_{0} + \beta_{1} Resemblance_i, \sigma)$$`
+&lt;br&gt;&lt;br&gt;
+where `\(\beta_{0}, \beta_{1}, \sigma\)` are elements of `\(\theta\)`
+
+---
+
+# The Log-Likelihood Surface from Grid Sampling
+
+&lt;img src="freq_testing_files/figure-html/reg_lik_surf-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Let's Look at Profiles to get CIs
+&lt;img src="freq_testing_files/figure-html/profileR-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Evaluate Coefficients
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.925 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.506 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.278 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.218 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; resemblance &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.989 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.571 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.232 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+Test Statistic is a Wald Z-Test Assuming a well behaved quadratic Confidence Interval
+
+---
+class: center, middle
+
+# What about comparing models, or evaluating if variables (continuous or categorical) should be included?
+
+
+---
+# Can Compare p(data | H) for alternate Parameter Values - and it could be 0!
+
+&lt;img src="freq_testing_files/figure-html/likelihoodDemo3-1.png" style="display: block; margin: auto;" /&gt;
+
+
+Compare `\(p(D|\theta_{1})\)` versus `\(p(D|\theta_{2})\)`
+
+---
+
+## Likelihood Ratios
+&lt;br&gt;
+`$$\LARGE G = \frac{L(H_1 | D)}{L(H_2 | D)}$$`
+
+- G is the ratio of *Maximum Likelihoods* from each model  
+  
+--
+  
+- Used to compare goodness of fit of different models/hypotheses  
+
+--
+  
+- Most often, `\(\theta\)` = MLE versus `\(\theta\)` = 0  
+  
+--
+
+- `\(-2 log(G)\)` is `\(\chi^2\)` distributed  
+
+---
+# Likelihood Ratio Test
+
+- A new test statistic: `\(D = -2 log(G)\)`  
+
+--
+
+- `\(= 2 [Log(L(H_2 | D)) - Log(L(H_1 | D))]\)`  
+
+--
+
+- We then scale by *dispersion parameter* (e.g., variance, etc.)  
+
+--
+
+- It's `\(\chi^2\)` distributed!   
+     - DF = Difference in # of Parameters  
+
+--
+
+- If `\(H_1\)` is the Null Model, we have support for our alternate model
+
+---
+# Likelihood Ratio Test for Regression
+
+- We compare our slope + intercept to a model fit with only an intercept!
+
+- Note, models must have the SAME response variable
+
+
+```r
+int_only &lt;- glm(predators ~ 1, data = puffer)
+```
+
+--
+
+- We then use *Analysis of Deviance* (ANODEV)
+
+---
+# Our First ANODEV
+
+
+```
+Analysis of Deviance Table
+
+Model 1: predators ~ 1
+Model 2: predators ~ resemblance
+  Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    
+1        19     422.95                          
+2        18     167.80  1   255.15 1.679e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Note, uses Difference in Deviance / Dispersion where Dispersion = Variance as LRT
+
+
+---
+# Or, R has Tools to Automate Doing This Piece by Piece
+
+
+```
+Analysis of Deviance Table (Type II tests)
+
+Response: predators
+            LR Chisq Df Pr(&gt;Chisq)    
+resemblance   27.371  1  1.679e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Here, LRT = Difference in Deviance / Dispersion where Dispersion = Variance
+
+
+
+---
+## Making P-Values with Models
+
+
+1. Linear Models  
+  
+2. Generalized Linear Models &amp; Likelihood  
+  
+3. .red[Mixed Models]
+
+---
+# Let's take this to the beach with Tide Height: RIKZ
+
+![:scale 80%](./images/mixed_models/denmark-lightsbeach.jpeg)
+
+
+
+---
+# How is Tidal Height of Measurement Associated With Species Richness?
+
+
+
+&lt;img src="freq_testing_files/figure-html/plot_varint-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, middle
+
+## Before we go any further - keep up to date at 
+
+### https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#testing-hypotheses
+
+---
+class: center, middle
+
+## The Big Question: What are your degrees of freedom in the presence of a random effect?
+
+---
+
+## Approaches to approximating DF
+
+- Satterthwaite approximation - Based on sample sizes and variances within groups  
+     - `lmerTest` (which is kinda broken at the moment)
+     
+- Kenward-Roger’s approximation. 
+      - Based on estimate of variance-covariance matrix of fixed effects and a scaling factor  
+      - More conservative - in `car::Anova()` and `pbkrtest`
+---
+# Compare!
+
+Baseline - only for balanced LMMs!
+
+```
+Analysis of Variance Table
+    npar Sum Sq Mean Sq F value
+NAP    1 10.467  10.467  63.356
+```
+
+Satterwaith
+
+```
+Type III Analysis of Variance Table with Satterthwaite's method
+    Sum Sq Mean Sq NumDF  DenDF F value    Pr(&gt;F)    
+NAP 10.467  10.467     1 37.203  63.356 1.495e-09 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Kenward-Roger
+
+```
+Analysis of Deviance Table (Type II Wald F tests with Kenward-Roger df)
+
+Response: log_richness
+         F Df Df.res    Pr(&gt;F)    
+NAP 62.154  1 37.203 1.877e-09 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+---
+## The Smaller Questions and Answers
+
+1. With REML (for lmms), we often are conservative in our estimation of fixed effects. Should we use it?
+     - use ML for FE tests if using Chisq 
+
+--
+
+2. Should we use Chi-Square?
+     - for GLMMs, yes.
+     - Can be unreliable in some scenarios. 
+     - Use F tests for lmms
+     
+---
+
+# F and Chisq
+
+F-test
+
+```
+# A tibble: 1 × 5
+  term  statistic    df Df.res       p.value
+  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;
+1 NAP        62.2     1   37.2 0.00000000188
+```
+
+LR Chisq
+
+```
+# A tibble: 1 × 4
+  term  statistic    df  p.value
+  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+1 NAP        63.4     1 1.72e-15
+```
+
+--
+
+LR Chisq where REML = FALSE
+
+```
+# A tibble: 1 × 4
+  term  statistic    df  p.value
+  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+1 NAP        65.6     1 5.54e-16
+```
+
+---
+
+## What about Random Effects
+
+- For LMMs, make sure you have fit with REML = TRUE
+
+--
+
+- One school of thought is to leave them in place  
+     - Your RE structure should be determined by sampling design
+     - Do you know enough to change your RE structure?
+     
+--
+
+- But sometimes you need to test!  
+     - Can sequentially drop RE effects with `lmerTest::ranova()`  
+     - Can simulate models with 0 variance in RE with `rlrsim`, but gets tricky  
+     
+
+---
+
+## RANOVA
+
+
+```r
+ranova(rikz_varint)
+```
+
+```
+ANOVA-like table for random-effects: Single term deletions
+
+Model:
+log_richness ~ NAP + (1 | Beach)
+            npar  logLik    AIC    LRT Df Pr(&gt;Chisq)    
+&lt;none&gt;         4 -32.588 73.175                         
+(1 | Beach)    3 -38.230 82.460 11.285  1  0.0007815 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+## Testing Mixed Models
+
+1. Yes you can!  
+
+--
+
+2. Some of the fun issues of denominator DF raise their heads
+
+--
+
+3. Keep up to date on the literature/FAQ when you are using them!
+
+---
+
+class: center, middle
+
+![](images/nht/p-value-statistics-meme.jpg)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="my_macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
