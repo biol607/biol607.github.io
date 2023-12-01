@@ -218,7 +218,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2023
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ Ways of Knowing: [NHT](./lectures/linear_regression_nht), [NHT and testing models](lectures/freq_testing.html), [Power Analysis](./lectures/power_analysis.html)    
+__Lecture:__ Ways of Knowing: [NHT](./lectures/linear_regression_nht), [NHT and testing models](lectures/freq_testing.html), [Power Analysis](./lectures/power_analysis_tidy.html)    
 __Lab Topic:__ [Null Hypothesis Testing](lab/nht.html), [Power Analysis](lab/power_analysis_lab.html)  
 __Data for Lab__: [mole rats](lab/data/18e4MoleRatLayabouts.csv), [intertidal algae](lab/data/18e3IntertidalAlgae.csv), [cryptosporidium infection](lab/data/cryptoDATA.csv), [Keeley et al. data](lab/data/Keeley_rawdata_select4.csv)   
 __Reading:__ W&S 20, [Muff et al. 2022 on p-values](./readings/muff_et_al_2022.pdf), [Feiberg on Maximum Likelihood](https://fw8051statistics4ecologists.netlify.app/mle.html)     

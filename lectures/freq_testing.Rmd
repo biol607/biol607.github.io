@@ -226,7 +226,7 @@ qplot(x,df(x,1,25), geom="line",  xlab="Y", ylab="df(Y)") +
 ---
 # F-Test and Pufferfish
 ```{r f-puffer}
-knitr::kable(anova(puffer_lm))
+knitr::kable(anova(puffer_lm), test.statistic = "F")
 ```
 
 <br><br>
@@ -678,7 +678,7 @@ puffer <- read.csv("lectures/data/11/16q11PufferfishMimicry Caley & Schluter 200
 ---
 # This is our fit relationship
 ```{r puffershow}
-puffer_lm <- glm(predators ~ resemblance, data = puffer)
+puffer_lm <- lm(predators ~ resemblance, data = puffer)
 
 pufferplot <- ggplot(puffer, mapping=aes(x=resemblance, y=predators)) +
   ylab("Predator Approaches per Trial") + 
