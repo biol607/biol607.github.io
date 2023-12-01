@@ -116,7 +116,7 @@ power_sims$models[[1]]
 From there, we can iterate over again to get Anova tables
 
 ```{r}
-power_sims1 <- power_sims |>
+power_sims <- power_sims |>
   mutate(anova = map(models, car::Anova),
          anova = map(anova, tidy))
 
