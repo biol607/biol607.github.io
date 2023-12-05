@@ -18,7 +18,7 @@ class: center, middle
 <!-- next year, more on overfitting and generality
 versus specificity -->
 
-![:scale 55%](images/cv/princess_bride_cv.jpg)
+![:scale 55%](images/cv/fry_cv.jpg)
 ```{r setup, include=FALSE}
 library(knitr)
 library(ggplot2)
