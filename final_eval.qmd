@@ -3,29 +3,42 @@ title: "Final Self Evaluation"
 format: html
 ---
 
------
+
 # First, Final Paper Evaluation
 
 ## Presentation
 How did it go for you? How well do you think you performed, vis a vis the weak, satisfactory, and strong rubric.
 
-## Too bad
-You got an A. Sorry. I don't make the rules. Oh, wait, I do. (You all did great!)
-
 ## The paper
 Please rate yourself as weak, sufficient, or strong on the following criteria, and tell me why.
 
+* Did you give the reader enough background to understand what you were going to do (note, this should be a small - a tiny - amount relative to everything else)?
+
 * Clear statement of questions & hypotheses?
 
-* Did you choose the right analyses?
+* Did you discuss and justify whether your analysis was predictive, causal, associative, or some combination of the three?
 
-* Did you justify the analysis?
+* Did you discuss how you would use statistical modeling to answer your questions?
+
+* Did you describe the data - what it is, its limitations, and its uses appropriate to your study goals?
+
+* For those that needed, did you describe how and why you processed and cleaned your data the way that you did?
+
+* Did you justify why the analyses and modeling approaches you chose were appropriate for the problem?
+
+* Did you show that you performed a valid analysis? 
 
 * Did you execute it properly?
 
 * Did you overcome assumption violations, or inferential traps (p-values, etc.)?
 
-* Did you describe their results cleanly and clearly
+* Did you use your model to answer your initial question well? Was it a query engine? Did it generate answers to clear hypotheses?
+
+* Did you describe their results cleanly and clearly, as well as their limitations?
+
+* Were you able to draw clear conclusions, or at least next steps/future directions based on what you've done here?
+
+* Was your code visible and well described?
 
 ## Overall
 Please rate your paper as weak, sufficient, or strong, and tell me why.
