@@ -37,7 +37,7 @@ homework_X/
 
 directory structure, so that all data is in `data/`. **Please zip up the archive for the homework and standardize filenames as follows: `number_lastName_firstName_2023.zip`** where number is the week number the homework is due (from weeks below) and make sure to include the 0s for numbers like 01), and your last and first names - well, you should know them!  
   
-To submit homework, use the dropbox link you were sent by the TA.  
+To submit homework, use [canvas](https://umassboston.instructure.com/courses/12982).  
 
 
 ```{r dates, echo=FALSE, message=FALSE, warning=FALSE}
