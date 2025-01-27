@@ -150,6 +150,8 @@ __Project Proposal:__ [general instructions here](project_proposal.html)
 ### Week 8   
 ```{r next_date, echo=FALSE}
 ```
+```{r next_date, echo=FALSE}
+```
 `r datestring`   
 __Lecture:__ [Generalized Linear Models](lectures/generalized_linear_models.html), [Fitting, Count Data,  and Overdispersion](lectures/glm_overdispersion.html)     
 __Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_data.zip)  
@@ -205,7 +207,6 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2025
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-**Thanksgiving Week**. 
 __Paper Discussion:__  Discussion of [papers](readings/obs_sampling.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments    
 __Optional Reading:__ [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2025  
@@ -245,4 +246,5 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-2025
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-Project work and Project Presentations on Dec 15th
+[Final project](final.html) work and Project Presentations on May 16th in ISC 1400 or 1200  
+Final paper due on May 22nd!
