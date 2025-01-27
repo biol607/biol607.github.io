@@ -23,7 +23,7 @@ background-position: center
 background-size: cover
 
 # .large[Introduction to  Computational  Data  Analysis  for  Biology]
-## .center[2023 Edition]
+## .center[2025 Spring Edition]
 
   
 ### .center[Jarrett Byrnes]  
@@ -56,7 +56,7 @@ class: center
 --
   
     
-.center[Write it here: https://etherpad.wikimedia.org/p/607-intro-2022]
+.center[Write it here: https://etherpad.wikimedia.org/p/607-intro-2025]
 
 ---
 
@@ -91,15 +91,15 @@ class: center
 
 --
 
-2. Regression and Inference
+2. Linear Models for Data Analysis
 
 --
 
-3. Further Adventures in Statistical Modeling
+3. Experimental and Observational Study Design and Causal Inference
 
 --
 
-3. Causal Inference and Study Design
+4. Drawing Inference from Studies
 
 
 
@@ -145,13 +145,13 @@ class:center
 
 ---
 
-# Block 2: Regression
+# Block 2:  Linear Models for Data Analysis
 
 ```{r echo=FALSE, message = FALSE}
 library(ggplot2)
 
 # Load the data ####
-eelgrass <- read.csv("lectures/data/15q05EelgrassGenotypes.csv")
+eelgrass <- read.csv("data/15q05EelgrassGenotypes.csv")
 
 ggplot(eelgrass,
        aes(y = shoots, x = treatment.genotypes)) +
@@ -164,7 +164,7 @@ ggplot(eelgrass,
 
 ---
 
-# Block 3: Further Adventures
+# Block 2:  Linear Models for Data Analysis
 
 ```{r, echo = FALSE}
 library(palmerpenguins)
@@ -182,38 +182,39 @@ ggplot(penguins |> dplyr::filter(!is.na(flipper_length_mm)),
 ```
 
 --
-.large[.center[Don't worry! It's all just a line!]]
+.large[.center[Yes, this is also a line!]]
 
 ---
 
-# Block 3: Further Adventures
+# Block 2:  Linear Models for Data Analysis
 
 ![](images/25/logit_conversion.jpg)
 --
-.large[.center[Don't worry! It's all just a line!]]
+.large[.center[Also a line!]]
 
 ---
 class:center
 
-# Block 4: Causal Inference
+# Block 3: Causal Inference & Study Design
 
 ![](images/01/grass2.jpg)
 
 ---
 
-# Block 4: Study Design
+# Block 3: Causal Inference & Study Design
 
 ![](./images/19/urchin_diet_expt.jpg)
 
 ---
 
-# Block 5: Inference
+# Block 4: Inference
 
 .center[![:scale 50%](images/01/bayes_popper.png)]
 
 - What is the probability of a hypothesis? Or data given a hypothesis?  
-- Is variation explained by a driver of interest?  
-- How confident are you in your conclusions?  
+
+- What's the predictive power of your model?  
+
 - How can we generalize from our models to the world?  
 
 ---
@@ -233,7 +234,7 @@ class:center
 ---
  
 # Yes, Lectures are Coded
-R Markdown sometimes with Reveal.js or Xarnigan
+R Markdown sometimes with Reveal.js or Xarnigan or Quarto
 &nbsp;  
 .center[<img src="images/01/lecture_code.jpg">]
 http://github.com/biol607/biol607.github.io
@@ -264,7 +265,7 @@ class: center
   
 .left[Feiberg, J. 2022. Statistics for Ecologists.] 
 
-### https://fw8051statistics4ecologists.netlify.app/
+### https://statistics4ecologists-v3.netlify.app
 
 ---
 class: center
@@ -319,7 +320,7 @@ class:center
   
 - Complete them using Quarto/Rmarkdown   
   
-- Submit via Dropbox or Github
+- Submit via Canvas
 
 ---
 
@@ -339,9 +340,9 @@ class:center
  &nbsp;  
  
 - Dates
-  - Proposal Due Oct 20th
-  - Presentations on Dec 15th
-  - Paper due Dec 20th (but earlier fine!)
+  - Proposal Due March 14
+  - Presentations on May 16th
+  - Paper due May 22nd (but earlier fine!)
  &nbsp;  
  
 
@@ -356,7 +357,7 @@ class:center
 - So.... create a class repository!
     - folder for homework, folder for exams, folder for labs
 - If you submit a link to your homework in a repo, +1 per homework!  
-- There will be a github tutorial outside of class hours?
+- I am happy to hold a github tutorial outside of class hours
 
 ---
 
@@ -368,7 +369,7 @@ class:center
 
 - Start going to local R User Groups like https://www.meetup.com/Boston-useR/  
 
-- Follow data science greats on Twitter (see https://twitter.com/jebyrnes/lists/stats-r-on-twitter)  
+- Follow data science greats on BlueSky (see the [#rstats feed](https://bsky.app/profile/andrew.heiss.phd/feed/aaaeckvqc3gzg))  
 
 - Bring up cool things in the UMBRug slack
 
@@ -384,7 +385,7 @@ class:center
 
 ---
 # Become Part of the Conversation
-Stats and R on Twitter: https://bit.ly/stats_r_twitter. 
+~~Stats and R on Twitter: https://bit.ly/stats_r_twitter~~   
 Stats and R on Bluesky: https://bit.ly/bsky_rstats
 
 .center[![:scale 50%](images/01/tidytuesday.png)]
