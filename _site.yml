@@ -21,7 +21,8 @@ navbar:
     href: resources.html
   - text: "Local Meetups"
     href: http://byrneslab.net/resources/boston-area-data-science-groups/
-
+  - text: "Old Versions"
+    href: old.html
 
 output:
   html_document:
