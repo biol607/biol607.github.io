@@ -5,7 +5,7 @@
 <!--
 
 
-NEXT TIME I TEACH 607 in 2024
+NEXT TIME I TEACH 607 in 2024/5
 redo explaining least squares - it's not good in the lecture
 
 re-arrange the linear regression lab
@@ -42,7 +42,7 @@ To submit homework, use the dropbox link you were sent by the TA.
 
 ```{r dates, echo=FALSE, message=FALSE, warning=FALSE}
 library(lubridate)
-current_date = parse_date_time("2023-09-04", orders="ymd")
+current_date = parse_date_time("2025-01-27", orders="ymd")
 datestring <- paste(month(current_date), day(current_date), year(current_date), sep="/")
 ```    
      
@@ -56,7 +56,7 @@ __Reading:__ R4DS [Intro](https://r4ds.hadley.nz/intro), [Workflow basics](https
 __Further Exploration:__ [Quarto Formats](https://r4ds.hadley.nz/quarto-formats), https://quarto.org/ for everything!  
 __Cheat Sheets:__ [Quarto Cheat Sheet](https://rstudio.github.io/cheatsheets/quarto.pdf)  
 __Install R:__ Go to https://cloud.r-project.org/ and get the right version of R for you. Then, go to https://www.rstudio.com/products/rstudio/download/#download and install Rstudio.  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-intro-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-intro-2025  
 __Homework:__ [Intro to R and Data Frames](./homework/intro_to_r.html)  
 
 ### Week 2.   
@@ -69,7 +69,7 @@ __Lecture:__  [Data visualization](lectures/05_data_viz_principles.pptx)
 __Lab Topic:__ [Introduction to ggplot2](lab/04_ggplot_palmer_intro.html).  
 __Reading:__ R4DS Chapters on [Data Vizualization](https://r4ds.hadley.nz/data-visualize), [Layers of Plots](https://r4ds.hadley.nz/layers), and [Graphics for Communication](https://r4ds.hadley.nz/communication),  [Introducing Palmer Penguins](https://journal.r-project.org/articles/RJ-2022-020/)    
 __Further Exploration:__  [Friendly 2008 on History of Data Viz](http://byrneslab.net/classes/biol607/readings/Friendly_2008_dataviz_history.pdf), [Unwin 2008](http://byrneslab.net/classes/biol607/readings/Unwin_2008_dataviz.pdf), [DC Starting with Data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html), [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/) - note, this is a whole book, but scan it - it's amazing\
-__Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/dataviz-2025  
 __Packages used this Week:__ [ggplot2](https://ggplot2.tidyverse.org/), [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), [ggdist](https://mjskay.github.io/ggdist/) - `install.packages(c("ggplot2", "ggridges", "palmerpenguins", "ggdist"))`  
 __Cheat Sheets:__  [Ggplot2 cheat sheet](https://posit.co/wp-content/uploads/2022/10/data-visualization-1.pdf), [Choosing a good chart cheat sheet](https://biol355.github.io/Readings/choosing-a-good-chart-09.pdf)  
 __Homework:__ [ggplot2 homework](./homework/ggplot.html)  
@@ -87,7 +87,7 @@ __Cheat Sheets:__ [Reading data into R](https://rstudio.github.io/cheatsheets/da
 __Packages:__ `install.packages(c("dplyr", "janitor", "skimr", "lubridate", "tidyr", "readr", "readxl", "tibble"))` - [readr](https://readr.tidyverse.org/),  [readxl](https://readxl.tidyverse.org/),  [tibble](https://tibble.tidyverse.org/),  [skimr](https://docs.ropensci.org/skimr/), 
 [janitor](https://garthtarr.github.io/meatR/janitor.html),
 [visdat](https://docs.ropensci.org/visdat/)  
-__Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2023  
+__Etherpad:__ http://etherpad.wikimedia.org/p/607-tidy-2025  
 __Homework:__ [Data Manipulation and Pivot homework](./homework/dplyr_tidyr.html)  
 
 
@@ -98,7 +98,7 @@ __Homework:__ [Data Manipulation and Pivot homework](./homework/dplyr_tidyr.html
 __Lecture:__  [What is a Sample?](lectures/03_sampling_lecture_x.html) and [Sampling Distribution](lectures/04_sampling_dist.html).   
 __Lab Topic:__ [Sampling and simulation](lab/sample_distributions_simulation.html).    
 __Reading:__ [Cumming et al. 2007 on SDs, SEs, and CIs](http://byrneslab.net/classes/biol607/readings/Cumming_2007_error.pdf)   
-__Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/sampling-2025  
 __Packages for the Week:__ [dplyr](https://dplyr.tidyverse.org/) - `install.packages(c("dplyr", "purrr"))`  
 __Homework:__ [Sampling, Simulation, and Tidy Tuesday](./homework/sampling_dist_tidytuesday.html)  
 
@@ -112,7 +112,7 @@ __Homework:__ [Sampling, Simulation, and Tidy Tuesday](./homework/sampling_dist_
 __Lecture:__ Introduction to Regression: [Correlation and Regression](lectures/linear_regression.html), [Fit and Precision](lectures/linear_regression_details.html)  
 __Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), and [data](lab/data_06.zip) \
 __Reading:__ [Fieberg linear regression review](https://fw8051statistics4ecologists.netlify.app/linreg.html), R4DS on [model basics](http://r4ds.had.co.nz/model-basics.html)  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-2025  
 <!--__In Class Code:__ [reproducible examples](in_class_code/2020/scripts/reprex.R), [lm](in_class_code/2020/scripts/linear_regression.R)  -->
 __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression.html)  
 
@@ -127,7 +127,7 @@ __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)
 __Reading:__ [Feiberg 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html)   
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf), [Day and Quinn 1989 on Post-hocs](https://www.jstor.org/stable/1943075).   
 __Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast", "visreg"))`    
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2025  
 __Homework:__ None. Catch up!    
 
 <!-- __In Class Code:__ [comparing two means](./in_class_code/2020/scripts/comparing_means.R)  -->  
@@ -142,7 +142,7 @@ __Lab Topic:__  [Models with many types of predictors - and interactions!](lab/c
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
 __Reading:__  [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Understanding ‘it depends’ in ecology: a guide to hypothesising, visualising and interpreting statistical interactions](https://onlinelibrary.wiley.com/doi/full/10.1111/brv.12939)   
 __Optional Readings:__ [Interactions in statistical models: Three things to know](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13714), [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-complex-linear-models-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-complex-linear-models-2025  
 __Homework:__ [Complex linear models](homework/complex_linear_models.html)    
 __Project Proposal:__ [general instructions here](project_proposal.html)  
 
@@ -157,7 +157,7 @@ __Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa", "TMB", "glmmTMB"))`  
 __Reading:__ [Feiberg on Generalized Linear Models](https://fw8051statistics4ecologists.netlify.app/glm.html), [Models for Count Data](https://fw8051statistics4ecologists.netlify.app/poissonr), [Feiberg on Logistic Regression](https://fw8051statistics4ecologists.netlify.app/logistic) - ignore Bayes parts in these. [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), [Analyzing % Cover and Porportional Data](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13234)  
 __Additional Reading:__ [Maximum Likelihood](https://fw8051statistics4ecologists.netlify.app/mle), [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Ver Hoef and Boveng 2007 on NB v. Quasi](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/07-0043.1),  [Intro to Beta Regression for % Cover Data](https://rpubs.com/nicoleknight/936037), [Zero-One Inflated Beta Regression](https://journal.r-project.org/archive/2015/RJ-2015-019/index.html), [Feiberg on GLS](https://fw8051statistics4ecologists.netlify.app/gls.html)      
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2025  
 __Homework:__ [Surviving the Titanic](homework/generalized_linear_model.html)  
 
 ### Week 9   
@@ -171,7 +171,7 @@ __Packages for the Week:__ `install.packages(c("glmmTMB", "lme4", "merTools", "b
 __Reading:__ [Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/mixed), [Generalized Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/glmm)   
 __Additional Reading:__ [Generalized linear mixed models: a practical guide for ecology and evolution](https://www.cell.com/trends/ecology-evolution/fulltext/S0169-5347(09)00019-6), [Gelman and Hill Ch 12](https://byrneslab.net/classes/biol609/gelman_hill_ch_12.pdf) login/pass biol609, [Zuur ch. 9](https://byrneslab.net/classes/biol609/Zuur_ch_5.pdf). 
 __Your One Stop FAQ:__ [Your One Stop FAQ: Ben Bolker’s Mixed Model’s FAQ](https://bbolker.github.io/mixedmodels-misc/), [optimizer tips](https://svmiller.com/blog/2018/06/mixed-effects-models-optimizer-checks/)     
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-mixed-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-mixed-2025  
 
 __MIDTERM__: Due Tues Nov 17th, 5pm. [Get it here](exams/exam_2023.html)  
 
@@ -185,7 +185,7 @@ __Lecture:__  [Causal Inference](lectures/causal_diagrams.pptx)
 __Lab:__ [Daggity and Causal Models](lab/dagitty.html)   
 __Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Fieberg on Causal Models](https://fw8051statistics4ecologists.netlify.app/causal).   
 __Optional Reading:__ [An Intro to the PO Framework from The Causal Mixtape](https://mixtape.scunning.com/04-potential_outcomes), [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [Does Water Kill?](https://pdf.sciencedirectassets.com/271328/1-s2.0-S1047279716X00105/1-s2.0-S1047279716302800/main.pdf)    
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2025  
   
   
 
@@ -197,7 +197,7 @@ __Lecture:__   [Causal Inference and Experiments](./lectures/causality_experimen
 __Paper Discussion:__  Thursday discussion of [papers](readings/exp_design_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
 __Reading:__   [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf), [The Causal Dag and Haunted Terror](./readings/McElreath_Ch_6.pdf), [Butsic et al 2021 on Quasi-Experiments](readings/butsic_et_al_2017.pdf),   
 __Optional Reading:__  [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf), [Bellemare et al. on Front Doors](BellemareBloemWexlerFDCJune2020.pdf)    
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2025  
   
   
   
@@ -208,7 +208,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2023
 **Thanksgiving Week**. 
 __Paper Discussion:__  Discussion of [papers](readings/obs_sampling.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments    
 __Optional Reading:__ [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2025  
 
 
 ## Block 4. Drawing Inference from Studies
@@ -222,7 +222,7 @@ __Lecture:__ Ways of Knowing: [NHT](./lectures/linear_regression_nht), [NHT and 
 __Lab Topic:__ [Null Hypothesis Testing](lab/nht.html), [Power Analysis](lab/power_analysis_tidy.html)  
 __Data for Lab__: [mole rats](lab/data/18e4MoleRatLayabouts.csv), [intertidal algae](lab/data/18e3IntertidalAlgae.csv), [cryptosporidium infection](lab/data/cryptoDATA.csv), [Keeley et al. data](lab/data/Keeley_rawdata_select4.csv)   
 __Reading:__ W&S 20, [Muff et al. 2022 on p-values](./readings/muff_et_al_2022.pdf), [Feiberg on Maximum Likelihood](https://fw8051statistics4ecologists.netlify.app/mle.html)     
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-nht-eval-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-nht-eval-2025  
 __Packages for The Week:__ `install.packages(c("car", "MASS", "profileModel"))`  
 
 
@@ -238,7 +238,7 @@ __Reading:__ [AIC in Behavioral Ecology](https://link.springer.com/article/10.10
 __Optional Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf)  
 __Optional Books:__ [Model Selection and Multimodel Inference](https://ebookcentral.proquest.com/lib/umboston/reader.action?docID=3035464) 
 __Packages for The Week:__ `install.packages(c("AICcmodavg")`   
-__Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-2023  
+__Etherpad:__ https://etherpad.wikimedia.org/p/607-cv-2025  
 
 
 ## Week 15
