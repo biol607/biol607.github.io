@@ -51,7 +51,7 @@ datestring <- paste(month(current_date), day(current_date), year(current_date), 
 ### Week 1. 
 `r datestring`   
 __Lecture:__ [Class intro](lectures/01_intro_x.html), [Intro to R](lectures/02_r_intro.html). \
-__Lab:__ [Matrices, Lists and Data Frames](lectures/02a_r_intro_list_matrix_df.html). [Introduction to Markdown](https://rmarkdown.rstudio.com/lesson-1.html)    
+__Lab:__ [Matrices, Lists and Data Frames](lectures/02a_r_intro_list_matrix_df.html). [Introduction to Quarto and Markdown](https://r4ds.hadley.nz/quarto.html)    
 __Reading:__ R4DS [Intro](https://r4ds.hadley.nz/intro), [Workflow basics](https://r4ds.hadley.nz/workflow-basics), [Scripts and Projects](https://r4ds.hadley.nz/workflow-scripts), [Code Style](https://r4ds.hadley.nz/workflow-style), [Vectors](http://r4ds.had.co.nz/vectors.html), and [Quarto](https://r4ds.hadley.nz/quarto)   
 __Further Exploration:__ [Quarto Formats](https://r4ds.hadley.nz/quarto-formats), https://quarto.org/ for everything!  
 __Cheat Sheets:__ [Quarto Cheat Sheet](https://rstudio.github.io/cheatsheets/quarto.pdf)  
