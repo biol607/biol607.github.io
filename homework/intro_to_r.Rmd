@@ -4,7 +4,7 @@ author: "Biol 607"
 output: html_document
 ---
 
-Please submit to your given dropbox. Submit both the markdown and html. Extra credit for using github. See the Rmarkdown Cheat Sheet [here](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+Please submit to your given dropbox. Submit both the markdown or quarto file and html. Extra credit for using github. See the Rmarkdown Cheat Sheet [here](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) and the Quarto Cheat Sheet [here](https://rstudio.github.io/cheatsheets/html/quarto.html)  
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -24,10 +24,28 @@ What unique stations are there? Use `length()` with `unique()` to determine how 
 
 Impress Yourself. Where was the earthquake of largest magnitude found? You’ll need to use come comparisons and the `max()` function for this in your indices instead of a number!
 
+## A Little LaTeX
+
+In the future, we'll be writing some equations. Quarto is great in that it allows you to use LaTeX syntax for equations. You simply use the LaTeX notation and wrap it in `$` or `$$` at the start and end. For a quick intro, [see here](https://qmd4sci.njtierney.com/math.html) or [here](https://rpruim.github.io/s341/S19/from-class/MathinRmd.html). I often refer to [this reference](https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols) or [this online LaTeX equation builder](https://editor.codecogs.com) when I get lost.  
+
+5. Take it for a test drive. Put the following equation in your markdown: $x = \mu$
+
+6. What's the difference between wrapping your equation in `$` versus `$$`? Show an example with $Y_i = 3 X_i$ done both ways.
+
+7. Try out superscripts. Code up $a^2 = b^2 + c^2$
+
+Impress Yourself. Write out the notation for a normal distribution that looks like so.
+
+$$y_i \sim \mathcal{N}(\hat{y_i}, \sigma^2)$$
+
+Note, if that N looks like a box, right click on the equation and change your math renderer to Common HTML.
+
 ----
 
 Meta 1. For some of you, this week was your first experience with R (or even programming at all) - how did it feel to connect concepts to a novel set of problems. For those who have experience with R, was this a cakewalk or challenging? How did it feel to shake off the cobwebs?
 
-Meta 2. How much time did this take you, roughly?  
+Meta 2. Sometimes I throw in new concepts in homework that I expect you to look into a little bit, like the LaTeX. It's something small enough that I think you can do it outside of class. How was the LaTeX part of the homework for you? Do you see its future application?
 
-Meta 3. Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.
+Meta 3. How much time did this take you, roughly?  
+
+Meta 4. Please give yourself a weak/sufficient/strong assessment on this assigment. Feel free to comment on why.
