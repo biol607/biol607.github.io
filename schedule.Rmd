@@ -78,9 +78,8 @@ __Homework:__ [ggplot2 homework](./homework/ggplot.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture/Lab:__  [Working with Data](https://datacarpentry.github.io/R-ecology-lesson/working-with-data.html)     
-<!--, [Joins](lectures/18_join.html)  -->
-__Data:__ [Portal Data](https://datacarpentry.org/R-ecology-lesson/data/cleaned/surveys_complete_77_89.csv) - and learn more [here](https://portal.weecology.org/)  
+__Lecture/Lab:__  [Working with Data](https://datacarpentry.github.io/R-ecology-lesson/working-with-data.html), [Joins](lectures/18_join.html)  
+__Data:__ [Portal Data](https://datacarpentry.org/R-ecology-lesson/data/cleaned/surveys_complete_77_89.csv) - and learn more [here](https://portal.weecology.org/), [hemlock wooly adelgid data from Harvard Forest](lectures/data/18/hemlock.xlsx)  
 __Reading:__  [Data organization in spreadsheets](./readings/Browman_and_Woo_Spreadsheets.pdf),  R4DS Chapters on [data import](https://r4ds.hadley.nz/spreadsheets),  [pipes](https://r4ds.hadley.nz/workflow-style.html#sec-pipes), [data transformation](https://r4ds.hadley.nz/data-transform.html), [tidy data](https://r4ds.hadley.nz/data-tidy.html)    
 __Optional Reading:__ [10 Commandments for Good Data Managament](https://dynamicecology.wordpress.com/2016/08/22/ten-commandments-for-good-data-management/), [Managing Data Frames with the Dplyr package](https://bookdown.org/rdpeng/exdata/managing-data-frames-with-the-dplyr-package.html), [Strings](http://r4ds.had.co.nz/strings.html), [factors](https://r4ds.hadley.nz/factors.html), and [Dates](http://r4ds.had.co.nz/dates-and-times.html)   
 __Cheat Sheets:__ [Reading data into R](https://rstudio.github.io/cheatsheets/data-import.pdf), [Dplyr cheat sheet](https://rstudio.github.io/cheatsheets/data-transformation.pdf).  
