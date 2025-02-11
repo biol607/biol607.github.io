@@ -43,14 +43,14 @@ library(tidyr)
 
 ## The data
 ```{r read_adelgid}
-hemlock_data <- read_excel("./data/18/hemlock.xlsx")
+hemlock_data <- read_excel("lectures/data/18/hemlock.xlsx")
 
 str(hemlock_data)
 ```
 
 ## Environmental Information
 ```{r read_adelgid_envt}
-hemlock_sites <- read_excel("./data/18/hemlock.xlsx", sheet=2)
+hemlock_sites <- read_excel("lectures/data/18/hemlock.xlsx", sheet=2)
 
 str(hemlock_sites)
 ```
@@ -104,7 +104,7 @@ library(ggplot2)
 qplot(Humus, `Tree Den`, data=hem_inner) +
   geom_point(size=2) +
   theme_bw(base_size=17)
-````
+```
 
 ## Outer Joins
 ![](images/18/outer_joins.png){width=45%}  
