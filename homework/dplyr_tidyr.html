@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.4.549">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
 </style>
 
 
@@ -29,17 +34,18 @@ ul.task-list{list-style: none;}
 <script src="dplyr_tidyr_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="dplyr_tidyr_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="dplyr_tidyr_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script src="dplyr_tidyr_files/libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<script src="dplyr_tidyr_files/libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="dplyr_tidyr_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="dplyr_tidyr_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="dplyr_tidyr_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <link href="dplyr_tidyr_files/libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
 <script src="dplyr_tidyr_files/libs/leaflet-1.3.1/leaflet.js"></script>
 <link href="dplyr_tidyr_files/libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
 <script src="dplyr_tidyr_files/libs/proj4-2.6.2/proj4.min.js"></script>
 <script src="dplyr_tidyr_files/libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
 <link href="dplyr_tidyr_files/libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
-<script src="dplyr_tidyr_files/libs/leaflet-binding-2.1.1/leaflet.js"></script>
-<script src="dplyr_tidyr_files/libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
-<script src="dplyr_tidyr_files/libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+<script src="dplyr_tidyr_files/libs/leaflet-binding-2.2.2/leaflet.js"></script>
+<script src="dplyr_tidyr_files/libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="dplyr_tidyr_files/libs/leaflet-providers-plugin-2.2.2/leaflet-providers-plugin.js"></script>
 
 
 </head>
@@ -48,7 +54,7 @@ ul.task-list{list-style: none;}
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc">
+  <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -83,18 +89,24 @@ ul.task-list{list-style: none;}
           </div>
   </div>
     
+  
     
   </div>
   
 
+
 </header>
 
+
+<!-- describe data more 
+re-write some questions - confusing - 4c for example
+4d - a lot of people didn't group by year, site, transect, AND species
+-->
 <p>Since 2014, a group of us in New England have been surveying kelp forests from Rhode Island to Maine. There’s a LOT of data from several protocols. Let’s muck about with the percent cover data to learn about the sampling program and a bit about kelp forests here in New England.</p>
 <div class="cell">
 <div class="cell-output-display">
-
-<div id="htmlwidget-da9472c923f24ebb10e0" style="width:100%;height:464px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-da9472c923f24ebb10e0">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"createMapPane","args":["tmap402",402]},{"method":"addProviderTiles","args":["Stamen.Watercolor",null,"Stamen.Watercolor",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addCircleMarkers","args":[[42.5047224260525,42.4892251433332,42.3431343558649,41.4776679666283,44.0398117857939,41.4504976409745,42.3274277823446,42.4187496202492,42.9668199493122,43.1659838344772,42.9914475379509,43.8357300000088,44.3681600002745,42.9851660668186],[-70.7369635575402,-70.7210374219017,-70.8928213427956,-71.3621234463603,-68.8927720756737,-71.3349550657216,-70.8898258745116,-70.906488913597,-70.6116745268839,-70.5919699950105,-70.6175188365986,-69.5078850001131,-68.0781849997362,-70.6191354820997],[8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916,8.94427190999916],["Baker.North","Baker.South","Calf.Island","Fort.Weatherill","Hurricane.Island","King.s.Beach","Little.Brewster","Nahant","NE.Appledore","Nubble.Lighthouse","NW.Appledore","Pemaquid","Schoodic","SW.Appledore"],"sites",{"interactive":true,"className":"","pane":"tmap401","stroke":true,"color":"#666666","weight":1,"opacity":0.5,"fill":true,"fillColor":["#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000"],"fillOpacity":[1,1,1,1,1,1,1,1,1,1,1,1,1,1]},null,null,["<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Baker North<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Baker North<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Baker South<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Baker South<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Calf Island<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Calf Island<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Fort Weatherill<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Fort Weatherill<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Hurricane Island<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Hurricane Island<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>King's Beach<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>King's Beach<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Little Brewster<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Little Brewster<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Nahant<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Nahant<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>NE Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>NE Appledore<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Nubble Lighthouse<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Nubble Lighthouse<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>NW Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>NW Appledore<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Pemaquid<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Pemaquid<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Schoodic<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Schoodic<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>SW Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>SW Appledore<\/nobr><\/td><\/tr><\/table><\/div>"],null,["Baker North","Baker South","Calf Island","Fort Weatherill","Hurricane Island","King's Beach","Little Brewster","Nahant","NE Appledore","Nubble Lighthouse","NW Appledore","Pemaquid","Schoodic","SW Appledore"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addTiles","args":["http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}",null,"Labels",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tmap402"}]},{"method":"addLayersControl","args":[[],["sites","Labels"],{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[41.4504976409745,44.3681600002745],"lng":[-71.3621234463603,-68.0781849997362]},"fitBounds":[41.4504976409745,-71.3621234463603,44.3681600002745,-68.0781849997362,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-e38d81f02ff3ebb7782c" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-e38d81f02ff3ebb7782c">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"createMapPane","args":["tmap402",402]},{"method":"addProviderTiles","args":["Stadia.Outdoors",null,"Stadia.Outdoors",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addCircleMarkers","args":[[42.5047224260525,42.48922514333324,42.34313435586494,41.47766796662825,44.03981178579389,41.45049764097448,42.32742778234459,42.96681994931222,42.99144753795086,42.41874962024924,43.16598383447717,43.83573000000882,42.98516606681861,44.3681600002745],[-70.73696355754015,-70.72103742190171,-70.8928213427956,-71.36212344636027,-68.8927720756737,-71.33495506572157,-70.8898258745116,-70.6116745268839,-70.61751883659861,-70.90648891359704,-70.59196999501054,-69.50788500011311,-70.61913548209968,-68.07818499973624],[8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159,8.944271909999159],["Baker.North","Baker.South","Calf.Island","Fort.Weatherill","Hurricane.Island","King.s.Beach","Little.Brewster","NE.Appledore","NW.Appledore","Nahant","Nubble.Lighthouse","Pemaquid","SW.Appledore","Schoodic"],"sites",{"interactive":true,"className":"","pane":"tmap401","stroke":true,"color":"#666666","weight":1,"opacity":0.5,"fill":true,"fillColor":["#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000"],"fillOpacity":[1,1,1,1,1,1,1,1,1,1,1,1,1,1]},null,null,["<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Baker North<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Baker North<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Baker South<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Baker South<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Calf Island<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Calf Island<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Fort Weatherill<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Fort Weatherill<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Hurricane Island<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Hurricane Island<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>King's Beach<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>King's Beach<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Little Brewster<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Little Brewster<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>NE Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>NE Appledore<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>NW Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>NW Appledore<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Nahant<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Nahant<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Nubble Lighthouse<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Nubble Lighthouse<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Pemaquid<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Pemaquid<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>SW Appledore<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>SW Appledore<\/nobr><\/td><\/tr><\/table><\/div>","<style> div.leaflet-popup-content {width:auto !important;overflow-y:auto; overflow-x:hidden;}<\/style><div style=\"max-height:25em;padding-right:0px;\"><table>\n\t\t\t   <thead><tr><th colspan=\"2\"><b>Schoodic<\/b><\/th><\/thead><\/tr><tr><td style=\"color: #888888;\"><nobr>SITE<\/nobr><\/td><td align=\"right\"><nobr>Schoodic<\/nobr><\/td><\/tr><\/table><\/div>"],null,["Baker North","Baker South","Calf Island","Fort Weatherill","Hurricane Island","King's Beach","Little Brewster","NE Appledore","NW Appledore","Nahant","Nubble Lighthouse","Pemaquid","SW Appledore","Schoodic"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addTiles","args":["http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}",null,"Labels",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tmap402"}]},{"method":"addLayersControl","args":[[],["sites","Labels"],{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[41.45049764097448,44.3681600002745],"lng":[-71.36212344636027,-68.07818499973624]},"fitBounds":[41.45049764097448,-71.36212344636027,44.3681600002745,-68.07818499973624,[]]},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <section id="load-me." class="level2">
@@ -178,9 +190,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -192,17 +218,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -212,43 +254,304 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

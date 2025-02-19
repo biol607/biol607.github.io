@@ -39,7 +39,7 @@ sites <- read_csv("https://github.com/kelpecosystems/observational_data/raw/mast
 
 #make a map
 tmap_mode("view")
-tm_basemap(leaflet::providers$Stamen.Watercolor) +
+tm_basemap(leaflet::providers$Stadia.Outdoors) +
 tm_shape(sites) +
   tm_dots(col = "red", size = 0.2) +
   tm_tiles(paste0("http://services.arcgisonline.com/arcgis/rest/services/Canvas/",
