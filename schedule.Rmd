@@ -110,7 +110,7 @@ __Homework:__ [Sampling, Simulation, and Tidy Tuesday](./homework/sampling_dist_
 `r datestring`   
 __Lecture:__ Introduction to Regression: [Correlation and Regression](lectures/linear_regression.html), [Fit and Precision](lectures/linear_regression_details.html)  
 __Lab Topic:__ [Linear regression, diagnostics, visualization](lab/06_lm.html), and [data](lab/data_06.zip) \
-__Reading:__ [Fieberg linear regression review](https://fw8051statistics4ecologists.netlify.app/linreg.html), R4DS on [model basics](http://r4ds.had.co.nz/model-basics.html)  
+__Reading:__ [Fieberg linear regression review](https://statistics4ecologists-v3.netlify.app/01-linearregression), R4DS on [model basics](http://r4ds.had.co.nz/model-basics.html)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-lm-2025  
 <!--__In Class Code:__ [reproducible examples](in_class_code/2020/scripts/reprex.R), [lm](in_class_code/2020/scripts/linear_regression.R)  -->
 __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression.html)  
@@ -123,7 +123,7 @@ __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression
 __Lecture:__  [Many Predictors](./lectures/mlr.html),  [Categorical Predictors: Just Another Linear Model](lectures/categorical_predictors.html)   
 __Lab Topic:__ [Models with Categorical Variables](lab/multiple_predictors.html)  
 __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)   
-__Reading:__ [Feiberg 3](https://fw8051statistics4ecologists.netlify.app/matrixreg), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html)   
+__Reading:__ [Feiberg  on Multiple Predictors through](https://statistics4ecologists-v3.netlify.app/03-multipleregression), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html)   
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf), [Day and Quinn 1989 on Post-hocs](https://www.jstor.org/stable/1943075).   
 __Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast", "visreg"))`    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2025  
@@ -139,7 +139,7 @@ __Homework:__ None. Catch up!
 __Lectures:__  [Many categories or mixing categories and continuous predictors](./lectures/many_types_of_predictors.html), [When one predictor's effect depends on the other](lectures/interactions_lm.html)   
 __Lab Topic:__  [Models with many types of predictors - and interactions!](lab/complex_linear_models.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
-__Reading:__  [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Understanding ‘it depends’ in ecology: a guide to hypothesising, visualising and interpreting statistical interactions](https://onlinelibrary.wiley.com/doi/full/10.1111/brv.12939)   
+__Reading:__  [Feiberg  on Multiple Predictors through](https://statistics4ecologists-v3.netlify.app/03-multipleregression), [Feiberg on Multicollinearity](https://statistics4ecologists-v3.netlify.app/06-multicollinearity),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Understanding ‘it depends’ in ecology: a guide to hypothesising, visualising and interpreting statistical interactions](https://onlinelibrary.wiley.com/doi/full/10.1111/brv.12939)   
 __Optional Readings:__ [Interactions in statistical models: Three things to know](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13714), [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-complex-linear-models-2025  
 __Homework:__ [Complex linear models](homework/complex_linear_models.html)    
@@ -156,7 +156,7 @@ __Lecture:__ [Generalized Linear Models](lectures/generalized_linear_models.html
 __Data:__ [GLS Data](./lectures/data/gls/gls_data.zip), [GLM Data](./lab/gzlm_data.zip)  
 __Lab Topic:__ [Generalized Linear Models](./lab/12_gzlm.html)  
 __Packages for the Week:__ `install.packages(c("MASS", "readxl", "betareg", "DHARMa", "TMB", "glmmTMB"))`  
-__Reading:__ [Feiberg on Generalized Linear Models](https://fw8051statistics4ecologists.netlify.app/glm.html), [Models for Count Data](https://fw8051statistics4ecologists.netlify.app/poissonr), [Feiberg on Logistic Regression](https://fw8051statistics4ecologists.netlify.app/logistic) - ignore Bayes parts in these. [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), [Analyzing % Cover and Porportional Data](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13234)  
+__Reading:__ [Feiberg on Generalized Linear Models](https://statistics4ecologists-v3.netlify.app/14-generalizedlinearmodels), [Models for Count Data](https://statistics4ecologists-v3.netlify.app/15-generalizedlinearmodelscountdata), [Feiberg on Logistic Regression](https://statistics4ecologists-v3.netlify.app/16-logisticregressionmod) - ignore Bayes parts in these. [Hartig DHARMa vignette](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), [Analyzing % Cover and Porportional Data](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13234)  
 __Additional Reading:__ [Maximum Likelihood](https://fw8051statistics4ecologists.netlify.app/mle), [O'Hara and Kotze 2010](http://byrneslab.net/classes/biol607/readings/o'hara_and_kotze_do_not_log_transform.pdf), [Wharton and Hui 2011](http://byrneslab.net/classes/biol607/readings/Wharton_Hui_2011_Ecology.pdf), [Ver Hoef and Boveng 2007 on NB v. Quasi](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/07-0043.1),  [Intro to Beta Regression for % Cover Data](https://rpubs.com/nicoleknight/936037), [Zero-One Inflated Beta Regression](https://journal.r-project.org/archive/2015/RJ-2015-019/index.html), [Feiberg on GLS](https://fw8051statistics4ecologists.netlify.app/gls.html)      
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-glm-2025  
 __Homework:__ [Surviving the Titanic](homework/generalized_linear_model.html)  
@@ -169,12 +169,12 @@ __Lecture:__ [Random Effects](https://biol609.github.io/lectures/07_random_effec
 __Data:__ TBA  
 __Lab Topic:__ [Mixed Models](lab/mixed_models.html)  
 __Packages for the Week:__ `install.packages(c("glmmTMB", "lme4", "merTools", "broom.mixed))`  
-__Reading:__ [Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/mixed), [Generalized Linear Mixed Effects Models](https://fw8051statistics4ecologists.netlify.app/glmm)   
+__Reading:__ [Feiberg on Linear Mixed Effects Models](https://statistics4ecologists-v3.netlify.app/18-linearmixedeffectsmodels), [Feiberg on Generalized Linear Mixed Effects Models](https://statistics4ecologists-v3.netlify.app/19-generalized-linear-mixed-effects)   
 __Additional Reading:__ [Generalized linear mixed models: a practical guide for ecology and evolution](https://www.cell.com/trends/ecology-evolution/fulltext/S0169-5347(09)00019-6), [Gelman and Hill Ch 12](https://byrneslab.net/classes/biol609/gelman_hill_ch_12.pdf) login/pass biol609, [Zuur ch. 9](https://byrneslab.net/classes/biol609/Zuur_ch_5.pdf). 
 __Your One Stop FAQ:__ [Your One Stop FAQ: Ben Bolker’s Mixed Model’s FAQ](https://bbolker.github.io/mixedmodels-misc/), [optimizer tips](https://svmiller.com/blog/2018/06/mixed-effects-models-optimizer-checks/)     
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-mixed-2025  
 
-__MIDTERM__: Due Tues Nov 17th, 5pm. [Get it here](exams/exam_2023.html)  
+__MIDTERM__: Due Tues April 4th, 5pm. [Get it here](exams/exam_2023.html)  
 
 ## Block 3. Experimental and Observational Study Design and Causal Inference
 
@@ -184,7 +184,7 @@ __MIDTERM__: Due Tues Nov 17th, 5pm. [Get it here](exams/exam_2023.html)
 `r datestring`   
 __Lecture:__  [Causal Inference](lectures/causal_diagrams.pptx)     
 __Lab:__ [Daggity and Causal Models](lab/dagitty.html)   
-__Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Fieberg on Causal Models](https://fw8051statistics4ecologists.netlify.app/causal).   
+__Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Fieberg on Causal Inference](https://statistics4ecologists-v3.netlify.app/07-causalnetworks).   
 __Optional Reading:__ [An Intro to the PO Framework from The Causal Mixtape](https://mixtape.scunning.com/04-potential_outcomes), [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [Does Water Kill?](https://pdf.sciencedirectassets.com/271328/1-s2.0-S1047279716X00105/1-s2.0-S1047279716302800/main.pdf)    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2025  
   
@@ -194,7 +194,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2025
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__   [Causal Inference and Experiments](./lectures/causality_experiments.pptx), [Using causal models to get valid inference from observational and quasi-experimental studies](lectures/causal_observational.pptx)    
+__Lecture:__   [Causal Inference and Experiments](./lectures/causality_experiments.pptx)  
 __Paper Discussion:__  Thursday discussion of [papers](readings/exp_design_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
 __Reading:__   [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf), [The Causal Dag and Haunted Terror](./readings/McElreath_Ch_6.pdf), [Butsic et al 2021 on Quasi-Experiments](readings/butsic_et_al_2017.pdf),   
 __Optional Reading:__  [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf), [Bellemare et al. on Front Doors](BellemareBloemWexlerFDCJune2020.pdf)    
@@ -206,6 +206,8 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2025
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
+__Lecture:__ [Using causal models to get valid inference from observational and quasi-experimental studies](lectures/causal_observational.pptx)    
+__Reading:__ [Siegel & Dee 2025](https://onlinelibrary.wiley.com/doi/abs/10.1111/ele.70053), [Byrnes & Dee 2025](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.70023)  
 __Paper Discussion:__  Discussion of [papers](readings/obs_sampling.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments    
 __Optional Reading:__ [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2025  
@@ -221,7 +223,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2025
 __Lecture:__ Ways of Knowing: [NHT](./lectures/linear_regression_nht), [NHT and testing models](lectures/freq_testing.html), [Power Analysis](./lectures/power_analysis.html)    
 __Lab Topic:__ [Null Hypothesis Testing](lab/nht.html), [Power Analysis](lab/power_analysis_tidy.html)  
 __Data for Lab__: [mole rats](lab/data/18e4MoleRatLayabouts.csv), [intertidal algae](lab/data/18e3IntertidalAlgae.csv), [cryptosporidium infection](lab/data/cryptoDATA.csv), [Keeley et al. data](lab/data/Keeley_rawdata_select4.csv)   
-__Reading:__ W&S 20, [Muff et al. 2022 on p-values](./readings/muff_et_al_2022.pdf), [Feiberg on Maximum Likelihood](https://fw8051statistics4ecologists.netlify.app/mle.html)     
+__Reading:__ [Muff et al. 2022 on p-values](./readings/muff_et_al_2022.pdf), [Feiberg on Maximum Likelihood](https://statistics4ecologists-v3.netlify.app/10-maximumlikelihood)     
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-nht-eval-2025  
 __Packages for The Week:__ `install.packages(c("car", "MASS", "profileModel"))`  
 
@@ -234,7 +236,7 @@ __Packages for The Week:__ `install.packages(c("car", "MASS", "profileModel"))`
 
 __Lecture:__ Ways of Knowing: [Cross-Validation and AIC](./lectures/crossvalidation.html)   
 __Lab Topic:__  [Cross-Validation and AIC](lab/crossvalidation.html)  
-__Reading:__ [AIC in Behavioral Ecology](https://link.springer.com/article/10.1007/s00265-010-1029-6), [Fieberg on Modeling Strategies](https://fw8051statistics4ecologists.netlify.app/mmi), [Aho et al. 2014 on BIC](./readings/Aho_2014_ecolog_bic.pdf)   
+__Reading:__ [AIC in Behavioral Ecology](https://link.springer.com/article/10.1007/s00265-010-1029-6), [Fieberg on Modeling Strategies](https://statistics4ecologists-v3.netlify.app/08-modelingstrategies), [Aho et al. 2014 on BIC](./readings/Aho_2014_ecolog_bic.pdf)   
 __Optional Reading:__ [Ellison 1996](http://byrneslab.net/classes/biol607/readings/Ellison_1996_ecol_app.pdf)  
 __Optional Books:__ [Model Selection and Multimodel Inference](https://ebookcentral.proquest.com/lib/umboston/reader.action?docID=3035464) 
 __Packages for The Week:__ `install.packages(c("AICcmodavg")`   
