@@ -176,3 +176,82 @@ sd(my_samp) / sqrt(10)
 ```
 
 Not bad!
+
+## Simulating the (linear) World
+
+This is all well and good, but we're often not interested in estimating means and the like. We want to study systems and relationships! Before going out to sample, we often want to know what kinds of results we might get based on how our system works. This can help us guide our intuition and think about possible things we might observe based on our assumptions. Always test your assumptions! Otherwise you make an ass out of you and me!
+
+Let's consider a simple system where urban runoff increases the abundance of bloodworms which serve as food for guppies in urban streams but also is toxic and can cause growth problems.
+
+
+```{r}
+#| echo: false
+#| warning: false
+library(ggdag)
+set.seed(2025)
+dagify(
+  bloodworm_abundance ~ runoff,
+  guppy_size ~ runoff + bloodworm_abundance
+) |> ggdag(text_col="black", node = FALSE) + ggplot2::theme_void()
+```
+
+Let's assume these relationships are linear - y = a + bx + error where error is normally distributed. Let's setup the simulation like so:
+
+bloodworm_abundance = b1 * runoff 
+guppy_size = b2 + -b3 * runoff + b4 * bloodworm_abundance
+
+WHOAH! We have specified how the world works!!! What's nice is that we can now simulate sampling programs from this under different scenarios and see what's reasonable. Note, we don't have any random error here. Let's start nice and deterministic.
+
+We also have these coefficients in here. This is where simulation comes in. Let's say we don't actually know the EXACT values of those coefficients. That would be pretty presumptuous of us.  But, we can make some educated guesses as to their ranges. Let's say we have the following
+
+b1 ~ N(1,1) 
+b2 ~ N(50, 5)  
+b3 ~ N(-1,.1)  
+b4 ~ N(2,1)
+
+This is kind of fun as now we have a positive effect of runoff simulating from these coefficients. Let's start by creating a data frame of simulated coefficients.
+
+```{r sim_guppy}
+n <- 1e3 #sample size
+
+sim_guppy_coefs <- tibble(
+  sims = 1:n,
+  b1 = rnorm(n, 1, 1),
+  b2 = rnorm(n, 50, 5),
+  b3 = rnorm(n, -1, 0.1),
+  b4 = rnorm(n, 2, 2)
+)
+```
+
+Whoah! That........ didn't involve very much at all, did it, as we used random normal number generation to give us the values we need.
+
+Now let's populate our simulations. As we're doing deterministic simulations, we just need to chose two runoff values as two points make a line. For the sake of argument, let's go with 0 and 1. We can use reframe to populate the equations
+
+```{r reframe_guppy}
+sim_guppy <- 
+  sim_guppy_coefs |>
+  group_by(sims) |>
+  reframe(runoff = c(0,1),
+          bloodworm_abundance = b1 * runoff,
+          guppy_size = b2 + -b3 * runoff + b4 * bloodworm_abundance)
+```
+
+So now we have a lot of possible lines! Let's look at some relationships.
+
+```{r}
+sim_guppy_plot <- ggplot(sim_guppy, 
+       aes(x = runoff,
+           y = guppy_size,
+           group = sims)) + 
+  geom_line(alpha = 0.2)
+
+sim_guppy_plot
+```
+
+So, you can ask yourself, is this a reasonable expectation? Are there any lines here that are unrealistic? Are those choices of coefficient good or bad?
+
+These are worth asking, as, once we understand the range of possibility, we can begin to plan out how we want to sample and what we want to do.
+
+## Introducing Error
+
+The nice thing is that adding external variation on top of this is not difficult. It's just some more values! Let's say we think that the additional sources of variation add error to bloodworm abundance that is N(0, 5) and N(0,10) to 
