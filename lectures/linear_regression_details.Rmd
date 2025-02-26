@@ -46,14 +46,6 @@ puffer_lm <- lm(predators ~ resemblance, data=puffer)
 
 
 ---
-class: center, middle
-
-# Etherpad
-<br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-lm-2022</h3></center>
-
-
----
 
 
 # Putting Linear Regression Into Practice with Pufferfish
@@ -284,7 +276,7 @@ Does the model seem to fit the data? Are there any deviations? Can be hard to se
 #                lwd = 2, color = "blue") +
 #   labs(title = "Distribution of Predator Visits in Our Data\nand as Predicted By Model")
 # 
-check_posterior_predictions(puffer_lm)
+check_predictions(puffer_lm)
 ```
 
 Is anything off?
@@ -306,7 +298,7 @@ Is anything off?
 #                lwd = 2, color = "blue") +
 #   labs(title = "Distribution of Pups in Our Data\nand as Predicted By Model")
 
-check_posterior_predictions(wolf_mod)
+check_predictions(wolf_mod)
 ```
 
 ---
@@ -481,7 +473,6 @@ check_outliers(wolf_mod, method = "cook") |> plot()
 
 2. .red[How did we fit this model?]
 
-3. How do we draw inference from this model?
 
 ---
 # So, uh.... How would you fit a line here?
@@ -537,7 +528,9 @@ for(i in 1:3){
 
 # Basic Principles of Least Squares Regression
 
-$\widehat{Y} = \beta_0 + \beta_1 X + \epsilon$ where $\beta_0$ = intercept, $\beta_1$ = slope
+$Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$ where $\beta_0$ = intercept, $\beta_1$ = slope. 
+
+$\epsilon_i \sim \mathcal{N}(0, \sigma)$ - the residuals
 
 ```{r linefit}
 set.seed(697)
@@ -547,14 +540,103 @@ a<-lm(y~x)
 plot(x,y,pch=19, cex=1.5)
 abline(a, lwd=2)
 segments(x,fitted(a),x,y, col="red", lwd=2)
+dat <- tibble(x=x, y = y,
+              mean_resid = y - mean(y),
+              fit = fitted(lm(y~x)),
+              resid = residuals(lm(y~x)))
 ``` 
+---
 
+# Basic Principles of Least Squares Regression: Total Sums of Squares
+
+$$SST = \sum (Y_i - \bar{Y})^2$$
+```{r sst}
+
+ggplot(dat, aes(x=x, y=y)) +
+  geom_point() +
+  geom_hline(yintercept = mean(dat$y), color = "purple") +
+  labs(
+    subtitle = "purple = mean of y") +
+  ylim(c(0,12))
+```
+
+---
+# Basic Principles of Least Squares Regression: Total Sums of Squares
+
+$$SST = \sum (Y_i - \bar{Y})^2$$
+
+```{r sst2}
+
+ggplot(dat, aes(x=x, y=y)) +
+  geom_point() +
+  geom_hline(yintercept = mean(dat$y), color = "purple") +
+  geom_segment(aes(y = mean(y),
+                   yend =  mean(y) + mean_resid, 
+                   xend = x),
+               color = "blue")+
+  labs(
+    subtitle = "purple = mean of y\nblue = distance to observed y")+
+  ylim(c(0,12))
+```
+---
+class: center, middle, large
+# Sums of Squares of a Model
+
+SST = SS Model + SS Residuals
+
+--
+
+We want to minimize SS Residuals
+
+---
+
+# Basic Principles of Least Squares Regression: Sums of Squares of the Model
+
+$$SSM = \sum (\widehat{Y_i} - \bar{Y})^2$$
+
+
+```{r ssm}
+
+ggplot(dat, aes(x=x, y=y)) +
+  geom_hline(yintercept = mean(dat$y), color = "purple") +
+  geom_line(aes(y = fit)) +
+  geom_segment(aes(y = mean(y),
+                   yend =  fit, 
+                   xend = x),
+               color = "orange", lwd = 1.5)+
+    geom_point() +
+  labs(
+    subtitle = "purple = mean of y\norange = distance to fit y")+
+  ylim(c(0,12))
+```
+
+---
+# Basic Principles of Least Squares Regression: Sums of Squares of the Residuals
 Minimize Residuals defined as $SS_{residuals} = \sum(Y_{i} - \widehat{Y})^2$
+
+```{r ssr}
+
+ggplot(dat, aes(x=x, y=y)) +
+  geom_hline(yintercept = mean(dat$y), color = "purple") +
+  geom_line(aes(y = fit)) +
+  geom_segment(aes(y = mean(y),
+                   yend =  fit, 
+                   xend = x),
+               color = "orange", lwd = 1.5)+
+  geom_segment(aes(y = fit,
+                   yend =  y, 
+                   xend = x),
+               color = "red", lwd = 1.5)+
+    geom_point() +
+  labs(
+    subtitle = "purple = mean of y\norange = distance to fit y\nred = residual distance")+
+  ylim(c(0,12))
+```
 
 ---
 class: center, middle
 
-# Let's try it out!
+# Is there Another Way?
 
 ---
 
@@ -586,7 +668,7 @@ $\Large \beta_0 = \bar{Y} - \beta_1  \bar{X}$
 
 ---
 
-# Least Squares Visualized
+# Least Squares Visualized for Puffers
 
 ```{r}
 library(modelr)
@@ -613,9 +695,14 @@ ggplot(puffer_m,
 --
 $L = \prod p(Data|parmeters)$
 --
-$L(\theta | D) = \prod dnorm(y_i, \mu = \beta_0 + \beta_1 x_i, \sigma)$
+$L(\theta | D) = \prod dnorm(y_i, \mu = \beta_0 + \beta_1 x_i, \sigma)$  
+
 --
-Deviance = -2 * Log Likelihood
+
+Deviance = -2 * Log Likelihood  
+
+--
+This gives us the same answer as Least Squares
 
 ---
 
@@ -677,390 +764,3 @@ plot(p_chain, "areas")
       - We will talk inference later
       - The key is looking at estimated values and their implications
       - Look at precision - do you feel comfortable with inference?
-
----
-
-<!-- --- -->
-
-<!-- # Digging Deeper into Regression -->
-
-<!-- 1. Assumptions: Is our fit valid?  -->
-
-<!-- 2. How did we fit this model? -->
-
-<!-- 3. .red[How do we draw inference from this model?] -->
-
-<!-- --- -->
-<!-- # Inductive v. Deductive Reasoning -->
-
-<!-- <br><br> -->
-<!-- **Deductive Inference:** A larger theory is used to devise -->
-<!-- many small tests. -->
-
-
-<!-- **Inductive Inference:** Small pieces of evidence are used -->
-<!-- to shape a larger theory and degree of belief. -->
-<!-- --- -->
-
-<!-- # Applying Different Styles of Inference -->
-
-<!-- - **Null Hypothesis Testing**: What's the probability that things are not influencing our data? -->
-<!--       - Deductive -->
-
-<!-- - **Cross-Validation**: How good are you at predicting new data? -->
-<!--       - Deductive -->
-
-<!-- - **Model Comparison**: Comparison of alternate hypotheses -->
-<!--       - Deductive or Inductive -->
-
-<!-- - **Probabilistic Inference**: What's our degree of belief in a data? -->
-<!--       - Inductive -->
-
-<!-- --- -->
-<!-- # Null Hypothesis Testing is a Form of Deductive Inference -->
-
-<!-- .pull-left[ -->
-<!-- ![:scale 55%](./images/07/Karl_Popper_wikipedia.jpeg) -->
-
-<!-- Falsification of hypotheses is key! <br><br> -->
-
-<!-- A theory should be considered scientific if, and only if, it is falsifiable. -->
-
-<!-- ] -->
-
-<!-- -- -->
-<!-- .pull-right[ -->
-<!-- ![:scale 55%](./images/regression/Professor_Imre_Lakatos,_c1960s.jpg) -->
-
-<!-- Look at a whole research program and falsify auxilliary hypotheses -->
-<!-- ] -->
-
-
-<!-- --- -->
-<!-- # A Bigger View of Dedictive Inference -->
-
-<!-- ![](./images/regression/lakatos_structure.png) -->
-
-<!-- .small[https://plato.stanford.edu/entries/lakatos/#ImprPoppScie] -->
-
-<!-- --- -->
-
-<!-- # Reifying Refutation - What is the probability something is false? -->
-
-<!-- What if our hypothesis was that the resemblance-predator relationship was 2:1. We know our SE of our estimate is 0.57, so, we have a distribution of what we **could** observe. -->
-
-<!-- ```{r slopedist, fig.height = 5} -->
-<!-- dat_slope <- tibble(x = seq(-1,5,length.out = 200), -->
-<!--                     y = dnorm(x, 2, 0.57)) -->
-
-<!-- slopedist <- ggplot(dat_slope, -->
-<!--                     aes(x = x, y = y)) + -->
-<!--   geom_line() + -->
-<!--   labs(x = "Hypothesized Slope", y = "Probability Density") -->
-
-<!-- slopedist -->
-<!-- ``` -->
-
-<!-- --- -->
-<!-- # Reifying Refutation - What is the probability something is false? -->
-
-<!-- BUT - our estimated slope is 3. -->
-
-<!-- ```{r add_obs, fig.height = 5} -->
-<!-- slopedist + -->
-<!--   geom_vline(xintercept = 3, color = "red", lty = 2)  -->
-<!-- ``` -->
-
-<!-- --- -->
-<!-- # To falsify the 2:1 hypothesis, we need to know the probability of observing 3, or something GREATER than 3. -->
-
-<!-- We want to know if we did this experiment again and again, what's the probability of observing what we saw or worse (frequentist!) -->
-
-<!-- ```{r add_p, fig.height = 5} -->
-<!-- dat_obs <- tibble(x = seq(3,5,length.out = 200), -->
-<!--                     y = dnorm(x, 2, 0.57), -->
-<!--                   ymin = 0) -->
-
-<!-- slopedist + -->
-<!--   geom_vline(xintercept = 3, color = "red", lty = 2) + -->
-<!--   geom_ribbon(aes(ymin = ymin, ymax = y),  -->
-<!--               data = dat_obs, fill = "red", alpha = 0.5) -->
-<!-- ``` -->
-<!-- -- -->
-
-<!-- Probability = `r round(1-pnorm(3, 2, 0.57),3)` -->
-
-<!-- -- -->
-<!-- Note: We typically would multiply this by 2 to look at extremes in both tails. -->
-
-<!-- --- -->
-<!-- class: center, middle -->
-
-<!-- # Null hypothesis testing is asking what is the probability of our observation or more extreme observation given that some null expectation is true. -->
-
-<!-- ### (it is .red[**NOT**] the probability of any particular alternate hypothesis being true) -->
-
-<!-- --- -->
-<!-- # R.A. Fisher and The P-Value For Null Hypotheses -->
-
-<!-- .pull-left[ -->
-<!-- ![](./images/07/fisher2.jpeg) -->
-<!-- ] -->
-
-<!-- .pull-right[ -->
-<!-- P-value: The Probability of making an observation or more extreme -->
-<!-- observation given that the null hypothesis is true. -->
-<!-- ] -->
-
-<!-- --- -->
-<!-- # Applying Fisher: Evaluation of a Test Statistic -->
-
-<!-- We  use our data to calculate a **test statistic** that maps to a value -->
-<!-- of the null distribution.  -->
-
-<!-- We can then calculate the probability of observing our data, or of observing data even more extreme, given that the null hypothesis is true. -->
-
-
-<!-- $$\large P(X \leq Data | H_{0})$$ -->
-
-
-<!-- --- -->
-<!-- # Problems with P -->
-
-<!-- - Most people don't understand it. -->
-<!--      - See American Statistical Society' recent statements -->
-
-<!-- -- -->
-<!-- - Like SE, it gets smaller with sample size! -->
-<!-- -- -->
-<!-- - Neyman-Pearson Null Hypothesis Significance Testing -->
-<!--      - For Industrial Quality Control, NHST was introduced to establish cutoffs of reasonable p, called an $\alpha$ -->
-<!--      - This corresponds to Confidence intervals - 1-$\alpha$ = CI of interest -->
-<!--      - This has become weaponized so that $\alpha = 0.05$ has become a norm.... and often determines if something is worthy of being published? -->
-<!--      - Chilling effect on science -->
-
-<!-- -- -->
-<!-- - We don't know how to talk about it -->
-
-<!-- --- -->
-<!-- # How do you talk about results from a p-value? -->
-
-<!-- - Based on your experimental design, what is a reasonable range of p-values to expect if the null is false -->
-
-<!-- - Smaller p values indicate stronger support for rejection, larger ones weaker. Use that language. -->
-
-<!-- - Accumulate multiple lines of evidence so that the entire edifice of your research does not rest on a single p-value!!!! -->
-
-<!-- --- -->
-<!-- # For example, what does p = 0.061 mean? -->
-
-<!-- - There is a 6.1% chance of obtaining the observed data or more extreme data given that the null hypothesis is true. -->
-
-<!-- - If you choose to reject the null, you have a ~ 1 in 16 chance of being wrong -->
-
-<!-- - Are you comfortable with that?  -->
-
-<!-- - OR - What other evidence would you need to make you more or less comfortable? -->
-
-<!-- --- -->
-
-<!-- # Common Regression Test Statistics -->
-
-<!-- - Does my model explain variability in the data? -->
-<!--      - **Null Hypothesis**: The ratio of variability from your predictors versus noise is 1 -->
-<!--      - **Test Statistic**: F distribution (describes ratio of two variances) -->
-
-<!-- - Are my coefficients not 0? -->
-<!--     - **Null Hypothesis**: Coefficients are 0   -->
-<!--     - **Test Statistic**: T distribution (normal distribution modified for low sample size) -->
-
-<!-- --- -->
-<!-- # Does my model explain variability in the data? -->
-
-<!-- Ho = The model predicts no variation in the data.   -->
-
-<!-- Ha = The model predicts variation in the data. -->
-
-<!-- -- -->
-
-<!-- To evaluate these hypotheses, we need to have a measure of variation explained by data versus error - the sums of squares! -->
-
-<!-- -- -->
-<!-- $$SS_{Total} = SS_{Regression} + SS_{Error}$$ -->
-<!-- --- -->
-
-<!-- # Sums of Squares of Error, Visually -->
-<!-- ```{r linefit} -->
-<!-- ```  -->
-
-<!-- --- -->
-<!-- # Sums of Squares of Regression, Visually -->
-<!-- ```{r grandmean} -->
-<!-- set.seed(697) -->
-
-<!-- plot(x,y,pch=19, cex=0, cex.lab=1.5, cex.axis=1.1) -->
-<!-- abline(a, lwd=2) -->
-<!-- #segments(x,fitted(a),x,y, col="red", lwd=2) -->
-<!-- points(mean(x), mean(y), col="blue", pch=15) -->
-<!-- ```  -->
-
-<!-- --- -->
-<!-- # Sums of Squares of Regression, Visually -->
-<!-- ```{r ssr} -->
-<!-- set.seed(697) -->
-
-<!-- plot(x,y,pch=19, cex=0, cex.lab=1.5, cex.axis=1.1) -->
-<!-- abline(a, lwd=2) -->
-<!-- points(mean(x), mean(y), col="blue", pch=15) -->
-<!-- points(x, fitted(a), col="blue", pch=1) -->
-<!-- ```  -->
-
-<!-- Distance from $\hat{y}$ to $\bar{y}$ -->
-
-<!-- --- -->
-<!-- # Components of the Total Sums of Squares -->
-
-<!-- $SS_{R} = \sum(\hat{Y_{i}} - \bar{Y})^{2}$, df=1 -->
-
-<!-- $SS_{E} = \sum(Y_{i} - \hat{Y}_{i})^2$, df=n-2 -->
-
-
-<!-- -- -->
-<!-- To compare them, we need to correct for different DF. This is the Mean -->
-<!-- Square. -->
-
-<!-- MS=SS/DF -->
-
-<!-- e.g, $MS_{E} = \frac{SS_{E}}{n-2}$ -->
-
-<!-- --- -->
-
-<!-- # The F Distribution and Ratios of Variances -->
-
-<!-- $F = \frac{MS_{R}}{MS_{E}}$ with DF=1,n-2  -->
-
-<!-- ```{r f} -->
-
-<!-- x<-seq(0,6,.01) -->
-<!-- qplot(x,df(x,1,25), geom="line",  xlab="Y", ylab="df(Y)") +  -->
-<!--   theme_bw(base_size=17) -->
-
-<!-- ``` -->
-
-<!-- --- -->
-<!-- # F-Test and Pufferfish -->
-<!-- ```{r f-puffer} -->
-<!-- knitr::kable(anova(puffer_lm)) -->
-<!-- ``` -->
-
-<!-- <br><br> -->
-<!-- -- -->
-<!-- We  reject the null hypothesis that resemblance does not explain variability in predator approaches -->
-
-<!-- --- -->
-<!-- # Testing the Coefficients -->
-
-<!--  -  F-Tests evaluate whether elements of the model contribute to variability in the data -->
-<!--       - Are modeled predictors just noise? -->
-<!--       - What's the difference between a model with only an intercept and an intercept and slope? -->
-
-<!-- -- -->
-
-<!-- - T-tests evaluate whether coefficients are different from 0 -->
-
-<!-- -- -->
-
-<!-- - Often, F and T agree - but not always -->
-<!--     - T can be more sensitive with multiple predictors -->
-
-<!-- --- -->
-<!-- background-color: black -->
-<!-- class: center, middle, inverse -->
-
-<!-- ![:scale 90%](images/09/t_distribution.png) -->
-
-<!-- .small[xkcd] -->
-
-<!-- --- -->
-<!-- background-image: url(images/09/guiness_full.jpg) -->
-<!-- background-position: center -->
-<!-- background-size: contain -->
-
-<!-- --- -->
-<!-- background-image: url(images/09/gosset.jpg) -->
-<!-- background-position: center -->
-<!-- background-size: contain -->
-
-<!-- --- -->
-<!-- # T-Distributions are What You'd Expect Sampling a Standard Normal Population with a Small Sample Size -->
-
-<!-- - t = mean/SE, DF = n-1 -->
-<!-- - It assumes a normal population with mean of 0 and SD of 1 -->
-
-<!-- ```{r dist_shape_t, fig.height=5} -->
-<!-- x_dists <- data.frame(x=seq(-2.5, 2.5, 0.01)) %>% -->
-<!--   mutate(dn = dnorm(x), -->
-<!--          dt_1 = dt(x, 1), -->
-<!--          dt_2 = dt(x, 2), -->
-<!--          dt_3 = dt(x, 3) -->
-<!--   ) -->
-
-<!-- x_df <- data.frame(x=rnorm(100), x_unif=runif(100)) -->
-
-<!-- ggplot() + -->
-<!--   geom_line(data=x_dists, mapping=aes(x=x, y=dn)) + -->
-<!--   geom_line(data=x_dists, mapping=aes(x=x, y=dt_1), color="red") + -->
-<!--   geom_line(data=x_dists, mapping=aes(x=x, y=dt_2), color="orange") + -->
-<!--   geom_line(data=x_dists, mapping=aes(x=x, y=dt_3), color="blue") + -->
-<!--   theme_classic(base_size=14) + -->
-<!--   annotate(x=c(0.2,0.7,1.1,1.2), y=c(0.4, 0.3, 0.2, 0.1),  -->
-<!--              label=c("Normal","3DF", "2DF", "1DF"), fill="white", -->
-<!--             fontface = "bold", geom="label") + -->
-<!--   ylab("density") -->
-<!-- ``` -->
-
-<!-- --- -->
-<!-- # Error in the Slope Estimate -->
-<!-- <br> -->
-
-
-<!-- $\Large SE_{b} = \sqrt{\frac{MS_{E}}{SS_{X}}}$ -->
-
-
-
-<!-- #### 95% CI = $b \pm t_{\alpha,df}SE_{b}$   -->
-
-<!-- (~ 1.96 when N is large) -->
-
-
-<!-- --- -->
-<!-- # Assessing the Slope with a T-Test -->
-<!-- <br> -->
-<!-- $$\Large t_{b} = \frac{b - \beta_{0}}{SE_{b}}$$  -->
-
-<!-- ##### DF=n-2 -->
-
-<!-- $H_0: \beta_{0} = 0$, but we can test other hypotheses -->
-
-<!-- --- -->
-<!-- # Slope of Puffer Relationship (DF = 1 for Parameter Tests) -->
-<!-- ```{r puffer_t} -->
-<!-- knitr::kable(coef(summary(puffer_lm))) -->
-<!-- ``` -->
-
-<!-- <Br> -->
-<!-- We reject the hypothesis of no slope for resemblance, but fail to reject it for the intercept. -->
-
-<!-- --- -->
-
-<!-- # So, what can we say? -->
-
-<!-- .pull-left[ -->
-<!-- - We reject that there is no relationship between resemblance and predator visits in our experiment.  -->
-<!-- - `r round(summary(puffer_lm)$r.squared, 2)` of the variability in predator visits is associated with resemblance.  -->
-<!-- ] -->
-
-<!-- .pull-right[ -->
-<!-- ```{r puffershow} -->
-<!-- ``` -->
-<!-- ] -->
