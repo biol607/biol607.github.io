@@ -34,6 +34,7 @@ E. Explain what the standard error associated with the slope parameter tells us.
 
 F. Create a confidence interval for the mean territory size associated with a bite force of 5 and a prediction interval for a lizard that has a bite force of 5. Explain the difference between the two intervals. When would you prefer the latter type of interval?
 
+<!--
 ## 3. W&S Chapter 17-25
 Data at [https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter17/chap17q25BeetleWingsAndHorns.csv](https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter17/chap17q25BeetleWingsAndHorns.csv)
 
@@ -46,7 +47,13 @@ Note, you'll want to use either `residuals()` or `broom::augment()` for this one
 
 e. Do any other diagnostics misbehave?
 
+-->
 
+## 3. A little LaTeX
+Using LaTeX, write out the equations underlying simple linear regression.
+
+$$Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$$
+$$\epsilon_i \sim \mathcal{N}(0, \sigma)$$
 
 ## 4. W&S Chapter 17-30
 https://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter17/chap17q30NuclearTeeth.csv
