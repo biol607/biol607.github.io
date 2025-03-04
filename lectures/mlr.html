@@ -3,7 +3,7 @@
   <head>
     <title>Multiple Linear Regression</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -238,6 +238,24 @@ $$
 &lt;img src="mlr_files/figure-html/unnamed-chunk-3-1.jpeg" style="display: block; margin: auto;" /&gt;
 
 ---
+## Supression and Simpson's Paradox
+
+Frog Density = 8 * Temperature + -10 * Pond Depth + 5 + `\(\epsilon_1\)`  
+Temperature = 1* Pond Depth + 10 + `\(\epsilon_2\)` 
+
+&lt;img src="mlr_files/figure-html/supression-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Supression and Simpson's Paradox
+
+&lt;img src="mlr_files/figure-html/sup_1-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
+## Supression and Simpson's Paradox
+
+&lt;img src="mlr_files/figure-html/sup_2-1.jpeg" style="display: block; margin: auto;" /&gt;
+
+---
 ## Models with Multiple Predictors
 .large[
 1. What is multiple regression?  
@@ -290,7 +308,7 @@ background-size: cover
 
 .large[
 
-```r
+``` r
 klm &lt;- lm(rich ~ cover + firesev + hetero, data=keeley)
 ```
 ]
@@ -470,7 +488,7 @@ VIF `\(&gt;\)` 5 or 10 can be problematic and indicate an unstable solution.
 ## What does it all mean: the coefficients
 `$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$`
 
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
@@ -505,7 +523,41 @@ VIF `\(&gt;\)` 5 or 10 can be problematic and indicate an unstable solution.
 - `\(\beta_0\)` - the intercept -  is the # of species when **all other predictors are 0**  
     - Note the very large SE  
     
---
+---
+## What does it all mean: the coefficients
+`$$Richness_i =\beta_{0}+ \beta_{1} cover_i +\beta_{2} firesev_i + \beta_{3}hetero_i +\epsilon_i$$`
+
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.68 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.67 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cover &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.56 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.49 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; firesev &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.82 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.85 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; hetero &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.99 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.17 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 - All other `\(\beta\)`s are the effect of a 1 unit increase on # of species  
      - They are **not** on the same scale
@@ -539,7 +591,7 @@ hetero      |       0.50 | [ 0.33,  0.67]
 
 ---
 ## How Much Variation is Associated with the Predictors
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; r.squared &lt;/th&gt;
@@ -574,14 +626,18 @@ hetero      |       0.50 | [ 0.33,  0.67]
 ---
 ## Visualization Strategies for Multivariate Models
 
+- Show the added effect of one variable after accounting for all others
+     - Classic added-variable plot
+     - On scales of contribution after detrending others
   
-  
+--
 
 - Plot the effect of each variable holding the other variables constant  
      - Mean, Median, 0
      - Or your choice!  
 
-    
+--
+
 - Plot **counterfactual scenarios** from model
      - Can match data (and be shown as such)
      - Can bexplore the response surface
