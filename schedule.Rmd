@@ -3,15 +3,14 @@
 ---  
 
 <!--
-
+NEXT TIME I TEACH 607 in 2026/7
+- Assumptions in linear regression lecture is a SLOG - make less boring
+  - separate assumptions about DGP and EGP
+  - Show clearer violations and fixes
+  - NO BIG TEXT SLIDES
+  - do not need to describe Bayes or maybe even likelihood
 
 NEXT TIME I TEACH 607 in 2024/5
-redo explaining least squares - it's not good in the lecture
-
-re-arrange the linear regression lab
-  - workflow
-  - transforms
-  - viz of prediction intervals and such
 
 Causal Intro is 2 lectures
   - End is week and flabby. Rework
@@ -123,7 +122,7 @@ __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression
 __Lecture:__  [Many Predictors](./lectures/mlr.html),  [Categorical Predictors: Just Another Linear Model](lectures/categorical_predictors.html)   
 __Lab Topic:__ [Models with Categorical Variables](lab/multiple_predictors.html)  
 __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)   
-__Reading:__ [Feiberg  on Multiple Predictors through](https://statistics4ecologists-v3.netlify.app/03-multipleregression), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/), [Feiberg ch 6](https://fw8051statistics4ecologists.netlify.app/multicol.html)   
+__Reading:__ [Feiberg  on Multiple Predictors through categorical variables](https://statistics4ecologists-v3.netlify.app/03-multipleregression), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/)   
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf), [Day and Quinn 1989 on Post-hocs](https://www.jstor.org/stable/1943075).   
 __Packages for The Week:__ `install.packages(c("car", "emmeans", "multcompView", "contrast", "visreg"))`    
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-many-predictors-2025  
@@ -139,7 +138,7 @@ __Homework:__ None. Catch up!
 __Lectures:__  [Many categories or mixing categories and continuous predictors](./lectures/many_types_of_predictors.html), [When one predictor's effect depends on the other](lectures/interactions_lm.html)   
 __Lab Topic:__  [Models with many types of predictors - and interactions!](lab/complex_linear_models.html)  
 __Lab Data:__  [Multiple Files](lab/data_10.zip)  
-__Reading:__  [Feiberg  on Multiple Predictors through](https://statistics4ecologists-v3.netlify.app/03-multipleregression), [Feiberg on Multicollinearity](https://statistics4ecologists-v3.netlify.app/06-multicollinearity),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Understanding ‘it depends’ in ecology: a guide to hypothesising, visualising and interpreting statistical interactions](https://onlinelibrary.wiley.com/doi/full/10.1111/brv.12939)   
+__Reading:__  [Feiberg  on Multiple Predictors all](https://statistics4ecologists-v3.netlify.app/03-multipleregression), [Feiberg on Multicollinearity](https://statistics4ecologists-v3.netlify.app/06-multicollinearity),  [Simple means to improve the interpretability of regression coefficients](./readings/Schielzeth_2010_MEE.pdf), [Understanding ‘it depends’ in ecology: a guide to hypothesising, visualising and interpreting statistical interactions](https://onlinelibrary.wiley.com/doi/full/10.1111/brv.12939)   
 __Optional Readings:__ [Interactions in statistical models: Three things to know](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13714), [Centring in regression analyses: a strategy to prevent errors in statistical inference](./readings/kramer_blasey_centering.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-complex-linear-models-2025  
 __Homework:__ [Complex linear models](homework/complex_linear_models.html)    
