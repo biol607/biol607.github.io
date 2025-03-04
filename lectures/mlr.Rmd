@@ -353,10 +353,10 @@ $$\epsilon_i \sim N(0, \sigma)$$
 
 --
 
-### With n predictors
+### With K predictors
 
 
-$$y_i = \beta_0 + \sum_{j = 1}^{K} \beta_1  x_{ij} + \epsilon_i$$
+$$y_i = \beta_0 + \sum_{j = 1}^{K} \beta_j  x_{ij} + \epsilon_i$$
 $$\epsilon_i \sim N(0, \sigma)$$
 
 
