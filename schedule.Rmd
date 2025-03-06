@@ -120,7 +120,7 @@ __Homework:__ [Correlation and Linear Models](homework/06_correlation_regression
 ```
 `r datestring`   
 __Lecture:__  [Many Predictors](./lectures/mlr.html),  [Categorical Predictors: Just Another Linear Model](lectures/categorical_predictors.html)   
-__Lab Topic:__ [Models with Categorical Variables](lab/multiple_predictors.html)  
+__Lab Topic:__ [Models with Multiple Predictors](lab/multiple_predictors.html)  
 __Lab Data:__  [Multiple Files](lab/data/categorical_data.zip)   
 __Reading:__ [Feiberg  on Multiple Predictors through categorical variables](https://statistics4ecologists-v3.netlify.app/03-multipleregression), [Common statistical tests are linear models](https://lindeloev.github.io/tests-as-linear/)   
 __Optional Reading:__ [Analysis of variance with unbalanced data: an update for ecology & evolution](./readings/Hector_et_al-2010-Journal_of_Animal_Ecology.pdf), [Day and Quinn 1989 on Post-hocs](https://www.jstor.org/stable/1943075).   
