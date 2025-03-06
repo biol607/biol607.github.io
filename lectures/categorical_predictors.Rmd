@@ -173,7 +173,7 @@ background-size: cover
 ```{r lizard_load, warning=FALSE}
 library(readr)
 library(dplyr)
-lizards <- read_csv("lectures/data/09/12e3HornedLizards.csv",
+lizards <- read_csv("data/09/12e3HornedLizards.csv",
                     col_types = "di") %>%
   mutate(Status = ifelse(Survive==1, "Living", "Dead")) %>%
   filter(!is.na(`Squamosal horn length`))
@@ -283,7 +283,7 @@ $$Length_i = \beta_0 + \beta_1 Status_i + \epsilon_i$$
 
 --
 
-- We could even fit a model wit no $\beta_0$ and code Dead = 0 or 1 and Living = 0 or 1
+- We could even fit a model with no $\beta_0$ and code Dead = 0 or 1 and Living = 0 or 1
 
 --
 
@@ -331,7 +331,7 @@ check_heteroscedasticity(horn_mod) |> plot() +
 ]
 
 ```{r load_brains}
-brainGene <- read.csv("lectures/data/19/15q06DisordersAndGeneExpression.csv") %>%
+brainGene <- read.csv("data/19/15q06DisordersAndGeneExpression.csv") %>%
   mutate(group = forcats::fct_relevel(group, c("control", "schizo", "bipolar")))
 ```
 
@@ -426,7 +426,6 @@ Underlying linear model with control = intercept, dummy variable for schizo
 ---
 # Linear Dummy Variable (Fixed Effect) Model
 $$\large y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}, \qquad x_{i} = 0,1$$  
-$$\epsilon_{ij} \sim N(0, \sigma^{2})$$
 
 - i = replicate, j = group  
 
@@ -531,7 +530,7 @@ What does this mean?
 
 --
 
-- Intercept ($\beta_{0}$) = the average value associated with being in the control group
+- Intercept ( $\beta_{0}$ ) = the average value associated with being in the control group
 
 - Others = the average difference between control and each other group
 
@@ -565,7 +564,7 @@ Being in group j is associated with an average outcome of y.
 ---
 
 # What's the best way to see this?
-.center[ ![:scale 75%](./images/anova/barplot_viz.jpg)]
+.center[ ![:scale 65%](./images/anova/barplot_viz.jpg)]
 
 ---
 # Many Ways to Visualize
@@ -574,7 +573,8 @@ Being in group j is associated with an average outcome of y.
 ggplot(brainGene,
        aes(x = group, y = PLP1.expression)) +
   geom_jitter(color = "lightgrey") +
-  stat_summary(fun.data = "mean_se", color = "red")
+  stat_summary(fun.data = "mean_se", color = "red") +
+  labs(subtitle = "Means, SE, and Raw Data")
 ```
 
 ---
@@ -585,7 +585,7 @@ ggplot(brainGene,
        aes(y = group, x = PLP1.expression,
            fill = group)) +
  stat_dotsinterval(dotsize = 0.3, binwidth = 0.1) +
-  labs(y="")
+  labs(y="", subtitle = "Quantiles of Data, Histogram")
 ```
 
 ---
@@ -597,7 +597,7 @@ ggplot(brainGene,
        aes(y = group, x = PLP1.expression,
            fill = group)) +
   stat_halfeye() +
-  labs(y="") +
+  labs(y="", subtitle = "Raincloud Plot") +
   stat_dots(side = "bottom", dotsize = .17, binwidth = 0.1, color = NA)
 ```
 
@@ -649,13 +649,23 @@ Many mini-linear models with two means....multiple comparisons!
 
 - Each group has a mean and SE
 
+--
+
 - We can calculate a comparison for each 
 
+--
+
 - BUT, we lose precision as we keep resampling the model  
-  
+
+--
+
 - Remember, for every time we look at a system, we have some % of our CI not overlapping the true value  
 
+--
+
 - Each time we compare means, we have a chance of our CI not covering the true value  
+
+--
 
 - To minimize this possibility, we correct (widen) our CIs for this **Family-Wise Error Rate**
 

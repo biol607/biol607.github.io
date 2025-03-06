@@ -139,7 +139,7 @@ What if we think of Dead = 0, Living = 1
 
 ---
 # First, Recode the Data with Dummy Variables
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; Squamosal horn length &lt;/th&gt;
@@ -183,7 +183,7 @@ What if we think of Dead = 0, Living = 1
 
 ---
 # First, Recode the Data with Dummy Variables
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; Squamosal horn length &lt;/th&gt;
@@ -241,7 +241,7 @@ What if we think of Dead = 0, Living = 1
 
 ---
 # But with an Intercept, we don't need Two Dummy Variables
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; Squamosal horn length &lt;/th&gt;
@@ -323,7 +323,7 @@ What if we think of Dead = 0, Living = 1
 
 --
 
-- We could even fit a model wit no `\(\beta_0\)` and code Dead = 0 or 1 and Living = 0 or 1
+- We could even fit a model with no `\(\beta_0\)` and code Dead = 0 or 1 and Living = 0 or 1
 
 --
 
@@ -419,7 +419,6 @@ Underlying linear model with control = intercept, dummy variable for schizo
 ---
 # Linear Dummy Variable (Fixed Effect) Model
 `$$\large y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}, \qquad x_{i} = 0,1$$`  
-`$$\epsilon_{ij} \sim N(0, \sigma^{2})$$`
 
 - i = replicate, j = group  
 
@@ -484,7 +483,7 @@ Underlying linear model with control = intercept, dummy variable for schizo
 
 **Using Least Squares**
 
-```r
+``` r
 brain_lm &lt;- lm(PLP1.expression ~ group, data=brainGene)
 
 tidy(brain_lm) |&gt; 
@@ -493,7 +492,7 @@ tidy(brain_lm) |&gt;
   kableExtra::kable_styling()
 ```
 
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
@@ -539,7 +538,7 @@ tidy(brain_lm) |&gt;
 # R Fits with Treatment Contrasts
 `$$y_{ij} = \beta_{0} + \sum \beta_{j}x_{ij} + \epsilon_{ij}$$`
 
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
@@ -572,7 +571,7 @@ What does this mean?
 
 --
 
-- Intercept ($\beta_{0}$) = the average value associated with being in the control group
+- Intercept ( `\(\beta_{0}\)` ) = the average value associated with being in the control group
 
 - Others = the average difference between control and each other group
 
@@ -584,7 +583,7 @@ What does this mean?
 `$$y_{ij} = \alpha_{j} + \epsilon_{ij}$$`
 
 
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; group &lt;/th&gt;
@@ -622,7 +621,7 @@ Being in group j is associated with an average outcome of y.
 ---
 
 # What's the best way to see this?
-.center[ ![:scale 75%](./images/anova/barplot_viz.jpg)]
+.center[ ![:scale 65%](./images/anova/barplot_viz.jpg)]
 
 ---
 # Many Ways to Visualize
@@ -689,13 +688,23 @@ Many mini-linear models with two means....multiple comparisons!
 
 - Each group has a mean and SE
 
+--
+
 - We can calculate a comparison for each 
 
+--
+
 - BUT, we lose precision as we keep resampling the model  
-  
+
+--
+
 - Remember, for every time we look at a system, we have some % of our CI not overlapping the true value  
 
+--
+
 - Each time we compare means, we have a chance of our CI not covering the true value  
+
+--
 
 - To minimize this possibility, we correct (widen) our CIs for this **Family-Wise Error Rate**
 
@@ -720,7 +729,7 @@ Many mini-linear models with two means....multiple comparisons!
 ---
 
 # No Correction: Least Square Differences
-&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table table-striped" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
@@ -753,7 +762,7 @@ Many mini-linear models with two means....multiple comparisons!
 
 ---
 # Bonferroni Corrections
-&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table table-striped" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
@@ -787,7 +796,7 @@ Many mini-linear models with two means....multiple comparisons!
 
 ---
 # Tukey's Honestly Significant Difference
-&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table table-striped" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
@@ -824,7 +833,7 @@ Many mini-linear models with two means....multiple comparisons!
 
 ---
 # Dunnett's Comparison to Controls
-&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table table-striped" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
