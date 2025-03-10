@@ -23,15 +23,7 @@ class: center, middle
 
 
 ---
-class: center, middle
 
-# Etherpad
-
-&lt;br&gt;&lt;br&gt;
-
-https://etherpad.wikimedia.org/p/607-complex-linear-models-2023 
-
----
 
 # We've Now Done Multiple Continuous Predictors
 
@@ -93,6 +85,8 @@ class: center, middle
 
 .center[![:scale 60%](./images/23/anova.png)]
 
+- Orthogonality breaks correlation  
+  
 - This is convenient for estimation  
 
 - Observational data is not always so nice, which is OK!  
@@ -134,7 +128,7 @@ class: center, middle
 ---
 # Fitting a Model with Mutiple Categorical Predictors
 
-```r
+``` r
 zoop_lm &lt;- lm(zooplankton ~ treatment + 
                 block, data=zoop)
 
@@ -148,9 +142,9 @@ lm(formula = zooplankton ~ treatment + block, data = zoop)
 
 Coefficients:
   (Intercept)  treatmenthigh   treatmentlow         block2         block3  
-     3.42e+00      -1.64e+00      -1.02e+00       9.57e-16      -7.00e-01  
+    3.420e+00     -1.640e+00     -1.020e+00      8.835e-16     -7.000e-01  
        block4         block5  
-    -1.00e+00      -3.00e-01  
+   -1.000e+00     -3.000e-01  
 ```
 
 --
@@ -161,7 +155,7 @@ Coefficients:
 -   Independence of data points  
 
 -   No relationship between fitted and residual values  
-     - .red[ Additivity (linearity) of Treatments ]
+     - **Additivity (linearity) of Treatments**  
   
 -   Normality within groups (of residuals)  
   
@@ -225,7 +219,7 @@ class: center, middle
 ---
 # Coefficients and Treatment Contrasts
 
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
@@ -449,7 +443,7 @@ We fit a model where slopes are not parallel:
 
 --
 
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
@@ -513,7 +507,7 @@ If you have an interaction, welp, that's a different model - slopes vary by grou
 ---
 # Those Coefs
 
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
@@ -548,7 +542,7 @@ If you have an interaction, welp, that's a different model - slopes vary by grou
 
 ---
 # Groups Means at Mean of Covariate
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; species &lt;/th&gt;
@@ -587,7 +581,7 @@ Can also evaluate for other levels of the covariate as is interesting
 
 ---
 # Difference Between Groups at Mean of Covariate
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+&lt;table class="table" style="color: black; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:left;"&gt; contrast &lt;/th&gt;
@@ -626,6 +620,10 @@ Can also evaluate for other levels of the covariate as is interesting
 - Categorical is just continuous as 0/1   
   
 - So, we can build a LOT of models, limited only by our imagination!  
+
+--
+
+- But what was that nonadditive thing again...? Wait a minuite...
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

@@ -49,15 +49,7 @@ table_out <- . %>%
 ```
 
 ---
-class: center, middle
 
-# Etherpad
-
-<br><br>
-
-https://etherpad.wikimedia.org/p/607-complex-linear-models-2023 
-
----
 
 # We've Now Done Multiple Continuous Predictors
 
@@ -119,6 +111,8 @@ class: center, middle
 
 .center[![:scale 60%](./images/23/anova.png)]
 
+- Orthogonality breaks correlation  
+  
 - This is convenient for estimation  
 
 - Observational data is not always so nice, which is OK!  
@@ -136,7 +130,7 @@ class: center, middle
 # Treatment and Block Effects
 
 ```{r zooplankton_boxplot}
-zoop <- read.csv("lectures/data/21/18e2ZooplanktonDepredation.csv") %>%
+zoop <- read.csv("data/21/18e2ZooplanktonDepredation.csv") %>%
   mutate(block = factor(block))
 
 a <- ggplot(zoop,
@@ -187,7 +181,7 @@ zoop_lm
 -   Independence of data points  
 
 -   No relationship between fitted and residual values  
-     - .red[ Additivity (linearity) of Treatments ]
+     - **Additivity (linearity) of Treatments**  
   
 -   Normality within groups (of residuals)  
   
@@ -213,7 +207,7 @@ check_model(zoop_lm, check = "linearity") |> plot()
 The effect of category depends on another - e.g. this grazing experiment
 
 ```{r}
-algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+algae <- read.csv("data/22/18e3IntertidalAlgae.csv")
 
 graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
 
@@ -225,7 +219,7 @@ ggplot(algae, aes(x = height, y = sqrtarea, color = herbivores)) +
 # Non-Additivity is Parabolic
 
 ```{r}
-algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+algae <- read.csv("data/22/18e3IntertidalAlgae.csv")
 
 graze_linear <- lm(sqrtarea ~ height + herbivores, data=algae)
 
@@ -241,7 +235,7 @@ class: center, middle
 # Normality!
 
 ```{r}
-check_normality(zoop_lm) |> plot()
+check_normality(zoop_lm) |> plot(detrend = FALSE)
 ```
 
 ---
@@ -411,7 +405,7 @@ Who had a bigger brain: Neanderthals or us?
 # The Means Look the Same...
 
 ```{r neand_boxplot}
-neand <- read.csv("lectures/data/23/18q09NeanderthalBrainSize.csv")
+neand <- read.csv("data/23/18q09NeanderthalBrainSize.csv")
 neand_plot_box <- qplot(species, lnbrain, data=neand, fill=species, geom="boxplot") 
 
 neand_plot_box
@@ -517,7 +511,7 @@ check_collinearity(neand_lm) |> plot()
 ---
 # Usual Normality Assumption
 ```{r}
-check_normality(neand_lm) |>plot("qq")
+check_normality(neand_lm) |>plot(detrend = FALSE)
 ```
 
 ---
@@ -602,3 +596,7 @@ visreg::visreg(neand_lm, "species", gg = TRUE)
 - Categorical is just continuous as 0/1   
   
 - So, we can build a LOT of models, limited only by our imagination!  
+
+--
+
+- But what was that nonadditive thing again...? Wait a minuite...
