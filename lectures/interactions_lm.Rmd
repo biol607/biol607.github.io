@@ -57,13 +57,6 @@ perform_plot <- function(x){
 ```
 
 
----
-class: center, middle
-
-# Etherpad
-<br><br>
-<center><h3>https://etherpad.wikimedia.org/p/607-complex-linear-models-2023</h3></center>
-
 
 ---
 # The world isn't additive
@@ -93,7 +86,7 @@ class: center, middle
 # We Have Explored Nonliearities Via Transforming our Response
 
 ```{r loglinear}
-dat <- read_csv("lectures/data/11/16e2InbreedingWolves.csv") |>
+dat <- read_csv("data/11/16e2InbreedingWolves.csv") |>
   mutate(log_pups = log(pups))
 
 mod <- lm(log_pups ~ inbreeding.coefficient, data = dat)
@@ -195,7 +188,7 @@ Note: You can have as many treatment types or observed category combinations as 
 # The Data: See the dependency of one treatment on another?
 
 ```{r plot_algae}
-algae <- read.csv("lectures/data/22/18e3IntertidalAlgae.csv")
+algae <- read.csv("data/22/18e3IntertidalAlgae.csv")
 
 algae_plot <- qplot(height, sqrtarea,  data=algae, geom="boxplot", fill=herbivores) + theme_bw(base_size=16)
 
@@ -286,7 +279,7 @@ check_model(graze_int, check = "linearity", panel = FALSE) |> perform_plot()
 ---
 # Residuals A-OK
 ```{r}
-check_normality(graze_int) |> plot(type = "qq") + theme_bw(base_size = 18)
+check_normality(graze_int) |> plot(detrend = FALSE) + theme_bw(base_size = 18)
 ```
 
 ---
@@ -337,7 +330,7 @@ tidy(graze_int) %>%
 
 --
 
-- Changing height to high is associated with a loss of 10 units of algae relative to low/-
+- Changing height to mid is associated with a loss of 10 units of algae relative to low/-
 
 --
 
@@ -349,7 +342,13 @@ tidy(graze_int) %>%
 - BUT - if you add herbivores and mid, that's also associated with an additional increase of 25 units of algae relative to mid and + alone  
       - 25.5 - 22.5 - 10.4 = only a loss of 7.4 relative to low/-
 
---
+---
+# What do the  Coefficients Mean?
+
+```{r graze_interaction_coefs}
+```
+
+<br><br>
 
 .center[**NEVER TRY AND INTERPRET ADDITIVE EFFECTS ALONE WHEN AN INTERACTION IS PRESENT**<Br>that way lies madness]
 
@@ -478,13 +477,19 @@ plot(contrast( emmeans(graze_int, ~herbivores | height), "pairwise", adjust="non
 ```
 
 ---
-# Why think about interactions
+# Why think about interactions?
 
-- It Depends is a rule in biology
+- It Depends is a rule in biology  
 
-- Context dependent interactions everywhere
+--
 
-- Using categorical predictors in a factorial design is an elegant way to see interactions without worrying about shapes of relationships
+- Context dependent interactions everywhere  
+
+--
+
+- Using categorical predictors in a factorial design is an elegant way to see interactions without worrying about shapes of relationships  
+
+--
 
 - BUT - it all comes down to a general linear model! And the same inferential frameworks we have been dealing with since linear regression!
 
@@ -590,7 +595,7 @@ check_collinearity(keeley_lm_int)
 
 --
 - If you are worried, **center** your predictors - i.e., $X_i - mean(X)$
-      - This can also fix issues with some models not converging
+      - This can fix issues with models not converging
 
 ---
 
