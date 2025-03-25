@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Biol607">
+
+<title>Midterm and Self-Evaluation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="exam_2025_files/libs/clipboard/clipboard.min.js"></script>
+<script src="exam_2025_files/libs/quarto-html/quarto.js"></script>
+<script src="exam_2025_files/libs/quarto-html/popper.min.js"></script>
+<script src="exam_2025_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="exam_2025_files/libs/quarto-html/anchor.min.js"></script>
+<link href="exam_2025_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="exam_2025_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="exam_2025_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="exam_2025_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="exam_2025_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-reshaping-and-visuzliation" id="toc-data-reshaping-and-visuzliation" class="nav-link active" data-scroll-target="#data-reshaping-and-visuzliation">1. Data Reshaping and Visuzliation</a>
+  <ul class="collapse">
+  <li><a href="#a.-access" id="toc-a.-access" class="nav-link" data-scroll-target="#a.-access">1a. Access</a></li>
+  <li><a href="#b.-its-big-and-wide" id="toc-b.-its-big-and-wide" class="nav-link" data-scroll-target="#b.-its-big-and-wide">1b. It’s big and wide!</a></li>
+  <li><a href="#c.-lets-get-visual" id="toc-c.-lets-get-visual" class="nav-link" data-scroll-target="#c.-lets-get-visual">1c. Let’s get visual!</a></li>
+  </ul></li>
+  <li><a href="#fit-and-evaluate-a-linear-model" id="toc-fit-and-evaluate-a-linear-model" class="nav-link" data-scroll-target="#fit-and-evaluate-a-linear-model">2. Fit and Evaluate a Linear model</a>
+  <ul class="collapse">
+  <li><a href="#a.-what-should-i-do" id="toc-a.-what-should-i-do" class="nav-link" data-scroll-target="#a.-what-should-i-do">2a. What should I do?</a></li>
+  <li><a href="#b.-lets-get-started" id="toc-b.-lets-get-started" class="nav-link" data-scroll-target="#b.-lets-get-started">2b. Let’s get started</a></li>
+  <li><a href="#c.-viz-before-fit" id="toc-c.-viz-before-fit" class="nav-link" data-scroll-target="#c.-viz-before-fit">2c. Viz before fit</a></li>
+  <li><a href="#d.-fit-and-evaluate" id="toc-d.-fit-and-evaluate" class="nav-link" data-scroll-target="#d.-fit-and-evaluate">2d. Fit and evaluate</a></li>
+  <li><a href="#e.-answer-the-question" id="toc-e.-answer-the-question" class="nav-link" data-scroll-target="#e.-answer-the-question">2e. Answer the Question</a></li>
+  </ul></li>
+  <li><a href="#something-generalized" id="toc-something-generalized" class="nav-link" data-scroll-target="#something-generalized">3. Something Generalized</a>
+  <ul class="collapse">
+  <li><a href="#a.-fit-a-glm" id="toc-a.-fit-a-glm" class="nav-link" data-scroll-target="#a.-fit-a-glm">3a. Fit a glm</a></li>
+  <li><a href="#b.-evaluate-your-treatments" id="toc-b.-evaluate-your-treatments" class="nav-link" data-scroll-target="#b.-evaluate-your-treatments">3b. Evaluate your treatments</a></li>
+  <li><a href="#c.-prediction-intervals-from-a-distribution" id="toc-c.-prediction-intervals-from-a-distribution" class="nav-link" data-scroll-target="#c.-prediction-intervals-from-a-distribution">3c. Prediction intervals from a distribution</a></li>
+  <li><a href="#d.-prediction-intervals-from-your-model" id="toc-d.-prediction-intervals-from-your-model" class="nav-link" data-scroll-target="#d.-prediction-intervals-from-your-model">3d. Prediction intervals from your model</a></li>
+  <li><a href="#e.-inmpress-yourself-prediction-intervals-from-your-model" id="toc-e.-inmpress-yourself-prediction-intervals-from-your-model" class="nav-link" data-scroll-target="#e.-inmpress-yourself-prediction-intervals-from-your-model">3e. INMPRESS YOURSELF! Prediction intervals from your model</a></li>
+  </ul></li>
+  <li><a href="#mix-it-up" id="toc-mix-it-up" class="nav-link" data-scroll-target="#mix-it-up">4. Mix it up!</a>
+  <ul class="collapse">
+  <li><a href="#a.-load-it-up-and-plot" id="toc-a.-load-it-up-and-plot" class="nav-link" data-scroll-target="#a.-load-it-up-and-plot">4a. Load it up and plot</a></li>
+  <li><a href="#b.-are-you-over-it" id="toc-b.-are-you-over-it" class="nav-link" data-scroll-target="#b.-are-you-over-it">4b. Are you <em>over</em> it?</a></li>
+  <li><a href="#c.-fixed-or-random-intercept" id="toc-c.-fixed-or-random-intercept" class="nav-link" data-scroll-target="#c.-fixed-or-random-intercept">4c. Fixed or Random Intercept</a></li>
+  <li><a href="#d.-changes-in-parameters" id="toc-d.-changes-in-parameters" class="nav-link" data-scroll-target="#d.-changes-in-parameters">4d. Changes in Parameters</a></li>
+  <li><a href="#e.-model-evaluation" id="toc-e.-model-evaluation" class="nav-link" data-scroll-target="#e.-model-evaluation">4e. Model evaluation</a></li>
+  <li><a href="#f.-impress-yourself-variable-slopes" id="toc-f.-impress-yourself-variable-slopes" class="nav-link" data-scroll-target="#f.-impress-yourself-variable-slopes">4f. IMPRESS YOURSELF! Variable slopes</a></li>
+  <li><a href="#what-did-we-do" id="toc-what-did-we-do" class="nav-link" data-scroll-target="#what-did-we-do">5. What did we do?</a></li>
+  </ul></li>
+  <li><a href="#midterm-self-evaluation" id="toc-midterm-self-evaluation" class="nav-link" data-scroll-target="#midterm-self-evaluation">Midterm Self-Evaluation</a>
+  <ul class="collapse">
+  <li><a href="#a.-how-are-you-doing" id="toc-a.-how-are-you-doing" class="nav-link" data-scroll-target="#a.-how-are-you-doing">A. How are you doing?</a></li>
+  <li><a href="#b.-what-concepts-do-you-think-youve-really-mastered-or-are-on-the-journey-to-mastery---i-know-youre-still-learning-in-this-class" id="toc-b.-what-concepts-do-you-think-youve-really-mastered-or-are-on-the-journey-to-mastery---i-know-youre-still-learning-in-this-class" class="nav-link" data-scroll-target="#b.-what-concepts-do-you-think-youve-really-mastered-or-are-on-the-journey-to-mastery---i-know-youre-still-learning-in-this-class">B. What concepts do you think you’ve really mastered (or are on the journey to mastery - I know, you’re still learning) in this class?</a></li>
+  <li><a href="#c.-what-in-this-class-do-you-find-easy" id="toc-c.-what-in-this-class-do-you-find-easy" class="nav-link" data-scroll-target="#c.-what-in-this-class-do-you-find-easy">C. What in this class do you find easy?</a></li>
+  <li><a href="#d.-how-would-you-describe-your-personal-journey-with-learning-to-code" id="toc-d.-how-would-you-describe-your-personal-journey-with-learning-to-code" class="nav-link" data-scroll-target="#d.-how-would-you-describe-your-personal-journey-with-learning-to-code">D. How would you describe your personal journey with learning to code?</a></li>
+  <li><a href="#e.-where-do-you-see-applying-coding-in-your-life-outside-of-just-stats" id="toc-e.-where-do-you-see-applying-coding-in-your-life-outside-of-just-stats" class="nav-link" data-scroll-target="#e.-where-do-you-see-applying-coding-in-your-life-outside-of-just-stats">E. Where do you see applying coding in your life outside of just stats?</a></li>
+  <li><a href="#f.-where-do-you-see-the-most-opportunities-for-growth-in-your-abilities" id="toc-f.-where-do-you-see-the-most-opportunities-for-growth-in-your-abilities" class="nav-link" data-scroll-target="#f.-where-do-you-see-the-most-opportunities-for-growth-in-your-abilities">F. Where do you see the most opportunities for growth in your abilities?</a></li>
+  <li><a href="#g.-talk-about-your-work-in-this-course.-what-have-you-done-what-havent-you-done-how-has-this-been-helpful-to-your-growth---or-not" id="toc-g.-talk-about-your-work-in-this-course.-what-have-you-done-what-havent-you-done-how-has-this-been-helpful-to-your-growth---or-not" class="nav-link" data-scroll-target="#g.-talk-about-your-work-in-this-course.-what-have-you-done-what-havent-you-done-how-has-this-been-helpful-to-your-growth---or-not">G. Talk about your work in this course. What have you done? What haven’t you done? How has this been helpful to your growth - or not?</a></li>
+  <li><a href="#h.-did-you-find-yourself-stretching-your-abilities-in-this-exam-or-did-it-just-feel-like-wrote-comfortable-work-tell-me-about-it." id="toc-h.-did-you-find-yourself-stretching-your-abilities-in-this-exam-or-did-it-just-feel-like-wrote-comfortable-work-tell-me-about-it." class="nav-link" data-scroll-target="#h.-did-you-find-yourself-stretching-your-abilities-in-this-exam-or-did-it-just-feel-like-wrote-comfortable-work-tell-me-about-it.">H. Did you find yourself stretching your abilities in this exam? Or did it just feel like wrote comfortable work? Tell me about it.</a></li>
+  <li><a href="#i.-how-would-you-assess-yourself-from-this-exam---weaksufficientstrong.-why" id="toc-i.-how-would-you-assess-yourself-from-this-exam---weaksufficientstrong.-why" class="nav-link" data-scroll-target="#i.-how-would-you-assess-yourself-from-this-exam---weaksufficientstrong.-why">I. How would you assess yourself from this exam - weak/sufficient/strong. Why?</a></li>
+  <li><a href="#j.-how-would-you-assess-yourself-on-the-first-half-of-this-course---weaksufficientstrong-why" id="toc-j.-how-would-you-assess-yourself-on-the-first-half-of-this-course---weaksufficientstrong-why" class="nav-link" data-scroll-target="#j.-how-would-you-assess-yourself-on-the-first-half-of-this-course---weaksufficientstrong-why">J. How would you assess yourself on the first half of this course - weak/sufficient/strong? Why?</a></li>
+  <li><a href="#k.-what-goals-do-you-have-for-yourself-for-the-rest-of-the-course-what-do-you-hope-to-accomplish-and-how-will-this-move-you-forward" id="toc-k.-what-goals-do-you-have-for-yourself-for-the-rest-of-the-course-what-do-you-hope-to-accomplish-and-how-will-this-move-you-forward" class="nav-link" data-scroll-target="#k.-what-goals-do-you-have-for-yourself-for-the-rest-of-the-course-what-do-you-hope-to-accomplish-and-how-will-this-move-you-forward">K. What goals do you have for yourself for the rest of the course? What do you hope to accomplish, and how will this move you forward?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Midterm and Self-Evaluation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Biol607 </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Welcome to your mid-term! I hope you enjoy. Note, in all of the questions below, there are easy not so code intensive ways of doing it, and there are longer more involved, yet still workable ways to answer them. I would suggest that before you dive into analyses, you do the following.</p>
+<p>First, breathe.</p>
+<p>Second, think about the steps you need to execute to get answer the question. Write them down.</p>
+<p>Third, for those parts of problems that require code, put those steps, in sequence, in comments in your script file. Use those as signposts to step-by-step walk through the things you need to do.</p>
+<p>Last, note there are some impress yourselves. You do not need to do them if you don’t want to. But they are there for you to stretch your wings, if you so desire, and get lost in the questions. Or learn something new.</p>
+<p>Have fun!</p>
+<p>The exam will be due on Fri April 11th, 5pm.</p>
+<section id="data-reshaping-and-visuzliation" class="level2">
+<h2 class="anchored" data-anchor-id="data-reshaping-and-visuzliation">1. Data Reshaping and Visuzliation</h2>
+<p>Johns Hopkins has been maintaining one of the best Covid-19 timseries data sets out there. The data on the US can be found <a href="https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv">here</a> with information about what is in the data at https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data</p>
+<section id="a.-access" class="level3">
+<h3 class="anchored" data-anchor-id="a.-access">1a. Access</h3>
+<p>Download and read in the data. Can you do this without downloading, but read directly from the archive?</p>
+</section>
+<section id="b.-its-big-and-wide" class="level3">
+<h3 class="anchored" data-anchor-id="b.-its-big-and-wide">1b. It’s big and wide!</h3>
+<p>The data is, well, huge. It’s also wide, with dates as columns. Write a workflow that will filter to a state (your choice which one!), and then returns a <!-- Write a function that, given a state name as its input argument, will output a--> time series (long data where every row is a day) with columns for date, new daily cases and for cumulative cases in that state.</p>
+<p>Note, let’s make the date column that emerges a true date object. Let’s say you’ve called it <code>date_col</code>. If you mutate it, <code>mutate(date_col = lubridate::mdy(date_col))</code>, it will be turned into a date object that will have a recognized order. {lubridate} is da bomb, and I’m hoping we have some time to cover it in the future.</p>
+<p>Even better - impress yourself (if you want - not required!) and merge it with some other data source to also return cases per 100,000 people.</p>
+</section>
+<section id="c.-lets-get-visual" class="level3">
+<h3 class="anchored" data-anchor-id="c.-lets-get-visual">1c. Let’s get visual!</h3>
+<p>Great! Make a compelling plot of the timeseries for Massachusetts! Points for style, class, ease of understanding major trends, etc. Note, 10/10 for yourself only for the most killer figures. Don’t phone it in! Also, note <em>what</em> the data from JHU is. Do you want the cummulatives, or daily, or what? Want to highlight features? Events? Go wild!</p>
+<!--
+### 2d. At our fingertips 
+
+Cool. Now, write a function that will take what you did above, and create a plot for any state - so, I enter Alaska and I get the plot for Alaska! If you really want to impress yourself (not required)  highlight points of interest - but dynamically using the data. 
+
+
+::: {.cell}
+
+:::
+
+
+-->
+</section>
+</section>
+<section id="fit-and-evaluate-a-linear-model" class="level2">
+<h2 class="anchored" data-anchor-id="fit-and-evaluate-a-linear-model">2. Fit and Evaluate a Linear model</h2>
+<p>Let’s fit and evaluate a linear model! To motivate this, we’ll look at Burness et al.’s 2012 study “Post-hatch heat warms adult beaks: irreversible physiological plasticity in Japanese quail http://rspb.royalsocietypublishing.org/content/280/1767/20131436.short the data for which they have made available at Data Dryad at http://datadryad.org/resource/doi:10.5061/dryad.gs661. We’ll be doing a slightly modified version of their analysis.</p>
+<section id="a.-what-should-i-do" class="level3">
+<h3 class="anchored" data-anchor-id="a.-what-should-i-do">2a. What should I do?</h3>
+<p>Starting with loading this (new to you) data set for the very first time, what are the steps that you would take to analyze this data? Write them out! Maybe even in comments!</p>
+</section>
+<section id="b.-lets-get-started" class="level3">
+<h3 class="anchored" data-anchor-id="b.-lets-get-started">2b. Let’s get started</h3>
+<p>Load the data. Look at it. Anything interesting? Anything you’d want to watch out for? Or is it OK? Anything you’d change to make working with the data easier? Also, manipulate it a bit - for our analysis, we’re going to want Bird # and the Age of the birds to be categorical variables. Make sure we have variables that will work!</p>
+</section>
+<section id="c.-viz-before-fit" class="level3">
+<h3 class="anchored" data-anchor-id="c.-viz-before-fit">2c. Viz before fit</h3>
+<p>The model we will fit is one where we want to look at how temperature treatment affects the development of tarsus length over time (age). Visualize this. Make it look good! Is there anything here that would shape how you fit a model? Do you see why we are treating age as categorical?</p>
+</section>
+<section id="d.-fit-and-evaluate" class="level3">
+<h3 class="anchored" data-anchor-id="d.-fit-and-evaluate">2d. Fit and evaluate</h3>
+<p>Fit a model where tarsus length is predicted by age, treatment, their interaction, and a ‘block’ effect, as it were, of bird #. Evaluate the fit. Make any modifications as you see necessary due to your model checks. Note, it’s not going to be perfect (I checked the original - hey, you can too - and they’re on the edge) - but our models are robust, so we’re OK.</p>
+</section>
+<section id="e.-answer-the-question" class="level3">
+<h3 class="anchored" data-anchor-id="e.-answer-the-question">2e. Answer the Question</h3>
+<p>A central question of this paper is - does temperature affect the development of tarsus length. With your fit model in hand, answer the question, however you deem fit. Make sure that, alongside any numerical answers you produce, there is at least one stunning figure for a publishable paper!</p>
+</section>
+</section>
+<section id="something-generalized" class="level2">
+<h2 class="anchored" data-anchor-id="something-generalized">3. Something Generalized</h2>
+<p>In their <a href="https://doi.org/10.1007/s00442-011-1958-4">2011 paper</a>, Stanton-Geddes and Anderson assessed the role of a facultative mutualism between a legume and soil rhizobia in limiting the plant’s range. After publishing, they deposited their data at Dryad http://datadryad.org/resource/doi:10.5061/dryad.8566. As part of their lab experiment, they looked at a variety of plant properties after growing plants with rhizobia from different regions. We want to look at what happened in that experiment during the March 12th sampling event.</p>
+<section id="a.-fit-a-glm" class="level3">
+<h3 class="anchored" data-anchor-id="a.-fit-a-glm">3a. Fit a glm</h3>
+<p>Load the data. Vizualize. Then, fit and evaluate a generalized linear model with your choice of error distribution looking at the effect of rhizobial region and plant height as measured on march 12 as predictors of # of leaves on march 12. Does your model meet assumptions? If not, refit with a different. Why did you chose this (or these) error distribution(s)?</p>
+</section>
+<section id="b.-evaluate-your-treatments" class="level3">
+<h3 class="anchored" data-anchor-id="b.-evaluate-your-treatments">3b. Evaluate your treatments</h3>
+<p>Which rhizobial regions enable more leaves relative to the control? And in what direction?</p>
+</section>
+<section id="c.-prediction-intervals-from-a-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="c.-prediction-intervals-from-a-distribution">3c. Prediction intervals from a distribution</h3>
+<p>So, your distribution has quantiles (right? We see these in QQ plots). You can see what the value for those quantiles are from the <code>q*</code> function for a distribution. For example, the 95th percentile of a poisson with a <span class="math inline">\(\lambda\)</span> of 5 spans from 1 to 10. You can see this with <code>qpois(0.025, lambda = 5)</code> for the lower, and change it to 0.975 for the upper. Check this out. Plot the upper and lower bounds of the 95th percentile of a Poisson distribution over a range of lambdas from 1 to 30. Do the same for a negative binomial with means from 1 to 30. Note, to translate from a mean ( <span class="math inline">\(\mu\)</span> ) with a size of 10 (you might have to look at the helpfile for qnbinom here).</p>
+</section>
+<section id="d.-prediction-intervals-from-your-model" class="level3">
+<h3 class="anchored" data-anchor-id="d.-prediction-intervals-from-your-model">3d. Prediction intervals from your model</h3>
+<p>All right! Armed with this knowledge, one of the frustrating things about <code>broom::augment()</code> for glm models is that it doesn’t have an <code>interval</code> argument. And has one trick. One - you need to see what scale your answer is returned on. We want to look at the response scale - the scale of the data. Second, while you can use <code>se_fit</code> to get standard errors, you don’t get a CI <em>per se</em> (although, hey, ~2*se = CI).</p>
+<p>AND - we just looked at how when you have an estimated value, you can get the prediction CI yourself by hand in the previous part of the question. So, using your creativity, visualize the fit, 95% fit interval, and 95% prediction interval at the min, mean, and max of height for each treatment. Geoms can be anything you like! Have fun here!</p>
+</section>
+<section id="e.-inmpress-yourself-prediction-intervals-from-your-model" class="level3">
+<h3 class="anchored" data-anchor-id="e.-inmpress-yourself-prediction-intervals-from-your-model">3e. INMPRESS YOURSELF! Prediction intervals from your model</h3>
+<p>Again, totally optional, but, check out the <a href="https://jebyrnes.github.io/sinterval/">sinterval package</a> which you’d have to install from github. It uses fit models and it’s two core functions <code>add_fitted_sims()</code> and <code>add_predicted_sims()</code> to get simulated values from fit models using one or the other interval. Do this, and visualize the same thing as above however you’d like (maybe look at <code>ggdist</code>?). Or try something new? Perhaps visualize across a range of heights, and not just three?</p>
+</section>
+</section>
+<section id="mix-it-up" class="level2">
+<h2 class="anchored" data-anchor-id="mix-it-up">4. Mix it up!</h2>
+<p>To explore the consequences of random effects, we are going to look at an example from Vonesh, J. R. and Bolker, B. M. (2005). Compensatory larval responses shift trade-offs associated with predator-induced hatching plasticity. Ecology, 86:1580–1591. In the paper, one thing they explore is the effect of tank size, predator presence, and prey density on larval tadpoles. They go on to look at induced plastic defenses in those tadpoles. It’s a cool paper, and worth a look! But, it also shows something really interesting about logistic regression models - namely, when should we consider them as mixed models.</p>
+<section id="a.-load-it-up-and-plot" class="level3">
+<h3 class="anchored" data-anchor-id="a.-load-it-up-and-plot">4a. Load it up and plot</h3>
+<p>Load the data with the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>reedfrogs <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"https://github.com/rmcelreath/rethinking/raw/master/data/reedfrogs.csv"</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">delim =</span> <span class="st">";"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tank =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>() <span class="sc">|&gt;</span> <span class="fu">as.character</span>(),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">died =</span> density <span class="sc">-</span> surv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To get used to the data, plot survivorship as a function of tank size and predator treatment. Then, to challenge yourself a bit. Expand the data to 1s and 0s (lived or died) as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>reedfrogs_expanded <span class="ot">&lt;-</span> reedfrogs <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tank, size, pred, density) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">status =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, surv), <span class="fu">rep</span>(<span class="dv">0</span>, died))) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now with the expanded data, plot it showing who lived, who died (who tells their story…), and how that corresponds to treatment AND tank. Do you see anything to do with within-tank variability?</p>
+</section>
+<section id="b.-are-you-over-it" class="level3">
+<h3 class="anchored" data-anchor-id="b.-are-you-over-it">4b. Are you <em>over</em> it?</h3>
+<p>Often, we treat data like this as a binomial logistic regression. We look at each tank as a set of ‘coin flips’ - some living some dead. Fit a glm here with survivorship determined by pred*size, and then evaluate it for overdispersion. Careful to weight for number of individuals stocked in a tank (density)! What do you see when you look at overdispersion?</p>
+</section>
+<section id="c.-fixed-or-random-intercept" class="level3">
+<h3 class="anchored" data-anchor-id="c.-fixed-or-random-intercept">4c. Fixed or Random Intercept</h3>
+<p>One way to fix this problem is a quasi-binomial. But, this is unsatisfying, as it’s a posthoc adjustment and not figured into the likelihood. But, another is to think in this case about what is happening in each tank. Fit a mixed model version of 5b, and assess its assumptions. How does it compare in overdispersion? Why the difference? What is a random tank effect doing here? And why couldn’t we use a FE of tank with this pred*size model (try it if you don’t believe me - the model will fit, but something will be… off)?</p>
+</section>
+<section id="d.-changes-in-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="d.-changes-in-parameters">4d. Changes in Parameters</h3>
+<p>Now that you have a model with and without a random intercept, how do the estimates of fixed effects change? Why?</p>
+<!--
+
+### 4e. Don't Soak up the Good Stuff!
+
+Sometimes, random effects are used inappropriately. They become sponges for sources of real variation, and then our estimates of fixed effects can be inappropriate if they are not balanced. In this case, we have a balanced experiment. I'd like you to explore this concept a bit, though. Fit every model - from just a random intercept to the full pred*surv + random intercept - and everything in between (that's 5 models) and visually show how the estimate of the RE standard deviation or variance changes. Explain what is happening here. Note, for the model with only a variable intercept, add the argument `nAGQ=20` (or play with options otherwise to get it to fit). If you visualize this, make sure you are getting  confidence intervals of the RE.  It's illuminating.
+
+
+::: {.cell}
+
+:::
+
+-->
+</section>
+<section id="e.-model-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="e.-model-evaluation">4e. Model evaluation</h3>
+<p>Last, let’s evaluate this model - both with contrasts and a crisp visualization of results. <code>emmeans</code>, <code>modelbased</code>, and other friends might help you here. Or not! You do you, and extract things from the model with other helpers! There’s no one right way to do this, but, make it sing.</p>
+</section>
+<section id="f.-impress-yourself-variable-slopes" class="level3">
+<h3 class="anchored" data-anchor-id="f.-impress-yourself-variable-slopes">4f. IMPRESS YOURSELF! Variable slopes</h3>
+<p>Explore multiple different RE structures beyond a variable intercept. What errors do you get? What do they mean? Can you implement some of the suggested solutions, and what do they tell you about why more complex structures don’t work well here and/or might not be appropriate. Do these different RE structures make a difference for your evaluation of the FE? What RE structure would you use? What if you added density as a covariate/predictor as in the paper?</p>
+</section>
+<section id="what-did-we-do" class="level3">
+<h3 class="anchored" data-anchor-id="what-did-we-do">5. What did we do?</h3>
+<p>Write out the model equations for the glmm you have fit in 4.3. Use LaTeX to write it all out. Explain what your symbols mean in text.</p>
+<hr>
+</section>
+</section>
+<section id="midterm-self-evaluation" class="level1">
+<h1>Midterm Self-Evaluation</h1>
+<section id="a.-how-are-you-doing" class="level3">
+<h3 class="anchored" data-anchor-id="a.-how-are-you-doing">A. How are you doing?</h3>
+</section>
+<section id="b.-what-concepts-do-you-think-youve-really-mastered-or-are-on-the-journey-to-mastery---i-know-youre-still-learning-in-this-class" class="level3">
+<h3 class="anchored" data-anchor-id="b.-what-concepts-do-you-think-youve-really-mastered-or-are-on-the-journey-to-mastery---i-know-youre-still-learning-in-this-class">B. What concepts do you think you’ve really mastered (or are on the journey to mastery - I know, you’re still learning) in this class?</h3>
+</section>
+<section id="c.-what-in-this-class-do-you-find-easy" class="level3">
+<h3 class="anchored" data-anchor-id="c.-what-in-this-class-do-you-find-easy">C. What in this class do you find easy?</h3>
+</section>
+<section id="d.-how-would-you-describe-your-personal-journey-with-learning-to-code" class="level3">
+<h3 class="anchored" data-anchor-id="d.-how-would-you-describe-your-personal-journey-with-learning-to-code">D. How would you describe your personal journey with learning to code?</h3>
+</section>
+<section id="e.-where-do-you-see-applying-coding-in-your-life-outside-of-just-stats" class="level3">
+<h3 class="anchored" data-anchor-id="e.-where-do-you-see-applying-coding-in-your-life-outside-of-just-stats">E. Where do you see applying coding in your life outside of just stats?</h3>
+</section>
+<section id="f.-where-do-you-see-the-most-opportunities-for-growth-in-your-abilities" class="level3">
+<h3 class="anchored" data-anchor-id="f.-where-do-you-see-the-most-opportunities-for-growth-in-your-abilities">F. Where do you see the most opportunities for growth in your abilities?</h3>
+</section>
+<section id="g.-talk-about-your-work-in-this-course.-what-have-you-done-what-havent-you-done-how-has-this-been-helpful-to-your-growth---or-not" class="level3">
+<h3 class="anchored" data-anchor-id="g.-talk-about-your-work-in-this-course.-what-have-you-done-what-havent-you-done-how-has-this-been-helpful-to-your-growth---or-not">G. Talk about your work in this course. What have you done? What haven’t you done? How has this been helpful to your growth - or not?</h3>
+</section>
+<section id="h.-did-you-find-yourself-stretching-your-abilities-in-this-exam-or-did-it-just-feel-like-wrote-comfortable-work-tell-me-about-it." class="level3">
+<h3 class="anchored" data-anchor-id="h.-did-you-find-yourself-stretching-your-abilities-in-this-exam-or-did-it-just-feel-like-wrote-comfortable-work-tell-me-about-it.">H. Did you find yourself stretching your abilities in this exam? Or did it just feel like wrote comfortable work? Tell me about it.</h3>
+</section>
+<section id="i.-how-would-you-assess-yourself-from-this-exam---weaksufficientstrong.-why" class="level3">
+<h3 class="anchored" data-anchor-id="i.-how-would-you-assess-yourself-from-this-exam---weaksufficientstrong.-why">I. How would you assess yourself from this exam - weak/sufficient/strong. Why?</h3>
+</section>
+<section id="j.-how-would-you-assess-yourself-on-the-first-half-of-this-course---weaksufficientstrong-why" class="level3">
+<h3 class="anchored" data-anchor-id="j.-how-would-you-assess-yourself-on-the-first-half-of-this-course---weaksufficientstrong-why">J. How would you assess yourself on the first half of this course - weak/sufficient/strong? Why?</h3>
+</section>
+<section id="k.-what-goals-do-you-have-for-yourself-for-the-rest-of-the-course-what-do-you-hope-to-accomplish-and-how-will-this-move-you-forward" class="level3">
+<h3 class="anchored" data-anchor-id="k.-what-goals-do-you-have-for-yourself-for-the-rest-of-the-course-what-do-you-hope-to-accomplish-and-how-will-this-move-you-forward">K. What goals do you have for yourself for the rest of the course? What do you hope to accomplish, and how will this move you forward?</h3>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
