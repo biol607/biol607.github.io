@@ -450,7 +450,7 @@ wolves_lm <- lm(log(pups) ~ inbreeding.coefficient,
 
 ---
 # We Still Check Some of the Same Assumptions
-```{r}
+```{r, warning = FALSE}
 check_model(wolves_glm, check = c("pp_check", "outliers"))
 ```
 
@@ -502,7 +502,7 @@ w1 <- wolfplot +
 w2 <- wolfplot +
   geom_ribbon(data = log_pred, aes(ymin = .lower, ymax = .upper),
               fill = "grey", alpha = 0.5) +
-    geom_line(data = log_pred, color = "red", size = 1) +
+    geom_line(data = log_pred, color = "red", linewidth = 1) +
   labs(subtitle = "Log LM") +
   ylim(c(0,11))
 
@@ -522,14 +522,17 @@ w1+w2
 ---
 # What is the relationship between kelp holdfast size and number of fronds?
   
-  .center[ ![](images/25/Giant_kelp_adult.jpeg) ]
+<!--  .center[ ![](images/25/Giant_kelp_adult.jpeg) ] -->
+
+.center[ ![](https://news.virginia.edu/sites/default/files/article_image/kelp_forest_douglas_klug_photo_lgdr.jpeg) ]
 
 ---
 # What About Kelp Holdfasts?
 ```{r kelp}
 kelp <- read.csv("lectures/data/25/kelp_holdfast.csv")
 
-kelp_plot <- qplot(HLD_DIAM, FRONDS, data=kelp) +
+kelp_plot <- ggplot(data=kelp,
+                    aes(x = HLD_DIAM, y = FRONDS)) +
   theme_bw(base_size=17) +
   geom_point(size=2) +
   labs(x = "Holdfast Diameter (cm)", y = "# of Fronds")
@@ -543,7 +546,7 @@ kelp_lm <- lm(FRONDS ~ HLD_DIAM, data=kelp)
 ```
 
 ```{r plot_lelp}
-check_normality(kelp_lm) |> plot("qq") + theme_bw(base_size = 16)
+check_normality(kelp_lm) |> plot(detrend = FALSE) + theme_bw(base_size = 16)
 ```
 
 ---
@@ -600,7 +603,7 @@ plotQQunif(simulationOutput, testUniformity = FALSE, testOutliers = FALSE,
 # For Count Data, Two Common Solutions
   
 1) Negative Binomial
-- Variance = $\hat{Y_i}^2 + \theta\hat{Y_i}^2$|$
+- Variance = $\hat{Y_i}^2 + \theta\hat{Y_i}^2$  
    - Increases with the square, not linearly
 - Although some forms also do linear...  
 - Common for **clumped data**  
@@ -646,7 +649,7 @@ kelp_glm_qp <- glm(FRONDS ~ HLD_DIAM, data=kelp,
 ```
 
 ---
-# Checking The Quantile Residuals
+# Checking The Quantile Residuals: NB
   
 ```{r}
 nb_qr <- simulateResiduals(kelp_glm_nb)
@@ -758,6 +761,68 @@ ggplot(data.frame(x=x),
        aes(x=x)) +
   geom_histogram(binwidth = 0.4) +
   labs(title = "This is Count Data", subtitle = "Needs a zero inflated distribution")
+```
+
+---
+## So, What if THIS was our data
+```{r zinfl}
+
+kelp_z <- kelp |>
+  bind_rows(data.frame(FRONDS = rep(0, 50),
+            HLD_DIAM = runif(runif(50, 1, 6))))
+
+ggplot(data=kelp_z,
+                    aes(x = HLD_DIAM, y = FRONDS)) +
+  theme_bw(base_size=17) +
+  geom_jitter(size=2) +
+  labs(x = "Holdfast Diameter (cm)", y = "# of Fronds")
+
+```
+
+---
+## So, What if THIS was our data
+```{r zinfl_dist}
+ggplot(kelp_z, aes(x = FRONDS)) +
+  geom_histogram()
+```
+
+---
+## Diagnostics Catch This
+```{r zinfl_check}
+kelp_z_bad <- glmmTMB(FRONDS ~ HLD_DIAM, 
+                     data = kelp_z,
+                     family = nbinom2)
+
+check_zeroinflation(kelp_z_bad)
+```
+
+---
+## We Can Model Zero Inflation
+- Often, we just allow for zeros to reflect detection probabilities
+
+- Can model sources of zeros as well
+
+```{r kelp_zinfl, echo = TRUE}
+kelp_zinfl <- glmmTMB(FRONDS ~ HLD_DIAM, 
+                      
+                      ziformula = ~ HLD_DIAM,
+                      
+                     data = kelp_z,
+                     
+                     family = nbinom2)
+
+```
+
+---
+## We are Good!
+```{r}
+check_zeroinflation(kelp_zinfl)
+```
+
+---
+## And We Can Visualize
+```{r}
+modelbased::estimate_expectation(kelp_zinfl) |> plot()
 ```
 
 ---

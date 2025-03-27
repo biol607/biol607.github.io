@@ -294,7 +294,7 @@ We want additive error - which we get from a GLM with a log link:
 # The Code Matches the Model
 
 
-```r
+``` r
 wolves_glm &lt;- glm(pups ~ inbreeding.coefficient, 
                   
                   family = poisson(link = "log"),
@@ -307,7 +307,7 @@ Compare to...
 
 
 
-```r
+``` r
 wolves_lm &lt;- lm(log(pups) ~ inbreeding.coefficient, 
                   
                   data = wolves)
@@ -370,7 +370,9 @@ wolves_lm &lt;- lm(log(pups) ~ inbreeding.coefficient,
 ---
 # What is the relationship between kelp holdfast size and number of fronds?
   
-  .center[ ![](images/25/Giant_kelp_adult.jpeg) ]
+&lt;!--  .center[ ![](images/25/Giant_kelp_adult.jpeg) ] --&gt;
+
+.center[ ![](https://news.virginia.edu/sites/default/files/article_image/kelp_forest_douglas_klug_photo_lgdr.jpeg) ]
 
 ---
 # What About Kelp Holdfasts?
@@ -378,7 +380,7 @@ wolves_lm &lt;- lm(log(pups) ~ inbreeding.coefficient,
 ---
 # If you had Tried a Linear Model
 
-```r
+``` r
 kelp_lm &lt;- lm(FRONDS ~ HLD_DIAM, data=kelp)
 ```
 
@@ -402,7 +404,7 @@ kelp_lm &lt;- lm(FRONDS ~ HLD_DIAM, data=kelp)
 # Let's Fit a Model!
   
 
-```r
+``` r
 kelp_glm &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp,
                 family=poisson(link="log"))
 ```
@@ -434,7 +436,7 @@ kelp_glm &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp,
 # For Count Data, Two Common Solutions
   
 1) Negative Binomial
-- Variance = `\(\hat{Y_i}^2 + \theta\hat{Y_i}^2\)`|$
+- Variance = `\(\hat{Y_i}^2 + \theta\hat{Y_i}^2\)`  
    - Increases with the square, not linearly
 - Although some forms also do linear...  
 - Common for **clumped data**  
@@ -465,7 +467,7 @@ See Ver Hoef and Boveng 2007
 Negative Binomial
 
 
-```r
+``` r
 library(MASS)
 kelp_glm_nb &lt;- glm.nb(FRONDS ~ HLD_DIAM, data=kelp)
 ```
@@ -474,13 +476,13 @@ OR
 
 Quasipoisson
 
-```r
+``` r
 kelp_glm_qp &lt;- glm(FRONDS ~ HLD_DIAM, data=kelp, 
                    family=quasipoisson(link="log"))
 ```
 
 ---
-# Checking The Quantile Residuals
+# Checking The Quantile Residuals: NB
   
 &lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -517,7 +519,7 @@ Skewed continuous, variance-mean relationship
 # Similar to Negative Binomial, So, Does it Blend with a log link?
 
 
-```r
+``` r
 kelp_gamma &lt;- glm(FRONDS ~ HLD_DIAM,
                      family = Gamma(link = "log"),
                      data = kelp)
@@ -542,7 +544,7 @@ Variance can be **linear** function of predictors, or otherwise
 
 
 
-```r
+``` r
 kelp_var &lt;- glmmTMB(FRONDS ~ HLD_DIAM,
                 
                 family = gaussian(link = "log"),
@@ -559,6 +561,57 @@ kelp_var &lt;- glmmTMB(FRONDS ~ HLD_DIAM,
 ### Many Distributions Cannot Handle 0s or 1s
   
 &lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## So, What if THIS was our data
+&lt;img src="glm_overdispersion_files/figure-html/zinfl-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## So, What if THIS was our data
+&lt;img src="glm_overdispersion_files/figure-html/zinfl_dist-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## Diagnostics Catch This
+
+```
+# Check for zero-inflation
+
+   Observed zeros: 50
+  Predicted zeros: 35
+            Ratio: 0.71
+```
+
+---
+## We Can Model Zero Inflation
+- Often, we just allow for zeros to reflect detection probabilities
+
+- Can model sources of zeros as well
+
+
+``` r
+kelp_zinfl &lt;- glmmTMB(FRONDS ~ HLD_DIAM, 
+                      
+                      ziformula = ~ HLD_DIAM,
+                      
+                     data = kelp_z,
+                     
+                     family = nbinom2)
+```
+
+---
+## We are Good!
+
+```
+# Check for zero-inflation
+
+   Observed zeros: 50
+  Predicted zeros: 51
+            Ratio: 1.03
+```
+
+---
+## And We Can Visualize
+&lt;img src="glm_overdispersion_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 class: center, middle
