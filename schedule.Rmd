@@ -164,7 +164,7 @@ __Homework:__ [Surviving the Titanic](homework/generalized_linear_model.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__ [Random Effects](https://biol609.github.io/lectures/07_random_effects.html#/section), [Mixed Models](lectures/mixed_models.html)   
+__Lecture:__ [Random Effects](lectures/random_effects.html), [Mixed Models](lectures/mixed_models.html)   
 __Data:__ TBA  
 __Lab Topic:__ [Mixed Models](lab/mixed_models.html)  
 __Packages for the Week:__ `install.packages(c("glmmTMB", "lme4", "merTools", "broom.mixed))`  
