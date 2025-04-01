@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>random_effects.knit</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="style.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+    <script src="libs/viz-1.8.2/viz.js"></script>
+    <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+    <script src="libs/grViz-binding-1.0.11/grViz.js"></script>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="section" class="slide level2">
+<h2></h2>
+<br />
+
+<center>
+<h2>
+Random Effects
+</h2>
+<br />
+<img data-src="images/random_effects/mixed_models_walken.jpg" />
+</center>
+</section>
+<section id="the-problem-of-independence" class="slide level2">
+<h2>The Problem of Independence</h2>
+<div id="left">
+<p><img
+data-src="images/random_effects/300px-Isles_of_Shoals_Map.png" /></p>
+</div>
+<div id="right">
+<ul>
+<li class="fragment">Let’s say you are sampling juvenile mussel
+lengths<br />
+<br />
+</li>
+<li class="fragment">You sample at 10 sites around each island<br />
+<br />
+</li>
+<li class="fragment">Can you just take the mean of all sites?<br />
+<br />
+</li>
+<li class="fragment">Is it OK to pull out an “Island” effect if some
+sites are sampled more than others?</li>
+</ul>
+</div>
+</section>
+<section
+id="how-would-you-handle-measuring-the-same-subjects-in-an-experiment-over-time"
+class="slide level2">
+<h2>How would you handle measuring the same subjects in an experiment
+over time?</h2>
+<p><img
+data-src="images/random_effects/cats_repeated_measurs.jpg" /></p>
+</section>
+<section id="what-is-the-sample-size" class="slide level2">
+<h2>What is the Sample Size?</h2>
+<p><img data-src="images/random_effects/plants.jpg" /></p>
+</section>
+<section id="what-is-the-sample-size-1" class="slide level2">
+<h2>What is the Sample Size?</h2>
+<p><img data-src="images/random_effects/plants_leaves.jpg" /></p>
+</section>
+<section id="pseudoreplication" class="slide level2">
+<h2>Pseudoreplication</h2>
+<p><img
+data-src="images/random_effects/kinds_of_pseudoreplication.jpg"
+style="width:55.0%" /></p>
+<p>Hurlbert 1985</p>
+</section>
+<section id="what-is-the-problem-with-pseudoreplication"
+class="slide level2">
+<h2>What is the problem with Pseudoreplication?</h2>
+<p><span class="math display">\[\Large Y_i = \beta X_i +
+\epsilon_i\]</span><br />
+</p>
+<p><span class="math display">\[\Large \epsilon_i \overset{iid}{\sim}
+\mathcal{N}(0, \sigma^2)\]</span></p>
+<p><br />
+<br />
+This assumes that all replicates are <strong>independent</strong> and
+identically distributed</p>
+</section>
+<section id="how-to-deal-with-violation-of-independence"
+class="slide level2">
+<h2>How to deal with violation of Independence</h2>
+<ul>
+<li class="fragment">Average at group level<br />
+- Big hit to sample size and thus precision<br />
+<br />
+</li>
+<li class="fragment"><strong>Fixed effect</strong> of group<br />
+- Many parameters to estimate = higher coef SE<br />
+- Big hit to Degrees of Freedom<br />
+<br />
+</li>
+<li class="fragment">Model hierarchy explicitly with <strong>Random
+effects</strong><br />
+- Mixed models if fixed and random effects<br />
+- Models <strong>correlation within groups</strong><br />
+- Creates <em>correct error structure</em><br />
+- Loses fewer DF</li>
+</ul>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<br />
+<br />
+<br />
+<br />
+
+<h1>
+What is a random effect?
+</h1>
+</section>
+<section id="lets-say-youre-sampling-mussel-lengths"
+class="slide level2">
+<h2>Let’s Say You’re Sampling Mussel Lengths…</h2>
+<p><img src="random_effects_files/figure-revealjs/mussel_hist-1.jpeg" width="672" /></p>
+</section>
+<section id="but-they-come-from-different-islands" class="slide level2">
+<h2>But, They come from different islands…</h2>
+<p><img src="random_effects_files/figure-revealjs/mussel_hist2-1.jpeg" width="672" /></p>
+</section>
+<section id="are-different-islands-that-different" class="slide level2">
+<h2>Are different islands that different?</h2>
+<p><img src="random_effects_files/figure-revealjs/mussel_plot_2-1.jpeg" width="672" /></p>
+</section>
+<section id="are-different-islands-that-different-1"
+class="slide level2">
+<h2>Are different islands that different?</h2>
+<p><img src="random_effects_files/figure-revealjs/mussel_plot_mean-1.jpeg" width="672" /></p>
+</section>
+<section id="the-problem-with-pseudoreplication---confidence-intervals"
+class="slide level2">
+<h2>The Problem with Pseudoreplication - Confidence Intervals</h2>
+<p><img src="random_effects_files/figure-revealjs/unnamed-chunk-1-1.jpeg" width="864" /></p>
+</section>
+<section
+id="the-problem-with-pseudoreplication---unbalanced-samples-and-bias"
+class="slide level2">
+<h2>The Problem with Pseudoreplication - Unbalanced Samples and
+Bias</h2>
+<p><img src="random_effects_files/figure-revealjs/unnamed-chunk-2-1.jpeg" width="672" /></p>
+</section>
+<section id="are-different-islands-that-different-2"
+class="slide level2">
+<h2>Are different islands that different?</h2>
+<p><img src="random_effects_files/figure-revealjs/mussel_site_mean_plot-1.jpeg" width="672" /></p>
+</section>
+<section id="you-could-try-a-fixed-effects-model" class="slide level2">
+<h2>You Could Try a Fixed Effects Model…</h2>
+<br />
+<br />
+<span class="math display">\[\Large Y_{ij} = \beta_{j} +
+\epsilon_i\]</span><br />
+<span class="math display">\[\Large \epsilon_i \sim \mathcal{N}(0,
+\sigma^2)\]</span><br />
+
+<div class="fragment">
+But this only tells you about <strong>these</strong> islands
+</div>
+</section>
+<section id="what-is-the-distribution-of-site-means"
+class="slide level2">
+<h2>What is the distribution of site means?</h2>
+<p><img src="random_effects_files/figure-revealjs/site_hist-1.jpeg" width="672" /></p>
+<div class="fragment">
+A nice normal distribution
+</div>
+</section>
+<section id="random-effects" class="slide level2">
+<h2>Random Effects</h2>
+<ul>
+<li class="fragment">A <em>random effect</em> is a parameter that varies
+across groups following a (typically normal) distribution<br />
+<br />
+</li>
+<li class="fragment">Implies that, while there is a grand mean
+<em>fixed</em> effect (slope or intercept), each group deviates
+randomly<br />
+<br />
+</li>
+<li class="fragment">Implies that there is no one <em>true</em> value of
+a parameter in the world<br />
+<br />
+</li>
+<li class="fragment">Allows us to estimate <strong>variability</strong>
+in how effects manifest<br />
+<br />
+</li>
+<li class="fragment">We pull apart <em>variance components</em> driving
+our response</li>
+</ul>
+</section>
+<section id="fixed-versus-random-effects-model" class="slide level2">
+<h2>Fixed Versus Random Effects Model</h2>
+<span id="left">Fixed:</span><br />
+<span class="math display">\[Y_{ij} =  \beta_{j} + \epsilon_i\]</span>
+<span class="math display">\[\epsilon_i \sim \mathcal{N}(0,
+\sigma^2)\]</span><br />
+
+<div class="fragment">
+<p><span id="left">Random:</span><br />
+<span class="math display">\[Y_{ij} =  \beta_{j} + \epsilon_i\]</span>
+<span class="math display">\[\beta_{j} \sim \mathcal{N}(\beta,
+\sigma^2_{site})\]</span> <span class="math display">\[\epsilon_i \sim
+\mathcal{N}(0, \sigma^2)\]</span></p>
+</div>
+</section>
+<section id="consider-what-random-effects-mean---1-model-2-ways"
+class="slide level2">
+<h2>Consider what random effects mean - 1 model, 2 ways</h2>
+<span class="math display">\[Y_{ij} =  \beta_{j} + \epsilon_i\]</span>
+<span class="math display">\[\beta_{j} \sim \mathcal{N}(\alpha,
+\sigma^2_{site})\]</span> <span class="math display">\[\epsilon_i \sim
+\mathcal{N}(0, \sigma^2)\]</span>
+<hr>
+<div class="fragment">
+<p><span class="math display">\[Y_{ij} =  \alpha + \beta_{j} +
+\epsilon_i\]</span> <span class="math display">\[\beta_{j} \sim
+\mathcal{N}(0, \sigma^2_{site})\]</span> <span
+class="math display">\[\epsilon_i \sim \mathcal{N}(0,
+\sigma^2)\]</span></p>
+</div>
+</section>
+<section id="consider-what-random-effects-mean---glmm-notation"
+class="slide level2">
+<h2>Consider what random effects mean - GLMM Notation</h2>
+<p>(yes, Generalized Linear Mixed Models - we will get there)</p>
+<p><span class="math display">\[\large \eta_{ij} =  \alpha +
+\beta_{j}\]</span> <span class="math display">\[\ \beta_{j} \sim
+\mathcal{N}(0, \sigma^2_{site})\]</span> <span
+class="math display">\[\large f(\widehat{Y_{ij}}) = \eta_{ij}\]</span>
+<span class="math display">\[\large Y_{ij} \sim
+\mathcal{D}(\widehat{Y_{ij}}, \theta)\]</span><br />
+where D is a distribution in the exponential family</p>
+</section>
+<section id="fixed-versus-random-effects-model-visually"
+class="slide level2">
+<h2>Fixed Versus Random Effects Model Visually</h2>
+<div id="left">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-b12bc9af42b4b58d9aa3" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-b12bc9af42b4b58d9aa3">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       label = \"Fixed\",\n       labelloc = \"t\",\n       labeljust = \"c\",\n       fontname = \"Helvetica\",\n       fontcolor = \"gray30\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"site\", shape = \"rectangle\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"1,1!\"] \n  \"2\" [label = \"length\", shape = \"rectangle\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,1!\"] \n  \"3\" [label = \"error\", shape = \"circle\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,2!\"] \n  \"1\"->\"2\" \n  \"3\"->\"2\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="right">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-73e896387ff0e8d76da8" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-73e896387ff0e8d76da8">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       label = \"Random\",\n       labelloc = \"t\",\n       labeljust = \"c\",\n       fontname = \"Helvetica\",\n       fontcolor = \"gray30\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"site\", shape = \"circle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"1,2!\"] \n  \"2\" [label = \"length\", shape = \"rectangle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,1!\"] \n  \"3\" [label = \"residual\nerror\", shape = \"circle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,3!\"] \n  \"4\" [label = \"total\nerror\", shape = \"circle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,2!\"] \n  \"1\"->\"4\" \n  \"3\"->\"4\" \n  \"4\"->\"2\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</section>
+<section id="wait-but-what-about-good-old-blocks-and-fixed-effects"
+class="slide level2">
+<h2>Wait, but what about good old blocks and fixed effects?</h2>
+<ul>
+<li class="fragment">We used to model blocks via estimation of
+means/parameters within a block<br />
+<br />
+</li>
+<li class="fragment">But - there was no distribution of parameters
+assumed<br />
+<br />
+</li>
+<li class="fragment">Assumed blocks could take any value<br />
+- Is this biologically plausible?<br />
+- What are blocks but collections of nuissance parameters?</li>
+</ul>
+</section>
+<section id="the-shrinkage-factor" class="slide level2">
+<h2>The Shrinkage Factor!</h2>
+<p><img src="random_effects_files/figure-revealjs/show_ranef-1.jpeg" width="672" /></p>
+<p>Orange = random effects estimates, Red = fixed effects estimate</p>
+</section>
+<section id="shrinkage" class="slide level2">
+<h2>Shrinkage</h2>
+<ul>
+<li class="fragment">Random effects assume each observation is drawn
+from a grand mean<br />
+<br />
+</li>
+<li class="fragment">This we can <strong>draw strength</strong> from
+samples in other groups to estimate a group mean<br />
+<br />
+</li>
+<li class="fragment">It <strong>reduces variance</strong> between groups
+by biasing results towards grand mean<br />
+<br />
+</li>
+<li class="fragment">Philosophically, group means are always likely to
+be incorrect due to sampling</li>
+</ul>
+</section>
+<section id="shrunken-group-mean---note-influence-of-sample-size"
+class="slide level2">
+<h2>Shrunken Group Mean - Note influence of sample size</h2>
+<span class="math display">\[\hat{Y_j} = \rho_j\bar{y_j} +
+(1-\rho_j)\bar{y}\]</span><br />
+where <span class="math inline">\(\rho_j\)</span> is the shrinkage
+coefficient<br />
+<br />
+<br />
+
+<div class="fragment">
+<p><span class="math display">\[\rho_j = \frac{\tau^2}{\tau^2 +
+\frac{\sigma^2}{n_j}}\]</span><br />
+Where <span class="math inline">\(\tau^2\)</span> is the variance of the
+random effect, and <span class="math inline">\(n_j\)</span> is the group
+sample size</p>
+</div>
+</section>
+<section id="what-influences-shrinkage" class="slide level2">
+<h2>What Influences Shrinkage?</h2>
+<p><span class="math display">\[\rho_j = \frac{\tau^2}{\tau^2 +
+\frac{\sigma^2}{n_j}}\]</span></p>
+<ul>
+<li>If your random effect variance is large (<span
+class="math inline">\(\tau^2\)</span>), very little shrinkage.<br />
+<br />
+</li>
+<li>If your residual variance is small (<span
+class="math inline">\(\sigma^2\)</span>), very little shrinkage.<br />
+<br />
+</li>
+<li>If your sample size for a group is small, shrinkage can be
+large.<br />
+<br />
+</li>
+<li>If your sample size for a group is large, shrinkage is minimal.</li>
+</ul>
+</section>
+<section id="for-example-unbalanced-sample-sizes" class="slide level2">
+<h2>For example, unbalanced sample sizes</h2>
+<p><img src="random_effects_files/figure-revealjs/unbalanced-1.jpeg" width="672" /></p>
+</section>
+<section id="for-example-unbalanced-sample-sizes-1"
+class="slide level2">
+<h2>For example, unbalanced sample sizes</h2>
+<p><img src="random_effects_files/figure-revealjs/unbalanced_2-1.jpeg" width="672" /></p>
+</section>
+<section id="it-effects-more-than-means---confidence"
+class="slide level2">
+<h2>It effects more than means - Confidence!</h2>
+<p><img src="random_effects_files/figure-revealjs/showShirnk-1.jpeg" width="672" /></p>
+</section>
+<section id="fixed-versus-random-effects" class="slide level2">
+<h2>Fixed versus Random Effects</h2>
+<div style="text-align:left">
+<div class="fragment">
+<p><strong>Fixed Effect:</strong> Effects that are constant across
+populations.<br />
+<strong>Random Effect:</strong> Effects that vary are random outcomes of
+underlying processes.<br />
+</p>
+</div>
+<br />
+
+<div class="fragment">
+<p>Gelman and Hill (2007) see the distinction as artificial. Fixed
+effects are special cases of random effects where the variance is
+infinite. The model is what you should focus on.<br />
+</p>
+</div>
+<br />
+
+<div class="fragment">
+<p>You will also hear that ’random effects’ are effects with many
+levels, but that you have not sampled all of them, wheras with fixed
+effects, you have sampled across the entire range of variation. This is
+subtly different, and artificial.</p>
+</div>
+</div>
+</section>
+<section id="but---the-big-assumption" class="slide level2">
+<h2>BUT - The big assumption</h2>
+<br><br>
+<h2>
+<center>
+The Random Effect is Uncorrelated with Any Fixed Effects
+</center>
+</h2>
+<br><br>
+<h3>
+<center>
+Violating this is a violation of the assumption of endogeneity (aka the
+Random Effects assumption)
+</center>
+</h3>
+</section>
+<section id="a-visual-explanation-of-endogeneity-problems-fixed-effects"
+class="slide level2">
+<h2>A Visual Explanation of Endogeneity Problems: Fixed Effects</h2>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-d711abd98777b54105b6" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-d711abd98777b54105b6">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"site\", shape = \"rectangle\", width = \"0.5\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"1,1!\"] \n  \"2\" [label = \"length\", shape = \"rectangle\", width = \"0.5\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,1!\"] \n  \"3\" [label = \"error\", shape = \"circle\", width = \"0.5\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,2!\"] \n  \"4\" [label = \"predictor\", shape = \"rectangle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"1,0!\"] \n\"1\"->\"2\" [dir = \"forward\"] \n\"3\"->\"2\" [dir = \"forward\"] \n\"4\"->\"1\" [dir = \"both\"] \n\"4\"->\"2\" [dir = \"forward\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</section>
+<section
+id="a-visual-explanation-of-endogeneity-problems-random-effects"
+class="slide level2">
+<h2>A Visual Explanation of Endogeneity Problems: Random Effects</h2>
+<div class="grViz html-widget html-fill-item" id="htmlwidget-55c4e28db38792dc4b54" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-55c4e28db38792dc4b54">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"site\", shape = \"circle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"1,2!\"] \n  \"2\" [label = \"length\", shape = \"rectangle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,1!\"] \n  \"3\" [label = \"residual\nerror\", shape = \"circle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,3!\"] \n  \"4\" [label = \"total\nerror\", shape = \"circle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"2,2!\"] \n  \"5\" [label = \"predictor\", shape = \"rectangle\", width = \"0.6\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\", pos = \"1,1!\"] \n\"1\"->\"4\" [dir = \"forward\"] \n\"3\"->\"4\" [dir = \"forward\"] \n\"4\"->\"2\" [dir = \"forward\"] \n\"5\"->\"2\" [dir = \"forward\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="fragment">
+Note the lack of correlation
+</div>
+</section>
+<section id="fixed-versus-random-effects-revisited"
+class="slide level2">
+<h2>Fixed versus Random Effects Revisited</h2>
+<ul>
+<li class="fragment">If your groups are correlated with predictors, use
+fixed effects
+<ul>
+<li class="fragment">See also upcoming lecture<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">If your groups are not “exchangeable”, use fixed
+effects<br />
+<br />
+</li>
+<li class="fragment">Fixed effects aren’t <strong>bad</strong>, they’re
+just inefficient<br />
+<br />
+</li>
+<li class="fragment">However, fixed effects are harder to generalize
+from</li>
+</ul>
+</section>
+<section id="more-on-when-to-avoid-random-effects-estimation-concerns"
+class="slide level2">
+<h2>More on when to avoid random effects: estimation concerns</h2>
+<ol type="1">
+<li class="fragment">Do you have &lt;4 blocks?
+<strong>Fixed</strong><br />
+<br />
+</li>
+<li class="fragment">Do you have &lt;3 points per block?
+<strong>Fixed</strong><br />
+<br />
+</li>
+<li class="fragment">Is your ‘blocking’ variable continuous?
+<strong>Fixed</strong><br />
+
+<ul>
+<li class="fragment">But slope can vary by discrete blocks - wait for
+it!<br />
+<br />
+</li>
+</ul></li>
+<li class="fragment">Do you have lots of blocks, but few/variable points
+per block? <strong>Random</strong><br />
+
+<ul>
+<li class="fragment">Save DF as you only estimate <span
+class="math inline">\(\sigma^2\)</span><br />
+</li>
+</ul></li>
+</ol>
+</section>
+<section id="other-ways-to-avoid-random-effects" class="slide level2">
+<h2>Other Ways to Avoid Random Effects</h2>
+<ul>
+<li class="fragment">Are you not interested in within subjects
+variability?<br />
+- AVERAGE at the block level<br />
+- But, loss of power<br />
+<br />
+</li>
+<li class="fragment">Is block level correlation simple?<br />
+- GLS with compound symmetry varying by block<br />
+- <code>corCompSym(form = ~ 1|block)</code><br />
+<br />
+</li>
+<li class="fragment">OH, JUST EMBRACE THE RANDOM!</li>
+</ul>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<br />
+<br />
+<br />
+
+<h1>
+Estimating Random Effects
+</h1>
+</section>
+<section id="restricted-maximum-likelihood" class="slide level2">
+<h2>Restricted Maximum Likelihood</h2>
+<ul>
+<li class="fragment">We typically estimate a <span
+class="math inline">\(\sigma^2\)</span> of random effects, not the
+effect of each block
+<ul>
+<li class="fragment">But later can derive Best Least Unbiased Predictors
+of each block (<strong>BLUPs</strong>)<br />
+ <br />
+</li>
+</ul></li>
+<li class="fragment">ML estimation can underestimate random effects
+variation (<span class="math inline">\(\sigma^2_{block}\)</span>)<br />
+</li>
+<li class="fragment">REML seeks to decompose out fixed effects to
+estimate random effects<br />
+<br />
+</li>
+<li class="fragment">Works iteratively - estimates random effects, then
+fixed, then back, and converges<br />
+- Lots of algorithms, computationally expensive</li>
+</ul>
+</section>
+<section id="what-other-methods-are-available-to-fit-glmms"
+class="slide level2">
+<h2>What other methods are available to fit GLMMs?</h2>
+<p><font size = "-1">(adapted from Bolker et al TREE 2009 and <a
+href="https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html"
+class="uri">https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html</a>)</font></p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Method</th>
+<th style="text-align: left;">Advantages</th>
+<th style="text-align: left;">Disadvantages</th>
+<th style="text-align: left;">Packages</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Penalized quasi-likelihood</td>
+<td style="text-align: left;">Flexible, widely implemented</td>
+<td style="text-align: left;">Likelihood inference may be inappropriate;
+biased for large variance or small means</td>
+<td style="text-align: left;">glmmPQL (R:MASS), ASREML-R</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Laplace approximation</td>
+<td style="text-align: left;">More accurate than PQL</td>
+<td style="text-align: left;">Slower and less flexible than PQL</td>
+<td style="text-align: left;">glmer (R:lme4), glmm.admb (R:glmmADMB),
+INLA, glmmTMB</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Gauss-Hermite quadrature</td>
+<td style="text-align: left;">More accurate than Laplace</td>
+<td style="text-align: left;">Slower than Laplace; limited to 2‑3 random
+effects</td>
+<td style="text-align: left;">glmer (R:lme4, lme4a), glmmML
+(R:glmmML)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="in-r." class="slide level2">
+<h2>In R….</h2>
+<br />
+<img data-src="images/random_effects/lmer_lemur_tim_doherty.jpg"
+style="width:55.0%" />
+<div style="text-align:left">
+<font size = "-1">Thank you Tim Doherty</font>
+</div>
+</section>
+<section id="the-one-source" class="slide level2">
+<h2>THE ONE SOURCE</h2>
+<br><br><br>
+<center>
+<a href="https://bbolker.github.io/mixedmodels-misc/"
+class="uri">https://bbolker.github.io/mixedmodels-misc/</a>
+</center>
+</section>
+<section id="nlme-and-lmer" class="slide level2">
+<h2>NLME and LMER</h2>
+<ul>
+<li><code>nlme</code> was created by Pinhero and Bates for linear and
+nonlinear mixed models<br />
+- Also fits <code>gls</code> models with REML<br />
+- Enables very flexible correlation structures<br />
+- Uses Satterthwaite corrected DF<br />
+<br />
+</li>
+<li><code>lme4</code> started by Bates, many developers<br />
+- Much faster for complex models<br />
+- Can fit generalized linear mixed models<br />
+- Simpler syntax adapted by many other packages<br />
+- Does not allow you to model correlation structure<br />
+- Does not allow you to model variance structure</li>
+</ul>
+</section>
+<section id="other-r-packages-functions-fit-glmms" class="slide level2">
+<h2>Other R packages (functions) fit GLMMs?</h2>
+<ul>
+<li>MASS::glmmPQL (penalized quasi-likelihood)</li>
+<li>lme4::glmer (Laplace approximation and adaptive Gauss-Hermite
+quadrature [AGHQ])</li>
+<li>glmmML (AGHQ)</li>
+<li>glmmAK (AGHQ?)</li>
+<li>glmmADMB (Laplace)</li>
+<li><strong>glmmTMB</strong> (Laplace)</li>
+<li>glmm (from Jim Lindsey’s <code>repeated</code> package: AGHQ)</li>
+<li>gamlss.mx</li>
+<li>ASREML-R</li>
+<li>sabreR<br />
+<font size = "-1">(from <a
+href="https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html"
+class="uri">https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html</a>)</font></li>
+</ul>
+</section>
+<section id="dont-you-forget-about-bayes" class="slide level2">
+<h2>Don’t you… Forget about Bayes</h2>
+<ul>
+<li><code>rstanarm</code> uses <code>lme4</code> syntax<br />
+<br />
+</li>
+<li><code>brms</code> uses <code>lme4</code> syntax and more<br />
+<br />
+</li>
+<li>Once a mixed model gets to sufficient complexity, it’s Bayes,
+baby!</li>
+</ul>
+</section>
+<section id="fitting-a-mixed-model-with-lme4" class="slide level2">
+<h2>Fitting a Mixed Model with lme4</h2>
+<p><br />
+</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>mussels_mer <span class="ot">&lt;-</span> <span class="fu">lmer</span>(mussel_length <span class="sc">~</span> (<span class="dv">1</span> <span class="sc">|</span>site), </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> mussels)</span></code></pre></div>
+<div class="fragment" style="text-align:left">
+Note <code>1 | group</code> syntax!
+</div>
+</section>
+<section id="fitting-a-mixed-model-with-nlme" class="slide level2">
+<h2>Fitting a Mixed Model with nlme</h2>
+<p><br />
+</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mussels_lme <span class="ot">&lt;-</span> <span class="fu">lme</span>(mussel_length <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                   </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">random =</span><span class="sc">~</span> <span class="dv">1</span> <span class="sc">|</span>site, </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> mussels)</span></code></pre></div>
+<div class="fragment" style="text-align:left">
+We could include correlations, etc.
+</div>
+</section>
+<section id="evaluating" class="slide level2">
+<h2>Evaluating…</h2>
+<p><img src="random_effects_files/figure-revealjs/lmer%20resid-1.jpeg" width="672" /></p>
+</section>
+<section id="we-look-at-normality-of-residuals" class="slide level2">
+<h2>We Look at Normality of Residuals</h2>
+<p><img src="random_effects_files/figure-revealjs/lmer_resid_qq-1.jpeg" width="672" /></p>
+</section>
+<section id="we-also-look-at-normality-of-group-mean-residuals"
+class="slide level2">
+<h2>We Also Look at Normality of Group Mean Residuals</h2>
+<pre><code>[[1]]</code></pre>
+<p><img src="random_effects_files/figure-revealjs/lmer_group_qq-1.jpeg" width="672" /></p>
+</section>
+<section id="we-can-also-look-at-quantile-residuals"
+class="slide level2">
+<h2>We can also look at quantile residuals</h2>
+<p><img src="random_effects_files/figure-revealjs/lmer_quantiles-1.jpeg" width="768" /></p>
+</section>
+<section id="evaluating-coefficients" class="slide level2">
+<h2>Evaluating Coefficients</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(broom<span class="sc">::</span><span class="fu">tidy</span>(mussels_mer))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">effect</th>
+<th style="text-align: left;">group</th>
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fixed</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">23.971873</td>
+<td style="text-align: right;">1.034508</td>
+<td style="text-align: right;">23.17224</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ran_pars</td>
+<td style="text-align: left;">site</td>
+<td style="text-align: left;">sd__(Intercept)</td>
+<td style="text-align: right;">3.291326</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ran_pars</td>
+<td style="text-align: left;">Residual</td>
+<td style="text-align: left;">sd__Observation</td>
+<td style="text-align: right;">7.225154</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Same as with a linear model!<br />
+</li>
+<li>But also we have a new SD for our random effect</li>
+</ul>
+</section>
+<section id="seeing-the-fixed-effects" class="slide level2">
+<h2>Seeing the Fixed Effects</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(mussels_mer)</span></code></pre></div>
+<pre><code>(Intercept) 
+   23.97187 </code></pre>
+</section>
+<section id="seeing-the-random-effects" class="slide level2">
+<h2>Seeing the Random Effects</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ranef</span>(mussels_mer)</span></code></pre></div>
+<pre><code>$site
+  (Intercept)
+a -4.33497614
+b -4.34924331
+c -1.68011011
+d -1.20584109
+e -1.54561002
+f -3.04522008
+g  0.25130706
+h  0.03927292
+i  0.78803340
+j  1.48409865
+k  4.72979281
+l  2.42732356
+m  0.83801263
+n  3.55773499
+o  2.04542473
+
+with conditional variances for &quot;site&quot; </code></pre>
+</section>
+<section id="combined-effects" class="slide level2">
+<h2>Combined Effects</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mussels_mer)</span></code></pre></div>
+<pre><code>$site
+  (Intercept)
+a    19.63690
+b    19.62263
+c    22.29176
+d    22.76603
+e    22.42626
+f    20.92665
+g    24.22318
+h    24.01115
+i    24.75991
+j    25.45597
+k    28.70167
+l    26.39920
+m    24.80989
+n    27.52961
+o    26.01730
+
+attr(,&quot;class&quot;)
+[1] &quot;coef.mer&quot;</code></pre>
+</section>
+<section id="visualizing-random-effects" class="slide level2">
+<h2>Visualizing Random Effects</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">estimate_grouplevel</span>(mussels_mer) <span class="sc">|&gt;</span> <span class="fu">plot</span>()</span></code></pre></div>
+<p><img src="random_effects_files/figure-revealjs/sjp_re-1.jpeg" width="672" /></p>
+</section>
+<section id="visualizing-fixed-effects" class="slide level2">
+<h2>Visualizing Fixed Effects</h2>
+<p><img src="random_effects_files/figure-revealjs/sjp_fe-1.jpeg" width="672" /></p>
+</section>
+<section id="visualizing-using-simulation-for-total-effects"
+class="slide level2">
+<h2>Visualizing using Simulation for Total Effects</h2>
+<p><img src="random_effects_files/figure-revealjs/sjp-1.jpeg" width="672" /></p>
+</section>
+<section id="why-did-we-do-this" class="slide level2">
+<h2>Why Did We Do This?</h2>
+<ul>
+<li class="fragment">Working with random effects opens up a world of
+<em>more efficient</em> models with clustering<br />
+<br />
+</li>
+<li class="fragment">Random and fixed effects correctly handle
+pseudoreplication<br />
+<br />
+</li>
+<li class="fragment">Random effects allow us to assume <em>nothing is
+truly fixed</em><br />
+<br />
+</li>
+<li class="fragment">Random effects allow us to generalize beyond our
+sampled clusters</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: false,
+        // Enables touch navigation on devices with touch input
+        touch: true,
+        // Turns fragments on and off globally
+        fragments: true,
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
