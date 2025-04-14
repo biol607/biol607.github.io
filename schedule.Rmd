@@ -10,10 +10,10 @@ NEXT TIME I TEACH 607 in 2026/7
   - NO BIG TEXT SLIDES
   - do not need to describe Bayes or maybe even likelihood
 
+- Check GLM lab - many analyses fail assumption checks!
+
 NEXT TIME I TEACH 607 in 2024/5
 
-Causal Intro is 2 lectures
-  - End is week and flabby. Rework
 
 Add more on randomization (dee slides) and SUTVA for expts
   - It's really 2 lectures
@@ -181,10 +181,10 @@ __MIDTERM__: Due Fri April 11th, 5pm. [Get it here](exams/exam_2025.html)
 ```{r next_date, echo=FALSE}
 ```
 `r datestring`   
-__Lecture:__  [Causal Inference](lectures/causal_diagrams.pptx)     
+__Lecture:__  [Causal Inference](lectures/causal_inference.pptx), [Using Causal Diagrams](lectures/causal_diagram_use.pptx)       
 __Lab:__ [Daggity and Causal Models](lab/dagitty.html)   
-__Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Fieberg on Causal Inference](https://statistics4ecologists-v3.netlify.app/07-causalnetworks).   
-__Optional Reading:__ [An Intro to the PO Framework from The Causal Mixtape](https://mixtape.scunning.com/04-potential_outcomes), [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [Does Water Kill?](https://pdf.sciencedirectassets.com/271328/1-s2.0-S1047279716X00105/1-s2.0-S1047279716302800/main.pdf)    
+__Reading:__  [Arif et al. on Structural Causal Models](./readings/Arif_et_al_2022.zip), [Fieberg on Causal Inference](https://statistics4ecologists-v3.netlify.app/07-causalnetworks), [The Causal Dag and Haunted Terror](./readings/McElreath_Ch_6.pdf)   
+__Optional Reading:__ [An Intro to the PO Framework from The Causal Mixtape](https://mixtape.scunning.com/04-potential_outcomes), [Grace and Irvine on designing SCMs](Grace_and_Irvine_2019.pdf), [Bellemare et al. on Front Doors](BellemareBloemWexlerFDCJune2020.pdf)      
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2025  
   
   
@@ -195,8 +195,8 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-2025
 `r datestring`   
 __Lecture:__   [Causal Inference and Experiments](./lectures/causality_experiments.pptx)  
 __Paper Discussion:__  Thursday discussion of [papers](readings/exp_design_papers.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments  
-__Reading:__   [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf), [The Causal Dag and Haunted Terror](./readings/McElreath_Ch_6.pdf), [Butsic et al 2021 on Quasi-Experiments](readings/butsic_et_al_2017.pdf),   
-__Optional Reading:__  [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf), [Bellemare et al. on Front Doors](BellemareBloemWexlerFDCJune2020.pdf)    
+__Reading:__   [Kimmel et al. on Experimental Design](./readings/Kimmel_et_al_2021.pdf), [Marshall 2024 on Experimental Design](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.14400)      
+__Optional Reading:__  [A Beastiary of Experimental Designs](readings/Gotelli&EllisonChapter7.pdf)      
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2025  
   
   
@@ -208,7 +208,7 @@ __Etherpad:__ https://etherpad.wikimedia.org/p/607-causal-expts-2025
 __Lecture:__ [Using causal models to get valid inference from observational and quasi-experimental studies](lectures/causal_observational.pptx)    
 __Reading:__ [Siegel & Dee 2025](https://onlinelibrary.wiley.com/doi/abs/10.1111/ele.70053), [Byrnes & Dee 2025](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.70023)  
 __Paper Discussion:__  Discussion of [papers](readings/obs_sampling.zip) - see [here](https://docs.google.com/spreadsheets/d/1r0VfnAJ3tuJufnLnrVC6Nx0qiyP4l6QILarKTsduov0/edit?usp=sharing) for assignments    
-__Optional Reading:__ [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
+__Optional Reading:__ [Butsic et al 2021 on Quasi-Experiments](readings/butsic_et_al_2017.pdf), [Collider Bias and Covid](readings/griffith_collider_bias_covid.pdf)  
 __Etherpad:__ https://etherpad.wikimedia.org/p/607-obs-2025  
 
 
